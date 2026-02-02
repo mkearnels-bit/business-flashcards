@@ -612,7 +612,7 @@
                 currentUser = session.user;
 
                 // Check subscription
-                const { data: sub, error } = await supabase
+                const { data: sub, error } = await supabaseClient
                     .from('subscriptions')
                     .select('*')
                     .eq('user_id', currentUser.id)

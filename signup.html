@@ -438,7 +438,7 @@
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (session) {
                 // Check subscription status
-                const { data: subscription } = await supabase
+                const { data: subscription } = await supabaseClient
                     .from('subscriptions')
                     .select('*')
                     .eq('user_id', session.user.id)

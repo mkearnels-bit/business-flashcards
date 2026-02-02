@@ -419,7 +419,7 @@
                 if (error) throw error;
 
                 // Check if subscription is active
-                const { data: subscription, error: subError } = await supabase
+                const { data: subscription, error: subError } = await supabaseClient
                     .from('subscriptions')
                     .select('*')
                     .eq('user_id', data.user.id)
