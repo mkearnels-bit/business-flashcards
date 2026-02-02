@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Flashcards | Study App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #3b82f6;
+            --accent: #0ea5e9;
+            --dark: #0f172a;
+            --gray-900: #1e293b;
+            --gray-700: #334155;
+            --gray-500: #64748b;
+            --gray-300: #cbd5e1;
+            --gray-100: #f1f5f9;
+            --white: #ffffff;
+            --success: #10b981;
+            --error: #ef4444;
+            --unit1: #e74c3c;
+            --unit2: #3498db;
+            --unit3: #2ecc71;
+            --unit4: #f39c12;
+            --term-color: #3498db;
+            --formula-color: #9b59b6;
+            --theory-color: #1abc9c;
+            --advantages-color: #e67e22;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Loading overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 9999;
+        }
+
+        .loading-spinner-large {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--gray-100);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-text {
+            margin-top: 1rem;
+            color: var(--gray-500);
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Top bar */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: white;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-name {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.9rem;
+        }
+
+        .subscription-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: white;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Controls */
+        .controls {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .control-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .control-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .control-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .control-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--gray-700);
+            font-size: 0.875rem;
+        }
+
+        select, input[type="text"] {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid var(--gray-100);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.2s;
+            background: var(--gray-100);
+        }
+
+        select:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-300);
+        }
+
+        /* Stats */
+        .stats {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .stat-box {
+            flex: 1;
+            min-width: 100px;
+            background: var(--gray-100);
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            margin-top: 4px;
+        }
+
+        /* Flashcard */
+        .flashcard-container {
+            perspective: 1000px;
+            margin-bottom: 24px;
+        }
+
+        .flashcard {
+            background: white;
+            border-radius: 16px;
+            min-height: 400px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            position: relative;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            backface-visibility: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 16px;
+        }
+
+        .card-front {
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            overflow-y: auto;
+        }
+
+        .card-type {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .card-type.term { background: var(--term-color); }
+        .card-type.formula { background: var(--formula-color); }
+        .card-type.theory { background: var(--theory-color); }
+        .card-type.advantages { background: var(--advantages-color); }
+
+        .card-unit {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .unit-1 { background: var(--unit1); }
+        .unit-2 { background: var(--unit2); }
+        .unit-3 { background: var(--unit3); }
+        .unit-4 { background: var(--unit4); }
+
+        .question {
+            font-size: 1.75rem;
+            font-weight: 700;
+            text-align: center;
+            color: var(--dark);
+            max-width: 600px;
+            line-height: 1.4;
+        }
+
+        .answer {
+            font-size: 1.125rem;
+            line-height: 1.8;
+            color: var(--gray-700);
+            margin-top: 60px;
+        }
+
+        .answer strong {
+            color: var(--dark);
+        }
+
+        .flip-hint {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--gray-500);
+            font-size: 0.875rem;
+        }
+
+        /* Two column layout for advantages */
+        .answer-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-top: 60px;
+        }
+
+        .advantage-col, .disadvantage-col {
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .advantage-col {
+            background: #d4edda;
+        }
+
+        .disadvantage-col {
+            background: #f8d7da;
+        }
+
+        .col-title {
+            font-weight: 700;
+            margin-bottom: 12px;
+            font-size: 1rem;
+        }
+
+        .advantage-col .col-title { color: #155724; }
+        .disadvantage-col .col-title { color: #721c24; }
+
+        /* Navigation */
+        .navigation {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .nav-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: white;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .card-counter {
+            background: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            color: var(--gray-700);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* No cards message */
+        .no-cards {
+            background: white;
+            border-radius: 16px;
+            padding: 60px 40px;
+            text-align: center;
+            color: var(--gray-500);
+        }
+
+        .no-cards h3 {
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .top-bar {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .question {
+                font-size: 1.25rem;
+            }
+
+            .answer-columns {
+                grid-template-columns: 1fr;
+            }
+
+            .control-group {
+                min-width: 100%;
+            }
+
+            .stats {
+                justify-content: center;
+            }
+
+            .stat-box {
+                min-width: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner-large"></div>
+        <p class="loading-text">Loading your flashcards...</p>
+    </div>
+
+    <!-- Main app (hidden until auth verified) -->
+    <div id="mainApp" class="container hidden">
+        <div class="top-bar">
+            <a href="/" class="logo">
+                <div class="logo-icon">📚</div>
+                <span class="logo-text">Business Flashcards</span>
+            </a>
+            <div class="user-menu">
+                <span class="user-name" id="userName">Welcome</span>
+                <span class="subscription-badge" id="subscriptionBadge">Active</span>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="control-row">
+                <div class="control-group">
+                    <label>Unit</label>
+                    <select id="unitFilter" onchange="filterCards()">
+                        <option value="all">All Units</option>
+                        <option value="1">Unit 1: Marketing & People</option>
+                        <option value="2">Unit 2: Managing Business Activities</option>
+                        <option value="3">Unit 3: Business Decisions & Strategy</option>
+                        <option value="4">Unit 4: Global Business</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Card Type</label>
+                    <select id="typeFilter" onchange="filterCards()">
+                        <option value="all">All Types</option>
+                        <option value="term">Key Terms</option>
+                        <option value="formula">Formulas</option>
+                        <option value="theory">Theories</option>
+                        <option value="advantages">Advantages & Disadvantages</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Search</label>
+                    <input type="text" id="searchInput" placeholder="Search flashcards..." oninput="filterCards()">
+                </div>
+            </div>
+            <div class="control-row">
+                <div class="control-group">
+                    <button class="btn btn-primary" onclick="shuffleCards()">🔀 Shuffle</button>
+                </div>
+                <div class="control-group">
+                    <button class="btn btn-secondary" onclick="resetCards()">↩️ Reset</button>
+                </div>
+            </div>
+            <div class="control-row">
+                <div class="stats">
+                    <div class="stat-box">
+                        <div class="stat-number" id="totalCards">0</div>
+                        <div class="stat-label">Total Cards</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" id="termCount">0</div>
+                        <div class="stat-label">Terms</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" id="formulaCount">0</div>
+                        <div class="stat-label">Formulas</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" id="theoryCount">0</div>
+                        <div class="stat-label">Theories</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" id="advantagesCount">0</div>
+                        <div class="stat-label">Pros & Cons</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="flashcardContainer" class="flashcard-container">
+            <!-- Flashcard will be rendered here -->
+        </div>
+
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="prevCard()">←</button>
+            <div class="card-counter">
+                <span id="currentIndex">1</span> / <span id="filteredTotal">0</span>
+            </div>
+            <button class="nav-btn" id="nextBtn" onclick="nextCard()">→</button>
+        </div>
+    </div>
+
+    <!-- Flashcard data will be loaded from external file -->
+    <script src="flashcard-data.js"></script>
+
+    <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
+
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // State
+        let currentUser = null;
+        let subscription = null;
+        let currentIndex = 0;
+        let filteredCards = [];
+        let isFlipped = false;
+
+        // DOM Elements
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const mainApp = document.getElementById('mainApp');
+        const userNameEl = document.getElementById('userName');
+        const subscriptionBadge = document.getElementById('subscriptionBadge');
+
+        // Check authentication and subscription
+        async function checkAuth() {
+            try {
+                const { data: { session } } = await supabase.auth.getSession();
+
+                if (!session) {
+                    window.location.href = '/login.html';
+                    return;
+                }
+
+                currentUser = session.user;
+
+                // Check subscription
+                const { data: sub, error } = await supabase
+                    .from('subscriptions')
+                    .select('*')
+                    .eq('user_id', currentUser.id)
+                    .single();
+
+                if (error && error.code !== 'PGRST116') {
+                    console.error('Subscription check error:', error);
+                }
+
+                if (!sub || new Date(sub.expires_at) < new Date()) {
+                    // No active subscription
+                    alert('Your subscription has expired. Please renew to continue.');
+                    window.location.href = '/#pricing';
+                    return;
+                }
+
+                subscription = sub;
+
+                // Update UI
+                const metadata = currentUser.user_metadata || {};
+                const name = metadata.full_name || metadata.first_name || currentUser.email.split('@')[0];
+                userNameEl.textContent = `Welcome, ${name}`;
+
+                // Calculate days remaining
+                const expiresAt = new Date(sub.expires_at);
+                const daysRemaining = Math.ceil((expiresAt - new Date()) / (1000 * 60 * 60 * 24));
+                subscriptionBadge.textContent = `${daysRemaining} days left`;
+
+                // Show app
+                loadingOverlay.classList.add('hidden');
+                mainApp.classList.remove('hidden');
+
+                // Initialize flashcards
+                initFlashcards();
+
+            } catch (error) {
+                console.error('Auth error:', error);
+                window.location.href = '/login.html';
+            }
+        }
+
+        // Initialize flashcards
+        function initFlashcards() {
+            if (typeof flashcardData === 'undefined') {
+                console.error('Flashcard data not loaded');
+                return;
+            }
+
+            filteredCards = [...flashcardData];
+            updateStats();
+            renderCard();
+        }
+
+        // Update stats
+        function updateStats() {
+            document.getElementById('totalCards').textContent = filteredCards.length;
+            document.getElementById('termCount').textContent = flashcardData.filter(c => c.type === 'term').length;
+            document.getElementById('formulaCount').textContent = flashcardData.filter(c => c.type === 'formula').length;
+            document.getElementById('theoryCount').textContent = flashcardData.filter(c => c.type === 'theory').length;
+            document.getElementById('advantagesCount').textContent = flashcardData.filter(c => c.type === 'advantages').length;
+            document.getElementById('filteredTotal').textContent = filteredCards.length;
+        }
+
+        // Filter cards
+        function filterCards() {
+            const unit = document.getElementById('unitFilter').value;
+            const type = document.getElementById('typeFilter').value;
+            const search = document.getElementById('searchInput').value.toLowerCase();
+
+            filteredCards = flashcardData.filter(card => {
+                const matchesUnit = unit === 'all' || card.unit.toString() === unit;
+                const matchesType = type === 'all' || card.type === type;
+                const matchesSearch = !search ||
+                    card.question.toLowerCase().includes(search) ||
+                    card.answer.toLowerCase().includes(search);
+                return matchesUnit && matchesType && matchesSearch;
+            });
+
+            currentIndex = 0;
+            document.getElementById('filteredTotal').textContent = filteredCards.length;
+            renderCard();
+        }
+
+        // Shuffle cards
+        function shuffleCards() {
+            for (let i = filteredCards.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [filteredCards[i], filteredCards[j]] = [filteredCards[j], filteredCards[i]];
+            }
+            currentIndex = 0;
+            renderCard();
+        }
+
+        // Reset cards
+        function resetCards() {
+            document.getElementById('unitFilter').value = 'all';
+            document.getElementById('typeFilter').value = 'all';
+            document.getElementById('searchInput').value = '';
+            filteredCards = [...flashcardData];
+            currentIndex = 0;
+            updateStats();
+            renderCard();
+        }
+
+        // Render current card
+        function renderCard() {
+            const container = document.getElementById('flashcardContainer');
+
+            if (filteredCards.length === 0) {
+                container.innerHTML = `
+                    <div class="no-cards">
+                        <h3>No flashcards found</h3>
+                        <p>Try adjusting your filters or search terms</p>
+                    </div>
+                `;
+                document.getElementById('currentIndex').textContent = '0';
+                return;
+            }
+
+            const card = filteredCards[currentIndex];
+            document.getElementById('currentIndex').textContent = currentIndex + 1;
+
+            // Check if it's an advantages card with two columns
+            const hasColumns = card.answer.includes('ADVANTAGES:') && card.answer.includes('DISADVANTAGES:');
+
+            let answerHTML = card.answer;
+            if (hasColumns) {
+                // Parse and create two-column layout
+                const advMatch = card.answer.match(/ADVANTAGES:([\s\S]*?)(?=DISADVANTAGES:|$)/i);
+                const disMatch = card.answer.match(/DISADVANTAGES:([\s\S]*?)$/i);
+
+                const advantages = advMatch ? advMatch[1].trim() : '';
+                const disadvantages = disMatch ? disMatch[1].trim() : '';
+
+                answerHTML = `
+                    <div class="answer-columns">
+                        <div class="advantage-col">
+                            <div class="col-title">✓ ADVANTAGES</div>
+                            <div>${advantages.replace(/•/g, '<br>•')}</div>
+                        </div>
+                        <div class="disadvantage-col">
+                            <div class="col-title">✗ DISADVANTAGES</div>
+                            <div>${disadvantages.replace(/•/g, '<br>•')}</div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                answerHTML = `<div class="answer">${card.answer}</div>`;
+            }
+
+            container.innerHTML = `
+                <div class="flashcard" onclick="flipCard()">
+                    <div class="card-face card-front">
+                        <span class="card-unit unit-${card.unit}">Unit ${card.unit}</span>
+                        <span class="card-type ${card.type}">${card.type}</span>
+                        <div class="question">${card.question}</div>
+                        <div class="flip-hint">Click to reveal answer</div>
+                    </div>
+                    <div class="card-face card-back">
+                        <span class="card-unit unit-${card.unit}">Unit ${card.unit}</span>
+                        <span class="card-type ${card.type}">${card.type}</span>
+                        ${answerHTML}
+                    </div>
+                </div>
+            `;
+
+            isFlipped = false;
+            updateNavButtons();
+        }
+
+        // Flip card
+        function flipCard() {
+            const flashcard = document.querySelector('.flashcard');
+            if (flashcard) {
+                flashcard.classList.toggle('flipped');
+                isFlipped = !isFlipped;
+            }
+        }
+
+        // Navigation
+        function prevCard() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                renderCard();
+            }
+        }
+
+        function nextCard() {
+            if (currentIndex < filteredCards.length - 1) {
+                currentIndex++;
+                renderCard();
+            }
+        }
+
+        function updateNavButtons() {
+            document.getElementById('prevBtn').disabled = currentIndex === 0;
+            document.getElementById('nextBtn').disabled = currentIndex === filteredCards.length - 1;
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') prevCard();
+            if (e.key === 'ArrowRight') nextCard();
+            if (e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
+                flipCard();
+            }
+        });
+
+        // Logout
+        async function logout() {
+            await supabase.auth.signOut();
+            window.location.href = '/';
+        }
+
+        // Initialize
+        checkAuth();
+    </script>
+</body>
+</html>

@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Payment | Business Flashcards</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #3b82f6;
+            --accent: #0ea5e9;
+            --dark: #0f172a;
+            --gray-900: #1e293b;
+            --gray-700: #334155;
+            --gray-500: #64748b;
+            --gray-300: #cbd5e1;
+            --gray-100: #f1f5f9;
+            --white: #ffffff;
+            --success: #10b981;
+            --error: #ef4444;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 50%, #f0f9ff 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .payment-container {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .payment-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+        }
+
+        .payment-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .payment-header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .payment-header p {
+            color: var(--gray-500);
+        }
+
+        .order-summary {
+            background: var(--gray-100);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .order-title {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--gray-300);
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .order-item-name {
+            color: var(--gray-700);
+        }
+
+        .order-item-price {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            margin-top: 0.5rem;
+            border-top: 2px solid var(--gray-300);
+        }
+
+        .order-total-label {
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .order-total-price {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .features-list {
+            margin-bottom: 2rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: var(--gray-700);
+            font-size: 0.95rem;
+        }
+
+        .feature-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        .payment-methods {
+            margin-bottom: 2rem;
+        }
+
+        .payment-methods-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 1rem;
+        }
+
+        .payment-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 1rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-apple-pay {
+            background: #000;
+            color: white;
+        }
+
+        .btn-apple-pay:hover {
+            background: #333;
+        }
+
+        .btn-google-pay {
+            background: white;
+            color: var(--gray-700);
+            border: 2px solid var(--gray-300);
+        }
+
+        .btn-google-pay:hover {
+            background: var(--gray-100);
+        }
+
+        .btn-icon {
+            margin-right: 0.5rem;
+            font-size: 1.25rem;
+        }
+
+        .secure-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+            color: var(--gray-500);
+            font-size: 0.875rem;
+        }
+
+        .message {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+            display: none;
+        }
+
+        .message.error {
+            background: #fef2f2;
+            color: var(--error);
+            border: 1px solid #fecaca;
+        }
+
+        .message.success {
+            background: #f0fdf4;
+            color: var(--success);
+            border: 1px solid #bbf7d0;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+            color: var(--gray-500);
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+
+        .back-link:hover {
+            color: var(--primary);
+        }
+
+        .user-info {
+            background: var(--gray-100);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-details {
+            flex-grow: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.95rem;
+        }
+
+        .user-email {
+            color: var(--gray-500);
+            font-size: 0.85rem;
+        }
+
+        .not-you {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.8rem;
+        }
+
+        .not-you:hover {
+            text-decoration: underline;
+        }
+
+        .payhip-button {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <a href="/" class="logo">
+            <div class="logo-icon">📚</div>
+            <span class="logo-text">Business Flashcards</span>
+        </a>
+
+        <div class="payment-card">
+            <div class="payment-header">
+                <h1>Complete Your Purchase</h1>
+                <p>One step away from mastering Business Studies</p>
+            </div>
+
+            <div id="userInfo" class="user-info" style="display: none;">
+                <div class="user-avatar" id="userAvatar">J</div>
+                <div class="user-details">
+                    <div class="user-name" id="userName">John Doe</div>
+                    <div class="user-email" id="userEmail">john@example.com</div>
+                </div>
+                <a href="#" class="not-you" onclick="logout()">Not you?</a>
+            </div>
+
+            <div id="message" class="message"></div>
+
+            <div class="order-summary">
+                <div class="order-title">📋 Order Summary</div>
+                <div class="order-item">
+                    <span class="order-item-name">Business Flashcards (1 Year Access)</span>
+                    <span class="order-item-price">$20.00</span>
+                </div>
+                <div class="order-item">
+                    <span class="order-item-name">378 Expert Flashcards</span>
+                    <span class="order-item-price">Included</span>
+                </div>
+                <div class="order-total">
+                    <span class="order-total-label">Total</span>
+                    <span class="order-total-price">$20.00</span>
+                </div>
+            </div>
+
+            <div class="features-list">
+                <div class="feature-item">
+                    <div class="feature-icon">✓</div>
+                    <span>Instant access after payment</span>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">✓</div>
+                    <span>12 months of full access</span>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">✓</div>
+                    <span>All updates included</span>
+                </div>
+            </div>
+
+            <div class="payment-methods">
+                <div class="payment-methods-title">Pay securely with:</div>
+                <div class="payment-buttons">
+                    <!--
+                    PAYHIP INTEGRATION:
+                    Replace the button below with your Payhip buy button.
+                    Get it from: https://payhip.com/your-product -> Embed Options -> Buy Button
+                    -->
+                    <a href="https://payhip.com/b/YOUR_PRODUCT_ID"
+                       class="btn btn-primary payhip-button"
+                       id="payhipButton"
+                       data-payhip-product-link="YOUR_PRODUCT_ID">
+                        <span class="btn-icon">💳</span>
+                        Pay with Card / Apple Pay / Google Pay
+                    </a>
+                </div>
+            </div>
+
+            <div class="secure-badge">
+                <span>🔒</span>
+                <span>Secure payment powered by Payhip</span>
+            </div>
+        </div>
+
+        <a href="/" class="back-link">
+            ← Back to home
+        </a>
+    </div>
+
+    <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
+
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        const messageDiv = document.getElementById('message');
+        const userInfoDiv = document.getElementById('userInfo');
+        const userAvatar = document.getElementById('userAvatar');
+        const userName = document.getElementById('userName');
+        const userEmail = document.getElementById('userEmail');
+
+        // Show message
+        function showMessage(text, type) {
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type} show`;
+        }
+
+        // Check auth and display user info
+        async function checkAuth() {
+            const { data: { session } } = await supabase.auth.getSession();
+
+            if (session) {
+                // Logged in user
+                const user = session.user;
+                const metadata = user.user_metadata || {};
+                const name = metadata.full_name || metadata.first_name || user.email.split('@')[0];
+
+                userAvatar.textContent = name.charAt(0).toUpperCase();
+                userName.textContent = name;
+                userEmail.textContent = user.email;
+                userInfoDiv.style.display = 'flex';
+
+                // Update Payhip button with user email for order tracking
+                const payhipBtn = document.getElementById('payhipButton');
+                payhipBtn.href += `?email=${encodeURIComponent(user.email)}`;
+            } else {
+                // Check for pending user from signup
+                const pendingUser = localStorage.getItem('pendingUser');
+                if (pendingUser) {
+                    const user = JSON.parse(pendingUser);
+                    userAvatar.textContent = user.firstName.charAt(0).toUpperCase();
+                    userName.textContent = `${user.firstName} ${user.lastName}`;
+                    userEmail.textContent = user.email;
+                    userInfoDiv.style.display = 'flex';
+
+                    const payhipBtn = document.getElementById('payhipButton');
+                    payhipBtn.href += `?email=${encodeURIComponent(user.email)}`;
+                } else {
+                    // No user - redirect to signup
+                    window.location.href = '/signup.html';
+                }
+            }
+        }
+
+        // Logout function
+        async function logout() {
+            await supabase.auth.signOut();
+            localStorage.removeItem('pendingUser');
+            window.location.href = '/signup.html';
+        }
+
+        // Listen for successful payment via URL callback
+        function checkPaymentSuccess() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('payment') === 'success') {
+                showMessage('Payment successful! Activating your account...', 'success');
+                // Redirect to app after activation
+                setTimeout(() => {
+                    window.location.href = '/app.html';
+                }, 2000);
+            }
+        }
+
+        // Initialize
+        checkAuth();
+        checkPaymentSuccess();
+    </script>
+
+    <!--
+    PAYHIP SCRIPT:
+    Uncomment and add the Payhip embed script here:
+    <script async src="https://payhip.com/embed-scripts/product-button.js"></script>
+    -->
+</body>
+</html>
