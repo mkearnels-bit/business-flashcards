@@ -266,12 +266,45 @@
             flex-direction: column;
             padding: 24px;
             border-radius: 20px;
+            overflow-y: auto;
         }
 
         .flashcard-back {
             transform: rotateY(180deg);
             background: var(--white);
             border-radius: 20px;
+        }
+
+        /* Mobile: disable 3D flip, use simple show/hide for reliability */
+        @media (max-width: 768px) {
+            .flashcard {
+                transform-style: flat;
+                transform: none !important;
+            }
+
+            .flashcard-face {
+                position: relative;
+                backface-visibility: visible;
+                transform: none !important;
+            }
+
+            .flashcard-front {
+                display: flex;
+            }
+
+            .flashcard-back {
+                display: none;
+                position: relative;
+                transform: none !important;
+            }
+
+            .flashcard.flipped .flashcard-front {
+                display: none;
+            }
+
+            .flashcard.flipped .flashcard-back {
+                display: flex;
+            }
         }
 
         .card-header {
@@ -558,25 +591,22 @@
                 font-size: 9px;
             }
 
-            /* Flashcard mobile fixes - CRITICAL: proper scrolling */
+            /* Flashcard mobile fixes */
             .flashcard-container {
                 margin-bottom: 16px;
             }
 
             .flashcard {
-                min-height: 400px;
-                max-height: 70vh;
+                min-height: auto;
                 border-radius: 16px;
                 border-left-width: 5px;
-                overflow: hidden;
             }
 
             .flashcard-face {
                 padding: 16px;
                 border-radius: 16px;
-                display: flex;
-                flex-direction: column;
-                height: 100%;
+                min-height: 300px;
+                height: auto;
             }
 
             .card-header {
@@ -584,22 +614,18 @@
                 flex-shrink: 0;
             }
 
-            /* Card content - SCROLLABLE on mobile */
             .card-content {
                 flex: 1;
                 padding: 8px;
-                overflow-y: auto;
-                -webkit-overflow-scrolling: touch;
+                overflow-y: visible;
                 align-items: flex-start;
                 justify-content: flex-start;
-                min-height: 0;
             }
 
             .card-footer {
                 padding-top: 12px;
                 flex-shrink: 0;
                 background: white;
-                margin-top: auto;
             }
 
             .card-question {
@@ -1221,8 +1247,8 @@
                 }
                 // Regular text
                 else {
-                    // Check if it's a comma-separated list after a colon
-                    if (cleanLine.includes(',') && !cleanLine.includes('.')) {
+                    // Check if it's a comma-separated list - but NOT if it has parentheses
+                    if (cleanLine.includes(',') && !cleanLine.includes('.') && !cleanLine.includes('(')) {
                         let items = cleanLine.split(',').map(i => i.trim()).filter(i => i);
                         if (items.length > 2) {
                             currentItems = currentItems.concat(items);
@@ -1243,24 +1269,60 @@
             return html;
         }
 
-        // Parse items from text (comma-separated or other patterns)
+        // Parse items from text - SMART comma splitting that respects parentheses
         function parseListItems(text) {
             text = text.trim();
-            // If it contains commas and multiple items, split
-            if (text.includes(',')) {
-                let items = text.split(',').map(i => i.trim().replace(/\.$/, '')).filter(i => i);
+            if (!text) return [];
+
+            // Don't split if text contains parentheses - keep items like "demographic (age, gender)" together
+            // Instead, split on ", and " or on commas that are followed by a word (not inside parens)
+
+            // Check if this looks like a list of items with parenthetical explanations
+            // Pattern: "word (stuff), word (stuff), and word (stuff)"
+            let parenPattern = /\w+\s*\([^)]+\)/g;
+            let parenMatches = text.match(parenPattern);
+
+            if (parenMatches && parenMatches.length > 1) {
+                // This has multiple items with parentheses - extract them properly
+                // Split on "), " or "), and " to get complete items
+                let items = [];
+                let remaining = text;
+                let match;
+                let itemRegex = /(\w+(?:\s+\w+)?\s*\([^)]+\))(?:,\s*(?:and\s+)?|$)/g;
+
+                while ((match = itemRegex.exec(text)) !== null) {
+                    items.push(match[1].trim());
+                }
+
                 if (items.length > 1) {
                     return items;
                 }
             }
-            // If it has "and" separating items
-            if (text.includes(' and ') && !text.includes('.')) {
-                let items = text.split(/,?\s+and\s+/i).map(i => i.trim()).filter(i => i);
+
+            // Check for simple comma-separated list (no parentheses)
+            if (text.includes(',') && !text.includes('(')) {
+                // Split on comma, handling "and" before last item
+                let items = text
+                    .replace(/,?\s+and\s+/g, ', ')  // normalize "and" to comma
+                    .split(',')
+                    .map(i => i.trim().replace(/\.$/, ''))
+                    .filter(i => i.length > 0);
+
                 if (items.length > 1) {
                     return items;
                 }
             }
-            return text ? [{type: 'text', content: text}] : [];
+
+            // If text has "and" separating items (no commas)
+            if (text.includes(' and ') && !text.includes(',') && !text.includes('(')) {
+                let items = text.split(/\s+and\s+/i).map(i => i.trim()).filter(i => i);
+                if (items.length > 1) {
+                    return items;
+                }
+            }
+
+            // Return as single text item
+            return [{type: 'text', content: text}];
         }
 
         // Output a section with optional title and items
