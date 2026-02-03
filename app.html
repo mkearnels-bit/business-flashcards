@@ -245,6 +245,7 @@
         .type-badge.formula { background: var(--formula-color); }
         .type-badge.theory { background: var(--theory-color); }
         .type-badge.proscons { background: var(--proscons-color); }
+        .type-badge.advantages { background: var(--proscons-color); }
 
         .card-content {
             flex: 1;
@@ -361,7 +362,7 @@
                         <option value="term">Key Terms</option>
                         <option value="formula">Formulas</option>
                         <option value="theory">Theories</option>
-                        <option value="proscons">Pros & Cons</option>
+                        <option value="advantages">Pros & Cons</option>
                     </select>
                 </div>
             </div>
@@ -585,7 +586,7 @@
 
             const card = filteredCards[currentIndex];
             document.getElementById('cardQuestion').textContent = card.question;
-            document.getElementById('cardAnswer').textContent = card.answer;
+            document.getElementById('cardAnswer').innerHTML = card.answer;
 
             const unitText = 'Unit ' + card.unit;
             document.getElementById('unitLabel').textContent = unitText;
@@ -593,7 +594,7 @@
             document.getElementById('topicLabel').textContent = card.topic || '';
             document.getElementById('topicLabelBack').textContent = card.topic || '';
 
-            const typeText = {'term': 'Key Term', 'formula': 'Formula', 'theory': 'Theory', 'proscons': 'Pros & Cons'}[card.type] || card.type;
+            const typeText = {'term': 'Key Term', 'formula': 'Formula', 'theory': 'Theory', 'advantages': 'Pros & Cons'}[card.type] || card.type;
             document.getElementById('typeBadge').textContent = typeText;
             document.getElementById('typeBadgeBack').textContent = typeText;
             document.getElementById('typeBadge').className = 'type-badge ' + card.type;
