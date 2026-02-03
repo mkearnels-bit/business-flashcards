@@ -53,7 +53,7 @@
             background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(10px);
             z-index: 1000;
-            padding: 0.75rem 2rem;
+            padding: 0.5rem 2rem;
             border-bottom: 1px solid var(--gray-100);
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
@@ -73,8 +73,14 @@
         }
 
         .logo img {
-            height: 50px;
+            height: 65px;
             width: auto;
+        }
+
+        @media (max-width: 768px) {
+            .logo img {
+                height: 50px;
+            }
         }
 
         .nav-links {
@@ -180,35 +186,6 @@
         .hero-content {
             position: relative;
             z-index: 1;
-            text-align: center;
-        }
-
-        .hero-logo {
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        .hero-logo img {
-            height: 80px;
-            width: auto;
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
-            transition: transform 0.3s ease;
-        }
-
-        .hero-logo img:hover {
-            transform: scale(1.02);
-        }
-
-        @media (max-width: 1024px) {
-            .hero-logo img {
-                height: 70px;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .hero-logo img {
-                height: 55px;
-            }
         }
 
         .hero-badge {
@@ -246,22 +223,18 @@
             font-size: 1.25rem;
             color: var(--gray-500);
             margin-bottom: 2rem;
-            max-width: 550px;
-            margin-left: auto;
-            margin-right: auto;
+            max-width: 500px;
         }
 
         .hero-cta {
             display: flex;
             gap: 1rem;
             margin-bottom: 2.5rem;
-            justify-content: center;
         }
 
         .hero-stats {
             display: flex;
             gap: 3rem;
-            justify-content: center;
         }
 
         .stat {
@@ -1207,9 +1180,6 @@
     <section class="hero">
         <div class="hero-container">
             <div class="hero-content">
-                <div class="hero-logo">
-                    <img src="logo.png" alt="MyBizStudies.com - A-Level Business Revision">
-                </div>
                 <div class="hero-badge">
                     📖 Created by an experienced educator
                 </div>
