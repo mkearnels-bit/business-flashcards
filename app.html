@@ -16,11 +16,13 @@
         }
 
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --primary-light: #3b82f6;
-            --accent: #0ea5e9;
-            --dark: #0f172a;
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --accent: #8b5cf6;
+            --gradient-start: #667eea;
+            --gradient-end: #764ba2;
+            --dark: #1e1b4b;
             --gray-900: #1e293b;
             --gray-700: #334155;
             --gray-500: #64748b;
@@ -33,15 +35,15 @@
             --unit2: #3498db;
             --unit3: #2ecc71;
             --unit4: #f39c12;
-            --term-color: #3498db;
-            --formula-color: #9b59b6;
-            --theory-color: #1abc9c;
-            --advantages-color: #e67e22;
+            --term-color: #3b82f6;
+            --formula-color: #8b5cf6;
+            --theory-color: #06b6d4;
+            --proscons-color: #f59e0b;
         }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
             min-height: 100vh;
             padding: 20px;
         }
@@ -51,28 +53,22 @@
             position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: white;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
             display: flex;
-            align-items: center;
             justify-content: center;
-            flex-direction: column;
+            align-items: center;
             z-index: 9999;
         }
 
-        .loading-spinner-large {
+        .loading-spinner {
             width: 50px;
             height: 50px;
-            border: 4px solid var(--gray-100);
-            border-top-color: var(--primary);
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top-color: white;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-        }
-
-        .loading-text {
-            margin-top: 1rem;
-            color: var(--gray-500);
         }
 
         @keyframes spin {
@@ -83,183 +79,101 @@
             display: none !important;
         }
 
-        .container {
-            max-width: 1200px;
+        /* Main container */
+        .app-container {
+            max-width: 900px;
             margin: 0 auto;
         }
 
-        /* Top bar */
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            text-decoration: none;
-            color: white;
-        }
-
-        .logo-icon {
-            width: 36px;
-            height: 36px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-        }
-
-        .logo-text {
-            font-size: 1.25rem;
-            font-weight: 700;
-        }
-
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .user-name {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 0.9rem;
-        }
-
-        .subscription-badge {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            color: white;
-        }
-
-        .logout-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.875rem;
-            transition: background 0.2s;
-        }
-
-        .logout-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        /* Controls */
-        .controls {
-            background: white;
+        /* Controls Panel */
+        .controls-panel {
+            background: var(--white);
             border-radius: 16px;
             padding: 24px;
             margin-bottom: 24px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
         }
 
-        .control-row {
-            display: flex;
-            flex-wrap: wrap;
+        .controls-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
             gap: 16px;
             margin-bottom: 16px;
         }
 
-        .control-row:last-child {
-            margin-bottom: 0;
-        }
-
         .control-group {
-            flex: 1;
-            min-width: 200px;
+            display: flex;
+            flex-direction: column;
         }
 
         .control-group label {
-            display: block;
+            font-size: 12px;
             font-weight: 600;
-            margin-bottom: 8px;
             color: var(--gray-700);
-            font-size: 0.875rem;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        select, input[type="text"] {
-            width: 100%;
-            padding: 12px 14px;
-            border: 2px solid var(--gray-100);
+        .control-group select,
+        .control-group input {
+            padding: 12px 16px;
+            border: 2px solid var(--gray-300);
             border-radius: 10px;
-            font-size: 1rem;
+            font-size: 14px;
             font-family: inherit;
+            color: var(--gray-900);
+            background: var(--white);
             transition: all 0.2s;
-            background: var(--gray-100);
+            cursor: pointer;
         }
 
-        select:focus, input[type="text"]:focus {
+        .control-group select:hover,
+        .control-group input:hover {
+            border-color: var(--primary-light);
+        }
+
+        .control-group select:focus,
+        .control-group input:focus {
             outline: none;
             border-color: var(--primary);
-            background: white;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
         }
 
-        .btn {
-            padding: 12px 20px;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            border: none;
-            font-family: inherit;
-            transition: all 0.2s;
+        .search-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-        }
-
-        .btn-secondary {
-            background: var(--gray-100);
-            color: var(--gray-700);
-        }
-
-        .btn-secondary:hover {
-            background: var(--gray-300);
-        }
-
-        /* Stats */
-        .stats {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
+        /* Stats Row */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
         }
 
         .stat-box {
-            flex: 1;
-            min-width: 100px;
             background: var(--gray-100);
-            padding: 16px;
             border-radius: 12px;
+            padding: 20px;
             text-align: center;
         }
 
-        .stat-number {
-            font-size: 1.75rem;
-            font-weight: 800;
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
             color: var(--primary);
+            line-height: 1;
+            margin-bottom: 4px;
         }
 
         .stat-label {
-            font-size: 0.8rem;
+            font-size: 12px;
             color: var(--gray-500);
-            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         /* Flashcard */
@@ -269,335 +183,350 @@
         }
 
         .flashcard {
-            background: white;
-            border-radius: 16px;
-            min-height: 400px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            background: var(--white);
+            border-radius: 20px;
+            min-height: 350px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
             cursor: pointer;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
             position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            border-left: 6px solid var(--unit1);
         }
 
         .flashcard.flipped {
             transform: rotateY(180deg);
         }
 
-        .card-face {
-            backface-visibility: hidden;
+        .flashcard-face {
             position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100%;
-            padding: 40px;
+            backface-visibility: hidden;
             display: flex;
             flex-direction: column;
-            border-radius: 16px;
+            padding: 24px;
+            border-radius: 20px;
         }
 
-        .card-front {
-            justify-content: center;
-            align-items: center;
-        }
-
-        .card-back {
+        .flashcard-back {
             transform: rotateY(180deg);
-            overflow-y: auto;
+            background: var(--white);
+            border-radius: 20px;
         }
 
-        .card-type {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            color: white;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.75rem;
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .card-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .unit-badge {
+            font-size: 14px;
             font-weight: 600;
+            color: var(--unit1);
+        }
+
+        .topic-label {
+            font-size: 13px;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .type-badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .card-type.term { background: var(--term-color); }
-        .card-type.formula { background: var(--formula-color); }
-        .card-type.theory { background: var(--theory-color); }
-        .card-type.advantages { background: var(--advantages-color); }
+        .type-badge.term { background: var(--term-color); }
+        .type-badge.formula { background: var(--formula-color); }
+        .type-badge.theory { background: var(--theory-color); }
+        .type-badge.proscons { background: var(--proscons-color); }
 
-        .card-unit {
-            position: absolute;
-            top: 16px;
-            left: 16px;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: white;
-        }
-
-        .unit-1 { background: var(--unit1); }
-        .unit-2 { background: var(--unit2); }
-        .unit-3 { background: var(--unit3); }
-        .unit-4 { background: var(--unit4); }
-
-        .question {
-            font-size: 1.75rem;
-            font-weight: 700;
+        .card-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             text-align: center;
-            color: var(--dark);
-            max-width: 600px;
+            padding: 20px;
+        }
+
+        .card-question {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--gray-900);
             line-height: 1.4;
         }
 
-        .answer {
-            font-size: 1.125rem;
-            line-height: 1.8;
+        .card-answer {
+            font-size: 18px;
             color: var(--gray-700);
-            margin-top: 60px;
+            line-height: 1.6;
         }
 
-        .answer strong {
-            color: var(--dark);
+        .card-footer {
+            text-align: center;
+            padding-top: 16px;
+            border-top: 1px solid var(--gray-200);
         }
 
         .flip-hint {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+            font-size: 13px;
             color: var(--gray-500);
-            font-size: 0.875rem;
         }
 
-        /* Two column layout for advantages */
-        .answer-columns {
+        /* Navigation Buttons */
+        .nav-buttons {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-            margin-top: 60px;
-        }
-
-        .advantage-col, .disadvantage-col {
-            padding: 20px;
-            border-radius: 12px;
-        }
-
-        .advantage-col {
-            background: #d4edda;
-        }
-
-        .disadvantage-col {
-            background: #f8d7da;
-        }
-
-        .col-title {
-            font-weight: 700;
-            margin-bottom: 12px;
-            font-size: 1rem;
-        }
-
-        .advantage-col .col-title { color: #155724; }
-        .disadvantage-col .col-title { color: #721c24; }
-
-        /* Navigation */
-        .navigation {
-            display: flex;
-            justify-content: center;
+            grid-template-columns: repeat(3, 1fr);
             gap: 16px;
+            margin-bottom: 16px;
         }
 
         .nav-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: white;
+            padding: 16px 24px;
             border: none;
-            font-size: 1.25rem;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .nav-btn.prev {
+            background: var(--primary-light);
+            color: white;
+        }
+
+        .nav-btn.flip {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-btn.next {
+            background: var(--primary-light);
+            color: white;
         }
 
         .nav-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
         }
 
-        .nav-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
+        .nav-btn:active {
+            transform: translateY(0);
         }
 
-        .card-counter {
-            background: white;
-            padding: 12px 24px;
-            border-radius: 30px;
-            font-weight: 600;
-            color: var(--gray-700);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        /* No cards message */
-        .no-cards {
-            background: white;
-            border-radius: 16px;
-            padding: 60px 40px;
+        /* Keyboard hints */
+        .keyboard-hints {
             text-align: center;
-            color: var(--gray-500);
+            color: rgba(255,255,255,0.8);
+            font-size: 13px;
         }
 
-        .no-cards h3 {
-            color: var(--dark);
-            margin-bottom: 8px;
+        .keyboard-hints span {
+            margin-right: 8px;
         }
+
+        /* Unit colors */
+        .flashcard.unit-1 { border-left-color: var(--unit1); }
+        .flashcard.unit-2 { border-left-color: var(--unit2); }
+        .flashcard.unit-3 { border-left-color: var(--unit3); }
+        .flashcard.unit-4 { border-left-color: var(--unit4); }
+
+        .unit-badge.unit-1 { color: var(--unit1); }
+        .unit-badge.unit-2 { color: var(--unit2); }
+        .unit-badge.unit-3 { color: var(--unit3); }
+        .unit-badge.unit-4 { color: var(--unit4); }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .top-bar {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-
-            .question {
-                font-size: 1.25rem;
-            }
-
-            .answer-columns {
+            .controls-row {
                 grid-template-columns: 1fr;
             }
 
-            .control-group {
-                min-width: 100%;
+            .search-row {
+                grid-template-columns: 1fr;
             }
 
-            .stats {
-                justify-content: center;
+            .stats-row {
+                grid-template-columns: repeat(3, 1fr);
             }
 
-            .stat-box {
-                min-width: 80px;
+            .nav-buttons {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .card-question {
+                font-size: 20px;
+            }
+
+            .card-answer {
+                font-size: 16px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Loading overlay -->
-    <div id="loadingOverlay" class="loading-overlay">
-        <div class="loading-spinner-large"></div>
-        <p class="loading-text">Loading your flashcards...</p>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
     </div>
 
-    <!-- Main app (hidden until auth verified) -->
-    <div id="mainApp" class="container hidden">
-        <div class="top-bar">
-            <a href="/" class="logo">
-                <div class="logo-icon">📚</div>
-                <span class="logo-text">Business Flashcards</span>
-            </a>
-            <div class="user-menu">
-                <span class="user-name" id="userName">Welcome</span>
-                <span class="subscription-badge" id="subscriptionBadge">Active</span>
-                <button class="logout-btn" onclick="logout()">Logout</button>
-            </div>
-        </div>
-
-        <div class="controls">
-            <div class="control-row">
+    <div class="app-container hidden" id="appContainer">
+        <!-- Controls Panel -->
+        <div class="controls-panel">
+            <div class="controls-row">
                 <div class="control-group">
-                    <label>Unit</label>
-                    <select id="unitFilter" onchange="filterCards()">
+                    <label>Select Unit:</label>
+                    <select id="unitFilter">
                         <option value="all">All Units</option>
-                        <option value="1">Unit 1: Marketing & People</option>
-                        <option value="2">Unit 2: Managing Business Activities</option>
-                        <option value="3">Unit 3: Business Decisions & Strategy</option>
-                        <option value="4">Unit 4: Global Business</option>
+                        <option value="1">Unit 1</option>
+                        <option value="2">Unit 2</option>
+                        <option value="3">Unit 3</option>
+                        <option value="4">Unit 4</option>
                     </select>
                 </div>
                 <div class="control-group">
-                    <label>Card Type</label>
-                    <select id="typeFilter" onchange="filterCards()">
+                    <label>Select Topic:</label>
+                    <select id="topicFilter">
+                        <option value="all">All Topics</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Card Type:</label>
+                    <select id="typeFilter">
                         <option value="all">All Types</option>
                         <option value="term">Key Terms</option>
                         <option value="formula">Formulas</option>
                         <option value="theory">Theories</option>
-                        <option value="advantages">Advantages & Disadvantages</option>
+                        <option value="proscons">Pros & Cons</option>
                     </select>
                 </div>
+            </div>
+
+            <div class="search-row">
                 <div class="control-group">
-                    <label>Search</label>
-                    <input type="text" id="searchInput" placeholder="Search flashcards..." oninput="filterCards()">
+                    <label>Search Flashcards:</label>
+                    <input type="text" id="searchInput" placeholder="Type to search...">
+                </div>
+                <div class="control-group">
+                    <label>Card Order:</label>
+                    <select id="orderSelect">
+                        <option value="sequential">Sequential</option>
+                        <option value="random">Random</option>
+                    </select>
                 </div>
             </div>
-            <div class="control-row">
-                <div class="control-group">
-                    <button class="btn btn-primary" onclick="shuffleCards()">🔀 Shuffle</button>
+
+            <div class="stats-row">
+                <div class="stat-box">
+                    <div class="stat-value" id="currentCardNum">1</div>
+                    <div class="stat-label">Current Card</div>
                 </div>
-                <div class="control-group">
-                    <button class="btn btn-secondary" onclick="resetCards()">↩️ Reset</button>
+                <div class="stat-box">
+                    <div class="stat-value" id="totalCards">0</div>
+                    <div class="stat-label">Total Cards</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="progressPercent">0%</div>
+                    <div class="stat-label">Progress</div>
                 </div>
             </div>
-            <div class="control-row">
-                <div class="stats">
-                    <div class="stat-box">
-                        <div class="stat-number" id="totalCards">0</div>
-                        <div class="stat-label">Total Cards</div>
+        </div>
+
+        <!-- Flashcard -->
+        <div class="flashcard-container">
+            <div class="flashcard" id="flashcard">
+                <div class="flashcard-face flashcard-front">
+                    <div class="card-header">
+                        <div class="card-meta">
+                            <span class="unit-badge" id="unitLabel">Unit 1</span>
+                            <span class="topic-label" id="topicLabel">1.1 Meeting Customer Needs</span>
+                        </div>
+                        <span class="type-badge term" id="typeBadge">Key Term</span>
                     </div>
-                    <div class="stat-box">
-                        <div class="stat-number" id="termCount">0</div>
-                        <div class="stat-label">Terms</div>
+                    <div class="card-content">
+                        <div class="card-question" id="cardQuestion">Loading...</div>
                     </div>
-                    <div class="stat-box">
-                        <div class="stat-number" id="formulaCount">0</div>
-                        <div class="stat-label">Formulas</div>
+                    <div class="card-footer">
+                        <span class="flip-hint">Click to reveal answer | Press Space</span>
                     </div>
-                    <div class="stat-box">
-                        <div class="stat-number" id="theoryCount">0</div>
-                        <div class="stat-label">Theories</div>
+                </div>
+                <div class="flashcard-face flashcard-back">
+                    <div class="card-header">
+                        <div class="card-meta">
+                            <span class="unit-badge" id="unitLabelBack">Unit 1</span>
+                            <span class="topic-label" id="topicLabelBack">1.1 Meeting Customer Needs</span>
+                        </div>
+                        <span class="type-badge term" id="typeBadgeBack">Key Term</span>
                     </div>
-                    <div class="stat-box">
-                        <div class="stat-number" id="advantagesCount">0</div>
-                        <div class="stat-label">Pros & Cons</div>
+                    <div class="card-content">
+                        <div class="card-answer" id="cardAnswer">Loading...</div>
+                    </div>
+                    <div class="card-footer">
+                        <span class="flip-hint">Click to see question | Press Space</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="flashcardContainer" class="flashcard-container">
-            <!-- Flashcard will be rendered here -->
+        <!-- Navigation -->
+        <div class="nav-buttons">
+            <button class="nav-btn prev" id="prevBtn">&larr; Previous</button>
+            <button class="nav-btn flip" id="flipBtn">Flip Card</button>
+            <button class="nav-btn next" id="nextBtn">Next &rarr;</button>
         </div>
 
-        <div class="navigation">
-            <button class="nav-btn" id="prevBtn" onclick="prevCard()">←</button>
-            <div class="card-counter">
-                <span id="currentIndex">1</span> / <span id="filteredTotal">0</span>
-            </div>
-            <button class="nav-btn" id="nextBtn" onclick="nextCard()">→</button>
+        <div class="keyboard-hints">
+            <span>⌨️ Keyboard:</span>
+            <span>Space/Enter = Flip</span> |
+            <span>←/→ = Navigate</span> |
+            <span>1 = Got It</span> |
+            <span>2 = Review</span>
         </div>
     </div>
 
-    <!-- Flashcard data will be loaded from external file -->
     <script src="flashcard-data.js"></script>
-
     <script>
-        // Supabase Configuration
+        // Supabase configuration
         const SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzgzNjA4MTIsImV4cCI6MjA1MzkzNjgxMn0.LE4DhWFvPI2E6R9vFLBaNHYBrxjOopIp1F-25ws9hco';
 
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // State
-        let currentUser = null;
-        let subscription = null;
+        // App state
         let currentIndex = 0;
         let filteredCards = [];
         let isFlipped = false;
+        let allTopics = [];
 
         // DOM Elements
         const loadingOverlay = document.getElementById('loadingOverlay');
-        const mainApp = document.getElementById('mainApp');
-        const userNameEl = document.getElementById('userName');
-        const subscriptionBadge = document.getElementById('subscriptionBadge');
+        const appContainer = document.getElementById('appContainer');
+        const flashcard = document.getElementById('flashcard');
+        const unitFilter = document.getElementById('unitFilter');
+        const topicFilter = document.getElementById('topicFilter');
+        const typeFilter = document.getElementById('typeFilter');
+        const searchInput = document.getElementById('searchInput');
+        const orderSelect = document.getElementById('orderSelect');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const flipBtn = document.getElementById('flipBtn');
 
         // Check authentication and subscription
         async function checkAuth() {
@@ -605,230 +534,285 @@
                 const { data: { session } } = await supabaseClient.auth.getSession();
 
                 if (!session) {
-                    window.location.href = '/login.html';
+                    window.location.href = 'login.html';
                     return;
                 }
-
-                currentUser = session.user;
 
                 // Check subscription
-                const { data: sub, error } = await supabaseClient
+                const { data: subscription } = await supabaseClient
                     .from('subscriptions')
                     .select('*')
-                    .eq('user_id', currentUser.id)
+                    .eq('user_id', session.user.id)
+                    .eq('status', 'active')
                     .single();
 
-                if (error && error.code !== 'PGRST116') {
-                    console.error('Subscription check error:', error);
-                }
-
-                if (!sub || new Date(sub.expires_at) < new Date()) {
-                    // No active subscription
-                    alert('Your subscription has expired. Please renew to continue.');
-                    window.location.href = '/#pricing';
+                if (!subscription) {
+                    window.location.href = 'payment.html';
                     return;
                 }
 
-                subscription = sub;
+                // Check if subscription is expired
+                if (new Date(subscription.expires_at) < new Date()) {
+                    window.location.href = 'payment.html';
+                    return;
+                }
 
-                // Update UI
-                const metadata = currentUser.user_metadata || {};
-                const name = metadata.full_name || metadata.first_name || currentUser.email.split('@')[0];
-                userNameEl.textContent = `Welcome, ${name}`;
-
-                // Calculate days remaining
-                const expiresAt = new Date(sub.expires_at);
-                const daysRemaining = Math.ceil((expiresAt - new Date()) / (1000 * 60 * 60 * 24));
-                subscriptionBadge.textContent = `${daysRemaining} days left`;
-
-                // Show app
-                loadingOverlay.classList.add('hidden');
-                mainApp.classList.remove('hidden');
-
-                // Initialize flashcards
-                initFlashcards();
+                // User is authenticated and subscribed
+                initializeApp();
 
             } catch (error) {
                 console.error('Auth error:', error);
-                window.location.href = '/login.html';
+                window.location.href = 'login.html';
             }
         }
 
-        // Initialize flashcards
-        function initFlashcards() {
-            if (typeof flashcardData === 'undefined') {
-                console.error('Flashcard data not loaded');
-                return;
-            }
+        // Initialize the app
+        function initializeApp() {
+            loadingOverlay.classList.add('hidden');
+            appContainer.classList.remove('hidden');
 
-            filteredCards = [...flashcardData];
-            updateStats();
-            renderCard();
+            // Extract all unique topics
+            extractTopics();
+
+            // Apply filters and display
+            applyFilters();
+
+            // Set up event listeners
+            setupEventListeners();
         }
 
-        // Update stats
-        function updateStats() {
-            document.getElementById('totalCards').textContent = filteredCards.length;
-            document.getElementById('termCount').textContent = flashcardData.filter(c => c.type === 'term').length;
-            document.getElementById('formulaCount').textContent = flashcardData.filter(c => c.type === 'formula').length;
-            document.getElementById('theoryCount').textContent = flashcardData.filter(c => c.type === 'theory').length;
-            document.getElementById('advantagesCount').textContent = flashcardData.filter(c => c.type === 'advantages').length;
-            document.getElementById('filteredTotal').textContent = filteredCards.length;
+        // Extract unique topics from flashcards
+        function extractTopics() {
+            const topicsSet = new Set();
+            flashcardsData.forEach(card => {
+                if (card.topic) {
+                    topicsSet.add(card.topic);
+                }
+            });
+            allTopics = Array.from(topicsSet).sort();
+
+            // Populate topic filter
+            topicFilter.innerHTML = '<option value="all">All Topics</option>';
+            allTopics.forEach(topic => {
+                const option = document.createElement('option');
+                option.value = topic;
+                option.textContent = topic;
+                topicFilter.appendChild(option);
+            });
         }
 
-        // Filter cards
-        function filterCards() {
-            const unit = document.getElementById('unitFilter').value;
-            const type = document.getElementById('typeFilter').value;
-            const search = document.getElementById('searchInput').value.toLowerCase();
+        // Apply filters
+        function applyFilters() {
+            const unitValue = unitFilter.value;
+            const topicValue = topicFilter.value;
+            const typeValue = typeFilter.value;
+            const searchValue = searchInput.value.toLowerCase();
+            const orderValue = orderSelect.value;
 
-            filteredCards = flashcardData.filter(card => {
-                const matchesUnit = unit === 'all' || card.unit.toString() === unit;
-                const matchesType = type === 'all' || card.type === type;
-                const matchesSearch = !search ||
-                    card.question.toLowerCase().includes(search) ||
-                    card.answer.toLowerCase().includes(search);
-                return matchesUnit && matchesType && matchesSearch;
+            filteredCards = flashcardsData.filter(card => {
+                const matchUnit = unitValue === 'all' || card.unit.toString() === unitValue;
+                const matchTopic = topicValue === 'all' || card.topic === topicValue;
+                const matchType = typeValue === 'all' || card.type === typeValue;
+                const matchSearch = !searchValue ||
+                    card.question.toLowerCase().includes(searchValue) ||
+                    card.answer.toLowerCase().includes(searchValue);
+
+                return matchUnit && matchTopic && matchType && matchSearch;
             });
 
-            currentIndex = 0;
-            document.getElementById('filteredTotal').textContent = filteredCards.length;
-            renderCard();
-        }
-
-        // Shuffle cards
-        function shuffleCards() {
-            for (let i = filteredCards.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [filteredCards[i], filteredCards[j]] = [filteredCards[j], filteredCards[i]];
+            // Apply ordering
+            if (orderValue === 'random') {
+                filteredCards = shuffleArray([...filteredCards]);
             }
+
             currentIndex = 0;
-            renderCard();
+            isFlipped = false;
+            flashcard.classList.remove('flipped');
+
+            updateDisplay();
         }
 
-        // Reset cards
-        function resetCards() {
-            document.getElementById('unitFilter').value = 'all';
-            document.getElementById('typeFilter').value = 'all';
-            document.getElementById('searchInput').value = '';
-            filteredCards = [...flashcardData];
-            currentIndex = 0;
-            updateStats();
-            renderCard();
+        // Shuffle array
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
         }
 
-        // Render current card
-        function renderCard() {
-            const container = document.getElementById('flashcardContainer');
+        // Update display
+        function updateDisplay() {
+            const totalCount = filteredCards.length;
+            document.getElementById('totalCards').textContent = totalCount;
+            document.getElementById('currentCardNum').textContent = totalCount > 0 ? currentIndex + 1 : 0;
 
-            if (filteredCards.length === 0) {
-                container.innerHTML = `
-                    <div class="no-cards">
-                        <h3>No flashcards found</h3>
-                        <p>Try adjusting your filters or search terms</p>
-                    </div>
-                `;
-                document.getElementById('currentIndex').textContent = '0';
+            const progress = totalCount > 0 ? Math.round(((currentIndex + 1) / totalCount) * 100) : 0;
+            document.getElementById('progressPercent').textContent = progress + '%';
+
+            if (totalCount === 0) {
+                document.getElementById('cardQuestion').textContent = 'No cards match your filters';
+                document.getElementById('cardAnswer').textContent = 'Try adjusting your search or filters';
+                document.getElementById('unitLabel').textContent = '';
+                document.getElementById('topicLabel').textContent = '';
+                document.getElementById('unitLabelBack').textContent = '';
+                document.getElementById('topicLabelBack').textContent = '';
                 return;
             }
 
             const card = filteredCards[currentIndex];
-            document.getElementById('currentIndex').textContent = currentIndex + 1;
 
-            // Check if it's an advantages card with two columns
-            const hasColumns = card.answer.includes('ADVANTAGES:') && card.answer.includes('DISADVANTAGES:');
+            // Update card content
+            document.getElementById('cardQuestion').textContent = card.question;
+            document.getElementById('cardAnswer').textContent = card.answer;
 
-            let answerHTML = card.answer;
-            if (hasColumns) {
-                // Parse and create two-column layout
-                const advMatch = card.answer.match(/ADVANTAGES:([\s\S]*?)(?=DISADVANTAGES:|$)/i);
-                const disMatch = card.answer.match(/DISADVANTAGES:([\s\S]*?)$/i);
+            // Update labels
+            const unitText = 'Unit ' + card.unit;
+            document.getElementById('unitLabel').textContent = unitText;
+            document.getElementById('unitLabelBack').textContent = unitText;
+            document.getElementById('topicLabel').textContent = card.topic || '';
+            document.getElementById('topicLabelBack').textContent = card.topic || '';
 
-                const advantages = advMatch ? advMatch[1].trim() : '';
-                const disadvantages = disMatch ? disMatch[1].trim() : '';
+            // Update type badge
+            const typeText = getTypeText(card.type);
+            const typeBadge = document.getElementById('typeBadge');
+            const typeBadgeBack = document.getElementById('typeBadgeBack');
+            typeBadge.textContent = typeText;
+            typeBadgeBack.textContent = typeText;
 
-                answerHTML = `
-                    <div class="answer-columns">
-                        <div class="advantage-col">
-                            <div class="col-title">✓ ADVANTAGES</div>
-                            <div>${advantages.replace(/•/g, '<br>•')}</div>
-                        </div>
-                        <div class="disadvantage-col">
-                            <div class="col-title">✗ DISADVANTAGES</div>
-                            <div>${disadvantages.replace(/•/g, '<br>•')}</div>
-                        </div>
-                    </div>
-                `;
-            } else {
-                answerHTML = `<div class="answer">${card.answer}</div>`;
+            // Update badge classes
+            typeBadge.className = 'type-badge ' + card.type;
+            typeBadgeBack.className = 'type-badge ' + card.type;
+
+            // Update unit classes
+            flashcard.className = 'flashcard unit-' + card.unit;
+            if (isFlipped) {
+                flashcard.classList.add('flipped');
             }
 
-            container.innerHTML = `
-                <div class="flashcard" onclick="flipCard()">
-                    <div class="card-face card-front">
-                        <span class="card-unit unit-${card.unit}">Unit ${card.unit}</span>
-                        <span class="card-type ${card.type}">${card.type}</span>
-                        <div class="question">${card.question}</div>
-                        <div class="flip-hint">Click to reveal answer</div>
-                    </div>
-                    <div class="card-face card-back">
-                        <span class="card-unit unit-${card.unit}">Unit ${card.unit}</span>
-                        <span class="card-type ${card.type}">${card.type}</span>
-                        ${answerHTML}
-                    </div>
-                </div>
-            `;
-
-            isFlipped = false;
-            updateNavButtons();
+            // Update unit badge colors
+            document.getElementById('unitLabel').className = 'unit-badge unit-' + card.unit;
+            document.getElementById('unitLabelBack').className = 'unit-badge unit-' + card.unit;
         }
 
-        // Flip card
-        function flipCard() {
-            const flashcard = document.querySelector('.flashcard');
-            if (flashcard) {
-                flashcard.classList.toggle('flipped');
-                isFlipped = !isFlipped;
-            }
+        function getTypeText(type) {
+            const types = {
+                'term': 'Key Term',
+                'formula': 'Formula',
+                'theory': 'Theory',
+                'proscons': 'Pros & Cons'
+            };
+            return types[type] || type;
         }
 
-        // Navigation
-        function prevCard() {
-            if (currentIndex > 0) {
-                currentIndex--;
-                renderCard();
-            }
-        }
-
+        // Navigation functions
         function nextCard() {
-            if (currentIndex < filteredCards.length - 1) {
-                currentIndex++;
-                renderCard();
+            if (filteredCards.length === 0) return;
+            currentIndex = (currentIndex + 1) % filteredCards.length;
+            isFlipped = false;
+            flashcard.classList.remove('flipped');
+            updateDisplay();
+        }
+
+        function prevCard() {
+            if (filteredCards.length === 0) return;
+            currentIndex = (currentIndex - 1 + filteredCards.length) % filteredCards.length;
+            isFlipped = false;
+            flashcard.classList.remove('flipped');
+            updateDisplay();
+        }
+
+        function flipCard() {
+            isFlipped = !isFlipped;
+            flashcard.classList.toggle('flipped');
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Filter changes
+            unitFilter.addEventListener('change', () => {
+                // Update topic filter based on selected unit
+                updateTopicFilter();
+                applyFilters();
+            });
+            topicFilter.addEventListener('change', applyFilters);
+            typeFilter.addEventListener('change', applyFilters);
+            orderSelect.addEventListener('change', applyFilters);
+
+            // Search with debounce
+            let searchTimeout;
+            searchInput.addEventListener('input', () => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(applyFilters, 300);
+            });
+
+            // Navigation buttons
+            prevBtn.addEventListener('click', prevCard);
+            nextBtn.addEventListener('click', nextCard);
+            flipBtn.addEventListener('click', flipCard);
+            flashcard.addEventListener('click', flipCard);
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+
+                switch(e.key) {
+                    case ' ':
+                    case 'Enter':
+                        e.preventDefault();
+                        flipCard();
+                        break;
+                    case 'ArrowRight':
+                        nextCard();
+                        break;
+                    case 'ArrowLeft':
+                        prevCard();
+                        break;
+                    case '1':
+                        // Got it - move to next
+                        nextCard();
+                        break;
+                    case '2':
+                        // Review - just flip if not flipped
+                        if (!isFlipped) flipCard();
+                        break;
+                }
+            });
+        }
+
+        // Update topic filter based on selected unit
+        function updateTopicFilter() {
+            const unitValue = unitFilter.value;
+            const currentTopicValue = topicFilter.value;
+
+            let relevantTopics;
+            if (unitValue === 'all') {
+                relevantTopics = allTopics;
+            } else {
+                const topicsSet = new Set();
+                flashcardsData.forEach(card => {
+                    if (card.unit.toString() === unitValue && card.topic) {
+                        topicsSet.add(card.topic);
+                    }
+                });
+                relevantTopics = Array.from(topicsSet).sort();
+            }
+
+            topicFilter.innerHTML = '<option value="all">All Topics</option>';
+            relevantTopics.forEach(topic => {
+                const option = document.createElement('option');
+                option.value = topic;
+                option.textContent = topic;
+                topicFilter.appendChild(option);
+            });
+
+            // Try to keep the same topic selected if it's still available
+            if (relevantTopics.includes(currentTopicValue)) {
+                topicFilter.value = currentTopicValue;
             }
         }
 
-        function updateNavButtons() {
-            document.getElementById('prevBtn').disabled = currentIndex === 0;
-            document.getElementById('nextBtn').disabled = currentIndex === filteredCards.length - 1;
-        }
-
-        // Keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') prevCard();
-            if (e.key === 'ArrowRight') nextCard();
-            if (e.key === ' ' || e.key === 'Enter') {
-                e.preventDefault();
-                flipCard();
-            }
-        });
-
-        // Logout
-        async function logout() {
-            await supabaseClient.auth.signOut();
-            window.location.href = '/';
-        }
-
-        // Initialize
+        // Start the app
         checkAuth();
     </script>
 </body>
