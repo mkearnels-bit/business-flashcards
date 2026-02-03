@@ -625,59 +625,54 @@
 
         // Format Pros & Cons answers into styled two-column layout
         function formatProsConsAnswer(answer) {
-            // Parse the answer to extract advantages and disadvantages
             let advantages = [];
             let disadvantages = [];
 
-            // Try to parse structured HTML format first
-            // Look for spans with class 'advantage' or 'disadvantage'
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = answer;
+            // The data format is: <span class='advantage'>ADVANTAGES:</span><br>• item<br>• item<br><br><span class='disadvantage'>DISADVANTAGES:</span><br>• item
+            // Split by the disadvantage span to get two sections
+            const parts = answer.split(/<span class=['"]disadvantage['"]>/i);
 
-            const advSpans = tempDiv.querySelectorAll('.advantage, span.advantage');
-            const disSpans = tempDiv.querySelectorAll('.disadvantage, span.disadvantage');
+            if (parts.length >= 2) {
+                // First part contains advantages section
+                const advSection = parts[0];
+                // Second part contains disadvantages section
+                const disSection = parts[1];
 
-            if (advSpans.length > 0 || disSpans.length > 0) {
-                advSpans.forEach(span => advantages.push(span.textContent.trim()));
-                disSpans.forEach(span => disadvantages.push(span.textContent.trim()));
-            } else {
-                // Try parsing text format with "Advantages:" and "Disadvantages:" sections
-                const text = answer.replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, '');
-
-                // Split by "Advantages" and "Disadvantages" keywords
-                const advMatch = text.match(/Advantages?:?\s*([\s\S]*?)(?=Disadvantages?:|$)/i);
-                const disMatch = text.match(/Disadvantages?:?\s*([\s\S]*?)$/i);
-
-                if (advMatch && advMatch[1]) {
-                    advantages = advMatch[1].split(/[\n•\-\*]/)
-                        .map(s => s.trim())
-                        .filter(s => s.length > 2);
-                }
-                if (disMatch && disMatch[1]) {
-                    disadvantages = disMatch[1].split(/[\n•\-\*]/)
-                        .map(s => s.trim())
-                        .filter(s => s.length > 2 && !s.toLowerCase().includes('advantage'));
-                }
-            }
-
-            // If we couldn't parse it, try a simpler split
-            if (advantages.length === 0 && disadvantages.length === 0) {
-                // Just split by line breaks and try to categorize
-                const lines = answer.replace(/<br\s*\/?>/gi, '|||').replace(/<[^>]+>/g, '').split('|||')
-                    .map(s => s.trim())
+                // Extract bullet points from advantages section (after the ADVANTAGES: header)
+                const advItems = advSection.split(/<br\s*\/?>/gi)
+                    .map(s => s.replace(/<[^>]+>/g, '').trim())
+                    .filter(s => s.startsWith('•'))
+                    .map(s => s.replace(/^•\s*/, '').trim())
                     .filter(s => s.length > 0);
 
-                let inAdvantages = true;
+                // Extract bullet points from disadvantages section
+                const disItems = disSection.split(/<br\s*\/?>/gi)
+                    .map(s => s.replace(/<[^>]+>/g, '').trim())
+                    .filter(s => s.startsWith('•'))
+                    .map(s => s.replace(/^•\s*/, '').trim())
+                    .filter(s => s.length > 0);
+
+                advantages = advItems;
+                disadvantages = disItems;
+            } else {
+                // Fallback: try parsing by text patterns
+                const text = answer.replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, '');
+                const lines = text.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+
+                let inDisadvantages = false;
                 lines.forEach(line => {
-                    if (line.toLowerCase().includes('disadvantage')) {
-                        inAdvantages = false;
-                    } else if (line.toLowerCase().includes('advantage')) {
-                        inAdvantages = true;
-                    } else if (line.length > 3) {
-                        if (inAdvantages) {
-                            advantages.push(line);
-                        } else {
-                            disadvantages.push(line);
+                    if (line.toUpperCase().includes('DISADVANTAGE')) {
+                        inDisadvantages = true;
+                    } else if (line.toUpperCase().includes('ADVANTAGE')) {
+                        inDisadvantages = false;
+                    } else if (line.startsWith('•')) {
+                        const item = line.replace(/^•\s*/, '').trim();
+                        if (item.length > 0) {
+                            if (inDisadvantages) {
+                                disadvantages.push(item);
+                            } else {
+                                advantages.push(item);
+                            }
                         }
                     }
                 });
