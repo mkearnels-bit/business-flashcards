@@ -526,7 +526,7 @@
 
         function extractTopics() {
             const topicsSet = new Set();
-            flashcardsData.forEach(card => {
+            flashcardData.forEach(card => {
                 if (card.topic) topicsSet.add(card.topic);
             });
             allTopics = Array.from(topicsSet).sort();
@@ -547,7 +547,7 @@
             const searchValue = searchInput.value.toLowerCase();
             const orderValue = orderSelect.value;
 
-            filteredCards = flashcardsData.filter(card => {
+            filteredCards = flashcardData.filter(card => {
                 const matchUnit = unitValue === 'all' || card.unit.toString() === unitValue;
                 const matchTopic = topicValue === 'all' || card.topic === topicValue;
                 const matchType = typeValue === 'all' || card.type === typeValue;
@@ -630,7 +630,7 @@
             unitFilter.addEventListener('change', () => {
                 const unitValue = unitFilter.value;
                 let relevantTopics = unitValue === 'all' ? allTopics :
-                    [...new Set(flashcardsData.filter(c => c.unit.toString() === unitValue).map(c => c.topic))].sort();
+                    [...new Set(flashcardData.filter(c => c.unit.toString() === unitValue).map(c => c.topic))].sort();
                 topicFilter.innerHTML = '<option value="all">All Topics</option>';
                 relevantTopics.forEach(topic => {
                     const opt = document.createElement('option');
