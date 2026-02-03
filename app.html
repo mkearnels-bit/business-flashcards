@@ -493,11 +493,250 @@
         .unit-badge.unit-3 { color: var(--unit3); }
         .unit-badge.unit-4 { color: var(--unit4); }
 
+        /* ========== MOBILE OPTIMIZATIONS ========== */
         @media (max-width: 768px) {
-            .controls-row { grid-template-columns: 1fr; }
-            .search-row { grid-template-columns: 1fr; }
-            .card-question { font-size: 20px; }
-            .card-answer { font-size: 16px; }
+            body {
+                padding-top: 70px;
+                padding-left: 12px;
+                padding-right: 12px;
+                padding-bottom: 16px;
+            }
+
+            .app-header {
+                padding: 0.5rem 1rem;
+            }
+
+            .user-email {
+                display: none;
+            }
+
+            /* Controls panel mobile fixes */
+            .controls-panel {
+                padding: 16px;
+                border-radius: 12px;
+            }
+
+            .controls-row {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                margin-bottom: 12px;
+            }
+
+            .search-row {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                margin-bottom: 16px;
+            }
+
+            .control-group select,
+            .control-group input {
+                padding: 10px 12px;
+                font-size: 14px;
+            }
+
+            .control-group label {
+                font-size: 11px;
+                margin-bottom: 4px;
+            }
+
+            /* Stats row - stack vertically on mobile */
+            .stats-row {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+
+            .stat-box {
+                padding: 12px 8px;
+                border-radius: 10px;
+            }
+
+            .stat-value {
+                font-size: 22px;
+            }
+
+            .stat-label {
+                font-size: 9px;
+            }
+
+            /* Flashcard mobile fixes */
+            .flashcard {
+                min-height: auto;
+                border-radius: 16px;
+                border-left-width: 5px;
+            }
+
+            .flashcard-face {
+                position: relative;
+                padding: 16px;
+                border-radius: 16px;
+            }
+
+            .flashcard-back {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+            }
+
+            .flashcard-container {
+                margin-bottom: 16px;
+            }
+
+            /* Card content - prevent cut-off */
+            .card-content {
+                min-height: 200px;
+                padding: 12px 8px;
+                overflow-y: visible;
+                align-items: flex-start;
+                justify-content: flex-start;
+            }
+
+            .card-header {
+                margin-bottom: 12px;
+                flex-shrink: 0;
+            }
+
+            .card-footer {
+                padding-top: 12px;
+                flex-shrink: 0;
+            }
+
+            .card-question {
+                font-size: 18px;
+                line-height: 1.5;
+            }
+
+            .card-answer {
+                font-size: 15px;
+                line-height: 1.7;
+                text-align: left;
+            }
+
+            .type-badge {
+                padding: 4px 10px;
+                font-size: 10px;
+            }
+
+            .unit-badge {
+                font-size: 12px;
+            }
+
+            .topic-label {
+                font-size: 11px;
+            }
+
+            .flip-hint {
+                font-size: 11px;
+            }
+
+            /* Navigation buttons */
+            .nav-buttons {
+                gap: 10px;
+                margin-bottom: 12px;
+            }
+
+            .nav-btn {
+                padding: 12px 8px;
+                font-size: 14px;
+                border-radius: 10px;
+            }
+
+            .keyboard-hints {
+                display: none;
+            }
+
+            /* Pros & Cons mobile */
+            .pros-cons-container {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .advantages-box,
+            .disadvantages-box {
+                padding: 12px;
+            }
+
+            .pros-cons-header {
+                font-size: 12px;
+                margin-bottom: 10px;
+            }
+
+            .pros-cons-list li {
+                font-size: 13px;
+                margin-bottom: 8px;
+            }
+        }
+
+        /* Extra small screens */
+        @media (max-width: 400px) {
+            .stats-row {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+
+            .stat-value {
+                font-size: 18px;
+            }
+
+            .stat-label {
+                font-size: 8px;
+            }
+
+            .nav-btn {
+                padding: 10px 6px;
+                font-size: 12px;
+            }
+        }
+
+        /* ========== IMPROVED ANSWER FORMATTING ========== */
+        .card-answer {
+            text-align: left;
+        }
+
+        /* Key term formatting with sections */
+        .card-answer .term-definition {
+            margin-bottom: 16px;
+        }
+
+        .card-answer .term-section {
+            margin-bottom: 14px;
+        }
+
+        .card-answer .term-section-title {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .card-answer .term-section-content {
+            text-align: justify;
+            text-justify: inter-word;
+        }
+
+        /* Formula card formatting */
+        .card-answer .formula-display {
+            background: var(--gray-100);
+            padding: 16px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .card-answer .formula-explanation {
+            text-align: justify;
+            line-height: 1.7;
+        }
+
+        @media (max-width: 768px) {
+            .card-answer .formula-display {
+                font-size: 15px;
+                padding: 12px;
+            }
         }
     </style>
 </head>
@@ -800,6 +1039,71 @@
             return html;
         }
 
+        // Format key term answers with proper sections and bold titles
+        function formatTermAnswer(answer) {
+            // Check if answer contains section markers like "Definition:", "Characteristics:", etc.
+            const sectionKeywords = ['Definition:', 'Characteristics:', 'Features:', 'Examples:', 'Example:', 'Purpose:', 'Types:', 'Key Points:', 'Benefits:', 'Importance:', 'Components:', 'Factors:', 'Elements:', 'Process:', 'Steps:', 'Advantages:', 'Disadvantages:'];
+
+            let formattedAnswer = answer;
+            let hasSections = false;
+
+            // Check if any section keywords exist
+            sectionKeywords.forEach(keyword => {
+                if (answer.includes(keyword)) {
+                    hasSections = true;
+                }
+            });
+
+            if (hasSections) {
+                // Replace section titles with bold formatting
+                sectionKeywords.forEach(keyword => {
+                    const regex = new RegExp(keyword, 'g');
+                    formattedAnswer = formattedAnswer.replace(regex, `<span class="term-section-title">${keyword}</span>`);
+                });
+
+                // Convert <br> tags to proper spacing
+                formattedAnswer = formattedAnswer
+                    .replace(/<br\s*\/?>\s*<br\s*\/?>/gi, '</div><div class="term-section">')
+                    .replace(/<br\s*\/?>/gi, ' ');
+
+                formattedAnswer = `<div class="term-section">${formattedAnswer}</div>`;
+            } else {
+                // No sections - just justify the text
+                formattedAnswer = `<div class="term-section-content">${formattedAnswer.replace(/<br\s*\/?>/gi, ' ')}</div>`;
+            }
+
+            return formattedAnswer;
+        }
+
+        // Format formula answers with highlighted formula and explanation
+        function formatFormulaAnswer(answer) {
+            // Check if there's a formula pattern (often contains = sign or mathematical notation)
+            // The format is usually: Formula<br><br>Explanation
+
+            let parts = answer.split(/<br\s*\/?>\s*<br\s*\/?>/gi);
+
+            if (parts.length >= 2) {
+                // First part is likely the formula, rest is explanation
+                const formula = parts[0].trim();
+                const explanation = parts.slice(1).join(' ').replace(/<br\s*\/?>/gi, ' ').trim();
+
+                return `
+                    <div class="formula-display">${formula}</div>
+                    <div class="formula-explanation">${explanation}</div>
+                `;
+            } else {
+                // Single block - check if it starts with a formula-like pattern
+                const text = answer.replace(/<br\s*\/?>/gi, ' ');
+                return `<div class="formula-explanation">${text}</div>`;
+            }
+        }
+
+        // Format theory answers with proper structure
+        function formatTheoryAnswer(answer) {
+            // Similar to term but may have more complex structure
+            return formatTermAnswer(answer);
+        }
+
         function extractTopics() {
             const topicsSet = new Set();
             flashcardData.forEach(card => {
@@ -862,12 +1166,24 @@
             const card = filteredCards[currentIndex];
             document.getElementById('cardQuestion').textContent = card.question;
 
-            // Check if this is a Pros & Cons card and format accordingly
-            if (card.type === 'advantages') {
-                document.getElementById('cardAnswer').innerHTML = formatProsConsAnswer(card.answer);
-            } else {
-                document.getElementById('cardAnswer').innerHTML = card.answer;
+            // Format answer based on card type
+            let formattedAnswer;
+            switch(card.type) {
+                case 'advantages':
+                    formattedAnswer = formatProsConsAnswer(card.answer);
+                    break;
+                case 'formula':
+                    formattedAnswer = formatFormulaAnswer(card.answer);
+                    break;
+                case 'theory':
+                    formattedAnswer = formatTheoryAnswer(card.answer);
+                    break;
+                case 'term':
+                default:
+                    formattedAnswer = formatTermAnswer(card.answer);
+                    break;
             }
+            document.getElementById('cardAnswer').innerHTML = formattedAnswer;
 
             const unitText = 'Unit ' + card.unit;
             document.getElementById('unitLabel').textContent = unitText;
