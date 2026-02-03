@@ -254,6 +254,12 @@
             justify-content: center;
             text-align: center;
             padding: 20px;
+            overflow-y: auto;
+        }
+
+        .card-content:has(.pros-cons-container) {
+            align-items: flex-start;
+            padding-top: 10px;
         }
 
         .card-question {
@@ -267,6 +273,98 @@
             font-size: 18px;
             color: var(--gray-700);
             line-height: 1.6;
+        }
+
+        /* Pros & Cons Styled Layout */
+        .pros-cons-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            width: 100%;
+            text-align: left;
+        }
+
+        .advantages-box {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border-radius: 12px;
+            padding: 16px;
+            border: 2px solid #28a745;
+        }
+
+        .disadvantages-box {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            border-radius: 12px;
+            padding: 16px;
+            border: 2px solid #dc3545;
+        }
+
+        .pros-cons-header {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 3px solid;
+        }
+
+        .advantages-box .pros-cons-header {
+            color: #155724;
+            border-bottom-color: #f39c12;
+        }
+
+        .disadvantages-box .pros-cons-header {
+            color: #721c24;
+            border-bottom-color: #dc3545;
+        }
+
+        .pros-cons-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .pros-cons-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .pros-cons-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        .advantages-box .pros-cons-list li::before {
+            content: "✓";
+            color: #28a745;
+            font-weight: 700;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .disadvantages-box .pros-cons-list li::before {
+            content: "✗";
+            color: #dc3545;
+            font-weight: 700;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .advantages-box .pros-cons-list li {
+            color: #155724;
+        }
+
+        .disadvantages-box .pros-cons-list li {
+            color: #721c24;
+        }
+
+        @media (max-width: 600px) {
+            .pros-cons-container {
+                grid-template-columns: 1fr;
+            }
         }
 
         .card-footer {
@@ -525,6 +623,100 @@
             setupEventListeners();
         }
 
+        // Format Pros & Cons answers into styled two-column layout
+        function formatProsConsAnswer(answer) {
+            // Parse the answer to extract advantages and disadvantages
+            let advantages = [];
+            let disadvantages = [];
+
+            // Try to parse structured HTML format first
+            // Look for spans with class 'advantage' or 'disadvantage'
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = answer;
+
+            const advSpans = tempDiv.querySelectorAll('.advantage, span.advantage');
+            const disSpans = tempDiv.querySelectorAll('.disadvantage, span.disadvantage');
+
+            if (advSpans.length > 0 || disSpans.length > 0) {
+                advSpans.forEach(span => advantages.push(span.textContent.trim()));
+                disSpans.forEach(span => disadvantages.push(span.textContent.trim()));
+            } else {
+                // Try parsing text format with "Advantages:" and "Disadvantages:" sections
+                const text = answer.replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, '');
+
+                // Split by "Advantages" and "Disadvantages" keywords
+                const advMatch = text.match(/Advantages?:?\s*([\s\S]*?)(?=Disadvantages?:|$)/i);
+                const disMatch = text.match(/Disadvantages?:?\s*([\s\S]*?)$/i);
+
+                if (advMatch && advMatch[1]) {
+                    advantages = advMatch[1].split(/[\n•\-\*]/)
+                        .map(s => s.trim())
+                        .filter(s => s.length > 2);
+                }
+                if (disMatch && disMatch[1]) {
+                    disadvantages = disMatch[1].split(/[\n•\-\*]/)
+                        .map(s => s.trim())
+                        .filter(s => s.length > 2 && !s.toLowerCase().includes('advantage'));
+                }
+            }
+
+            // If we couldn't parse it, try a simpler split
+            if (advantages.length === 0 && disadvantages.length === 0) {
+                // Just split by line breaks and try to categorize
+                const lines = answer.replace(/<br\s*\/?>/gi, '|||').replace(/<[^>]+>/g, '').split('|||')
+                    .map(s => s.trim())
+                    .filter(s => s.length > 0);
+
+                let inAdvantages = true;
+                lines.forEach(line => {
+                    if (line.toLowerCase().includes('disadvantage')) {
+                        inAdvantages = false;
+                    } else if (line.toLowerCase().includes('advantage')) {
+                        inAdvantages = true;
+                    } else if (line.length > 3) {
+                        if (inAdvantages) {
+                            advantages.push(line);
+                        } else {
+                            disadvantages.push(line);
+                        }
+                    }
+                });
+            }
+
+            // Build the styled HTML
+            let html = '<div class="pros-cons-container">';
+
+            // Advantages box
+            html += '<div class="advantages-box">';
+            html += '<div class="pros-cons-header">ADVANTAGES</div>';
+            html += '<ul class="pros-cons-list">';
+            if (advantages.length > 0) {
+                advantages.forEach(adv => {
+                    html += `<li>${adv}</li>`;
+                });
+            } else {
+                html += '<li>No advantages listed</li>';
+            }
+            html += '</ul></div>';
+
+            // Disadvantages box
+            html += '<div class="disadvantages-box">';
+            html += '<div class="pros-cons-header">DISADVANTAGES</div>';
+            html += '<ul class="pros-cons-list">';
+            if (disadvantages.length > 0) {
+                disadvantages.forEach(dis => {
+                    html += `<li>${dis}</li>`;
+                });
+            } else {
+                html += '<li>No disadvantages listed</li>';
+            }
+            html += '</ul></div>';
+
+            html += '</div>';
+
+            return html;
+        }
+
         function extractTopics() {
             const topicsSet = new Set();
             flashcardData.forEach(card => {
@@ -586,7 +778,13 @@
 
             const card = filteredCards[currentIndex];
             document.getElementById('cardQuestion').textContent = card.question;
-            document.getElementById('cardAnswer').innerHTML = card.answer;
+
+            // Check if this is a Pros & Cons card and format accordingly
+            if (card.type === 'advantages') {
+                document.getElementById('cardAnswer').innerHTML = formatProsConsAnswer(card.answer);
+            } else {
+                document.getElementById('cardAnswer').innerHTML = card.answer;
+            }
 
             const unitText = 'Unit ' + card.unit;
             document.getElementById('unitLabel').textContent = unitText;
