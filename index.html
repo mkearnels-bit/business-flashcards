@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Flashcards | Ace Your Edexcel IAL Business Studies Exam</title>
-    <meta name="description" content="378 expertly crafted flashcards covering all 4 units of Edexcel IAL Business Studies. Created by a teacher with 20+ years experience.">
+    <title>MyBizStudies | A-Level Business Revision Flashcards</title>
+    <meta name="description" content="Over 350 expertly crafted flashcards covering all 4 units of A-Level Business Studies. Created by a teacher with 20+ years experience.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -16,10 +16,12 @@
         }
 
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --primary-light: #3b82f6;
-            --accent: #0ea5e9;
+            --primary: #1e3a5f;
+            --primary-dark: #152a45;
+            --primary-light: #2d5a8a;
+            --accent: #e67e22;
+            --accent-light: #f39c12;
+            --secondary: #3498db;
             --dark: #0f172a;
             --gray-900: #1e293b;
             --gray-700: #334155;
@@ -27,8 +29,12 @@
             --gray-300: #cbd5e1;
             --gray-100: #f1f5f9;
             --white: #ffffff;
-            --success: #10b981;
-            --warning: #f59e0b;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --unit1: #e74c3c;
+            --unit2: #3498db;
+            --unit3: #27ae60;
+            --unit4: #f39c12;
         }
 
         body {
@@ -44,11 +50,12 @@
             top: 0;
             left: 0;
             right: 0;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(10px);
             z-index: 1000;
-            padding: 1rem 2rem;
+            padding: 0.75rem 2rem;
             border-bottom: 1px solid var(--gray-100);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
         .nav-container {
@@ -60,25 +67,14 @@
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--primary);
-            text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            text-decoration: none;
         }
 
-        .logo-icon {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.2rem;
+        .logo img {
+            height: 50px;
+            width: auto;
         }
 
         .nav-links {
@@ -95,7 +91,7 @@
         }
 
         .nav-links a:hover {
-            color: var(--primary);
+            color: var(--accent);
         }
 
         .btn {
@@ -113,14 +109,14 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
             color: white;
-            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 4px 14px rgba(230, 126, 34, 0.3);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+            box-shadow: 0 6px 20px rgba(230, 126, 34, 0.4);
         }
 
         .btn-secondary {
@@ -144,7 +140,7 @@
             min-height: 100vh;
             display: flex;
             align-items: center;
-            background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 50%, #f0f9ff 100%);
+            background: linear-gradient(135deg, #f8fafc 0%, #e8f4fc 50%, #fef6e8 100%);
             padding: 8rem 2rem 4rem;
             position: relative;
             overflow: hidden;
@@ -157,7 +153,18 @@
             right: -20%;
             width: 800px;
             height: 800px;
-            background: radial-gradient(circle, rgba(37, 99, 235, 0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(30, 58, 95, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(230, 126, 34, 0.06) 0%, transparent 70%);
             border-radius: 50%;
         }
 
@@ -187,6 +194,7 @@
             color: var(--primary);
             margin-bottom: 1.5rem;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--gray-100);
         }
 
         .hero h1 {
@@ -198,7 +206,7 @@
         }
 
         .hero h1 span {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -246,9 +254,10 @@
             background: white;
             border-radius: 20px;
             padding: 2rem;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12);
             transform: perspective(1000px) rotateY(-5deg) rotateX(5deg);
             transition: transform 0.3s;
+            border: 1px solid var(--gray-100);
         }
 
         .flashcard-preview:hover {
@@ -261,11 +270,12 @@
             padding: 2rem;
             color: white;
             margin-bottom: 1rem;
+            border-left: 5px solid var(--accent);
         }
 
         .preview-card-type {
             display: inline-block;
-            background: rgba(255, 255, 255, 0.2);
+            background: var(--accent);
             padding: 0.25rem 0.75rem;
             border-radius: 20px;
             font-size: 0.75rem;
@@ -319,7 +329,7 @@
         .trust-avatar {
             width: 120px;
             height: 120px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -381,7 +391,7 @@
 
         .section-label {
             display: inline-block;
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(14, 165, 233, 0.1) 100%);
+            background: linear-gradient(135deg, rgba(30, 58, 95, 0.1) 0%, rgba(52, 152, 219, 0.1) 100%);
             color: var(--primary);
             padding: 0.5rem 1rem;
             border-radius: 50px;
@@ -415,17 +425,19 @@
             border-radius: 16px;
             padding: 2rem;
             transition: all 0.3s;
+            border: 1px solid transparent;
         }
 
         .feature-card:hover {
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             transform: translateY(-5px);
+            border-color: var(--accent);
         }
 
         .feature-icon {
             width: 56px;
             height: 56px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -449,10 +461,15 @@
         /* Interactive Demo Section */
         .demo {
             padding: 6rem 2rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
         }
 
         .demo .section-header {
+            color: white;
+        }
+
+        .demo .section-label {
+            background: rgba(255,255,255,0.15);
             color: white;
         }
 
@@ -469,14 +486,14 @@
             margin: 0 auto;
         }
 
-        /* Filter highlight box */
         .filter-highlight {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             border-radius: 16px;
             padding: 1.5rem 2rem;
             margin-bottom: 2rem;
             text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .filter-highlight h4 {
@@ -493,7 +510,7 @@
         }
 
         .filter-tag {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.15);
             color: white;
             padding: 0.5rem 1rem;
             border-radius: 25px;
@@ -504,11 +521,7 @@
             gap: 0.5rem;
         }
 
-        .filter-tag-icon {
-            font-size: 1rem;
-        }
-
-        /* Main flashcard demo */
+        /* Demo flashcard - matches actual app styling */
         .demo-card-container {
             perspective: 1000px;
             margin-bottom: 1.5rem;
@@ -520,7 +533,14 @@
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             position: relative;
             cursor: pointer;
+            min-height: 350px;
+            border-left: 6px solid var(--unit1);
         }
+
+        .demo-flashcard.unit-1 { border-left-color: var(--unit1); }
+        .demo-flashcard.unit-2 { border-left-color: var(--unit2); }
+        .demo-flashcard.unit-3 { border-left-color: var(--unit3); }
+        .demo-flashcard.unit-4 { border-left-color: var(--unit4); }
 
         .demo-card-face {
             border-radius: 20px;
@@ -528,13 +548,12 @@
         }
 
         .demo-card-front {
-            background: white;
             display: flex;
             flex-direction: column;
+            height: 100%;
         }
 
         .demo-card-back {
-            background: white;
             display: none;
             animation: fadeIn 0.3s ease;
         }
@@ -552,19 +571,13 @@
             to { opacity: 1; transform: scale(1); }
         }
 
-        /* Card header with unit color stripe */
         .demo-card-header {
-            padding: 1rem 1.5rem;
+            padding: 1.25rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            border-left: 5px solid;
+            border-bottom: 1px solid var(--gray-100);
         }
-
-        .demo-card-header.unit-1 { border-color: #e74c3c; }
-        .demo-card-header.unit-2 { border-color: #3498db; }
-        .demo-card-header.unit-3 { border-color: #2ecc71; }
-        .demo-card-header.unit-4 { border-color: #f39c12; }
 
         .demo-unit-info {
             display: flex;
@@ -577,14 +590,15 @@
             font-weight: 700;
         }
 
-        .demo-unit-badge.unit-1 { color: #e74c3c; }
-        .demo-unit-badge.unit-2 { color: #3498db; }
-        .demo-unit-badge.unit-3 { color: #2ecc71; }
-        .demo-unit-badge.unit-4 { color: #f39c12; }
+        .demo-unit-badge.unit-1 { color: var(--unit1); }
+        .demo-unit-badge.unit-2 { color: var(--unit2); }
+        .demo-unit-badge.unit-3 { color: var(--unit3); }
+        .demo-unit-badge.unit-4 { color: var(--unit4); }
 
         .demo-topic {
-            font-size: 0.8rem;
-            color: #e67e22;
+            font-size: 0.85rem;
+            color: var(--secondary);
+            font-weight: 500;
         }
 
         .demo-type-badge {
@@ -593,23 +607,24 @@
             font-size: 0.75rem;
             font-weight: 600;
             color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .demo-type-badge.term { background: #3498db; }
-        .demo-type-badge.formula { background: #9b59b6; }
-        .demo-type-badge.theory { background: #1abc9c; }
-        .demo-type-badge.advantages { background: #e67e22; }
+        .demo-type-badge.term { background: #3b82f6; }
+        .demo-type-badge.formula { background: #8b5cf6; }
+        .demo-type-badge.theory { background: #06b6d4; }
+        .demo-type-badge.advantages { background: var(--accent); }
 
-        /* Card body */
         .demo-card-body {
             flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 3rem;
+            padding: 3rem 2rem;
             text-align: center;
-            min-height: 280px;
+            min-height: 250px;
         }
 
         .demo-question {
@@ -620,78 +635,91 @@
         }
 
         .demo-flip-hint {
-            position: absolute;
-            bottom: 1.5rem;
-            left: 50%;
-            transform: translateX(-50%);
+            padding: 1rem;
+            text-align: center;
             color: var(--gray-500);
             font-size: 0.875rem;
+            border-top: 1px solid var(--gray-100);
         }
 
-        /* Back of card - two column layout */
+        /* Back of card answer content */
         .demo-answer-content {
             padding: 1.5rem;
-            padding-bottom: 2rem;
-            display: flex;
-            flex-direction: column;
         }
 
-        .demo-answer-columns {
+        .demo-answer-text {
+            line-height: 1.8;
+            color: var(--gray-700);
+            font-size: 1rem;
+        }
+
+        /* Pros/Cons styled layout for demo */
+        .demo-pros-cons {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            flex: 1;
+            gap: 1rem;
         }
 
-        .demo-adv-col, .demo-dis-col {
+        .demo-adv-box, .demo-dis-box {
             border-radius: 12px;
             padding: 1.25rem;
-            border-left: 4px solid;
+            border: 2px solid;
         }
 
-        .demo-adv-col {
-            background: #d4edda;
+        .demo-adv-box {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
             border-color: #28a745;
         }
 
-        .demo-dis-col {
-            background: #f8d7da;
+        .demo-dis-box {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
             border-color: #dc3545;
         }
 
-        .demo-col-title {
+        .demo-col-header {
+            font-size: 0.875rem;
             font-weight: 700;
-            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             margin-bottom: 1rem;
             padding-bottom: 0.5rem;
-            border-bottom: 2px solid;
+            border-bottom: 3px solid;
         }
 
-        .demo-adv-col .demo-col-title {
+        .demo-adv-box .demo-col-header {
             color: #155724;
-            border-color: #28a745;
+            border-bottom-color: var(--accent);
         }
 
-        .demo-dis-col .demo-col-title {
+        .demo-dis-box .demo-col-header {
             color: #721c24;
-            border-color: #dc3545;
+            border-bottom-color: #dc3545;
         }
 
         .demo-col-item {
             display: flex;
             align-items: flex-start;
             gap: 0.5rem;
-            margin-bottom: 0.75rem;
-            font-size: 0.95rem;
+            margin-bottom: 0.6rem;
+            font-size: 0.9rem;
+            line-height: 1.4;
         }
 
-        .demo-adv-col .demo-col-item { color: #155724; }
-        .demo-dis-col .demo-col-item { color: #721c24; }
+        .demo-adv-box .demo-col-item { color: #155724; }
+        .demo-dis-box .demo-col-item { color: #721c24; }
 
-        .demo-check { color: #28a745; }
-        .demo-cross { color: #dc3545; }
+        .demo-check { color: #28a745; font-weight: 700; }
+        .demo-cross { color: #dc3545; font-weight: 700; }
 
         /* Navigation buttons */
+        .demo-counter {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
         .demo-nav {
             display: flex;
             justify-content: center;
@@ -711,24 +739,24 @@
 
         .demo-nav-btn.prev,
         .demo-nav-btn.next {
-            background: #7c3aed;
+            background: var(--secondary);
             color: white;
         }
 
         .demo-nav-btn.prev:hover,
         .demo-nav-btn.next:hover {
-            background: #6d28d9;
+            background: #2980b9;
             transform: translateY(-2px);
         }
 
         .demo-nav-btn.flip {
-            background: #3b82f6;
+            background: var(--accent);
             color: white;
             padding: 0.875rem 3rem;
         }
 
         .demo-nav-btn.flip:hover {
-            background: #2563eb;
+            background: #d35400;
             transform: translateY(-2px);
         }
 
@@ -746,62 +774,7 @@
             margin: 0 0.25rem;
         }
 
-        /* Card counter */
-        .demo-counter {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.9);
-            font-weight: 600;
-            margin-bottom: 1rem;
-            font-size: 1rem;
-        }
-
-        @media (max-width: 768px) {
-            .demo-question {
-                font-size: 1.1rem;
-            }
-
-            .demo-answer-columns {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .demo-nav-btn {
-                padding: 0.75rem 1rem;
-                font-size: 0.85rem;
-            }
-
-            .demo-nav-btn.flip {
-                padding: 0.75rem 1.5rem;
-            }
-
-            .demo-card-body {
-                padding: 2rem 1.5rem;
-                min-height: 220px;
-            }
-
-            .filter-tags {
-                gap: 0.5rem;
-            }
-
-            .filter-tag {
-                font-size: 0.75rem;
-                padding: 0.4rem 0.75rem;
-            }
-
-            .demo-card-face {
-                min-height: 300px;
-            }
-
-            .demo-answer-content {
-                padding: 1rem;
-            }
-
-            .demo-col-item {
-                font-size: 0.85rem;
-            }
-        }
-
-        /* What's Included Section */
+        /* What's Included */
         .included {
             padding: 6rem 2rem;
             background: white;
@@ -820,11 +793,13 @@
             background: var(--gray-100);
             border-radius: 16px;
             transition: all 0.3s;
+            border: 2px solid transparent;
         }
 
         .included-card:hover {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             transform: translateY(-5px);
+            border-color: var(--accent);
         }
 
         .included-card:hover .included-number,
@@ -876,7 +851,7 @@
             gap: 1.5rem;
             align-items: flex-start;
             transition: all 0.3s;
-            border-left: 4px solid;
+            border-left: 5px solid;
         }
 
         .unit-card:hover {
@@ -884,10 +859,10 @@
             transform: translateX(5px);
         }
 
-        .unit-card:nth-child(1) { border-color: #e74c3c; }
-        .unit-card:nth-child(2) { border-color: #3498db; }
-        .unit-card:nth-child(3) { border-color: #2ecc71; }
-        .unit-card:nth-child(4) { border-color: #f39c12; }
+        .unit-card:nth-child(1) { border-color: var(--unit1); }
+        .unit-card:nth-child(2) { border-color: var(--unit2); }
+        .unit-card:nth-child(3) { border-color: var(--unit3); }
+        .unit-card:nth-child(4) { border-color: var(--unit4); }
 
         .unit-number {
             width: 48px;
@@ -902,10 +877,10 @@
             flex-shrink: 0;
         }
 
-        .unit-card:nth-child(1) .unit-number { background: #e74c3c; }
-        .unit-card:nth-child(2) .unit-number { background: #3498db; }
-        .unit-card:nth-child(3) .unit-number { background: #2ecc71; }
-        .unit-card:nth-child(4) .unit-number { background: #f39c12; }
+        .unit-card:nth-child(1) .unit-number { background: var(--unit1); }
+        .unit-card:nth-child(2) .unit-number { background: var(--unit2); }
+        .unit-card:nth-child(3) .unit-number { background: var(--unit3); }
+        .unit-card:nth-child(4) .unit-number { background: var(--unit4); }
 
         .unit-content h3 {
             font-size: 1.25rem;
@@ -1039,6 +1014,7 @@
             background: white;
             border-radius: 12px;
             padding: 1.5rem;
+            border-left: 4px solid var(--accent);
         }
 
         .faq-question {
@@ -1055,7 +1031,7 @@
         /* CTA Section */
         .cta {
             padding: 6rem 2rem;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
             text-align: center;
         }
 
@@ -1067,7 +1043,7 @@
         }
 
         .cta p {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.9);
             font-size: 1.25rem;
             margin-bottom: 2rem;
             max-width: 600px;
@@ -1077,7 +1053,7 @@
 
         .cta .btn-primary {
             background: white;
-            color: var(--primary);
+            color: var(--accent);
         }
 
         .cta .btn-primary:hover {
@@ -1090,6 +1066,16 @@
             color: var(--gray-300);
             padding: 3rem 2rem;
             text-align: center;
+        }
+
+        .footer-logo {
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-logo img {
+            height: 40px;
+            filter: brightness(0) invert(1);
+            opacity: 0.9;
         }
 
         .footer-links {
@@ -1121,95 +1107,48 @@
                 text-align: center;
             }
 
-            .hero-content {
-                order: 1;
-            }
+            .hero-content { order: 1; }
+            .hero-visual { order: 0; margin-bottom: 2rem; }
+            .hero-description { margin: 0 auto 2rem; }
+            .hero-cta { justify-content: center; }
+            .hero-stats { justify-content: center; }
+            .features-grid { grid-template-columns: 1fr; }
+            .included-grid { grid-template-columns: repeat(2, 1fr); }
+            .units-grid { grid-template-columns: 1fr; }
+            .trust-container { flex-direction: column; text-align: center; }
+            .trust-badges { justify-content: center; }
+        }
 
-            .hero-visual {
-                order: 0;
-                margin-bottom: 2rem;
-            }
-
-            .hero-description {
-                margin: 0 auto 2rem;
-            }
-
-            .hero-cta {
-                justify-content: center;
-            }
-
-            .hero-stats {
-                justify-content: center;
-            }
-
-            .features-grid {
+        @media (max-width: 768px) {
+            .demo-pros-cons {
                 grid-template-columns: 1fr;
             }
 
-            .included-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .demo-question {
+                font-size: 1.2rem;
             }
 
-            .units-grid {
-                grid-template-columns: 1fr;
+            .demo-nav-btn {
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
             }
 
-            .trust-container {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .trust-badges {
-                justify-content: center;
-            }
-
-            .demo-cards-container {
-                gap: 1rem;
-            }
-
-            .demo-flashcard {
-                width: 180px;
-                height: 240px;
+            .demo-card-body {
+                padding: 2rem 1.5rem;
+                min-height: 200px;
             }
         }
 
         @media (max-width: 640px) {
-            .nav-links {
-                display: none;
-            }
-
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero-cta {
-                flex-direction: column;
-            }
-
-            .hero-stats {
-                flex-direction: column;
-                gap: 1.5rem;
-            }
-
-            .stat {
-                text-align: center;
-            }
-
-            .included-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .section-title {
-                font-size: 2rem;
-            }
-
-            .pricing-value {
-                font-size: 3rem;
-            }
-
-            .faq-grid {
-                grid-template-columns: 1fr;
-            }
+            .nav-links { display: none; }
+            .hero h1 { font-size: 2.5rem; }
+            .hero-cta { flex-direction: column; }
+            .hero-stats { flex-direction: column; gap: 1.5rem; }
+            .stat { text-align: center; }
+            .included-grid { grid-template-columns: 1fr 1fr; }
+            .section-title { font-size: 2rem; }
+            .pricing-value { font-size: 3rem; }
+            .faq-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -1218,8 +1157,7 @@
     <nav class="nav">
         <div class="nav-container">
             <a href="#" class="logo">
-                <div class="logo-icon">📚</div>
-                Business Flashcards
+                <img src="logo.png" alt="MyBizStudies.com - A-Level Business Revision">
             </a>
             <div class="nav-links">
                 <a href="#features">Features</a>
@@ -1238,15 +1176,15 @@
                 <div class="hero-badge">
                     📖 Created by an experienced educator
                 </div>
-                <h1>Ace Your <span>Edexcel IAL Business</span> Exam</h1>
-                <p class="hero-description">378 expertly crafted flashcards covering all 4 units. Master key terms, formulas, theories, and exam techniques in one place.</p>
+                <h1>Ace Your <span>A-Level Business</span> Exam</h1>
+                <p class="hero-description">Over 350 expertly crafted flashcards covering all 4 units. Master key terms, formulas, theories, and evaluation points in one place.</p>
                 <div class="hero-cta">
                     <a href="#pricing" class="btn btn-primary btn-large">Get Started - $20/year</a>
                     <a href="#demo" class="btn btn-secondary btn-large">Try Demo</a>
                 </div>
                 <div class="hero-stats">
                     <div class="stat">
-                        <div class="stat-number">378</div>
+                        <div class="stat-number">350+</div>
                         <div class="stat-label">Flashcards</div>
                     </div>
                     <div class="stat">
@@ -1267,7 +1205,7 @@
                     </div>
                     <div class="preview-stats">
                         <div class="preview-stat">
-                            <div class="preview-stat-num">218</div>
+                            <div class="preview-stat-num">200+</div>
                             <div class="preview-stat-label">Key Terms</div>
                         </div>
                         <div class="preview-stat">
@@ -1279,7 +1217,7 @@
                             <div class="preview-stat-label">Theories</div>
                         </div>
                         <div class="preview-stat">
-                            <div class="preview-stat-num">118</div>
+                            <div class="preview-stat-num">100+</div>
                             <div class="preview-stat-label">Pros & Cons</div>
                         </div>
                     </div>
@@ -1294,7 +1232,7 @@
             <div class="trust-avatar">👨‍🏫</div>
             <div class="trust-content">
                 <h3>Created by an Expert Educator</h3>
-                <p>These flashcards were developed by a Business Studies teacher with over 20 years of classroom experience, including extensive work preparing students for Edexcel IAL examinations.</p>
+                <p>These flashcards were developed by a Business Studies teacher with over 20 years of classroom experience, specializing in A-Level Business Studies examinations.</p>
                 <div class="trust-badges">
                     <div class="trust-badge">
                         <span class="trust-badge-icon">🎓</span>
@@ -1302,11 +1240,11 @@
                     </div>
                     <div class="trust-badge">
                         <span class="trust-badge-icon">📋</span>
-                        Edexcel IAL Specialist
+                        A-Level Business Specialist
                     </div>
                     <div class="trust-badge">
                         <span class="trust-badge-icon">✅</span>
-                        Exam Board Aligned
+                        Syllabus Aligned
                     </div>
                     <div class="trust-badge">
                         <span class="trust-badge-icon">📈</span>
@@ -1323,13 +1261,13 @@
             <div class="section-header">
                 <div class="section-label">Why Choose Us</div>
                 <h2 class="section-title">Everything You Need to Succeed</h2>
-                <p class="section-subtitle">Designed specifically for Edexcel IAL Business Studies students who want to achieve top grades</p>
+                <p class="section-subtitle">Designed specifically for A-Level Business Studies students who want to achieve top grades</p>
             </div>
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">🎯</div>
-                    <h3 class="feature-title">Exam-Focused Content</h3>
-                    <p class="feature-description">Every card is crafted to match Edexcel IAL specification. Includes exam tips and common mark scheme points.</p>
+                    <h3 class="feature-title">Syllabus-Focused Content</h3>
+                    <p class="feature-description">Every card is crafted to cover core A-Level Business content relevant across major exam boards.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">⚡</div>
@@ -1347,14 +1285,14 @@
                     <p class="feature-description">30 essential formulas with worked examples. Never forget how to calculate break-even, gearing, or NPV again.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">💡</div>
-                    <h3 class="feature-title">Exam Tips</h3>
-                    <p class="feature-description">Insider tips on key cards help you understand what examiners are looking for in your answers.</p>
-                </div>
-                <div class="feature-card">
                     <div class="feature-icon">📱</div>
                     <h3 class="feature-title">Works Everywhere</h3>
                     <p class="feature-description">Access on any device - phone, tablet, or computer. Study on the bus, in the library, or at home.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3 class="feature-title">Regular Updates</h3>
+                    <p class="feature-description">Content is regularly reviewed and updated to ensure accuracy and relevance to current specifications.</p>
                 </div>
             </div>
         </div>
@@ -1364,7 +1302,7 @@
     <section class="demo" id="demo">
         <div class="section-container">
             <div class="section-header">
-                <div class="section-label" style="background: rgba(255,255,255,0.1);">Try It Now</div>
+                <div class="section-label">Try It Now</div>
                 <h2 class="section-title">Experience the Flashcards</h2>
                 <p class="section-subtitle">This is exactly how the full app works. Navigate through 5 sample cards below.</p>
             </div>
@@ -1374,12 +1312,12 @@
                 <div class="filter-highlight">
                     <h4>🔍 Powerful Filtering Options</h4>
                     <div class="filter-tags">
-                        <div class="filter-tag"><span class="filter-tag-icon">📚</span> Filter by Unit</div>
-                        <div class="filter-tag"><span class="filter-tag-icon">📝</span> Filter by Topic</div>
-                        <div class="filter-tag"><span class="filter-tag-icon">🔤</span> Search Keywords</div>
-                        <div class="filter-tag"><span class="filter-tag-icon">⚖️</span> Pros & Cons</div>
-                        <div class="filter-tag"><span class="filter-tag-icon">💡</span> Theories</div>
-                        <div class="filter-tag"><span class="filter-tag-icon">🔢</span> Formulas</div>
+                        <div class="filter-tag"><span>📚</span> Filter by Unit</div>
+                        <div class="filter-tag"><span>📝</span> Filter by Topic</div>
+                        <div class="filter-tag"><span>🔤</span> Search Keywords</div>
+                        <div class="filter-tag"><span>⚖️</span> Pros & Cons</div>
+                        <div class="filter-tag"><span>💡</span> Theories</div>
+                        <div class="filter-tag"><span>🔢</span> Formulas</div>
                     </div>
                 </div>
 
@@ -1388,10 +1326,10 @@
 
                 <!-- Main flashcard -->
                 <div class="demo-card-container">
-                    <div class="demo-flashcard" id="demoFlashcard" onclick="flipDemoCard()">
+                    <div class="demo-flashcard unit-1" id="demoFlashcard" onclick="flipDemoCard()">
                         <!-- Front -->
                         <div class="demo-card-face demo-card-front" id="demoFront">
-                            <div class="demo-card-header unit-1" id="demoHeader">
+                            <div class="demo-card-header">
                                 <div class="demo-unit-info">
                                     <span class="demo-unit-badge unit-1" id="demoUnitBadge">Unit 1</span>
                                     <span class="demo-topic" id="demoTopic">1.1 Meeting Customer Needs</span>
@@ -1405,9 +1343,17 @@
                         </div>
                         <!-- Back -->
                         <div class="demo-card-face demo-card-back" id="demoBack">
+                            <div class="demo-card-header" id="demoBackHeader">
+                                <div class="demo-unit-info">
+                                    <span class="demo-unit-badge unit-1" id="demoUnitBadgeBack">Unit 1</span>
+                                    <span class="demo-topic" id="demoTopicBack">1.1 Meeting Customer Needs</span>
+                                </div>
+                                <span class="demo-type-badge advantages" id="demoTypeBadgeBack">Pros & Cons</span>
+                            </div>
                             <div class="demo-answer-content" id="demoAnswer">
                                 <!-- Answer content rendered by JS -->
                             </div>
+                            <div class="demo-flip-hint">Click to see question | Press Space</div>
                         </div>
                     </div>
                 </div>
@@ -1431,12 +1377,12 @@
         <div class="section-container">
             <div class="section-header">
                 <div class="section-label">What's Included</div>
-                <h2 class="section-title">378 Cards Across 4 Card Types</h2>
-                <p class="section-subtitle">Comprehensive coverage of the entire Edexcel IAL Business Studies syllabus</p>
+                <h2 class="section-title">Over 350 Cards Across 4 Card Types</h2>
+                <p class="section-subtitle">Comprehensive coverage of the A-Level Business Studies syllabus</p>
             </div>
             <div class="included-grid">
                 <div class="included-card">
-                    <div class="included-number">218</div>
+                    <div class="included-number">200+</div>
                     <div class="included-label">Key Terms</div>
                     <div class="included-desc">Essential definitions and concepts</div>
                 </div>
@@ -1451,7 +1397,7 @@
                     <div class="included-desc">Motivation & management models</div>
                 </div>
                 <div class="included-card">
-                    <div class="included-number">118</div>
+                    <div class="included-number">100+</div>
                     <div class="included-label">Pros & Cons</div>
                     <div class="included-desc">Advantages & disadvantages cards</div>
                 </div>
@@ -1514,11 +1460,11 @@
                     <span class="pricing-value">20</span>
                     <span class="pricing-period">/ year</span>
                 </div>
-                <p class="pricing-description">Full access to all 378 flashcards for 12 months</p>
+                <p class="pricing-description">Full access to all flashcards for 12 months</p>
                 <div class="pricing-features">
                     <div class="pricing-feature">
                         <div class="pricing-feature-icon">✓</div>
-                        <span>All 378 flashcards across 4 units</span>
+                        <span>Over 350 flashcards across 4 units</span>
                     </div>
                     <div class="pricing-feature">
                         <div class="pricing-feature-icon">✓</div>
@@ -1530,7 +1476,7 @@
                     </div>
                     <div class="pricing-feature">
                         <div class="pricing-feature-icon">✓</div>
-                        <span>Exam tips included</span>
+                        <span>Works across all major exam boards</span>
                     </div>
                     <div class="pricing-feature">
                         <div class="pricing-feature-icon">✓</div>
@@ -1555,8 +1501,8 @@
             </div>
             <div class="faq-grid">
                 <div class="faq-item">
-                    <h3 class="faq-question">Is this specifically for Edexcel IAL?</h3>
-                    <p class="faq-answer">Yes! Every card is tailored to the Edexcel International Advanced Level Business Studies specification. Topics, terminology, and exam tips all match the IAL syllabus.</p>
+                    <h3 class="faq-question">Which exam boards is this suitable for?</h3>
+                    <p class="faq-answer">Our flashcards cover core A-Level Business Studies content that's relevant across major exam boards including Edexcel, AQA, OCR, and international qualifications. The key concepts, theories, and formulas are universal to business studies curricula.</p>
                 </div>
                 <div class="faq-item">
                     <h3 class="faq-question">How long do I have access?</h3>
@@ -1572,11 +1518,11 @@
                 </div>
                 <div class="faq-item">
                     <h3 class="faq-question">Will new cards be added?</h3>
-                    <p class="faq-answer">Yes! We regularly update the content based on exam changes and feedback. All updates are included free during your subscription.</p>
+                    <p class="faq-answer">Yes! We regularly update the content based on syllabus changes and feedback. All updates are included free during your subscription.</p>
                 </div>
                 <div class="faq-item">
                     <h3 class="faq-question">Who created these flashcards?</h3>
-                    <p class="faq-answer">These cards were created by a Business Studies teacher with over 20 years of experience teaching and preparing students for Edexcel IAL examinations.</p>
+                    <p class="faq-answer">These cards were created by a Business Studies teacher with over 20 years of experience teaching and preparing students for A-Level Business examinations.</p>
                 </div>
             </div>
         </div>
@@ -1586,35 +1532,38 @@
     <section class="cta">
         <div class="section-container">
             <h2>Ready to Ace Your Exams?</h2>
-            <p>Get instant access to all 378 flashcards and start improving your grades today.</p>
+            <p>Get instant access to over 350 flashcards and start improving your grades today.</p>
             <a href="#pricing" class="btn btn-primary btn-large">Get Started - $20/year</a>
         </div>
     </section>
 
     <!-- Footer -->
     <footer class="footer">
+        <div class="footer-logo">
+            <img src="logo.png" alt="MyBizStudies.com">
+        </div>
         <div class="footer-links">
             <a href="/terms.html">Terms of Service</a>
             <a href="/privacy.html">Privacy Policy</a>
-            <a href="mailto:support@businessflashcards.com">Contact</a>
+            <a href="mailto:support@mybizstudies.com">Contact</a>
         </div>
-        <p class="footer-copy">© 2026 Business Flashcards. All rights reserved.</p>
+        <p class="footer-copy">© 2026 MyBizStudies.com. All rights reserved.</p>
     </footer>
 
     <script>
-        // Sample flashcard data for demo
+        // Sample flashcard data for demo - matches actual app styling
         const demoCards = [
             {
                 unit: 1,
                 topic: '1.1 Meeting Customer Needs',
                 type: 'advantages',
                 question: 'What are the Advantages and Disadvantages of Mass Markets?',
-                advantages: ['Large customer base', 'Economies of scale possible', 'Lower unit costs', 'High sales volume potential'],
-                disadvantages: ['High competition', 'Less customer loyalty', 'Standardized products', 'High marketing costs']
+                advantages: ['Large customer base with high sales volume potential', 'Economies of scale reduce unit costs', 'Brand recognition benefits from wide exposure', 'Easier to achieve market dominance'],
+                disadvantages: ['Intense competition from many rivals', 'Lower profit margins due to price competition', 'Standardized products limit differentiation', 'High marketing costs required']
             },
             {
                 unit: 1,
-                topic: '1.2 The Market',
+                topic: '1.4 Demand',
                 type: 'term',
                 question: 'What is Price Elasticity of Demand (PED)?',
                 answer: '<strong>PED</strong> measures how responsive quantity demanded is to a change in price.<br><br><strong>Formula:</strong><br>PED = % change in Quantity Demanded ÷ % change in Price<br><br><strong>Interpretation:</strong><br>• Elastic (PED > 1) = Demand is sensitive to price changes<br>• Inelastic (PED < 1) = Demand is not sensitive to price<br>• Unitary (PED = 1) = Proportional change'
@@ -1624,14 +1573,14 @@
                 topic: '2.3 Managing Finance',
                 type: 'formula',
                 question: 'How do you calculate Break-Even Output?',
-                answer: '<strong>Formula:</strong><br><div style="font-size: 1.25rem; background: #f3e8ff; padding: 1rem; border-radius: 8px; margin: 1rem 0; text-align: center;">Break-Even = Fixed Costs ÷ Contribution per Unit</div><strong>Where:</strong><br>Contribution per Unit = Selling Price - Variable Cost per Unit<br><br><strong>Example:</strong><br>Fixed Costs = £30,000<br>Selling Price = £25<br>Variable Cost = £15<br>Contribution = £10<br><br><strong>BEO = £30,000 ÷ £10 = 3,000 units</strong>'
+                answer: '<strong>Formula:</strong><br><div style="font-size: 1.1rem; background: #f3e8ff; padding: 1rem; border-radius: 8px; margin: 1rem 0; text-align: center; font-weight: 600;">Break-Even = Fixed Costs ÷ Contribution per Unit</div><strong>Where:</strong><br>Contribution per Unit = Selling Price - Variable Cost per Unit<br><br><strong>Example:</strong><br>Fixed Costs = £30,000<br>Selling Price = £25, Variable Cost = £15<br>Contribution = £10<br><br><strong>BEO = £30,000 ÷ £10 = 3,000 units</strong>'
             },
             {
                 unit: 1,
-                topic: '1.5 Entrepreneurs & Leaders',
+                topic: '1.6 Managing People',
                 type: 'theory',
                 question: "What is Maslow's Hierarchy of Needs?",
-                answer: '<strong>5 Levels of Human Needs (bottom to top):</strong><br><br><div style="background: #ccfbf1; padding: 1rem; border-radius: 8px; margin: 0.5rem 0;"><strong>5. Self-Actualization</strong> - Reaching full potential, creativity</div><div style="background: #d1fae5; padding: 1rem; border-radius: 8px; margin: 0.5rem 0;"><strong>4. Esteem</strong> - Recognition, status, achievement</div><div style="background: #e0f2fe; padding: 1rem; border-radius: 8px; margin: 0.5rem 0;"><strong>3. Social/Love</strong> - Belonging, friendship, teamwork</div><div style="background: #fef3c7; padding: 1rem; border-radius: 8px; margin: 0.5rem 0;"><strong>2. Safety</strong> - Job security, safe working conditions</div><div style="background: #fee2e2; padding: 1rem; border-radius: 8px; margin: 0.5rem 0;"><strong>1. Physiological</strong> - Basic pay for food, shelter</div><br><strong>Key Point:</strong> Lower needs must be satisfied before higher needs motivate.'
+                answer: '<strong>5 Levels of Human Needs (bottom to top):</strong><br><br><div style="background: #d1fae5; padding: 0.75rem; border-radius: 8px; margin: 0.4rem 0;"><strong>5. Self-Actualization</strong> - Reaching full potential</div><div style="background: #dbeafe; padding: 0.75rem; border-radius: 8px; margin: 0.4rem 0;"><strong>4. Esteem</strong> - Recognition, status, achievement</div><div style="background: #e0e7ff; padding: 0.75rem; border-radius: 8px; margin: 0.4rem 0;"><strong>3. Social/Love</strong> - Belonging, friendship</div><div style="background: #fef3c7; padding: 0.75rem; border-radius: 8px; margin: 0.4rem 0;"><strong>2. Safety</strong> - Job security, safe conditions</div><div style="background: #fee2e2; padding: 0.75rem; border-radius: 8px; margin: 0.4rem 0;"><strong>1. Physiological</strong> - Basic pay for food, shelter</div><br><strong>Key:</strong> Lower needs must be satisfied first.'
             },
             {
                 unit: 3,
@@ -1646,7 +1595,6 @@
         let currentDemoIndex = 0;
         let isDemoFlipped = false;
 
-        // Type label mapping
         const typeLabels = {
             'term': 'Key Term',
             'formula': 'Formula',
@@ -1654,7 +1602,6 @@
             'advantages': 'Pros & Cons'
         };
 
-        // Render current demo card
         function renderDemoCard() {
             const card = demoCards[currentDemoIndex];
             const flashcard = document.getElementById('demoFlashcard');
@@ -1663,69 +1610,53 @@
             isDemoFlipped = false;
             flashcard.classList.remove('flipped');
 
+            // Update unit class for border color
+            flashcard.className = `demo-flashcard unit-${card.unit}`;
+
             // Update counter
             document.getElementById('demoCurrentCard').textContent = currentDemoIndex + 1;
 
-            // Update header
-            const header = document.getElementById('demoHeader');
-            header.className = `demo-card-header unit-${card.unit}`;
-
+            // Update front
             document.getElementById('demoUnitBadge').textContent = `Unit ${card.unit}`;
             document.getElementById('demoUnitBadge').className = `demo-unit-badge unit-${card.unit}`;
             document.getElementById('demoTopic').textContent = card.topic;
-
-            // Update type badge
-            const typeBadge = document.getElementById('demoTypeBadge');
-            typeBadge.textContent = typeLabels[card.type];
-            typeBadge.className = `demo-type-badge ${card.type}`;
-
-            // Update question
+            document.getElementById('demoTypeBadge').textContent = typeLabels[card.type];
+            document.getElementById('demoTypeBadge').className = `demo-type-badge ${card.type}`;
             document.getElementById('demoQuestion').textContent = card.question;
+
+            // Update back header
+            document.getElementById('demoUnitBadgeBack').textContent = `Unit ${card.unit}`;
+            document.getElementById('demoUnitBadgeBack').className = `demo-unit-badge unit-${card.unit}`;
+            document.getElementById('demoTopicBack').textContent = card.topic;
+            document.getElementById('demoTypeBadgeBack').textContent = typeLabels[card.type];
+            document.getElementById('demoTypeBadgeBack').className = `demo-type-badge ${card.type}`;
 
             // Update answer
             const answerContainer = document.getElementById('demoAnswer');
             if (card.type === 'advantages') {
                 answerContainer.innerHTML = `
-                    <div class="demo-card-header unit-${card.unit}" style="margin: -1.5rem -1.5rem 1rem -1.5rem; padding: 1rem 1.5rem;">
-                        <div class="demo-unit-info">
-                            <span class="demo-unit-badge unit-${card.unit}">Unit ${card.unit}</span>
-                            <span class="demo-topic">${card.topic}</span>
-                        </div>
-                        <span class="demo-type-badge ${card.type}">${typeLabels[card.type]}</span>
-                    </div>
-                    <div class="demo-answer-columns">
-                        <div class="demo-adv-col">
-                            <div class="demo-col-title">ADVANTAGES</div>
+                    <div class="demo-pros-cons">
+                        <div class="demo-adv-box">
+                            <div class="demo-col-header">ADVANTAGES</div>
                             ${card.advantages.map(a => `<div class="demo-col-item"><span class="demo-check">✓</span> ${a}</div>`).join('')}
                         </div>
-                        <div class="demo-dis-col">
-                            <div class="demo-col-title">DISADVANTAGES</div>
+                        <div class="demo-dis-box">
+                            <div class="demo-col-header">DISADVANTAGES</div>
                             ${card.disadvantages.map(d => `<div class="demo-col-item"><span class="demo-cross">✗</span> ${d}</div>`).join('')}
                         </div>
                     </div>
                 `;
             } else {
-                answerContainer.innerHTML = `
-                    <div class="demo-card-header unit-${card.unit}" style="margin: -1.5rem -1.5rem 1rem -1.5rem; padding: 1rem 1.5rem;">
-                        <div class="demo-unit-info">
-                            <span class="demo-unit-badge unit-${card.unit}">Unit ${card.unit}</span>
-                            <span class="demo-topic">${card.topic}</span>
-                        </div>
-                        <span class="demo-type-badge ${card.type}">${typeLabels[card.type]}</span>
-                    </div>
-                    <div style="padding: 1rem; line-height: 1.8; color: #333;">${card.answer}</div>
-                `;
+                answerContainer.innerHTML = `<div class="demo-answer-text">${card.answer}</div>`;
             }
         }
 
-        // Flip card
         function flipDemoCard() {
             const flashcard = document.getElementById('demoFlashcard');
             flashcard.classList.toggle('flipped');
             isDemoFlipped = !isDemoFlipped;
         }
 
-        // Navigation
         function prevDemoCard() {
             if (currentDemoIndex > 0) {
                 currentDemoIndex--;
@@ -1740,9 +1671,8 @@
             }
         }
 
-        // Keyboard navigation for demo
+        // Keyboard navigation
         document.addEventListener('keydown', (e) => {
-            // Only respond if demo section is in view
             const demoSection = document.getElementById('demo');
             const rect = demoSection.getBoundingClientRect();
             const isInView = rect.top < window.innerHeight && rect.bottom > 0;
@@ -1757,7 +1687,7 @@
             }
         });
 
-        // Initialize on page load
+        // Initialize
         document.addEventListener('DOMContentLoaded', renderDemoCard);
     </script>
 </body>

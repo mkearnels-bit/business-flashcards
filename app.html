@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Flashcards | Study App</title>
+    <title>MyBizStudies | A-Level Business Flashcards</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -16,36 +16,98 @@
         }
 
         :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --primary-light: #818cf8;
-            --accent: #8b5cf6;
-            --gradient-start: #667eea;
-            --gradient-end: #764ba2;
-            --dark: #1e1b4b;
+            --primary: #1e3a5f;
+            --primary-dark: #152a45;
+            --primary-light: #2d5a8a;
+            --accent: #e67e22;
+            --accent-light: #f39c12;
+            --secondary: #3498db;
+            --gradient-start: #1e3a5f;
+            --gradient-end: #2d5a8a;
+            --dark: #0f172a;
             --gray-900: #1e293b;
             --gray-700: #334155;
             --gray-500: #64748b;
             --gray-300: #cbd5e1;
             --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
             --white: #ffffff;
-            --success: #10b981;
-            --error: #ef4444;
+            --success: #27ae60;
+            --error: #e74c3c;
             --unit1: #e74c3c;
             --unit2: #3498db;
-            --unit3: #2ecc71;
+            --unit3: #27ae60;
             --unit4: #f39c12;
-            --term-color: #3b82f6;
-            --formula-color: #8b5cf6;
-            --theory-color: #06b6d4;
-            --proscons-color: #f59e0b;
+            --term-color: #3498db;
+            --formula-color: #9b59b6;
+            --theory-color: #17a2b8;
+            --proscons-color: #e67e22;
         }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding-top: 80px;
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-bottom: 20px;
+        }
+
+        /* Header with logo and logout */
+        .app-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 0.75rem 2rem;
+            border-bottom: 1px solid var(--gray-100);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .header-logo img {
+            height: 45px;
+            width: auto;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-email {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+        }
+
+        .logout-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: #d35400;
+            transform: translateY(-1px);
         }
 
         .loading-overlay {
@@ -396,13 +458,17 @@
             font-family: inherit;
         }
 
-        .nav-btn.prev { background: var(--primary-light); color: white; }
-        .nav-btn.flip { background: var(--primary); color: white; }
-        .nav-btn.next { background: var(--primary-light); color: white; }
+        .nav-btn.prev { background: var(--secondary); color: white; }
+        .nav-btn.flip { background: var(--accent); color: white; }
+        .nav-btn.next { background: var(--secondary); color: white; }
 
         .nav-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+            box-shadow: 0 4px 12px rgba(30, 58, 95, 0.4);
+        }
+
+        .nav-btn.flip:hover {
+            box-shadow: 0 4px 12px rgba(230, 126, 34, 0.4);
         }
 
         .keyboard-hints {
@@ -430,6 +496,17 @@
     </style>
 </head>
 <body>
+    <!-- Header with logo and logout -->
+    <header class="app-header">
+        <a href="/" class="header-logo">
+            <img src="logo.png" alt="MyBizStudies.com">
+        </a>
+        <div class="header-right">
+            <span class="user-email" id="userEmail"></span>
+            <button class="logout-btn" id="logoutBtn" onclick="handleLogout()">Logout</button>
+        </div>
+    </header>
+
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-spinner"></div>
     </div>
@@ -575,6 +652,11 @@
                 }
 
                 console.log('Session found, user:', session.user.id);
+
+                // Display user email in header
+                if (session.user.email) {
+                    document.getElementById('userEmail').textContent = session.user.email;
+                }
 
                 // FIXED: Use limit(1) instead of single() for more lenient query
                 const { data: subscriptions, error: subError } = await supabaseClient
@@ -856,6 +938,18 @@
                 if (e.key === 'ArrowRight') nextCard();
                 if (e.key === 'ArrowLeft') prevCard();
             });
+        }
+
+        // Logout function
+        async function handleLogout() {
+            try {
+                await supabaseClient.auth.signOut();
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+                // Force redirect even if signout fails
+                window.location.href = 'login.html';
+            }
         }
 
         checkAuth();
