@@ -539,7 +539,7 @@
                 margin-bottom: 4px;
             }
 
-            /* Stats row - stack vertically on mobile */
+            /* Stats row */
             .stats-row {
                 grid-template-columns: repeat(3, 1fr);
                 gap: 8px;
@@ -558,38 +558,25 @@
                 font-size: 9px;
             }
 
-            /* Flashcard mobile fixes */
-            .flashcard {
-                min-height: auto;
-                border-radius: 16px;
-                border-left-width: 5px;
-            }
-
-            .flashcard-face {
-                position: relative;
-                padding: 16px;
-                border-radius: 16px;
-            }
-
-            .flashcard-back {
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-            }
-
+            /* Flashcard mobile fixes - CRITICAL: proper scrolling */
             .flashcard-container {
                 margin-bottom: 16px;
             }
 
-            /* Card content - prevent cut-off */
-            .card-content {
-                min-height: 200px;
-                padding: 12px 8px;
-                overflow-y: visible;
-                align-items: flex-start;
-                justify-content: flex-start;
+            .flashcard {
+                min-height: 400px;
+                max-height: 70vh;
+                border-radius: 16px;
+                border-left-width: 5px;
+                overflow: hidden;
+            }
+
+            .flashcard-face {
+                padding: 16px;
+                border-radius: 16px;
+                display: flex;
+                flex-direction: column;
+                height: 100%;
             }
 
             .card-header {
@@ -597,9 +584,22 @@
                 flex-shrink: 0;
             }
 
+            /* Card content - SCROLLABLE on mobile */
+            .card-content {
+                flex: 1;
+                padding: 8px;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+                align-items: flex-start;
+                justify-content: flex-start;
+                min-height: 0;
+            }
+
             .card-footer {
                 padding-top: 12px;
                 flex-shrink: 0;
+                background: white;
+                margin-top: auto;
             }
 
             .card-question {
@@ -608,9 +608,10 @@
             }
 
             .card-answer {
-                font-size: 15px;
-                line-height: 1.7;
+                font-size: 14px;
+                line-height: 1.6;
                 text-align: left;
+                width: 100%;
             }
 
             .type-badge {
@@ -666,6 +667,20 @@
                 font-size: 13px;
                 margin-bottom: 8px;
             }
+
+            /* Highlight box mobile */
+            .answer-highlight {
+                padding: 12px;
+                font-size: 14px;
+            }
+
+            .answer-section-title {
+                font-size: 13px;
+            }
+
+            .answer-list li {
+                font-size: 13px;
+            }
         }
 
         /* Extra small screens */
@@ -686,56 +701,84 @@
                 padding: 10px 6px;
                 font-size: 12px;
             }
+
+            .flashcard {
+                min-height: 350px;
+            }
         }
 
-        /* ========== IMPROVED ANSWER FORMATTING ========== */
+        /* ========== IMPROVED ANSWER FORMATTING - ALL CARD TYPES ========== */
         .card-answer {
             text-align: left;
+            width: 100%;
         }
 
-        /* Key term formatting with sections */
-        .card-answer .term-definition {
-            margin-bottom: 16px;
-        }
-
-        .card-answer .term-section {
-            margin-bottom: 14px;
-        }
-
-        .card-answer .term-section-title {
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 6px;
-            display: block;
-        }
-
-        .card-answer .term-section-content {
-            text-align: justify;
-            text-justify: inter-word;
-        }
-
-        /* Formula card formatting */
-        .card-answer .formula-display {
+        /* Grey highlight box - used for main definition/formula on ALL cards */
+        .answer-highlight {
             background: var(--gray-100);
             padding: 16px;
             border-radius: 10px;
-            font-family: 'Courier New', monospace;
-            font-size: 18px;
             font-weight: 600;
             color: var(--primary);
-            margin-bottom: 12px;
+            margin-bottom: 16px;
             text-align: center;
+            line-height: 1.5;
         }
 
-        .card-answer .formula-explanation {
+        /* Section titles (Definition:, Characteristics:, etc.) */
+        .answer-section-title {
+            font-weight: 700;
+            color: var(--primary);
+            margin-top: 16px;
+            margin-bottom: 8px;
+            display: block;
+            font-size: 15px;
+        }
+
+        .answer-section-title:first-child {
+            margin-top: 0;
+        }
+
+        /* Bullet point lists */
+        .answer-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 16px 0;
+        }
+
+        .answer-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 8px;
+            line-height: 1.6;
+            text-align: left;
+        }
+
+        .answer-list li::before {
+            content: "•";
+            color: var(--primary);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        /* Regular paragraph text */
+        .answer-text {
             text-align: justify;
+            text-justify: inter-word;
             line-height: 1.7;
+            margin-bottom: 12px;
+        }
+
+        /* Formula specific styling */
+        .answer-highlight.formula {
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
         }
 
         @media (max-width: 768px) {
-            .card-answer .formula-display {
-                font-size: 15px;
-                padding: 12px;
+            .answer-highlight.formula {
+                font-size: 14px;
             }
         }
     </style>
@@ -1039,69 +1082,124 @@
             return html;
         }
 
-        // Format key term answers with proper sections and bold titles
-        function formatTermAnswer(answer) {
-            // Check if answer contains section markers like "Definition:", "Characteristics:", etc.
-            const sectionKeywords = ['Definition:', 'Characteristics:', 'Features:', 'Examples:', 'Example:', 'Purpose:', 'Types:', 'Key Points:', 'Benefits:', 'Importance:', 'Components:', 'Factors:', 'Elements:', 'Process:', 'Steps:', 'Advantages:', 'Disadvantages:'];
+        // Universal answer formatter - used for terms, theories, and formulas
+        function formatAnswerUniversal(answer, isFormula = false) {
+            // Convert HTML to workable text, preserving structure
+            let text = answer;
 
-            let formattedAnswer = answer;
-            let hasSections = false;
+            // Split into paragraphs (double br = new paragraph)
+            let paragraphs = text.split(/<br\s*\/?>\s*<br\s*\/?>/gi);
 
-            // Check if any section keywords exist
-            sectionKeywords.forEach(keyword => {
-                if (answer.includes(keyword)) {
-                    hasSections = true;
+            let html = '';
+            let mainHighlight = '';
+            let contentSections = [];
+
+            // Section keywords to look for
+            const sectionKeywords = ['Definition:', 'Characteristics:', 'Features:', 'Examples:', 'Example:', 'Purpose:', 'Types:', 'Key Points:', 'Benefits:', 'Importance:', 'Components:', 'Factors:', 'Elements:', 'Process:', 'Steps:', 'Includes:', 'Measures:'];
+
+            // Process first paragraph - likely the main definition/formula
+            if (paragraphs.length > 0) {
+                let firstPara = paragraphs[0].replace(/<br\s*\/?>/gi, ' ').replace(/<[^>]+>/g, '').trim();
+
+                // Check if first paragraph contains a section keyword
+                let hasKeyword = sectionKeywords.some(kw => firstPara.includes(kw));
+
+                if (!hasKeyword && firstPara.length > 0) {
+                    // Use first paragraph as highlight
+                    mainHighlight = firstPara;
+                    paragraphs = paragraphs.slice(1);
                 }
-            });
+            }
 
-            if (hasSections) {
-                // Replace section titles with bold formatting
-                sectionKeywords.forEach(keyword => {
-                    const regex = new RegExp(keyword, 'g');
-                    formattedAnswer = formattedAnswer.replace(regex, `<span class="term-section-title">${keyword}</span>`);
+            // Build the HTML output
+            if (mainHighlight) {
+                html += `<div class="answer-highlight${isFormula ? ' formula' : ''}">${mainHighlight}</div>`;
+            }
+
+            // Process remaining paragraphs
+            paragraphs.forEach(para => {
+                // Split by single <br> to get lines
+                let lines = para.split(/<br\s*\/?>/gi).map(l => l.replace(/<[^>]+>/g, '').trim()).filter(l => l.length > 0);
+
+                if (lines.length === 0) return;
+
+                // Check if this paragraph starts with a section keyword
+                let sectionTitle = null;
+                let sectionContent = [];
+
+                lines.forEach((line, idx) => {
+                    // Check for section title
+                    let foundKeyword = sectionKeywords.find(kw => line.includes(kw));
+
+                    if (foundKeyword && idx === 0) {
+                        // Extract title and any content after it
+                        let parts = line.split(foundKeyword);
+                        sectionTitle = foundKeyword;
+                        if (parts[1] && parts[1].trim()) {
+                            sectionContent.push(parts[1].trim());
+                        }
+                    } else if (line.startsWith('•') || line.startsWith('-') || line.startsWith('*')) {
+                        // Bullet point
+                        sectionContent.push({type: 'bullet', text: line.replace(/^[•\-\*]\s*/, '').trim()});
+                    } else {
+                        // Regular text
+                        sectionContent.push({type: 'text', text: line});
+                    }
                 });
 
-                // Convert <br> tags to proper spacing
-                formattedAnswer = formattedAnswer
-                    .replace(/<br\s*\/?>\s*<br\s*\/?>/gi, '</div><div class="term-section">')
-                    .replace(/<br\s*\/?>/gi, ' ');
+                // Build section HTML
+                if (sectionTitle) {
+                    html += `<span class="answer-section-title">${sectionTitle}</span>`;
+                }
 
-                formattedAnswer = `<div class="term-section">${formattedAnswer}</div>`;
-            } else {
-                // No sections - just justify the text
-                formattedAnswer = `<div class="term-section-content">${formattedAnswer.replace(/<br\s*\/?>/gi, ' ')}</div>`;
+                // Check if we have bullets
+                let bullets = sectionContent.filter(c => c.type === 'bullet');
+                let texts = sectionContent.filter(c => c.type === 'text');
+
+                if (bullets.length > 0) {
+                    html += '<ul class="answer-list">';
+                    bullets.forEach(b => {
+                        html += `<li>${b.text}</li>`;
+                    });
+                    html += '</ul>';
+                }
+
+                if (texts.length > 0) {
+                    texts.forEach(t => {
+                        html += `<p class="answer-text">${t.text}</p>`;
+                    });
+                }
+
+                // Handle case where content is just strings (from split after keyword)
+                sectionContent.forEach(c => {
+                    if (typeof c === 'string') {
+                        html += `<p class="answer-text">${c}</p>`;
+                    }
+                });
+            });
+
+            // If no content was generated, just wrap the original in highlight
+            if (!html || html.trim() === '') {
+                let cleanText = answer.replace(/<br\s*\/?>/gi, ' ').replace(/<[^>]+>/g, '').trim();
+                html = `<div class="answer-highlight${isFormula ? ' formula' : ''}">${cleanText}</div>`;
             }
 
-            return formattedAnswer;
+            return html;
         }
 
-        // Format formula answers with highlighted formula and explanation
+        // Format key term answers
+        function formatTermAnswer(answer) {
+            return formatAnswerUniversal(answer, false);
+        }
+
+        // Format formula answers
         function formatFormulaAnswer(answer) {
-            // Check if there's a formula pattern (often contains = sign or mathematical notation)
-            // The format is usually: Formula<br><br>Explanation
-
-            let parts = answer.split(/<br\s*\/?>\s*<br\s*\/?>/gi);
-
-            if (parts.length >= 2) {
-                // First part is likely the formula, rest is explanation
-                const formula = parts[0].trim();
-                const explanation = parts.slice(1).join(' ').replace(/<br\s*\/?>/gi, ' ').trim();
-
-                return `
-                    <div class="formula-display">${formula}</div>
-                    <div class="formula-explanation">${explanation}</div>
-                `;
-            } else {
-                // Single block - check if it starts with a formula-like pattern
-                const text = answer.replace(/<br\s*\/?>/gi, ' ');
-                return `<div class="formula-explanation">${text}</div>`;
-            }
+            return formatAnswerUniversal(answer, true);
         }
 
-        // Format theory answers with proper structure
+        // Format theory answers
         function formatTheoryAnswer(answer) {
-            // Similar to term but may have more complex structure
-            return formatTermAnswer(answer);
+            return formatAnswerUniversal(answer, false);
         }
 
         function extractTopics() {
