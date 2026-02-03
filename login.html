@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | Business Flashcards</title>
+    <title>Login | MyBizStudies</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -16,10 +16,10 @@
         }
 
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --primary-light: #3b82f6;
-            --accent: #0ea5e9;
+            --primary: #1e3a5f;
+            --primary-dark: #152d4a;
+            --primary-light: #2a4a73;
+            --accent: #e67e22;
             --dark: #0f172a;
             --gray-900: #1e293b;
             --gray-700: #334155;
@@ -50,27 +50,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
             margin-bottom: 2rem;
             text-decoration: none;
         }
 
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.25rem;
-        }
-
-        .logo-text {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--primary);
+        .logo img {
+            height: 70px;
+            width: auto;
         }
 
         .auth-card {
@@ -162,14 +148,14 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            background: linear-gradient(135deg, var(--accent) 0%, #d35400 100%);
             color: white;
-            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 4px 14px rgba(230, 126, 34, 0.3);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+            box-shadow: 0 6px 20px rgba(230, 126, 34, 0.4);
         }
 
         .btn-primary:disabled {
@@ -307,8 +293,7 @@
 <body>
     <div class="auth-container">
         <a href="/" class="logo">
-            <div class="logo-icon">📚</div>
-            <span class="logo-text">Business Flashcards</span>
+            <img src="logo.png" alt="MyBizStudies.com">
         </a>
 
         <div class="auth-card">
