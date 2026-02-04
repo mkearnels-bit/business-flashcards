@@ -1235,17 +1235,34 @@
             updateProgressButtons();
         }
 
-        // Update the progress stats display
+        // Update the progress stats display - counts based on current filter context
         function updateProgressStats() {
             let mastered = 0;
             let reviewing = 0;
             let needLearn = 0;
 
-            // Count all cards with progress (not just filtered)
-            Object.values(cardProgress).forEach(status => {
-                if (status === 'mastered') mastered++;
-                else if (status === 'reviewing') reviewing++;
-                else if (status === 'need-learn') needLearn++;
+            // Get current filter values (excluding progress filter to show all progress within other filters)
+            const unitValue = unitFilter.value;
+            const topicValue = topicFilter.value;
+            const typeValue = typeFilter.value;
+            const searchValue = searchInput.value.toLowerCase();
+
+            // Count progress for cards matching current filters (ignoring progress filter itself)
+            flashcardData.forEach(card => {
+                const matchUnit = unitValue === 'all' || card.unit.toString() === unitValue;
+                const matchTopic = topicValue === 'all' || card.topic === topicValue;
+                const matchType = typeValue === 'all' || card.type === typeValue;
+                const matchSearch = !searchValue ||
+                    card.question.toLowerCase().includes(searchValue) ||
+                    card.answer.toLowerCase().includes(searchValue);
+
+                if (matchUnit && matchTopic && matchType && matchSearch) {
+                    const cardId = getCardId(card);
+                    const status = cardProgress[cardId];
+                    if (status === 'mastered') mastered++;
+                    else if (status === 'reviewing') reviewing++;
+                    else if (status === 'need-learn') needLearn++;
+                }
             });
 
             document.getElementById('masteredCount').textContent = mastered;
