@@ -219,23 +219,129 @@
         .stat-box {
             background: var(--gray-100);
             border-radius: 12px;
-            padding: 20px;
+            padding: 16px;
             text-align: center;
         }
 
+        .stat-box.mastered {
+            background: rgba(39, 174, 96, 0.1);
+            border: 2px solid var(--success);
+        }
+
+        .stat-box.reviewing {
+            background: rgba(243, 156, 18, 0.1);
+            border: 2px solid #f39c12;
+        }
+
+        .stat-box.need-learn {
+            background: rgba(231, 76, 60, 0.1);
+            border: 2px solid var(--error);
+        }
+
         .stat-value {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 700;
             color: var(--primary);
             line-height: 1;
             margin-bottom: 4px;
         }
 
+        .stat-box.mastered .stat-value { color: var(--success); }
+        .stat-box.reviewing .stat-value { color: #f39c12; }
+        .stat-box.need-learn .stat-value { color: var(--error); }
+
         .stat-label {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--gray-500);
             text-transform: uppercase;
             letter-spacing: 0.5px;
+        }
+
+        /* Progress Icons on Card */
+        .progress-buttons {
+            display: flex;
+            gap: 8px;
+            margin-left: auto;
+        }
+
+        .progress-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid var(--gray-300);
+            background: var(--white);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .progress-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .progress-btn.need-learn {
+            border-color: var(--error);
+            color: var(--error);
+        }
+
+        .progress-btn.need-learn.active,
+        .progress-btn.need-learn:hover {
+            background: var(--error);
+            color: white;
+        }
+
+        .progress-btn.reviewing {
+            border-color: #f39c12;
+            color: #f39c12;
+        }
+
+        .progress-btn.reviewing.active,
+        .progress-btn.reviewing:hover {
+            background: #f39c12;
+            color: white;
+        }
+
+        .progress-btn.mastered {
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .progress-btn.mastered.active,
+        .progress-btn.mastered:hover {
+            background: var(--success);
+            color: white;
+        }
+
+        /* Reset button */
+        .reset-progress-btn {
+            background: transparent;
+            border: 1px solid var(--gray-300);
+            color: var(--gray-500);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 12px;
+        }
+
+        .reset-progress-btn:hover {
+            border-color: var(--error);
+            color: var(--error);
+        }
+
+        @media (max-width: 768px) {
+            .progress-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+            .stat-value {
+                font-size: 24px;
+            }
         }
 
         .flashcard-container {
@@ -476,7 +582,9 @@
         }
 
         .card-footer {
-            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             padding-top: 16px;
             border-top: 1px solid var(--gray-200);
         }
@@ -484,6 +592,10 @@
         .flip-hint {
             font-size: 13px;
             color: var(--gray-500);
+        }
+
+        .flashcard-front .card-footer {
+            justify-content: center;
         }
 
         .nav-buttons {
@@ -901,10 +1013,20 @@
                     </select>
                 </div>
             </div>
-            <div class="search-row">
+            <div class="search-row" style="grid-template-columns: 1fr 1fr 1fr;">
                 <div class="control-group">
                     <label>Search Flashcards:</label>
                     <input type="text" id="searchInput" placeholder="Type to search...">
+                </div>
+                <div class="control-group">
+                    <label>Progress Status:</label>
+                    <select id="progressFilter">
+                        <option value="all">All Cards</option>
+                        <option value="mastered">✅ Mastered</option>
+                        <option value="reviewing">🔄 Reviewing</option>
+                        <option value="need-learn">❌ Need to Learn</option>
+                        <option value="unrated">⚪ Not Rated</option>
+                    </select>
                 </div>
                 <div class="control-group">
                     <label>Card Order:</label>
@@ -915,19 +1037,20 @@
                 </div>
             </div>
             <div class="stats-row">
-                <div class="stat-box">
-                    <div class="stat-value" id="currentCardNum">1</div>
-                    <div class="stat-label">Current Card</div>
+                <div class="stat-box mastered">
+                    <div class="stat-value" id="masteredCount">0</div>
+                    <div class="stat-label">✅ Mastered</div>
                 </div>
-                <div class="stat-box">
-                    <div class="stat-value" id="totalCards">0</div>
-                    <div class="stat-label">Total Cards</div>
+                <div class="stat-box reviewing">
+                    <div class="stat-value" id="reviewingCount">0</div>
+                    <div class="stat-label">🔄 Reviewing</div>
                 </div>
-                <div class="stat-box">
-                    <div class="stat-value" id="progressPercent">0%</div>
-                    <div class="stat-label">Progress</div>
+                <div class="stat-box need-learn">
+                    <div class="stat-value" id="needLearnCount">0</div>
+                    <div class="stat-label">❌ Need to Learn</div>
                 </div>
             </div>
+            <button class="reset-progress-btn" id="resetProgressBtn">Reset All Progress</button>
         </div>
 
         <div class="flashcard-container">
@@ -960,6 +1083,11 @@
                     </div>
                     <div class="card-footer">
                         <span class="flip-hint">Click to see question | Press Space</span>
+                        <div class="progress-buttons">
+                            <button class="progress-btn need-learn" id="btnNeedLearn" title="Need to Learn" onclick="event.stopPropagation(); setCardProgress('need-learn')">❌</button>
+                            <button class="progress-btn reviewing" id="btnReviewing" title="Reviewing" onclick="event.stopPropagation(); setCardProgress('reviewing')">🔄</button>
+                            <button class="progress-btn mastered" id="btnMastered" title="Mastered" onclick="event.stopPropagation(); setCardProgress('mastered')">✅</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -990,6 +1118,169 @@
         let filteredCards = [];
         let isFlipped = false;
         let allTopics = [];
+        let cardProgress = {}; // Stores progress: { cardId: 'mastered' | 'reviewing' | 'need-learn' }
+        let currentUserId = null;
+
+        // Generate unique card ID from question (first 100 chars to keep it manageable)
+        function getCardId(card) {
+            return card.question.substring(0, 100).replace(/[^a-zA-Z0-9]/g, '_');
+        }
+
+        // Load user progress from Supabase
+        async function loadUserProgress() {
+            if (!currentUserId) return;
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('card_progress')
+                    .select('card_id, status')
+                    .eq('user_id', currentUserId);
+
+                if (error) {
+                    console.error('Error loading progress:', error);
+                    return;
+                }
+
+                // Convert to object format
+                cardProgress = {};
+                if (data) {
+                    data.forEach(item => {
+                        cardProgress[item.card_id] = item.status;
+                    });
+                }
+
+                updateProgressStats();
+                updateProgressButtons();
+            } catch (err) {
+                console.error('Failed to load progress:', err);
+            }
+        }
+
+        // Save card progress to Supabase
+        async function saveCardProgress(cardId, status) {
+            if (!currentUserId) return;
+
+            try {
+                // Upsert - insert or update if exists
+                const { error } = await supabaseClient
+                    .from('card_progress')
+                    .upsert({
+                        user_id: currentUserId,
+                        card_id: cardId,
+                        status: status,
+                        updated_at: new Date().toISOString()
+                    }, {
+                        onConflict: 'user_id,card_id'
+                    });
+
+                if (error) {
+                    console.error('Error saving progress:', error);
+                }
+            } catch (err) {
+                console.error('Failed to save progress:', err);
+            }
+        }
+
+        // Set progress for current card
+        function setCardProgress(status) {
+            if (filteredCards.length === 0) return;
+
+            const card = filteredCards[currentIndex];
+            const cardId = getCardId(card);
+
+            // If clicking the same status, remove it (toggle off)
+            if (cardProgress[cardId] === status) {
+                delete cardProgress[cardId];
+                // Remove from database
+                if (currentUserId) {
+                    supabaseClient
+                        .from('card_progress')
+                        .delete()
+                        .eq('user_id', currentUserId)
+                        .eq('card_id', cardId)
+                        .then(({ error }) => {
+                            if (error) console.error('Error removing progress:', error);
+                        });
+                }
+            } else {
+                // Set new status
+                cardProgress[cardId] = status;
+                saveCardProgress(cardId, status);
+            }
+
+            updateProgressStats();
+            updateProgressButtons();
+        }
+
+        // Update the progress stats display
+        function updateProgressStats() {
+            let mastered = 0;
+            let reviewing = 0;
+            let needLearn = 0;
+
+            // Count all cards with progress (not just filtered)
+            Object.values(cardProgress).forEach(status => {
+                if (status === 'mastered') mastered++;
+                else if (status === 'reviewing') reviewing++;
+                else if (status === 'need-learn') needLearn++;
+            });
+
+            document.getElementById('masteredCount').textContent = mastered;
+            document.getElementById('reviewingCount').textContent = reviewing;
+            document.getElementById('needLearnCount').textContent = needLearn;
+        }
+
+        // Update progress button states for current card
+        function updateProgressButtons() {
+            // Reset all buttons
+            document.getElementById('btnMastered').classList.remove('active');
+            document.getElementById('btnReviewing').classList.remove('active');
+            document.getElementById('btnNeedLearn').classList.remove('active');
+
+            if (filteredCards.length === 0) return;
+
+            const card = filteredCards[currentIndex];
+            const cardId = getCardId(card);
+            const status = cardProgress[cardId];
+
+            // Highlight the active status
+            if (status === 'mastered') {
+                document.getElementById('btnMastered').classList.add('active');
+            } else if (status === 'reviewing') {
+                document.getElementById('btnReviewing').classList.add('active');
+            } else if (status === 'need-learn') {
+                document.getElementById('btnNeedLearn').classList.add('active');
+            }
+        }
+
+        // Reset all progress
+        async function resetProgress() {
+            if (!confirm('Are you sure you want to reset all your progress? This cannot be undone.')) {
+                return;
+            }
+
+            // Clear local progress
+            cardProgress = {};
+
+            // Clear from database
+            if (currentUserId) {
+                try {
+                    const { error } = await supabaseClient
+                        .from('card_progress')
+                        .delete()
+                        .eq('user_id', currentUserId);
+
+                    if (error) {
+                        console.error('Error resetting progress:', error);
+                    }
+                } catch (err) {
+                    console.error('Failed to reset progress:', err);
+                }
+            }
+
+            updateProgressStats();
+            updateProgressButtons();
+        }
 
         const loadingOverlay = document.getElementById('loadingOverlay');
         const appContainer = document.getElementById('appContainer');
@@ -1012,6 +1303,9 @@
                 }
 
                 console.log('Session found, user:', session.user.id);
+
+                // Store current user ID for progress tracking
+                currentUserId = session.user.id;
 
                 // Display user email in header
                 if (session.user.email) {
@@ -1057,12 +1351,17 @@
             }
         }
 
-        function initializeApp() {
+        async function initializeApp() {
             loadingOverlay.classList.add('hidden');
             appContainer.classList.remove('hidden');
             extractTopics();
-            applyFilters();
             setupEventListeners();
+
+            // Load user progress before applying filters
+            await loadUserProgress();
+
+            applyFilters();
+            updateProgressStats();
         }
 
         // Format Pros & Cons answers into styled two-column layout
@@ -1472,6 +1771,7 @@
             const typeValue = typeFilter.value;
             const searchValue = searchInput.value.toLowerCase();
             const orderValue = orderSelect.value;
+            const progressValue = document.getElementById('progressFilter').value;
 
             filteredCards = flashcardData.filter(card => {
                 const matchUnit = unitValue === 'all' || card.unit.toString() === unitValue;
@@ -1480,7 +1780,21 @@
                 const matchSearch = !searchValue ||
                     card.question.toLowerCase().includes(searchValue) ||
                     card.answer.toLowerCase().includes(searchValue);
-                return matchUnit && matchTopic && matchType && matchSearch;
+
+                // Progress filter
+                let matchProgress = true;
+                if (progressValue !== 'all') {
+                    const cardId = getCardId(card);
+                    const cardStatus = cardProgress[cardId];
+
+                    if (progressValue === 'unrated') {
+                        matchProgress = !cardStatus;
+                    } else {
+                        matchProgress = cardStatus === progressValue;
+                    }
+                }
+
+                return matchUnit && matchTopic && matchType && matchSearch && matchProgress;
             });
 
             if (orderValue === 'random') {
@@ -1498,14 +1812,14 @@
 
         function updateDisplay() {
             const totalCount = filteredCards.length;
-            document.getElementById('totalCards').textContent = totalCount;
-            document.getElementById('currentCardNum').textContent = totalCount > 0 ? currentIndex + 1 : 0;
-            const progress = totalCount > 0 ? Math.round(((currentIndex + 1) / totalCount) * 100) : 0;
-            document.getElementById('progressPercent').textContent = progress + '%';
 
             if (totalCount === 0) {
                 document.getElementById('cardQuestion').textContent = 'No cards match your filters';
                 document.getElementById('cardAnswer').textContent = 'Try adjusting your search';
+                // Reset progress buttons when no cards
+                document.getElementById('btnMastered').classList.remove('active');
+                document.getElementById('btnReviewing').classList.remove('active');
+                document.getElementById('btnNeedLearn').classList.remove('active');
                 return;
             }
 
@@ -1547,6 +1861,9 @@
             if (isFlipped) flashcard.classList.add('flipped');
             document.getElementById('unitLabel').className = 'unit-badge unit-' + card.unit;
             document.getElementById('unitLabelBack').className = 'unit-badge unit-' + card.unit;
+
+            // Update progress button states for current card
+            updateProgressButtons();
         }
 
         function nextCard() {
@@ -1588,6 +1905,8 @@
             topicFilter.addEventListener('change', applyFilters);
             typeFilter.addEventListener('change', applyFilters);
             orderSelect.addEventListener('change', applyFilters);
+            document.getElementById('progressFilter').addEventListener('change', applyFilters);
+            document.getElementById('resetProgressBtn').addEventListener('click', resetProgress);
 
             let searchTimeout;
             searchInput.addEventListener('input', () => {
