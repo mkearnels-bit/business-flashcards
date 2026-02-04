@@ -1128,7 +1128,11 @@
 
         // Load user progress from Supabase
         async function loadUserProgress() {
-            if (!currentUserId) return;
+            console.log('Loading progress for user:', currentUserId);
+            if (!currentUserId) {
+                console.log('No user ID, skipping progress load');
+                return;
+            }
 
             try {
                 const { data, error } = await supabaseClient
@@ -1136,17 +1140,26 @@
                     .select('card_id, status')
                     .eq('user_id', currentUserId);
 
+                console.log('Progress load result:', { data, error });
+
                 if (error) {
                     console.error('Error loading progress:', error);
+                    // If table doesn't exist, show a helpful message
+                    if (error.code === '42P01' || error.message.includes('does not exist')) {
+                        console.warn('The card_progress table does not exist in Supabase. Please create it using the SQL provided.');
+                    }
                     return;
                 }
 
                 // Convert to object format
                 cardProgress = {};
-                if (data) {
+                if (data && data.length > 0) {
                     data.forEach(item => {
                         cardProgress[item.card_id] = item.status;
                     });
+                    console.log('Loaded progress for', data.length, 'cards');
+                } else {
+                    console.log('No saved progress found for this user');
                 }
 
                 updateProgressStats();
@@ -1158,11 +1171,15 @@
 
         // Save card progress to Supabase
         async function saveCardProgress(cardId, status) {
-            if (!currentUserId) return;
+            console.log('Saving progress:', { cardId, status, userId: currentUserId });
+            if (!currentUserId) {
+                console.log('No user ID, skipping save');
+                return;
+            }
 
             try {
                 // Upsert - insert or update if exists
-                const { error } = await supabaseClient
+                const { data, error } = await supabaseClient
                     .from('card_progress')
                     .upsert({
                         user_id: currentUserId,
@@ -1171,10 +1188,16 @@
                         updated_at: new Date().toISOString()
                     }, {
                         onConflict: 'user_id,card_id'
-                    });
+                    })
+                    .select();
 
                 if (error) {
                     console.error('Error saving progress:', error);
+                    if (error.code === '42P01' || error.message.includes('does not exist')) {
+                        alert('Progress tracking table not found. Please contact support to enable this feature.');
+                    }
+                } else {
+                    console.log('Progress saved successfully:', data);
                 }
             } catch (err) {
                 console.error('Failed to save progress:', err);
