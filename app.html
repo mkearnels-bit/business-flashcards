@@ -807,11 +807,50 @@
         .answer-highlight.formula {
             font-family: 'Courier New', monospace;
             font-size: 18px;
+            margin-bottom: 16px;
+        }
+
+        .formula-text {
+            font-size: 15px;
+            color: var(--gray-700);
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .formula-label {
+            font-size: 15px;
+            color: var(--gray-900);
+            margin-top: 12px;
+            margin-bottom: 4px;
+        }
+
+        .formula-bullet {
+            font-size: 14px;
+            color: var(--gray-700);
+            margin-left: 8px;
+            margin-bottom: 4px;
+            line-height: 1.5;
+        }
+
+        .formula-calculation {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: var(--primary);
+            background: var(--gray-100);
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin: 8px 0;
         }
 
         @media (max-width: 768px) {
             .answer-highlight.formula {
                 font-size: 14px;
+            }
+            .formula-text, .formula-label, .formula-bullet {
+                font-size: 13px;
+            }
+            .formula-calculation {
+                font-size: 12px;
             }
         }
     </style>
@@ -1347,9 +1386,63 @@
             return formatAnswerUniversal(answer, false);
         }
 
-        // Format formula answers
+        // Format formula answers - dedicated formatter for formula cards
         function formatFormulaAnswer(answer) {
-            return formatAnswerUniversal(answer, true);
+            let html = '';
+
+            // Remove the <strong>Formula:</strong> prefix if present
+            let content = answer.replace(/^<strong>Formula:<\/strong>\s*/i, '');
+
+            // Split by double <br> to separate formula from explanation
+            let sections = content.split(/<br\s*\/?>\s*<br\s*\/?>/gi);
+
+            // First section is the formula itself - goes in grey box
+            if (sections[0]) {
+                let formula = sections[0].trim();
+                // Clean any stray HTML but keep the formula text
+                formula = formula.replace(/<br\s*\/?>/gi, ' ').trim();
+                html += `<div class="answer-highlight formula">${formula}</div>`;
+            }
+
+            // Process remaining sections (explanation, examples, etc.)
+            for (let i = 1; i < sections.length; i++) {
+                let section = sections[i].trim();
+                if (!section) continue;
+
+                // Split by single <br> for lines within this section
+                let lines = section.split(/<br\s*\/?>/gi).map(l => l.trim()).filter(l => l);
+
+                lines.forEach(line => {
+                    // Check for bullet point
+                    if (/^[•\-\*]\s/.test(line)) {
+                        let item = line.replace(/^[•\-\*]\s*/, '');
+                        html += `<div class="formula-bullet">• ${item}</div>`;
+                    }
+                    // Check for bold label like <strong>Example:</strong>
+                    else if (/<strong>[^<]+<\/strong>/i.test(line)) {
+                        html += `<div class="formula-label">${line}</div>`;
+                    }
+                    // Check for "Example:" or similar labels
+                    else if (/^(Example|Where|Note|Result|Interpretation)s?:/i.test(line)) {
+                        let parts = line.match(/^([^:]+:)\s*(.*)$/);
+                        if (parts) {
+                            html += `<div class="formula-label"><strong>${parts[1]}</strong> ${parts[2]}</div>`;
+                        } else {
+                            html += `<div class="formula-label"><strong>${line}</strong></div>`;
+                        }
+                    }
+                    // Check for calculation result (contains = sign at start or is a formula step)
+                    else if (/^[A-Z][a-z]*\s*=/.test(line) || /^\([^)]+\)/.test(line)) {
+                        html += `<div class="formula-calculation">${line}</div>`;
+                    }
+                    // Regular text
+                    else {
+                        html += `<p class="formula-text">${line}</p>`;
+                    }
+                });
+            }
+
+            return html || `<div class="answer-highlight formula">${answer}</div>`;
         }
 
         // Format theory answers
