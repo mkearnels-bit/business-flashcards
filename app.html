@@ -675,7 +675,7 @@
             }
 
             .search-row {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr !important;
                 gap: 12px;
                 margin-bottom: 16px;
             }
@@ -684,6 +684,8 @@
             .control-group input {
                 padding: 10px 12px;
                 font-size: 14px;
+                width: 100%;
+                box-sizing: border-box;
             }
 
             .control-group label {
@@ -737,8 +739,20 @@
                 flex: 1;
                 padding: 8px;
                 overflow-y: visible;
+            }
+
+            /* Keep question centered on front of card */
+            .flashcard-front .card-content {
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+            }
+
+            /* Answer left-aligned on back of card */
+            .flashcard-back .card-content {
                 align-items: flex-start;
                 justify-content: flex-start;
+                text-align: left;
             }
 
             .card-footer {
