@@ -1801,8 +1801,9 @@
             }
 
             .testimonials-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr !important;
                 max-width: 500px;
+                margin: 0 auto;
             }
 
             .step {
@@ -2027,7 +2028,13 @@
             }
 
             .demo-nav {
-                flex-wrap: wrap;
+                flex-wrap: nowrap;
+                gap: 0.5rem;
+            }
+
+            .demo-nav-btn {
+                padding: 0.7rem 1rem;
+                font-size: 0.85rem;
             }
 
             .demo-pros-cons {
@@ -2109,9 +2116,23 @@
         }
 
         @media (max-width: 480px) {
+            /* Fix button text centering */
+            .btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+            }
+
             .btn-large {
                 padding: 0.875rem 1.5rem;
                 font-size: 1rem;
+            }
+
+            /* Nav buttons on mobile */
+            .nav-buttons .btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.85rem;
             }
 
             .hero h1 {
@@ -2211,8 +2232,75 @@
                 flex-direction: column;
             }
 
+            /* Demo nav buttons - arrows with flip in middle */
+            .demo-nav {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                gap: 0.5rem;
+                flex-wrap: nowrap;
+            }
+
+            .demo-nav-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.85rem;
+                min-width: auto;
+            }
+
+            .demo-nav-btn:not(.flip) {
+                padding: 0.6rem 0.8rem;
+            }
+
+            /* Hide text on prev/next, show only arrows */
+            .demo-nav-btn:first-child {
+                font-size: 0;
+            }
+            .demo-nav-btn:first-child::before {
+                content: '←';
+                font-size: 1rem;
+            }
+
+            .demo-nav-btn:last-child {
+                font-size: 0;
+            }
+            .demo-nav-btn:last-child::before {
+                content: '→';
+                font-size: 1rem;
+            }
+
+            .demo-nav-btn.flip {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.8rem;
+            }
+
+            /* Expert content cards - vertical stack */
+            .testimonials-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1rem;
+            }
+
+            .testimonial-card {
+                padding: 1.5rem;
+            }
+
             .step-number {
                 font-size: 4rem;
+            }
+
+            /* Pain points on mobile */
+            .pain-point-card {
+                flex-direction: column;
+                text-align: center;
+                padding: 1.25rem;
+            }
+
+            .pain-point-icon {
+                margin: 0 auto 1rem;
+            }
+
+            .pain-point-content .solution-text {
+                justify-content: center;
             }
         }
     </style>
