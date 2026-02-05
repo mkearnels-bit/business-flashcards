@@ -334,6 +334,36 @@
             color: var(--error);
         }
 
+        .controls-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .filtered-count {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
+
+        .filtered-count-label {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 500;
+        }
+
+        .filtered-count-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+        }
+
         @media (max-width: 768px) {
             .progress-btn {
                 width: 32px;
@@ -713,6 +743,23 @@
                 font-size: 9px;
             }
 
+            /* Controls footer mobile */
+            .controls-footer {
+                flex-direction: column;
+                gap: 12px;
+                align-items: stretch;
+            }
+
+            .filtered-count {
+                justify-content: center;
+                padding: 10px 16px;
+            }
+
+            .reset-progress-btn {
+                width: 100%;
+                text-align: center;
+            }
+
             /* Flashcard mobile fixes */
             .flashcard-container {
                 margin-bottom: 16px;
@@ -1065,7 +1112,14 @@
                     <div class="stat-label">❌ Need to Learn</div>
                 </div>
             </div>
-            <button class="reset-progress-btn" id="resetProgressBtn">Reset All Progress</button>
+            <div class="controls-footer">
+                <button class="reset-progress-btn" id="resetProgressBtn">Reset All Progress</button>
+                <div class="filtered-count">
+                    <span class="filtered-count-label">Showing</span>
+                    <span class="filtered-count-value" id="filteredCardCount">0</span>
+                    <span class="filtered-count-label">cards</span>
+                </div>
+            </div>
         </div>
 
         <div class="flashcard-container">
@@ -1864,6 +1918,14 @@
             flashcard.classList.remove('flipped');
             updateDisplay();
             updateProgressStats(); // Update stats based on current filters
+            updateFilteredCount(); // Update the filtered card count display
+        }
+
+        function updateFilteredCount() {
+            const countEl = document.getElementById('filteredCardCount');
+            if (countEl) {
+                countEl.textContent = filteredCards.length;
+            }
         }
 
         function updateDisplay() {
