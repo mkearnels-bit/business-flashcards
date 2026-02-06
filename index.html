@@ -273,6 +273,30 @@
             line-height: 1.7;
         }
 
+        .free-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            padding: 0.6rem 1.25rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: white;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+            animation: subtlePulse 2s ease-in-out infinite;
+        }
+
+        .free-badge-icon {
+            font-size: 1.1rem;
+        }
+
+        @keyframes subtlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
         .hero-cta {
             display: flex;
             gap: 1rem;
@@ -748,6 +772,26 @@
             color: var(--gray-600);
             font-size: 0.95rem;
             line-height: 1.6;
+        }
+
+        .coming-soon-banner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            background: linear-gradient(135deg, var(--primary) 0%, #1e3a5f 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 3rem auto 0;
+            max-width: fit-content;
+            box-shadow: 0 4px 20px rgba(30, 58, 95, 0.3);
+        }
+
+        .coming-soon-icon {
+            font-size: 1.25rem;
         }
 
         /* ==================== INTERACTIVE DEMO SECTION ==================== */
@@ -2333,8 +2377,12 @@
                 </div>
                 <h1>Ace Your A-Level <span>Business Studies</span> Exams</h1>
                 <p class="hero-subtitle">Master every topic with interactive flashcards, smart revision tools, and progress tracking. Study smarter, not harder and watch your grades improve.</p>
+                <div class="free-badge">
+                    <span class="free-badge-icon">🎉</span>
+                    <span class="free-badge-text">Free for a Limited Time</span>
+                </div>
                 <div class="hero-cta">
-                    <a href="signup.html" class="btn btn-primary btn-large">Start Revising Now →</a>
+                    <a href="signup.html" class="btn btn-primary btn-large">Start Revising Now — It's Free →</a>
                     <a href="#demo" class="btn btn-ghost btn-large">Try the Demo</a>
                 </div>
                 <div class="hero-stats">
@@ -2540,6 +2588,10 @@
                 <p>Access your flashcards on any device – phone, tablet, or computer. Your progress syncs automatically.</p>
             </div>
         </div>
+        <div class="coming-soon-banner">
+            <span class="coming-soon-icon">🚀</span>
+            <span class="coming-soon-text">Coming Soon: Exam Skills &amp; Practice Questions</span>
+        </div>
     </section>
 
     <!-- Interactive Demo Section -->
@@ -2732,6 +2784,13 @@
             </div>
 
             <div class="faq-item">
+                <button class="faq-question">Is it really free?</button>
+                <div class="faq-answer">
+                    <p>Yes! MyBizStudies is completely free for a limited time while we build out more features like exam skills and practice questions. Register now to get early access — pricing will be introduced later.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
                 <button class="faq-question">Why do flashcards work?</button>
                 <div class="faq-answer">
                     <p>Flashcards use active recall, which forces your brain to retrieve information rather than passively reading it. This strengthens memory pathways and improves long term retention. Combined with spaced repetition, flashcards are one of the most effective study methods proven by research.</p>
@@ -2766,8 +2825,8 @@
         <div class="final-cta-content">
             <h2>Ready to Boost Your Business Studies Grade?</h2>
             <p>Start revising smarter with 360+ expert crafted flashcards covering the entire A-Level syllabus.</p>
-            <a href="signup.html" class="btn btn-white btn-large">Start Revising Now →</a>
-            <p class="final-cta-note">Created by an expert teacher • Full syllabus coverage</p>
+            <a href="signup.html" class="btn btn-white btn-large">Start Revising Now — It's Free →</a>
+            <p class="final-cta-note">Free for a limited time • Created by an expert teacher</p>
         </div>
     </section>
 

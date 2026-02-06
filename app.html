@@ -1436,6 +1436,11 @@
 
                 const subscription = subscriptions && subscriptions.length > 0 ? subscriptions[0] : null;
 
+                // ========================================
+                // PAYWALL BYPASS - Free access period
+                // To re-enable paywall, uncomment the code below
+                // ========================================
+                /*
                 if (!subscription) {
                     console.log('No subscription found');
                     window.location.href = 'payment.html';
@@ -1451,8 +1456,10 @@
                     window.location.href = 'payment.html';
                     return;
                 }
+                */
+                // ========================================
 
-                console.log('Access granted!');
+                console.log('Access granted - Free access period active!');
                 initializeApp();
             } catch (error) {
                 console.error('Auth error:', error);
