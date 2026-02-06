@@ -1109,15 +1109,16 @@
         <span id="toastMessage">Success!</span>
     </div>
 
-    <!-- Flashcard Data -->
-    <script src="flashcard-data.js"></script>
-
+    <!-- Flashcard Data - Now loaded from Supabase -->
     <script>
         // Supabase configuration
         const SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
 
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Flashcard data loaded from Supabase
+        let flashcardData = [];
 
         // ADMIN EMAIL - Only this user can access
         const ADMIN_EMAIL = 'mkearnels@gmail.com';
@@ -1209,18 +1210,29 @@
             document.getElementById('totalUsers').textContent = userCount || '0';
             document.getElementById('usersChange').textContent = `${userCount || 0} registered users`;
 
-            // Load flashcard count
-            document.getElementById('totalCards').textContent = flashcardData.length;
+            // Load flashcard count from Supabase
+            const { count: cardCount } = await supabaseClient
+                .from('flashcards')
+                .select('*', { count: 'exact', head: true });
+
+            document.getElementById('totalCards').textContent = cardCount || '0';
+
+            // Load flashcards for unit breakdown
+            const { data: cards } = await supabaseClient
+                .from('flashcards')
+                .select('unit');
 
             // Unit breakdown
             const unitCounts = [0, 0, 0, 0];
-            flashcardData.forEach(card => {
-                if (card.unit >= 1 && card.unit <= 4) {
-                    unitCounts[card.unit - 1]++;
-                }
-            });
+            if (cards) {
+                cards.forEach(card => {
+                    if (card.unit >= 1 && card.unit <= 4) {
+                        unitCounts[card.unit - 1]++;
+                    }
+                });
+            }
 
-            const total = flashcardData.length;
+            const total = cardCount || 1;
             for (let i = 1; i <= 4; i++) {
                 document.getElementById(`unit${i}Count`).textContent = unitCounts[i-1];
                 document.getElementById(`unit${i}Bar`).style.width = `${(unitCounts[i-1] / total) * 100}%`;
@@ -1345,10 +1357,27 @@
             showToast('Users exported successfully!', 'success');
         });
 
-        // Load Flashcards
-        function loadFlashcards() {
-            filteredFlashcards = [...flashcardData];
-            renderFlashcards();
+        // Load Flashcards from Supabase
+        async function loadFlashcards() {
+            const tbody = document.getElementById('cardsTableBody');
+            tbody.innerHTML = '<tr><td colspan="6" class="loading"><div class="spinner"></div> Loading flashcards...</td></tr>';
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('flashcards')
+                    .select('*')
+                    .order('unit', { ascending: true })
+                    .order('topic', { ascending: true });
+
+                if (error) throw error;
+
+                flashcardData = data || [];
+                filteredFlashcards = [...flashcardData];
+                renderFlashcards();
+            } catch (error) {
+                console.error('Error loading flashcards:', error);
+                tbody.innerHTML = '<tr><td colspan="6" class="empty-state">Error loading flashcards. Make sure the database is set up.</td></tr>';
+            }
         }
 
         function renderFlashcards() {
@@ -1368,16 +1397,39 @@
 
             tbody.innerHTML = pageCards.map((card, idx) => `
                 <tr>
-                    <td>${start + idx + 1}</td>
+                    <td>${card.id}</td>
                     <td><span class="badge badge-gray">Unit ${card.unit}</span></td>
                     <td><span class="badge type-${card.type}">${formatType(card.type)}</span></td>
                     <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${card.question}</td>
                     <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${card.topic}</td>
                     <td>
-                        <button class="btn btn-ghost btn-sm" onclick="editCard(${start + idx})">Edit</button>
+                        <button class="btn btn-ghost btn-sm" onclick="editCard(${card.id})">Edit</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteCard(${card.id})" style="margin-left: 4px;">Delete</button>
                     </td>
                 </tr>
             `).join('');
+        }
+
+        // Delete flashcard from Supabase
+        async function deleteCard(cardId) {
+            if (!confirm('Are you sure you want to delete this flashcard? This cannot be undone.')) {
+                return;
+            }
+
+            try {
+                const { error } = await supabaseClient
+                    .from('flashcards')
+                    .delete()
+                    .eq('id', cardId);
+
+                if (error) throw error;
+
+                showToast('Flashcard deleted successfully!', 'success');
+                await loadFlashcards();
+            } catch (error) {
+                console.error('Error deleting flashcard:', error);
+                showToast('Error deleting flashcard: ' + error.message, 'error');
+            }
         }
 
         // Card Filters
@@ -1419,11 +1471,16 @@
         });
 
         // Edit Card
-        let editingCardIndex = -1;
+        let editingCardId = null;
 
-        function editCard(index) {
-            editingCardIndex = index;
-            const card = filteredFlashcards[index];
+        function editCard(cardId) {
+            editingCardId = cardId;
+            const card = flashcardData.find(c => c.id === cardId);
+
+            if (!card) {
+                showToast('Card not found', 'error');
+                return;
+            }
 
             document.getElementById('cardModalTitle').textContent = 'Edit Flashcard';
             document.getElementById('editUnit').value = card.unit;
@@ -1437,7 +1494,7 @@
 
         // Add Card
         document.getElementById('addCardBtn').addEventListener('click', () => {
-            editingCardIndex = -1;
+            editingCardId = null;
             document.getElementById('cardModalTitle').textContent = 'Add New Flashcard';
             document.getElementById('editUnit').value = '1';
             document.getElementById('editTopic').value = '';
@@ -1461,8 +1518,8 @@
             document.getElementById('userModal').classList.remove('active');
         });
 
-        // Save Card
-        document.getElementById('saveCardEdit').addEventListener('click', () => {
+        // Save Card to Supabase
+        document.getElementById('saveCardEdit').addEventListener('click', async () => {
             const cardData = {
                 unit: parseInt(document.getElementById('editUnit').value),
                 topic: document.getElementById('editTopic').value,
@@ -1476,19 +1533,39 @@
                 return;
             }
 
-            if (editingCardIndex >= 0) {
-                // Update existing
-                Object.assign(filteredFlashcards[editingCardIndex], cardData);
-                showToast('Card updated! Note: Changes are in memory only.', 'success');
-            } else {
-                // Add new
-                flashcardData.push(cardData);
-                filteredFlashcards = [...flashcardData];
-                showToast('Card added! Note: Changes are in memory only.', 'success');
-            }
+            const saveBtn = document.getElementById('saveCardEdit');
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Saving...';
 
-            document.getElementById('cardModal').classList.remove('active');
-            renderFlashcards();
+            try {
+                if (editingCardId) {
+                    // Update existing card in Supabase
+                    const { error } = await supabaseClient
+                        .from('flashcards')
+                        .update(cardData)
+                        .eq('id', editingCardId);
+
+                    if (error) throw error;
+                    showToast('Card updated successfully!', 'success');
+                } else {
+                    // Add new card to Supabase
+                    const { error } = await supabaseClient
+                        .from('flashcards')
+                        .insert([cardData]);
+
+                    if (error) throw error;
+                    showToast('Card added successfully!', 'success');
+                }
+
+                document.getElementById('cardModal').classList.remove('active');
+                await loadFlashcards();
+            } catch (error) {
+                console.error('Error saving card:', error);
+                showToast('Error saving card: ' + error.message, 'error');
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Save Changes';
+            }
         });
 
         // View User

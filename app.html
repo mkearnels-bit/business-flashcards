@@ -1175,7 +1175,6 @@
         </div>
     </div>
 
-    <script src="flashcard-data.js"></script>
     <script>
         // Supabase configuration - SAME KEY AS LOGIN.HTML
         const SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
@@ -1183,12 +1182,41 @@
 
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+        // Flashcard data - loaded from Supabase
+        let flashcardData = [];
+
         let currentIndex = 0;
         let filteredCards = [];
         let isFlipped = false;
         let allTopics = [];
         let cardProgress = {}; // Stores progress: { cardId: 'mastered' | 'reviewing' | 'need-learn' }
         let currentUserId = null;
+
+        // Load flashcards from Supabase database
+        async function loadFlashcardsFromSupabase() {
+            console.log('Loading flashcards from Supabase...');
+            try {
+                const { data, error } = await supabaseClient
+                    .from('flashcards')
+                    .select('*')
+                    .order('unit', { ascending: true })
+                    .order('topic', { ascending: true });
+
+                if (error) {
+                    console.error('Error loading flashcards:', error);
+                    throw error;
+                }
+
+                flashcardData = data || [];
+                console.log(`Loaded ${flashcardData.length} flashcards from database`);
+                return true;
+            } catch (error) {
+                console.error('Failed to load flashcards:', error);
+                // Show error to user
+                alert('Failed to load flashcards. Please refresh the page.');
+                return false;
+            }
+        }
 
         // Generate unique card ID from question (first 100 chars to keep it manageable)
         function getCardId(card) {
@@ -1468,6 +1496,14 @@
         }
 
         async function initializeApp() {
+            // Load flashcards from Supabase first
+            const loaded = await loadFlashcardsFromSupabase();
+            if (!loaded || flashcardData.length === 0) {
+                console.error('No flashcards loaded!');
+                loadingOverlay.innerHTML = '<div style="text-align: center; color: white;"><h2>Unable to load flashcards</h2><p>Please refresh the page or try again later.</p></div>';
+                return;
+            }
+
             loadingOverlay.classList.add('hidden');
             appContainer.classList.remove('hidden');
             extractTopics();
