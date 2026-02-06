@@ -1,0 +1,1656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyBizStudies Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1e3a5f;
+            --primary-light: #2d5a8a;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-100);
+            min-height: 100vh;
+            color: var(--gray-800);
+        }
+
+        /* Login Screen */
+        .login-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+        }
+
+        .login-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-card h1 {
+            font-size: 1.75rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .login-card p {
+            color: var(--gray-500);
+            margin-bottom: 2rem;
+        }
+
+        .login-error {
+            background: #fef2f2;
+            color: var(--danger);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .login-btn:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        /* Admin Layout */
+        .admin-container {
+            display: none;
+        }
+
+        .admin-header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .admin-header h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .admin-header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .admin-user {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .logout-btn {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        .admin-body {
+            display: flex;
+            min-height: calc(100vh - 60px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: white;
+            border-right: 1px solid var(--gray-200);
+            padding: 1.5rem 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.875rem 1.5rem;
+            color: var(--gray-600);
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: var(--gray-50);
+            color: var(--primary);
+        }
+
+        .nav-item.active {
+            background: #eff6ff;
+            color: var(--primary);
+            border-left-color: var(--primary);
+            font-weight: 600;
+        }
+
+        .nav-icon {
+            font-size: 1.25rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: var(--gray-500);
+            margin-bottom: 2rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .stat-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-icon.blue { background: #dbeafe; }
+        .stat-icon.green { background: #d1fae5; }
+        .stat-icon.amber { background: #fef3c7; }
+        .stat-icon.purple { background: #ede9fe; }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--gray-900);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray-500);
+        }
+
+        .stat-change {
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .stat-change.positive { color: var(--success); }
+        .stat-change.neutral { color: var(--gray-500); }
+
+        /* Cards/Panels */
+        .panel {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .panel-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .panel-body {
+            padding: 1.5rem;
+        }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .data-table th {
+            font-weight: 600;
+            color: var(--gray-600);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: var(--gray-50);
+        }
+
+        .data-table tbody tr:hover {
+            background: var(--gray-50);
+        }
+
+        .data-table td {
+            font-size: 0.95rem;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-success { background: #d1fae5; color: #065f46; }
+        .badge-warning { background: #fef3c7; color: #92400e; }
+        .badge-danger { background: #fee2e2; color: #991b1b; }
+        .badge-info { background: #dbeafe; color: #1e40af; }
+        .badge-gray { background: var(--gray-200); color: var(--gray-700); }
+
+        /* Buttons */
+        .btn {
+            padding: 0.625rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-light);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--gray-600);
+            border: 1px solid var(--gray-300);
+        }
+
+        .btn-ghost:hover {
+            background: var(--gray-50);
+        }
+
+        .btn-sm {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.8rem;
+        }
+
+        /* Search & Filters */
+        .filters-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.1);
+        }
+
+        .filter-select {
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            background: white;
+            min-width: 150px;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray-500);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: inherit;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* Loading States */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            color: var(--gray-500);
+        }
+
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid var(--gray-300);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 0.75rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray-500);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Charts placeholder */
+        .chart-container {
+            height: 250px;
+            background: var(--gray-50);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-500);
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            height: 8px;
+            background: var(--gray-200);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--success);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        /* Activity list */
+        .activity-list {
+            list-style: none;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--gray-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-text {
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-time {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+        }
+
+        /* User avatar */
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .pagination-info {
+            font-size: 0.9rem;
+            color: var(--gray-600);
+        }
+
+        .pagination-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Hide sections by default */
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .filters-bar {
+                flex-direction: column;
+            }
+
+            .search-input {
+                min-width: 100%;
+            }
+        }
+
+        /* Card Type Colors for Flashcard Management */
+        .type-term { background: #dbeafe; color: #1e40af; }
+        .type-formula { background: #fef3c7; color: #92400e; }
+        .type-advantages { background: #d1fae5; color: #065f46; }
+        .type-discussion { background: #ede9fe; color: #5b21b6; }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--gray-900);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 2000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success { background: var(--success); }
+        .toast.error { background: var(--danger); }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-card">
+            <h1>🔐 Admin Access</h1>
+            <p>MyBizStudies Management Portal</p>
+            <div class="login-error" id="loginError">Invalid credentials. Access denied.</div>
+            <button class="login-btn" id="loginBtn">Sign in with Supabase</button>
+        </div>
+    </div>
+
+    <!-- Admin Container -->
+    <div class="admin-container" id="adminContainer">
+        <!-- Header -->
+        <header class="admin-header">
+            <h1>📊 MyBizStudies Admin</h1>
+            <div class="admin-header-right">
+                <span class="admin-user" id="adminEmail"></span>
+                <button class="logout-btn" id="logoutBtn">Logout</button>
+            </div>
+        </header>
+
+        <div class="admin-body">
+            <!-- Sidebar -->
+            <nav class="sidebar">
+                <div class="nav-item active" data-page="dashboard">
+                    <span class="nav-icon">📊</span>
+                    Dashboard
+                </div>
+                <div class="nav-item" data-page="users">
+                    <span class="nav-icon">👥</span>
+                    Users
+                </div>
+                <div class="nav-item" data-page="flashcards">
+                    <span class="nav-icon">📚</span>
+                    Flashcards
+                </div>
+                <div class="nav-item" data-page="progress">
+                    <span class="nav-icon">📈</span>
+                    Progress Data
+                </div>
+                <div class="nav-item" data-page="settings">
+                    <span class="nav-icon">⚙️</span>
+                    Settings
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Dashboard Page -->
+                <section class="page-section active" id="page-dashboard">
+                    <h1 class="page-title">Dashboard</h1>
+                    <p class="page-subtitle">Welcome back! Here's an overview of MyBizStudies.</p>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div>
+                                    <div class="stat-value" id="totalUsers">-</div>
+                                    <div class="stat-label">Total Users</div>
+                                </div>
+                                <div class="stat-icon blue">👥</div>
+                            </div>
+                            <div class="stat-change positive" id="usersChange">Loading...</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div>
+                                    <div class="stat-value" id="totalCards">-</div>
+                                    <div class="stat-label">Total Flashcards</div>
+                                </div>
+                                <div class="stat-icon green">📚</div>
+                            </div>
+                            <div class="stat-change neutral">Across 4 units</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div>
+                                    <div class="stat-value" id="totalProgress">-</div>
+                                    <div class="stat-label">Cards Studied</div>
+                                </div>
+                                <div class="stat-icon amber">📝</div>
+                            </div>
+                            <div class="stat-change neutral">Total progress records</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div>
+                                    <div class="stat-value" id="masteredCards">-</div>
+                                    <div class="stat-label">Mastered</div>
+                                </div>
+                                <div class="stat-icon purple">✅</div>
+                            </div>
+                            <div class="stat-change neutral">Cards marked mastered</div>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+                        <div class="panel">
+                            <div class="panel-header">
+                                <span class="panel-title">Recent User Signups</span>
+                            </div>
+                            <div class="panel-body">
+                                <ul class="activity-list" id="recentUsers">
+                                    <li class="loading"><div class="spinner"></div> Loading...</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="panel">
+                            <div class="panel-header">
+                                <span class="panel-title">Quick Stats</span>
+                            </div>
+                            <div class="panel-body">
+                                <div style="margin-bottom: 1.5rem;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                        <span style="font-size: 0.9rem; color: var(--gray-600);">Unit 1 Cards</span>
+                                        <span style="font-weight: 600;" id="unit1Count">-</span>
+                                    </div>
+                                    <div class="progress-bar"><div class="progress-fill" id="unit1Bar" style="width: 0%"></div></div>
+                                </div>
+                                <div style="margin-bottom: 1.5rem;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                        <span style="font-size: 0.9rem; color: var(--gray-600);">Unit 2 Cards</span>
+                                        <span style="font-weight: 600;" id="unit2Count">-</span>
+                                    </div>
+                                    <div class="progress-bar"><div class="progress-fill" id="unit2Bar" style="width: 0%"></div></div>
+                                </div>
+                                <div style="margin-bottom: 1.5rem;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                        <span style="font-size: 0.9rem; color: var(--gray-600);">Unit 3 Cards</span>
+                                        <span style="font-weight: 600;" id="unit3Count">-</span>
+                                    </div>
+                                    <div class="progress-bar"><div class="progress-fill" id="unit3Bar" style="width: 0%"></div></div>
+                                </div>
+                                <div>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                        <span style="font-size: 0.9rem; color: var(--gray-600);">Unit 4 Cards</span>
+                                        <span style="font-weight: 600;" id="unit4Count">-</span>
+                                    </div>
+                                    <div class="progress-bar"><div class="progress-fill" id="unit4Bar" style="width: 0%"></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Users Page -->
+                <section class="page-section" id="page-users">
+                    <h1 class="page-title">User Management</h1>
+                    <p class="page-subtitle">Manage registered users and their access.</p>
+
+                    <div class="filters-bar">
+                        <input type="text" class="search-input" id="userSearch" placeholder="Search by email...">
+                        <button class="btn btn-primary" id="exportUsersBtn">📥 Export Users</button>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-header">
+                            <span class="panel-title">All Users</span>
+                            <span class="badge badge-info" id="userCount">0 users</span>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Email</th>
+                                    <th>Signed Up</th>
+                                    <th>Last Sign In</th>
+                                    <th>Cards Studied</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <tr>
+                                    <td colspan="6" class="loading"><div class="spinner"></div> Loading users...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Flashcards Page -->
+                <section class="page-section" id="page-flashcards">
+                    <h1 class="page-title">Flashcard Management</h1>
+                    <p class="page-subtitle">View and manage all flashcards in the system.</p>
+
+                    <div class="filters-bar">
+                        <input type="text" class="search-input" id="cardSearch" placeholder="Search questions or answers...">
+                        <select class="filter-select" id="unitFilter">
+                            <option value="all">All Units</option>
+                            <option value="1">Unit 1</option>
+                            <option value="2">Unit 2</option>
+                            <option value="3">Unit 3</option>
+                            <option value="4">Unit 4</option>
+                        </select>
+                        <select class="filter-select" id="typeFilter">
+                            <option value="all">All Types</option>
+                            <option value="term">Key Terms</option>
+                            <option value="formula">Formulas</option>
+                            <option value="advantages">Advantages/Disadvantages</option>
+                            <option value="discussion">Discussion Points</option>
+                        </select>
+                        <button class="btn btn-success" id="addCardBtn">+ Add Card</button>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-header">
+                            <span class="panel-title">Flashcards</span>
+                            <span class="badge badge-info" id="cardCount">0 cards</span>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 60px;">ID</th>
+                                    <th style="width: 80px;">Unit</th>
+                                    <th style="width: 100px;">Type</th>
+                                    <th>Question</th>
+                                    <th style="width: 150px;">Topic</th>
+                                    <th style="width: 100px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cardsTableBody">
+                                <tr>
+                                    <td colspan="6" class="loading"><div class="spinner"></div> Loading flashcards...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="pagination">
+                            <div class="pagination-info" id="cardPaginationInfo">Showing 1-25 of 378</div>
+                            <div class="pagination-buttons">
+                                <button class="btn btn-ghost btn-sm" id="prevPageBtn">← Previous</button>
+                                <button class="btn btn-ghost btn-sm" id="nextPageBtn">Next →</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Progress Data Page -->
+                <section class="page-section" id="page-progress">
+                    <h1 class="page-title">Progress Analytics</h1>
+                    <p class="page-subtitle">View aggregated learning progress data.</p>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div>
+                                    <div class="stat-value" id="progressLearning">-</div>
+                                    <div class="stat-label">Learning</div>
+                                </div>
+                                <div class="stat-icon amber">📖</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div>
+                                    <div class="stat-value" id="progressReviewing">-</div>
+                                    <div class="stat-label">Reviewing</div>
+                                </div>
+                                <div class="stat-icon blue">🔄</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div>
+                                    <div class="stat-value" id="progressMastered">-</div>
+                                    <div class="stat-label">Mastered</div>
+                                </div>
+                                <div class="stat-icon green">✅</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-header">
+                            <span class="panel-title">Most Studied Cards (Top 10)</span>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Card</th>
+                                    <th>Times Studied</th>
+                                    <th>Mastery Rate</th>
+                                </tr>
+                            </thead>
+                            <tbody id="topCardsBody">
+                                <tr>
+                                    <td colspan="3" class="loading"><div class="spinner"></div> Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Settings Page -->
+                <section class="page-section" id="page-settings">
+                    <h1 class="page-title">Settings</h1>
+                    <p class="page-subtitle">Manage site configuration.</p>
+
+                    <div class="panel">
+                        <div class="panel-header">
+                            <span class="panel-title">Paywall Settings</span>
+                        </div>
+                        <div class="panel-body">
+                            <div style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; background: var(--gray-50); border-radius: 10px;">
+                                <div>
+                                    <div style="font-weight: 600; margin-bottom: 0.25rem;">Paywall Status</div>
+                                    <div style="font-size: 0.9rem; color: var(--gray-600);">Currently bypassed for free access period</div>
+                                </div>
+                                <span class="badge badge-success">FREE ACCESS</span>
+                            </div>
+                            <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--gray-600);">
+                                To re-enable the paywall, edit <code>app.html</code> and uncomment the subscription check code.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-header">
+                            <span class="panel-title">Admin Access</span>
+                        </div>
+                        <div class="panel-body">
+                            <p style="font-size: 0.9rem; color: var(--gray-600); margin-bottom: 1rem;">
+                                Admin access is restricted to the following email:
+                            </p>
+                            <div style="padding: 1rem; background: var(--gray-50); border-radius: 10px; font-family: monospace;">
+                                mkearnels@gmail.com
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Card Edit Modal -->
+    <div class="modal-overlay" id="cardModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="cardModalTitle">Edit Flashcard</h2>
+                <button class="modal-close" id="closeCardModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Unit</label>
+                    <select class="form-select" id="editUnit">
+                        <option value="1">Unit 1 - Marketing and People</option>
+                        <option value="2">Unit 2 - Managing Business Activities</option>
+                        <option value="3">Unit 3 - Business Decisions and Strategy</option>
+                        <option value="4">Unit 4 - Global Business</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Topic</label>
+                    <input type="text" class="form-input" id="editTopic" placeholder="e.g., 1.1 Meeting Customer Needs">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Type</label>
+                    <select class="form-select" id="editType">
+                        <option value="term">Key Term</option>
+                        <option value="formula">Formula</option>
+                        <option value="advantages">Advantages/Disadvantages</option>
+                        <option value="discussion">Discussion Points</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Question</label>
+                    <textarea class="form-textarea" id="editQuestion" placeholder="Enter the question..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Answer (HTML supported)</label>
+                    <textarea class="form-textarea" id="editAnswer" style="min-height: 200px;" placeholder="Enter the answer..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" id="cancelCardEdit">Cancel</button>
+                <button class="btn btn-primary" id="saveCardEdit">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Detail Modal -->
+    <div class="modal-overlay" id="userModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">User Details</h2>
+                <button class="modal-close" id="closeUserModal">&times;</button>
+            </div>
+            <div class="modal-body" id="userModalBody">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <span id="toastMessage">Success!</span>
+    </div>
+
+    <!-- Flashcard Data -->
+    <script src="flashcard-data.js"></script>
+
+    <script>
+        // Supabase configuration
+        const SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
+
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ADMIN EMAIL - Only this user can access
+        const ADMIN_EMAIL = 'mkearnels@gmail.com';
+
+        // State
+        let currentUser = null;
+        let allUsers = [];
+        let cardPage = 0;
+        const cardsPerPage = 25;
+        let filteredFlashcards = [];
+
+        // DOM Elements
+        const loginScreen = document.getElementById('loginScreen');
+        const adminContainer = document.getElementById('adminContainer');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginError = document.getElementById('loginError');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        // Initialize
+        async function init() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+
+            if (session && session.user) {
+                if (session.user.email === ADMIN_EMAIL) {
+                    showAdmin(session.user);
+                } else {
+                    loginError.textContent = 'Access denied. Admin only.';
+                    loginError.style.display = 'block';
+                    await supabaseClient.auth.signOut();
+                }
+            }
+        }
+
+        // Login
+        loginBtn.addEventListener('click', async () => {
+            const { data, error } = await supabaseClient.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                    redirectTo: window.location.href
+                }
+            });
+
+            if (error) {
+                loginError.textContent = error.message;
+                loginError.style.display = 'block';
+            }
+        });
+
+        // Logout
+        logoutBtn.addEventListener('click', async () => {
+            await supabaseClient.auth.signOut();
+            location.reload();
+        });
+
+        // Show Admin
+        function showAdmin(user) {
+            currentUser = user;
+            loginScreen.style.display = 'none';
+            adminContainer.style.display = 'block';
+            document.getElementById('adminEmail').textContent = user.email;
+
+            loadDashboard();
+            loadFlashcards();
+        }
+
+        // Navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+
+                item.classList.add('active');
+                const page = item.dataset.page;
+                document.getElementById(`page-${page}`).classList.add('active');
+
+                // Load page data
+                if (page === 'users') loadUsers();
+                if (page === 'progress') loadProgressStats();
+            });
+        });
+
+        // Load Dashboard
+        async function loadDashboard() {
+            // Load user count
+            const { count: userCount } = await supabaseClient
+                .from('profiles')
+                .select('*', { count: 'exact', head: true });
+
+            document.getElementById('totalUsers').textContent = userCount || '0';
+            document.getElementById('usersChange').textContent = `${userCount || 0} registered users`;
+
+            // Load flashcard count
+            document.getElementById('totalCards').textContent = flashcardData.length;
+
+            // Unit breakdown
+            const unitCounts = [0, 0, 0, 0];
+            flashcardData.forEach(card => {
+                if (card.unit >= 1 && card.unit <= 4) {
+                    unitCounts[card.unit - 1]++;
+                }
+            });
+
+            const total = flashcardData.length;
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`unit${i}Count`).textContent = unitCounts[i-1];
+                document.getElementById(`unit${i}Bar`).style.width = `${(unitCounts[i-1] / total) * 100}%`;
+            }
+
+            // Load progress stats
+            const { data: progressData, count: progressCount } = await supabaseClient
+                .from('card_progress')
+                .select('*', { count: 'exact' });
+
+            document.getElementById('totalProgress').textContent = progressCount || '0';
+
+            const mastered = progressData ? progressData.filter(p => p.status === 'mastered').length : 0;
+            document.getElementById('masteredCards').textContent = mastered;
+
+            // Load recent users
+            loadRecentUsers();
+        }
+
+        // Load Recent Users
+        async function loadRecentUsers() {
+            const { data: users } = await supabaseClient
+                .from('profiles')
+                .select('*')
+                .order('created_at', { ascending: false })
+                .limit(5);
+
+            const container = document.getElementById('recentUsers');
+
+            if (!users || users.length === 0) {
+                container.innerHTML = '<li class="empty-state">No users yet</li>';
+                return;
+            }
+
+            container.innerHTML = users.map(user => `
+                <li class="activity-item">
+                    <div class="user-avatar">${(user.email || 'U')[0].toUpperCase()}</div>
+                    <div class="activity-content">
+                        <div class="activity-text">${user.email || 'Unknown user'}</div>
+                        <div class="activity-time">${formatDate(user.created_at)}</div>
+                    </div>
+                </li>
+            `).join('');
+        }
+
+        // Load Users
+        async function loadUsers() {
+            const { data: users } = await supabaseClient
+                .from('profiles')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            allUsers = users || [];
+
+            // Get progress counts per user
+            const { data: progressData } = await supabaseClient
+                .from('card_progress')
+                .select('user_id');
+
+            const progressCounts = {};
+            if (progressData) {
+                progressData.forEach(p => {
+                    progressCounts[p.user_id] = (progressCounts[p.user_id] || 0) + 1;
+                });
+            }
+
+            renderUsers(allUsers, progressCounts);
+        }
+
+        function renderUsers(users, progressCounts = {}) {
+            const tbody = document.getElementById('usersTableBody');
+            document.getElementById('userCount').textContent = `${users.length} users`;
+
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No users found</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = users.map(user => `
+                <tr>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <div class="user-avatar">${(user.email || 'U')[0].toUpperCase()}</div>
+                            <span>${user.full_name || 'User'}</span>
+                        </div>
+                    </td>
+                    <td>${user.email || '-'}</td>
+                    <td>${formatDate(user.created_at)}</td>
+                    <td>${formatDate(user.last_sign_in_at) || 'Never'}</td>
+                    <td><span class="badge badge-info">${progressCounts[user.id] || 0} cards</span></td>
+                    <td>
+                        <button class="btn btn-ghost btn-sm" onclick="viewUser('${user.id}')">View</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // User search
+        document.getElementById('userSearch').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const filtered = allUsers.filter(u =>
+                (u.email && u.email.toLowerCase().includes(query)) ||
+                (u.full_name && u.full_name.toLowerCase().includes(query))
+            );
+            renderUsers(filtered);
+        });
+
+        // Export Users
+        document.getElementById('exportUsersBtn').addEventListener('click', () => {
+            const csv = [
+                ['Email', 'Full Name', 'Created At'],
+                ...allUsers.map(u => [u.email, u.full_name || '', u.created_at])
+            ].map(row => row.join(',')).join('\n');
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `mybizstudies-users-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+
+            showToast('Users exported successfully!', 'success');
+        });
+
+        // Load Flashcards
+        function loadFlashcards() {
+            filteredFlashcards = [...flashcardData];
+            renderFlashcards();
+        }
+
+        function renderFlashcards() {
+            const tbody = document.getElementById('cardsTableBody');
+            const start = cardPage * cardsPerPage;
+            const end = start + cardsPerPage;
+            const pageCards = filteredFlashcards.slice(start, end);
+
+            document.getElementById('cardCount').textContent = `${filteredFlashcards.length} cards`;
+            document.getElementById('cardPaginationInfo').textContent =
+                `Showing ${start + 1}-${Math.min(end, filteredFlashcards.length)} of ${filteredFlashcards.length}`;
+
+            if (pageCards.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No flashcards found</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = pageCards.map((card, idx) => `
+                <tr>
+                    <td>${start + idx + 1}</td>
+                    <td><span class="badge badge-gray">Unit ${card.unit}</span></td>
+                    <td><span class="badge type-${card.type}">${formatType(card.type)}</span></td>
+                    <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${card.question}</td>
+                    <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${card.topic}</td>
+                    <td>
+                        <button class="btn btn-ghost btn-sm" onclick="editCard(${start + idx})">Edit</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Card Filters
+        document.getElementById('cardSearch').addEventListener('input', filterCards);
+        document.getElementById('unitFilter').addEventListener('change', filterCards);
+        document.getElementById('typeFilter').addEventListener('change', filterCards);
+
+        function filterCards() {
+            const search = document.getElementById('cardSearch').value.toLowerCase();
+            const unit = document.getElementById('unitFilter').value;
+            const type = document.getElementById('typeFilter').value;
+
+            filteredFlashcards = flashcardData.filter(card => {
+                const matchSearch = !search ||
+                    card.question.toLowerCase().includes(search) ||
+                    card.answer.toLowerCase().includes(search);
+                const matchUnit = unit === 'all' || card.unit.toString() === unit;
+                const matchType = type === 'all' || card.type === type;
+                return matchSearch && matchUnit && matchType;
+            });
+
+            cardPage = 0;
+            renderFlashcards();
+        }
+
+        // Pagination
+        document.getElementById('prevPageBtn').addEventListener('click', () => {
+            if (cardPage > 0) {
+                cardPage--;
+                renderFlashcards();
+            }
+        });
+
+        document.getElementById('nextPageBtn').addEventListener('click', () => {
+            if ((cardPage + 1) * cardsPerPage < filteredFlashcards.length) {
+                cardPage++;
+                renderFlashcards();
+            }
+        });
+
+        // Edit Card
+        let editingCardIndex = -1;
+
+        function editCard(index) {
+            editingCardIndex = index;
+            const card = filteredFlashcards[index];
+
+            document.getElementById('cardModalTitle').textContent = 'Edit Flashcard';
+            document.getElementById('editUnit').value = card.unit;
+            document.getElementById('editTopic').value = card.topic;
+            document.getElementById('editType').value = card.type;
+            document.getElementById('editQuestion').value = card.question;
+            document.getElementById('editAnswer').value = card.answer;
+
+            document.getElementById('cardModal').classList.add('active');
+        }
+
+        // Add Card
+        document.getElementById('addCardBtn').addEventListener('click', () => {
+            editingCardIndex = -1;
+            document.getElementById('cardModalTitle').textContent = 'Add New Flashcard';
+            document.getElementById('editUnit').value = '1';
+            document.getElementById('editTopic').value = '';
+            document.getElementById('editType').value = 'term';
+            document.getElementById('editQuestion').value = '';
+            document.getElementById('editAnswer').value = '';
+
+            document.getElementById('cardModal').classList.add('active');
+        });
+
+        // Close modals
+        document.getElementById('closeCardModal').addEventListener('click', () => {
+            document.getElementById('cardModal').classList.remove('active');
+        });
+
+        document.getElementById('cancelCardEdit').addEventListener('click', () => {
+            document.getElementById('cardModal').classList.remove('active');
+        });
+
+        document.getElementById('closeUserModal').addEventListener('click', () => {
+            document.getElementById('userModal').classList.remove('active');
+        });
+
+        // Save Card
+        document.getElementById('saveCardEdit').addEventListener('click', () => {
+            const cardData = {
+                unit: parseInt(document.getElementById('editUnit').value),
+                topic: document.getElementById('editTopic').value,
+                type: document.getElementById('editType').value,
+                question: document.getElementById('editQuestion').value,
+                answer: document.getElementById('editAnswer').value
+            };
+
+            if (!cardData.topic || !cardData.question || !cardData.answer) {
+                showToast('Please fill in all fields', 'error');
+                return;
+            }
+
+            if (editingCardIndex >= 0) {
+                // Update existing
+                Object.assign(filteredFlashcards[editingCardIndex], cardData);
+                showToast('Card updated! Note: Changes are in memory only.', 'success');
+            } else {
+                // Add new
+                flashcardData.push(cardData);
+                filteredFlashcards = [...flashcardData];
+                showToast('Card added! Note: Changes are in memory only.', 'success');
+            }
+
+            document.getElementById('cardModal').classList.remove('active');
+            renderFlashcards();
+        });
+
+        // View User
+        async function viewUser(userId) {
+            const user = allUsers.find(u => u.id === userId);
+            if (!user) return;
+
+            const { data: progress } = await supabaseClient
+                .from('card_progress')
+                .select('*')
+                .eq('user_id', userId);
+
+            const learning = progress ? progress.filter(p => p.status === 'learning').length : 0;
+            const reviewing = progress ? progress.filter(p => p.status === 'reviewing').length : 0;
+            const mastered = progress ? progress.filter(p => p.status === 'mastered').length : 0;
+
+            document.getElementById('userModalBody').innerHTML = `
+                <div style="text-align: center; margin-bottom: 1.5rem;">
+                    <div class="user-avatar" style="width: 64px; height: 64px; font-size: 1.5rem; margin: 0 auto 1rem;">
+                        ${(user.email || 'U')[0].toUpperCase()}
+                    </div>
+                    <h3 style="margin-bottom: 0.25rem;">${user.full_name || 'User'}</h3>
+                    <p style="color: var(--gray-500);">${user.email}</p>
+                </div>
+
+                <div style="background: var(--gray-50); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div>
+                            <div style="font-size: 0.8rem; color: var(--gray-500);">Signed Up</div>
+                            <div style="font-weight: 600;">${formatDate(user.created_at)}</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.8rem; color: var(--gray-500);">Last Active</div>
+                            <div style="font-weight: 600;">${formatDate(user.last_sign_in_at) || 'Never'}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 style="margin-bottom: 0.75rem;">Progress</h4>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem;">
+                    <div style="text-align: center; padding: 1rem; background: #fef3c7; border-radius: 10px;">
+                        <div style="font-size: 1.5rem; font-weight: 800;">${learning}</div>
+                        <div style="font-size: 0.8rem; color: #92400e;">Learning</div>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: #dbeafe; border-radius: 10px;">
+                        <div style="font-size: 1.5rem; font-weight: 800;">${reviewing}</div>
+                        <div style="font-size: 0.8rem; color: #1e40af;">Reviewing</div>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: #d1fae5; border-radius: 10px;">
+                        <div style="font-size: 1.5rem; font-weight: 800;">${mastered}</div>
+                        <div style="font-size: 0.8rem; color: #065f46;">Mastered</div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('userModal').classList.add('active');
+        }
+
+        // Load Progress Stats
+        async function loadProgressStats() {
+            const { data: progress } = await supabaseClient
+                .from('card_progress')
+                .select('*');
+
+            if (!progress) {
+                document.getElementById('progressLearning').textContent = '0';
+                document.getElementById('progressReviewing').textContent = '0';
+                document.getElementById('progressMastered').textContent = '0';
+                return;
+            }
+
+            const learning = progress.filter(p => p.status === 'learning').length;
+            const reviewing = progress.filter(p => p.status === 'reviewing').length;
+            const mastered = progress.filter(p => p.status === 'mastered').length;
+
+            document.getElementById('progressLearning').textContent = learning;
+            document.getElementById('progressReviewing').textContent = reviewing;
+            document.getElementById('progressMastered').textContent = mastered;
+
+            // Top cards
+            const cardCounts = {};
+            progress.forEach(p => {
+                cardCounts[p.card_id] = cardCounts[p.card_id] || { total: 0, mastered: 0 };
+                cardCounts[p.card_id].total++;
+                if (p.status === 'mastered') cardCounts[p.card_id].mastered++;
+            });
+
+            const topCards = Object.entries(cardCounts)
+                .sort((a, b) => b[1].total - a[1].total)
+                .slice(0, 10);
+
+            const tbody = document.getElementById('topCardsBody');
+
+            if (topCards.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" class="empty-state">No progress data yet</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = topCards.map(([cardId, data]) => {
+                const card = flashcardData.find((c, i) => i.toString() === cardId || c.question.substring(0, 20) === cardId.substring(0, 20));
+                const question = card ? card.question : `Card ${cardId}`;
+                const masteryRate = data.total > 0 ? Math.round((data.mastered / data.total) * 100) : 0;
+
+                return `
+                    <tr>
+                        <td style="max-width: 400px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${question}</td>
+                        <td><span class="badge badge-info">${data.total} times</span></td>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <div class="progress-bar" style="width: 100px;">
+                                    <div class="progress-fill" style="width: ${masteryRate}%"></div>
+                                </div>
+                                <span>${masteryRate}%</span>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Helpers
+        function formatDate(dateStr) {
+            if (!dateStr) return null;
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-GB', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+            });
+        }
+
+        function formatType(type) {
+            const types = {
+                'term': 'Key Term',
+                'formula': 'Formula',
+                'advantages': 'Adv/Disadv',
+                'discussion': 'Discussion'
+            };
+            return types[type] || type;
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.className = `toast ${type} show`;
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Close modal on overlay click
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    overlay.classList.remove('active');
+                }
+            });
+        });
+
+        // Initialize
+        init();
+    </script>
+</body>
+</html>
