@@ -297,6 +297,51 @@
             50% { transform: scale(1.02); }
         }
 
+        /* Coming Soon Sticker */
+        .coming-soon-sticker {
+            position: absolute;
+            top: 120px;
+            right: 40px;
+            width: 130px;
+            height: 130px;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 30px rgba(245, 158, 11, 0.4);
+            transform: rotate(12deg);
+            z-index: 30;
+            animation: stickerBounce 3s ease-in-out infinite;
+        }
+
+        .sticker-inner {
+            text-align: center;
+            color: white;
+            padding: 10px;
+        }
+
+        .sticker-label {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+
+        .sticker-text {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        @keyframes stickerBounce {
+            0%, 100% { transform: rotate(12deg) scale(1); }
+            50% { transform: rotate(12deg) scale(1.05); }
+        }
+
         .hero-cta {
             display: flex;
             gap: 1rem;
@@ -1925,6 +1970,21 @@
                 font-size: 2rem;
             }
 
+            .coming-soon-sticker {
+                width: 100px;
+                height: 100px;
+                top: 80px;
+                right: 15px;
+            }
+
+            .sticker-label {
+                font-size: 0.55rem;
+            }
+
+            .sticker-text {
+                font-size: 0.7rem;
+            }
+
             .hero-subtitle {
                 font-size: 1rem;
             }
@@ -2181,6 +2241,21 @@
 
             .hero h1 {
                 font-size: 1.75rem;
+            }
+
+            .coming-soon-sticker {
+                width: 85px;
+                height: 85px;
+                top: 70px;
+                right: 10px;
+            }
+
+            .sticker-label {
+                font-size: 0.5rem;
+            }
+
+            .sticker-text {
+                font-size: 0.6rem;
             }
 
             .hero-visual {
@@ -2496,6 +2571,14 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Coming Soon Sticker -->
+        <div class="coming-soon-sticker">
+            <div class="sticker-inner">
+                <span class="sticker-label">Coming Soon</span>
+                <span class="sticker-text">Exam Skills &amp; Questions</span>
             </div>
         </div>
     </section>
