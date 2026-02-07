@@ -82,9 +82,43 @@
             width: auto;
         }
 
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            background: var(--gray-100);
+            border-radius: 10px;
+            padding: 0.25rem;
+        }
+
+        .header-nav a {
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            color: var(--gray-500);
+            transition: all 0.2s ease;
+        }
+
+        .header-nav a:hover {
+            color: var(--primary);
+            background: rgba(255,255,255,0.5);
+        }
+
+        .header-nav a.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
         @media (max-width: 768px) {
             .header-logo img {
                 height: 50px;
+            }
+            .header-nav a {
+                padding: 0.4rem 0.75rem;
+                font-size: 0.8rem;
             }
         }
 
@@ -1030,11 +1064,15 @@
     </style>
 </head>
 <body>
-    <!-- Header with logo and logout -->
+    <!-- Header with logo and navigation -->
     <header class="app-header">
         <a href="/" class="header-logo">
             <img src="logo.png" alt="MyBizStudies.com">
         </a>
+        <nav class="header-nav">
+            <a href="app.html" class="active">Flash Cards</a>
+            <a href="exam-skills-v2.html">Exam Skills</a>
+        </nav>
         <div class="header-right">
             <span class="user-email" id="userEmail"></span>
             <button class="logout-btn" id="logoutBtn" onclick="handleLogout()">Logout</button>

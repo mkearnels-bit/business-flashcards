@@ -1,0 +1,2754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Skills | MyBizStudies</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --primary: #1e3a5f;
+            --primary-dark: #152a45;
+            --primary-light: #2d5a8a;
+            --accent: #e67e22;
+            --accent-light: #f39c12;
+            --accent-glow: rgba(230, 126, 34, 0.3);
+            --white: #ffffff;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-300: #cbd5e1;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-900: #1e293b;
+            --skill-knowledge: #3498db;
+            --skill-application: #2ecc71;
+            --skill-analysis: #9b59b6;
+            --skill-evaluation: #e67e22;
+            --success: #27ae60;
+            --error: #e74c3c;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-700);
+            line-height: 1.6;
+        }
+
+        /* App Header */
+        .app-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 0.75rem 2rem;
+            border-bottom: 1px solid var(--gray-100);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .header-logo img {
+            height: 65px;
+            width: auto;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            background: var(--gray-100);
+            border-radius: 10px;
+            padding: 0.25rem;
+        }
+
+        .header-nav a {
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            color: var(--gray-500);
+            transition: all 0.2s ease;
+        }
+
+        .header-nav a:hover {
+            color: var(--primary);
+            background: rgba(255,255,255,0.5);
+        }
+
+        .header-nav a.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-email {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+        }
+
+        .logout-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: #d35400;
+            transform: translateY(-1px);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
+            min-height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 7rem 2rem 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .hero-content { position: relative; z-index: 2; max-width: 800px; }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 {
+            font-size: 2.75rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.7;
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .section-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .section-subtitle {
+            font-size: 1rem;
+            color: var(--gray-600);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Skills Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem;
+        }
+
+        .skill-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .skill-card.knowledge { border-color: var(--skill-knowledge); }
+        .skill-card.application { border-color: var(--skill-application); }
+        .skill-card.analysis { border-color: var(--skill-analysis); }
+        .skill-card.evaluation { border-color: var(--skill-evaluation); }
+
+        .skill-card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .skill-card.knowledge .skill-card-icon { background: rgba(52, 152, 219, 0.15); }
+        .skill-card.application .skill-card-icon { background: rgba(46, 204, 113, 0.15); }
+        .skill-card.analysis .skill-card-icon { background: rgba(155, 89, 182, 0.15); }
+        .skill-card.evaluation .skill-card-icon { background: rgba(230, 126, 34, 0.15); }
+
+        .skill-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .skill-card.knowledge h3 { color: var(--skill-knowledge); }
+        .skill-card.application h3 { color: var(--skill-application); }
+        .skill-card.analysis h3 { color: var(--skill-analysis); }
+        .skill-card.evaluation h3 { color: var(--skill-evaluation); }
+
+        .skill-card p { font-size: 0.9rem; color: var(--gray-600); }
+
+        /* Command Words Section - Redesigned */
+        .command-words-section { background: white; }
+
+        .command-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .command-table th {
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .command-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-100);
+            vertical-align: middle;
+        }
+
+        .command-table tr:last-child td { border-bottom: none; }
+
+        .command-table tr:hover { background: var(--gray-50); }
+
+        .command-name {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1rem;
+        }
+
+        .skill-dots {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .skill-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .skill-dot.k { background: var(--skill-knowledge); }
+        .skill-dot.ap { background: var(--skill-application); }
+        .skill-dot.an { background: var(--skill-analysis); }
+        .skill-dot.ev { background: var(--skill-evaluation); }
+        .skill-dot.empty { background: var(--gray-200); opacity: 0.3; }
+
+        /* PBLI Section */
+        .pbli-section { background: var(--gray-50); }
+
+        .pbli-container {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .pbli-intro {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid var(--gray-100);
+        }
+
+        .pbli-intro h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .pbli-visual {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .pbli-step {
+            display: flex;
+            align-items: stretch;
+            gap: 1rem;
+        }
+
+        .pbli-letter {
+            width: 60px;
+            min-height: 80px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .pbli-letter span {
+            font-size: 0.6rem;
+            font-weight: 600;
+            margin-top: 0.25rem;
+        }
+
+        .pbli-letter.p { background: var(--skill-knowledge); }
+        .pbli-letter.b { background: var(--skill-application); }
+        .pbli-letter.l { background: var(--skill-analysis); }
+        .pbli-letter.i { background: var(--skill-analysis); }
+
+        .pbli-content {
+            flex: 1;
+            background: var(--gray-50);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            border-left: 4px solid;
+        }
+
+        .pbli-content.p { border-left-color: var(--skill-knowledge); }
+        .pbli-content.b { border-left-color: var(--skill-application); }
+        .pbli-content.l { border-left-color: var(--skill-analysis); }
+        .pbli-content.i { border-left-color: var(--skill-analysis); }
+
+        .pbli-content h4 {
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .pbli-content.p h4 { color: var(--skill-knowledge); }
+        .pbli-content.b h4 { color: var(--skill-application); }
+        .pbli-content.l h4, .pbli-content.i h4 { color: var(--skill-analysis); }
+
+        .pbli-content p { font-size: 0.9rem; color: var(--gray-600); }
+
+        .pbli-example {
+            background: var(--gray-50);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .pbli-example h4 {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 1rem;
+        }
+
+        .pbli-example p {
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        .pbli-example .highlight {
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .highlight.k { background: rgba(52, 152, 219, 0.2); }
+        .highlight.ap { background: rgba(46, 204, 113, 0.2); }
+        .highlight.an { background: rgba(155, 89, 182, 0.2); }
+        .highlight.ev { background: rgba(230, 126, 34, 0.2); }
+
+        /* Application Types */
+        .app-types {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--gray-100);
+        }
+
+        .app-type-card, .analysis-type-card, .eval-type-card {
+            padding: 1.5rem;
+            border-radius: 12px;
+        }
+
+        .app-type-card { border: 2px solid var(--skill-application); }
+        .analysis-type-card { border: 2px solid var(--skill-analysis); }
+        .eval-type-card { border: 2px solid var(--skill-evaluation); }
+
+        .app-type-card h4 {
+            color: var(--skill-application);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .analysis-type-card h4 {
+            color: var(--skill-analysis);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .eval-type-card h4 {
+            color: var(--skill-evaluation);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .app-type-card p, .analysis-type-card p, .eval-type-card p { font-size: 0.9rem; color: var(--gray-600); margin-bottom: 0.75rem; }
+
+        .analysis-type-card .example {
+            background: transparent;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-style: italic;
+        }
+
+        .eval-type-card .example {
+            background: transparent;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-style: italic;
+        }
+
+        .app-type-card .example {
+            background: transparent;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-style: italic;
+        }
+
+        /* Evaluation Section */
+        .eval-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--gray-100);
+        }
+
+        .eval-section h3 {
+            color: var(--skill-evaluation);
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .eval-formula {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            padding: 1.5rem;
+            background: rgba(230, 126, 34, 0.08);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .eval-formula-item {
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .eval-formula-item.pbli { background: var(--skill-analysis); color: white; }
+        .eval-formula-item.however { background: var(--skill-evaluation); color: white; }
+        .eval-formula-item.plus { background: transparent; color: var(--gray-500); font-size: 1.5rem; }
+
+        /* Mark Structures */
+        .mark-structures-section { background: white; }
+
+        .mark-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .mark-card {
+            background: var(--gray-50);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border-top: 4px solid var(--primary);
+        }
+
+        .mark-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            background: var(--primary);
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .mark-card h4 {
+            font-size: 1rem;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .mark-card ul {
+            list-style: none;
+            font-size: 0.9rem;
+        }
+
+        .mark-card li {
+            padding: 0.4rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .mark-card li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        .mark-card .no-conclusion {
+            margin-top: 0.75rem;
+            padding: 0.5rem;
+            background: rgba(231, 76, 60, 0.1);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: var(--error);
+            font-weight: 600;
+        }
+
+        .mark-card .need-conclusion {
+            margin-top: 0.75rem;
+            padding: 0.5rem;
+            background: rgba(39, 174, 96, 0.1);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        /* Conclusions Section */
+        .conclusions-section { background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%); color: white; }
+        .conclusions-section .section-label { color: var(--accent-light); }
+        .conclusions-section .section-title { color: white; }
+        .conclusions-section .section-subtitle { color: rgba(255, 255, 255, 0.8); }
+
+        .conclusion-container {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            color: var(--gray-700);
+        }
+
+        .conclusion-steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .conclusion-step {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--gray-50);
+            border-radius: 12px;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin: 0 auto 1rem;
+        }
+
+        .conclusion-step h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .conclusion-step p { font-size: 0.9rem; color: var(--gray-600); }
+
+        /* MOPS Framework */
+        .mops-container {
+            background: var(--gray-50);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .mops-container h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .mops-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        .mops-item {
+            text-align: center;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid var(--gray-200);
+        }
+
+        .mops-item span {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 0.25rem;
+        }
+
+        .mops-item p { font-size: 0.85rem; color: var(--gray-600); }
+
+        .conclusion-phrases {
+            background: var(--gray-50);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .conclusion-phrases h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .phrase-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .phrase-tag {
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 2px solid var(--skill-evaluation);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--skill-evaluation);
+        }
+
+        /* Case Studies */
+        .case-studies-section { background: var(--gray-50); }
+
+        .case-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .case-tab {
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            border: 2px solid var(--gray-300);
+            color: var(--gray-600);
+        }
+
+        .case-tab:hover { border-color: var(--accent); color: var(--accent); }
+        .case-tab.active { background: var(--accent); border-color: var(--accent); color: white; }
+
+        .case-study { display: none; }
+        .case-study.active { display: block; }
+
+        .case-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .case-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            padding: 2rem;
+            color: white;
+        }
+
+        .case-header h3 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .case-header p { opacity: 0.9; line-height: 1.7; }
+
+        .questions-list { padding: 2rem; }
+
+        .question-item {
+            border: 2px solid var(--gray-100);
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .question-header {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .question-text { flex: 1; }
+        .question-text h4 { font-size: 1.05rem; color: var(--gray-900); margin-bottom: 0.5rem; }
+
+        .question-badges { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+        .q-badge {
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .q-badge.marks { background: var(--gray-100); color: var(--gray-600); }
+        .q-badge.structure { background: var(--primary); color: white; }
+
+        .answer-section {
+            border-top: 2px solid var(--gray-100);
+            background: var(--gray-50);
+        }
+
+        .reveal-btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            background: transparent;
+            color: var(--accent);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .reveal-btn:hover { background: rgba(230, 126, 34, 0.1); }
+
+        .answer-content { display: none; padding: 1.5rem; }
+        .answer-content.visible { display: block; }
+
+        .answer-box {
+            padding: 1.25rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .answer-box.weak {
+            background: rgba(231, 76, 60, 0.08);
+            border-left: 4px solid var(--error);
+        }
+
+        .answer-box.model {
+            background: white;
+            border: 2px solid var(--gray-200);
+            border-left: 4px solid var(--primary);
+        }
+
+        .answer-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+
+        .answer-box.weak .answer-label { color: var(--error); }
+        .answer-box.model .answer-label { color: var(--primary); }
+
+        /* Interactive Skill Filter */
+        .skill-filter-panel {
+            background: linear-gradient(135deg, var(--gray-50) 0%, white 100%);
+            border: 2px solid var(--gray-200);
+            border-radius: 16px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.25rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .skill-filter-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .skill-filter-header h5 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 0;
+        }
+
+        .skill-filter-header .filter-icon {
+            font-size: 1rem;
+        }
+
+        .skill-filter-hint {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            margin-left: auto;
+        }
+
+        .skill-filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .skill-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid;
+            background: white;
+            user-select: none;
+        }
+
+        .skill-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .skill-toggle:active {
+            transform: translateY(0);
+        }
+
+        .skill-toggle .toggle-indicator {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            transition: all 0.25s ease;
+        }
+
+        /* Knowledge Toggle */
+        .skill-toggle.k {
+            border-color: var(--skill-knowledge);
+            color: var(--skill-knowledge);
+        }
+        .skill-toggle.k .toggle-indicator {
+            background: rgba(52, 152, 219, 0.2);
+            color: var(--skill-knowledge);
+        }
+        .skill-toggle.k.active {
+            background: var(--skill-knowledge);
+            color: white;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+        }
+        .skill-toggle.k.active .toggle-indicator {
+            background: white;
+            color: var(--skill-knowledge);
+        }
+
+        /* Application Toggle */
+        .skill-toggle.ap {
+            border-color: var(--skill-application);
+            color: var(--skill-application);
+        }
+        .skill-toggle.ap .toggle-indicator {
+            background: rgba(46, 204, 113, 0.2);
+            color: var(--skill-application);
+        }
+        .skill-toggle.ap.active {
+            background: var(--skill-application);
+            color: white;
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
+        }
+        .skill-toggle.ap.active .toggle-indicator {
+            background: white;
+            color: var(--skill-application);
+        }
+
+        /* Analysis Toggle */
+        .skill-toggle.an {
+            border-color: var(--skill-analysis);
+            color: var(--skill-analysis);
+        }
+        .skill-toggle.an .toggle-indicator {
+            background: rgba(155, 89, 182, 0.2);
+            color: var(--skill-analysis);
+        }
+        .skill-toggle.an.active {
+            background: var(--skill-analysis);
+            color: white;
+            box-shadow: 0 4px 15px rgba(155, 89, 182, 0.4);
+        }
+        .skill-toggle.an.active .toggle-indicator {
+            background: white;
+            color: var(--skill-analysis);
+        }
+
+        /* Evaluation Toggle */
+        .skill-toggle.ev {
+            border-color: var(--skill-evaluation);
+            color: var(--skill-evaluation);
+        }
+        .skill-toggle.ev .toggle-indicator {
+            background: rgba(230, 126, 34, 0.2);
+            color: var(--skill-evaluation);
+        }
+        .skill-toggle.ev.active {
+            background: var(--skill-evaluation);
+            color: white;
+            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.4);
+        }
+        .skill-toggle.ev.active .toggle-indicator {
+            background: white;
+            color: var(--skill-evaluation);
+        }
+
+        /* Highlights hidden by default, shown when skill is active */
+        .answer-text .highlight {
+            background: transparent !important;
+            padding: 0;
+            border-radius: 0;
+            transition: all 0.3s ease;
+        }
+
+        .answer-text .highlight.show-k {
+            background: rgba(52, 152, 219, 0.25) !important;
+            padding: 0.1rem 0.3rem;
+            border-radius: 4px;
+        }
+        .answer-text .highlight.show-ap {
+            background: rgba(46, 204, 113, 0.25) !important;
+            padding: 0.1rem 0.3rem;
+            border-radius: 4px;
+        }
+        .answer-text .highlight.show-an {
+            background: rgba(155, 89, 182, 0.25) !important;
+            padding: 0.1rem 0.3rem;
+            border-radius: 4px;
+        }
+        .answer-text .highlight.show-ev {
+            background: rgba(230, 126, 34, 0.25) !important;
+            padding: 0.1rem 0.3rem;
+            border-radius: 4px;
+        }
+
+        /* Show All Button */
+        .skill-toggle.show-all {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: white;
+        }
+        .skill-toggle.show-all .toggle-indicator {
+            background: rgba(30, 58, 95, 0.1);
+            color: var(--primary);
+        }
+        .skill-toggle.show-all.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(30, 58, 95, 0.4);
+        }
+        .skill-toggle.show-all.active .toggle-indicator {
+            background: white;
+            color: var(--primary);
+        }
+
+        .answer-text { font-size: 0.95rem; line-height: 1.8; }
+
+        .answer-text .highlight { padding: 0.1rem 0.3rem; border-radius: 4px; }
+
+        .marks-estimate { font-size: 0.85rem; font-weight: 600; margin-top: 0.75rem; }
+        .answer-box.weak .marks-estimate { color: var(--error); }
+        .answer-box.model .marks-estimate { color: var(--primary); }
+
+        .structure-breakdown {
+            background: var(--gray-100);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+        }
+
+        .structure-breakdown h5 {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            margin-bottom: 0.5rem;
+        }
+
+        .examiner-tip {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-top: 1rem;
+        }
+
+        .examiner-tip h5 { font-size: 0.85rem; margin-bottom: 0.5rem; }
+        .examiner-tip p { font-size: 0.9rem; opacity: 0.95; }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            text-align: center;
+            color: white;
+            padding: 4rem 2rem;
+        }
+
+        .cta-section h2 { font-size: 2rem; margin-bottom: 1rem; }
+        .cta-section p { opacity: 0.9; margin-bottom: 2rem; max-width: 500px; margin-left: auto; margin-right: auto; }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            background: var(--accent);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px var(--accent-glow);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .skills-grid { grid-template-columns: repeat(2, 1fr); }
+            .mark-grid { grid-template-columns: repeat(2, 1fr); }
+            .conclusion-steps { grid-template-columns: 1fr; }
+            .mops-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .skills-grid { grid-template-columns: 1fr; }
+            .mark-grid { grid-template-columns: 1fr; }
+            .app-types { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 2rem; }
+            .section { padding: 3rem 1rem; }
+            .section-title { font-size: 1.5rem; }
+            .app-header { padding: 0.5rem 1rem; }
+            .header-logo img { height: 50px; }
+            .header-nav a { padding: 0.4rem 0.75rem; font-size: 0.8rem; }
+            .user-email { display: none; }
+            .command-table { font-size: 0.85rem; }
+            .command-table th, .command-table td { padding: 0.75rem; }
+            .pbli-step { flex-direction: column; }
+            .pbli-letter { width: 100%; min-height: 50px; flex-direction: row; gap: 0.5rem; }
+
+            /* Mobile Skill Filter */
+            .skill-filter-panel {
+                padding: 0.875rem 1rem;
+            }
+            .skill-filter-header {
+                flex-wrap: wrap;
+            }
+            .skill-filter-hint {
+                width: 100%;
+                margin-left: 0;
+                margin-top: 0.25rem;
+            }
+            .skill-filter-buttons {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.5rem;
+            }
+            .skill-toggle {
+                justify-content: center;
+                padding: 0.75rem 0.5rem;
+                font-size: 0.8rem;
+            }
+            .skill-toggle.show-all {
+                grid-column: span 2;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with logo and navigation -->
+    <header class="app-header">
+        <a href="/" class="header-logo">
+            <img src="logo.png" alt="MyBizStudies.com">
+        </a>
+        <nav class="header-nav">
+            <a href="app.html">Flash Cards</a>
+            <a href="exam-skills-v2.html" class="active">Exam Skills</a>
+        </nav>
+        <div class="header-right">
+            <span class="user-email" id="userEmail"></span>
+            <button class="logout-btn" id="logoutBtn" onclick="handleLogout()">Logout</button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">🎯 Exam Technique Masterclass</div>
+            <h1>Business Studies Exam Skills</h1>
+            <p>Based on the Edexcel International A Level specification and mark schemes, but the skills and techniques taught here apply to all exam boards</p>
+        </div>
+    </section>
+
+    <!-- Four Skills Section -->
+    <section class="section">
+        <div class="section-header">
+            <p class="section-label">The Foundation</p>
+            <h2 class="section-title">The 4 Assessment Objectives</h2>
+            <p class="section-subtitle">Every mark you earn demonstrates one or more of these skills</p>
+        </div>
+
+        <div class="skills-grid">
+            <div class="skill-card knowledge">
+                <div class="skill-card-icon">📚</div>
+                <h3>Knowledge (AO1)</h3>
+                <p>Recall facts, definitions, theories. Found in the <strong>Point</strong> of PBLI.</p>
+            </div>
+            <div class="skill-card application">
+                <div class="skill-card-icon">🎯</div>
+                <h3>Application (AO2)</h3>
+                <p>Use the case study context. Found in <strong>Because</strong> and can be basic or advanced (detailed context).</p>
+            </div>
+            <div class="skill-card analysis">
+                <div class="skill-card-icon">🔍</div>
+                <h3>Analysis (AO3)</h3>
+                <p>Explain cause and effect chains. Found in <strong>Leads to</strong> and <strong>Impact</strong>.</p>
+            </div>
+            <div class="skill-card evaluation">
+                <div class="skill-card-icon">⚖️</div>
+                <h3>Evaluation (AO4)</h3>
+                <p>Weigh up both sides and make judgments. Created by adding <strong>However</strong> + balance.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Command Words Section - Redesigned -->
+    <section class="section command-words-section">
+        <div class="section-header">
+            <p class="section-label">Quick Reference</p>
+            <h2 class="section-title">Command Words & Required Skills</h2>
+            <p class="section-subtitle">Most command words require multiple skills. Only pure knowledge words need just one</p>
+        </div>
+
+        <table class="command-table">
+            <thead>
+                <tr>
+                    <th>Command Word</th>
+                    <th>Skills Required</th>
+                    <th>What It Means</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="command-name">Define / State / Identify</span></td>
+                    <td>
+                        <div class="skill-dots">
+                            <div class="skill-dot k">K</div>
+                        </div>
+                    </td>
+                    <td>Just give the definition or fact. Pure knowledge only</td>
+                </tr>
+                <tr>
+                    <td><span class="command-name">Outline / Describe</span></td>
+                    <td>
+                        <div class="skill-dots">
+                            <div class="skill-dot k">K</div>
+                            <div class="skill-dot ap">Ap</div>
+                        </div>
+                    </td>
+                    <td>State the point and relate it to the context</td>
+                </tr>
+                <tr>
+                    <td><span class="command-name">Explain</span></td>
+                    <td>
+                        <div class="skill-dots">
+                            <div class="skill-dot k">K</div>
+                            <div class="skill-dot ap">Ap</div>
+                            <div class="skill-dot an">An</div>
+                        </div>
+                    </td>
+                    <td>PBLI structure: show the chain of reasoning in context</td>
+                </tr>
+                <tr>
+                    <td><span class="command-name">Analyse / Examine</span></td>
+                    <td>
+                        <div class="skill-dots">
+                            <div class="skill-dot k">K</div>
+                            <div class="skill-dot ap">Ap</div>
+                            <div class="skill-dot an">An</div>
+                        </div>
+                    </td>
+                    <td>Multiple PBLIs with developed chains. No evaluation needed</td>
+                </tr>
+                <tr>
+                    <td><span class="command-name">Discuss</span></td>
+                    <td>
+                        <div class="skill-dots">
+                            <div class="skill-dot k">K</div>
+                            <div class="skill-dot ap">Ap</div>
+                            <div class="skill-dot an">An</div>
+                            <div class="skill-dot ev">Ev</div>
+                        </div>
+                    </td>
+                    <td>PBLIs with balance (however) but no conclusion needed for 8 marks</td>
+                </tr>
+                <tr>
+                    <td><span class="command-name">Evaluate / Assess / Recommend</span></td>
+                    <td>
+                        <div class="skill-dots">
+                            <div class="skill-dot k">K</div>
+                            <div class="skill-dot ap">Ap</div>
+                            <div class="skill-dot an">An</div>
+                            <div class="skill-dot ev">Ev</div>
+                        </div>
+                    </td>
+                    <td>All skills with a justified conclusion required</td>
+                </tr>
+                <tr>
+                    <td><span class="command-name">To what extent</span></td>
+                    <td>
+                        <div class="skill-dots">
+                            <div class="skill-dot k">K</div>
+                            <div class="skill-dot ap">Ap</div>
+                            <div class="skill-dot an">An</div>
+                            <div class="skill-dot ev">Ev</div>
+                        </div>
+                    </td>
+                    <td>All skills: must weigh up and give a degree of agreement</td>
+                </tr>
+                <tr>
+                    <td><span class="command-name">Justify</span></td>
+                    <td>
+                        <div class="skill-dots">
+                            <div class="skill-dot k">K</div>
+                            <div class="skill-dot ap">Ap</div>
+                            <div class="skill-dot an">An</div>
+                            <div class="skill-dot ev">Ev</div>
+                        </div>
+                    </td>
+                    <td>All skills: give reasons for a decision with evidence</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- PBLI Section -->
+    <section class="section pbli-section">
+        <div class="section-header">
+            <p class="section-label">The Method</p>
+            <h2 class="section-title">The PBLI Framework</h2>
+            <p class="section-subtitle">Point, Because, Leads to, Impact: the structure that earns marks</p>
+        </div>
+
+        <div class="pbli-container">
+            <div class="pbli-intro">
+                <h3>How PBLI Maps to Skills</h3>
+                <p>Each part of PBLI demonstrates a specific skill to the examiner</p>
+            </div>
+
+            <div class="pbli-visual">
+                <div class="pbli-step">
+                    <div class="pbli-letter p">P <span>POINT</span></div>
+                    <div class="pbli-content p">
+                        <h4>📚 Knowledge (AO1)</h4>
+                        <p>State your business concept, theory, or key point. This is your foundation.</p>
+                    </div>
+                </div>
+                <div class="pbli-step">
+                    <div class="pbli-letter b">B <span>BECAUSE</span></div>
+                    <div class="pbli-content b">
+                        <h4>🎯 Application (AO2)</h4>
+                        <p>Link to the case study. Use the business name, their situation, and data from the extract.</p>
+                    </div>
+                </div>
+                <div class="pbli-step">
+                    <div class="pbli-letter l">L <span>LEADS TO</span></div>
+                    <div class="pbli-content l">
+                        <h4>🔍 Analysis (AO3)</h4>
+                        <p>Show the consequence. What happens next? Build the chain of cause and effect.</p>
+                    </div>
+                </div>
+                <div class="pbli-step">
+                    <div class="pbli-letter i">I <span>IMPACT</span></div>
+                    <div class="pbli-content i">
+                        <h4>🔍 Analysis (AO3)</h4>
+                        <p>The final effect on the business. Often relates to profit, sales, costs, or competitiveness.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pbli-example">
+                <h4>💡 Example PBLI in action:</h4>
+                <p>
+                    <span class="highlight k">[P] Offering employee training can improve motivation</span>
+                    <span class="highlight ap">[B] because TechStart's developers would feel more valued and gain new skills relevant to their app development work</span>.
+                    <span class="highlight an">[L] This leads to higher productivity as skilled, motivated employees work more efficiently</span>,
+                    <span class="highlight an">[I] which would help TechStart complete more projects and increase revenue, addressing their cash flow problems</span>.
+                </p>
+            </div>
+
+            <!-- Application Types -->
+            <div class="app-types">
+                <div class="app-type-card">
+                    <h4>📌 Basic Application</h4>
+                    <p>Vaguely mentions the business or what they do without real detail</p>
+                    <div class="example">
+                        <strong>P:</strong> "Training improves motivation"<br>
+                        <strong>B:</strong> "because <span class="highlight ap">Nike's employees</span> would feel valued"<br>
+                        <strong>L:</strong> "This leads to higher productivity"<br>
+                        <strong>I:</strong> "which increases profits"
+                    </div>
+                    <p style="margin-top: 0.75rem; font-size: 0.8rem; color: var(--error);">❌ Only mentions the company name once. No real context used.</p>
+                </div>
+                <div class="app-type-card">
+                    <h4>⭐ Advanced Application (Detailed Context)</h4>
+                    <p>Weaves specific details, data, and situation throughout the whole PBLI</p>
+                    <div class="example">
+                        <strong>P:</strong> "Training improves motivation <span class="highlight ap">particularly for a sportswear company like Nike where product knowledge is essential</span>"<br>
+                        <strong>B:</strong> "because <span class="highlight ap">Nike's retail staff need to understand the technology in their running shoes to advise customers effectively</span>"<br>
+                        <strong>L:</strong> "This leads to better customer service <span class="highlight ap">in Nike's flagship stores where customers expect expert advice</span>"<br>
+                        <strong>I:</strong> "which increases sales <span class="highlight ap">and justifies Nike's premium pricing strategy</span>"
+                    </div>
+                    <p style="margin-top: 0.75rem; font-size: 0.8rem; color: var(--success);">✓ Context woven throughout. Every part links to the specific business.</p>
+                </div>
+            </div>
+
+            <!-- Analysis Types -->
+            <div class="app-types" style="border-top-color: var(--skill-analysis);">
+                <div class="analysis-type-card">
+                    <h4>📌 Basic Analysis</h4>
+                    <p>States a consequence but doesn't build a chain. Stops after one step</p>
+                    <div class="example">
+                        <strong>L:</strong> "This leads to <span class="highlight an">higher costs</span>"<br>
+                        <strong>I:</strong> "which <span class="highlight an">reduces profit</span>"
+                    </div>
+                    <p style="margin-top: 0.75rem; font-size: 0.8rem; color: var(--error);">❌ Too short. No developed chain, just a generic two-step jump.</p>
+                </div>
+                <div class="analysis-type-card">
+                    <h4>⭐ Advanced Analysis (Developed Chains)</h4>
+                    <p>Builds a logical chain of cause and effect with multiple steps, linking back to the business context throughout</p>
+                    <div class="example">
+                        <strong>L:</strong> "This leads to <span class="highlight an">a timing gap where cash flows out for wages before revenue flows in from completed projects</span>"<br>
+                        <strong>I:</strong> "which <span class="highlight an">creates the tight cash flow situation despite 540% revenue growth, potentially forcing TechStart to turn down lucrative projects or delay hiring when opportunities arise</span>"
+                    </div>
+                    <p style="margin-top: 0.75rem; font-size: 0.8rem; color: var(--success);">✓ Multi-step chain with specific context woven in. Shows deep understanding of cause and effect.</p>
+                </div>
+            </div>
+
+            <!-- Evaluation Types -->
+            <div class="app-types" style="border-top-color: var(--skill-evaluation);">
+                <div class="eval-type-card">
+                    <h4>📌 Basic Evaluation</h4>
+                    <p>Simply states "however" and gives the opposite view without any development</p>
+                    <div class="example">
+                        <strong>However:</strong> "<span class="highlight ev">However, this might not work because there are disadvantages too.</span>"
+                    </div>
+                    <p style="margin-top: 0.75rem; font-size: 0.8rem; color: var(--error);">❌ No counter-argument developed. Just asserts the opposite exists without explaining it.</p>
+                </div>
+                <div class="eval-type-card">
+                    <h4>⭐ Advanced Evaluation (Developed Balance)</h4>
+                    <p>Introduces a counter-argument with "However" and develops it as a full PBL or PBLI, then reaches a justified conclusion</p>
+                    <div class="example">
+                        <strong>However:</strong> "<span class="highlight ev">However</span>, <span class="highlight k">revenue without profitability creates cash flow risk</span>. <span class="highlight ap">TechStart already has 'tight cash flow' despite their impressive 540% revenue growth</span>. <span class="highlight an">This means chasing more revenue could actually worsen their cash position if they take on projects requiring upfront development costs before payment arrives</span>."
+                    </div>
+                    <p style="margin-top: 0.75rem; font-size: 0.8rem; color: var(--success);">✓ Full counter-argument with its own PBL structure. Shows genuine weighing of both sides.</p>
+                </div>
+            </div>
+
+            <!-- Balance Section -->
+            <div class="eval-section">
+                <h3>⚖️ How to Create Balance</h3>
+                <p style="margin-bottom: 1rem; color: var(--gray-600);">Adding balance to your developed points is what creates Evaluation. Show both sides of the argument:</p>
+
+                <div class="eval-formula">
+                    <div class="eval-formula-item pbli">PBLI</div>
+                    <div class="eval-formula-item plus">+</div>
+                    <div class="eval-formula-item however">However...</div>
+                    <div class="eval-formula-item plus">+</div>
+                    <div class="eval-formula-item pbli">Another PBL(I)</div>
+                    <div class="eval-formula-item plus">=</div>
+                    <div class="eval-formula-item however">Evaluation ✓</div>
+                </div>
+
+                <p style="font-size: 0.9rem; color: var(--gray-600); text-align: center;">The "However" introduces the counter-argument, showing you can see both sides of the issue.</p>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Short Form Questions Section -->
+    <section class="section short-form-section" style="background: white;">
+        <div class="section-header">
+            <p class="section-label">Know Your Basics</p>
+            <h2 class="section-title">Short Form Questions</h2>
+            <p class="section-subtitle">Questions worth 2 to 4 marks use points-based marking. Each mark is awarded for a specific component</p>
+        </div>
+
+        <!-- Points-Based Marking Explanation -->
+        <div style="margin-bottom: 2rem; background: var(--gray-50); border-radius: 16px; padding: 1.5rem; border-top: 4px solid var(--skill-knowledge);">
+            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">📋 How Short Form Questions Are Marked: Points-Based</h4>
+            <p style="font-size: 0.9rem; color: var(--gray-600); margin-bottom: 1rem;">Unlike extended response questions (8+ marks) which use levels-based marking, short form questions award individual marks for specific components. You either earn each mark or you do not. There are no "best fit" judgements here.</p>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                <div style="background: rgba(52, 152, 219, 0.08); padding: 1.25rem; border-radius: 12px; border-left: 4px solid var(--skill-knowledge);">
+                    <strong style="color: var(--skill-knowledge); font-size: 1rem;">2 Mark Questions (Define)</strong>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem;"><strong>1 mark per component of the definition.</strong> A full definition has two parts. For example, "variable costs" needs: (1) costs that change + (2) when output changes. Giving an example alone does not earn marks.</p>
+                </div>
+                <div style="background: rgba(46, 204, 113, 0.08); padding: 1.25rem; border-radius: 12px; border-left: 4px solid var(--skill-application);">
+                    <strong style="color: var(--skill-application); font-size: 1rem;">4 Mark Questions (Explain / Calculate / Diagram)</strong>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem;"><strong>Marks split across Knowledge, Application, and Analysis.</strong> For Explain: 1K + 2Ap + 1An. For Calculate: marks for formula, method, and correct answer. For Diagrams: marks for axes, curves, shift, and new equilibrium.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2 Mark Define Examples -->
+        <div style="margin-bottom: 2rem;">
+            <h3 style="color: var(--primary); font-size: 1.2rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--gray-100);">📝 2 Mark Questions: Define</h3>
+
+            <div class="question-item" style="margin-bottom: 1.5rem;">
+                <div class="question-header">
+                    <div class="question-text">
+                        <h4>Define the term 'market segmentation'. (2 marks)</h4>
+                    </div>
+                    <div class="question-badges">
+                        <span class="q-badge marks">2 marks</span>
+                        <span class="q-badge structure">1 mark per component</span>
+                    </div>
+                </div>
+                <div class="answer-section">
+                    <button class="reveal-btn" onclick="toggleAnswer(this)">
+                        <span>👁️ Show Answers</span>
+                    </button>
+                    <div class="answer-content" data-question-id="sf1">
+                        <div class="answer-box weak">
+                            <div class="answer-label">❌ Weak Answer (0 marks)</div>
+                            <p class="answer-text">Market segmentation is when a business segments the market. For example, Nike segments by age group.</p>
+                            <p class="marks-estimate">0/2 marks. This repeats the term being defined ("segments the market") and gives an example, but examples alone do not earn marks on a Define question.</p>
+                        </div>
+                        <div class="answer-box model">
+                            <div class="answer-label">✓ Model Answer (2/2)</div>
+                            <p class="answer-text"><span class="highlight k">[1 mark] Market segmentation is the process of dividing a market into distinct groups of consumers</span> <span class="highlight k">[1 mark] who share similar characteristics, needs, or buying behaviour</span>.</p>
+                            <p class="marks-estimate">✓ 2/2 marks. Two clear components: (1) dividing a market into groups + (2) based on shared characteristics. Concise and precise.</p>
+                        </div>
+                        <div class="structure-breakdown">
+                            <h5>Tips for 2 mark Define questions</h5>
+                            Keep it short. Two clear sentences is usually enough. Do not write a paragraph. Do not give examples unless the question specifically asks for one. Make sure your definition has two distinct parts and does not just repeat the words in the question.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-item" style="margin-bottom: 1.5rem;">
+                <div class="question-header">
+                    <div class="question-text">
+                        <h4>Define the term 'cash flow'. (2 marks)</h4>
+                    </div>
+                    <div class="question-badges">
+                        <span class="q-badge marks">2 marks</span>
+                        <span class="q-badge structure">1 mark per component</span>
+                    </div>
+                </div>
+                <div class="answer-section">
+                    <button class="reveal-btn" onclick="toggleAnswer(this)">
+                        <span>👁️ Show Answers</span>
+                    </button>
+                    <div class="answer-content" data-question-id="sf2">
+                        <div class="answer-box weak">
+                            <div class="answer-label">❌ Weak Answer (1 mark)</div>
+                            <p class="answer-text">Cash flow is the amount of money flowing through a business.</p>
+                            <p class="marks-estimate">1/2 marks. Identifies money moving through a business (1 mark) but does not mention both inflows and outflows or the time period, so the second component is missing.</p>
+                        </div>
+                        <div class="answer-box model">
+                            <div class="answer-label">✓ Model Answer (2/2)</div>
+                            <p class="answer-text"><span class="highlight k">[1 mark] Cash flow is the movement of money into and out of a business</span> <span class="highlight k">[1 mark] over a given period of time</span>.</p>
+                            <p class="marks-estimate">✓ 2/2 marks. Two clear components: (1) movement of money in and out + (2) over a period of time.</p>
+                        </div>
+                        <div class="structure-breakdown">
+                            <h5>Common mistake on Define questions</h5>
+                            Students often write too much. A define question only needs the definition. Writing a full paragraph wastes time and does not earn extra marks. Focus on getting both components right.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4 Mark Examples -->
+        <div style="margin-bottom: 2rem;">
+            <h3 style="color: var(--primary); font-size: 1.2rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--gray-100);">📝 4 Mark Questions: Three Types</h3>
+
+            <!-- 4 Mark Type 1: Calculate -->
+            <div style="background: rgba(155, 89, 182, 0.05); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; border-left: 4px solid var(--skill-analysis);">
+                <h4 style="color: var(--skill-analysis); margin-bottom: 0.5rem;">Type 1: Calculate</h4>
+                <p style="font-size: 0.85rem; color: var(--gray-600); margin-bottom: 1rem;">Marks are awarded for showing the correct formula, substituting the right values, and arriving at the correct answer. If only the correct final answer is given, full marks are awarded. Always show your working in case you make a calculation error, so you can still pick up method marks.</p>
+            </div>
+
+            <div class="question-item" style="margin-bottom: 1.5rem;">
+                <div class="question-header">
+                    <div class="question-text">
+                        <h4>TechStart Ltd has revenue of £320,000 and total costs of £280,000. Calculate TechStart's profit margin. (4 marks)</h4>
+                    </div>
+                    <div class="question-badges">
+                        <span class="q-badge marks">4 marks</span>
+                        <span class="q-badge structure">Calculate</span>
+                    </div>
+                </div>
+                <div class="answer-section">
+                    <button class="reveal-btn" onclick="toggleAnswer(this)">
+                        <span>👁️ Show Answers</span>
+                    </button>
+                    <div class="answer-content" data-question-id="sf3">
+                        <div class="answer-box weak">
+                            <div class="answer-label">❌ Weak Answer (1 mark)</div>
+                            <p class="answer-text">320,000 / 280,000 = 1.14<br><br>The profit margin is 1.14.</p>
+                            <p class="marks-estimate">1/4 marks. The student has confused the formula entirely, dividing revenue by costs. They earn 1 mark at most for attempting to use the given data. No formula stated, wrong method, wrong answer.</p>
+                        </div>
+                        <div class="answer-box model">
+                            <div class="answer-label">✓ Model Answer (4/4)</div>
+                            <p class="answer-text">
+                                <span class="highlight k">[1 mark] Profit margin = (Profit / Revenue) x 100</span><br><br>
+                                <span class="highlight ap">[1 mark] Profit = £320,000 − £280,000 = £40,000</span><br><br>
+                                <span class="highlight an">[1 mark] Profit margin = (£40,000 / £320,000) x 100</span><br><br>
+                                <span class="highlight an">[1 mark] = 12.5%</span>
+                            </p>
+                            <p class="marks-estimate">✓ 4/4 marks. Formula stated (1), correct profit calculated (1), correct substitution (1), correct final answer with % (1).</p>
+                        </div>
+                        <div class="structure-breakdown">
+                            <h5>Tips for Calculate questions</h5>
+                            Always write the formula first. Then show your substitution step by step. Include the correct unit (%, £, units). If your final answer is wrong but your formula and method are correct, you can still earn 3 out of 4 marks.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4 Mark Type 2: Explain -->
+            <div style="background: rgba(46, 204, 113, 0.05); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; border-left: 4px solid var(--skill-application);">
+                <h4 style="color: var(--skill-application); margin-bottom: 0.5rem;">Type 2: Explain</h4>
+                <p style="font-size: 0.85rem; color: var(--gray-600); margin-bottom: 1rem;">Marks are split: 1 for Knowledge (identifying the concept), 2 for Application (linking to the business context with specific detail), and 1 for Analysis (explaining the consequence or impact). Think of it as a mini-PBLI: Point + Because (x2) + Leads to.</p>
+            </div>
+
+            <div class="question-item" style="margin-bottom: 1.5rem;">
+                <div class="question-header">
+                    <div class="question-text">
+                        <h4>Explain one benefit to TechStart of using a flat organisational structure. (4 marks)</h4>
+                    </div>
+                    <div class="question-badges">
+                        <span class="q-badge marks">4 marks</span>
+                        <span class="q-badge structure">1K + 2Ap + 1An</span>
+                    </div>
+                </div>
+                <div class="answer-section">
+                    <button class="reveal-btn" onclick="toggleAnswer(this)">
+                        <span>👁️ Show Answers</span>
+                    </button>
+                    <div class="answer-content" data-question-id="sf4">
+                        <div class="answer-box weak">
+                            <div class="answer-label">❌ Weak Answer (1 mark)</div>
+                            <p class="answer-text">A flat organisational structure has fewer layers of management. This means communication is faster and decisions can be made more quickly. This is good for TechStart because it will help the business be more efficient.</p>
+                            <p class="marks-estimate">1/4 marks. There is some knowledge about flat structures (1K), but the reference to TechStart is just the name dropped in at the end. No specific case study detail is used. The analysis is generic ("more efficient") with no developed chain of reasoning.</p>
+                        </div>
+                        <div class="answer-box model">
+                            <div class="answer-label">✓ Model Answer (4/4)</div>
+                            <p class="answer-text">
+                                <span class="highlight k">[K] A flat organisational structure means fewer layers of hierarchy, which allows for faster communication and quicker decision making</span>. <span class="highlight ap">[Ap] This is relevant to TechStart because it is a small business of just 15 employees where the two founders, James and Priya, already handle management, sales, and client relationships themselves</span>. <span class="highlight ap">[Ap] In the fast-moving tech industry where new apps enter the market regularly, being able to respond quickly to client needs and competitor actions is important</span>. <span class="highlight an">[An] This means TechStart can adapt its app features or pricing faster than larger competitors with more bureaucratic structures, helping to protect the strong revenue growth the business has already achieved</span>.
+                            </p>
+                            <p class="marks-estimate">✓ 4/4 marks. Knowledge of flat structures (1K), two distinct applications using case data: 15 employees/founders and fast-moving tech industry (2Ap), and analysis of the consequence: faster adaptation protecting revenue growth (1An).</p>
+                        </div>
+                        <div class="structure-breakdown">
+                            <h5>Tips for 4 mark Explain questions</h5>
+                            You only need ONE point, not two. The marks come from depth, not breadth. Use two pieces of case study evidence (that is where the 2 application marks come from) and make sure your analysis explains WHY the point matters for THIS business, not just any business.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4 Mark Type 3: Demand and Supply Diagram -->
+            <div style="background: rgba(230, 126, 34, 0.05); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; border-left: 4px solid var(--accent);">
+                <h4 style="color: var(--accent); margin-bottom: 0.5rem;">Type 3: Demand and Supply Diagram</h4>
+                <p style="font-size: 0.85rem; color: var(--gray-600); margin-bottom: 1rem;">Marks are awarded for: correctly labelled axes (Price and Quantity), original demand and supply curves with equilibrium, shifting the correct curve in the right direction, and showing the new equilibrium with its effect on price and quantity. Label axes as "Price" and "Quantity" only. Do not write "Quantity Demanded" or "QD".</p>
+            </div>
+
+            <div class="question-item" style="margin-bottom: 1.5rem;">
+                <div class="question-header">
+                    <div class="question-text">
+                        <h4>TechStart is considering reducing the price of its app subscription service. Using a demand and supply diagram, show the likely effect of an increase in demand for TechStart's app subscriptions on the market equilibrium. (4 marks)</h4>
+                    </div>
+                    <div class="question-badges">
+                        <span class="q-badge marks">4 marks</span>
+                        <span class="q-badge structure">Diagram</span>
+                    </div>
+                </div>
+                <div class="answer-section">
+                    <button class="reveal-btn" onclick="toggleAnswer(this)">
+                        <span>👁️ Show Answers</span>
+                    </button>
+                    <div class="answer-content" data-question-id="sf5">
+                        <div class="answer-box weak">
+                            <div class="answer-label">❌ Weak Answer (1 mark)</div>
+                            <p class="answer-text" style="text-align: center; font-style: italic;">[Student draws two lines crossing but labels axes as "QD" and "P". No equilibrium point marked. A second demand curve is drawn but not labelled. No indication of what happens to price or quantity.]</p>
+                            <p class="marks-estimate">1/4 marks. Gets 1 mark for attempting a diagram with curves, but the axes are incorrectly labelled (should be "Price" and "Quantity"), there is no equilibrium marked, the shift is unlabelled, and the new equilibrium is not shown.</p>
+                        </div>
+                        <div class="answer-box model">
+                            <div class="answer-label">✓ Model Answer (4/4)</div>
+                            <div style="background: white; border: 2px solid var(--gray-300); border-radius: 12px; padding: 1.5rem; margin: 1rem 0;">
+                                <svg viewBox="0 0 400 320" style="width: 100%; max-width: 400px; display: block; margin: 0 auto;">
+                                    <!-- Axes -->
+                                    <line x1="60" y1="20" x2="60" y2="260" stroke="#334155" stroke-width="2"/>
+                                    <line x1="60" y1="260" x2="380" y2="260" stroke="#334155" stroke-width="2"/>
+                                    <!-- Axis Labels -->
+                                    <text x="25" y="140" font-size="13" fill="#334155" font-weight="600" transform="rotate(-90,25,140)">Price</text>
+                                    <text x="220" y="290" font-size="13" fill="#334155" font-weight="600" text-anchor="middle">Quantity</text>
+                                    <!-- Supply Curve (S) -->
+                                    <line x1="80" y1="230" x2="340" y2="50" stroke="#3498db" stroke-width="2.5"/>
+                                    <text x="345" y="48" font-size="13" fill="#3498db" font-weight="700">S</text>
+                                    <!-- Original Demand Curve (D1) -->
+                                    <line x1="80" y1="50" x2="300" y2="230" stroke="#e74c3c" stroke-width="2.5"/>
+                                    <text x="305" y="233" font-size="13" fill="#e74c3c" font-weight="700">D1</text>
+                                    <!-- New Demand Curve (D2) - shifted right -->
+                                    <line x1="130" y1="50" x2="350" y2="230" stroke="#e74c3c" stroke-width="2.5" stroke-dasharray="8,4"/>
+                                    <text x="355" y="233" font-size="13" fill="#e74c3c" font-weight="700">D2</text>
+                                    <!-- Original Equilibrium (E1) -->
+                                    <circle cx="183" cy="148" r="5" fill="#334155"/>
+                                    <text x="170" y="138" font-size="12" fill="#334155" font-weight="600">E1</text>
+                                    <!-- New Equilibrium (E2) -->
+                                    <circle cx="213" cy="128" r="5" fill="#27ae60"/>
+                                    <text x="220" y="122" font-size="12" fill="#27ae60" font-weight="600">E2</text>
+                                    <!-- Dotted lines from E1 -->
+                                    <line x1="60" y1="148" x2="183" y2="148" stroke="#334155" stroke-width="1" stroke-dasharray="4,3"/>
+                                    <line x1="183" y1="148" x2="183" y2="260" stroke="#334155" stroke-width="1" stroke-dasharray="4,3"/>
+                                    <text x="45" y="152" font-size="11" fill="#334155">P1</text>
+                                    <text x="178" y="275" font-size="11" fill="#334155">Q1</text>
+                                    <!-- Dotted lines from E2 -->
+                                    <line x1="60" y1="128" x2="213" y2="128" stroke="#27ae60" stroke-width="1" stroke-dasharray="4,3"/>
+                                    <line x1="213" y1="128" x2="213" y2="260" stroke="#27ae60" stroke-width="1" stroke-dasharray="4,3"/>
+                                    <text x="45" y="132" font-size="11" fill="#27ae60">P2</text>
+                                    <text x="208" y="275" font-size="11" fill="#27ae60">Q2</text>
+                                    <!-- Arrow showing shift -->
+                                    <line x1="240" y1="170" x2="270" y2="170" stroke="#e67e22" stroke-width="2" marker-end="url(#arrowhead)"/>
+                                    <defs>
+                                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                                            <polygon points="0 0, 10 3.5, 0 7" fill="#e67e22"/>
+                                        </marker>
+                                    </defs>
+                                    <text x="235" y="190" font-size="10" fill="#e67e22" font-weight="600">Shift</text>
+                                </svg>
+                            </div>
+                            <p class="answer-text" style="margin-top: 1rem;">
+                                <span class="highlight k">[K: 1 mark] Correctly drawn diagram with axes labelled "Price" (vertical) and "Quantity" (horizontal), with both supply and demand curves.</span><br><br>
+                                <span class="highlight ap">[Ap: 1 mark] Original equilibrium (E1) shown at the intersection of D1 and S, with P1 and Q1 marked.</span><br><br>
+                                <span class="highlight ap">[Ap: 1 mark] Demand curve shifts right from D1 to D2, reflecting the increase in demand for TechStart's subscriptions.</span><br><br>
+                                <span class="highlight an">[An: 1 mark] New equilibrium (E2) shown at the intersection of D2 and S. Price increases from P1 to P2 and quantity increases from Q1 to Q2.</span>
+                            </p>
+                            <p class="marks-estimate">✓ 4/4 marks. All four components present: labelled axes, original equilibrium, correct demand shift, and new equilibrium with price/quantity effects shown.</p>
+                        </div>
+                        <div class="structure-breakdown">
+                            <h5>Tips for Demand and Supply diagram questions</h5>
+                            Remember: label axes as "Price" and "Quantity" only. Always draw the original equilibrium first, then show the shift. Label curves clearly (D1, D2 or S1, S2). Use dotted lines to show the old and new price/quantity levels. Only ONE curve shifts at a time. Make sure you can explain what happens to both price and quantity at the new equilibrium.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mark Structures Section -->
+    <section class="section mark-structures-section">
+        <div class="section-header">
+            <p class="section-label">Know Your Structure</p>
+            <h2 class="section-title">Long Form Questions</h2>
+            <p class="section-subtitle">Extended response questions (8+ marks) are marked using levels-based assessment. Know exactly what to write</p>
+        </div>
+
+        <div class="mark-grid">
+            <div class="mark-card">
+                <span class="mark-badge">6 Marks</span>
+                <h4>Analyse / Explain</h4>
+                <ul>
+                    <li>2 × PBLI paragraphs</li>
+                    <li>Focus on developed analysis chains</li>
+                    <li>Apply case study context throughout</li>
+                </ul>
+                <div class="no-conclusion">❌ No evaluation or conclusion needed</div>
+            </div>
+
+            <div class="mark-card">
+                <span class="mark-badge">8 Marks</span>
+                <h4>Discuss</h4>
+                <ul>
+                    <li>2 × PBLI paragraphs with balance</li>
+                    <li>Each PBLI needs a "However" counter-argument</li>
+                    <li>Both sides must be developed, not just stated</li>
+                </ul>
+                <div class="no-conclusion">❌ No conclusion needed at the end</div>
+            </div>
+
+            <div class="mark-card">
+                <span class="mark-badge">10, 12, 20 Marks</span>
+                <h4>Evaluate / Assess / Recommend</h4>
+                <ul>
+                    <li>2+ PBLI paragraphs each with developed balance</li>
+                    <li>20-mark answers need more varied knowledge within each PBLI</li>
+                    <li>Weigh up competing arguments, do not just list them</li>
+                </ul>
+                <div class="need-conclusion">✓ Justified conclusion is ESSENTIAL</div>
+            </div>
+        </div>
+
+        <!-- Levels-Based Marking -->
+        <div style="margin-top: 2rem; background: var(--gray-50); border-radius: 16px; padding: 1.5rem; border-top: 4px solid var(--accent);">
+            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">📋 How Examiners Actually Mark: Levels-Based Assessment</h4>
+            <p style="font-size: 0.9rem; color: var(--gray-600); margin-bottom: 1rem;">Edexcel uses levels-based marking for all extended questions (8+ marks). Your answer is read as a whole and placed into the level that best describes it. The examiner starts in the middle of a level and moves up or down based on the quality of your answer.</p>
+            <div style="display: grid; grid-template-columns: 1fr; gap: 1rem;">
+                <div style="background: rgba(231, 76, 60, 0.08); padding: 1.25rem; border-radius: 12px; border-left: 4px solid var(--error);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <strong style="color: var(--error); font-size: 1rem;">Level 1</strong>
+                        <span style="font-size: 0.8rem; color: var(--gray-500); font-weight: 600;">8 mark: 1-2 | 12 mark: 1-2 | 20 mark: 1-3</span>
+                    </div>
+                    <p style="font-size: 0.85rem; margin-top: 0.25rem;"><strong>Isolated elements of knowledge and understanding that are recall based.</strong> Weak or no relevant application to the business example. Generic assertions may be presented. The student defines business terms but does not connect them to the case study.</p>
+                </div>
+                <div style="background: rgba(243, 156, 18, 0.08); padding: 1.25rem; border-radius: 12px; border-left: 4px solid #f39c12;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <strong style="color: #f39c12; font-size: 1rem;">Level 2</strong>
+                        <span style="font-size: 0.8rem; color: var(--gray-500); font-weight: 600;">8 mark: 3-4 | 12 mark: 3-4 | 20 mark: 4-9</span>
+                    </div>
+                    <p style="font-size: 0.85rem; margin-top: 0.25rem;"><strong>Elements of knowledge and understanding applied to the business example.</strong> Chains of reasoning are presented but may be assertions or incomplete. A generic or superficial assessment is presented. The student mentions the business but does not use data or develop their analysis.</p>
+                </div>
+                <div style="background: rgba(52, 152, 219, 0.08); padding: 1.25rem; border-radius: 12px; border-left: 4px solid var(--skill-knowledge);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <strong style="color: var(--skill-knowledge); font-size: 1rem;">Level 3</strong>
+                        <span style="font-size: 0.8rem; color: var(--gray-500); font-weight: 600;">8 mark: 5-6 | 12 mark: 5-7 | 20 mark: 10-14</span>
+                    </div>
+                    <p style="font-size: 0.85rem; margin-top: 0.25rem;"><strong>Accurate knowledge and understanding, supported by relevant and effective use of the business context.</strong> Developed chains of reasoning showing cause(s) and/or effect(s). An attempt at assessment is presented, using quantitative and/or qualitative information, but is unlikely to show the significance of competing arguments.</p>
+                </div>
+                <div style="background: rgba(39, 174, 96, 0.08); padding: 1.25rem; border-radius: 12px; border-left: 4px solid var(--success);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <strong style="color: var(--success); font-size: 1rem;">Level 4 (Top marks)</strong>
+                        <span style="font-size: 0.8rem; color: var(--gray-500); font-weight: 600;">8 mark: 7-8 | 12 mark: 8-12 | 20 mark: 15-20</span>
+                    </div>
+                    <p style="font-size: 0.85rem; margin-top: 0.25rem;"><strong>Accurate and thorough knowledge and understanding, supported throughout by relevant and effective use of the business context.</strong> A coherent and logical chain of reasoning, showing cause(s) and/or effect(s). Assessment is balanced, wide-ranging and well contextualised, using quantitative and/or qualitative information, and shows an awareness of competing arguments/factors, leading to a supported judgement.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Conclusions Section -->
+    <section class="section conclusions-section">
+        <div class="section-header">
+            <p class="section-label">The Finishing Touch</p>
+            <h2 class="section-title">Writing Killer Conclusions</h2>
+            <p class="section-subtitle">The conclusion is the last thing examiners read before checking the mark scheme. Make it count!</p>
+        </div>
+
+        <div class="conclusion-container">
+            <div class="conclusion-steps">
+                <div class="conclusion-step">
+                    <div class="step-number">1</div>
+                    <h4>Make Your Decision</h4>
+                    <p>Start with a clear recommendation. Don't sit on the fence!</p>
+                </div>
+                <div class="conclusion-step">
+                    <div class="step-number">2</div>
+                    <h4>Justify with MOPS</h4>
+                    <p>Use a NEW factor from the case that outweighs your earlier points</p>
+                </div>
+                <div class="conclusion-step">
+                    <div class="step-number">3</div>
+                    <h4>Add Nuance</h4>
+                    <p>Use phrases like "In the short term... In the long term..." or "It depends on..."</p>
+                </div>
+            </div>
+
+            <div class="mops-container">
+                <h4>🎯 MOPS Framework: Find Your Significant Factor</h4>
+                <p style="margin-bottom: 1rem; font-size: 0.9rem; color: var(--gray-600);">When writing your conclusion, find something from the case study about:</p>
+                <div class="mops-grid">
+                    <div class="mops-item">
+                        <span>M</span>
+                        <p><strong>Market</strong><br>Dynamic? Competitive? Growing?</p>
+                    </div>
+                    <div class="mops-item">
+                        <span>O</span>
+                        <p><strong>Objectives</strong><br>What does the business want?</p>
+                    </div>
+                    <div class="mops-item">
+                        <span>P</span>
+                        <p><strong>Product</strong><br>Type of product/service?</p>
+                    </div>
+                    <div class="mops-item">
+                        <span>S</span>
+                        <p><strong>Situation</strong><br>Current circumstances?</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pbli-example">
+                <h4>💡 Example Conclusion:</h4>
+                <p>
+                    <span class="highlight ev">"Overall, I recommend TechStart accepts the venture capital investment.</span>
+                    <span class="highlight ap">Given that TechStart operates in a fast-moving technology market where their competitors could replicate their app features within months, and their revenue has already grown by 540%</span>,
+                    <span class="highlight an">the speed of growth that £500,000 of VC funding would provide outweighs the ownership concerns. Without rapid scaling, TechStart risks losing their first-mover advantage in the small business app market, as better-funded rivals could overtake them.</span>
+                    <span class="highlight ev">In the short term, the founders will have to give up some equity and control. In the long term, however, this investment could secure their position as market leader before competitors catch up. It depends on whether they can negotiate investment terms that protect their day-to-day control of the business while still accessing the capital they need to grow."</span>
+                </p>
+            </div>
+
+            <div class="conclusion-phrases">
+                <h4>🔑 Key Phrases for Conclusions</h4>
+                <div class="phrase-list">
+                    <span class="phrase-tag">In the short term...</span>
+                    <span class="phrase-tag">In the long term...</span>
+                    <span class="phrase-tag">It depends on...</span>
+                    <span class="phrase-tag">Given that...</span>
+                    <span class="phrase-tag">The key factor is...</span>
+                    <span class="phrase-tag">This outweighs...</span>
+                    <span class="phrase-tag">Overall, I recommend...</span>
+                    <span class="phrase-tag">On balance...</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Case Studies Section -->
+    <section class="section case-studies-section">
+        <div class="section-header">
+            <p class="section-label">Practice Questions</p>
+            <h2 class="section-title">Exam Style Questions with Sample Answers</h2>
+            <p class="section-subtitle">See exactly how to structure answers at every mark level using PBLI</p>
+        </div>
+
+        <div class="case-selector">
+            <button class="case-tab active" onclick="showCase(0)">TechStart Ltd</button>
+            <button class="case-tab" onclick="showCase(1)">Green Bean Coffee</button>
+            <button class="case-tab" onclick="showCase(2)">SportsFit UK</button>
+        </div>
+
+        <!-- Case Study 1: TechStart Ltd -->
+        <div class="case-study active" id="case-0">
+            <div class="case-card">
+                <div class="case-header">
+                    <h3>TechStart Ltd</h3>
+                    <p>TechStart Ltd is a software startup founded in 2022 by two university graduates, James and Priya. The company develops mobile apps for small businesses, helping them manage bookings, payments, and customer communication. The business has grown from 3 to 15 employees in just two years. Revenue has increased from £50,000 in the first year to £320,000, representing 540% growth. However, cash flow remains tight because developers must be paid monthly while clients often pay 60 days after project completion. The founders are now considering whether to seek £500,000 venture capital investment to speed up growth, or continue growing organically through retained profits. Staff turnover has recently increased, with three developers leaving in the past six months for higher-paying jobs at larger tech firms. James and Priya currently work over 60 hours per week and handle most of the management, sales, and client relationships themselves. The tech industry is known for being highly competitive and fast-moving, with new apps entering the market regularly.</p>
+                </div>
+                <div class="questions-list">
+                    <!-- 8 Mark Discuss Question -->
+                    <div class="question-item">
+                        <div class="question-header">
+                            <div class="question-text">
+                                <h4>Discuss the likely benefits for TechStart of using financial incentives to reduce staff turnover. (8 marks)</h4>
+                            </div>
+                            <div class="question-badges">
+                                <span class="q-badge marks">8 marks</span>
+                                <span class="q-badge structure">2 × PBLI + However</span>
+                            </div>
+                        </div>
+                        <div class="answer-section">
+                            <button class="reveal-btn" onclick="toggleAnswer(this)">
+                                <span>👁️ Show Answers</span>
+                            </button>
+                            <div class="answer-content" data-question-id="q1">
+                                <div class="answer-box weak">
+                                    <div class="answer-label">❌ Weak Answer (Level 1)</div>
+                                    <p class="answer-text">Financial incentives are things like bonuses, pay rises, and profit sharing. These can motivate employees because they get more money for working hard. According to Taylor, workers are motivated by money, so if TechStart pays its employees more they will be more motivated and will not leave. This means staff turnover will go down. Staff turnover is the percentage of employees who leave a business over a period of time. High staff turnover is bad for businesses because they have to spend money recruiting and training new people. Therefore, financial incentives would be good for TechStart because they would keep their employees happy and reduce costs.</p>
+                                    <p class="marks-estimate">≈ 2/8 marks (Level 1). This is mostly textbook knowledge with definitions of financial incentives and staff turnover. The only mention of TechStart is the name. No case study data is used and the analysis does not develop beyond simple assertions.</p>
+                                </div>
+                                <div class="skill-filter-panel">
+                                    <div class="skill-filter-header">
+                                        <span class="filter-icon">🎯</span>
+                                        <h5>Reveal Skills in Answer</h5>
+                                        <span class="skill-filter-hint">Tap to highlight each skill</span>
+                                    </div>
+                                    <div class="skill-filter-buttons">
+                                        <button class="skill-toggle k" onclick="toggleSkill(this, 'k', 'q1')">
+                                            <span class="toggle-indicator">P</span>
+                                            Knowledge
+                                        </button>
+                                        <button class="skill-toggle ap" onclick="toggleSkill(this, 'ap', 'q1')">
+                                            <span class="toggle-indicator">B</span>
+                                            Application
+                                        </button>
+                                        <button class="skill-toggle an" onclick="toggleSkill(this, 'an', 'q1')">
+                                            <span class="toggle-indicator">L/I</span>
+                                            Analysis
+                                        </button>
+                                        <button class="skill-toggle ev" onclick="toggleSkill(this, 'ev', 'q1')">
+                                            <span class="toggle-indicator">⚖️</span>
+                                            Evaluation
+                                        </button>
+                                        <button class="skill-toggle show-all" onclick="toggleAllSkills(this, 'q1')">
+                                            <span class="toggle-indicator">✨</span>
+                                            Show All Skills
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="answer-box model">
+                                    <div class="answer-label">✓ Model Answer (2 × PBLI with balance)</div>
+                                    <p class="answer-text">
+                                        <strong>PBLI 1 + Balance:</strong> <span class="highlight k">[P] Financial incentives such as performance-related pay can help retain employees by rewarding them for their contribution to the business</span> <span class="highlight ap">[B] because TechStart has lost three developers in the past six months to larger tech firms offering higher salaries, which suggests pay is a key reason staff are leaving</span>. <span class="highlight an">[L] This leads to lower recruitment costs, as replacing a skilled developer can cost thousands in job adverts and training time</span>, <span class="highlight an">[I] which would help protect TechStart's already tight cash flow and allow James and Priya to focus on growing the business rather than constantly hiring</span>.
+
+                                        <br><br><span class="highlight ev">However</span>, <span class="highlight k">[P] financial incentives increase the business's fixed costs</span>. <span class="highlight ap">[B] TechStart already struggles with cash flow because developers are paid monthly while clients pay 60 days later</span>. <span class="highlight an">[L] This means higher salaries would widen this cash flow gap further, potentially forcing TechStart to turn down new projects because they cannot afford to pay their team while waiting for client payments</span>.<br><br>
+
+                                        <strong>PBLI 2 + Balance:</strong> <span class="highlight k">[P] Profit sharing schemes give employees a stake in the success of the business, which can increase loyalty</span> <span class="highlight ap">[B] because TechStart's 540% revenue growth shows the business is performing well, meaning profit shares could be meaningful rewards that make developers feel part of the company's success story</span>. <span class="highlight an">[L] This leads to employees being more committed to producing quality work since their income is directly linked to how well TechStart performs</span>, <span class="highlight an">[I] which could improve the quality of apps produced and strengthen TechStart's reputation with clients</span>.
+
+                                        <br><br><span class="highlight ev">However</span>, <span class="highlight k">[P] Herzberg argued that pay is a hygiene factor, not a true motivator</span>. <span class="highlight ap">[B] TechStart's developers may be leaving not just for higher pay but because James and Priya manage everything themselves, leaving little room for developers to take on responsibility or develop their careers</span>. <span class="highlight an">[L] This means financial incentives alone may not solve the turnover problem if the real issue is a lack of job enrichment and career progression within the small 15-person team</span>.
+                                    </p>
+                                    <p class="marks-estimate">✓ 8/8 marks (Level 4)</p>
+                                </div>
+                                <div class="structure-breakdown">
+                                    <h5>Structure: 2 × (PBLI + However + Balance) = 8 marks</h5>
+                                    Both sides shown throughout. NO conclusion needed for 8 mark Discuss
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 12 Mark Evaluate Question -->
+                    <div class="question-item">
+                        <div class="question-header">
+                            <div class="question-text">
+                                <h4>Evaluate whether TechStart should accept venture capital investment to fund its growth. (12 marks)</h4>
+                            </div>
+                            <div class="question-badges">
+                                <span class="q-badge marks">12 marks</span>
+                                <span class="q-badge structure">2 × PBLI + Balance + Conclusion</span>
+                            </div>
+                        </div>
+                        <div class="answer-section">
+                            <button class="reveal-btn" onclick="toggleAnswer(this)">
+                                <span>👁️ Show Answers</span>
+                            </button>
+                            <div class="answer-content" data-question-id="q2">
+                                <div class="answer-box weak">
+                                    <div class="answer-label">❌ Weak Answer (Level 2)</div>
+                                    <p class="answer-text">Venture capital is when investors give money to a business in exchange for a share of the company. This can be useful for businesses that need money to grow. TechStart could benefit from venture capital because they would get £500,000 which they could use to grow. This money could help them hire more staff and buy better equipment. Growing the business would increase their revenue and help them become more successful.<br><br>However, venture capital has disadvantages. The investors would own part of the business so the founders would lose some control. They might have to make decisions that the investors want rather than what they want. This could be a problem because the founders might have a different vision for the business. Also, the investors might want their money back quickly which could put pressure on the business.<br><br>In conclusion, I think TechStart should accept the venture capital because the advantages outweigh the disadvantages. The money would help them grow which is important.</p>
+                                    <p class="marks-estimate">≈ 4/12 marks (Level 2). This answer has some knowledge and attempts both sides, but the application is weak (just names the £500,000 without using other case data). Analysis never develops beyond one step. The conclusion has no real justification and does not use any MOPS factor.</p>
+                                </div>
+                                <div class="skill-filter-panel">
+                                    <div class="skill-filter-header">
+                                        <span class="filter-icon">🎯</span>
+                                        <h5>Reveal Skills in Answer</h5>
+                                        <span class="skill-filter-hint">Tap to highlight each skill</span>
+                                    </div>
+                                    <div class="skill-filter-buttons">
+                                        <button class="skill-toggle k" onclick="toggleSkill(this, 'k', 'q2')">
+                                            <span class="toggle-indicator">P</span>
+                                            Knowledge
+                                        </button>
+                                        <button class="skill-toggle ap" onclick="toggleSkill(this, 'ap', 'q2')">
+                                            <span class="toggle-indicator">B</span>
+                                            Application
+                                        </button>
+                                        <button class="skill-toggle an" onclick="toggleSkill(this, 'an', 'q2')">
+                                            <span class="toggle-indicator">L/I</span>
+                                            Analysis
+                                        </button>
+                                        <button class="skill-toggle ev" onclick="toggleSkill(this, 'ev', 'q2')">
+                                            <span class="toggle-indicator">⚖️</span>
+                                            Evaluation
+                                        </button>
+                                        <button class="skill-toggle show-all" onclick="toggleAllSkills(this, 'q2')">
+                                            <span class="toggle-indicator">✨</span>
+                                            Show All Skills
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="answer-box model">
+                                    <div class="answer-label">✓ Model Answer</div>
+                                    <p class="answer-text">
+                                        <strong>PBLI 1 + Balance:</strong> <span class="highlight k">[P] Venture capital provides significant funding that can speed up business growth</span> <span class="highlight ap">[B] because the £500,000 would solve TechStart's immediate cash flow problems and allow them to hire more specialist developers for their mobile app projects</span>. <span class="highlight an">[L] This leads to faster product development and the ability to take on larger clients</span>, <span class="highlight an">[I] potentially speeding up their already strong 540% growth rate and helping them become the leading provider in the small business app market</span>.
+
+                                        <br><br><span class="highlight ev">However</span>, <span class="highlight k">[P] VC investors usually want quick returns and a say in how the business is run</span>. <span class="highlight ap">[B] This could push TechStart towards aggressive growth that damages the team culture they have built with their 15 employees</span>. <span class="highlight an">[L] This leads to possible disagreements between what the founders want and what the investors want, which could cause good developers to leave if they feel the company has changed</span>.<br><br>
+
+                                        <strong>PBLI 2 + Balance:</strong> <span class="highlight k">[P] Organic growth through retained profits allows the founders to keep full ownership and control</span> <span class="highlight ap">[B] because James and Priya, as university graduates who built TechStart from scratch, would not have to answer to external investors or give up equity in their company</span>. <span class="highlight an">[L] This leads to freedom to make long-term decisions without pressure to deliver quick returns</span>, <span class="highlight an">[I] protecting the original product vision that has already achieved impressive revenue growth</span>.
+
+                                        <br><br><span class="highlight ev">However</span>, <span class="highlight k">[P] cash flow constraints limit how fast the business can grow</span>. <span class="highlight ap">[B] TechStart's tight cash flow and 60-day payment terms from clients mean they may have to turn down projects or delay hiring</span>. <span class="highlight an">[L] This leads to slower expansion, allowing better-funded competitors to capture market share first in what is described as a "highly competitive" tech sector</span>.<br><br>
+
+                                        <strong>Conclusion (MOPS: Market):</strong> <span class="highlight ev">Overall, I recommend TechStart accepts the venture capital investment.</span> <span class="highlight ap">Given that they operate in a fast-moving technology market where competitors could copy their app features within months</span>, <span class="highlight an">speed is essential. Slower organic growth risks letting rivals overtake them, which would make all their work so far pointless.</span> <span class="highlight ev">In the short term, they will give up some control, but in the long term this investment could secure their market position before competitors catch up. It depends on negotiating terms that let the founders keep day-to-day control while accessing the growth capital they need.</span>
+                                    </p>
+                                    <p class="marks-estimate">✓ 12/12 marks (Level 4)</p>
+                                </div>
+                                <div class="structure-breakdown">
+                                    <h5>Structure: 2 × (PBLI + Balance) + Justified Conclusion with MOPS</h5>
+                                    Conclusion uses Market factor + "In the short/long term" + "It depends on"
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 20 Mark Evaluate Question -->
+                    <div class="question-item">
+                        <div class="question-header">
+                            <div class="question-text">
+                                <h4>Evaluate the most important factors that TechStart should consider when deciding its future growth strategy. (20 marks)</h4>
+                            </div>
+                            <div class="question-badges">
+                                <span class="q-badge marks">20 marks</span>
+                                <span class="q-badge structure">2 × PBLI + Balance + Extended Conclusion</span>
+                            </div>
+                        </div>
+                        <div class="answer-section">
+                            <button class="reveal-btn" onclick="toggleAnswer(this)">
+                                <span>👁️ Show Answers</span>
+                            </button>
+                            <div class="answer-content" data-question-id="q3">
+                                <div class="answer-box weak">
+                                    <div class="answer-label">❌ Weak Answer (Level 2)</div>
+                                    <p class="answer-text">There are many factors that TechStart should consider when deciding its growth strategy. One important factor is finance. Finance is the money that a business uses to fund its activities. TechStart needs to decide whether to get venture capital or use retained profits. Venture capital means getting money from investors who want a return on their investment. This would give TechStart £500,000 to spend on growth. Retained profits means using the money the business has already made. This is safer because you do not owe anyone anything.<br><br>Another factor is human resources. Human resources is the management of people within a business. When a business grows, it needs more employees and this can be difficult to manage. TechStart has gone from 3 to 15 employees which is a lot of growth. They need to make sure they can recruit and train people properly.<br><br>The market is also important. The market is where buyers and sellers come together. TechStart operates in the technology market which is competitive. They need to grow quickly because other businesses might copy what they do.<br><br>However, there are risks with growing too fast. If a business grows too quickly it can run into cash flow problems and may not be able to manage all its staff properly. This is called overtrading.<br><br>In conclusion, I think the most important factor is finance because without money a business cannot do anything. TechStart should get the venture capital because they need the money to grow and compete in the market.</p>
+                                    <p class="marks-estimate">≈ 6/20 marks (Level 2). This answer covers several factors and shows some knowledge of business terms, but it reads like a textbook. The application is shallow (mentions £500,000 and 15 employees but does not develop the analysis). Each point is stated but never built into a chain of reasoning. The "however" is generic, not a developed counter-argument. The conclusion picks a factor but gives no real justification using MOPS.</p>
+                                </div>
+                                <div class="skill-filter-panel">
+                                    <div class="skill-filter-header">
+                                        <span class="filter-icon">🎯</span>
+                                        <h5>Reveal Skills in Answer</h5>
+                                        <span class="skill-filter-hint">Tap to highlight each skill</span>
+                                    </div>
+                                    <div class="skill-filter-buttons">
+                                        <button class="skill-toggle k" onclick="toggleSkill(this, 'k', 'q3')">
+                                            <span class="toggle-indicator">P</span>
+                                            Knowledge
+                                        </button>
+                                        <button class="skill-toggle ap" onclick="toggleSkill(this, 'ap', 'q3')">
+                                            <span class="toggle-indicator">B</span>
+                                            Application
+                                        </button>
+                                        <button class="skill-toggle an" onclick="toggleSkill(this, 'an', 'q3')">
+                                            <span class="toggle-indicator">L/I</span>
+                                            Analysis
+                                        </button>
+                                        <button class="skill-toggle ev" onclick="toggleSkill(this, 'ev', 'q3')">
+                                            <span class="toggle-indicator">⚖️</span>
+                                            Evaluation
+                                        </button>
+                                        <button class="skill-toggle show-all" onclick="toggleAllSkills(this, 'q3')">
+                                            <span class="toggle-indicator">✨</span>
+                                            Show All Skills
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="answer-box model">
+                                    <div class="answer-label">✓ Model Answer (2 × PBLI with balance + Extended Conclusion)</div>
+                                    <p class="answer-text">
+                                        <strong>PBLI 1 + Balance:</strong> <span class="highlight k">[P] The source and speed of funding is a key factor, as venture capital provides quick access to large amounts of money, and in a competitive market speed of growth can determine whether a business survives or fails</span>. <span class="highlight ap">[B] TechStart's founders are considering £500,000 of VC funding, which would be a huge amount for a business that has only grown from £50,000 to £320,000 revenue in two years. At the same time, they operate in a sector where product lifecycles are short and it is easy for new competitors to enter</span>. <span class="highlight an">[L] This leads to the ability to hire specialist developers, invest in marketing, and take on larger client projects at the same time rather than one after another, which is important because if TechStart does not scale quickly enough, established software companies or well-funded startups could develop competing small business apps and use bigger marketing budgets to take TechStart's target customers</span>, <span class="highlight an">[I] meaning the VC funding question is really a question about speed, and the cost of slow organic growth is not just missed revenue but the risk of being overtaken entirely in a fast-moving market</span>.
+
+                                        <br><br><span class="highlight ev">However</span>, <span class="highlight k">[P] VC investors usually want board seats, regular reports, and a plan for how they will get their money back, and rapid expansion also carries the risk of overtrading</span>. <span class="highlight ap">[B] As two university graduates who built TechStart from scratch, James and Priya may not have the experience to deal with professional investors who will push for fast growth targets. Their cash flow is already "tight" despite strong revenue growth, and clients take 60 days to pay</span>. <span class="highlight an">[L] This could lead to business decisions being driven by what investors want rather than what is best for the product, while aggressive growth could make the cash flow gap worse, meaning TechStart could run out of cash even though the business looks profitable on paper</span>.<br><br>
+
+                                        <strong>PBLI 2 + Balance:</strong> <span class="highlight k">[P] Managing people becomes much harder during rapid growth, and the ability to recruit, train and keep skilled staff is essential, particularly in an industry where the product depends entirely on the quality of the workforce</span>. <span class="highlight ap">[B] TechStart has expanded from 3 to 15 employees in just two years, three developers have already left in the past six months for higher-paying jobs at larger tech firms, and James and Priya work over 60 hours per week handling most management, sales, and client relationships themselves</span>. <span class="highlight an">[L] This leads to pressure on the founders' time and management capacity at a point when the business most needs strong leadership, and each developer who leaves takes knowledge of TechStart's code and client relationships with them</span>, <span class="highlight an">[I] which risks lower productivity, lost clients, and a damaged reputation if projects are delayed or quality drops because the team is constantly changing</span>.
+
+                                        <br><br><span class="highlight ev">However</span>, <span class="highlight k">[P] not investing in competitive salaries and career development could be just as damaging, because in a knowledge-based industry losing key staff can set a business back more than any financial loss</span>. <span class="highlight ap">[B] The tech industry is described as "highly competitive and fast-moving", meaning TechStart's remaining developers are likely being approached by larger, better-paying employers regularly</span>. <span class="highlight an">[L] This means without growth capital to fund competitive pay, training budgets, and clear career paths within the company, the turnover problem will only get worse, and trying to grow the business while constantly replacing staff creates a cycle that becomes harder and harder to break</span>.<br><br>
+
+                                        <strong>Conclusion (MOPS: Market):</strong> <span class="highlight ev">Overall, the most important factor is the competitive nature of TechStart's market, because this is what makes every other decision so urgent.</span> <span class="highlight ap">In a fast-moving technology sector where larger competitors could copy their products within months</span>, <span class="highlight an">the window to build a strong market position is narrow. Both the funding decision and the staffing challenges come down to the same thing: speed.</span> <span class="highlight ev">In the short term, accepting VC investment will create pressures around control and culture. In the long term, however, growing too slowly could threaten the survival of the business entirely. It depends on whether the founders can secure investment terms that provide growth capital while protecting enough control to maintain their product quality and team culture.</span>
+                                    </p>
+                                    <p class="marks-estimate">✓ 20/20 marks (Level 4)</p>
+                                </div>
+                                <div class="structure-breakdown">
+                                    <h5>Structure: 2 × (PBLI + Developed Balance) + Extended Conclusion with MOPS</h5>
+                                    The difference between 12 and 20 mark answers is not more PBLIs. It is more varied knowledge within each PBLI (notice how multiple concepts like funding, market competition, and overtrading are woven into a single paragraph), more developed counter-arguments, and a more extended conclusion that weighs factors against each other.
+                                </div>
+                                <div class="examiner-tip">
+                                    <h5>💡 Examiner Tip: 20-Mark Essays</h5>
+                                    <p>The jump from 12 to 20 marks is not about writing more paragraphs. It is about writing with more depth within each one. Include more varied knowledge in each PBLI (e.g. two related benefits woven together), develop your counter-arguments fully, and write an extended conclusion that weighs factors against each other using a MOPS factor.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Case Study 2: Green Bean Coffee -->
+        <div class="case-study" id="case-1">
+            <div class="case-card">
+                <div class="case-header">
+                    <h3>Green Bean Coffee</h3>
+                    <p>Green Bean Coffee is an independent coffee shop in Manchester that has built a loyal customer base over 5 years. Monthly revenue is £18,000 with profit margins of 15%, giving £2,700 monthly profit. The owner, Sarah, roasts her own beans on-site, which customers see as a key part of the Green Bean experience. She employs 8 part-time baristas and 1 full-time assistant manager. Sarah currently works 60+ hours per week managing every aspect of the business, from supplier relationships to social media marketing. Customer feedback consistently praises the quality of coffee and friendly atmosphere, but some reviews mention that the shop can feel cramped during peak hours. Sarah is considering two options for growth: opening a second company-owned location in a nearby town (requiring £80,000 investment) or franchising the Green Bean brand (with lower upfront costs but shared profits). A recent local market survey found that 68% of coffee drinkers in nearby towns had never heard of Green Bean, suggesting significant room for brand growth. Sarah's main objective is to build a sustainable business that provides good work-life balance.</p>
+                </div>
+                <div class="questions-list">
+                    <!-- 8 Mark Discuss Question -->
+                    <div class="question-item">
+                        <div class="question-header">
+                            <div class="question-text">
+                                <h4>Discuss the likely benefits for Green Bean Coffee of using social media marketing to build brand awareness. (8 marks)</h4>
+                            </div>
+                            <div class="question-badges">
+                                <span class="q-badge marks">8 marks</span>
+                                <span class="q-badge structure">2 × PBLI + However</span>
+                            </div>
+                        </div>
+                        <div class="answer-section">
+                            <button class="reveal-btn" onclick="toggleAnswer(this)">
+                                <span>👁️ Show Answers</span>
+                            </button>
+                            <div class="answer-content" data-question-id="q4">
+                                <div class="answer-box weak">
+                                    <div class="answer-label">❌ Weak Answer (Level 1)</div>
+                                    <p class="answer-text">Social media marketing is when a business uses platforms like Instagram, Facebook and TikTok to promote its products. It is a form of promotion which is one of the 4 Ps of the marketing mix. Social media is good because it is free to use and can reach lots of people. Businesses can post pictures and videos of their products to attract customers. This can increase sales and revenue. Social media also allows businesses to interact with customers and get feedback. This helps the business improve its products and services. Social media marketing is becoming more popular because more people use their phones. Overall, social media marketing would be beneficial for Green Bean because it would help them reach more customers.</p>
+                                    <p class="marks-estimate">≈ 2/8 marks (Level 1). All general knowledge about social media with no developed analysis. Green Bean is only mentioned once at the end. No case study data used (e.g. the 68% who have not heard of them, the on-site roasting, the customer reviews).</p>
+                                </div>
+                                <div class="skill-filter-panel">
+                                    <div class="skill-filter-header">
+                                        <span class="filter-icon">🎯</span>
+                                        <h5>Reveal Skills in Answer</h5>
+                                        <span class="skill-filter-hint">Tap to highlight each skill</span>
+                                    </div>
+                                    <div class="skill-filter-buttons">
+                                        <button class="skill-toggle k" onclick="toggleSkill(this, 'k', 'q4')">
+                                            <span class="toggle-indicator">P</span>
+                                            Knowledge
+                                        </button>
+                                        <button class="skill-toggle ap" onclick="toggleSkill(this, 'ap', 'q4')">
+                                            <span class="toggle-indicator">B</span>
+                                            Application
+                                        </button>
+                                        <button class="skill-toggle an" onclick="toggleSkill(this, 'an', 'q4')">
+                                            <span class="toggle-indicator">L/I</span>
+                                            Analysis
+                                        </button>
+                                        <button class="skill-toggle ev" onclick="toggleSkill(this, 'ev', 'q4')">
+                                            <span class="toggle-indicator">⚖️</span>
+                                            Evaluation
+                                        </button>
+                                        <button class="skill-toggle show-all" onclick="toggleAllSkills(this, 'q4')">
+                                            <span class="toggle-indicator">✨</span>
+                                            Show All Skills
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="answer-box model">
+                                    <div class="answer-label">✓ Model Answer (2 × PBLI with balance)</div>
+                                    <p class="answer-text">
+                                        <strong>PBLI 1 + Balance:</strong> <span class="highlight k">[P] Social media marketing can increase brand awareness at a low cost compared to traditional advertising methods</span> <span class="highlight ap">[B] because a recent survey found that 68% of coffee drinkers in nearby towns have never heard of Green Bean, which shows there is a large untapped market that could be reached through platforms like Instagram</span>. <span class="highlight an">[L] This leads to potential new customers discovering the brand without Green Bean needing to spend heavily on print or radio adverts</span>, <span class="highlight an">[I] which is important for Sarah since she needs to keep costs low while building awareness ahead of any expansion plans</span>.
+
+                                        <br><br><span class="highlight ev">However</span>, <span class="highlight k">[P] social media requires consistent content creation and engagement to be effective</span>. <span class="highlight ap">[B] Sarah already works 60+ hours per week managing every aspect of the business herself</span>. <span class="highlight an">[L] This means she may not have the time to regularly post quality content, respond to comments, and manage campaigns, leading to an inactive account that could actually harm the brand image rather than help it</span>.<br><br>
+
+                                        <strong>PBLI 2 + Balance:</strong> <span class="highlight k">[P] Visual platforms like Instagram are particularly effective for food and drink businesses because customers share photos of their experiences</span> <span class="highlight ap">[B] because Green Bean roasts its own beans on-site, which is a unique and visual process that would make compelling social media content and help differentiate them from chain coffee shops</span>. <span class="highlight an">[L] This leads to organic sharing where customers post their own photos, giving Green Bean free word-of-mouth promotion</span>, <span class="highlight an">[I] which builds the authentic, community feel that customer reviews already praise and could attract customers from the nearby towns before opening a second location there</span>.
+
+                                        <br><br><span class="highlight ev">However</span>, <span class="highlight k">[P] social media reach does not always convert into actual footfall</span>. <span class="highlight ap">[B] Green Bean is located in one Manchester location that already feels "cramped during peak hours" according to reviews</span>. <span class="highlight an">[L] This means attracting more customers through social media could worsen the crowding problem, leading to longer queues and lower service quality that damages the friendly atmosphere customers currently love</span>.
+                                    </p>
+                                    <p class="marks-estimate">✓ 8/8 marks (Level 4)</p>
+                                </div>
+                                <div class="structure-breakdown">
+                                    <h5>Structure: 2 × (PBLI + However + Balance) = 8 marks</h5>
+                                    Both sides shown throughout. NO conclusion needed for 8 mark Discuss
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 12 Mark Evaluate Question -->
+                    <div class="question-item">
+                        <div class="question-header">
+                            <div class="question-text">
+                                <h4>Evaluate these two expansion options and recommend which one Green Bean Coffee should use. (12 marks)</h4>
+                            </div>
+                            <div class="question-badges">
+                                <span class="q-badge marks">12 marks</span>
+                                <span class="q-badge structure">2 × PBLI + Balance + Conclusion</span>
+                            </div>
+                        </div>
+                        <div class="answer-section">
+                            <button class="reveal-btn" onclick="toggleAnswer(this)">
+                                <span>👁️ Show Answers</span>
+                            </button>
+                            <div class="answer-content" data-question-id="q5">
+                                <div class="answer-box weak">
+                                    <div class="answer-label">❌ Weak Answer (Level 2)</div>
+                                    <p class="answer-text">Sarah could open a second location or franchise the business. Opening a second location means she would own it and get all the profits. This is good because she would have full control. However, it costs £80,000 which is a lot of money. She might need a bank loan to pay for it.<br><br>Franchising means letting other people use the Green Bean name to open their own coffee shops. This is good because it costs less and the franchisees do the work. However, she has to share the profits with them. Also, the franchisees might not make the coffee as well as Sarah does.<br><br>In conclusion, I think Sarah should franchise because it is cheaper and less risky. She already works a lot of hours so franchising would be easier for her.</p>
+                                    <p class="marks-estimate">≈ 4/12 marks (Level 2). Some knowledge of both options but analysis is very thin. Application mentions £80,000 and Sarah's hours but does not use data like the 15% profit margin or the £2,700 monthly profit. The conclusion mentions work-life balance briefly but does not develop it as a MOPS factor.</p>
+                                </div>
+                                <div class="skill-filter-panel">
+                                    <div class="skill-filter-header">
+                                        <span class="filter-icon">🎯</span>
+                                        <h5>Reveal Skills in Answer</h5>
+                                        <span class="skill-filter-hint">Tap to highlight each skill</span>
+                                    </div>
+                                    <div class="skill-filter-buttons">
+                                        <button class="skill-toggle k" onclick="toggleSkill(this, 'k', 'q5')">
+                                            <span class="toggle-indicator">P</span>
+                                            Knowledge
+                                        </button>
+                                        <button class="skill-toggle ap" onclick="toggleSkill(this, 'ap', 'q5')">
+                                            <span class="toggle-indicator">B</span>
+                                            Application
+                                        </button>
+                                        <button class="skill-toggle an" onclick="toggleSkill(this, 'an', 'q5')">
+                                            <span class="toggle-indicator">L/I</span>
+                                            Analysis
+                                        </button>
+                                        <button class="skill-toggle ev" onclick="toggleSkill(this, 'ev', 'q5')">
+                                            <span class="toggle-indicator">⚖️</span>
+                                            Evaluation
+                                        </button>
+                                        <button class="skill-toggle show-all" onclick="toggleAllSkills(this, 'q5')">
+                                            <span class="toggle-indicator">✨</span>
+                                            Show All Skills
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="answer-box model">
+                                    <div class="answer-label">✓ Model Answer</div>
+                                    <p class="answer-text">
+                                        <strong>PBLI 1 + Balance:</strong> <span class="highlight k">[P] Opening a company-owned second location gives full control over operations and all profits stay with the owner</span> <span class="highlight ap">[B] because Sarah would keep 100% of the 15% profit margin rather than sharing revenue with franchisees</span>. <span class="highlight an">[L] This leads to higher potential earnings per location, as all £2,700 monthly profit goes to Sarah</span>, <span class="highlight an">[I] which could significantly increase her income and build a more valuable business if she ever decides to sell</span>.
+
+                                        <br><br><span class="highlight ev">However</span>, <span class="highlight k">[P] expansion requires significant capital investment and management time</span>. <span class="highlight ap">[B] The £80,000 needed represents nearly 2.5 years of current annual profits (£32,400 per year), and Sarah already works 60+ hours per week</span>. <span class="highlight an">[L] This creates major financial risk as Sarah would need to borrow or use all her savings, and a second location would demand even more of her time when she is already stretched thin, potentially leading to burnout</span>.<br><br>
+
+                                        <strong>PBLI 2 + Balance:</strong> <span class="highlight k">[P] Franchising offers expansion with reduced personal risk because the franchisee provides their own capital</span> <span class="highlight ap">[B] because franchisees would fund and manage their own Green Bean locations, meaning Sarah avoids the £80,000 investment and the daily management burden</span>. <span class="highlight an">[L] This leads to the potential for multiple locations generating royalty income without Sarah working additional hours</span>, <span class="highlight an">[I] directly helping with her 60+ hour weeks that are clearly not sustainable long-term</span>.
+
+                                        <br><br><span class="highlight ev">However</span>, <span class="highlight k">[P] franchisees may not maintain the same quality standards as the original owner</span>. <span class="highlight ap">[B] Green Bean's loyal customer base was built over 5 years through Sarah's personal attention to coffee quality, including the on-site bean roasting that customers value</span>. <span class="highlight an">[L] If a franchisee cuts corners to boost their own margins, poor reviews could spread online and damage the entire Green Bean brand, hurting Sarah's original shop too</span>.<br><br>
+
+                                        <strong>Conclusion (MOPS: Objectives):</strong> <span class="highlight ev">Overall, I recommend Sarah pursues franchising.</span> <span class="highlight ap">Given that her main objective is to build "a sustainable business that provides good work-life balance"</span>, <span class="highlight an">franchising directly addresses this goal while opening a second location would likely increase her already excessive workload. Her personal objective outweighs the potential for higher profits from direct ownership.</span> <span class="highlight ev">In the short term, she will earn less per location, but in the long term she could have multiple franchises generating income while enjoying better quality of life. It depends on developing strong franchise agreements that require franchisees to maintain quality, including the on-site roasting process.</span>
+                                    </p>
+                                    <p class="marks-estimate">✓ 12/12 marks (Level 4)</p>
+                                </div>
+                                <div class="structure-breakdown">
+                                    <h5>Structure: 2 × (PBLI + Balance) + Justified Conclusion with MOPS</h5>
+                                    Conclusion uses Objectives factor + "In the short/long term" + "It depends on"
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 20 Mark Evaluate Question -->
+                    <div class="question-item">
+                        <div class="question-header">
+                            <div class="question-text">
+                                <h4>Evaluate the extent to which maintaining quality is the most important factor for Green Bean Coffee as it plans to expand. (20 marks)</h4>
+                            </div>
+                            <div class="question-badges">
+                                <span class="q-badge marks">20 marks</span>
+                                <span class="q-badge structure">2 × PBLI + Balance + Extended Conclusion</span>
+                            </div>
+                        </div>
+                        <div class="answer-section">
+                            <button class="reveal-btn" onclick="toggleAnswer(this)">
+                                <span>👁️ Show Answers</span>
+                            </button>
+                            <div class="answer-content" data-question-id="q6">
+                                <div class="answer-box weak">
+                                    <div class="answer-label">❌ Weak Answer (Level 2)</div>
+                                    <p class="answer-text">Quality is very important for any business. Quality means making sure that the product or service meets customer expectations. If a business has good quality, customers will keep coming back and tell their friends about it. This is called customer loyalty. Green Bean Coffee has good quality because customers give good reviews.<br><br>If Green Bean expands, they need to keep quality high. This could be done through quality control, which means checking the product at the end of the process, or quality assurance, which means building quality into every stage. Training staff is also important for maintaining quality.<br><br>However, quality is not the only factor. Price is also important because customers might choose cheaper coffee shops. Location matters too because the shop needs to be in a place where customers can find it easily. Marketing is important so people know about the business.<br><br>In conclusion, quality is the most important factor because if the coffee is not good then customers will not come back. Green Bean should focus on maintaining quality as it expands.</p>
+                                    <p class="marks-estimate">≈ 7/20 marks (Level 2). This shows knowledge of quality management concepts but applies them generically. The answer lists factors (price, location, marketing) rather than developing them into proper PBLI arguments. Very little use of case study data. The conclusion simply repeats the question statement without weighing competing factors.</p>
+                                </div>
+                                <div class="skill-filter-panel">
+                                    <div class="skill-filter-header">
+                                        <span class="filter-icon">🎯</span>
+                                        <h5>Reveal Skills in Answer</h5>
+                                        <span class="skill-filter-hint">Tap to highlight each skill</span>
+                                    </div>
+                                    <div class="skill-filter-buttons">
+                                        <button class="skill-toggle k" onclick="toggleSkill(this, 'k', 'q6')">
+                                            <span class="toggle-indicator">P</span>
+                                            Knowledge
+                                        </button>
+                                        <button class="skill-toggle ap" onclick="toggleSkill(this, 'ap', 'q6')">
+                                            <span class="toggle-indicator">B</span>
+                                            Application
+                                        </button>
+                                        <button class="skill-toggle an" onclick="toggleSkill(this, 'an', 'q6')">
+                                            <span class="toggle-indicator">L/I</span>
+                                            Analysis
+                                        </button>
+                                        <button class="skill-toggle ev" onclick="toggleSkill(this, 'ev', 'q6')">
+                                            <span class="toggle-indicator">⚖️</span>
+                                            Evaluation
+                                        </button>
+                                        <button class="skill-toggle show-all" onclick="toggleAllSkills(this, 'q6')">
+                                            <span class="toggle-indicator">✨</span>
+                                            Show All Skills
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="answer-box model">
+                                    <div class="answer-label">✓ Model Answer (2 × PBLI with balance + Extended Conclusion)</div>
+                                    <p class="answer-text">
+                                        <strong>PBLI 1 + Balance:</strong> <span class="highlight k">[P] Maintaining product quality is important during expansion because it protects the brand reputation that drives customer loyalty, and in a service business this also means investing in staff training so that quality is consistent across every location</span>. <span class="highlight ap">[B] Green Bean's customer reviews consistently praise the quality of coffee and the on-site bean roasting is seen as a key part of the experience. Sarah currently oversees quality herself with her 8 part-time baristas and 1 assistant manager, but she cannot be in two places at once</span>. <span class="highlight an">[L] This leads to a major challenge when expanding because new locations would need baristas trained to the same standard without Sarah's direct supervision, and any drop in quality could undo 5 years of reputation-building</span>, <span class="highlight an">[I] meaning that inconsistent coffee or poor service at a new location would not just lose customers there but could damage the Green Bean brand overall, driving loyal Manchester customers to competitors too</span>.
+
+                                        <br><br><span class="highlight ev">However</span>, <span class="highlight k">[P] quality alone does not guarantee business growth if the target market does not know the brand exists, and over-investing in training before expansion generates revenue could strain the business financially</span>. <span class="highlight ap">[B] The local survey found that 68% of coffee drinkers in nearby towns have never heard of Green Bean despite 5 years of trading, and monthly profit is only £2,700</span>. <span class="highlight an">[L] This means that even though current customers love the quality, this has not been enough to build awareness beyond Manchester, and spending heavily on training systems on top of expansion costs could stretch Sarah's limited finances too thin, especially if a new location takes months to become profitable</span>.<br><br>
+
+                                        <strong>PBLI 2 + Balance:</strong> <span class="highlight k">[P] The method of expansion chosen will directly affect how easy it is to maintain quality, and the financial risk involved creates a trade-off between control and sustainability</span>. <span class="highlight ap">[B] If Sarah franchises, she relies on franchisees to replicate her on-site roasting process and the "friendly atmosphere" that reviews praise, while a company-owned second location would stay under her direct control but requires £80,000 of capital, which is nearly 2.5 years of current annual profits</span>. <span class="highlight an">[L] This leads to a difficult choice where franchising is less risky financially but harder to quality-control from a distance, while direct ownership keeps quality high but adds to Sarah's already unsustainable 60+ hour working week and puts her personal finances at serious risk</span>, <span class="highlight an">[I] meaning the expansion method and the quality question are closely linked and cannot be considered separately</span>.
+
+                                        <br><br><span class="highlight ev">However</span>, <span class="highlight k">[P] strong franchise agreements with clear quality standards can reduce the quality control risk, as proven by successful franchise models in the coffee industry</span>. <span class="highlight ap">[B] Chains like Costa require franchisees to follow strict operational procedures covering bean sourcing, preparation methods, and customer service standards</span>. <span class="highlight an">[L] This means Sarah could build similar requirements into her contracts, including mandatory use of her roasted beans and regular quality inspections, which would protect quality without requiring her personal presence at every location and without the £80,000 financial risk</span>.<br><br>
+
+                                        <strong>Conclusion (MOPS: Product + Objectives):</strong> <span class="highlight ev">Overall, maintaining quality is the most important factor because it is so closely connected to what makes Green Bean different.</span> <span class="highlight ap">Green Bean's product is not just coffee but the whole experience of on-site roasting and a friendly atmosphere, and Sarah's objective is to build a "sustainable business" with good work-life balance</span>. <span class="highlight an">If quality drops during expansion, the brand that took 5 years to build could be damaged in months, making all other planning pointless.</span> <span class="highlight ev">In the short term, Sarah should develop training systems and quality standards before expanding. In the long term, franchising with strong quality controls offers the best balance between growth and quality. It depends on whether she can create franchise agreements that truly protect the on-site roasting experience.</span>
+                                    </p>
+                                    <p class="marks-estimate">✓ 20/20 marks (Level 4)</p>
+                                </div>
+                                <div class="structure-breakdown">
+                                    <h5>Structure: 2 × (PBLI + Developed Balance) + Extended Conclusion with MOPS</h5>
+                                    Notice how each PBLI contains more varied knowledge than a 12-mark answer (e.g. PBLI 1 weaves together brand reputation AND staff training, PBLI 2 combines expansion method AND financial risk). The conclusion is also more developed.
+                                </div>
+                                <div class="examiner-tip">
+                                    <h5>💡 Examiner Tip: "To what extent" and "Evaluate the extent"</h5>
+                                    <p>These questions ask you to weigh how important something is compared to other factors. You must discuss the factor in the question AND other factors, then reach a judgement about which matters most and why. Do not just agree with the question statement.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Case Study 3: SportsFit UK -->
+        <div class="case-study" id="case-2">
+            <div class="case-card">
+                <div class="case-header">
+                    <h3>SportsFit UK</h3>
+                    <p>SportsFit UK operates 12 mid-range gyms across Northern England with 15,000 members paying an average of £35/month, generating £525,000 monthly revenue. The business employs 180 staff including personal trainers, receptionists, and cleaners. Recently, budget gym chains offering £15/month memberships have opened near 8 of SportsFit's 12 locations, and fitness apps now provide home workouts for £10/month. SportsFit has seen a 12% decline in membership over the past year, losing around 1,800 members. Customer exit surveys show that 45% of leavers cited price as the main reason, while 30% said they now prefer working out at home with apps. The remaining 25% moved to gyms with newer equipment. SportsFit's current equipment is 4 years old and would cost £1.2 million to fully replace across all 12 locations. The company has £400,000 in reserves. SportsFit's CEO believes their core strength is the personal, community-focused gym experience with qualified trainers that budget gyms and apps cannot replicate. The board is considering three options: lowering prices to compete, investing in premium facilities, or developing their own fitness app.</p>
+                </div>
+                <div class="questions-list">
+                    <!-- 8 Mark Discuss Question -->
+                    <div class="question-item">
+                        <div class="question-header">
+                            <div class="question-text">
+                                <h4>Discuss the likely impact on SportsFit of developing its own fitness app. (8 marks)</h4>
+                            </div>
+                            <div class="question-badges">
+                                <span class="q-badge marks">8 marks</span>
+                                <span class="q-badge structure">2 × PBLI + However</span>
+                            </div>
+                        </div>
+                        <div class="answer-section">
+                            <button class="reveal-btn" onclick="toggleAnswer(this)">
+                                <span>👁️ Show Answers</span>
+                            </button>
+                            <div class="answer-content" data-question-id="q7">
+                                <div class="answer-box weak">
+                                    <div class="answer-label">❌ Weak Answer (Level 1)</div>
+                                    <p class="answer-text">Developing a fitness app could be good for SportsFit. An app is a piece of software that runs on a mobile phone. Many businesses now use apps to reach their customers. A fitness app could include things like workout plans, exercise videos, and tracking features. This would let people exercise at home. The app market is very competitive with lots of fitness apps already available. However, if SportsFit makes a good app it could compete with other apps and attract new customers. Technology is changing the way people exercise and businesses need to adapt to survive. In conclusion, developing an app would be a good idea for SportsFit because it would help them keep up with the competition.</p>
+                                    <p class="marks-estimate">≈ 2/8 marks (Level 1). Generic description of what an app is with no specific application to SportsFit's situation. Does not mention any data from the case study (e.g. 30% of leavers preferring home workouts, the £35 membership price, or the 12 locations). No developed analysis chains.</p>
+                                </div>
+                                <div class="skill-filter-panel">
+                                    <div class="skill-filter-header">
+                                        <span class="filter-icon">🎯</span>
+                                        <h5>Reveal Skills in Answer</h5>
+                                        <span class="skill-filter-hint">Tap to highlight each skill</span>
+                                    </div>
+                                    <div class="skill-filter-buttons">
+                                        <button class="skill-toggle k" onclick="toggleSkill(this, 'k', 'q7')">
+                                            <span class="toggle-indicator">P</span>
+                                            Knowledge
+                                        </button>
+                                        <button class="skill-toggle ap" onclick="toggleSkill(this, 'ap', 'q7')">
+                                            <span class="toggle-indicator">B</span>
+                                            Application
+                                        </button>
+                                        <button class="skill-toggle an" onclick="toggleSkill(this, 'an', 'q7')">
+                                            <span class="toggle-indicator">L/I</span>
+                                            Analysis
+                                        </button>
+                                        <button class="skill-toggle ev" onclick="toggleSkill(this, 'ev', 'q7')">
+                                            <span class="toggle-indicator">⚖️</span>
+                                            Evaluation
+                                        </button>
+                                        <button class="skill-toggle show-all" onclick="toggleAllSkills(this, 'q7')">
+                                            <span class="toggle-indicator">✨</span>
+                                            Show All Skills
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="answer-box model">
+                                    <div class="answer-label">✓ Model Answer (2 × PBLI with balance)</div>
+                                    <p class="answer-text">
+                                        <strong>PBLI 1 + Balance:</strong> <span class="highlight k">[P] Developing a fitness app could create a new revenue stream and help retain members who want flexible workout options</span> <span class="highlight ap">[B] because exit surveys show that 30% of members who left SportsFit did so because they now prefer working out at home with apps charging just £10/month</span>. <span class="highlight an">[L] This leads to the potential to win back some of those lost members by offering a hybrid membership combining gym access with app-based home workouts</span>, <span class="highlight an">[I] giving SportsFit more than one source of income and protecting them if the trend towards home fitness continues to grow</span>.
+
+                                        <br><br><span class="highlight ev">However</span>, <span class="highlight k">[P] app development requires specialist technical skills that a gym operator is unlikely to have in-house</span>. <span class="highlight ap">[B] SportsFit's 180 staff are personal trainers, receptionists, and cleaners, not software developers, so they would need to hire externally or outsource the build</span>. <span class="highlight an">[L] This means facing established apps with bigger budgets, more content already built, and years of user data, making it very difficult for a first-time app from a gym chain to compete</span>.<br><br>
+
+                                        <strong>PBLI 2 + Balance:</strong> <span class="highlight k">[P] An app could strengthen customer loyalty by keeping members connected to SportsFit even when they are not in the gym</span> <span class="highlight ap">[B] because SportsFit's CEO believes their strength is the personal, community-focused experience with qualified trainers, and an app could extend this by offering personalised workout plans from those trainers</span>. <span class="highlight an">[L] This leads to members feeling they get more value from their £35/month membership, making them less likely to switch to a £15 budget gym that offers no personal support</span>, <span class="highlight an">[I] which could help slow the 12% membership decline that is currently costing SportsFit around 1,800 members per year</span>.
+
+                                        <br><br><span class="highlight ev">However</span>, <span class="highlight k">[P] investing in an app diverts money away from the physical gyms where most revenue is generated</span>. <span class="highlight ap">[B] SportsFit's equipment is already 4 years old and the 25% of leavers who cited outdated equipment suggest the gyms themselves need investment</span>. <span class="highlight an">[L] This means spending reserves on app development could leave SportsFit unable to upgrade equipment, losing even more members to competitors with newer facilities</span>.
+                                    </p>
+                                    <p class="marks-estimate">✓ 8/8 marks (Level 4)</p>
+                                </div>
+                                <div class="structure-breakdown">
+                                    <h5>Structure: 2 × (PBLI + However + Balance) = 8 marks</h5>
+                                    Both sides shown throughout. NO conclusion needed for 8 mark Discuss
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 12 Mark Evaluate Question -->
+                    <div class="question-item">
+                        <div class="question-header">
+                            <div class="question-text">
+                                <h4>Evaluate the most appropriate pricing strategy for SportsFit to use in response to budget gym competition. (12 marks)</h4>
+                            </div>
+                            <div class="question-badges">
+                                <span class="q-badge marks">12 marks</span>
+                                <span class="q-badge structure">2 × PBLI + Balance + Conclusion</span>
+                            </div>
+                        </div>
+                        <div class="answer-section">
+                            <button class="reveal-btn" onclick="toggleAnswer(this)">
+                                <span>👁️ Show Answers</span>
+                            </button>
+                            <div class="answer-content" data-question-id="q8">
+                                <div class="answer-box weak">
+                                    <div class="answer-label">❌ Weak Answer (Level 2)</div>
+                                    <p class="answer-text">There are different pricing strategies a business can use. Competitive pricing means setting your prices similar to competitors. Penetration pricing means setting a low price to enter a market. Price skimming means setting a high price when launching a new product. Cost-plus pricing means adding a percentage on top of costs.<br><br>SportsFit charges £35 per month but budget gyms charge £15. This is a big difference. SportsFit could lower its prices to match the budget gyms. This would attract more customers because people like cheap prices. However, this would reduce their profit margins.<br><br>Alternatively, SportsFit could keep prices high and focus on quality. This is called premium pricing. Some customers are willing to pay more for a better service. SportsFit has personal trainers which budget gyms do not.<br><br>In conclusion, SportsFit should use competitive pricing and lower their prices a bit. This way they can still attract customers without losing too much profit.</p>
+                                    <p class="marks-estimate">≈ 4/12 marks (Level 2). Opens with a list of pricing strategies that is mostly textbook knowledge. Some application to SportsFit (mentions £35 vs £15) but analysis is undeveloped. Does not use exit survey data or calculate the financial impact of price changes. The conclusion gives a recommendation but does not justify it with a MOPS factor.</p>
+                                </div>
+                                <div class="skill-filter-panel">
+                                    <div class="skill-filter-header">
+                                        <span class="filter-icon">🎯</span>
+                                        <h5>Reveal Skills in Answer</h5>
+                                        <span class="skill-filter-hint">Tap to highlight each skill</span>
+                                    </div>
+                                    <div class="skill-filter-buttons">
+                                        <button class="skill-toggle k" onclick="toggleSkill(this, 'k', 'q8')">
+                                            <span class="toggle-indicator">P</span>
+                                            Knowledge
+                                        </button>
+                                        <button class="skill-toggle ap" onclick="toggleSkill(this, 'ap', 'q8')">
+                                            <span class="toggle-indicator">B</span>
+                                            Application
+                                        </button>
+                                        <button class="skill-toggle an" onclick="toggleSkill(this, 'an', 'q8')">
+                                            <span class="toggle-indicator">L/I</span>
+                                            Analysis
+                                        </button>
+                                        <button class="skill-toggle ev" onclick="toggleSkill(this, 'ev', 'q8')">
+                                            <span class="toggle-indicator">⚖️</span>
+                                            Evaluation
+                                        </button>
+                                        <button class="skill-toggle show-all" onclick="toggleAllSkills(this, 'q8')">
+                                            <span class="toggle-indicator">✨</span>
+                                            Show All Skills
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="answer-box model">
+                                    <div class="answer-label">✓ Model Answer</div>
+                                    <p class="answer-text">
+                                        <strong>PBLI 1 + Balance:</strong> <span class="highlight k">[P] Lowering prices could help retain price-sensitive members who might otherwise switch to budget competitors</span> <span class="highlight ap">[B] because exit surveys show that 45% of the 1,800 members who left cited price as the main reason, suggesting that around 800 members were lost primarily due to the £20 gap between SportsFit's £35 and the budget gyms' £15</span>. <span class="highlight an">[L] This leads to maintaining membership numbers and spreading fixed costs like rent and equipment maintenance across more members</span>, <span class="highlight an">[I] which could stop the cycle of falling membership causing further cost pressures on the remaining 15,000 members</span>.
+
+                                        <br><br><span class="highlight ev">However</span>, <span class="highlight k">[P] large price cuts destroy profit margins and can trigger a price war that mid-range businesses cannot win</span>. <span class="highlight ap">[B] Matching the £15 budget price would mean losing £20 per member per month, totalling around £300,000 less monthly revenue across 15,000 members, while SportsFit has higher costs for qualified trainers and quality facilities than stripped-back budget gyms</span>. <span class="highlight an">[L] This would likely make their 12 locations unprofitable because they simply cannot operate at the same low cost as budget competitors without cutting the staff and facilities that make them different</span>.<br><br>
+
+                                        <strong>PBLI 2 + Balance:</strong> <span class="highlight k">[P] Premium pricing, supported by investment in better facilities, can justify a higher price point by offering value that budget gyms cannot match</span> <span class="highlight ap">[B] because SportsFit could upgrade their 4-year-old equipment and add services like personal training packages, group classes, and spa facilities that stripped-down £15 gyms simply cannot offer</span>. <span class="highlight an">[L] This leads to a clear reason for customers to pay more, as they receive an experience and level of service that goes far beyond what a basic gym provides</span>, <span class="highlight an">[I] potentially not only keeping current members but attracting new ones who want more than a room full of machines</span>.
+
+                                        <br><br><span class="highlight ev">However</span>, <span class="highlight k">[P] premium investment carries financial risk, especially when membership is already declining</span>. <span class="highlight ap">[B] Full equipment replacement across 12 locations would cost £1.2 million, but SportsFit only has £400,000 in reserves</span>. <span class="highlight an">[L] This means they would need to borrow £800,000, and if the premium strategy does not attract enough new members to cover repayments, SportsFit could face serious cash flow problems</span>.<br><br>
+
+                                        <strong>Conclusion (MOPS: Product):</strong> <span class="highlight ev">Overall, I recommend SportsFit uses premium pricing supported by targeted facility upgrades.</span> <span class="highlight ap">Given that their core product is "the personal, community-focused gym experience" with qualified trainers</span>, <span class="highlight an">this is something that budget gyms and apps simply cannot copy. Investing in what makes SportsFit different is smarter than trying to compete on price where they will always lose.</span> <span class="highlight ev">In the short term, investment costs will reduce profits, but in the long term a clear premium position creates a reason for customers to choose SportsFit over cheaper alternatives. It depends on upgrading the most visible equipment first using the £400,000 reserves, rather than trying to replace everything at once.</span>
+                                    </p>
+                                    <p class="marks-estimate">✓ 12/12 marks (Level 4)</p>
+                                </div>
+                                <div class="structure-breakdown">
+                                    <h5>Structure: 2 × (PBLI + Balance) + Justified Conclusion with MOPS</h5>
+                                    Conclusion uses Product factor + "In the short/long term" + "It depends on"
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 20 Mark Evaluate Question -->
+                    <div class="question-item">
+                        <div class="question-header">
+                            <div class="question-text">
+                                <h4>Evaluate the factors that SportsFit should consider when developing a strategy to respond to increased competition in the fitness industry. (20 marks)</h4>
+                            </div>
+                            <div class="question-badges">
+                                <span class="q-badge marks">20 marks</span>
+                                <span class="q-badge structure">2 × PBLI + Balance + Extended Conclusion</span>
+                            </div>
+                        </div>
+                        <div class="answer-section">
+                            <button class="reveal-btn" onclick="toggleAnswer(this)">
+                                <span>👁️ Show Answers</span>
+                            </button>
+                            <div class="answer-content" data-question-id="q9">
+                                <div class="answer-box weak">
+                                    <div class="answer-label">❌ Weak Answer (Level 2)</div>
+                                    <p class="answer-text">SportsFit faces a lot of competition from budget gyms and fitness apps. Competition is when businesses try to attract the same customers. There are different types of competition including price competition and non-price competition. Price competition is when businesses try to offer the lowest prices. Non-price competition is when businesses compete on things like quality, service, and branding.<br><br>SportsFit could lower its prices to compete with budget gyms. Budget gyms charge £15 while SportsFit charges £35. Lowering prices would attract more customers. However, this would reduce profit margins and SportsFit might not be able to afford to pay its staff.<br><br>Another option is to invest in better facilities. SportsFit could buy new equipment and add new services. This would make the gyms better and attract customers who want a premium experience. However, this would cost a lot of money.<br><br>SportsFit could also develop a fitness app. This would help them compete with fitness apps that offer home workouts for £10. The app could offer personalised workouts from their personal trainers.<br><br>Stakeholders would be affected by these decisions. Staff might lose their jobs if prices are lowered and costs need to be cut. Members would benefit from lower prices or better facilities. Shareholders would want the strategy that makes the most profit.<br><br>In conclusion, I think SportsFit should invest in premium facilities because they cannot compete on price with budget gyms. This would help them stand out from the competition.</p>
+                                    <p class="marks-estimate">≈ 7/20 marks (Level 2). This covers multiple factors but none are developed beyond one or two sentences. Opens with textbook definitions of competition types. Application is present but shallow (mentions £35 vs £15, £10 apps). The stakeholder paragraph lists groups without analysing the impact on each. The conclusion gives a recommendation but does not weigh factors against each other or use MOPS.</p>
+                                </div>
+                                <div class="skill-filter-panel">
+                                    <div class="skill-filter-header">
+                                        <span class="filter-icon">🎯</span>
+                                        <h5>Reveal Skills in Answer</h5>
+                                        <span class="skill-filter-hint">Tap to highlight each skill</span>
+                                    </div>
+                                    <div class="skill-filter-buttons">
+                                        <button class="skill-toggle k" onclick="toggleSkill(this, 'k', 'q9')">
+                                            <span class="toggle-indicator">P</span>
+                                            Knowledge
+                                        </button>
+                                        <button class="skill-toggle ap" onclick="toggleSkill(this, 'ap', 'q9')">
+                                            <span class="toggle-indicator">B</span>
+                                            Application
+                                        </button>
+                                        <button class="skill-toggle an" onclick="toggleSkill(this, 'an', 'q9')">
+                                            <span class="toggle-indicator">L/I</span>
+                                            Analysis
+                                        </button>
+                                        <button class="skill-toggle ev" onclick="toggleSkill(this, 'ev', 'q9')">
+                                            <span class="toggle-indicator">⚖️</span>
+                                            Evaluation
+                                        </button>
+                                        <button class="skill-toggle show-all" onclick="toggleAllSkills(this, 'q9')">
+                                            <span class="toggle-indicator">✨</span>
+                                            Show All Skills
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="answer-box model">
+                                    <div class="answer-label">✓ Model Answer (2 × PBLI with balance + Extended Conclusion)</div>
+                                    <p class="answer-text">
+                                        <strong>PBLI 1 + Balance:</strong> <span class="highlight k">[P] Understanding why customers are leaving is essential before choosing a strategy, and differentiation through premium facilities can create a competitive advantage that budget competitors cannot copy</span>. <span class="highlight ap">[B] SportsFit's exit surveys reveal three distinct groups: 45% left because of price, 30% prefer home app workouts, and 25% wanted newer equipment. SportsFit could use its £400,000 reserves to begin upgrading the 4-year-old equipment at the 8 locations facing direct budget gym competition, adding features like personal training suites and group fitness studios</span>. <span class="highlight an">[L] This leads to a clear value difference that justifies the £35 price, since budget gyms operating on £15 cannot afford qualified trainers or specialist equipment, and it directly addresses the 25% who left for newer gyms while also giving the 45% who cited price a stronger reason to see the membership as worth the extra cost</span>, <span class="highlight an">[I] which could not only keep the remaining 15,000 members but attract new ones who want more than a basic, no-frills gym experience</span>.
+
+                                        <br><br><span class="highlight ev">However</span>, <span class="highlight k">[P] differentiation only works if enough customers in the market are willing and able to pay a premium, and focusing on just one customer group risks permanently losing the others</span>. <span class="highlight ap">[B] The fact that 45% of leavers cited price suggests a significant portion of SportsFit's Northern England market is price-sensitive. Full equipment replacement across 12 locations would cost £1.2 million but reserves are only £400,000, and SportsFit has already lost 1,800 members</span>. <span class="highlight an">[L] This means if the pool of customers willing to pay £35+ is too small to fill 12 gyms, the investment will not pay off, and the ongoing 12% annual membership decline could push revenue losses beyond what the business can absorb</span>.<br><br>
+
+                                        <strong>PBLI 2 + Balance:</strong> <span class="highlight k">[P] The impact on staff morale and capability must be considered alongside the financial constraints, because employees deliver the customer experience that sets SportsFit apart and any strategy that cuts staff undermines the core product</span>. <span class="highlight ap">[B] SportsFit employs 180 staff including qualified personal trainers, and the CEO believes their community-focused experience with trained staff is their core strength. At the same time, with 1,800 fewer members each paying £35, the business has already lost £63,000 per month in revenue</span>. <span class="highlight an">[L] This leads to a difficult position where any strategy involving cost-cutting (like matching budget prices) would likely mean reducing staff or replacing qualified trainers with cheaper alternatives</span>, <span class="highlight an">[I] which would destroy the very thing the CEO says makes SportsFit different, leaving them as a more expensive version of a budget gym with no real reason for customers to choose them</span>.
+
+                                        <br><br><span class="highlight ev">However</span>, <span class="highlight k">[P] retaining all 180 staff across 12 locations may not be sustainable if the membership decline continues, and some restructuring may be necessary regardless of which strategy is chosen</span>. <span class="highlight ap">[B] If the 12% annual decline continues, SportsFit could lose over 3,000 members in total, and the revenue drop could make fixed costs like rent on 12 locations unaffordable</span>. <span class="highlight an">[L] This means SportsFit may need to consider closing the weakest-performing locations and concentrating its best staff and investment into the gyms with the most loyal membership bases, rather than trying to save every location</span>.<br><br>
+
+                                        <strong>Conclusion (MOPS: Situation + Product):</strong> <span class="highlight ev">Overall, the most important factor is SportsFit's current financial situation, which limits what strategies are actually possible.</span> <span class="highlight ap">With only £400,000 in reserves and revenue falling by £63,000 per month, SportsFit cannot afford to do everything</span>. <span class="highlight an">Since 45% of leavers cited price and 25% cited equipment, a combined approach of targeted equipment upgrades at the most threatened locations plus a lower "off-peak" membership tier would address 70% of the reasons members are leaving. Their product strength, the personal community experience, should be at the centre of whatever they do.</span> <span class="highlight ev">In the short term, SportsFit should prioritise upgrading the 8 locations facing direct competition using its reserves. In the long term, the goal should be establishing a clear premium reputation so customers see the £35 as good value. It depends on acting quickly before the membership decline becomes too severe to reverse.</span>
+                                    </p>
+                                    <p class="marks-estimate">✓ 20/20 marks (Level 4)</p>
+                                </div>
+                                <div class="structure-breakdown">
+                                    <h5>Structure: 2 × (PBLI + Developed Balance) + Extended Conclusion with MOPS</h5>
+                                    Notice how each PBLI contains more varied knowledge than a 12-mark answer (e.g. PBLI 1 weaves together customer exit data AND differentiation strategy, PBLI 2 combines staff morale AND financial constraints). The conclusion is also more extended with a specific, practical recommendation.
+                                </div>
+                                <div class="examiner-tip">
+                                    <h5>💡 Examiner Tip: Using Data in Your Answers</h5>
+                                    <p>Top-level answers use numbers from the case study throughout, not just once. Notice how this answer calculates the revenue loss (1,800 × £35 = £63,000/month) and uses the exit survey percentages to justify the strategy. This shows the examiner you can apply quantitative information, which is specifically mentioned in the Level 4 descriptor.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2>Ready to Practice?</h2>
+        <p>Master the business concepts you need for PBLI answers with our flashcards.</p>
+        <a href="app.html" class="cta-btn">Start Studying Now →</a>
+    </section>
+
+    <script>
+        // Supabase configuration
+        const SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Check authentication
+        async function checkAuth() {
+            try {
+                const { data: { session } } = await supabaseClient.auth.getSession();
+                if (!session) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+                if (session.user.email) {
+                    document.getElementById('userEmail').textContent = session.user.email;
+                }
+            } catch (error) {
+                console.error('Auth check error:', error);
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Logout function
+        async function handleLogout() {
+            try {
+                await supabaseClient.auth.signOut();
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+                window.location.href = 'login.html';
+            }
+        }
+
+        checkAuth();
+
+        // Case study switching
+        function showCase(index) {
+            document.querySelectorAll('.case-tab').forEach((tab, i) => {
+                tab.classList.toggle('active', i === index);
+            });
+            document.querySelectorAll('.case-study').forEach((study, i) => {
+                study.classList.toggle('active', i === index);
+            });
+        }
+
+        // Toggle answer reveal
+        function toggleAnswer(btn) {
+            const answerContent = btn.nextElementSibling;
+            const isVisible = answerContent.classList.contains('visible');
+            if (isVisible) {
+                answerContent.classList.remove('visible');
+                btn.innerHTML = '<span>👁️ Show Answers</span>';
+            } else {
+                answerContent.classList.add('visible');
+                btn.innerHTML = '<span>👁️ Hide Answers</span>';
+            }
+        }
+
+        // Skill Filter Toggle Functions
+        function toggleSkill(btn, skillType, questionId) {
+            const answerContent = document.querySelector(`[data-question-id="${questionId}"]`);
+            const highlights = answerContent.querySelectorAll(`.highlight.${skillType}`);
+            const showAllBtn = answerContent.querySelector('.skill-toggle.show-all');
+
+            // Toggle active state on button
+            btn.classList.toggle('active');
+
+            // Toggle highlight visibility
+            const isActive = btn.classList.contains('active');
+            highlights.forEach(h => {
+                if (isActive) {
+                    h.classList.add(`show-${skillType}`);
+                } else {
+                    h.classList.remove(`show-${skillType}`);
+                }
+            });
+
+            // Update "Show All" button state
+            const allToggles = answerContent.querySelectorAll('.skill-toggle:not(.show-all)');
+            const allActive = Array.from(allToggles).every(t => t.classList.contains('active'));
+            const noneActive = Array.from(allToggles).every(t => !t.classList.contains('active'));
+
+            if (allActive) {
+                showAllBtn.classList.add('active');
+            } else {
+                showAllBtn.classList.remove('active');
+            }
+        }
+
+        function toggleAllSkills(btn, questionId) {
+            const answerContent = document.querySelector(`[data-question-id="${questionId}"]`);
+            const allToggles = answerContent.querySelectorAll('.skill-toggle:not(.show-all)');
+            const allHighlights = answerContent.querySelectorAll('.highlight');
+
+            // Check if all are currently active
+            const allActive = Array.from(allToggles).every(t => t.classList.contains('active'));
+
+            if (allActive) {
+                // Turn all off
+                btn.classList.remove('active');
+                allToggles.forEach(t => t.classList.remove('active'));
+                allHighlights.forEach(h => {
+                    h.classList.remove('show-k', 'show-ap', 'show-an', 'show-ev');
+                });
+            } else {
+                // Turn all on
+                btn.classList.add('active');
+                allToggles.forEach(t => t.classList.add('active'));
+                allHighlights.forEach(h => {
+                    if (h.classList.contains('k')) h.classList.add('show-k');
+                    if (h.classList.contains('ap')) h.classList.add('show-ap');
+                    if (h.classList.contains('an')) h.classList.add('show-an');
+                    if (h.classList.contains('ev')) h.classList.add('show-ev');
+                });
+            }
+        }
+    </script>
+</body>
+</html>
