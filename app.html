@@ -1502,6 +1502,27 @@
 
                 const subscription = subscriptions && subscriptions.length > 0 ? subscriptions[0] : null;
 
+                // Auto-create subscription if user doesn't have one yet
+                if (!subscription) {
+                    console.log('No subscription found, creating free subscription...');
+                    const expiresAt = new Date();
+                    expiresAt.setFullYear(expiresAt.getFullYear() + 1);
+                    const { error: insertError } = await supabaseClient
+                        .from('subscriptions')
+                        .insert({
+                            user_id: session.user.id,
+                            email: session.user.email,
+                            plan: 'free',
+                            status: 'active',
+                            expires_at: expiresAt.toISOString()
+                        });
+                    if (insertError) {
+                        console.error('Failed to create subscription:', insertError);
+                    } else {
+                        console.log('Free subscription created successfully');
+                    }
+                }
+
                 // ========================================
                 // PAYWALL BYPASS - Free access period
                 // To re-enable paywall, uncomment the code below

@@ -2649,6 +2649,27 @@
                 if (session.user.email) {
                     document.getElementById('userEmail').textContent = session.user.email;
                 }
+
+                // Auto-create subscription if user doesn't have one yet
+                const { data: subs } = await supabaseClient
+                    .from('subscriptions')
+                    .select('id')
+                    .eq('user_id', session.user.id)
+                    .limit(1);
+
+                if (!subs || subs.length === 0) {
+                    const expiresAt = new Date();
+                    expiresAt.setFullYear(expiresAt.getFullYear() + 1);
+                    await supabaseClient
+                        .from('subscriptions')
+                        .insert({
+                            user_id: session.user.id,
+                            email: session.user.email,
+                            plan: 'free',
+                            status: 'active',
+                            expires_at: expiresAt.toISOString()
+                        });
+                }
             } catch (error) {
                 console.error('Auth check error:', error);
                 window.location.href = 'login.html';
