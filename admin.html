@@ -877,15 +877,16 @@
                                 <tr>
                                     <th>User</th>
                                     <th>Email</th>
+                                    <th>Plan</th>
+                                    <th>Status</th>
                                     <th>Signed Up</th>
-                                    <th>Last Sign In</th>
                                     <th>Cards Studied</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="usersTableBody">
                                 <tr>
-                                    <td colspan="6" class="loading"><div class="spinner"></div> Loading users...</td>
+                                    <td colspan="7" class="loading"><div class="spinner"></div> Loading users...</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -1202,9 +1203,9 @@
 
         // Load Dashboard
         async function loadDashboard() {
-            // Load user count
+            // Load user count from subscriptions
             const { count: userCount } = await supabaseClient
-                .from('profiles')
+                .from('subscriptions')
                 .select('*', { count: 'exact', head: true });
 
             document.getElementById('totalUsers').textContent = userCount || '0';
@@ -1255,7 +1256,7 @@
         // Load Recent Users
         async function loadRecentUsers() {
             const { data: users } = await supabaseClient
-                .from('profiles')
+                .from('subscriptions')
                 .select('*')
                 .order('created_at', { ascending: false })
                 .limit(5);
@@ -1281,7 +1282,7 @@
         // Load Users
         async function loadUsers() {
             const { data: users } = await supabaseClient
-                .from('profiles')
+                .from('subscriptions')
                 .select('*')
                 .order('created_at', { ascending: false });
 
@@ -1307,27 +1308,33 @@
             document.getElementById('userCount').textContent = `${users.length} users`;
 
             if (users.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No users found</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" class="empty-state">No users found</td></tr>';
                 return;
             }
 
-            tbody.innerHTML = users.map(user => `
+            tbody.innerHTML = users.map(user => {
+                const planBadge = user.plan === 'free' ? 'badge-gray' :
+                                  user.plan === 'yearly' ? 'badge-success' : 'badge-info';
+                const statusBadge = user.status === 'active' ? 'badge-success' :
+                                    user.status === 'expired' ? 'badge-danger' : 'badge-warning';
+                return `
                 <tr>
                     <td>
                         <div style="display: flex; align-items: center; gap: 0.75rem;">
                             <div class="user-avatar">${(user.email || 'U')[0].toUpperCase()}</div>
-                            <span>${user.full_name || 'User'}</span>
+                            <span>${user.email ? user.email.split('@')[0] : 'User'}</span>
                         </div>
                     </td>
                     <td>${user.email || '-'}</td>
+                    <td><span class="badge ${planBadge}">${(user.plan || 'free').toUpperCase()}</span></td>
+                    <td><span class="badge ${statusBadge}">${(user.status || 'active').toUpperCase()}</span></td>
                     <td>${formatDate(user.created_at)}</td>
-                    <td>${formatDate(user.last_sign_in_at) || 'Never'}</td>
-                    <td><span class="badge badge-info">${progressCounts[user.id] || 0} cards</span></td>
+                    <td><span class="badge badge-info">${progressCounts[user.user_id] || 0} cards</span></td>
                     <td>
-                        <button class="btn btn-ghost btn-sm" onclick="viewUser('${user.id}')">View</button>
+                        <button class="btn btn-ghost btn-sm" onclick="viewUser('${user.user_id}')">View</button>
                     </td>
                 </tr>
-            `).join('');
+            `}).join('');
         }
 
         // User search
@@ -1335,7 +1342,7 @@
             const query = e.target.value.toLowerCase();
             const filtered = allUsers.filter(u =>
                 (u.email && u.email.toLowerCase().includes(query)) ||
-                (u.full_name && u.full_name.toLowerCase().includes(query))
+                (u.plan && u.plan.toLowerCase().includes(query))
             );
             renderUsers(filtered);
         });
@@ -1343,8 +1350,8 @@
         // Export Users
         document.getElementById('exportUsersBtn').addEventListener('click', () => {
             const csv = [
-                ['Email', 'Full Name', 'Created At'],
-                ...allUsers.map(u => [u.email, u.full_name || '', u.created_at])
+                ['Email', 'Plan', 'Status', 'Created At', 'Expires At'],
+                ...allUsers.map(u => [u.email, u.plan || 'free', u.status || 'active', u.created_at, u.expires_at || ''])
             ].map(row => row.join(',')).join('\n');
 
             const blob = new Blob([csv], { type: 'text/csv' });
@@ -1570,7 +1577,7 @@
 
         // View User
         async function viewUser(userId) {
-            const user = allUsers.find(u => u.id === userId);
+            const user = allUsers.find(u => u.user_id === userId);
             if (!user) return;
 
             const { data: progress } = await supabaseClient
@@ -1582,13 +1589,22 @@
             const reviewing = progress ? progress.filter(p => p.status === 'reviewing').length : 0;
             const mastered = progress ? progress.filter(p => p.status === 'mastered').length : 0;
 
+            const planBadge = user.plan === 'free' ? 'badge-gray' :
+                              user.plan === 'yearly' ? 'badge-success' : 'badge-info';
+            const statusBadge = user.status === 'active' ? 'badge-success' :
+                                user.status === 'expired' ? 'badge-danger' : 'badge-warning';
+
             document.getElementById('userModalBody').innerHTML = `
                 <div style="text-align: center; margin-bottom: 1.5rem;">
                     <div class="user-avatar" style="width: 64px; height: 64px; font-size: 1.5rem; margin: 0 auto 1rem;">
                         ${(user.email || 'U')[0].toUpperCase()}
                     </div>
-                    <h3 style="margin-bottom: 0.25rem;">${user.full_name || 'User'}</h3>
+                    <h3 style="margin-bottom: 0.25rem;">${user.email ? user.email.split('@')[0] : 'User'}</h3>
                     <p style="color: var(--gray-500);">${user.email}</p>
+                    <div style="margin-top: 0.5rem;">
+                        <span class="badge ${planBadge}">${(user.plan || 'free').toUpperCase()}</span>
+                        <span class="badge ${statusBadge}">${(user.status || 'active').toUpperCase()}</span>
+                    </div>
                 </div>
 
                 <div style="background: var(--gray-50); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
@@ -1598,13 +1614,13 @@
                             <div style="font-weight: 600;">${formatDate(user.created_at)}</div>
                         </div>
                         <div>
-                            <div style="font-size: 0.8rem; color: var(--gray-500);">Last Active</div>
-                            <div style="font-weight: 600;">${formatDate(user.last_sign_in_at) || 'Never'}</div>
+                            <div style="font-size: 0.8rem; color: var(--gray-500);">Expires</div>
+                            <div style="font-weight: 600;">${formatDate(user.expires_at) || 'N/A'}</div>
                         </div>
                     </div>
                 </div>
 
-                <h4 style="margin-bottom: 0.75rem;">Progress</h4>
+                <h4 style="margin-bottom: 0.75rem;">Study Progress</h4>
                 <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem;">
                     <div style="text-align: center; padding: 1rem; background: #fef3c7; border-radius: 10px;">
                         <div style="font-size: 1.5rem; font-weight: 800;">${learning}</div>
