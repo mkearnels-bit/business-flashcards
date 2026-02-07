@@ -407,7 +407,7 @@
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
 
         // Initialize Supabase client
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // DOM Elements
         const signupForm = document.getElementById('signupForm');
@@ -420,10 +420,10 @@
 
         // Check if already logged in
         async function checkAuth() {
-            const { data: { session } } = await supabase.auth.getSession();
+            const { data: { session } } = await supabaseClient.auth.getSession();
             if (session) {
                 // Check subscription status
-                const { data: subscription } = await supabase
+                const { data: subscription } = await supabaseClient
                     .from('subscriptions')
                     .select('*')
                     .eq('user_id', session.user.id)
@@ -472,7 +472,7 @@
 
             try {
                 // Sign up the user
-                const { data, error } = await supabase.auth.signUp({
+                const { data, error } = await supabaseClient.auth.signUp({
                     email,
                     password,
                     options: {
@@ -480,7 +480,8 @@
                             first_name: firstName,
                             last_name: lastName,
                             full_name: `${firstName} ${lastName}`
-                        }
+                        },
+                        emailRedirectTo: window.location.origin + '/payment.html'
                     }
                 });
 
@@ -492,7 +493,7 @@
                     return;
                 }
 
-                // Store user info for payment page
+                // Store user info for after email confirmation
                 localStorage.setItem('pendingUser', JSON.stringify({
                     email,
                     firstName,
@@ -500,7 +501,33 @@
                     userId: data.user?.id
                 }));
 
-                // Success - redirect to payment page
+                // Check if email confirmation is needed (no session means confirmation required)
+                if (data.user && !data.session) {
+                    // Email confirmation required - show success message
+                    document.getElementById('signupForm').style.display = 'none';
+                    messageDiv.innerHTML = `
+                        <div style="text-align: center;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">📧</div>
+                            <h2 style="color: var(--primary); margin-bottom: 0.5rem;">Check Your Email!</h2>
+                            <p style="color: var(--gray-700); margin-bottom: 1rem;">
+                                We've sent a confirmation link to:<br>
+                                <strong>${email}</strong>
+                            </p>
+                            <p style="color: var(--gray-500); font-size: 0.875rem;">
+                                Click the link in the email to confirm your account and continue to payment.
+                            </p>
+                            <p style="color: var(--gray-500); font-size: 0.8rem; margin-top: 1rem;">
+                                Didn't receive it? Check your spam folder or <a href="#" onclick="location.reload()" style="color: var(--primary);">try again</a>.
+                            </p>
+                        </div>
+                    `;
+                    messageDiv.className = 'message success show';
+                    messageDiv.style.background = '#f0fdf4';
+                    messageDiv.style.padding = '2rem';
+                    return;
+                }
+
+                // If session exists (email confirmation not required), redirect to payment
                 showMessage('Account created! Redirecting to payment...', 'success');
                 setTimeout(() => {
                     window.location.href = '/payment.html';
