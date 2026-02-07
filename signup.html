@@ -267,37 +267,6 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-
-        .benefits {
-            background: var(--gray-100);
-            border-radius: 10px;
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .benefits-title {
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: var(--gray-700);
-            margin-bottom: 0.75rem;
-        }
-
-        .benefit-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.8rem;
-            color: var(--gray-500);
-            margin-bottom: 0.5rem;
-        }
-
-        .benefit-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .benefit-icon {
-            color: var(--success);
-        }
     </style>
 </head>
 <body>
@@ -310,22 +279,6 @@
             <div class="auth-header">
                 <h1>Create Your Account</h1>
                 <p>Start mastering Business Studies today</p>
-            </div>
-
-            <div class="benefits">
-                <div class="benefits-title">What you'll get:</div>
-                <div class="benefit-item">
-                    <span class="benefit-icon">✓</span>
-                    <span>Over 350 expert-crafted flashcards</span>
-                </div>
-                <div class="benefit-item">
-                    <span class="benefit-icon">✓</span>
-                    <span>Full access for 12 months</span>
-                </div>
-                <div class="benefit-item">
-                    <span class="benefit-icon">✓</span>
-                    <span>Works on all devices</span>
-                </div>
             </div>
 
             <div id="message" class="message"></div>
@@ -383,7 +336,7 @@
 
                 <button type="submit" class="btn btn-primary" id="submitBtn">
                     <span class="loading-spinner"></span>
-                    <span class="btn-text">Create Account & Continue to Payment</span>
+                    <span class="btn-text">Create Account</span>
                 </button>
 
                 <p class="terms">
@@ -432,8 +385,8 @@
                 if (subscription && new Date(subscription.expires_at) > new Date()) {
                     window.location.href = '/app.html';
                 } else {
-                    // Redirect to payment
-                    window.location.href = '/payment.html';
+                    // Redirect to app
+                    window.location.href = '/app.html';
                 }
             }
         }
@@ -481,7 +434,7 @@
                             last_name: lastName,
                             full_name: `${firstName} ${lastName}`
                         },
-                        emailRedirectTo: window.location.origin + '/payment.html'
+                        emailRedirectTo: window.location.origin + '/app.html'
                     }
                 });
 
@@ -505,32 +458,28 @@
                 if (data.user && !data.session) {
                     // Email confirmation required - show success message
                     document.getElementById('signupForm').style.display = 'none';
+                    document.querySelector('.auth-header').style.display = 'none';
+                    document.querySelector('.auth-footer').style.display = 'none';
+                    document.querySelector('.terms').style.display = 'none';
                     messageDiv.innerHTML = `
                         <div style="text-align: center;">
-                            <div style="font-size: 3rem; margin-bottom: 1rem;">📧</div>
-                            <h2 style="color: var(--primary); margin-bottom: 0.5rem;">Check Your Email!</h2>
-                            <p style="color: var(--gray-700); margin-bottom: 1rem;">
-                                We've sent a confirmation link to:<br>
-                                <strong>${email}</strong>
-                            </p>
-                            <p style="color: var(--gray-500); font-size: 0.875rem;">
-                                Click the link in the email to confirm your account and continue to payment.
-                            </p>
-                            <p style="color: var(--gray-500); font-size: 0.8rem; margin-top: 1rem;">
-                                Didn't receive it? Check your spam folder or <a href="#" onclick="location.reload()" style="color: var(--primary);">try again</a>.
+                            <h2 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.5rem;">Check Your Email!</h2>
+                            <p style="color: var(--gray-600);">
+                                We've sent a confirmation link to <strong>${email}</strong>
                             </p>
                         </div>
                     `;
                     messageDiv.className = 'message success show';
                     messageDiv.style.background = '#f0fdf4';
                     messageDiv.style.padding = '2rem';
+                    messageDiv.style.border = 'none';
                     return;
                 }
 
-                // If session exists (email confirmation not required), redirect to payment
-                showMessage('Account created! Redirecting to payment...', 'success');
+                // If session exists (email confirmation not required), redirect to app
+                showMessage('Account created! Redirecting...', 'success');
                 setTimeout(() => {
-                    window.location.href = '/payment.html';
+                    window.location.href = '/app.html';
                 }, 1500);
 
             } catch (error) {
