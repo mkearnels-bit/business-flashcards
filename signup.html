@@ -371,23 +371,11 @@
         const submitBtn = document.getElementById('submitBtn');
         const messageDiv = document.getElementById('message');
 
-        // Check if already logged in
+        // Check if already logged in - redirect to app
         async function checkAuth() {
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (session) {
-                // Check subscription status
-                const { data: subscription } = await supabaseClient
-                    .from('subscriptions')
-                    .select('*')
-                    .eq('user_id', session.user.id)
-                    .single();
-
-                if (subscription && new Date(subscription.expires_at) > new Date()) {
-                    window.location.href = '/app.html';
-                } else {
-                    // Redirect to app
-                    window.location.href = '/app.html';
-                }
+                window.location.href = '/app.html';
             }
         }
         checkAuth();

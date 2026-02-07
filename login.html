@@ -403,52 +403,7 @@
 
                 if (error) throw error;
 
-                console.log('Login successful, user ID:', data.user.id);
-
-                // Check if subscription is active - use limit(1) instead of single() for more lenient query
-                const { data: subscriptions, error: subError } = await supabaseClient
-                    .from('subscriptions')
-                    .select('*')
-                    .eq('user_id', data.user.id)
-                    .limit(1);
-
-                console.log('Subscription query result:', { subscriptions, subError });
-
-                if (subError) {
-                    console.error('Subscription query error:', subError);
-                    throw subError;
-                }
-
-                // Check if we have at least one subscription
-                const subscription = subscriptions && subscriptions.length > 0 ? subscriptions[0] : null;
-
-                if (!subscription) {
-                    // No subscription found - redirect to pricing
-                    console.log('No subscription found');
-                    showMessage('No active subscription found. Please subscribe to continue.', 'error');
-                    setTimeout(() => {
-                        window.location.href = '/#pricing';
-                    }, 2000);
-                    return;
-                }
-
-                // Check expiration
-                const expiresAt = new Date(subscription.expires_at);
-                const now = new Date();
-                console.log('Subscription expires:', expiresAt, 'Current time:', now);
-
-                if (expiresAt < now) {
-                    // Subscription expired - redirect to pricing
-                    console.log('Subscription expired');
-                    showMessage('Your subscription has expired. Please renew to continue.', 'error');
-                    setTimeout(() => {
-                        window.location.href = '/#pricing';
-                    }, 2000);
-                    return;
-                }
-
                 // Success - redirect to app
-                console.log('Subscription valid, redirecting to app');
                 showMessage('Login successful! Redirecting...', 'success');
                 setTimeout(() => {
                     window.location.href = '/app.html';
