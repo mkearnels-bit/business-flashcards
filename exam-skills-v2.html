@@ -168,10 +168,11 @@
             backdrop-filter: blur(4px);
             z-index: 1040;
             opacity: 0;
+            pointer-events: none;
             transition: opacity 0.3s ease;
         }
 
-        .mobile-menu-overlay.active { opacity: 1; }
+        .mobile-menu-overlay.active { opacity: 1; pointer-events: auto; }
 
         .mobile-menu {
             display: none;
@@ -724,6 +725,12 @@
 
         /* Mark Structures */
         .mark-structures-section { background: white; }
+
+        .short-form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
 
         .mark-grid {
             display: grid;
@@ -1576,6 +1583,12 @@
                 font-size: 0.85rem;
             }
 
+            /* Short Form Grid -> stack on mobile */
+            .short-form-grid {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+
             /* Level Descriptors / Mark Grid */
             .mark-grid {
                 gap: 0.75rem;
@@ -1801,6 +1814,73 @@
 
             .cta-section p {
                 font-size: 0.9rem;
+            }
+
+            /* Balance formula vertical stack */
+            .eval-formula {
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 1.25rem;
+            }
+
+            .eval-formula-item {
+                padding: 0.6rem 1.15rem;
+                font-size: 0.85rem;
+            }
+
+            .eval-formula-item.plus {
+                font-size: 1.25rem;
+            }
+
+            /* Eval sections */
+            .eval-section {
+                padding: 1.15rem;
+            }
+
+            .eval-section h3 {
+                font-size: 1rem;
+            }
+
+            .eval-section p {
+                font-size: 0.85rem;
+            }
+
+            /* Conclusion phrases */
+            .conclusion-phrases {
+                padding: 1rem;
+            }
+
+            .conclusion-phrases h4 {
+                font-size: 0.95rem;
+            }
+
+            .phrase-list {
+                gap: 0.5rem;
+            }
+
+            .phrase-tag {
+                padding: 0.4rem 0.75rem;
+                font-size: 0.8rem;
+            }
+
+            /* Reveal / Show Answers button */
+            .reveal-btn {
+                padding: 0.75rem;
+                font-size: 0.85rem;
+            }
+
+            /* Inline styled sections within short-form */
+            .short-form-section .question-item {
+                margin-bottom: 0.75rem;
+            }
+
+            /* General inline-styled containers */
+            [style*="padding: 1.5rem"] {
+                padding: 1rem !important;
+            }
+
+            [style*="font-size: 1.2rem"] {
+                font-size: 1rem !important;
             }
         }
     </style>
@@ -2236,7 +2316,7 @@
         <div style="margin-bottom: 2rem; background: var(--gray-50); border-radius: 16px; padding: 1.5rem; border-top: 4px solid var(--skill-knowledge);">
             <h4 style="color: var(--primary); margin-bottom: 0.5rem;">📋 How Short Form Questions Are Marked: Points-Based</h4>
             <p style="font-size: 0.9rem; color: var(--gray-600); margin-bottom: 1rem;">Unlike extended response questions (8+ marks) which use levels-based marking, short form questions award individual marks for specific components. You either earn each mark or you do not. There are no "best fit" judgements here.</p>
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+            <div class="short-form-grid">
                 <div style="background: rgba(52, 152, 219, 0.08); padding: 1.25rem; border-radius: 12px; border-left: 4px solid var(--skill-knowledge);">
                     <strong style="color: var(--skill-knowledge); font-size: 1rem;">2 Mark Questions (Define)</strong>
                     <p style="font-size: 0.85rem; margin-top: 0.5rem;"><strong>1 mark per component of the definition.</strong> A full definition has two parts. For example, "variable costs" needs: (1) costs that change + (2) when output changes. Giving an example alone does not earn marks.</p>
