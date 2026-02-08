@@ -2544,36 +2544,34 @@
                     </button>
                     <div class="answer-content" data-question-id="sf5">
                         <div class="answer-box weak">
-                            <div class="answer-label">❌ Weak Answer (1 mark)</div>
+                            <div class="answer-label">❌ Weak Answer (2 marks)</div>
                             <div style="background: white; border: 2px solid var(--gray-300); border-radius: 12px; padding: 1.5rem; margin: 1rem 0;">
                                 <svg viewBox="0 0 400 320" style="width: 100%; max-width: 400px; display: block; margin: 0 auto;">
                                     <!-- Axes -->
                                     <line x1="60" y1="20" x2="60" y2="260" stroke="#334155" stroke-width="2"/>
                                     <line x1="60" y1="260" x2="380" y2="260" stroke="#334155" stroke-width="2"/>
-                                    <!-- Incorrect Axis Labels -->
-                                    <text x="38" y="140" font-size="13" fill="#94a3b8" font-weight="600" transform="rotate(-90,38,140)">P</text>
-                                    <text x="220" y="290" font-size="13" fill="#94a3b8" font-weight="600" text-anchor="middle">QD</text>
+                                    <!-- Axis Labels (correct) -->
+                                    <text x="25" y="140" font-size="13" fill="#334155" font-weight="600" transform="rotate(-90,25,140)">Price</text>
+                                    <text x="220" y="290" font-size="13" fill="#334155" font-weight="600" text-anchor="middle">Quantity</text>
                                     <!-- Supply Curve (S) -->
                                     <line x1="80" y1="230" x2="340" y2="50" stroke="#3498db" stroke-width="2.5"/>
                                     <text x="345" y="48" font-size="13" fill="#3498db" font-weight="700">S</text>
-                                    <!-- Original Demand Curve (D) - no D1 label -->
+                                    <!-- Original Demand Curve (D1) -->
                                     <line x1="80" y1="50" x2="300" y2="230" stroke="#e74c3c" stroke-width="2.5"/>
-                                    <text x="305" y="233" font-size="13" fill="#e74c3c" font-weight="700">D</text>
+                                    <text x="305" y="233" font-size="13" fill="#e74c3c" font-weight="700">D1</text>
                                     <!-- WRONG: Demand shifted LEFT instead of right -->
-                                    <line x1="65" y1="30" x2="250" y2="230" stroke="#e74c3c" stroke-width="2.5" stroke-dasharray="8,4"/>
-                                    <!-- No label on shifted curve -->
-                                    <!-- No equilibrium points marked (E1 or E2) -->
+                                    <line x1="80" y1="100" x2="250" y2="230" stroke="#e74c3c" stroke-width="2.5" stroke-dasharray="8,4"/>
+                                    <text x="255" y="233" font-size="13" fill="#e74c3c" font-weight="700">D2</text>
+                                    <!-- No equilibrium points marked -->
                                     <!-- No P1/P2 or Q1/Q2 dotted lines -->
-                                    <!-- Red X annotations showing mistakes -->
-                                    <text x="100" y="50" font-size="22" fill="#ef4444" font-weight="700">X</text>
-                                    <text x="82" y="68" font-size="9" fill="#ef4444">Wrong direction</text>
-                                    <text x="178" y="160" font-size="22" fill="#ef4444" font-weight="700">X</text>
-                                    <text x="165" y="178" font-size="9" fill="#ef4444">No E1 or E2</text>
-                                    <text x="38" y="24" font-size="9" fill="#ef4444">Should be "Price"</text>
-                                    <text x="220" y="305" font-size="9" fill="#ef4444">Should be "Quantity"</text>
+                                    <!-- Red annotations showing mistakes -->
+                                    <rect x="120" y="95" width="120" height="22" rx="4" fill="#fef2f2" stroke="#ef4444" stroke-width="1"/>
+                                    <text x="180" y="111" font-size="10" fill="#ef4444" font-weight="600" text-anchor="middle">Shifted wrong way!</text>
+                                    <rect x="130" y="148" width="108" height="22" rx="4" fill="#fef2f2" stroke="#ef4444" stroke-width="1"/>
+                                    <text x="184" y="164" font-size="10" fill="#ef4444" font-weight="600" text-anchor="middle">No E1 or E2 shown</text>
                                 </svg>
                             </div>
-                            <p class="marks-estimate">1/4 marks. The student gets 1 mark for attempting a diagram with supply and demand curves, but makes several common mistakes: the axes are incorrectly labelled ("P" and "QD" instead of "Price" and "Quantity"), the demand curve is shifted left instead of right, the shifted curve is not labelled as D2, no equilibrium points (E1 or E2) are marked, and there are no dotted lines showing the change in price and quantity.</p>
+                            <p class="marks-estimate">2/4 marks. The student correctly draws and labels both curves (1K) and labels the axes as "Price" and "Quantity" (1K). However, the demand curve is shifted left (showing a decrease) instead of right (showing an increase), losing the application mark. No equilibrium points (E1 or E2) are marked and no dotted lines show the change in price and quantity, losing the analysis mark.</p>
                         </div>
                         <div class="answer-box model">
                             <div class="answer-label">✓ Model Answer (4/4)</div>
@@ -2621,16 +2619,16 @@
                                 </svg>
                             </div>
                             <p class="answer-text" style="margin-top: 1rem;">
-                                <span class="highlight k">[K: 1 mark] Correctly drawn diagram with axes labelled "Price" (vertical) and "Quantity" (horizontal), with both supply and demand curves.</span><br><br>
-                                <span class="highlight ap">[Ap: 1 mark] Original equilibrium (E1) shown at the intersection of D1 and S, with P1 and Q1 marked.</span><br><br>
-                                <span class="highlight ap">[Ap: 1 mark] Demand curve shifts right from D1 to D2, reflecting the growing trend of small businesses adopting digital tools, which increases demand for TechStart's subscriptions.</span><br><br>
-                                <span class="highlight an">[An: 1 mark] New equilibrium (E2) shown at the intersection of D2 and S. Price increases from P1 to P2 and quantity increases from Q1 to Q2.</span>
+                                <span class="highlight k">[K: 1 mark] Axes correctly labelled "Price" (vertical) and "Quantity" (horizontal).</span><br><br>
+                                <span class="highlight k">[K: 1 mark] Both supply (S) and demand (D1) curves correctly drawn and labelled.</span><br><br>
+                                <span class="highlight ap">[Ap: 1 mark] Demand curve shifts right from D1 to D2, correctly reflecting the growing trend of small businesses adopting digital tools, which increases demand for TechStart's subscriptions.</span><br><br>
+                                <span class="highlight an">[An: 1 mark] Original equilibrium (E1) and new equilibrium (E2) clearly shown with dotted lines indicating price increases from P1 to P2 and quantity increases from Q1 to Q2.</span>
                             </p>
-                            <p class="marks-estimate">✓ 4/4 marks. All four components present: labelled axes, original equilibrium, correct demand shift, and new equilibrium with price/quantity effects shown.</p>
+                            <p class="marks-estimate">✓ 4/4 marks. Remember the ACE rule: Axes labelled (1K), Curves drawn and labelled (1K), correct shift applied to context (1Ap), and Equilibrium points with price/quantity consequences shown (1An).</p>
                         </div>
                         <div class="structure-breakdown">
                             <h5>Tips for Demand and Supply diagram questions</h5>
-                            Remember: label axes as "Price" and "Quantity" only. Always draw the original equilibrium first, then show the shift. Label curves clearly (D1, D2 or S1, S2). Use dotted lines to show the old and new price/quantity levels. Only ONE curve shifts at a time. Make sure you can explain what happens to both price and quantity at the new equilibrium.
+                            Use the ACE rule to pick up all 4 marks: <strong>A</strong>xes labelled "Price" and "Quantity" (1K), <strong>C</strong>urves drawn and labelled correctly as D1, D2 or S1, S2 (1K), <strong>E</strong>quilibrium points E1 and E2 shown with dotted lines to the axes (1An). The remaining application mark (1Ap) comes from shifting the correct curve in the correct direction based on the scenario. Remember: only ONE curve shifts at a time, and a change in price causes movement along the curve, not a shift.
                         </div>
                     </div>
                 </div>
