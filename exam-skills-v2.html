@@ -1381,6 +1381,428 @@
                 grid-column: span 2;
             }
         }
+
+        /* ==================== MOBILE OPTIMISATION (480px and below) ==================== */
+        @media (max-width: 480px) {
+
+            /* Body offset for fixed header */
+            body {
+                padding-top: 62px;
+            }
+
+            /* Header tightening */
+            .app-header {
+                padding: 0.4rem 0.75rem;
+            }
+
+            .header-logo img {
+                height: 44px;
+            }
+
+            /* Hero Section */
+            .hero {
+                min-height: auto;
+                padding: 2.5rem 1.25rem 2rem;
+            }
+
+            .hero h1 {
+                font-size: 1.6rem;
+                line-height: 1.25;
+            }
+
+            .hero p {
+                font-size: 0.95rem;
+            }
+
+            .hero-badge {
+                font-size: 0.75rem;
+                padding: 0.4rem 0.75rem;
+                margin-bottom: 1rem;
+            }
+
+            /* Section spacing */
+            .section {
+                padding: 2rem 0.875rem;
+            }
+
+            .section-label {
+                font-size: 0.7rem;
+            }
+
+            .section-title {
+                font-size: 1.3rem;
+                line-height: 1.3;
+            }
+
+            .section-subtitle {
+                font-size: 0.875rem;
+            }
+
+            /* Skills Grid Cards */
+            .skills-grid {
+                gap: 0.75rem;
+            }
+
+            .skill-card {
+                padding: 1.15rem;
+            }
+
+            .skill-card .skill-icon {
+                width: 42px;
+                height: 42px;
+            }
+
+            .skill-card h3 {
+                font-size: 1rem;
+            }
+
+            .skill-card p {
+                font-size: 0.85rem;
+                line-height: 1.55;
+            }
+
+            /* Command Words Table -> Card Layout on Mobile */
+            .command-table {
+                margin-top: 1.25rem;
+            }
+
+            .command-table thead {
+                display: none;
+            }
+
+            .command-table tbody {
+                display: flex;
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .command-table tr {
+                display: flex;
+                flex-direction: column;
+                background: white;
+                border-radius: 12px;
+                padding: 1rem;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+                border: 1px solid var(--gray-100);
+            }
+
+            .command-table tr:hover {
+                background: white;
+            }
+
+            .command-table td {
+                padding: 0;
+                border-bottom: none;
+            }
+
+            .command-table td:first-child {
+                margin-bottom: 0.5rem;
+            }
+
+            .command-table td:nth-child(2) {
+                margin-bottom: 0.5rem;
+            }
+
+            .command-table td:last-child {
+                font-size: 0.85rem;
+                color: var(--gray-600);
+                line-height: 1.5;
+            }
+
+            .command-name {
+                font-size: 0.95rem;
+            }
+
+            .skill-dots {
+                gap: 0.35rem;
+            }
+
+            .skill-dot {
+                width: 22px;
+                height: 22px;
+                font-size: 0.65rem;
+            }
+
+            /* PBLI Framework */
+            .pbli-step {
+                gap: 0;
+            }
+
+            .pbli-letter {
+                padding: 0.65rem 1rem;
+                border-radius: 10px 10px 0 0;
+            }
+
+            .pbli-letter .letter {
+                font-size: 1.3rem;
+            }
+
+            .pbli-letter span {
+                font-size: 0.7rem;
+            }
+
+            .pbli-content {
+                padding: 0.875rem;
+            }
+
+            .pbli-content h4 {
+                font-size: 0.9rem;
+            }
+
+            .pbli-content p {
+                font-size: 0.85rem;
+            }
+
+            .pbli-example {
+                padding: 1rem;
+                font-size: 0.85rem;
+            }
+
+            /* Application Types / Skill Mapping Cards */
+            .app-types {
+                gap: 1rem;
+            }
+
+            .app-type-card {
+                padding: 1.15rem;
+            }
+
+            .app-type-card h4 {
+                font-size: 0.95rem;
+            }
+
+            .app-type-card p,
+            .app-type-card .example {
+                font-size: 0.85rem;
+            }
+
+            /* Level Descriptors / Mark Grid */
+            .mark-grid {
+                gap: 0.75rem;
+            }
+
+            .mark-card {
+                padding: 1.15rem;
+            }
+
+            .mark-badge {
+                font-size: 0.8rem;
+                padding: 0.35rem 0.75rem;
+            }
+
+            .mark-card h3 {
+                font-size: 1rem;
+            }
+
+            .mark-card p,
+            .mark-card ul {
+                font-size: 0.85rem;
+            }
+
+            .mark-card ul li {
+                padding-left: 1.15rem;
+            }
+
+            /* Para Flow Diagrams */
+            .para-flow {
+                gap: 0.3rem;
+                margin-top: 0.6rem;
+            }
+
+            .para-flow .para {
+                padding: 0.35rem 0.5rem;
+                font-size: 0.7rem;
+            }
+
+            .para-flow .para-arrow {
+                font-size: 0.65rem;
+            }
+
+            /* Conclusion Section */
+            .conclusion-container {
+                padding: 1.25rem;
+            }
+
+            .conclusion-steps {
+                gap: 0.75rem;
+                margin-bottom: 1.25rem;
+            }
+
+            .conclusion-step {
+                padding: 1rem;
+                text-align: left;
+                display: flex;
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
+
+            .step-number {
+                margin: 0;
+                flex-shrink: 0;
+                width: 32px;
+                height: 32px;
+                font-size: 0.85rem;
+            }
+
+            .conclusion-step h4 {
+                font-size: 0.95rem;
+                margin-bottom: 0.25rem;
+            }
+
+            .conclusion-step p {
+                font-size: 0.85rem;
+            }
+
+            /* MOPS Grid */
+            .mops-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.5rem;
+            }
+
+            .mops-item {
+                padding: 0.75rem 0.5rem;
+            }
+
+            .mops-item span {
+                font-size: 1.25rem;
+            }
+
+            .mops-item strong {
+                font-size: 0.8rem;
+            }
+
+            .mops-container {
+                padding: 1rem;
+            }
+
+            .mops-container h4 {
+                font-size: 1rem;
+            }
+
+            /* Case Study Section */
+            .case-selector {
+                gap: 0.5rem;
+            }
+
+            .case-tab {
+                padding: 0.6rem 1rem;
+                font-size: 0.8rem;
+            }
+
+            .case-header {
+                padding: 1.25rem;
+            }
+
+            .case-header h3 {
+                font-size: 1.15rem;
+            }
+
+            .case-header p {
+                font-size: 0.85rem;
+            }
+
+            /* Questions & Answers */
+            .questions-list {
+                padding: 1rem;
+            }
+
+            .question-item {
+                margin-bottom: 1rem;
+                border-radius: 12px;
+            }
+
+            .question-header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .question-text h4 {
+                font-size: 0.95rem;
+            }
+
+            .question-badges {
+                gap: 0.35rem;
+            }
+
+            .q-badge {
+                font-size: 0.65rem;
+                padding: 0.2rem 0.5rem;
+            }
+
+            /* Answer Areas */
+            .answer-content {
+                padding: 1rem;
+            }
+
+            .answer-box {
+                padding: 1rem;
+                border-radius: 10px;
+            }
+
+            .answer-label {
+                font-size: 0.7rem;
+            }
+
+            .answer-text {
+                font-size: 0.875rem;
+                line-height: 1.65;
+            }
+
+            .marks-estimate {
+                font-size: 0.8rem;
+                padding: 0.5rem 0.75rem;
+            }
+
+            .structure-breakdown {
+                padding: 0.75rem;
+                font-size: 0.8rem;
+            }
+
+            /* Highlighted text */
+            .highlight {
+                padding: 0.05rem 0.2rem;
+                border-radius: 3px;
+            }
+
+            /* Skill Filter Panel */
+            .skill-filter-panel {
+                padding: 0.75rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .skill-filter-title {
+                font-size: 0.8rem;
+            }
+
+            .skill-filter-hint {
+                font-size: 0.7rem;
+            }
+
+            .skill-toggle {
+                padding: 0.6rem 0.4rem;
+                font-size: 0.75rem;
+                border-radius: 8px;
+            }
+
+            .toggle-indicator {
+                width: 16px;
+                height: 16px;
+            }
+
+            /* CTA Section at bottom */
+            .cta-section {
+                padding: 2.5rem 1rem;
+            }
+
+            .cta-section h2 {
+                font-size: 1.4rem;
+            }
+
+            .cta-section p {
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 <body>
