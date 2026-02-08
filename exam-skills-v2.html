@@ -621,6 +621,41 @@
             font-weight: 600;
         }
 
+        .para-flow {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem;
+            margin-top: 0.75rem;
+            align-items: center;
+        }
+
+        .para-flow .para {
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .para-flow .para-pbli {
+            background: rgba(52, 152, 219, 0.15);
+            color: var(--primary);
+        }
+
+        .para-flow .para-however {
+            background: rgba(231, 76, 60, 0.12);
+            color: var(--error);
+        }
+
+        .para-flow .para-conclusion {
+            background: rgba(39, 174, 96, 0.15);
+            color: var(--success);
+        }
+
+        .para-flow .para-arrow {
+            font-size: 0.7rem;
+            color: var(--gray-400);
+        }
+
         /* Conclusions Section */
         .conclusions-section { background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%); color: white; }
         .conclusions-section .section-label { color: var(--accent-light); }
@@ -1859,10 +1894,19 @@
                 <span class="mark-badge">8 Marks</span>
                 <h4>Discuss</h4>
                 <ul>
-                    <li>2 × PBLI paragraphs with balance</li>
-                    <li>Each PBLI needs a "However" counter-argument</li>
+                    <li>4 paragraphs in total</li>
+                    <li>The "However" balance is a full PBLI paragraph that counters the point made in the PBLI before it</li>
                     <li>Both sides must be developed, not just stated</li>
                 </ul>
+                <div class="para-flow">
+                    <span class="para para-pbli">① PBLI</span>
+                    <span class="para-arrow">→</span>
+                    <span class="para para-however">② However PBLI</span>
+                    <span class="para-arrow">→</span>
+                    <span class="para para-pbli">③ PBLI</span>
+                    <span class="para-arrow">→</span>
+                    <span class="para para-however">④ However PBLI</span>
+                </div>
                 <div class="no-conclusion">❌ No conclusion needed at the end</div>
             </div>
 
@@ -1870,10 +1914,21 @@
                 <span class="mark-badge">10, 12, 20 Marks</span>
                 <h4>Evaluate / Assess / Recommend</h4>
                 <ul>
-                    <li>2+ PBLI paragraphs each with developed balance</li>
+                    <li>5 paragraphs in total (4 + conclusion)</li>
+                    <li>The "However" balance is a full PBLI paragraph that counters the point made in the PBLI before it</li>
                     <li>20-mark answers need more varied knowledge within each PBLI</li>
-                    <li>Weigh up competing arguments, do not just list them</li>
                 </ul>
+                <div class="para-flow">
+                    <span class="para para-pbli">① PBLI</span>
+                    <span class="para-arrow">→</span>
+                    <span class="para para-however">② However PBLI</span>
+                    <span class="para-arrow">→</span>
+                    <span class="para para-pbli">③ PBLI</span>
+                    <span class="para-arrow">→</span>
+                    <span class="para para-however">④ However PBLI</span>
+                    <span class="para-arrow">→</span>
+                    <span class="para para-conclusion">⑤ Conclusion</span>
+                </div>
                 <div class="need-conclusion">✓ Justified conclusion is ESSENTIAL</div>
             </div>
         </div>
