@@ -144,6 +144,164 @@
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
         }
 
+        .nav-contact {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 0.5rem 0;
+            position: relative;
+            transition: opacity 0.2s ease;
+        }
+
+        .nav-contact:hover {
+            opacity: 0.8;
+        }
+
+        .navbar.scrolled .nav-contact {
+            color: var(--primary);
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 44px;
+            height: 44px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1100;
+            position: relative;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--white);
+            border-radius: 2px;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: absolute;
+        }
+
+        .navbar.scrolled .hamburger span {
+            background: var(--primary);
+        }
+
+        .hamburger span:nth-child(1) { transform: translateY(-7px); }
+        .hamburger span:nth-child(2) { opacity: 1; }
+        .hamburger span:nth-child(3) { transform: translateY(7px); }
+
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg); }
+
+        .hamburger.active span {
+            background: var(--primary) !important;
+        }
+
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 1040;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .mobile-menu-overlay.active { opacity: 1; }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 280px;
+            height: 100%;
+            background: var(--white);
+            z-index: 1050;
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
+            padding: 5.5rem 1.5rem 2rem;
+        }
+
+        .mobile-menu.active { transform: translateX(0); }
+
+        .mobile-menu-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .mobile-menu-links a {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            padding: 0.875rem 1rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-links a .menu-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background: var(--gray-100);
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-links a .menu-icon svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--gray-500);
+            transition: stroke 0.2s ease;
+        }
+
+        .mobile-menu-links a:hover {
+            background: var(--gray-100);
+            color: var(--primary);
+        }
+
+        .mobile-menu-divider {
+            height: 1px;
+            background: var(--gray-100);
+            margin: 0.5rem 0;
+        }
+
+        .mobile-menu-links .btn-mobile-cta {
+            margin-top: 0.5rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            color: white;
+            justify-content: center;
+            font-weight: 700;
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+
+        .mobile-menu-links .btn-mobile-cta .menu-icon {
+            display: none;
+        }
+
+        .mobile-menu-links .btn-mobile-cta:hover {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            color: white;
+            transform: translateY(-1px);
+        }
+
         /* ==================== HERO SECTION ==================== */
         .hero {
             min-height: 100vh;
@@ -1953,8 +2111,24 @@
                 padding: 0.75rem 1rem;
             }
 
-            .nav-buttons .btn-ghost {
+            .nav-buttons {
                 display: none;
+            }
+
+            .nav-contact {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .mobile-menu-overlay {
+                display: block;
+            }
+
+            .mobile-menu {
+                display: block;
             }
 
             .hero {
@@ -2434,11 +2608,36 @@
                 <img src="logo.png" alt="MyBizStudies" class="logo">
             </a>
             <div class="nav-buttons">
+                <a href="contact.html" class="nav-contact">Contact Us</a>
                 <a href="login.html" class="btn btn-ghost">Log In</a>
                 <a href="signup.html" class="btn btn-primary">Get Started</a>
             </div>
+            <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu-overlay" id="mobileOverlay"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-links">
+            <a href="login.html">
+                <span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"/></svg></span>
+                Log In
+            </a>
+            <div class="mobile-menu-divider"></div>
+            <a href="contact.html">
+                <span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></span>
+                Contact Us
+            </a>
+            <a href="signup.html" class="btn-mobile-cta">
+                Get Started
+            </a>
+        </div>
+    </div>
 
     <!-- Hero Section -->
     <section class="hero">
@@ -2936,7 +3135,7 @@
                 <ul>
                     <li><a href="privacy.html">Privacy Policy</a></li>
                     <li><a href="terms.html">Terms of Service</a></li>
-                    <li><a href="mailto:hello@mybizstudies.com">Contact Us</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
                 </ul>
             </div>
         </div>
@@ -3088,6 +3287,21 @@
                 }, index * 150 + 100);
             });
         }, 200);
+
+        // Mobile hamburger menu
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+
+        function toggleMobileMenu() {
+            hamburgerBtn.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            mobileOverlay.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        }
+
+        hamburgerBtn.addEventListener('click', toggleMobileMenu);
+        mobileOverlay.addEventListener('click', toggleMobileMenu);
     </script>
 </body>
 </html>
