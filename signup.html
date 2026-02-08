@@ -176,20 +176,44 @@
             transform: none;
         }
 
-        .terms {
-            font-size: 0.8rem;
-            color: var(--gray-500);
-            text-align: center;
+        .terms-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
             margin-top: 1rem;
+            margin-bottom: 0.25rem;
         }
 
-        .terms a {
+        .terms-checkbox input[type="checkbox"] {
+            margin-top: 0.2rem;
+            width: 16px;
+            height: 16px;
+            accent-color: var(--primary);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .terms-checkbox label {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            cursor: pointer;
+            line-height: 1.5;
+        }
+
+        .terms-checkbox a {
             color: var(--primary);
             text-decoration: none;
         }
 
-        .terms a:hover {
+        .terms-checkbox a:hover {
             text-decoration: underline;
+        }
+
+        .terms-error {
+            font-size: 0.75rem;
+            color: var(--error);
+            margin-top: 0.25rem;
+            display: none;
         }
 
         .auth-footer {
@@ -339,9 +363,11 @@
                     <span class="btn-text">Create Account</span>
                 </button>
 
-                <p class="terms">
-                    By signing up, you agree to our <a href="/terms.html">Terms of Service</a> and <a href="/privacy.html">Privacy Policy</a>
-                </p>
+                <div class="terms-checkbox">
+                    <input type="checkbox" id="agreeTerms">
+                    <label for="agreeTerms">I agree to the <a href="terms.html" target="_blank">Terms of Service</a> and <a href="privacy.html" target="_blank">Privacy Policy</a></label>
+                </div>
+                <p class="terms-error" id="termsError">You must agree to the Terms of Service and Privacy Policy</p>
             </form>
 
             <div class="auth-footer">
@@ -407,6 +433,15 @@
                 return;
             }
 
+            // Validate terms checkbox
+            const agreeTerms = document.getElementById('agreeTerms');
+            const termsError = document.getElementById('termsError');
+            if (!agreeTerms.checked) {
+                termsError.style.display = 'block';
+                return;
+            }
+            termsError.style.display = 'none';
+
             // Show loading state
             submitBtn.classList.add('loading');
             submitBtn.disabled = true;
@@ -448,7 +483,8 @@
                     document.getElementById('signupForm').style.display = 'none';
                     document.querySelector('.auth-header').style.display = 'none';
                     document.querySelector('.auth-footer').style.display = 'none';
-                    document.querySelector('.terms').style.display = 'none';
+                    document.querySelector('.terms-checkbox').style.display = 'none';
+                    document.getElementById('termsError').style.display = 'none';
                     messageDiv.innerHTML = `
                         <div style="text-align: center;">
                             <h2 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.5rem;">Check Your Email!</h2>
