@@ -1338,6 +1338,23 @@
             box-shadow: 0 8px 30px var(--accent-glow);
         }
 
+        /* Justified prose text (desktop & tablet) */
+        .skill-card p,
+        .pbli-content p,
+        .pbli-example p,
+        .app-type-card p,
+        .analysis-type-card p,
+        .eval-type-card p,
+        .mark-card p,
+        .mark-card li,
+        .eval-section p,
+        .conclusion-step p,
+        .case-header p,
+        .answer-text,
+        .section-subtitle {
+            text-align: justify;
+        }
+
         /* Responsive */
         @media (max-width: 1024px) {
             .skills-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1881,6 +1898,23 @@
 
             [style*="font-size: 1.2rem"] {
                 font-size: 1rem !important;
+            }
+
+            /* Override justified text on mobile for readability */
+            .skill-card p,
+            .pbli-content p,
+            .pbli-example p,
+            .app-type-card p,
+            .analysis-type-card p,
+            .eval-type-card p,
+            .mark-card p,
+            .mark-card li,
+            .eval-section p,
+            .conclusion-step p,
+            .case-header p,
+            .answer-text,
+            .section-subtitle {
+                text-align: left;
             }
         }
     </style>
