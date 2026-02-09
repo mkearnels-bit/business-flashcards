@@ -1697,9 +1697,16 @@
                 // Store current user ID for progress tracking
                 currentUserId = session.user.id;
 
-                // Display user email in header
-                if (session.user.email) {
-                    document.getElementById('userEmail').textContent = session.user.email;
+                // Get user's name from Google OAuth metadata
+                const fullName = session.user.user_metadata?.full_name || session.user.user_metadata?.name || '';
+                const firstName = fullName ? fullName.split(' ')[0] : '';
+
+                // Display welcome message with first name (or email fallback)
+                const welcomeEl = document.getElementById('userEmail');
+                if (firstName) {
+                    welcomeEl.textContent = `Welcome, ${firstName}!`;
+                } else if (session.user.email) {
+                    welcomeEl.textContent = session.user.email;
                 }
 
                 // FIXED: Use limit(1) instead of single() for more lenient query
@@ -1727,6 +1734,7 @@
                         .insert({
                             user_id: session.user.id,
                             email: session.user.email,
+                            name: fullName,
                             plan: 'free',
                             status: 'active',
                             expires_at: expiresAt.toISOString()
@@ -1736,6 +1744,12 @@
                     } else {
                         console.log('Free subscription created successfully');
                     }
+                } else if (fullName && subscription.name !== fullName) {
+                    // Update name if it has changed or was not previously stored
+                    await supabaseClient
+                        .from('subscriptions')
+                        .update({ name: fullName })
+                        .eq('user_id', session.user.id);
                 }
 
                 // ========================================

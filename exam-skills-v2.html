@@ -3451,14 +3451,22 @@
                     window.location.href = 'login.html';
                     return;
                 }
-                if (session.user.email) {
-                    document.getElementById('userEmail').textContent = session.user.email;
+                // Get user's name from Google OAuth metadata
+                const fullName = session.user.user_metadata?.full_name || session.user.user_metadata?.name || '';
+                const firstName = fullName ? fullName.split(' ')[0] : '';
+
+                // Display welcome message with first name (or email fallback)
+                const welcomeEl = document.getElementById('userEmail');
+                if (firstName) {
+                    welcomeEl.textContent = `Welcome, ${firstName}!`;
+                } else if (session.user.email) {
+                    welcomeEl.textContent = session.user.email;
                 }
 
                 // Auto-create subscription if user doesn't have one yet
                 const { data: subs } = await supabaseClient
                     .from('subscriptions')
-                    .select('id')
+                    .select('id, name')
                     .eq('user_id', session.user.id)
                     .limit(1);
 
@@ -3470,10 +3478,17 @@
                         .insert({
                             user_id: session.user.id,
                             email: session.user.email,
+                            name: fullName,
                             plan: 'free',
                             status: 'active',
                             expires_at: expiresAt.toISOString()
                         });
+                } else if (fullName && subs[0].name !== fullName) {
+                    // Update name if changed or not previously stored
+                    await supabaseClient
+                        .from('subscriptions')
+                        .update({ name: fullName })
+                        .eq('user_id', session.user.id);
                 }
             } catch (error) {
                 console.error('Auth check error:', error);

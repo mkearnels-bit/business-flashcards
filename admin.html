@@ -863,7 +863,7 @@
                     <p class="page-subtitle">Manage registered users and their access.</p>
 
                     <div class="filters-bar">
-                        <input type="text" class="search-input" id="userSearch" placeholder="Search by email...">
+                        <input type="text" class="search-input" id="userSearch" placeholder="Search by name or email...">
                         <button class="btn btn-primary" id="exportUsersBtn">📥 Export Users</button>
                     </div>
 
@@ -875,7 +875,7 @@
                         <table class="data-table">
                             <thead>
                                 <tr>
-                                    <th>User</th>
+                                    <th>Name</th>
                                     <th>Email</th>
                                     <th>Plan</th>
                                     <th>Status</th>
@@ -1268,15 +1268,18 @@
                 return;
             }
 
-            container.innerHTML = users.map(user => `
+            container.innerHTML = users.map(user => {
+                const displayName = user.name || (user.email ? user.email.split('@')[0] : 'User');
+                const initial = (user.name || user.email || 'U')[0].toUpperCase();
+                return `
                 <li class="activity-item">
-                    <div class="user-avatar">${(user.email || 'U')[0].toUpperCase()}</div>
+                    <div class="user-avatar">${initial}</div>
                     <div class="activity-content">
-                        <div class="activity-text">${user.email || 'Unknown user'}</div>
-                        <div class="activity-time">${formatDate(user.created_at)}</div>
+                        <div class="activity-text">${displayName}</div>
+                        <div class="activity-time">${user.email || ''} &middot; ${formatDate(user.created_at)}</div>
                     </div>
                 </li>
-            `).join('');
+            `}).join('');
         }
 
         // Load Users
@@ -1313,6 +1316,8 @@
             }
 
             tbody.innerHTML = users.map(user => {
+                const displayName = user.name || (user.email ? user.email.split('@')[0] : 'User');
+                const initial = (user.name || user.email || 'U')[0].toUpperCase();
                 const planBadge = user.plan === 'free' ? 'badge-gray' :
                                   user.plan === 'yearly' ? 'badge-success' : 'badge-info';
                 const statusBadge = user.status === 'active' ? 'badge-success' :
@@ -1321,8 +1326,8 @@
                 <tr>
                     <td>
                         <div style="display: flex; align-items: center; gap: 0.75rem;">
-                            <div class="user-avatar">${(user.email || 'U')[0].toUpperCase()}</div>
-                            <span>${user.email ? user.email.split('@')[0] : 'User'}</span>
+                            <div class="user-avatar">${initial}</div>
+                            <span>${displayName}</span>
                         </div>
                     </td>
                     <td>${user.email || '-'}</td>
@@ -1332,17 +1337,18 @@
                     <td><span class="badge badge-info">${progressCounts[user.user_id] || 0} cards</span></td>
                     <td>
                         <button class="btn btn-ghost btn-sm" onclick="viewUser('${user.user_id}')">View</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteUser('${user.user_id}', '${(displayName).replace(/'/g, "\\'")}')" style="margin-left: 4px;">Delete</button>
                     </td>
                 </tr>
             `}).join('');
         }
 
-        // User search
+        // User search (by name or email)
         document.getElementById('userSearch').addEventListener('input', (e) => {
             const query = e.target.value.toLowerCase();
             const filtered = allUsers.filter(u =>
                 (u.email && u.email.toLowerCase().includes(query)) ||
-                (u.plan && u.plan.toLowerCase().includes(query))
+                (u.name && u.name.toLowerCase().includes(query))
             );
             renderUsers(filtered);
         });
@@ -1350,8 +1356,8 @@
         // Export Users
         document.getElementById('exportUsersBtn').addEventListener('click', () => {
             const csv = [
-                ['Email', 'Plan', 'Status', 'Created At', 'Expires At'],
-                ...allUsers.map(u => [u.email, u.plan || 'free', u.status || 'active', u.created_at, u.expires_at || ''])
+                ['Name', 'Email', 'Plan', 'Status', 'Created At', 'Expires At'],
+                ...allUsers.map(u => [u.name || '', u.email, u.plan || 'free', u.status || 'active', u.created_at, u.expires_at || ''])
             ].map(row => row.join(',')).join('\n');
 
             const blob = new Blob([csv], { type: 'text/csv' });
@@ -1363,6 +1369,38 @@
 
             showToast('Users exported successfully!', 'success');
         });
+
+        // Delete User
+        async function deleteUser(userId, displayName) {
+            if (!confirm(`Are you sure you want to delete ${displayName}? This will remove their subscription and all progress data. This cannot be undone.`)) {
+                return;
+            }
+
+            try {
+                // Delete progress data first
+                const { error: progressError } = await supabaseClient
+                    .from('card_progress')
+                    .delete()
+                    .eq('user_id', userId);
+
+                if (progressError) console.warn('Progress deletion warning:', progressError);
+
+                // Delete subscription
+                const { error: subError } = await supabaseClient
+                    .from('subscriptions')
+                    .delete()
+                    .eq('user_id', userId);
+
+                if (subError) throw subError;
+
+                showToast(`${displayName} has been deleted.`, 'success');
+                await loadUsers();
+                await loadDashboard();
+            } catch (error) {
+                console.error('Error deleting user:', error);
+                showToast('Error deleting user: ' + error.message, 'error');
+            }
+        }
 
         // Load Flashcards from Supabase
         async function loadFlashcards() {
@@ -1594,12 +1632,15 @@
             const statusBadge = user.status === 'active' ? 'badge-success' :
                                 user.status === 'expired' ? 'badge-danger' : 'badge-warning';
 
+            const displayName = user.name || (user.email ? user.email.split('@')[0] : 'User');
+            const initial = (user.name || user.email || 'U')[0].toUpperCase();
+
             document.getElementById('userModalBody').innerHTML = `
                 <div style="text-align: center; margin-bottom: 1.5rem;">
                     <div class="user-avatar" style="width: 64px; height: 64px; font-size: 1.5rem; margin: 0 auto 1rem;">
-                        ${(user.email || 'U')[0].toUpperCase()}
+                        ${initial}
                     </div>
-                    <h3 style="margin-bottom: 0.25rem;">${user.email ? user.email.split('@')[0] : 'User'}</h3>
+                    <h3 style="margin-bottom: 0.25rem;">${displayName}</h3>
                     <p style="color: var(--gray-500);">${user.email}</p>
                     <div style="margin-top: 0.5rem;">
                         <span class="badge ${planBadge}">${(user.plan || 'free').toUpperCase()}</span>
