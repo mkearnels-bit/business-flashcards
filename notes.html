@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Notes | MyBizStudies</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #1e3a5f;
+            --primary-dark: #152a45;
+            --primary-light: #2d5a8a;
+            --accent: #e67e22;
+            --accent-light: #f39c12;
+            --accent-glow: rgba(230, 126, 34, 0.3);
+            --secondary: #3498db;
+            --success: #27ae60;
+            --error: #e74c3c;
+            --dark: #0f172a;
+            --gray-900: #1e293b;
+            --gray-700: #334155;
+            --gray-500: #64748b;
+            --gray-300: #cbd5e1;
+            --gray-200: #e2e8f0;
+            --gray-100: #f1f5f9;
+            --gray-50: #f8fafc;
+            --white: #ffffff;
+            --unit1: #e74c3c;
+            --unit2: #3498db;
+            --unit3: #27ae60;
+            --unit4: #f39c12;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--gray-900);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background: var(--gray-50);
+        }
+
+        /* ==================== HEADER ==================== */
+        .app-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 0.75rem 2rem;
+            border-bottom: 1px solid var(--gray-100);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .header-logo img {
+            height: 65px;
+            width: auto;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            background: var(--gray-100);
+            border-radius: 10px;
+            padding: 0.25rem;
+        }
+
+        .header-nav a {
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            color: var(--gray-500);
+            transition: all 0.2s ease;
+        }
+
+        .header-nav a:hover {
+            color: var(--primary);
+            background: rgba(255,255,255,0.5);
+        }
+
+        .header-nav a.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-email {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+        }
+
+        .logout-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .logout-btn:hover {
+            background: #d35400;
+            transform: translateY(-1px);
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 44px;
+            height: 44px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1100;
+            position: relative;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--primary);
+            border-radius: 2px;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: absolute;
+        }
+
+        .hamburger span:nth-child(1) { transform: translateY(-7px); }
+        .hamburger span:nth-child(2) { opacity: 1; }
+        .hamburger span:nth-child(3) { transform: translateY(7px); }
+
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg); }
+
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 1040;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .mobile-menu-overlay.active { opacity: 1; pointer-events: auto; }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 280px;
+            height: 100%;
+            background: var(--white);
+            z-index: 1050;
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
+            padding: 5.5rem 1.5rem 2rem;
+        }
+
+        .mobile-menu.active { transform: translateX(0); }
+
+        .mobile-menu-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .mobile-menu-links a {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            padding: 0.875rem 1rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-links a .menu-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background: var(--gray-100);
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-links a .menu-icon svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--gray-500);
+            transition: stroke 0.2s ease;
+        }
+
+        .mobile-menu-links a:hover,
+        .mobile-menu-links a.active {
+            background: var(--gray-100);
+            color: var(--primary);
+        }
+
+        .mobile-menu-links a.active .menu-icon {
+            background: var(--primary);
+        }
+
+        .mobile-menu-links a.active .menu-icon svg {
+            stroke: white;
+        }
+
+        .mobile-menu-divider {
+            height: 1px;
+            background: var(--gray-100);
+            margin: 0.5rem 0;
+        }
+
+        .mobile-menu-logout { margin-top: 1rem; }
+
+        .mobile-menu-logout button {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            padding: 0.875rem 1rem;
+            border-radius: 12px;
+            border: none;
+            background: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--error);
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-logout button .menu-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background: rgba(231, 76, 60, 0.08);
+            flex-shrink: 0;
+        }
+
+        .mobile-menu-logout button .menu-icon svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--error);
+        }
+
+        .mobile-menu-logout button:hover {
+            background: rgba(231, 76, 60, 0.06);
+        }
+
+        /* ==================== HERO SECTION ==================== */
+        .notes-hero {
+            padding-top: 120px;
+            padding-bottom: 60px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 50%, #3a7bd5 100%);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .notes-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(230, 126, 34, 0.08) 0%, transparent 40%);
+            animation: subtleFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes subtleFloat {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-2%, -1%); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            color: rgba(255,255,255,0.95);
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-badge svg {
+            width: 14px;
+            height: 14px;
+            fill: var(--accent-light);
+        }
+
+        .notes-hero h1 {
+            font-size: 2.75rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1rem;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+        }
+
+        .notes-hero h1 span {
+            background: linear-gradient(135deg, var(--accent-light), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .notes-hero p {
+            font-size: 1.15rem;
+            color: rgba(255,255,255,0.85);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            line-height: 1.7;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-value {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+        }
+
+        .hero-stat-label {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.7);
+            font-weight: 500;
+        }
+
+        /* ==================== UNITS GRID ==================== */
+        .units-section {
+            max-width: 1200px;
+            margin: -40px auto 0;
+            padding: 0 2rem 4rem;
+            position: relative;
+            z-index: 3;
+        }
+
+        .units-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .unit-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .unit-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .unit-card-header {
+            padding: 1.75rem 2rem 1.25rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .unit-card-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .unit-card[data-unit="1"] .unit-card-header::before { background: var(--unit1); }
+        .unit-card[data-unit="2"] .unit-card-header::before { background: var(--unit2); }
+        .unit-card[data-unit="3"] .unit-card-header::before { background: var(--unit3); }
+        .unit-card[data-unit="4"] .unit-card-header::before { background: var(--unit4); }
+
+        .unit-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.75rem;
+        }
+
+        .unit-card[data-unit="1"] .unit-number { background: var(--unit1); }
+        .unit-card[data-unit="2"] .unit-number { background: var(--unit2); }
+        .unit-card[data-unit="3"] .unit-number { background: var(--unit3); }
+        .unit-card[data-unit="4"] .unit-number { background: var(--unit4); }
+
+        .unit-card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        .unit-card-subtitle {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            font-weight: 500;
+        }
+
+        .unit-card-body {
+            padding: 0 2rem 1.5rem;
+            flex: 1;
+        }
+
+        .topic-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .topic-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem 0.75rem;
+            border-radius: 10px;
+            background: var(--gray-50);
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--gray-700);
+            transition: all 0.2s ease;
+        }
+
+        .topic-list li:hover {
+            background: var(--gray-100);
+        }
+
+        .topic-list li .topic-number {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--gray-400);
+            min-width: 24px;
+        }
+
+        .topic-list li .topic-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .unit-card[data-unit="1"] .topic-icon { background: rgba(231, 76, 60, 0.1); }
+        .unit-card[data-unit="2"] .topic-icon { background: rgba(52, 152, 219, 0.1); }
+        .unit-card[data-unit="3"] .topic-icon { background: rgba(39, 174, 96, 0.1); }
+        .unit-card[data-unit="4"] .topic-icon { background: rgba(243, 156, 18, 0.1); }
+
+        .topic-icon svg {
+            width: 10px;
+            height: 10px;
+        }
+
+        .unit-card[data-unit="1"] .topic-icon svg { fill: var(--unit1); }
+        .unit-card[data-unit="2"] .topic-icon svg { fill: var(--unit2); }
+        .unit-card[data-unit="3"] .topic-icon svg { fill: var(--unit3); }
+        .unit-card[data-unit="4"] .topic-icon svg { fill: var(--unit4); }
+
+        .unit-card-footer {
+            padding: 1.25rem 2rem;
+            border-top: 1px solid var(--gray-100);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .topic-count {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            font-weight: 500;
+        }
+
+        .unit-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.25rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            color: white;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .unit-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .unit-btn svg {
+            width: 14px;
+            height: 14px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .unit-card[data-unit="1"] .unit-btn { background: var(--unit1); }
+        .unit-card[data-unit="2"] .unit-btn { background: var(--unit2); }
+        .unit-card[data-unit="3"] .unit-btn { background: var(--unit3); }
+        .unit-card[data-unit="4"] .unit-btn { background: var(--unit4); }
+
+        /* ==================== FEATURES SECTION ==================== */
+        .features-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 2rem 5rem;
+        }
+
+        .features-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .features-header h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 0.75rem;
+        }
+
+        .features-header p {
+            font-size: 1.05rem;
+            color: var(--gray-500);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.25rem;
+            font-size: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            font-size: 0.9rem;
+            color: var(--gray-500);
+            line-height: 1.6;
+        }
+
+        /* ==================== FOOTER ==================== */
+        .notes-footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid var(--gray-200);
+            font-size: 0.85rem;
+            color: var(--gray-500);
+        }
+
+        .notes-footer a {
+            color: var(--gray-500);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .notes-footer a:hover {
+            color: var(--primary);
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 1024px) {
+            .units-grid {
+                gap: 1.25rem;
+            }
+
+            .unit-card-header {
+                padding: 1.5rem 1.5rem 1rem;
+            }
+
+            .unit-card-body {
+                padding: 0 1.5rem 1.25rem;
+            }
+
+            .unit-card-footer {
+                padding: 1rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-nav { display: none; }
+            .header-right { display: none; }
+            .header-logo img { height: 50px; }
+            .hamburger { display: flex; }
+            .mobile-menu-overlay { display: block; }
+            .mobile-menu { display: block; }
+
+            .notes-hero {
+                padding-top: 100px;
+                padding-bottom: 50px;
+            }
+
+            .notes-hero h1 {
+                font-size: 2rem;
+            }
+
+            .notes-hero p {
+                font-size: 1rem;
+            }
+
+            .hero-stats {
+                gap: 1.5rem;
+            }
+
+            .units-section {
+                padding: 0 1rem 3rem;
+                margin-top: -30px;
+            }
+
+            .units-grid {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+                margin: 0 auto;
+            }
+
+            .features-section {
+                padding: 2rem 1rem 4rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+                margin: 0 auto;
+            }
+
+            .features-header h2 {
+                font-size: 1.6rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .notes-hero h1 {
+                font-size: 1.7rem;
+            }
+
+            .hero-stats {
+                gap: 1rem;
+            }
+
+            .hero-stat-value {
+                font-size: 1.25rem;
+            }
+
+            .unit-card-header {
+                padding: 1.25rem 1.25rem 1rem;
+            }
+
+            .unit-card-body {
+                padding: 0 1.25rem 1rem;
+            }
+
+            .unit-card-title {
+                font-size: 1.1rem;
+            }
+
+            .topic-list li {
+                padding: 0.5rem 0.6rem;
+                font-size: 0.82rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="app-header">
+        <a href="/" class="header-logo">
+            <img src="logo.png" alt="MyBizStudies.com">
+        </a>
+        <nav class="header-nav">
+            <a href="app.html">Flashcards</a>
+            <a href="exam-skills-v2.html">Exam Skills</a>
+            <a href="notes.html" class="active">Study Notes</a>
+            <a href="pricing.html">Pricing</a>
+        </nav>
+        <div class="header-right">
+            <span class="user-email" id="userEmail"></span>
+            <button class="logout-btn" id="logoutBtn" onclick="handleLogout()">Logout</button>
+        </div>
+        <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu-overlay" id="mobileOverlay" onclick="toggleMobileMenu()"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-links">
+            <a href="app.html">
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                </span>
+                Flashcards
+            </a>
+            <a href="exam-skills-v2.html">
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                </span>
+                Exam Skills
+            </a>
+            <a href="notes.html" class="active">
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                </span>
+                Study Notes
+            </a>
+            <a href="pricing.html">
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                </span>
+                Pricing
+            </a>
+        </div>
+        <div class="mobile-menu-divider"></div>
+        <div class="mobile-menu-logout">
+            <button onclick="handleLogout()">
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                </span>
+                Logout
+            </button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="notes-hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <svg viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+                Premium Study Notes
+            </div>
+            <h1>Everything You Need to <span>Ace Your Exams</span></h1>
+            <p>Comprehensive, interactive study notes covering every topic across all four units of Edexcel A Level Business Studies. Written in clear, simple language with interactive diagrams, real world examples, and built in quizzes.</p>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="hero-stat-value">22</span>
+                    <span class="hero-stat-label">Topics</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-value">4</span>
+                    <span class="hero-stat-label">Units</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-value">100%</span>
+                    <span class="hero-stat-label">Syllabus</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-value">50+</span>
+                    <span class="hero-stat-label">Interactive Diagrams</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Units Grid -->
+    <section class="units-section">
+        <div class="units-grid">
+            <!-- Unit 1 -->
+            <div class="unit-card" data-unit="1">
+                <div class="unit-card-header">
+                    <div class="unit-number">U1</div>
+                    <h2 class="unit-card-title">Marketing and People</h2>
+                    <p class="unit-card-subtitle">Understanding markets, customers, and managing teams</p>
+                </div>
+                <div class="unit-card-body">
+                    <ul class="topic-list">
+                        <li>
+                            <span class="topic-icon"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg></span>
+                            <span>1.1 Meeting Customer Needs</span>
+                        </li>
+                        <li>
+                            <span class="topic-icon"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg></span>
+                            <span>1.2 Market Research</span>
+                        </li>
+                        <li>
+                            <span class="topic-icon"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg></span>
+                            <span>1.3 Market Positioning</span>
+                        </li>
+                        <li>
+                            <span class="topic-icon"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg></span>
+                            <span>1.4 Demand</span>
+                        </li>
+                        <li>
+                            <span class="topic-icon"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg></span>
+                            <span>1.5 Marketing Mix and Strategy</span>
+                        </li>
+                        <li>
+                            <span class="topic-icon"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg></span>
+                            <span>1.6 Managing People</span>
+                        </li>
+                        <li>
+                            <span class="topic-icon"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg></span>
+                            <span>1.7 Entrepreneurs and Leaders</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="unit-card-footer">
+                    <span class="topic-count">7 topics</span>
+                    <a href="notes-unit1.html" class="unit-btn">
+                        Start Learning
+                        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Unit 2 -->
+            <div class="unit-card" data-unit="2">
+                <div class="unit-card-header">
+                    <div class="unit-number">U2</div>
+                    <h2 class="unit-card-title">Managing Business Activities</h2>
+                    <p class="unit-card-subtitle">Finance, operations, and the external environment</p>
+                </div>
+                <div class="unit-card-body">
+                    <ul class="topic-list">
+                        <li>
+                            <span class="topic-icon"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg></span>
+                            <span>2.1 Raising Finance</span>
+                        </li>
+                        <li>
+                            <span class="topic-icon"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg></span>
+                            <span>2.2 Financial Planning</span>
+                        </li>
+                        <li>
+                            <span class="topic-icon"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg></span>
+                            <span>2.3 Managing Finance</span>
+                        </li>
+                        <li>
+                            <span class="topic-icon"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg></span>
+                            <span>2.4 Resource Management</span>
+                        </li>
+                        <li>
+                            <span class="topic-icon"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg></span>
+                            <span>2.5 External Influences</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="unit-card-footer">
+                    <span class="topic-count">5 topics</span>
+                    <a href="notes-unit2.html" class="unit-btn">
+                        Start Learning
+                        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Unit 3 -->
+            <div class="unit-card" data-unit="3">
+                <div class="unit-card-header">
+                    <div class="unit-number">U3</div>
+                    <h2 class="unit-card-title">Business Decisions and Strategy</h2>
+                    <p class="unit-card-subtitle">Strategic thinking, growth, and decision making</p>
+                </div>
+                <div class="unit-card-body">
+                    <ul class="topic-list">
+                        <li>
+                            <span class="topic-icon"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg></span>
+                            <span>3.1 Business Objectives and Strategy</span>
+                        </li>
+                        <li>
+                            <span class="topic-icon"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg></span>
+                            <span>3.2 Business Growth</span>
+                        </li>
+                        <li>
+                            <span class="topic-icon"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg></span>
+                            <span>3.3 Decision Making Techniques</span>
+                        </li>
+                        <li>
+                            <span class="topic-icon"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg></span>
+                            <span>3.4 Influences on Business Decisions</span>
+                        </li>
+                        <li>
+                            <span class="topic-icon"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg></span>
+                            <span>3.5 Assessing Competitiveness</span>
+                        </li>
+                        <li>
+                            <span class="topic-icon"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg></span>
+                            <span>3.6 Managing Change</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="unit-card-footer">
+                    <span class="topic-count">6 topics</span>
+                    <a href="notes-unit3.html" class="unit-btn">
+                        Start Learning
+                        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Unit 4 -->
+            <div class="unit-card" data-unit="4">
+                <div class="unit-card-header">
+                    <div class="unit-number">U4</div>
+                    <h2 class="unit-card-title">Global Business</h2>
+                    <p class="unit-card-subtitle">International trade, globalisation, and multinational companies</p>
+                </div>
+                <div class="unit-card-body">
+                    <ul class="topic-list">
+                        <li>
+                            <span class="topic-icon"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg></span>
+                            <span>4.1 Globalisation</span>
+                        </li>
+                        <li>
+                            <span class="topic-icon"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg></span>
+                            <span>4.2 Global Markets and Business Expansion</span>
+                        </li>
+                        <li>
+                            <span class="topic-icon"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg></span>
+                            <span>4.3 Global Marketing</span>
+                        </li>
+                        <li>
+                            <span class="topic-icon"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg></span>
+                            <span>4.4 Global Industries and Companies (MNCs)</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="unit-card-footer">
+                    <span class="topic-count">4 topics</span>
+                    <a href="notes-unit4.html" class="unit-btn">
+                        Start Learning
+                        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What Makes These Notes Special -->
+    <section class="features-section">
+        <div class="features-header">
+            <h2>More Than Just Notes</h2>
+            <p>Interactive tools and features designed to help you truly understand every concept, not just memorise it.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon" style="background: rgba(52, 152, 219, 0.1);">
+                    <span>📊</span>
+                </div>
+                <h3>Interactive Diagrams</h3>
+                <p>Drag demand curves, build break even charts, explore the Boston Matrix, and interact with over 50 dynamic diagrams that bring theory to life.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background: rgba(155, 89, 182, 0.1);">
+                    <span>🔢</span>
+                </div>
+                <h3>Formula Calculators</h3>
+                <p>Input your own numbers into PED, break even, ratios, and more. See the formulas work in real time with step by step worked examples.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background: rgba(39, 174, 96, 0.1);">
+                    <span>✅</span>
+                </div>
+                <h3>Knowledge Checks</h3>
+                <p>Test yourself with quick multiple choice quizzes at the end of every topic. Get instant feedback and explanations for every answer.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background: rgba(230, 126, 34, 0.1);">
+                    <span>🏢</span>
+                </div>
+                <h3>Real World Examples</h3>
+                <p>Every concept is linked to real businesses like Apple, Tesla, and Amazon so you can see how theory works in practice.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background: rgba(231, 76, 60, 0.1);">
+                    <span>📌</span>
+                </div>
+                <h3>Key Term Definitions</h3>
+                <p>Every important term is highlighted and defined in a clear, exam ready format so you always know exactly what concepts mean.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background: rgba(52, 73, 94, 0.1);">
+                    <span>💡</span>
+                </div>
+                <h3>Exam Tips</h3>
+                <p>Insider advice on what examiners look for, common mistakes to avoid, and how to structure your answers for maximum marks.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="notes-footer">
+        <p>&copy; 2026 MyBizStudies. All rights reserved. &nbsp; <a href="privacy.html">Privacy Policy</a> &nbsp; | &nbsp; <a href="terms.html">Terms of Service</a> &nbsp; | &nbsp; <a href="contact.html">Contact Us</a></p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Supabase setup
+        const supabaseUrl = 'https://kxfcnbgpyqwxatawvuty.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt4ZmNuYmdweXF3eGF0YXd2dXR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIzMjI2MDAsImV4cCI6MjA1Nzg5ODYwMH0.YOqSBe4IkBjmnAikPNoHbrpkEqGPPFR0hfONsTDnj7s';
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // Check auth state
+        async function checkAuth() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (session) {
+                const fullName = session.user.user_metadata?.full_name || session.user.user_metadata?.name || '';
+                const firstName = fullName ? fullName.split(' ')[0] : '';
+                const welcomeEl = document.getElementById('userEmail');
+                if (firstName) {
+                    welcomeEl.textContent = 'Welcome, ' + firstName + '!';
+                } else {
+                    welcomeEl.textContent = session.user.email;
+                }
+            }
+        }
+
+        checkAuth();
+
+        // Logout
+        async function handleLogout() {
+            await supabaseClient.auth.signOut();
+            window.location.href = 'login.html';
+        }
+
+        // Mobile menu
+        function toggleMobileMenu() {
+            document.getElementById('hamburger').classList.toggle('active');
+            document.getElementById('mobileMenu').classList.toggle('active');
+            document.getElementById('mobileOverlay').classList.toggle('active');
+            document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('active') ? 'hidden' : '';
+        }
+    </script>
+</body>
+</html>
