@@ -3,18 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
     <title>About Us | MyBizStudies</title>
-<meta name="description" content="About MyBizStudies. Built by an experienced teacher with over 20 years in the classroom. Interactive revision for Edexcel IAL Business Studies.">
-<meta name="keywords" content="A-Level Business Studies, Edexcel IAL, revision notes, flashcards, exam technique, GCSE Business">
-<link rel="canonical" href="https://mybizstudies.com/about.html">
-<meta property="og:title" content="About Us | MyBizStudies">
-<meta property="og:description" content="About MyBizStudies. Built by an experienced teacher with over 20 years in the classroom. Interactive revision for Edexcel IAL Business Studies.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://mybizstudies.com/about.html">
-<meta property="og:site_name" content="MyBizStudies">
+    <meta name="description" content="About MyBizStudies. Built by an experienced teacher with over 20 years in the classroom. Interactive revision for Edexcel IAL Business Studies.">
+    <meta name="keywords" content="A-Level Business Studies, Edexcel IAL, revision notes, flashcards, exam technique, GCSE Business">
+    <link rel="canonical" href="https://mybizstudies.com/about.html">
+    <meta property="og:title" content="About Us | MyBizStudies">
+    <meta property="og:description" content="About MyBizStudies. Built by an experienced teacher with over 20 years in the classroom. Interactive revision for Edexcel IAL Business Studies.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mybizstudies.com/about.html">
+    <meta property="og:site_name" content="MyBizStudies">
+    <meta property="og:image" content="https://mybizstudies.com/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://mybizstudies.com/og-image.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -39,14 +45,15 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--gray-50);
+            background: var(--white);
             color: var(--gray-900);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            overflow-x: hidden;
         }
 
-        /* Header */
+        /* ==================== HEADER ==================== */
         .page-header {
             background: var(--white);
             border-bottom: 1px solid var(--gray-100);
@@ -63,9 +70,7 @@
             text-decoration: none;
         }
 
-        .page-header img {
-            height: 55px;
-        }
+        .page-header img { height: 55px; }
 
         .header-nav {
             display: flex;
@@ -91,12 +96,6 @@
             background: rgba(255,255,255,0.5);
         }
 
-        .header-nav a.active {
-            background: white;
-            color: var(--primary);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-        }
-
         .back-link {
             color: var(--primary);
             text-decoration: none;
@@ -105,11 +104,9 @@
             transition: color 0.2s;
         }
 
-        .back-link:hover {
-            color: var(--accent);
-        }
+        .back-link:hover { color: var(--accent); }
 
-        /* Hamburger Menu */
+        /* Hamburger */
         .hamburger {
             display: none;
             flex-direction: column;
@@ -218,13 +215,8 @@
             color: var(--primary);
         }
 
-        .mobile-menu-links a.active .menu-icon {
-            background: var(--primary);
-        }
-
-        .mobile-menu-links a.active .menu-icon svg {
-            stroke: white;
-        }
+        .mobile-menu-links a.active .menu-icon { background: var(--primary); }
+        .mobile-menu-links a.active .menu-icon svg { stroke: white; }
 
         .mobile-menu-divider {
             height: 1px;
@@ -242,144 +234,493 @@
             .mobile-menu { display: block; }
         }
 
-        /* Hero */
+        /* ==================== HERO ==================== */
         .about-hero {
-            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 40%, var(--primary-light) 100%);
             color: white;
+            padding: 5rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
             text-align: center;
-            padding: 3rem 2rem;
+        }
+
+        .about-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(230, 126, 34, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .about-hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(52, 152, 219, 0.12) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero-inner {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            letter-spacing: 0.3px;
+        }
+
+        .hero-badge-dot {
+            width: 7px;
+            height: 7px;
+            background: var(--accent);
+            border-radius: 50%;
         }
 
         .about-hero h1 {
-            font-size: 2rem;
+            font-size: 2.75rem;
             font-weight: 800;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
         }
 
-        .about-hero p {
-            font-size: 1rem;
+        .about-hero h1 span {
+            background: linear-gradient(135deg, var(--accent-light) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .about-hero .subtitle {
+            font-size: 1.15rem;
             opacity: 0.85;
+            line-height: 1.7;
+            max-width: 580px;
+            margin: 0 auto;
+        }
+
+        /* ==================== STORY SECTION ==================== */
+        .story-section {
+            padding: 5rem 2rem;
+            background: var(--white);
+        }
+
+        .story-content {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .story-text h2 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+        }
+
+        .story-text p {
+            font-size: 1rem;
+            color: var(--gray-700);
+            line-height: 1.75;
+            text-align: left;
+            margin-bottom: 1.25rem;
+        }
+
+        .story-visual {
+            position: relative;
+        }
+
+        .story-card {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            border-radius: 20px;
+            padding: 2.5rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-card::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            width: 150px;
+            height: 150px;
+            background: rgba(230, 126, 34, 0.15);
+            border-radius: 50%;
+        }
+
+        .story-card-quote {
+            font-size: 2.5rem;
+            color: var(--accent);
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .story-card p {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+            font-style: italic;
+        }
+
+        .story-card-author {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            font-size: 0.85rem;
+            font-weight: 600;
+            opacity: 0.8;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ==================== CREDENTIALS ==================== */
+        .credentials-section {
+            padding: 5rem 2rem;
+            background: var(--gray-50);
+        }
+
+        .credentials-inner {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .credentials-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .credentials-header h2 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.01em;
+        }
+
+        .credentials-header p {
+            font-size: 1rem;
+            color: var(--gray-500);
             max-width: 500px;
             margin: 0 auto;
         }
 
-        /* Main Content */
-        .about-container {
-            max-width: 700px;
-            margin: -2rem auto 3rem;
-            padding: 0 1.5rem;
-            width: 100%;
-            flex: 1;
+        .credentials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
         }
 
-        .about-card {
+        .credential-card {
             background: var(--white);
             border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-            padding: 2.5rem;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.04);
         }
 
-        /* Section Styling */
-        .about-section {
-            margin-bottom: 2.5rem;
+        .credential-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
         }
 
-        .about-section:last-child {
-            margin-bottom: 0;
+        .credential-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.25rem;
         }
 
-        .about-section h2 {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 1rem;
+        .credential-icon svg {
+            width: 28px;
+            height: 28px;
+            stroke-width: 2;
         }
 
-        .about-section p {
-            font-size: 0.95rem;
-            color: var(--gray-700);
-            line-height: 1.6;
-            text-align: left;
-            margin-bottom: 0.75rem;
+        .credential-icon.navy {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
         }
 
-        .about-section ul {
-            list-style: none;
-            margin-left: 0;
-            padding-left: 0;
+        .credential-icon.orange {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
         }
 
-        .about-section li {
-            font-size: 0.95rem;
-            color: var(--gray-700);
-            line-height: 1.6;
-            text-align: left;
-            margin-bottom: 0.5rem;
-            padding-left: 1.5rem;
-            position: relative;
+        .credential-icon.green {
+            background: linear-gradient(135deg, var(--success), #2ecc71);
         }
 
-        .about-section li:before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 0.6rem;
-            width: 6px;
-            height: 6px;
-            background: var(--primary);
-            border-radius: 50%;
+        .credential-icon.blue {
+            background: linear-gradient(135deg, var(--secondary), #5dade2);
         }
 
-        /* Feature Grid */
-        .feature-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 1rem;
-            margin-top: 1.5rem;
+        .credential-icon.purple {
+            background: linear-gradient(135deg, #9b59b6, #a569bd);
         }
 
-        .feature-card {
-            background: linear-gradient(135deg, rgba(30, 58, 95, 0.05) 0%, rgba(230, 126, 34, 0.05) 100%);
-            border: 2px solid var(--gray-100);
-            border-radius: 12px;
-            padding: 1.25rem;
-            text-align: left;
-            transition: all 0.2s ease;
+        .credential-icon.teal {
+            background: linear-gradient(135deg, #17a2b8, #20c997);
         }
 
-        .feature-card:hover {
-            border-color: var(--primary);
-            box-shadow: 0 4px 16px rgba(30, 58, 95, 0.1);
+        .credential-icon svg {
+            stroke: white;
+            fill: none;
         }
 
-        .feature-card h3 {
+        .credential-card h3 {
             font-size: 1rem;
             font-weight: 700;
             color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .credential-card p {
+            font-size: 0.88rem;
+            color: var(--gray-500);
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        /* ==================== RESULTS BANNER ==================== */
+        .results-banner {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            padding: 3.5rem 2rem;
+            text-align: center;
+            color: white;
+        }
+
+        .results-inner {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .results-inner h2 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: -0.01em;
+        }
+
+        .results-inner p {
+            font-size: 1.05rem;
+            opacity: 0.85;
+            line-height: 1.7;
+            max-width: 650px;
+            margin: 0 auto 2rem;
+        }
+
+        .results-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3.5rem;
+            flex-wrap: wrap;
+        }
+
+        .results-stat {
+            text-align: center;
+        }
+
+        .results-stat-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            display: block;
+            background: linear-gradient(135deg, var(--accent-light) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+
+        .results-stat-label {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            font-weight: 500;
+            margin-top: 0.25rem;
+        }
+
+        /* ==================== WHY DIFFERENT ==================== */
+        .different-section {
+            padding: 5rem 2rem;
+            background: var(--white);
+        }
+
+        .different-inner {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .different-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .different-header h2 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.01em;
+        }
+
+        .different-header p {
+            font-size: 1rem;
+            color: var(--gray-500);
+        }
+
+        .different-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .different-card {
+            background: var(--gray-50);
+            border-radius: 16px;
+            padding: 2rem 1.5rem;
+            border: 1px solid var(--gray-100);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .different-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .different-card:nth-child(1)::before { background: linear-gradient(90deg, var(--accent), var(--accent-light)); }
+        .different-card:nth-child(2)::before { background: linear-gradient(90deg, var(--success), #2ecc71); }
+        .different-card:nth-child(3)::before { background: linear-gradient(90deg, var(--secondary), #5dade2); }
+
+        .different-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+            border-color: transparent;
+        }
+
+        .different-card h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
             margin-bottom: 0.75rem;
         }
 
-        .feature-card p {
-            font-size: 0.85rem;
+        .different-card p {
+            font-size: 0.92rem;
             color: var(--gray-700);
-            line-height: 1.5;
+            line-height: 1.65;
             text-align: left;
-            margin: 0;
         }
 
-        /* Section Divider */
-        .section-divider {
-            height: 1px;
-            background: var(--gray-100);
-            margin: 2rem 0;
-            display: none;
+        /* ==================== CTA ==================== */
+        .about-cta {
+            padding: 5rem 2rem;
+            background: var(--gray-50);
+            text-align: center;
         }
 
-        .about-section:not(:last-child) .section-divider {
-            display: block;
+        .about-cta-inner {
+            max-width: 600px;
+            margin: 0 auto;
         }
 
-        /* Footer */
+        .about-cta h2 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            letter-spacing: -0.01em;
+        }
+
+        .about-cta p {
+            font-size: 1rem;
+            color: var(--gray-500);
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.85rem 2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(230, 126, 34, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* ==================== FOOTER ==================== */
         .page-footer {
             background: var(--dark);
             color: rgba(255, 255, 255, 0.6);
@@ -394,46 +735,86 @@
             text-decoration: none;
         }
 
-        .page-footer a:hover {
-            color: var(--accent);
+        .page-footer a:hover { color: var(--accent); }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 960px) {
+            .story-content {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+
+            .story-visual {
+                order: -1;
+            }
         }
 
-        /* Responsive */
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
+            .about-hero {
+                padding: 3.5rem 1.5rem 3rem;
+            }
+
             .about-hero h1 {
-                font-size: 1.5rem;
+                font-size: 2rem;
             }
 
-            .about-card {
-                padding: 1.5rem;
+            .credentials-grid {
+                grid-template-columns: 1fr 1fr;
             }
 
-            .feature-grid {
+            .different-grid {
                 grid-template-columns: 1fr;
             }
 
-            .about-section h2 {
-                font-size: 1.1rem;
+            .results-stats {
+                gap: 2rem;
+            }
+
+            .results-stat-value {
+                font-size: 2rem;
             }
         }
-    
-@media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-    }
-}
-</style>
-<!-- Google Analytics - Replace GA_MEASUREMENT_ID with your actual ID -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'GA_MEASUREMENT_ID');
-</script>
+
+        @media (max-width: 600px) {
+            .about-hero h1 {
+                font-size: 1.65rem;
+            }
+
+            .about-hero .subtitle {
+                font-size: 1rem;
+            }
+
+            .credentials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .story-card {
+                padding: 1.75rem;
+            }
+
+            .results-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+    <!-- Google Analytics - Replace GA_MEASUREMENT_ID with your actual ID -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
 </head>
 <body>
 
@@ -477,58 +858,159 @@
         </div>
     </div>
 
-    <div class="about-hero">
-        <h1>About MyBizStudies</h1>
-        <p>Built by an experienced teacher who understands what students really need to succeed.</p>
-    </div>
-
-    <div class="about-container">
-        <div class="about-card">
-
-            <div class="about-section">
-                <h2>Our Mission</h2>
-                <p>MyBizStudies was created because students deserve revision resources that work the way they actually learn. Textbooks are packed with unnecessary information, static diagrams that do not show how concepts interact, and exam technique is barely covered. We built an interactive platform where students can see graphs move, learn from real world examples, and develop a framework for writing exam answers that score full marks.</p>
+    <!-- ==================== HERO ==================== -->
+    <section class="about-hero">
+        <div class="hero-inner">
+            <div class="hero-badge">
+                <span class="hero-badge-dot"></span>
+                Teacher Built Platform
             </div>
+            <h1>Built by a Teacher<br>Who Gets <span>Results</span></h1>
+            <p class="subtitle">With over 20 years in the classroom and a track record of students achieving top grades, MyBizStudies was created to give every student the tools they need to succeed.</p>
+        </div>
+    </section>
 
-            <div class="about-section">
-                <h2>Meet the Teacher</h2>
-                <ul>
-                    <li>Over 20 years of classroom experience teaching Business Studies</li>
-                    <li>Taught across multiple exam boards including AQA, Edexcel, CIE, and OCR</li>
-                    <li>BCom Accounting degree and PGCE qualified</li>
-                    <li>Unique perspective from growing up helping others market their businesses and helping parents run theirs</li>
-                    <li>Passionate about making Business Studies accessible and practical, not just theoretical</li>
-                </ul>
+    <!-- ==================== STORY ==================== -->
+    <section class="story-section">
+        <div class="story-content">
+            <div class="story-text">
+                <h2>Why I Built MyBizStudies</h2>
+                <p>After two decades of teaching Business Studies, I kept seeing the same problem. Students were drowning in textbook content that was either too dense, too theoretical, or completely disconnected from how exam answers actually need to be structured.</p>
+                <p>I grew up helping my parents run their business and spent years helping others market theirs. That practical experience taught me that Business Studies should feel real, not like memorising a textbook.</p>
+                <p>So I built MyBizStudies. An interactive platform where graphs actually move, concepts come alive through real world examples, and students learn a proven framework for writing answers that score full marks. No fluff. No unnecessary information. Just everything you need, mapped directly to the Edexcel IAL specification.</p>
             </div>
-
-            <div class="about-section">
-                <h2>Why We Are Different</h2>
-                <p>Three key differentiators that set MyBizStudies apart:</p>
-                <div class="feature-grid">
-                    <div class="feature-card">
-                        <h3>Interactive Learning</h3>
-                        <p>Students can see how graphs move and interact with concepts, not just read about them</p>
-                    </div>
-                    <div class="feature-card">
-                        <h3>Exam Technique Focus</h3>
-                        <p>A structured framework that teaches students exactly how to build answers that score full marks</p>
-                    </div>
-                    <div class="feature-card">
-                        <h3>No Fluff</h3>
-                        <p>Only the content students need, mapped directly to the Edexcel IAL specification</p>
-                    </div>
+            <div class="story-visual">
+                <div class="story-card">
+                    <div class="story-card-quote">"</div>
+                    <p>I knew that students struggled most with exam technique. They understood the content but could not translate that knowledge into answers that earned marks. That gap is exactly what MyBizStudies was designed to close.</p>
+                    <div class="story-card-author">Founder, MyBizStudies</div>
                 </div>
             </div>
-
         </div>
-    </div>
+    </section>
 
+    <!-- ==================== CREDENTIALS ==================== -->
+    <section class="credentials-section">
+        <div class="credentials-inner">
+            <div class="credentials-header">
+                <h2>Teaching Experience You Can Trust</h2>
+                <p>Every resource on MyBizStudies is informed by real classroom experience.</p>
+            </div>
+            <div class="credentials-grid">
+                <div class="credential-card">
+                    <div class="credential-icon navy">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5"/></svg>
+                    </div>
+                    <h3>20+ Years Teaching</h3>
+                    <p>Over two decades of dedicated classroom experience in Business Studies education</p>
+                </div>
+                <div class="credential-card">
+                    <div class="credential-icon orange">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z"/></svg>
+                    </div>
+                    <h3>Multiple Exam Boards</h3>
+                    <p>Taught AQA, Edexcel, CIE, and OCR so I understand what examiners across all boards are looking for</p>
+                </div>
+                <div class="credential-card">
+                    <div class="credential-icon green">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"/></svg>
+                    </div>
+                    <h3>Proven Results</h3>
+                    <p>Students consistently achieve top grades and many go on to study Commerce, Economics, and Business at university</p>
+                </div>
+                <div class="credential-card">
+                    <div class="credential-icon blue">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z"/></svg>
+                    </div>
+                    <h3>BCom Accounting</h3>
+                    <p>Formal business qualifications that bring academic rigour and real world understanding to every lesson</p>
+                </div>
+                <div class="credential-card">
+                    <div class="credential-icon purple">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/></svg>
+                    </div>
+                    <h3>PGCE Qualified</h3>
+                    <p>Postgraduate Certificate in Education ensuring best practice teaching methods in every resource</p>
+                </div>
+                <div class="credential-card">
+                    <div class="credential-icon teal">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 0 0 .75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 0 0-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0 1 12 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 0 1-.673-.38m0 0A2.18 2.18 0 0 1 3 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 0 1 3.413-.387m7.5 0V5.25A2.25 2.25 0 0 0 13.5 3h-3a2.25 2.25 0 0 0-2.25 2.25v.894m7.5 0a48.667 48.667 0 0 0-7.5 0M12 12.75h.008v.008H12v-.008Z"/></svg>
+                    </div>
+                    <h3>Real Business Insight</h3>
+                    <p>Grew up helping market businesses and supporting family ventures, bringing practical expertise to the classroom</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== RESULTS BANNER ==================== -->
+    <section class="results-banner">
+        <div class="results-inner">
+            <h2>A Track Record of Student Success</h2>
+            <p>Year after year, students taught using these methods and resources consistently achieve top grades. Many go on to study Commerce, Business, and Economics at leading universities.</p>
+            <div class="results-stats">
+                <div class="results-stat">
+                    <span class="results-stat-value">20+</span>
+                    <span class="results-stat-label">Years Teaching</span>
+                </div>
+                <div class="results-stat">
+                    <span class="results-stat-value">4</span>
+                    <span class="results-stat-label">Exam Boards Taught</span>
+                </div>
+                <div class="results-stat">
+                    <span class="results-stat-value">360+</span>
+                    <span class="results-stat-label">Flashcards Created</span>
+                </div>
+                <div class="results-stat">
+                    <span class="results-stat-value">100%</span>
+                    <span class="results-stat-label">Syllabus Coverage</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== WHY DIFFERENT ==================== -->
+    <section class="different-section">
+        <div class="different-inner">
+            <div class="different-header">
+                <h2>Why MyBizStudies Is Different</h2>
+                <p>Three things we do that textbooks and other revision sites do not.</p>
+            </div>
+            <div class="different-grid">
+                <div class="different-card">
+                    <h3>Interactive Learning</h3>
+                    <p>Students can see how graphs move and interact with concepts in real time. When you change a variable, you see the effect immediately. No more static diagrams that leave students guessing.</p>
+                </div>
+                <div class="different-card">
+                    <h3>Exam Technique Framework</h3>
+                    <p>Understanding content is only half the battle. We teach students a structured framework for building answers that score full marks, from 4 mark questions right through to 20 mark essays.</p>
+                </div>
+                <div class="different-card">
+                    <h3>No Unnecessary Content</h3>
+                    <p>Every page is mapped directly to the Edexcel IAL specification. We only cover what the examiner is looking for. No filler, no waffle, no information overload.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== CTA ==================== -->
+    <section class="about-cta">
+        <div class="about-cta-inner">
+            <h2>Ready to Start Revising Smarter?</h2>
+            <p>Join thousands of students using MyBizStudies to prepare for their A Level Business Studies exams.</p>
+            <div class="cta-buttons">
+                <a href="signup.html" class="btn btn-primary">Get Started Free</a>
+                <a href="contact.html" class="btn btn-outline">Get in Touch</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
     <footer class="page-footer">
-        <p>&copy; 2026 MyBizStudies. All rights reserved. | <a href="about.html">About</a> | <a href="about.html">About</a> | <a href="privacy.html">Privacy</a> | <a href="terms.html">Terms</a> | <a href="refund.html">Refund Policy</a> | <a href="contact.html">Contact</a></p>
+        <p>&copy; 2026 MyBizStudies. All rights reserved. | <a href="about.html">About</a> | <a href="privacy.html">Privacy</a> | <a href="terms.html">Terms</a> | <a href="refund.html">Refund Policy</a> | <a href="contact.html">Contact</a></p>
     </footer>
 
     <script>
-        // Mobile hamburger menu
         const hamburgerBtn = document.getElementById('hamburgerBtn');
         const mobileMenu = document.getElementById('mobileMenu');
         const mobileOverlay = document.getElementById('mobileOverlay');
