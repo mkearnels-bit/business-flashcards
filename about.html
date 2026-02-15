@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | MyBizStudies</title>
+<meta name="description" content="About MyBizStudies. Built by an experienced teacher with over 20 years in the classroom. Interactive revision for Edexcel IAL Business Studies.">
+<meta name="keywords" content="A-Level Business Studies, Edexcel IAL, revision notes, flashcards, exam technique, GCSE Business">
+<link rel="canonical" href="https://mybizstudies.com/about.html">
+<meta property="og:title" content="About Us | MyBizStudies">
+<meta property="og:description" content="About MyBizStudies. Built by an experienced teacher with over 20 years in the classroom. Interactive revision for Edexcel IAL Business Studies.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mybizstudies.com/about.html">
+<meta property="og:site_name" content="MyBizStudies">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #1e3a5f;
+            --primary-dark: #152a45;
+            --primary-light: #2d5a8a;
+            --accent: #e67e22;
+            --accent-light: #f39c12;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --error: #e74c3c;
+            --dark: #0f172a;
+            --gray-900: #1e293b;
+            --gray-700: #334155;
+            --gray-500: #64748b;
+            --gray-300: #cbd5e1;
+            --gray-100: #f1f5f9;
+            --gray-50: #f8fafc;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .page-header {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-100);
+            padding: 0.75rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .page-header .header-logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .page-header img {
+            height: 55px;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            background: var(--gray-100);
+            border-radius: 10px;
+            padding: 0.25rem;
+        }
+
+        .header-nav a {
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            color: var(--gray-500);
+            transition: all 0.2s ease;
+        }
+
+        .header-nav a:hover {
+            color: var(--primary);
+            background: rgba(255,255,255,0.5);
+        }
+
+        .header-nav a.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .back-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--accent);
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 44px;
+            height: 44px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1100;
+            position: relative;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--primary);
+            border-radius: 2px;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: absolute;
+        }
+
+        .hamburger span:nth-child(1) { transform: translateY(-7px); }
+        .hamburger span:nth-child(2) { opacity: 1; }
+        .hamburger span:nth-child(3) { transform: translateY(7px); }
+
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg); }
+
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 1040;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .mobile-menu-overlay.active { opacity: 1; pointer-events: auto; }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 280px;
+            height: 100%;
+            background: var(--white);
+            z-index: 1050;
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
+            padding: 5.5rem 1.5rem 2rem;
+        }
+
+        .mobile-menu.active { transform: translateX(0); }
+
+        .mobile-menu-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .mobile-menu-links a {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            padding: 0.875rem 1rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-links a .menu-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background: var(--gray-100);
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-links a .menu-icon svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--gray-500);
+            transition: stroke 0.2s ease;
+        }
+
+        .mobile-menu-links a:hover,
+        .mobile-menu-links a.active {
+            background: var(--gray-100);
+            color: var(--primary);
+        }
+
+        .mobile-menu-links a.active .menu-icon {
+            background: var(--primary);
+        }
+
+        .mobile-menu-links a.active .menu-icon svg {
+            stroke: white;
+        }
+
+        .mobile-menu-divider {
+            height: 1px;
+            background: var(--gray-100);
+            margin: 0.5rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .header-nav { display: none; }
+            .back-link { display: none; }
+            .page-header img { height: 45px; }
+            .page-header { padding: 0.5rem 1rem; }
+            .hamburger { display: flex; }
+            .mobile-menu-overlay { display: block; }
+            .mobile-menu { display: block; }
+        }
+
+        /* Hero */
+        .about-hero {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
+            color: white;
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .about-hero h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .about-hero p {
+            font-size: 1rem;
+            opacity: 0.85;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Main Content */
+        .about-container {
+            max-width: 700px;
+            margin: -2rem auto 3rem;
+            padding: 0 1.5rem;
+            width: 100%;
+            flex: 1;
+        }
+
+        .about-card {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            padding: 2.5rem;
+        }
+
+        /* Section Styling */
+        .about-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .about-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .about-section h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .about-section p {
+            font-size: 0.95rem;
+            color: var(--gray-700);
+            line-height: 1.6;
+            text-align: left;
+            margin-bottom: 0.75rem;
+        }
+
+        .about-section ul {
+            list-style: none;
+            margin-left: 0;
+            padding-left: 0;
+        }
+
+        .about-section li {
+            font-size: 0.95rem;
+            color: var(--gray-700);
+            line-height: 1.6;
+            text-align: left;
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .about-section li:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0.6rem;
+            width: 6px;
+            height: 6px;
+            background: var(--primary);
+            border-radius: 50%;
+        }
+
+        /* Feature Grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(30, 58, 95, 0.05) 0%, rgba(230, 126, 34, 0.05) 100%);
+            border: 2px solid var(--gray-100);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: left;
+            transition: all 0.2s ease;
+        }
+
+        .feature-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 16px rgba(30, 58, 95, 0.1);
+        }
+
+        .feature-card h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-card p {
+            font-size: 0.85rem;
+            color: var(--gray-700);
+            line-height: 1.5;
+            text-align: left;
+            margin: 0;
+        }
+
+        /* Section Divider */
+        .section-divider {
+            height: 1px;
+            background: var(--gray-100);
+            margin: 2rem 0;
+            display: none;
+        }
+
+        .about-section:not(:last-child) .section-divider {
+            display: block;
+        }
+
+        /* Footer */
+        .page-footer {
+            background: var(--dark);
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            padding: 1.5rem 2rem;
+            font-size: 0.8rem;
+            margin-top: auto;
+        }
+
+        .page-footer a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+        }
+
+        .page-footer a:hover {
+            color: var(--accent);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .about-hero h1 {
+                font-size: 1.5rem;
+            }
+
+            .about-card {
+                padding: 1.5rem;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .about-section h2 {
+                font-size: 1.1rem;
+            }
+        }
+    
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+</style>
+<!-- Google Analytics - Replace GA_MEASUREMENT_ID with your actual ID -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'GA_MEASUREMENT_ID');
+</script>
+</head>
+<body>
+
+    <header class="page-header">
+        <a href="index.html" class="header-logo"><img src="logo.png" alt="MyBizStudies"></a>
+        <nav class="header-nav">
+            <a href="app.html">Flash Cards</a>
+            <a href="exam-skills-v2.html">Exam Skills</a>
+            <a href="notes.html">Study Notes</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+        <a href="index.html" class="back-link">Back to Home</a>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu-overlay" id="mobileOverlay"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-links">
+            <a href="app.html">
+                <span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
+                Flash Cards
+            </a>
+            <a href="exam-skills-v2.html">
+                <span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg></span>
+                Exam Skills
+            </a>
+            <a href="notes.html">
+                <span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></span>
+                Study Notes
+            </a>
+            <div class="mobile-menu-divider"></div>
+            <a href="contact.html">
+                <span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></span>
+                Contact
+            </a>
+        </div>
+    </div>
+
+    <div class="about-hero">
+        <h1>About MyBizStudies</h1>
+        <p>Built by an experienced teacher who understands what students really need to succeed.</p>
+    </div>
+
+    <div class="about-container">
+        <div class="about-card">
+
+            <div class="about-section">
+                <h2>Our Mission</h2>
+                <p>MyBizStudies was created because students deserve revision resources that work the way they actually learn. Textbooks are packed with unnecessary information, static diagrams that do not show how concepts interact, and exam technique is barely covered. We built an interactive platform where students can see graphs move, learn from real world examples, and develop a framework for writing exam answers that score full marks.</p>
+            </div>
+
+            <div class="about-section">
+                <h2>Meet the Teacher</h2>
+                <ul>
+                    <li>Over 20 years of classroom experience teaching Business Studies</li>
+                    <li>Taught across multiple exam boards including AQA, Edexcel, CIE, and OCR</li>
+                    <li>BCom Accounting degree and PGCE qualified</li>
+                    <li>Unique perspective from growing up helping others market their businesses and helping parents run theirs</li>
+                    <li>Passionate about making Business Studies accessible and practical, not just theoretical</li>
+                </ul>
+            </div>
+
+            <div class="about-section">
+                <h2>Why We Are Different</h2>
+                <p>Three key differentiators that set MyBizStudies apart:</p>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h3>Interactive Learning</h3>
+                        <p>Students can see how graphs move and interact with concepts, not just read about them</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Exam Technique Focus</h3>
+                        <p>A structured framework that teaches students exactly how to build answers that score full marks</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>No Fluff</h3>
+                        <p>Only the content students need, mapped directly to the Edexcel IAL specification</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="page-footer">
+        <p>&copy; 2026 MyBizStudies. All rights reserved. | <a href="about.html">About</a> | <a href="about.html">About</a> | <a href="privacy.html">Privacy</a> | <a href="terms.html">Terms</a> | <a href="refund.html">Refund Policy</a> | <a href="contact.html">Contact</a></p>
+    </footer>
+
+    <script>
+        // Mobile hamburger menu
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+
+        function toggleMobileMenu() {
+            hamburgerBtn.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            mobileOverlay.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        }
+
+        hamburgerBtn.addEventListener('click', toggleMobileMenu);
+        mobileOverlay.addEventListener('click', toggleMobileMenu);
+    </script>
+
+</body>
+</html>
