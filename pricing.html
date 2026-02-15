@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing | MyBizStudies</title>
+<meta name="description" content="Affordable subscription plans for MyBizStudies. Access interactive study notes, flashcards, and exam technique training.">
+<meta name="keywords" content="A-Level Business Studies, Edexcel IAL, revision notes, flashcards, exam technique, GCSE Business">
+<link rel="canonical" href="https://mybizstudies.com/pricing.html">
+<meta property="og:title" content="Pricing | MyBizStudies">
+<meta property="og:description" content="Affordable subscription plans for MyBizStudies. Access interactive study notes, flashcards, and exam technique training.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mybizstudies.com/pricing.html">
+<meta property="og:site_name" content="MyBizStudies">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #1e3a5f;
+            --primary-dark: #152a45;
+            --primary-light: #2d5a8a;
+            --accent: #e67e22;
+            --accent-light: #f39c12;
+            --accent-glow: rgba(230, 126, 34, 0.3);
+            --secondary: #3498db;
+            --success: #27ae60;
+            --error: #e74c3c;
+            --dark: #0f172a;
+            --gray-900: #1e293b;
+            --gray-700: #334155;
+            --gray-500: #64748b;
+            --gray-300: #cbd5e1;
+            --gray-200: #e2e8f0;
+            --gray-100: #f1f5f9;
+            --gray-50: #f8fafc;
+            --white: #ffffff;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--gray-900);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background: var(--gray-50);
+        }
+
+        /* ==================== HEADER ==================== */
+        .app-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 0.75rem 2rem;
+            border-bottom: 1px solid var(--gray-100);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .header-logo img {
+            height: 65px;
+            width: auto;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            background: var(--gray-100);
+            border-radius: 10px;
+            padding: 0.25rem;
+        }
+
+        .header-nav a {
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            color: var(--gray-500);
+            transition: all 0.2s ease;
+        }
+
+        .header-nav a:hover {
+            color: var(--primary);
+            background: rgba(255,255,255,0.5);
+        }
+
+        .header-nav a.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-email {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+        }
+
+        .logout-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .logout-btn:hover {
+            background: #d35400;
+            transform: translateY(-1px);
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 44px;
+            height: 44px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1100;
+            position: relative;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--primary);
+            border-radius: 2px;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: absolute;
+        }
+
+        .hamburger span:nth-child(1) { transform: translateY(-7px); }
+        .hamburger span:nth-child(2) { opacity: 1; }
+        .hamburger span:nth-child(3) { transform: translateY(7px); }
+
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg); }
+
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 1040;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .mobile-menu-overlay.active { opacity: 1; pointer-events: auto; }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 280px;
+            height: 100%;
+            background: var(--white);
+            z-index: 1050;
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
+            padding: 5.5rem 1.5rem 2rem;
+        }
+
+        .mobile-menu.active { transform: translateX(0); }
+
+        .mobile-menu-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .mobile-menu-links a {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            padding: 0.875rem 1rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-links a .menu-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background: var(--gray-100);
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-links a .menu-icon svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--gray-500);
+            transition: stroke 0.2s ease;
+        }
+
+        .mobile-menu-links a:hover,
+        .mobile-menu-links a.active {
+            background: var(--gray-100);
+            color: var(--primary);
+        }
+
+        .mobile-menu-links a.active .menu-icon {
+            background: var(--primary);
+        }
+
+        .mobile-menu-links a.active .menu-icon svg {
+            stroke: white;
+        }
+
+        .mobile-menu-divider {
+            height: 1px;
+            background: var(--gray-100);
+            margin: 0.5rem 0;
+        }
+
+        .mobile-menu-logout { margin-top: 1rem; }
+
+        .mobile-menu-logout button {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            padding: 0.875rem 1rem;
+            border-radius: 12px;
+            border: none;
+            background: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--error);
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-logout button .menu-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background: rgba(231, 76, 60, 0.08);
+            flex-shrink: 0;
+        }
+
+        .mobile-menu-logout button .menu-icon svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--error);
+        }
+
+        .mobile-menu-logout button:hover {
+            background: rgba(231, 76, 60, 0.06);
+        }
+
+        /* ==================== HERO SECTION ==================== */
+        .pricing-hero {
+            padding-top: 120px;
+            padding-bottom: 60px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 50%, #3a7bd5 100%);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .pricing-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(230, 126, 34, 0.08) 0%, transparent 40%);
+            animation: subtleFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes subtleFloat {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-2%, -1%); }
+        }
+
+        .pricing-hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: linear-gradient(to top, var(--gray-50), transparent);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 24px;
+            letter-spacing: 0.3px;
+        }
+
+        .hero-badge svg {
+            width: 16px;
+            height: 16px;
+            fill: var(--accent-light);
+        }
+
+        .pricing-hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: white;
+            line-height: 1.15;
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+
+        .pricing-hero h1 span {
+            background: linear-gradient(135deg, var(--accent-light), #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .pricing-hero p {
+            font-size: 1.15rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 520px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* ==================== PRICING CARDS ==================== */
+        .pricing-section {
+            max-width: 880px;
+            margin: -40px auto 0;
+            padding: 0 1.5rem 80px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .pricing-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 40px 36px;
+            border: 2px solid var(--gray-200);
+            position: relative;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+        }
+
+        .pricing-card.featured {
+            border-color: var(--accent);
+            box-shadow: 0 20px 60px rgba(230, 126, 34, 0.15);
+        }
+
+        .pricing-card.featured:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 25px 70px rgba(230, 126, 34, 0.2);
+        }
+
+        .featured-banner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            text-align: center;
+            padding: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .pricing-card.featured .card-inner {
+            padding-top: 12px;
+        }
+
+        .plan-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .plan-icon.monthly {
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.12), rgba(52, 152, 219, 0.05));
+        }
+
+        .plan-icon.monthly svg {
+            stroke: var(--secondary);
+        }
+
+        .plan-icon.yearly {
+            background: linear-gradient(135deg, rgba(230, 126, 34, 0.15), rgba(230, 126, 34, 0.05));
+        }
+
+        .plan-icon.yearly svg {
+            stroke: var(--accent);
+        }
+
+        .plan-icon svg {
+            width: 28px;
+            height: 28px;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .plan-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+
+        .plan-desc {
+            font-size: 0.9rem;
+            color: var(--gray-500);
+            margin-bottom: 24px;
+        }
+
+        .price-row {
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+            margin-bottom: 6px;
+        }
+
+        .price-currency {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            align-self: flex-start;
+            margin-top: 8px;
+        }
+
+        .price-amount {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            line-height: 1;
+            letter-spacing: -2px;
+        }
+
+        .price-period {
+            font-size: 1rem;
+            color: var(--gray-500);
+            font-weight: 500;
+        }
+
+        .price-yearly-total {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            margin-bottom: 24px;
+        }
+
+        .price-monthly-note {
+            margin-bottom: 24px;
+        }
+
+        .savings-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(39, 174, 96, 0.1);
+            color: var(--success);
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 50px;
+            margin-bottom: 24px;
+        }
+
+        .savings-badge svg {
+            width: 14px;
+            height: 14px;
+            fill: none;
+            stroke: var(--success);
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .subscribe-btn {
+            display: block;
+            width: 100%;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            letter-spacing: 0.3px;
+        }
+
+        .subscribe-btn.secondary {
+            background: var(--gray-100);
+            color: var(--primary);
+            border: 2px solid var(--gray-200);
+        }
+
+        .subscribe-btn.secondary:hover {
+            background: var(--gray-200);
+            border-color: var(--gray-300);
+            transform: translateY(-2px);
+        }
+
+        .subscribe-btn.primary {
+            background: linear-gradient(135deg, var(--accent), #d35400);
+            color: white;
+            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.35);
+        }
+
+        .subscribe-btn.primary:hover {
+            box-shadow: 0 6px 25px rgba(230, 126, 34, 0.45);
+            transform: translateY(-2px);
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-top: 28px;
+            padding-top: 28px;
+            border-top: 1px solid var(--gray-100);
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 0;
+            font-size: 0.92rem;
+            color: var(--gray-700);
+            line-height: 1.5;
+        }
+
+        .feature-list li svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .check-icon {
+            fill: none;
+            stroke: var(--success);
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* ==================== WHAT'S INCLUDED ==================== */
+        .included-section {
+            max-width: 880px;
+            margin: 0 auto;
+            padding: 0 1.5rem 80px;
+        }
+
+        .included-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .included-header h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 10px;
+        }
+
+        .included-header p {
+            font-size: 1.05rem;
+            color: var(--gray-500);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 28px 24px;
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+        }
+
+        .feature-card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .feature-card-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .feature-card-icon.blue { background: rgba(52, 152, 219, 0.1); }
+        .feature-card-icon.blue svg { stroke: var(--secondary); }
+        .feature-card-icon.orange { background: rgba(230, 126, 34, 0.1); }
+        .feature-card-icon.orange svg { stroke: var(--accent); }
+        .feature-card-icon.green { background: rgba(39, 174, 96, 0.1); }
+        .feature-card-icon.green svg { stroke: var(--success); }
+        .feature-card-icon.purple { background: rgba(155, 89, 182, 0.1); }
+        .feature-card-icon.purple svg { stroke: #9b59b6; }
+        .feature-card-icon.red { background: rgba(231, 76, 60, 0.1); }
+        .feature-card-icon.red svg { stroke: var(--error); }
+        .feature-card-icon.teal { background: rgba(23, 162, 184, 0.1); }
+        .feature-card-icon.teal svg { stroke: #17a2b8; }
+
+        .feature-card h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 6px;
+        }
+
+        .feature-card p {
+            font-size: 0.88rem;
+            color: var(--gray-500);
+            line-height: 1.6;
+        }
+
+        /* ==================== FAQ ==================== */
+        .faq-section {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 0 1.5rem 80px;
+        }
+
+        .faq-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .faq-header h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 10px;
+        }
+
+        .faq-header p {
+            font-size: 1.05rem;
+            color: var(--gray-500);
+        }
+
+        .faq-item {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 14px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .faq-item:hover {
+            border-color: var(--gray-300);
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-family: inherit;
+            transition: color 0.2s;
+        }
+
+        .faq-question:hover {
+            color: var(--primary);
+        }
+
+        .faq-question svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--gray-400);
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+            margin-left: 16px;
+        }
+
+        .faq-item.open .faq-question svg {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 300px;
+        }
+
+        .faq-answer-inner {
+            padding: 0 24px 20px;
+            font-size: 0.9rem;
+            color: var(--gray-500);
+            line-height: 1.7;
+        }
+
+        /* ==================== TRUST BAR ==================== */
+        .trust-bar {
+            text-align: center;
+            padding: 40px 1.5rem 60px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .trust-items {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.88rem;
+            color: var(--gray-500);
+            font-weight: 500;
+        }
+
+        .trust-item svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* ==================== CTA BOTTOM ==================== */
+        .bottom-cta {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            padding: 60px 2rem;
+            text-align: center;
+        }
+
+        .bottom-cta h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .bottom-cta p {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.75);
+            margin-bottom: 28px;
+            max-width: 460px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .bottom-cta .subscribe-btn.primary {
+            display: inline-block;
+            width: auto;
+            padding: 16px 40px;
+        }
+
+        /* ==================== FOOTER ==================== */
+        .pricing-footer {
+            background: var(--dark);
+            padding: 32px 2rem;
+            text-align: center;
+        }
+
+        .pricing-footer p {
+            color: rgba(255,255,255,0.4);
+            font-size: 0.82rem;
+        }
+
+        .pricing-footer a {
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .pricing-footer a:hover {
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* ==================== PAYMENT ICONS ==================== */
+        .payment-methods {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin-top: 20px;
+            padding-top: 20px;
+            opacity: 0.5;
+        }
+
+        .payment-icon {
+            height: 24px;
+            width: auto;
+        }
+
+        .payment-label {
+            font-size: 0.78rem;
+            color: var(--gray-500);
+            text-align: center;
+            margin-top: 16px;
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 768px) {
+            .header-nav { display: none; }
+            .header-right { display: none; }
+            .header-logo img { height: 50px; }
+            .hamburger { display: flex; }
+            .mobile-menu-overlay { display: block; }
+            .mobile-menu { display: block; }
+
+            .pricing-hero {
+                padding-top: 100px;
+                padding-bottom: 50px;
+            }
+
+            .pricing-hero h1 {
+                font-size: 2rem;
+            }
+
+            .pricing-hero p {
+                font-size: 1rem;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                max-width: 420px;
+                margin: 0 auto;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+                order: -1;
+            }
+
+            .pricing-card.featured:hover {
+                transform: translateY(-4px);
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .trust-items {
+                gap: 20px;
+            }
+
+            .bottom-cta h2 {
+                font-size: 1.4rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .pricing-hero h1 {
+                font-size: 1.7rem;
+            }
+
+            .pricing-card {
+                padding: 28px 24px;
+            }
+
+            .price-amount {
+                font-size: 2.8rem;
+            }
+
+            .trust-items {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+    
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+</style>
+<!-- Google Analytics - Replace GA_MEASUREMENT_ID with your actual ID -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'GA_MEASUREMENT_ID');
+</script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="app-header">
+        <a href="/" class="header-logo">
+            <img src="logo.png" alt="MyBizStudies.com">
+        </a>
+        <nav class="header-nav">
+            <a href="app.html">Flashcards</a>
+            <a href="exam-skills-v2.html">Exam Skills</a>
+            <a href="pricing.html" class="active">Pricing</a>
+        </nav>
+        <div class="header-right">
+            <span class="user-email" id="userEmail"></span>
+            <button class="logout-btn" id="logoutBtn" onclick="handleLogout()">Logout</button>
+        </div>
+        <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu-overlay" id="mobileOverlay" onclick="toggleMobileMenu()"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-links">
+            <a href="app.html">
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                </span>
+                Flashcards
+            </a>
+            <a href="exam-skills-v2.html">
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                </span>
+                Exam Skills
+            </a>
+            <a href="pricing.html" class="active">
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                </span>
+                Pricing
+            </a>
+        </div>
+        <div class="mobile-menu-divider"></div>
+        <div class="mobile-menu-logout">
+            <button onclick="handleLogout()">
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                </span>
+                Logout
+            </button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="pricing-hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <svg viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+                Premium Access
+            </div>
+            <h1>Unlock Your <span>Full Potential</span></h1>
+            <p>One payment. Lifetime access. Get every flashcard, exam technique, model answer, and study tool designed to help you ace your Edexcel A-Level Business Studies exams.</p>
+        </div>
+    </section>
+
+    <!-- Pricing Card -->
+    <section class="pricing-section">
+        <div class="pricing-grid" style="grid-template-columns: 1fr; max-width: 480px; margin: 0 auto;">
+            <!-- Lifetime Access -->
+            <div class="pricing-card featured">
+                <div class="featured-banner">Lifetime Access</div>
+                <div class="card-inner">
+                    <div class="plan-icon yearly">
+                        <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    </div>
+                    <div class="plan-name">One Payment. Forever Yours.</div>
+                    <div class="plan-desc">Pay once and get lifetime access to everything</div>
+                    <div class="price-row">
+                        <span class="price-currency">$</span>
+                        <span class="price-amount">15</span>
+                        <span class="price-period">one time</span>
+                    </div>
+                    <div class="savings-badge">
+                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        No subscriptions. No recurring charges.
+                    </div>
+                    <button class="subscribe-btn primary" onclick="subscribe('lifetime')">Get Lifetime Access</button>
+                    <ul class="feature-list">
+                        <li>
+                            <svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg>
+                            <strong>360+ Interactive Flashcards</strong> covering all topics across Units 1, 2, 3, and 4
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg>
+                            <strong>Exam Skills Training</strong> with the PBLI framework for writing answers that score full marks
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg>
+                            <strong>Weak vs Model Answers</strong> for every question type (2, 4, 8, 12, and 20 mark questions)
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg>
+                            <strong>Colour Coded Mark Breakdowns</strong> showing exactly where Knowledge, Application, Analysis, and Evaluation marks are earned
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg>
+                            <strong>Case Study Practice Questions</strong> with realistic business scenarios and full sample answers
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg>
+                            <strong>Progress Tracking</strong> so you can see what you have mastered and what needs work
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg>
+                            <strong>All Future Content Updates</strong> including new flashcards, case studies, and revision notes as they are added
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Methods -->
+        <div class="payment-label">Secure payments powered by Flutterwave</div>
+        <div class="payment-methods">
+            <svg width="38" height="24" viewBox="0 0 38 24"><rect width="38" height="24" rx="4" fill="#1A1F71"/><text x="19" y="15" font-size="8" fill="white" text-anchor="middle" font-weight="700" font-family="Inter,sans-serif">VISA</text></svg>
+            <svg width="38" height="24" viewBox="0 0 38 24"><rect width="38" height="24" rx="4" fill="#252525"/><circle cx="15" cy="12" r="7" fill="#EB001B"/><circle cx="23" cy="12" r="7" fill="#F79E1B"/><path d="M19 6.7a7 7 0 0 1 0 10.6 7 7 0 0 1 0-10.6z" fill="#FF5F00"/></svg>
+            <svg width="38" height="24" viewBox="0 0 38 24"><rect width="38" height="24" rx="4" fill="#000"/><text x="19" y="15" font-size="7" fill="white" text-anchor="middle" font-weight="600" font-family="Inter,sans-serif">Apple Pay</text></svg>
+            <svg width="38" height="24" viewBox="0 0 38 24"><rect width="38" height="24" rx="4" fill="#fff" stroke="#ddd"/><text x="19" y="15" font-size="6" fill="#333" text-anchor="middle" font-weight="600" font-family="Inter,sans-serif">EFT</text></svg>
+        </div>
+    </section>
+
+    <!-- What's Included -->
+    <section class="included-section">
+        <div class="included-header">
+            <h2>Everything You Need to Succeed</h2>
+            <p>Built specifically for Edexcel IAL Business Studies students</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-card-icon blue">
+                    <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                </div>
+                <h3>500+ Flashcards</h3>
+                <p>Covering every topic across Units 1, 2, 3, and 4 of the Edexcel IAL specification.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-card-icon orange">
+                    <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                </div>
+                <h3>Exam Techniques</h3>
+                <p>Learn exactly how Edexcel marks each type of question with real model answers and breakdowns.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-card-icon green">
+                    <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                </div>
+                <h3>Progress Tracking</h3>
+                <p>Track what you've mastered, what needs reviewing, and focus your study where it counts.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-card-icon purple">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                </div>
+                <h3>Mark Scheme Insights</h3>
+                <p>Understand exactly where marks are awarded using the Knowledge, Application, Analysis framework.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-card-icon red">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                </div>
+                <h3>Case Study Practice</h3>
+                <p>Apply your knowledge to realistic business scenarios, just like in the actual exam.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-card-icon teal">
+                    <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <h3>Regular Updates</h3>
+                <p>New content added regularly to keep up with the latest exam trends and specification changes.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section">
+        <div class="faq-header">
+            <h2>Common Questions</h2>
+            <p>Everything you need to know before subscribing</p>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Is this really a one time payment?
+                <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">
+                <div class="faq-answer-inner">Yes! You pay $15 once and you have lifetime access to everything on the platform. There are no recurring charges, no hidden fees, and no subscription to cancel. Your access never expires.</div>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                What payment methods do you accept?
+                <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">
+                <div class="faq-answer-inner">We accept Visa, Mastercard, Apple Pay, Google Pay, and EFT bank transfers. All payments are securely processed through Flutterwave, a trusted payment provider.</div>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Which exam board is this for?
+                <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">
+                <div class="faq-answer-inner">MyBizStudies is built specifically for Edexcel International A-Level (IAL) Business Studies. All content, flashcards, and exam techniques are aligned with the Edexcel specification and mark schemes.</div>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Is my payment information safe?
+                <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">
+                <div class="faq-answer-inner">Your payment details are handled entirely by Flutterwave, which is PCI DSS compliant (the highest level of security for payment processing). We never see or store your card information on our servers.</div>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                What if I need a refund?
+                <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">
+                <div class="faq-answer-inner">If you're not satisfied within the first 7 days, contact us and we'll issue a full refund. No questions asked.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Bar -->
+    <div class="trust-bar">
+        <div class="trust-items">
+            <div class="trust-item">
+                <svg viewBox="0 0 24 24" stroke="var(--success)"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Secure Payments
+            </div>
+            <div class="trust-item">
+                <svg viewBox="0 0 24 24" stroke="var(--secondary)"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                One Time Payment
+            </div>
+            <div class="trust-item">
+                <svg viewBox="0 0 24 24" stroke="var(--accent)"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                7 Day Refund
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom CTA -->
+    <section class="bottom-cta">
+        <h2>Ready to Start Studying Smarter?</h2>
+        <p>Join students who are already using MyBizStudies to improve their grades. One payment, lifetime access.</p>
+        <button class="subscribe-btn primary" onclick="subscribe('lifetime')">Get Lifetime Access for $15</button>
+    </section>
+
+    <!-- Footer -->
+    <footer class="pricing-footer">
+        <p>&copy; 2026 MyBizStudies. All rights reserved. &nbsp; <a href="about.html">About</a> &nbsp; | &nbsp; <a href="privacy.html">Privacy</a> &nbsp; | &nbsp; <a href="terms.html">Terms</a> &nbsp; | &nbsp; <a href="refund.html">Refund Policy</a> &nbsp; | &nbsp; <a href="contact.html">Contact</a></p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Supabase setup
+        const supabaseUrl = 'https://kxfcnbgpyqwxatawvuty.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt4ZmNuYmdweXF3eGF0YXd2dXR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIzMjI2MDAsImV4cCI6MjA1Nzg5ODYwMH0.YOqSBe4IkBjmnAikPNoHbrpkEqGPPFR0hfONsTDnj7s';
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // Check auth state
+        async function checkAuth() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (session) {
+                const fullName = session.user.user_metadata?.full_name || session.user.user_metadata?.name || '';
+                const firstName = fullName ? fullName.split(' ')[0] : '';
+                const welcomeEl = document.getElementById('userEmail');
+                if (firstName) {
+                    welcomeEl.textContent = `Welcome, ${firstName}!`;
+                } else {
+                    welcomeEl.textContent = session.user.email;
+                }
+            }
+        }
+
+        checkAuth();
+
+        // Logout
+        async function handleLogout() {
+            await supabaseClient.auth.signOut();
+            window.location.href = 'login.html';
+        }
+
+        // Mobile menu
+        function toggleMobileMenu() {
+            document.getElementById('hamburger').classList.toggle('active');
+            document.getElementById('mobileMenu').classList.toggle('active');
+            document.getElementById('mobileOverlay').classList.toggle('active');
+            document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('active') ? 'hidden' : '';
+        }
+
+        // FAQ toggle
+        function toggleFaq(btn) {
+            const item = btn.parentElement;
+            const wasOpen = item.classList.contains('open');
+            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+            if (!wasOpen) item.classList.add('open');
+        }
+
+        // Subscribe placeholder (will be replaced with Flutterwave integration)
+        function subscribe(plan) {
+            alert('Payment integration coming soon! You selected the ' + plan + ' access plan.');
+        }
+    </script>
+</body>
+</html>

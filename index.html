@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyBizStudies | Ace Your A-Level Business Studies Exams</title>
+<meta name="description" content="Interactive A-Level Business Studies revision platform. Study notes, 360+ flashcards, exam technique training, and practice questions for Edexcel IAL students.">
+<meta name="keywords" content="A-Level Business Studies, Edexcel IAL, revision notes, flashcards, exam technique, GCSE Business">
+<link rel="canonical" href="https://mybizstudies.com/index.html">
+<meta property="og:title" content="MyBizStudies | Ace Your A-Level Business Studies Exams">
+<meta property="og:description" content="Interactive A-Level Business Studies revision platform. Study notes, 360+ flashcards, exam technique training, and practice questions for Edexcel IAL students.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mybizstudies.com/index.html">
+<meta property="og:site_name" content="MyBizStudies">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -456,50 +464,6 @@
             50% { transform: scale(1.02); }
         }
 
-        /* Coming Soon Sticker */
-        .coming-soon-sticker {
-            position: absolute;
-            top: 120px;
-            right: 40px;
-            width: 130px;
-            height: 130px;
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 8px 30px rgba(245, 158, 11, 0.4);
-            transform: rotate(12deg);
-            z-index: 30;
-            animation: stickerBounce 3s ease-in-out infinite;
-        }
-
-        .sticker-inner {
-            text-align: center;
-            color: white;
-            padding: 10px;
-        }
-
-        .sticker-label {
-            display: block;
-            font-size: 0.7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 2px;
-        }
-
-        .sticker-text {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 800;
-            line-height: 1.2;
-        }
-
-        @keyframes stickerBounce {
-            0%, 100% { transform: rotate(12deg) scale(1); }
-            50% { transform: rotate(12deg) scale(1.05); }
-        }
 
         .hero-cta {
             display: flex;
@@ -978,24 +942,380 @@
             line-height: 1.6;
         }
 
-        .coming-soon-banner {
+
+        /* ==================== EXAM SKILLS SHOWCASE ==================== */
+        .exam-showcase {
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, white 0%, var(--gray-50) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .exam-showcase::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gray-300), transparent);
+        }
+
+        .exam-showcase-container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .exam-showcase-header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+
+        .exam-showcase-header .section-label {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(155, 89, 182, 0.1), rgba(230, 126, 34, 0.1));
+            color: var(--primary);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1.25rem;
+        }
+
+        .exam-showcase-header h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        .exam-showcase-header p {
+            font-size: 1.1rem;
+            color: var(--gray-600);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* Showcase Case Study Card */
+        .showcase-case-card {
+            background: white;
+            border-radius: 20px;
+            border: 1px solid var(--gray-200);
+            overflow: hidden;
+            margin-bottom: 4rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+        }
+
+        .showcase-case-header {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            padding: 2rem 2.5rem;
+            color: white;
+        }
+
+        .showcase-case-header h3 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+        }
+
+        .showcase-case-header p {
+            font-size: 0.9rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.85);
+            text-align: justify;
+        }
+
+        .showcase-question-item {
+            padding: 2rem 2.5rem;
+        }
+
+        .showcase-question-header {
+            margin-bottom: 1.25rem;
+        }
+
+        .showcase-question-header h4 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            line-height: 1.5;
+            margin-bottom: 0.75rem;
+        }
+
+        .showcase-question-badges {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .showcase-q-badge {
+            padding: 0.35rem 0.85rem;
+            border-radius: 50px;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+        .showcase-q-badge.marks {
+            background: rgba(230, 126, 34, 0.12);
+            color: var(--accent);
+        }
+
+        .showcase-q-badge.structure {
+            background: var(--gray-100);
+            color: var(--gray-600);
+        }
+
+        /* Reveal Button */
+        .showcase-reveal-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, rgba(230, 126, 34, 0.05), rgba(230, 126, 34, 0.02));
+            border: 2px dashed var(--gray-300);
+            border-radius: 12px;
+            color: var(--accent);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.75rem;
-            background: linear-gradient(135deg, var(--primary) 0%, #1e3a5f 100%);
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin: 3rem auto 0;
-            max-width: fit-content;
-            box-shadow: 0 4px 20px rgba(30, 58, 95, 0.3);
+            gap: 0.5rem;
+            font-family: inherit;
+            transition: all 0.2s ease;
         }
 
-        .coming-soon-icon {
-            font-size: 1.25rem;
+        .showcase-reveal-btn:hover {
+            background: rgba(230, 126, 34, 0.1);
+            border-color: var(--accent);
+        }
+
+        .showcase-answer-content {
+            display: none;
+            margin-top: 1.5rem;
+        }
+
+        .showcase-answer-content.visible {
+            display: block;
+        }
+
+        /* Answer Boxes */
+        .showcase-answer-box {
+            padding: 1.25rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.25rem;
+        }
+
+        .showcase-answer-box.weak {
+            background: rgba(231, 76, 60, 0.06);
+            border-left: 4px solid var(--error);
+        }
+
+        .showcase-answer-box.model {
+            background: white;
+            border: 2px solid var(--gray-200);
+            border-left: 4px solid var(--primary);
+        }
+
+        .showcase-answer-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.3px;
+        }
+
+        .showcase-answer-box.weak .showcase-answer-label { color: var(--error); }
+        .showcase-answer-box.model .showcase-answer-label { color: var(--primary); }
+
+        .showcase-answer-text {
+            font-size: 0.92rem;
+            line-height: 1.8;
+            color: var(--gray-700);
+            text-align: justify;
+        }
+
+        .showcase-marks-estimate {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 0.75rem;
+        }
+
+        .showcase-marks-estimate.weak { color: var(--error); }
+        .showcase-marks-estimate.model { color: var(--primary); }
+
+        /* Skill Filter Panel */
+        .showcase-skill-filter-panel {
+            background: linear-gradient(135deg, var(--gray-50) 0%, white 100%);
+            border: 2px solid var(--gray-200);
+            border-radius: 16px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.25rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .showcase-skill-filter-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .showcase-skill-filter-header h5 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 0;
+        }
+
+        .showcase-filter-icon { font-size: 1rem; }
+
+        .showcase-skill-filter-hint {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            margin-left: auto;
+        }
+
+        .showcase-skill-filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        /* Skill Toggle Buttons */
+        .showcase-skill-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid;
+            background: white;
+            user-select: none;
+            font-family: inherit;
+        }
+
+        .showcase-skill-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .showcase-skill-toggle:active { transform: translateY(0); }
+
+        .showcase-toggle-indicator {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            transition: all 0.25s ease;
+        }
+
+        .showcase-skill-toggle.k { border-color: #3498db; color: #3498db; }
+        .showcase-skill-toggle.k .showcase-toggle-indicator { background: rgba(52, 152, 219, 0.2); color: #3498db; }
+        .showcase-skill-toggle.k.active { background: #3498db; color: white; box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4); }
+        .showcase-skill-toggle.k.active .showcase-toggle-indicator { background: white; color: #3498db; }
+
+        .showcase-skill-toggle.ap { border-color: #2ecc71; color: #2ecc71; }
+        .showcase-skill-toggle.ap .showcase-toggle-indicator { background: rgba(46, 204, 113, 0.2); color: #2ecc71; }
+        .showcase-skill-toggle.ap.active { background: #2ecc71; color: white; box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4); }
+        .showcase-skill-toggle.ap.active .showcase-toggle-indicator { background: white; color: #2ecc71; }
+
+        .showcase-skill-toggle.an { border-color: #9b59b6; color: #9b59b6; }
+        .showcase-skill-toggle.an .showcase-toggle-indicator { background: rgba(155, 89, 182, 0.2); color: #9b59b6; }
+        .showcase-skill-toggle.an.active { background: #9b59b6; color: white; box-shadow: 0 4px 15px rgba(155, 89, 182, 0.4); }
+        .showcase-skill-toggle.an.active .showcase-toggle-indicator { background: white; color: #9b59b6; }
+
+        .showcase-skill-toggle.ev { border-color: #e67e22; color: #e67e22; }
+        .showcase-skill-toggle.ev .showcase-toggle-indicator { background: rgba(230, 126, 34, 0.2); color: #e67e22; }
+        .showcase-skill-toggle.ev.active { background: #e67e22; color: white; box-shadow: 0 4px 15px rgba(230, 126, 34, 0.4); }
+        .showcase-skill-toggle.ev.active .showcase-toggle-indicator { background: white; color: #e67e22; }
+
+        .showcase-skill-toggle.show-all { border-color: var(--primary); color: var(--primary); }
+        .showcase-skill-toggle.show-all .showcase-toggle-indicator { background: rgba(30, 58, 95, 0.1); color: var(--primary); }
+        .showcase-skill-toggle.show-all.active { background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(30, 58, 95, 0.4); }
+        .showcase-skill-toggle.show-all.active .showcase-toggle-indicator { background: white; color: var(--primary); }
+
+        /* Highlights hidden by default, shown when skill is active */
+        .showcase-answer-text .highlight {
+            background: transparent !important;
+            padding: 0;
+            border-radius: 0;
+            transition: all 0.3s ease;
+        }
+
+        .showcase-answer-text .highlight.show-k { background: rgba(52, 152, 219, 0.25) !important; padding: 0.1rem 0.3rem; border-radius: 4px; }
+        .showcase-answer-text .highlight.show-ap { background: rgba(46, 204, 113, 0.25) !important; padding: 0.1rem 0.3rem; border-radius: 4px; }
+        .showcase-answer-text .highlight.show-an { background: rgba(155, 89, 182, 0.25) !important; padding: 0.1rem 0.3rem; border-radius: 4px; }
+        .showcase-answer-text .highlight.show-ev { background: rgba(230, 126, 34, 0.25) !important; padding: 0.1rem 0.3rem; border-radius: 4px; }
+
+        /* Exam Skills Feature Cards */
+        .exam-features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 3rem;
+        }
+
+        .exam-feature-card {
+            background: white;
+            border-radius: 16px;
+            padding: 28px 22px;
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .exam-feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+        }
+
+        .exam-feature-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 1.5rem;
+        }
+
+        .exam-feature-icon.blue { background: rgba(52, 152, 219, 0.1); }
+        .exam-feature-icon.green { background: rgba(46, 204, 113, 0.1); }
+        .exam-feature-icon.purple { background: rgba(155, 89, 182, 0.1); }
+        .exam-feature-icon.orange { background: rgba(230, 126, 34, 0.1); }
+
+        .exam-feature-card h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .exam-feature-card p {
+            font-size: 0.88rem;
+            color: var(--gray-600);
+            line-height: 1.6;
+        }
+
+        .exam-showcase-cta {
+            text-align: center;
+        }
+
+        .exam-showcase-cta .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
         /* ==================== INTERACTIVE DEMO SECTION ==================== */
@@ -1910,7 +2230,7 @@
             max-width: 1200px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
             gap: 4rem;
         }
 
@@ -2105,6 +2425,18 @@
             .footer-content {
                 grid-template-columns: 1fr 1fr;
             }
+
+            .exam-showcase-header h2 {
+                font-size: 2rem;
+            }
+
+            .exam-features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .showcase-case-header p {
+                font-size: 0.88rem;
+            }
         }
 
         @media (max-width: 768px) {
@@ -2143,22 +2475,6 @@
 
             .hero h1 {
                 font-size: 2rem;
-            }
-
-            .coming-soon-sticker {
-                width: 100px;
-                height: 100px;
-                top: auto;
-                bottom: 20px;
-                right: 15px;
-            }
-
-            .sticker-label {
-                font-size: 0.55rem;
-            }
-
-            .sticker-text {
-                font-size: 0.7rem;
             }
 
             .hero-subtitle {
@@ -2393,6 +2709,40 @@
                 gap: 2rem;
                 text-align: center;
             }
+
+            .exam-showcase {
+                padding: 4rem 1.5rem;
+            }
+
+            .exam-showcase-header h2 {
+                font-size: 1.75rem;
+            }
+
+            .exam-showcase-header p {
+                font-size: 1rem;
+            }
+
+            .showcase-case-header {
+                padding: 1.5rem;
+            }
+
+            .showcase-question-item {
+                padding: 1.5rem;
+            }
+
+            .showcase-skill-filter-hint {
+                display: none;
+            }
+
+            .showcase-skill-toggle {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.78rem;
+            }
+
+            .exam-features-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 14px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -2417,22 +2767,6 @@
 
             .hero h1 {
                 font-size: 1.75rem;
-            }
-
-            .coming-soon-sticker {
-                width: 85px;
-                height: 85px;
-                top: auto;
-                bottom: 15px;
-                right: 10px;
-            }
-
-            .sticker-label {
-                font-size: 0.5rem;
-            }
-
-            .sticker-text {
-                font-size: 0.6rem;
             }
 
             .hero-visual {
@@ -2598,8 +2932,73 @@
             .pain-point-content .solution-text {
                 justify-content: center;
             }
+
+            .exam-showcase {
+                padding: 3rem 1rem;
+            }
+
+            .exam-showcase-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .showcase-case-header {
+                padding: 1.25rem;
+            }
+
+            .showcase-case-header p {
+                font-size: 0.85rem;
+            }
+
+            .showcase-question-item {
+                padding: 1.25rem;
+            }
+
+            .showcase-answer-box {
+                padding: 1rem;
+            }
+
+            .showcase-answer-text {
+                font-size: 0.85rem;
+            }
+
+            .showcase-skill-toggle {
+                padding: 0.45rem 0.65rem;
+                font-size: 0.75rem;
+                gap: 0.35rem;
+            }
+
+            .showcase-toggle-indicator {
+                width: 16px;
+                height: 16px;
+                font-size: 0.6rem;
+            }
+
+            .exam-features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .exam-feature-card {
+                padding: 22px 18px;
+            }
         }
-    </style>
+    
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+</style>
+<!-- Google Analytics - Replace GA_MEASUREMENT_ID with your actual ID -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'GA_MEASUREMENT_ID');
+</script>
 </head>
 <body>
     <!-- Navigation -->
@@ -2653,7 +3052,7 @@
                     Created by an Expert Business Teacher
                 </div>
                 <h1>Ace Your A-Level <span>Business Studies</span> Exams</h1>
-                <p class="hero-subtitle">Master every topic with interactive flashcards, smart revision tools, and progress tracking. Study smarter, not harder and watch your grades improve.</p>
+                <p class="hero-subtitle">Master every topic with interactive flashcards and learn exactly how to write answers that score full marks with our exam skills training. Study smarter, not harder.</p>
                 <div class="free-badge">
                     <span class="free-badge-icon">🎉</span>
                     <span class="free-badge-text">Free for a Limited Time</span>
@@ -2674,6 +3073,10 @@
                     <div class="hero-stat">
                         <span class="hero-stat-value">100%</span>
                         <span class="hero-stat-label">Syllabus Coverage</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="hero-stat-value">✍️</span>
+                        <span class="hero-stat-label">Exam Skills</span>
                     </div>
                 </div>
             </div>
@@ -2776,13 +3179,6 @@
             </div>
         </div>
 
-        <!-- Coming Soon Sticker -->
-        <div class="coming-soon-sticker">
-            <div class="sticker-inner">
-                <span class="sticker-label">Coming Soon</span>
-                <span class="sticker-text">Exam Skills &amp; Questions</span>
-            </div>
-        </div>
     </section>
 
     <!-- Pain Points Section -->
@@ -2863,9 +3259,9 @@
                 <p>Perfect for busy students. Just 10 minutes a day of focused revision can significantly boost your understanding.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon feature-icon-5">🔄</div>
-                <h3>Spaced Repetition</h3>
-                <p>Our system helps you review cards at optimal intervals, improving long-term memory retention.</p>
+                <div class="feature-icon feature-icon-5">✍️</div>
+                <h3>Exam Skills Training</h3>
+                <p>Learn exactly how to write answers that score full marks with model answers, mark breakdowns, and the PBLI framework.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon feature-icon-6">📱</div>
@@ -2873,9 +3269,118 @@
                 <p>Access your flashcards on any device – phone, tablet, or computer. Your progress syncs automatically.</p>
             </div>
         </div>
-        <div class="coming-soon-banner">
-            <span class="coming-soon-icon">🚀</span>
-            <span class="coming-soon-text">Coming Soon: Exam Skills &amp; Practice Questions</span>
+    </section>
+
+    <!-- Exam Skills Showcase Section -->
+    <section class="exam-showcase" id="exam-skills">
+        <div class="exam-showcase-container">
+            <div class="exam-showcase-header">
+                <span class="section-label">Exam Skills Training</span>
+                <h2>See What Separates a Weak Answer from a Top Mark Answer</h2>
+                <p>Our exam skills training shows you exactly where marks are won and lost, sentence by sentence.</p>
+            </div>
+
+            <!-- Full Exam Skills Replica -->
+            <div class="showcase-case-card">
+                <div class="showcase-case-header">
+                    <h3>TechStart Ltd</h3>
+                    <p>TechStart Ltd is a software startup founded in 2022 by two university graduates, James and Priya. The company develops mobile apps for small businesses, helping them manage bookings, payments, and customer communication. The business has grown from 3 to 15 employees in just two years. Revenue has increased from £50,000 in the first year to £320,000, representing 540% growth. However, cash flow remains tight because developers must be paid monthly while clients often pay 60 days after project completion. The founders are now considering whether to seek £500,000 venture capital investment to speed up growth, or continue growing organically through retained profits. Staff turnover has recently increased, with three developers leaving in the past six months for higher-paying jobs at larger tech firms.</p>
+                </div>
+                <div class="showcase-question-item">
+                    <div class="showcase-question-header">
+                        <h4>Evaluate the most important factors that TechStart should consider when deciding its future growth strategy. (20 marks)</h4>
+                        <div class="showcase-question-badges">
+                            <span class="showcase-q-badge marks">20 marks</span>
+                            <span class="showcase-q-badge structure">2 × PBLI + Balance + Extended Conclusion</span>
+                        </div>
+                    </div>
+                    <div class="showcase-answer-section">
+                        <button class="showcase-reveal-btn" onclick="toggleShowcaseAnswer(this)">
+                            <span>👁️ Show Answers</span>
+                        </button>
+                        <div class="showcase-answer-content" data-question-id="showcase-q1">
+                            <div class="showcase-answer-box weak">
+                                <div class="showcase-answer-label">❌ Weak Answer (Level 2)</div>
+                                <p class="showcase-answer-text">There are many factors that TechStart should consider when deciding its growth strategy. One important factor is finance. Finance is the money that a business uses to fund its activities. TechStart needs to decide whether to get venture capital or use retained profits. Venture capital means getting money from investors who want a return on their investment. This would give TechStart £500,000 to spend on growth. Retained profits means using the money the business has already made. This is safer because you do not owe anyone anything.<br><br>Another factor is human resources. Human resources is the management of people within a business. When a business grows, it needs more employees and this can be difficult to manage. TechStart has gone from 3 to 15 employees which is a lot of growth.<br><br>However, there are risks with growing too fast. If a business grows too quickly it can run into cash flow problems. This is called overtrading.<br><br>In conclusion, I think the most important factor is finance because without money a business cannot do anything.</p>
+                                <p class="showcase-marks-estimate weak">≈ 6/20 marks (Level 2). This answer reads like a textbook. The application is shallow and each point is stated but never built into a chain of reasoning.</p>
+                            </div>
+                            <div class="showcase-skill-filter-panel">
+                                <div class="showcase-skill-filter-header">
+                                    <span class="showcase-filter-icon">🎯</span>
+                                    <h5>Reveal Skills in Model Answer</h5>
+                                    <span class="showcase-skill-filter-hint">Tap to highlight each skill</span>
+                                </div>
+                                <div class="showcase-skill-filter-buttons">
+                                    <button class="showcase-skill-toggle k" onclick="showcaseToggleSkill(this, 'k', 'showcase-q1')">
+                                        <span class="showcase-toggle-indicator">P</span>
+                                        Knowledge
+                                    </button>
+                                    <button class="showcase-skill-toggle ap" onclick="showcaseToggleSkill(this, 'ap', 'showcase-q1')">
+                                        <span class="showcase-toggle-indicator">B</span>
+                                        Application
+                                    </button>
+                                    <button class="showcase-skill-toggle an" onclick="showcaseToggleSkill(this, 'an', 'showcase-q1')">
+                                        <span class="showcase-toggle-indicator">L/I</span>
+                                        Analysis
+                                    </button>
+                                    <button class="showcase-skill-toggle ev" onclick="showcaseToggleSkill(this, 'ev', 'showcase-q1')">
+                                        <span class="showcase-toggle-indicator">⚖️</span>
+                                        Evaluation
+                                    </button>
+                                    <button class="showcase-skill-toggle show-all" onclick="showcaseToggleAllSkills(this, 'showcase-q1')">
+                                        <span class="showcase-toggle-indicator">✨</span>
+                                        Show All Skills
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="showcase-answer-box model">
+                                <div class="showcase-answer-label">✓ Model Answer (2 × PBLI with balance + Extended Conclusion)</div>
+                                <p class="showcase-answer-text">
+                                    <strong>PBLI 1 + Balance:</strong> <span class="highlight k">[P] The source and speed of funding is a key factor, as venture capital provides quick access to large amounts of money, and in a competitive market speed of growth can determine whether a business survives or fails</span>. <span class="highlight ap">[B] TechStart's founders are considering £500,000 of VC funding, which would be a huge amount for a business that has only grown from £50,000 to £320,000 revenue in two years</span>. <span class="highlight an">[L] This leads to the ability to hire specialist developers, invest in marketing, and take on larger client projects at the same time rather than one after another</span>, <span class="highlight an">[I] meaning the VC funding question is really a question about speed, and the cost of slow organic growth is not just missed revenue but the risk of being overtaken entirely in a fast-moving market</span>.
+
+                                    <br><br><span class="highlight ev">However</span>, <span class="highlight k">[P] VC investors usually want board seats, regular reports, and a plan for how they will get their money back, and rapid expansion also carries the risk of overtrading</span>. <span class="highlight ap">[B] As two university graduates who built TechStart from scratch, James and Priya may not have the experience to deal with professional investors. Their cash flow is already "tight" despite strong revenue growth, and clients take 60 days to pay</span>. <span class="highlight an">[L] This could lead to business decisions being driven by what investors want rather than what is best for the product, while aggressive growth could make the cash flow gap worse</span>.<br><br>
+
+                                    <strong>PBLI 2 + Balance:</strong> <span class="highlight k">[P] Managing people becomes much harder during rapid growth, and the ability to recruit, train and keep skilled staff is essential, particularly in an industry where the product depends entirely on the quality of the workforce</span>. <span class="highlight ap">[B] TechStart has expanded from 3 to 15 employees in just two years, and three developers have already left in the past six months for higher-paying jobs at larger tech firms</span>. <span class="highlight an">[L] This leads to pressure on the founders' time and management capacity, and each developer who leaves takes knowledge of TechStart's code and client relationships with them</span>, <span class="highlight an">[I] which risks lower productivity, lost clients, and a damaged reputation if projects are delayed or quality drops</span>.
+
+                                    <br><br><span class="highlight ev">However</span>, <span class="highlight k">[P] not investing in competitive salaries could be just as damaging, because in a knowledge-based industry losing key staff can set a business back more than any financial loss</span>. <span class="highlight ap">[B] The tech industry is described as "highly competitive and fast-moving", meaning TechStart's remaining developers are likely being approached by larger, better-paying employers regularly</span>. <span class="highlight an">[L] This means without growth capital to fund competitive pay and training, the turnover problem will only get worse</span>.<br><br>
+
+                                    <strong>Conclusion (MOPS: Market):</strong> <span class="highlight ev">Overall, the most important factor is the competitive nature of TechStart's market, because this is what makes every other decision so urgent.</span> <span class="highlight ap">In a fast-moving technology sector where larger competitors could copy their products within months</span>, <span class="highlight an">the window to build a strong market position is narrow.</span> <span class="highlight ev">In the short term, accepting VC investment will create pressures around control and culture. In the long term, however, growing too slowly could threaten the survival of the business entirely.</span>
+                                </p>
+                                <p class="showcase-marks-estimate model">✓ 20/20 marks (Level 4)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exam Feature Cards -->
+            <div class="exam-features-grid">
+                <div class="exam-feature-card">
+                    <div class="exam-feature-icon blue">🎨</div>
+                    <h3>Colour Coded Marks</h3>
+                    <p>Every sentence is highlighted to show exactly which skill it demonstrates and where your marks come from.</p>
+                </div>
+                <div class="exam-feature-card">
+                    <div class="exam-feature-icon green">📐</div>
+                    <h3>PBLI Framework</h3>
+                    <p>Learn the Point, Because, Leads to, Impact structure that turns average answers into top band responses.</p>
+                </div>
+                <div class="exam-feature-card">
+                    <div class="exam-feature-icon purple">⚖️</div>
+                    <h3>Weak vs Model Answers</h3>
+                    <p>Compare side by side examples for every question type, from 2 mark definitions to 20 mark essays.</p>
+                </div>
+                <div class="exam-feature-card">
+                    <div class="exam-feature-icon orange">💡</div>
+                    <h3>Examiner Tips</h3>
+                    <p>Insider advice on what examiners are actually looking for and the common mistakes that cost students marks.</p>
+                </div>
+            </div>
+
+            <!-- CTA Button -->
+            <div class="exam-showcase-cta">
+                <a href="exam-skills-v2.html" class="btn btn-primary btn-large">Explore Exam Skills →</a>
+            </div>
         </div>
     </section>
 
@@ -3132,11 +3637,18 @@
                 </ul>
             </div>
             <div class="footer-links">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
                 <h4>Legal</h4>
                 <ul>
                     <li><a href="privacy.html">Privacy Policy</a></li>
                     <li><a href="terms.html">Terms of Service</a></li>
-                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="refund.html">Refund Policy</a></li>
                 </ul>
             </div>
         </div>
@@ -3146,6 +3658,69 @@
     </footer>
 
     <script>
+        // Exam Skills Showcase Functions
+        function toggleShowcaseAnswer(btn) {
+            const answerContent = btn.nextElementSibling;
+            const isVisible = answerContent.classList.contains('visible');
+            if (isVisible) {
+                answerContent.classList.remove('visible');
+                btn.innerHTML = '<span>👁️ Show Answers</span>';
+            } else {
+                answerContent.classList.add('visible');
+                btn.innerHTML = '<span>👁️ Hide Answers</span>';
+            }
+        }
+
+        function showcaseToggleSkill(btn, skillType, questionId) {
+            const answerContent = document.querySelector('[data-question-id="' + questionId + '"]');
+            const highlights = answerContent.querySelectorAll('.highlight.' + skillType);
+            const showAllBtn = answerContent.querySelector('.showcase-skill-toggle.show-all');
+
+            btn.classList.toggle('active');
+
+            const isActive = btn.classList.contains('active');
+            highlights.forEach(function(h) {
+                if (isActive) {
+                    h.classList.add('show-' + skillType);
+                } else {
+                    h.classList.remove('show-' + skillType);
+                }
+            });
+
+            var allToggles = answerContent.querySelectorAll('.showcase-skill-toggle:not(.show-all)');
+            var allActive = Array.from(allToggles).every(function(t) { return t.classList.contains('active'); });
+            if (allActive) {
+                showAllBtn.classList.add('active');
+            } else {
+                showAllBtn.classList.remove('active');
+            }
+        }
+
+        function showcaseToggleAllSkills(btn, questionId) {
+            var answerContent = document.querySelector('[data-question-id="' + questionId + '"]');
+            var allToggles = answerContent.querySelectorAll('.showcase-skill-toggle:not(.show-all)');
+            var allHighlights = answerContent.querySelectorAll('.highlight');
+
+            var allActive = Array.from(allToggles).every(function(t) { return t.classList.contains('active'); });
+
+            if (allActive) {
+                btn.classList.remove('active');
+                allToggles.forEach(function(t) { t.classList.remove('active'); });
+                allHighlights.forEach(function(h) {
+                    h.classList.remove('show-k', 'show-ap', 'show-an', 'show-ev');
+                });
+            } else {
+                btn.classList.add('active');
+                allToggles.forEach(function(t) { t.classList.add('active'); });
+                allHighlights.forEach(function(h) {
+                    if (h.classList.contains('k')) h.classList.add('show-k');
+                    if (h.classList.contains('ap')) h.classList.add('show-ap');
+                    if (h.classList.contains('an')) h.classList.add('show-an');
+                    if (h.classList.contains('ev')) h.classList.add('show-ev');
+                });
+            }
+        }
+
         // Navbar scroll effect
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
