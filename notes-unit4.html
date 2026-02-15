@@ -152,8 +152,8 @@
 
         /* ==================== UNIT HEADER BAR ==================== */
         .unit-header-bar {
-            padding-top: 90px;
-            padding-bottom: 1.5rem;
+            padding-top: 110px;
+            padding-bottom: 20px;
             background: linear-gradient(135deg, #d68910 0%, var(--unit4) 50%, #f5b041 100%);
             position: relative;
             overflow: hidden;
@@ -184,6 +184,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            align-self: center;
             width: 40px;
             height: 40px;
             border-radius: 10px;
@@ -198,7 +199,7 @@
         .unit-header-back:hover { background: rgba(255,255,255,0.25); }
         .unit-header-back svg { width: 18px; height: 18px; stroke: white; fill: none; stroke-width: 2; }
 
-        .unit-header-info { flex: 1; }
+        .unit-header-info { flex: 1; align-self: center; }
 
         .unit-header-label {
             font-size: 0.75rem;
@@ -341,6 +342,15 @@
             border-radius: 50%;
             flex-shrink: 0;
         }
+
+            .sidebar-topic-item { position: relative; }
+            .sidebar-expand-icon { margin-left: auto; font-size: 0.75rem; color: var(--gray-400); transition: transform 0.2s ease; flex-shrink: 0; }
+            .sidebar-topic-item.expanded .sidebar-expand-icon { transform: rotate(90deg); }
+            .sidebar-subsections { display: none; padding: 0.15rem 0 0.3rem 2.6rem; }
+            .sidebar-topic-item.expanded .sidebar-subsections { display: block; }
+            .sidebar-sub-link { display: block; padding: 0.35rem 0.75rem; font-size: 0.78rem; color: var(--gray-500); text-decoration: none; cursor: pointer; border-radius: 6px; transition: all 0.15s ease; line-height: 1.3; }
+            .sidebar-sub-link:hover { color: var(--gray-800); background: var(--gray-50); }
+            .sidebar-sub-link.active { color: var(--unit-color); font-weight: 600; }
 
         /* ==================== MAIN CONTENT ==================== */
         .main-content {
@@ -722,6 +732,12 @@
             font-weight: 600;
             margin-bottom: 0.75rem;
             line-height: 1.5;
+            color: #ffffff;
+        }
+
+        .quiz-section p,
+        .quiz-section p strong {
+            color: #ffffff;
         }
 
         .quiz-options {
@@ -1028,7 +1044,7 @@
             .mobile-menu-overlay { display: block; }
             .mobile-menu { display: block; }
 
-            .unit-header-bar { padding-top: 80px; padding-bottom: 1.25rem; }
+            .unit-header-bar { padding-top: 95px; padding-bottom: 15px; }
             .unit-header-title { font-size: 1.2rem; }
 
             .notes-layout {
@@ -1076,6 +1092,359 @@
             .topic-inner { padding: 0 1rem 1.25rem; }
             .key-term, .formula-box, .real-world, .exam-tip { padding: 0.85rem 1rem; }
         }
+
+            /* ===== SEARCH ===== */
+            .unit-header-bar.search-active { overflow: visible; }
+            .search-container { flex-shrink: 0; width: 260px; position: relative; margin-left: auto; align-self: center; }
+            .search-input-wrapper { position: relative; display: flex; align-items: center; }
+            .search-icon { position: absolute; left: 0.75rem; width: 16px; height: 16px; stroke: var(--gray-400); pointer-events: none; z-index: 2; }
+            .search-input { width: 100%; padding: 0.6rem 2.25rem 0.6rem 2.5rem; background: rgba(255,255,255,0.92); border: 1px solid rgba(255,255,255,0.3); border-radius: 10px; font-size: 0.85rem; font-family: inherit; color: var(--gray-900); transition: all 0.2s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+            .search-input::placeholder { color: var(--gray-400); }
+            .search-input:focus { outline: none; background: white; border-color: var(--accent, var(--unit-color)); box-shadow: 0 0 0 3px rgba(255,255,255,0.3); }
+            .search-clear-btn { position: absolute; right: 0.5rem; background: none; border: none; font-size: 1.25rem; color: var(--gray-400); cursor: pointer; padding: 0; width: 24px; height: 24px; display: none; align-items: center; justify-content: center; transition: color 0.2s ease; z-index: 2; line-height: 1; }
+            .search-clear-btn:hover { color: var(--gray-700); }
+            .search-clear-btn.visible { display: flex; }
+            .search-results-panel { display: none; position: absolute; top: calc(100% + 0.5rem); left: auto; right: 0; width: 400px; background: white; border: 1px solid var(--gray-200); border-radius: 12px; max-height: 420px; overflow-y: auto; box-shadow: 0 12px 40px rgba(0,0,0,0.15); z-index: 2000; }
+            .search-results-panel.open { display: block; }
+            .search-results-count { padding: 0.6rem 1rem 0.4rem; font-size: 0.75rem; color: var(--gray-500); border-bottom: 1px solid var(--gray-100); font-weight: 500; }
+            .search-results-content { padding: 0.35rem; }
+            .search-result-item { padding: 0.75rem 0.85rem; cursor: pointer; transition: background 0.15s ease; border-radius: 8px; margin-bottom: 2px; }
+            .search-result-item:hover { background: var(--gray-50); }
+            .result-location { display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.35rem; flex-wrap: wrap; }
+            .result-topic-badge { font-size: 0.7rem; font-weight: 700; color: white; background: var(--unit-color); padding: 0.15rem 0.45rem; border-radius: 4px; white-space: nowrap; }
+            .result-subsection-name { font-size: 0.8rem; font-weight: 600; color: var(--gray-800); }
+            .result-preview { font-size: 0.78rem; color: var(--gray-500); line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+            .search-highlight { background: #fef08a; color: var(--gray-900); padding: 0.05rem 0.15rem; border-radius: 2px; font-weight: 600; }
+            .page-search-highlight { background: #fbbf24; color: var(--gray-900); padding: 0.1rem 0.2rem; border-radius: 3px; font-weight: 600; box-shadow: 0 0 0 2px rgba(251,191,36,0.4); animation: highlightPulse 1.5s ease-in-out 2; }
+            @keyframes highlightPulse { 0%, 100% { box-shadow: 0 0 0 2px rgba(251,191,36,0.4); } 50% { box-shadow: 0 0 0 6px rgba(251,191,36,0.2); } }
+
+            .search-no-results { padding: 2rem 1rem; text-align: center; color: var(--gray-400); font-size: 0.85rem; }
+            .search-no-results span { display: block; font-size: 1.5rem; margin-bottom: 0.5rem; }
+
+            /* Mobile search button */
+            .search-mobile-btn { display: none; align-items: center; justify-content: center; width: 40px; height: 40px; border: none; background: none; cursor: pointer; padding: 0; margin-right: 0.25rem; }
+            .search-mobile-btn svg { width: 22px; height: 22px; stroke: var(--gray-700); }
+
+            /* Mobile search modal */
+            .search-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 2000; flex-direction: column; }
+            .search-modal.open { display: flex; }
+            .search-modal-header { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-bottom: 1px solid var(--gray-200); background: var(--gray-50); }
+            .search-modal-input-wrapper { flex: 1; position: relative; display: flex; align-items: center; }
+            .search-modal-input-wrapper .search-icon { left: 0.75rem; }
+            .search-modal-input { width: 100%; padding: 0.65rem 2.25rem 0.65rem 2.5rem; background: white; border: 1px solid var(--gray-300); border-radius: 10px; font-size: 0.9rem; font-family: inherit; color: var(--gray-900); }
+            .search-modal-input:focus { outline: none; border-color: var(--unit-color); box-shadow: 0 0 0 3px rgba(0,0,0,0.05); }
+            .search-modal-close { background: none; border: none; color: var(--unit-color); font-size: 0.9rem; font-weight: 600; cursor: pointer; white-space: nowrap; padding: 0.5rem; font-family: inherit; }
+            .search-modal-results { flex: 1; overflow-y: auto; padding: 0.5rem; }
+
+            @media (max-width: 768px) {
+                .search-container { display: none; }
+                .search-mobile-btn { display: flex; }
+            }
+
+            /* ===== ADV/DISADV GRID ===== */
+            .adv-disadv-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+                margin: 1rem 0;
+            }
+            .adv-box, .disadv-box {
+                border-radius: 10px;
+                padding: 1rem 1.1rem;
+            }
+            .adv-box {
+                background: rgba(39, 174, 96, 0.06);
+                border: 1px solid rgba(39, 174, 96, 0.2);
+            }
+            .disadv-box {
+                background: rgba(231, 76, 60, 0.06);
+                border: 1px solid rgba(231, 76, 60, 0.2);
+            }
+            .adv-box-title {
+                font-size: 0.7rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                color: #27ae60;
+                margin-bottom: 0.6rem;
+            }
+            .disadv-box-title {
+                font-size: 0.7rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                color: #e74c3c;
+                margin-bottom: 0.6rem;
+            }
+            .adv-box ul, .disadv-box ul {
+                margin: 0;
+                padding-left: 1.2rem;
+            }
+            .adv-box li, .disadv-box li {
+                font-size: 0.85rem;
+                line-height: 1.6;
+                margin-bottom: 0.5rem;
+                color: var(--gray-700);
+            }
+            .adv-box li:last-child, .disadv-box li:last-child {
+                margin-bottom: 0;
+            }
+            @media (max-width: 768px) {
+                .adv-disadv-grid { grid-template-columns: 1fr; }
+            }
+
+
+            @keyframes ansoffSlide {
+                from { opacity: 0; transform: translateY(-8px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+
+            /* ===== ENTRY METHODS GRAPHIC ===== */
+            .entry-methods-graphic {
+                background: linear-gradient(135deg, rgba(26, 42, 58, 0.03), rgba(26, 42, 58, 0.08));
+                border: 1px solid rgba(26, 42, 58, 0.12);
+                border-radius: 14px;
+                padding: 0;
+                margin: 1.5rem 0;
+                overflow: hidden;
+            }
+            .entry-methods-top-bar {
+                background: linear-gradient(135deg, #1a2a3a, #2c3e50);
+                color: #fff;
+                padding: 0.8rem 1.2rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .entry-methods-top-bar h5 {
+                margin: 0;
+                font-size: 0.95rem;
+                font-weight: 700;
+            }
+            .em-badge {
+                background: rgba(255,255,255,0.15);
+                color: #fff;
+                font-size: 0.6rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                padding: 0.25rem 0.6rem;
+                border-radius: 20px;
+            }
+            .em-spectrum {
+                padding: 1.2rem;
+            }
+            .em-axis {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 0.6rem;
+                padding: 0 0.5rem;
+            }
+            .em-axis-label {
+                font-size: 0.65rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                color: var(--gray-500);
+            }
+            .em-axis-line {
+                flex: 1;
+                height: 3px;
+                background: linear-gradient(90deg, #27ae60, #f39c12, #e74c3c);
+                margin: 0 0.8rem;
+                border-radius: 2px;
+            }
+            .em-cards-row {
+                display: grid;
+                grid-template-columns: repeat(6, 1fr);
+                gap: 0.5rem;
+                margin-top: 0.8rem;
+            }
+            .em-card {
+                background: #fff;
+                border: 2px solid rgba(26, 42, 58, 0.1);
+                border-radius: 10px;
+                padding: 0.7rem 0.5rem;
+                text-align: center;
+                cursor: pointer;
+                transition: all 0.25s ease;
+                position: relative;
+            }
+            .em-card:hover, .em-card.active {
+                border-color: var(--primary);
+                transform: translateY(-3px);
+                box-shadow: 0 4px 15px rgba(26, 42, 58, 0.12);
+            }
+            .em-card-icon {
+                font-size: 1.4rem;
+                margin-bottom: 0.3rem;
+            }
+            .em-card-name {
+                font-size: 0.7rem;
+                font-weight: 700;
+                color: var(--gray-800);
+                line-height: 1.3;
+            }
+            .em-card-metrics {
+                display: flex;
+                justify-content: center;
+                gap: 0.3rem;
+                margin-top: 0.4rem;
+            }
+            .em-metric {
+                font-size: 0.55rem;
+                font-weight: 600;
+                padding: 0.15rem 0.35rem;
+                border-radius: 4px;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+            }
+            .em-metric.risk-low { background: rgba(39,174,96,0.12); color: #27ae60; }
+            .em-metric.risk-med { background: rgba(243,156,18,0.12); color: #f39c12; }
+            .em-metric.risk-high { background: rgba(231,76,60,0.12); color: #e74c3c; }
+            .em-info {
+                display: none;
+                background: rgba(26, 42, 58, 0.04);
+                border-radius: 10px;
+                padding: 1rem 1.2rem;
+                margin: 0.8rem 1.2rem 1.2rem;
+                animation: ansoffSlide 0.3s ease;
+            }
+            .em-info.show { display: block; }
+            .em-info h6 {
+                font-size: 0.85rem;
+                font-weight: 700;
+                color: var(--gray-800);
+                margin: 0 0 0.5rem 0;
+            }
+            .em-info-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 0.6rem;
+            }
+            .em-info-adv, .em-info-disadv {
+                border-radius: 8px;
+                padding: 0.6rem 0.8rem;
+            }
+            .em-info-adv {
+                background: rgba(39,174,96,0.06);
+                border: 1px solid rgba(39,174,96,0.15);
+            }
+            .em-info-disadv {
+                background: rgba(231,76,60,0.06);
+                border: 1px solid rgba(231,76,60,0.15);
+            }
+            .em-info-adv-title, .em-info-disadv-title {
+                font-size: 0.6rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                margin-bottom: 0.3rem;
+            }
+            .em-info-adv-title { color: #27ae60; }
+            .em-info-disadv-title { color: #e74c3c; }
+            .em-info ul {
+                margin: 0;
+                padding-left: 1rem;
+            }
+            .em-info li {
+                font-size: 0.78rem;
+                line-height: 1.5;
+                margin-bottom: 0.3rem;
+                color: var(--gray-700);
+            }
+            .em-hint {
+                text-align: center;
+                font-size: 0.7rem;
+                color: var(--gray-500);
+                font-style: italic;
+                padding: 0.5rem 1.2rem 1rem;
+            }
+            @media (max-width: 768px) {
+                .em-cards-row { grid-template-columns: repeat(3, 1fr); }
+                .em-info-grid { grid-template-columns: 1fr; }
+            }
+
+            /* ===== FDI COMPARISON GRAPHIC ===== */
+            .fdi-compare {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+                margin: 1.5rem 0;
+            }
+            .fdi-card {
+                border-radius: 14px;
+                padding: 0;
+                overflow: hidden;
+            }
+            .fdi-card-green {
+                background: rgba(39, 174, 96, 0.04);
+                border: 1px solid rgba(39, 174, 96, 0.2);
+            }
+            .fdi-card-brown {
+                background: rgba(160, 120, 60, 0.04);
+                border: 1px solid rgba(160, 120, 60, 0.2);
+            }
+            .fdi-card-header {
+                padding: 0.8rem 1rem;
+                display: flex;
+                align-items: center;
+                gap: 0.6rem;
+            }
+            .fdi-card-green .fdi-card-header {
+                background: rgba(39, 174, 96, 0.08);
+            }
+            .fdi-card-brown .fdi-card-header {
+                background: rgba(160, 120, 60, 0.08);
+            }
+            .fdi-card-icon {
+                font-size: 1.4rem;
+            }
+            .fdi-card-title {
+                font-size: 0.85rem;
+                font-weight: 700;
+                color: var(--gray-800);
+            }
+            .fdi-card-body {
+                padding: 0.8rem 1rem;
+            }
+            .fdi-card-body p {
+                font-size: 0.8rem;
+                line-height: 1.6;
+                color: var(--gray-700);
+                margin: 0 0 0.5rem 0;
+            }
+            .fdi-card-features {
+                list-style: none;
+                padding: 0;
+                margin: 0.5rem 0 0 0;
+            }
+            .fdi-card-features li {
+                font-size: 0.78rem;
+                line-height: 1.5;
+                color: var(--gray-700);
+                padding: 0.3rem 0 0.3rem 1.2rem;
+                position: relative;
+            }
+            .fdi-card-green .fdi-card-features li::before {
+                content: '\2713';
+                position: absolute;
+                left: 0;
+                color: #27ae60;
+                font-weight: 700;
+            }
+            .fdi-card-brown .fdi-card-features li::before {
+                content: '\2713';
+                position: absolute;
+                left: 0;
+                color: #a0783c;
+                font-weight: 700;
+            }
+            @media (max-width: 768px) {
+                .fdi-compare { grid-template-columns: 1fr; }
+            }
+
     </style>
 </head>
 <body>
@@ -1093,6 +1462,10 @@
             <span class="user-email" id="userEmail"></span>
             <button class="logout-btn" id="logoutBtn" onclick="handleLogout()">Logout</button>
         </div>
+        <button class="search-mobile-btn" id="searchMobileBtn" onclick="openMobileSearch()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
+
         <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
             <span></span>
             <span></span>
@@ -1136,12 +1509,38 @@
                 <div class="unit-header-label">Unit 4</div>
                 <h1 class="unit-header-title">Global Business</h1>
             </div>
+            <div class="search-container" id="searchContainer">
+                <div class="search-input-wrapper">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search notes..." autocomplete="off">
+                    <button class="search-clear-btn" id="searchClearBtn" onclick="clearSearch()">&#215;</button>
+                </div>
+                <div class="search-results-panel" id="searchResultsPanel">
+                    <div class="search-results-count" id="searchResultsCount"></div>
+                    <div class="search-results-content" id="searchResultsContent"></div>
+                </div>
+            </div>
+
         </div>
     </section>
 
     <!-- Sidebar Mobile Toggle -->
     <button class="sidebar-mobile-toggle" id="sidebarToggle" onclick="toggleSidebar()">&#9776;</button>
     <div class="sidebar-mobile-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <!-- Mobile Search Modal -->
+    <div class="search-modal" id="searchModal">
+        <div class="search-modal-header">
+            <div class="search-modal-input-wrapper">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" class="search-modal-input" id="searchModalInput" placeholder="Search notes..." autocomplete="off">
+                <button class="search-clear-btn" id="searchModalClearBtn" onclick="clearMobileSearch()">&#215;</button>
+            </div>
+            <button class="search-modal-close" onclick="closeMobileSearch()">Cancel</button>
+        </div>
+        <div class="search-modal-results" id="searchModalResults"></div>
+    </div>
+
 
     <!-- Layout -->
     <div class="notes-layout">
@@ -1152,24 +1551,60 @@
                     <div class="sidebar-unit-badge">U4</div>
                     <div class="sidebar-unit-name">Global Business</div>
                 </div>
-                <div class="sidebar-topics">
-                    <a class="sidebar-topic-link active" onclick="scrollToTopic('topic-4-1')">
-                        <span class="sidebar-topic-num">4.1</span>
-                        <span>Globalisation</span>
-                    </a>
-                    <a class="sidebar-topic-link" onclick="scrollToTopic('topic-4-2')">
-                        <span class="sidebar-topic-num">4.2</span>
-                        <span>Global Markets and Expansion</span>
-                    </a>
-                    <a class="sidebar-topic-link" onclick="scrollToTopic('topic-4-3')">
-                        <span class="sidebar-topic-num">4.3</span>
-                        <span>Global Marketing</span>
-                    </a>
-                    <a class="sidebar-topic-link" onclick="scrollToTopic('topic-4-4')">
-                        <span class="sidebar-topic-num">4.4</span>
-                        <span>Global Industries and Multinational Corporations</span>
-                    </a>
-                </div>
+                    <div class="sidebar-topics">
+                        <div class="sidebar-topic-item expanded" data-topic="topic-4-1">
+                            <a class="sidebar-topic-link active" onclick="sidebarTopicClick('topic-4-1', event)">
+                                <span class="sidebar-topic-num">4.1</span>
+                                <span>Globalisation</span>
+                                <span class="sidebar-expand-icon">›</span>
+                            </a>
+                            <div class="sidebar-subsections">
+                                <a class="sidebar-sub-link" onclick="scrollToSubsection('sub-what-is-globalisation', 'topic-4-1')">What Is Globalisation?</a>
+                                <a class="sidebar-sub-link" onclick="scrollToSubsection('sub-causes-globalisation', 'topic-4-1')">Causes of Globalisation</a>
+                                <a class="sidebar-sub-link" onclick="scrollToSubsection('sub-impact-businesses', 'topic-4-1')">Impact on Businesses</a>
+                                <a class="sidebar-sub-link" onclick="scrollToSubsection('sub-impact-consumers', 'topic-4-1')">Impact on Consumers</a>
+                                <a class="sidebar-sub-link" onclick="scrollToSubsection('sub-free-trade', 'topic-4-1')">Free Trade and Protectionism</a>
+                            </div>
+                        </div>
+                        <div class="sidebar-topic-item" data-topic="topic-4-2">
+                            <a class="sidebar-topic-link" onclick="sidebarTopicClick('topic-4-2', event)">
+                                <span class="sidebar-topic-num">4.2</span>
+                                <span>Global Markets and Expansion</span>
+                                <span class="sidebar-expand-icon">›</span>
+                            </a>
+                            <div class="sidebar-subsections">
+                                <a class="sidebar-sub-link" onclick="scrollToSubsection('sub-reasons-entering', 'topic-4-2')">Reasons for Entering</a>
+                                <a class="sidebar-sub-link" onclick="scrollToSubsection('sub-methods-entering', 'topic-4-2')">Methods of Entering</a>
+                                <a class="sidebar-sub-link" onclick="scrollToSubsection('sub-assessing-markets', 'topic-4-2')">Assessing Markets</a>
+                                <a class="sidebar-sub-link" onclick="scrollToSubsection('sub-barriers-entry', 'topic-4-2')">Barriers to Entry</a>
+                                <a class="sidebar-sub-link" onclick="scrollToSubsection('sub-niche-markets', 'topic-4-2')">Global Niche Markets</a>
+                            </div>
+                        </div>
+                        <div class="sidebar-topic-item" data-topic="topic-4-3">
+                            <a class="sidebar-topic-link" onclick="sidebarTopicClick('topic-4-3', event)">
+                                <span class="sidebar-topic-num">4.3</span>
+                                <span>Global Marketing</span>
+                                <span class="sidebar-expand-icon">›</span>
+                            </a>
+                            <div class="sidebar-subsections">
+                                <a class="sidebar-sub-link" onclick="scrollToSubsection('sub-standardisation-adaptation', 'topic-4-3')">Standardisation vs Adaptation</a>
+                                <a class="sidebar-sub-link" onclick="scrollToSubsection('sub-cultural-differences', 'topic-4-3')">Cultural Differences</a>
+                                <a class="sidebar-sub-link" onclick="scrollToSubsection('sub-global-marketing-mix', 'topic-4-3')">The Global Marketing Mix</a>
+                            </div>
+                        </div>
+                        <div class="sidebar-topic-item" data-topic="topic-4-4">
+                            <a class="sidebar-topic-link" onclick="sidebarTopicClick('topic-4-4', event)">
+                                <span class="sidebar-topic-num">4.4</span>
+                                <span>Global Industries and MNCs</span>
+                                <span class="sidebar-expand-icon">›</span>
+                            </a>
+                            <div class="sidebar-subsections">
+                                <a class="sidebar-sub-link" onclick="scrollToSubsection('sub-multinational-corporations', 'topic-4-4')">Multinational Corporations</a>
+                                <a class="sidebar-sub-link" onclick="scrollToSubsection('sub-controlling-mncs', 'topic-4-4')">Controlling MNCs</a>
+                                <a class="sidebar-sub-link" onclick="scrollToSubsection('sub-fdi-reshoring', 'topic-4-4')">FDI and Reshoring</a>
+                            </div>
+                        </div>
+                    </div>
                 <div class="sidebar-other-units">
                     <div class="sidebar-other-label">Other Units</div>
                     <div class="sidebar-other-links">
@@ -1210,7 +1645,7 @@
                         <p>Globalisation refers to the increasing interconnectedness of the world's economies, cultures, and societies. It involves the growing integration of markets, free movement of goods and services, and greater collaboration between countries and businesses across borders. The world has become increasingly "flatter" with businesses operating in multiple countries and competing on a truly global scale.</p>
 
                         <!-- SUBSECTION 1: WHAT IS GLOBALISATION -->
-                        <div class="subsection open">
+                        <div class="subsection open" id="sub-what-is-globalisation">
                             <div class="subsection-header" onclick="toggleSubsection(this)">
                                 <h4>What Is Globalisation?</h4>
                                 <span class="subsection-toggle">&minus;</span>
@@ -1238,7 +1673,7 @@
                         </div>
 
                         <!-- SUBSECTION 2: CAUSES OF GLOBALISATION -->
-                        <div class="subsection open">
+                        <div class="subsection open" id="sub-causes-globalisation">
                             <div class="subsection-header" onclick="toggleSubsection(this)">
                                 <h4>Causes of Globalisation</h4>
                                 <span class="subsection-toggle">&minus;</span>
@@ -1253,16 +1688,63 @@
 
                                     <p><strong>Trade Liberalisation:</strong> The World Trade Organisation (WTO) has negotiated reductions in tariffs and trade barriers. Countries have removed quotas on imports. Trade agreements between nations make it easier for businesses to operate internationally with fewer restrictions.</p>
 
+                                    <h4>The Role of the WTO</h4>
+                                    <p>The World Trade Organisation (WTO) was established in 1995 and has 164 member countries. Its primary aim is to promote free trade by reducing barriers between nations. The WTO achieves this through negotiating trade agreements, settling trade disputes between countries, and monitoring national trade policies. Without the WTO, individual countries could impose any restrictions they wished on imports, making international trade unpredictable and costly for businesses.</p>
+
+                                    <div class="key-term">
+                                        <div class="key-term-label">KEY TERM</div>
+                                        <h5>World Trade Organisation (WTO)</h5>
+                                        <p>An international body that promotes and regulates free trade between nations by negotiating agreements, settling disputes, and monitoring trade policies across 164 member countries.</p>
+                                    </div>
+
                                     <p><strong>Growth of Trading Blocs:</strong> Regional agreements like the European Union, ASEAN (Association of Southeast Asian Nations), and USMCA (United States, Mexico, Canada Agreement) create large internal markets with reduced trade barriers. This encourages businesses to expand within these regions.</p>
 
                                     <p><strong>Deregulation of Financial Markets:</strong> Governments removed restrictions on money moving between countries. This allows companies to access capital globally and investors to diversify internationally. Multinational companies can easily transfer money between subsidiaries.</p>
 
                                     <p><strong>Political Changes:</strong> The fall of communism opened Eastern Europe and Russia to international business. China's economic reforms in the 1980s and 1990s created massive markets and low-cost manufacturing hubs. These geopolitical shifts expanded global business opportunities dramatically.</p>
 
+                                    <p><strong>Structural Change in Economies:</strong> Many developed economies have shifted from manufacturing to service based industries. The UK, for example, moved from heavy industry to financial services, technology, and creative industries. This structural change means developed countries now import manufactured goods from developing nations while exporting services, knowledge, and technology. This interdependence drives globalisation as countries specialise in what they do best.</p>
+
+                                    <p><strong>Growth of the Global Labour Force:</strong> The world's working age population has grown significantly, particularly in developing countries. India, for example, has a very young population with hundreds of millions entering the workforce. This expanding labour supply attracts multinational companies seeking workers, while also creating new consumer markets as these workers earn income and increase their spending power.</p>
+
                                     <div class="key-term">
                                         <div class="key-term-label">KEY TERM</div>
                                         <h5>Trading Bloc</h5>
                                         <p>A group of countries that have agreed to remove trade barriers between themselves, making it easier for businesses to operate across member nations. Examples include the EU and ASEAN.</p>
+                                    </div>
+
+                                    <h4>Types of Trading Blocs</h4>
+                                    <p>Trading blocs vary in their level of economic integration. The deeper the integration, the more barriers are removed between member countries:</p>
+
+                                    <p><strong>Free Trade Area (FTA):</strong> Members remove tariffs and quotas on goods traded between themselves, but each country keeps its own trade policies with non member countries. Example: USMCA (United States, Mexico, Canada Agreement).</p>
+
+                                    <p><strong>Customs Union:</strong> Like a free trade area, but members also adopt a common external tariff on imports from non member countries. This prevents goods entering through the country with the lowest tariff. Example: The EU operates as a customs union among other things.</p>
+
+                                    <p><strong>Common Market:</strong> Goes beyond a customs union by also allowing the free movement of labour and capital between member countries. Workers can live and work in any member state. Example: The European Single Market.</p>
+
+                                    <p><strong>Economic Union:</strong> The deepest level of integration. Members share common economic policies, regulations, and sometimes a single currency. This requires significant political cooperation and loss of national sovereignty. Example: The Eurozone (EU countries using the euro).</p>
+
+                                    <div class="adv-disadv-grid">
+                                        <div class="adv-box">
+                                            <div class="adv-box-title">Benefits of Trading Blocs</div>
+                                            <ul>
+                                                <li><strong>Free trade between members:</strong> No tariffs or quotas means lower costs and higher profits for businesses trading within the bloc</li>
+                                                <li><strong>Larger market access:</strong> Businesses can sell to millions more consumers without trade barriers, enabling economies of scale</li>
+                                                <li><strong>Increased FDI:</strong> Companies outside the bloc invest within it to avoid external tariffs, creating jobs and economic growth</li>
+                                                <li><strong>Greater bargaining power:</strong> A bloc negotiates trade deals as one unit, giving smaller countries more influence than they would have alone</li>
+                                                <li><strong>Political cooperation:</strong> Economic ties encourage stability and reduce the likelihood of conflict between member nations</li>
+                                            </ul>
+                                        </div>
+                                        <div class="disadv-box">
+                                            <div class="disadv-box-title">Drawbacks of Trading Blocs</div>
+                                            <ul>
+                                                <li><strong>Trade diversion:</strong> Members may buy from less efficient bloc partners instead of cheaper non member producers, increasing costs</li>
+                                                <li><strong>Loss of sovereignty:</strong> Members must follow common rules and regulations, reducing their ability to set independent trade and economic policies</li>
+                                                <li><strong>Unequal benefits:</strong> Larger, stronger economies within the bloc tend to benefit more than smaller or less developed members</li>
+                                                <li><strong>Dependency:</strong> Heavy reliance on bloc partners makes countries vulnerable if a major member experiences economic difficulties</li>
+                                                <li><strong>Exclusion of non members:</strong> External tariffs can harm developing countries outside the bloc by making their exports less competitive</li>
+                                            </ul>
+                                        </div>
                                     </div>
 
                                     <div class="exam-tip">
@@ -1274,7 +1756,7 @@
                         </div>
 
                         <!-- SUBSECTION 3: IMPACT ON BUSINESSES -->
-                        <div class="subsection open">
+                        <div class="subsection open" id="sub-impact-businesses">
                             <div class="subsection-header" onclick="toggleSubsection(this)">
                                 <h4>Impact of Globalisation on Businesses</h4>
                                 <span class="subsection-toggle">&minus;</span>
@@ -1283,27 +1765,41 @@
                                 <div class="subsection-inner">
                                     <p>Globalisation presents both significant opportunities and serious challenges for businesses:</p>
 
-                                    <p><strong>Opportunities:</strong></p>
-                                    <p><strong>Larger Markets:</strong> A business can sell to billions of consumers instead of just its home country. Market size determines growth potential, and global markets are vastly larger.</p>
+                                    <div class="adv-disadv-grid">
+                                        <div class="adv-box">
+                                            <div class="adv-box-title">Opportunities</div>
+                                            <ul>
+                                                <li><strong>Larger Markets:</strong> Sell to billions of consumers instead of just the home country; market size determines growth potential and global markets are vastly larger</li>
+                                                <li><strong>Economies of Scale:</strong> Producing in huge volumes reduces per unit costs; a factory producing 1 million units costs less per unit than producing 100,000</li>
+                                                <li><strong>Access to Cheaper Labour:</strong> Manufacturing in countries with low wages reduces production costs significantly; a garment factory in Bangladesh costs far less than one in the UK</li>
+                                                <li><strong>Access to New Suppliers:</strong> Source materials from anywhere, ensuring competitive pricing and backup suppliers if one becomes unavailable</li>
+                                                <li><strong>New Sources of Finance:</strong> Global capital markets mean businesses can borrow from banks and investors worldwide, accessing cheaper and larger amounts of finance</li>
+                                            </ul>
+                                        </div>
+                                        <div class="disadv-box">
+                                            <div class="disadv-box-title">Threats</div>
+                                            <ul>
+                                                <li><strong>Increased Competition:</strong> Facing competitors worldwide increases competitive pressure and can reduce market share and profit margins</li>
+                                                <li><strong>Cultural and Language Differences:</strong> Products, marketing, and operations must be adapted to local preferences; what sells in one country may fail in another</li>
+                                                <li><strong>Political and Legal Risks:</strong> Different laws, regulations, and political systems; government changes and political instability threaten assets and operations</li>
+                                                <li><strong>Ethical Concerns:</strong> Pressure to cut costs can lead to poor working conditions, child labour, and environmental damage, creating reputational risk</li>
+                                                <li><strong>Exchange Rate Risk:</strong> Currency fluctuations affect profits unpredictably; a weaker foreign currency reduces profits when converting back to home currency</li>
+                                            </ul>
+                                        </div>
+                                    </div>
 
-                                    <p><strong>Economies of Scale:</strong> Selling globally means producing in huge volumes. Higher production volumes reduce per-unit costs; a factory producing 1 million units costs less per unit than producing 100,000. Lower costs enable competitive pricing and higher profits.</p>
+                                    <h4>Global Supply Chain Issues</h4>
+                                    <p>Globalisation has created complex supply chains stretching across multiple countries and continents. While this reduces costs, it also creates significant vulnerabilities:</p>
 
-                                    <p><strong>Access to Cheaper Labour:</strong> Businesses can manufacture in countries with low wages, reducing production costs significantly. A garment factory in Bangladesh costs far less to operate than one in the UK, improving margins.</p>
+                                    <p><strong>Disruption risk:</strong> Natural disasters, pandemics, or political instability in one country can halt production worldwide. The 2021 Suez Canal blockage disrupted global shipping for weeks, causing shortages across industries.</p>
 
-                                    <p><strong>Access to New Suppliers and Resources:</strong> Companies can source materials from anywhere. This provides choice, ensures competitive pricing, and provides backup suppliers if one becomes unavailable.</p>
+                                    <p><strong>Quality control:</strong> Managing product quality across suppliers in different countries with different standards is challenging. A single faulty component from one supplier can affect millions of products.</p>
 
-                                    <p><strong>New Sources of Finance:</strong> Global capital markets mean businesses can borrow from banks and investors worldwide, accessing cheaper finance and larger amounts than domestic markets alone offer.</p>
+                                    <p><strong>Lead times:</strong> Shipping goods internationally takes weeks or months, making it difficult to respond quickly to changes in demand or unexpected shortages.</p>
 
-                                    <p><strong>Threats:</strong></p>
-                                    <p><strong>Increased Competition:</strong> Global markets mean facing competitors worldwide, not just locally. This increases competitive pressure and can reduce market share and profit margins.</p>
+                                    <p><strong>Ethical concerns:</strong> Companies face reputational risk if suppliers in their chain use child labour, pay poverty wages, or cause environmental damage. Monitoring distant suppliers is difficult and costly.</p>
 
-                                    <p><strong>Cultural and Language Differences:</strong> Operating in different countries means adapting products, marketing, and operations to local preferences. What sells in one country may fail in another. This requires investment in market research and adaptation.</p>
-
-                                    <p><strong>Political and Legal Risks:</strong> Different countries have different laws, regulations, and political systems. Government changes can affect business operations; regulations may change; political instability threatens assets and operations.</p>
-
-                                    <p><strong>Ethical Concerns and Exploitation:</strong> Pressure to cut costs can lead to poor working conditions in supplier factories, use of child labour, and environmental damage. These practices create reputational risks if exposed.</p>
-
-                                    <p><strong>Exchange Rate Risk:</strong> Currency fluctuations affect profits. If your costs are in pounds but revenues in euros, a weaker euro reduces profits when converting back to pounds. This unpredictability complicates financial planning.</p>
+                                    <p><strong>Dependency:</strong> Over reliance on a single country or supplier creates vulnerability. Many technology companies discovered this during the COVID 19 pandemic when Chinese factories closed, disrupting global electronics supply.</p>
 
                                     <div class="real-world">
                                         <div class="real-world-label">REAL WORLD EXAMPLE</div>
@@ -1326,7 +1822,7 @@
                         </div>
 
                         <!-- SUBSECTION 4: IMPACT ON CONSUMERS AND WORKERS -->
-                        <div class="subsection open">
+                        <div class="subsection open" id="sub-impact-consumers">
                             <div class="subsection-header" onclick="toggleSubsection(this)">
                                 <h4>Impact of Globalisation on Consumers and Workers</h4>
                                 <span class="subsection-toggle">&minus;</span>
@@ -1359,7 +1855,7 @@
                         </div>
 
                         <!-- SUBSECTION 5: FREE TRADE AND PROTECTIONISM -->
-                        <div class="subsection open">
+                        <div class="subsection open" id="sub-free-trade">
                             <div class="subsection-header" onclick="toggleSubsection(this)">
                                 <h4>Free Trade and Protectionism</h4>
                                 <span class="subsection-toggle">&minus;</span>
@@ -1369,6 +1865,12 @@
                                     <p><strong>Benefits of Free Trade:</strong></p>
 
                                     <p><strong>Comparative Advantage:</strong> Countries specialise in producing goods where they have relative cost advantages. Portugal grows oranges cheaper than Sweden; Sweden builds ships cheaper than Portugal. Both benefit from specialisation and trade, consuming more than if both tried self-sufficiency.</p>
+
+                                    <div class="key-term">
+                                        <div class="key-term-label">KEY TERM</div>
+                                        <h5>Comparative Advantage</h5>
+                                        <p>The ability of a country to produce a good or service at a lower opportunity cost than another country. Even if one country is more efficient at producing everything, both countries benefit from specialising in what they produce relatively most efficiently and trading.</p>
+                                    </div>
 
                                     <p><strong>Efficiency and Competition:</strong> Open markets force producers to be efficient or face bankruptcy. Competition drives innovation. Consumers access the cheapest goods regardless of origin. Global competition rewards efficiency and punishes waste.</p>
 
@@ -1386,19 +1888,26 @@
 
                                     <p><strong>Regulations and Standards:</strong> Strict regulations can act as protectionism. Very high environmental or safety standards might exclude foreign competitors unable to meet them cost-effectively.</p>
 
-                                    <p><strong>Arguments for Protectionism:</strong></p>
-
-                                    <p><strong>Infant Industry Protection:</strong> New industries need protection until they achieve scale and competitiveness. Without tariffs, established foreign competitors destroy emerging local industries before they mature.</p>
-
-                                    <p><strong>Strategic Industries:</strong> Countries protect industries critical for national security. Food production, energy, and defence sectors are often protected to ensure independence and security.</p>
-
-                                    <p><strong>Job Protection:</strong> Protectionism keeps jobs domestic rather than moving abroad. Popular politically, especially in regions facing unemployment from factory closures.</p>
-
-                                    <p><strong>Dumping Prevention:</strong> Dumping means selling abroad below production cost to gain market share. Protectionism prevents foreign companies from unfairly destroying domestic competitors.</p>
-
-                                    <p><strong>Arguments Against Protectionism:</strong></p>
-
-                                    <p>Protectionism typically harms overall welfare. Protected industries become inefficient without competition. Consumers pay higher prices. Retaliation follows; if the UK increases car tariffs, other countries increase tariffs on UK goods. Inefficient allocation of resources means less total output. Economists broadly support free trade despite localized harm to specific industries.</p>
+                                    <div class="adv-disadv-grid">
+                                        <div class="adv-box">
+                                            <div class="adv-box-title">Arguments For Protectionism</div>
+                                            <ul>
+                                                <li><strong>Infant Industry Protection:</strong> New industries need protection until they achieve scale and competitiveness; without tariffs, established foreign competitors destroy emerging local industries before they mature</li>
+                                                <li><strong>Strategic Industries:</strong> Countries protect industries critical for national security; food production, energy, and defence sectors are often protected to ensure independence and security</li>
+                                                <li><strong>Job Protection:</strong> Keeps jobs domestic rather than moving abroad; popular politically, especially in regions facing unemployment from factory closures</li>
+                                                <li><strong>Dumping Prevention:</strong> Prevents foreign companies from selling abroad below production cost to unfairly destroy domestic competitors and gain market share</li>
+                                            </ul>
+                                        </div>
+                                        <div class="disadv-box">
+                                            <div class="disadv-box-title">Arguments Against Protectionism</div>
+                                            <ul>
+                                                <li><strong>Reduced Efficiency:</strong> Protected industries become inefficient without competition, leading to lower quality products and slower innovation</li>
+                                                <li><strong>Higher Consumer Prices:</strong> Tariffs and quotas increase the cost of imported goods, meaning consumers pay more for everyday products</li>
+                                                <li><strong>Retaliation Risk:</strong> If the UK increases car tariffs, other countries increase tariffs on UK goods, harming exporters and reducing trade overall</li>
+                                                <li><strong>Inefficient Resource Allocation:</strong> Resources are tied up in protected industries rather than flowing to sectors where the country has a genuine comparative advantage, reducing total output</li>
+                                            </ul>
+                                        </div>
+                                    </div>
 
                                     <div class="key-term">
                                         <div class="key-term-label">KEY TERM</div>
@@ -1423,9 +1932,6 @@
                                         <h5>Protectionism</h5>
                                         <p>Government policies restricting imports or protecting domestic industries through tariffs, quotas, subsidies, or regulations. Opposite of free trade.</p>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
 
                         <div class="exam-tip">
                             <div class="exam-tip-label">EXAM TIP</div>
@@ -1440,6 +1946,9 @@
                         <div class="exam-tip">
                             <div class="exam-tip-label">EXAM TIP</div>
                             <p>Evaluate the extent to which globalisation benefits developing countries. While foreign investment creates jobs and transfers technology, it can also create dependency on multinational corporations that may relocate if cheaper labour is found elsewhere. The long term impact depends on whether the host country develops its own industries and skills alongside foreign investment, or simply becomes a low cost production base with little value retained locally.</p>
+                        </div>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- QUIZ SECTION -->
@@ -1569,7 +2078,7 @@
                         <p>Businesses expand into global markets for many strategic reasons. This topic covers why companies go international, the different entry methods available, how to assess new markets, and the barriers they face. Understanding global expansion is essential for success in the modern business world.</p>
 
                         <!-- ============ SUBSECTION 1 ============ -->
-                        <div class="subsection">
+                        <div class="subsection" id="sub-reasons-entering">
                             <div class="subsection-header" onclick="toggleSubsection(this)">
                                 <h4>Reasons for Entering Global Markets</h4>
                                 <span class="subsection-toggle">+</span>
@@ -1608,14 +2117,62 @@
                         </div>
 
                         <!-- ============ SUBSECTION 2 ============ -->
-                        <div class="subsection">
+                        <div class="subsection" id="sub-methods-entering">
                             <div class="subsection-header" onclick="toggleSubsection(this)">
                                 <h4>Methods of Entering Global Markets</h4>
                                 <span class="subsection-toggle">+</span>
                             </div>
                             <div class="subsection-content">
                                 <div class="subsection-inner">
-                                    <p>Businesses use different strategies to enter international markets. Each method has distinct advantages and disadvantages.</p>
+                                    <p>Businesses use different strategies to enter international markets. Each method has distinct advantages and disadvantages, varying in risk, investment required, and level of control.</p>
+
+                                    <div class="entry-methods-graphic">
+                                        <div class="entry-methods-top-bar">
+                                            <h5>Market Entry Methods Comparison</h5>
+                                            <span class="em-badge">Interactive</span>
+                                        </div>
+                                        <div class="em-spectrum">
+                                            <div class="em-axis">
+                                                <span class="em-axis-label">Low Risk / Low Control</span>
+                                                <div class="em-axis-line"></div>
+                                                <span class="em-axis-label">High Risk / High Control</span>
+                                            </div>
+                                            <div class="em-cards-row">
+                                                <div class="em-card" onclick="showEntryMethod('exporting')">
+                                                    <div class="em-card-icon">&#128230;</div>
+                                                    <div class="em-card-name">Exporting</div>
+                                                    <div class="em-card-metrics"><span class="em-metric risk-low">Low Risk</span></div>
+                                                </div>
+                                                <div class="em-card" onclick="showEntryMethod('licensing')">
+                                                    <div class="em-card-icon">&#128196;</div>
+                                                    <div class="em-card-name">Licensing</div>
+                                                    <div class="em-card-metrics"><span class="em-metric risk-low">Low Risk</span></div>
+                                                </div>
+                                                <div class="em-card" onclick="showEntryMethod('ecommerce')">
+                                                    <div class="em-card-icon">&#128187;</div>
+                                                    <div class="em-card-name">E-Commerce</div>
+                                                    <div class="em-card-metrics"><span class="em-metric risk-low">Low Risk</span></div>
+                                                </div>
+                                                <div class="em-card" onclick="showEntryMethod('franchising')">
+                                                    <div class="em-card-icon">&#127828;</div>
+                                                    <div class="em-card-name">Franchising</div>
+                                                    <div class="em-card-metrics"><span class="em-metric risk-med">Med Risk</span></div>
+                                                </div>
+                                                <div class="em-card" onclick="showEntryMethod('jointventure')">
+                                                    <div class="em-card-icon">&#129309;</div>
+                                                    <div class="em-card-name">Joint Venture</div>
+                                                    <div class="em-card-metrics"><span class="em-metric risk-med">Med Risk</span></div>
+                                                </div>
+                                                <div class="em-card" onclick="showEntryMethod('subsidiary')">
+                                                    <div class="em-card-icon">&#127970;</div>
+                                                    <div class="em-card-name">Wholly Owned</div>
+                                                    <div class="em-card-metrics"><span class="em-metric risk-high">High Risk</span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="em-info" id="em-info-panel"></div>
+                                        <div class="em-hint">Click any entry method to explore its advantages and disadvantages</div>
+                                    </div>
 
                                     <h4>Exporting</h4>
                                     <p>Exporting means producing goods domestically and selling them abroad. It requires the lowest initial investment and carries least risk.</p>
@@ -1656,18 +2213,33 @@
                                         <div class="exam-tip-label">EXAM TIP</div>
                                         <p>No single entry method is best for all situations. Joint ventures reduce risk but mean sharing profits and control. Wholly owned subsidiaries give full control but require massive investment. Evaluate the method against the business's financial strength, risk appetite, and knowledge of the target market.</p>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
+
+                                    <h4>Reasons for International Mergers, Joint Ventures and Strategic Alliances</h4>
+                                    <p>When expanding globally, businesses often combine with other companies rather than going it alone. The reasons for this include:</p>
+
+                                    <p><strong>Access to local knowledge:</strong> A local partner understands the culture, regulations, consumer preferences, and business customs that a foreign company would take years to learn independently.</p>
+
+                                    <p><strong>Sharing financial risk:</strong> International expansion requires enormous investment. Sharing costs with a partner reduces the financial exposure for each company and makes ambitious projects viable.</p>
+
+                                    <p><strong>Overcoming barriers to entry:</strong> Some countries restrict foreign ownership or require local partnerships. A joint venture or alliance with a domestic company satisfies legal requirements and eases market entry.</p>
+
+                                    <p><strong>Combining complementary strengths:</strong> One company may have superior technology while the other has an established distribution network. Combining these strengths creates a competitive advantage neither could achieve alone.</p>
+
+                                    <p><strong>Achieving economies of scale:</strong> Merging operations or cooperating on production allows combined companies to produce at larger volumes, reducing per unit costs and improving competitiveness.</p>
+
+                                    <p><strong>Speed of entry:</strong> Building operations from scratch takes years. Acquiring an existing company or partnering with one provides immediate market presence, customer base, and operational capability.</p>
 
                         <div class="key-term">
                             <span class="key-term-label">KEY TERM</span>
                             <h5>Foreign Direct Investment (FDI)</h5>
                             <p>Investment in physical assets and business operations in another country, giving the investor ownership and control. Includes building factories, buying companies, or establishing subsidiaries. Represents long term commitment to international operations.</p>
                         </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <!-- ============ SUBSECTION 3 ============ -->
-                        <div class="subsection">
+                        <div class="subsection" id="sub-assessing-markets">
                             <div class="subsection-header" onclick="toggleSubsection(this)">
                                 <h4>Assessing Global Markets</h4>
                                 <span class="subsection-toggle">+</span>
@@ -1697,23 +2269,91 @@
                                     <h4>Economic Development</h4>
                                     <p>Developed economies offer wealthy customers but saturated competition. Developing economies offer growth but lower purchasing power and higher risk. The level of economic development affects potential customer base, infrastructure quality, and regulatory sophistication.</p>
 
+                                    <h4>Measuring Economic Development</h4>
+                                    <p>Businesses and governments use several indicators to assess a country's level of development beyond just GDP:</p>
+
+                                    <p><strong>GDP per capita:</strong> Total economic output divided by population. Gives a basic measure of average wealth, but does not show how income is distributed across the population.</p>
+
+                                    <p><strong>Human Development Index (HDI):</strong> A composite measure combining life expectancy, education levels, and income per capita. HDI provides a more rounded picture of development than GDP alone because it considers health and education alongside wealth.</p>
+
+                                    <p><strong>Literacy rate:</strong> The percentage of adults who can read and write. High literacy rates indicate an educated workforce capable of skilled employment, making a country more attractive for investment in higher value industries.</p>
+
+                                    <p><strong>Health indicators:</strong> Life expectancy, infant mortality rates, and access to healthcare reveal the overall wellbeing of a population and the quality of public services.</p>
+
+                                    <p><strong>Infrastructure quality:</strong> Access to electricity, internet penetration, road quality, and port capacity indicate how well a country can support business operations.</p>
+
+                                    <div class="key-term">
+                                        <div class="key-term-label">KEY TERM</div>
+                                        <h5>Human Development Index (HDI)</h5>
+                                        <p>A United Nations measure of development combining life expectancy, education (mean and expected years of schooling), and gross national income per capita. Scored from 0 to 1, with higher scores indicating greater development.</p>
+                                    </div>
+
+                                    <h4>BRICS Economies</h4>
+                                    <p>BRICS refers to the group of major emerging economies: Brazil, Russia, India, China, and South Africa. These countries are significant because of their large populations, rapidly growing economies, and increasing influence in global trade and politics.</p>
+
+                                    <p><strong>Why BRICS matters for business:</strong></p>
+
+                                    <p><strong>Massive consumer markets:</strong> China and India alone account for over 2.8 billion people. As incomes rise, demand for consumer goods, technology, and services grows enormously.</p>
+
+                                    <p><strong>Low cost production:</strong> Several BRICS nations offer significantly lower labour costs than developed economies, attracting manufacturing investment from global companies.</p>
+
+                                    <p><strong>Resource wealth:</strong> Russia has vast energy reserves, Brazil has agricultural resources, South Africa has minerals, and India has a huge educated workforce. These resources attract specific types of foreign investment.</p>
+
+                                    <p><strong>Growing middle class:</strong> Rising incomes in BRICS nations are creating large middle class populations that demand branded goods, financial services, education, and healthcare.</p>
+
+                                    <p><strong>Challenges:</strong> Political instability, corruption, infrastructure gaps, and regulatory unpredictability remain significant barriers to doing business in some BRICS nations. Income inequality within these countries means wealth is concentrated in urban areas while rural regions remain poor.</p>
+
+                                    <div class="key-term">
+                                        <div class="key-term-label">KEY TERM</div>
+                                        <h5>BRICS</h5>
+                                        <p>An acronym for the group of major emerging economies: Brazil, Russia, India, China, and South Africa. These nations represent significant opportunities for businesses due to their large populations, growing economies, and increasing global influence.</p>
+                                    </div>
+
                                     <h4>Push and Pull Factors</h4>
                                     <p><strong>Push factors:</strong> Domestic problems that encourage leaving home market, such as saturated markets, declining demand, intense competition, or limited growth opportunities. Push factors make companies seek new markets.</p>
                                     <p><strong>Pull factors:</strong> Opportunities in target markets that attract investment, such as rising demand, large populations, growing middle class, untapped markets, or premium pricing opportunities. Pull factors make specific markets attractive.</p>
 
                                     <p>Successful market entry combines positive pull factors (attractive opportunities) with manageable push factors (domestic pressures). Markets with strong pull factors but severe barriers to entry may still be avoided.</p>
-                                </div>
-                            </div>
-                        </div>
+
+                                    <h4>Characteristics of Growing Economies</h4>
+                                    <p>Businesses look for specific indicators when identifying attractive growing economies:</p>
+
+                                    <p><strong>Rising GDP per capita:</strong> Indicates increasing wealth and consumer spending power, meaning more potential customers who can afford products and services.</p>
+
+                                    <p><strong>Expanding middle class:</strong> A growing middle class creates demand for consumer goods, branded products, and services that were previously unaffordable for most of the population.</p>
+
+                                    <p><strong>Urbanisation:</strong> People moving from rural areas to cities creates concentrated consumer markets, making distribution and marketing more efficient and cost effective.</p>
+
+                                    <p><strong>Young population:</strong> Countries with a large proportion of young people have a growing workforce and consumer base, providing both labour supply and future demand.</p>
+
+                                    <p><strong>Improving infrastructure:</strong> Investment in roads, ports, electricity, and internet connectivity makes business operations more feasible and reduces costs.</p>
+
+                                    <p><strong>Increasing foreign investment:</strong> Growing economies attract FDI, which brings technology, skills, and further economic development, creating a positive cycle of growth.</p>
+
+                                    <h4>Applying Porter's Five Forces Globally</h4>
+                                    <p>Porter's Five Forces framework is particularly useful when assessing international markets. Each force takes on additional complexity in a global context:</p>
+
+                                    <p><strong>Threat of new entrants:</strong> In global markets, new competitors can emerge from any country. Low barriers in developing economies may attract many new entrants, while established markets may have high barriers protecting existing firms.</p>
+
+                                    <p><strong>Bargaining power of suppliers:</strong> Global supply chains mean businesses can source from multiple countries, potentially reducing supplier power. However, if key components come from only one region, supplier power increases significantly.</p>
+
+                                    <p><strong>Bargaining power of buyers:</strong> Global consumers have more choice than ever. The internet allows price comparison across countries, increasing buyer power and forcing companies to remain competitive on price and quality.</p>
+
+                                    <p><strong>Threat of substitutes:</strong> Operating globally exposes businesses to substitute products from different industries and different countries that may not exist in the home market.</p>
+
+                                    <p><strong>Competitive rivalry:</strong> International markets often have intense rivalry from both local firms with cultural advantages and other MNCs with financial strength. Understanding the competitive dynamics of each market is essential before entry.</p>
 
                         <div class="key-term">
                             <span class="key-term-label">KEY TERM</span>
                             <h5>Market Research</h5>
                             <p>Systematic investigation of a market's characteristics, customers, competitors, and conditions. International market research assesses whether a market is suitable for entry and how to succeed there. Includes quantitative data analysis and qualitative understanding of local preferences and practices.</p>
                         </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <!-- ============ SUBSECTION 4 ============ -->
-                        <div class="subsection">
+                        <div class="subsection" id="sub-barriers-entry">
                             <div class="subsection-header" onclick="toggleSubsection(this)">
                                 <h4>Barriers to Entry in Global Markets</h4>
                                 <span class="subsection-toggle">+</span>
@@ -1754,18 +2394,18 @@
                                         <div class="exam-tip-label">EXAM TIP</div>
                                         <p>When discussing barriers to entering global markets, distinguish between those a business can overcome with investment (like language differences or distribution networks) and those largely outside its control (like government protectionism or political instability). This distinction shows the examiner you understand relative significance.</p>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
 
                         <div class="key-term">
                             <span class="key-term-label">KEY TERM</span>
                             <h5>Tariff</h5>
                             <p>A tax imposed on imported goods by governments. Tariffs increase import costs, making foreign products more expensive and protecting domestic industries. High tariffs can prevent or limit international trade, acting as barriers to market entry for foreign companies.</p>
                         </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <!-- ============ SUBSECTION 5 ============ -->
-                        <div class="subsection">
+                        <div class="subsection" id="sub-niche-markets">
                             <div class="subsection-header" onclick="toggleSubsection(this)">
                                 <h4>Global Niche Markets</h4>
                                 <span class="subsection-toggle">+</span>
@@ -1792,9 +2432,17 @@
                                     <h4>Examples</h4>
                                     <p>A small UK company manufactures specialty fishing equipment for a specific fish species. Through e-commerce, it reaches fishing enthusiasts worldwide, becoming the market leader despite tiny global demand.</p>
                                     <p>A furniture maker produces handcrafted sustainable wooden products. Online marketing reaches environmentally conscious consumers globally, commanding premium prices despite limited production volume.</p>
-                                </div>
-                            </div>
-                        </div>
+
+                                    <h4>Adapting the Marketing Mix (4Ps) for Global Niche Markets</h4>
+                                    <p>Serving global niche customers requires careful adaptation of each element of the marketing mix:</p>
+
+                                    <p><strong>Product:</strong> Niche products must meet very specific customer needs. Quality and specialisation matter more than mass appeal. Products may need minor adaptations for different regions (e.g. voltage differences for electronics, sizing adjustments for clothing) while maintaining the core specialist features that define the niche.</p>
+
+                                    <p><strong>Price:</strong> Niche customers typically accept premium pricing because few alternatives exist. However, pricing must account for international shipping costs, import duties, and currency differences. Transparent pricing builds trust with dispersed global customers.</p>
+
+                                    <p><strong>Promotion:</strong> Targeted digital marketing through specialist forums, social media groups, and influencer partnerships is more effective than mass advertising for niche products. Content marketing demonstrating expertise builds credibility within the niche community.</p>
+
+                                    <p><strong>Place:</strong> E commerce platforms and direct to consumer websites are the primary distribution channels for global niche businesses. Reliable international shipping and clear delivery information are essential. Some niches benefit from presence on specialist marketplaces like Etsy for crafts or Reverb for musical equipment.</p>
 
                         <div class="key-term">
                             <span class="key-term-label">KEY TERM</span>
@@ -1802,7 +2450,6 @@
                             <p>A small, specialized market segment with specific customer needs or interests, served globally through the internet. Technology allows small businesses to reach dispersed niche customers worldwide, competing effectively against larger companies by specializing deeply in customer needs.</p>
                         </div>
 
-                        <!-- Real World Examples -->
                         <div class="real-world">
                             <span class="real-world-label">REAL WORLD EXAMPLE</span>
                             <h5>Starbucks Entering China</h5>
@@ -1815,7 +2462,6 @@
                             <p>Uber faced severe barriers entering various international markets. In Europe, strict employment laws prevented treating drivers as independent contractors. In Germany and France, established taxi regulations restricted Uber's operations. In China, fierce local competition and regulatory restrictions led Uber to sell its operations to local competitor Didi. These examples show that even successful global companies face severe barriers requiring strategic adaptation, and sometimes must withdraw from markets where barriers prove insurmountable or competition too intense.</p>
                         </div>
 
-                        <!-- Exam Tips -->
                         <div class="exam-tip">
                             <span class="exam-tip-label">EXAM TIP</span>
                             <p>When answering questions about entering global markets, structure your answer by identifying the entry method, discussing its advantages and disadvantages, and explaining why it suits the specific business situation. For instance, if asked how a small tech startup enters a new market, you might suggest exporting or licensing to minimize risk and capital requirements, rather than expensive greenfield subsidiary investment suitable for large multinational corporations.</p>
@@ -1830,7 +2476,12 @@
                             <div class="exam-tip-label">EXAM TIP</div>
                             <p>Assess whether financial resources or cultural understanding is more important when entering a new global market. A business with deep pockets but no understanding of local consumer preferences, business customs, or regulatory requirements is likely to fail. Conversely, strong cultural knowledge without sufficient capital limits scale and speed. The most successful global expansions combine both, but if forced to choose, understanding the market often matters more than outspending competitors.</p>
                         </div>
+                                </div>
+                            </div>
+                        </div>
 
+                        <!-- Real World Examples -->
+                        <!-- Exam Tips -->
                         <!-- Key Takeaways -->
                         <div class="takeaways">
                             <h4>Key Takeaways</h4>
@@ -1941,12 +2592,61 @@
                 </div>
                 <div class="topic-content">
                     <div class="topic-inner">
-                        <h3>Global vs Local Marketing</h3>
-                        <p>Companies operating internationally face a key decision: should they use the same marketing approach worldwide (standardisation), or adapt their strategies for each market (adaptation)? The answer is not always obvious.</p>
+                        <!-- SUBSECTION 1: STANDARDISATION VS ADAPTATION -->
+                        <div class="subsection open" id="sub-standardisation-adaptation">
+                            <div class="subsection-header" onclick="toggleSubsection(this)">
+                                <h4>Standardisation vs Adaptation</h4>
+                                <span class="subsection-toggle">&minus;</span>
+                            </div>
+                            <div class="subsection-content">
+                                <div class="subsection-inner">
+                                    <p>Companies operating internationally face a key decision: should they use the same marketing approach worldwide (standardisation), or adapt their strategies for each market (adaptation)? The answer is not always obvious and most successful businesses use elements of both.</p>
 
-                        <p><strong>Standardisation</strong> means using one global marketing mix across all markets. This approach saves costs because companies produce one set of advertisements, use consistent pricing, and maintain unified distribution channels. It also creates a consistent brand identity worldwide. However, it ignores differences in consumer preferences, cultural values, and local regulations.</p>
+                        <p><strong>Standardisation</strong> means using one global marketing mix across all markets. Companies produce one set of advertisements, use consistent pricing, and maintain unified distribution channels. This creates a consistent brand identity worldwide and significantly reduces costs through economies of scale. However, it ignores differences in consumer preferences, cultural values, and local regulations, which can limit effectiveness in individual markets.</p>
 
-                        <p><strong>Adaptation</strong> means customising the marketing mix for each country or region. Companies change product features, pricing, advertising messages, and distribution methods to suit local needs. This approach respects cultural differences and can boost sales in individual markets, but it increases costs and complicates operations.</p>
+                        <div class="adv-disadv-grid">
+                            <div class="adv-box">
+                                <div class="adv-box-title">Advantages of Standardisation</div>
+                                <ul>
+                                    <li><strong>Cost Savings:</strong> One set of advertisements, consistent pricing, and unified distribution channels reduce marketing spend significantly</li>
+                                    <li><strong>Brand Consistency:</strong> Creates a consistent and recognisable brand identity that customers trust worldwide</li>
+                                    <li><strong>Simpler Operations:</strong> Easier to manage one marketing strategy than coordinating multiple localised versions</li>
+                                    <li><strong>Economies of Scale:</strong> Producing identical products and materials in bulk reduces unit costs across markets</li>
+                                </ul>
+                            </div>
+                            <div class="disadv-box">
+                                <div class="disadv-box-title">Disadvantages of Standardisation</div>
+                                <ul>
+                                    <li><strong>Ignores Local Preferences:</strong> Consumer tastes, values, and buying habits vary significantly between cultures and countries</li>
+                                    <li><strong>Regulatory Issues:</strong> Different countries have different advertising laws, product standards, and labelling requirements</li>
+                                    <li><strong>Missed Opportunities:</strong> A one size fits all approach may underperform in markets where localised competitors better meet customer needs</li>
+                                    <li><strong>Cultural Insensitivity:</strong> Marketing messages that work in one country may confuse or offend consumers in another</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <p><strong>Adaptation</strong> means customising the marketing mix for each country or region. Companies change product features, pricing, advertising messages, and distribution methods to suit local needs. This approach respects cultural differences and can boost sales in individual markets, but it increases costs and complicates operations significantly.</p>
+
+                        <div class="adv-disadv-grid">
+                            <div class="adv-box">
+                                <div class="adv-box-title">Advantages of Adaptation</div>
+                                <ul>
+                                    <li><strong>Local Relevance:</strong> Products and marketing tailored to local cultural preferences, values, and consumer tastes</li>
+                                    <li><strong>Higher Sales Potential:</strong> Meeting specific local needs can significantly boost revenue in individual markets</li>
+                                    <li><strong>Regulatory Compliance:</strong> Ensures products and advertising meet different national laws, standards, and restrictions</li>
+                                    <li><strong>Competitive Edge:</strong> Localised marketing resonates more strongly with consumers than generic global campaigns</li>
+                                </ul>
+                            </div>
+                            <div class="disadv-box">
+                                <div class="disadv-box-title">Disadvantages of Adaptation</div>
+                                <ul>
+                                    <li><strong>Higher Costs:</strong> Creating different products, packaging, and advertising for each market is expensive and resource intensive</li>
+                                    <li><strong>Operational Complexity:</strong> Managing multiple localised strategies across many countries is difficult to coordinate</li>
+                                    <li><strong>Brand Dilution:</strong> Too much variation can weaken the global brand identity and confuse international customers</li>
+                                    <li><strong>Slower Rollout:</strong> Adapting for each market takes time, delaying product launches and campaigns compared to standardised approaches</li>
+                                </ul>
+                            </div>
+                        </div>
 
                         <div class="key-term">
                             <div class="key-term-label">KEY TERM</div>
@@ -1956,25 +2656,55 @@
 
                         <p>The <strong>glocal approach</strong> tries to balance standardisation and adaptation. Companies maintain consistent brand messaging and core values worldwide, but adapt specific elements like products, packaging, and promotions to local preferences. This combines cost efficiency with local relevance.</p>
 
+                        <h3>Marketing Orientations in International Business</h3>
+                        <p>Companies adopt different philosophical approaches to how they manage marketing across countries. These orientations reflect the degree to which a business centralises or localises its decision making:</p>
+
+                        <p><strong>Ethnocentric approach:</strong> The company believes its home country methods are superior and applies them everywhere. Marketing strategies, products, and management practices from the home country are imposed on all international markets with minimal adaptation. This is cost efficient but risks ignoring local preferences and can lead to marketing failures in culturally different markets.</p>
+
+                        <p><strong>Polycentric approach:</strong> The company treats each country as a unique market and allows local subsidiaries to develop their own marketing strategies independently. Local managers make decisions based on their understanding of the local market. This maximises local relevance but increases costs, reduces brand consistency, and makes coordination across markets difficult.</p>
+
+                        <p><strong>Geocentric approach:</strong> The company takes a global view, combining the best ideas from anywhere in the world regardless of their country of origin. Marketing strategies are developed collaboratively between headquarters and local teams, blending global efficiency with local insights. This is the most sophisticated approach but requires excellent communication and coordination across the organisation.</p>
+
+                        <div class="exam-tip">
+                            <div class="exam-tip-label">EXAM TIP</div>
+                            <p>The ethnocentric, polycentric, and geocentric approaches link directly to the standardisation versus adaptation debate. An ethnocentric company standardises; a polycentric company adapts fully; a geocentric company takes the glocal approach. Use these terms in exam answers to show deeper analytical understanding.</p>
+                        </div>
+
                         <div class="exam-tip">
                             <div class="exam-tip-label">EXAM TIP</div>
                             <p>The standardisation versus adaptation debate is not all or nothing. Most successful global businesses standardise their core brand identity while adapting specific elements like flavours, sizing, or advertising campaigns. Coca Cola's logo is the same everywhere, but its product range and advertising vary significantly by country.</p>
                         </div>
 
-                        <h3>Cultural Differences in Marketing</h3>
+                        <div class="key-term">
+                            <div class="key-term-label">KEY TERM</div>
+                            <h5>Standardisation</h5>
+                            <p>Using the same marketing mix (product, price, promotion, place) across all international markets without significant adaptation.</p>
+                        </div>
+
+                        <div class="key-term">
+                            <div class="key-term-label">KEY TERM</div>
+                            <h5>Adaptation</h5>
+                            <p>Customising the marketing mix for different markets to suit local consumer preferences, cultural norms, and market conditions.</p>
+                        </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SUBSECTION 2: CULTURAL DIFFERENCES IN MARKETING -->
+                        <div class="subsection" id="sub-cultural-differences">
+                            <div class="subsection-header" onclick="toggleSubsection(this)">
+                                <h4>Cultural Differences in Marketing</h4>
+                                <span class="subsection-toggle">+</span>
+                            </div>
+                            <div class="subsection-content">
+                                <div class="subsection-inner">
                         <p>Culture deeply influences how consumers think and buy. Marketing messages that work in one country may fail or offend in another. Understanding cultural differences is essential for successful international marketing.</p>
 
                         <p>Language is the most obvious cultural issue. Words can have different meanings, and translations sometimes create unintended messages. Companies must ensure advertising copy is culturally appropriate and grammatically correct in each language.</p>
 
                         <p>Religious and social norms shape what products people buy and how they expect to be marketed to. For example, some cultures emphasise family values in advertising while others focus on individual achievement. Religious beliefs affect attitudes towards certain products, colours, and images.</p>
 
-                        <div class="key-term">
-                            <div class="key-term-label">KEY TERM</div>
-                            <h5>Hofstede's Cultural Dimensions</h5>
-                            <p>A framework measuring cultural differences: individualism vs collectivism (whether people prioritise personal goals or group harmony), power distance (acceptance of unequal authority), uncertainty avoidance (comfort with risk and change), and masculinity vs femininity (competitive vs nurturing values).</p>
-                        </div>
-
-                        <p>Hofstede's dimensions help marketers understand cultural values. In individualistic cultures (like the US), advertising emphasises personal achievement and choice. In collectivist cultures (like Japan), marketing stresses harmony, family, and group benefits. Power distance affects whether people accept hierarchy in advertising; some cultures prefer experts and authority figures in ads, while others prefer equal relationships. Uncertainty avoidance influences whether consumers embrace new products or prefer established brands.</p>
 
                         <p>Cultural mistakes in marketing can damage a company's reputation. These errors happen when companies fail to understand local customs, religious sensitivities, or taboo subjects. Colour symbolism varies; white represents purity in Western cultures but mourning in some Asian countries. Animal symbolism differs too; owls symbolise wisdom in Europe but death in some cultures.</p>
 
@@ -1989,18 +2719,24 @@
                             <p>Cultural mistakes in global marketing can be extremely costly. A colour, symbol, or slogan that works in one country may be offensive or meaningless in another. Always argue that cultural research is not an optional extra but a fundamental requirement before entering any new market.</p>
                         </div>
 
-                        <h3>Global Pricing Strategies</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SUBSECTION 3: THE GLOBAL MARKETING MIX -->
+                        <div class="subsection" id="sub-global-marketing-mix">
+                            <div class="subsection-header" onclick="toggleSubsection(this)">
+                                <h4>The Global Marketing Mix</h4>
+                                <span class="subsection-toggle">+</span>
+                            </div>
+                            <div class="subsection-content">
+                                <div class="subsection-inner">
+                                    <h4>Global Pricing Strategies</h4>
                         <p>Setting prices for international markets is complex because costs, competition, and customer purchasing power vary significantly by country.</p>
 
                         <p><strong>Standardised pricing</strong> means charging the same price (in local currencies) everywhere. This is simple and maintains a consistent brand image, but it ignores local market conditions.</p>
 
                         <p><strong>Adapted pricing</strong> adjusts prices for different markets based on local factors. These factors include production and transportation costs (which vary by location), exchange rate fluctuations (currencies strengthen or weaken), local competition intensity, demand levels in each market, tariffs and import duties imposed by governments, and local taxes and regulations.</p>
-
-                        <div class="key-term">
-                            <div class="key-term-label">KEY TERM</div>
-                            <h5>Transfer Pricing</h5>
-                            <p>The price at which one division of a company sells goods or services to another division within the same company, often across borders. Used to manage costs and taxes.</p>
-                        </div>
 
                         <p><strong>Price skimming</strong> in new markets means setting high prices initially to target premium customers and recover research and development costs quickly. As competition increases and the market matures, companies lower prices to attract more customers.</p>
 
@@ -2017,7 +2753,7 @@
                             <p>Global pricing must account for factors beyond simple cost plus calculations. Exchange rate fluctuations, local purchasing power, competitor pricing, and import duties all affect what price is viable in each market. A price that generates healthy margins in the UK may be unaffordable in developing markets or uncompetitive in low cost economies.</p>
                         </div>
 
-                        <h3>Global Distribution and Promotion</h3>
+                                    <h4>Global Distribution and Promotion</h4>
                         <p>Distribution channels and promotional methods differ widely across countries based on consumer behaviour, infrastructure, and regulations.</p>
 
                         <p>Distribution channel adaptation is essential. Some countries have advanced retail infrastructure with large supermarkets and online shopping; others rely on small family shops, street markets, and door to door sales. Companies must select distribution channels that match how local consumers prefer to shop.</p>
@@ -2031,22 +2767,16 @@
                             <p>Evaluate whether a business can realistically manage its own global distribution or whether local partners are essential. Companies like Amazon have built proprietary logistics networks, but most businesses lack the scale to do this and must rely on local distributors who understand the infrastructure and regulations of each market.</p>
                         </div>
 
-                        <h3>Ansoff Matrix in a Global Context</h3>
-                        <p>The Ansoff Matrix (market penetration, product development, market development, and diversification) applies to international business, though the strategies take on different forms.</p>
+                                    <h4>Ansoff's Matrix in a Global Context</h4>
+                        <p>Ansoff's Matrix helps businesses assess growth strategies by considering whether they are targeting existing or new markets with existing or new products. In an international context, each strategy takes on a different dimension:</p>
 
-                        <p><strong>Market penetration</strong> globally means increasing sales in existing international markets through better advertising, lower prices, or improved distribution. <strong>Product development</strong> for new markets involves creating new products specifically for international customers or modifying existing products for cultural preferences. <strong>Market development</strong> means entering completely new geographical markets with existing products. <strong>Diversification</strong> across borders involves entering new markets with new products simultaneously, which is the highest risk strategy.</p>
+                        <p><strong>Market Penetration (Existing Products, Existing Markets):</strong> A business focuses on increasing its market share in countries where it already operates. This could involve more aggressive pricing, increased advertising spend, or expanding distribution channels within those markets. This is the lowest risk global strategy because the business already understands the market and its customers.</p>
 
-                        <div class="key-term">
-                            <div class="key-term-label">KEY TERM</div>
-                            <h5>Standardisation</h5>
-                            <p>Using the same marketing mix (product, price, promotion, place) across all international markets without significant adaptation.</p>
-                        </div>
+                        <p><strong>Market Development (Existing Products, New Markets):</strong> A business takes its current products into new countries or regions. This is the most common form of international expansion. For example, a UK retailer opening stores in Asia or a European car manufacturer entering the South American market. The risk is moderate because the product is proven, but the new market may have different consumer preferences, regulations, and competitive conditions.</p>
 
-                        <div class="key-term">
-                            <div class="key-term-label">KEY TERM</div>
-                            <h5>Adaptation</h5>
-                            <p>Customising the marketing mix for different markets to suit local consumer preferences, cultural norms, and market conditions.</p>
-                        </div>
+                        <p><strong>Product Development (New Products, Existing Markets):</strong> A business develops new products specifically for international markets where it already has a presence. This could mean creating products tailored to local tastes, religious requirements, or climate conditions. For example, a fast food chain developing vegetarian menus specifically for the Indian market. Risk is moderate as the business knows the market but is investing in unproven products.</p>
+
+                        <p><strong>Diversification (New Products, New Markets):</strong> A business enters a completely new country with a product it has never sold before. This carries the highest risk because the business lacks experience with both the market and the product. However, the potential rewards are significant if successful, as it opens entirely new revenue streams in untapped markets.</p>
 
                         <div class="exam-tip">
                             <div class="exam-tip-label">EXAM TIP</div>
@@ -2061,6 +2791,10 @@
                         <div class="exam-tip">
                             <div class="exam-tip-label">EXAM TIP</div>
                             <p>Evaluate whether any global brand can truly standardise its marketing across all markets. Even the most iconic global brands like McDonald's and Coca Cola adapt their products, messaging, and pricing to local conditions. The real strategic question is not standardisation versus adaptation, but which specific elements to standardise for efficiency and which to adapt for local relevance. A strong answer identifies these elements rather than treating it as an all or nothing choice.</p>
+                        </div>
+
+                                </div>
+                            </div>
                         </div>
 
                         <div class="quiz-section">
@@ -2157,7 +2891,7 @@
                             <ul class="takeaway-list">
                                 <li>Standardisation reduces costs but may ignore local preferences; adaptation respects cultural differences but increases complexity</li>
                                 <li>The glocal approach balances consistency with local relevance; McDonald's and Coca Cola exemplify this strategy</li>
-                                <li>Culture shapes marketing success through language, religious norms, and values reflected in Hofstede's dimensions</li>
+                                <li>Culture shapes marketing success through language, religious norms, tastes, and values; failing to understand cultural differences can lead to costly marketing mistakes</li>
                                 <li>Global pricing reflects exchange rates, tariffs, local competition, and purchasing power; price skimming targets premium customers before lowering prices</li>
                                 <li>Distribution and promotion methods must suit local retail infrastructure and consumer behaviour patterns</li>
                                 <li>Ansoff Matrix applies internationally: market penetration, product development, market development, and diversification strategies</li>
@@ -2179,7 +2913,14 @@
                 </div>
                 <div class="topic-content">
                     <div class="topic-inner">
-                        <h3>What Are Multinational Corporations (MNCs)?</h3>
+                        <!-- SUBSECTION 1: MULTINATIONAL CORPORATIONS -->
+                        <div class="subsection open" id="sub-multinational-corporations">
+                            <div class="subsection-header" onclick="toggleSubsection(this)">
+                                <h4>Multinational Corporations (MNCs)</h4>
+                                <span class="subsection-toggle">&minus;</span>
+                            </div>
+                            <div class="subsection-content">
+                                <div class="subsection-inner">
                         <p>A Multinational Corporation (MNC) is a company that operates in multiple countries, with offices, factories, and subsidiaries across different nations. These companies combine operations across borders under unified management and ownership.</p>
 
                         <p>MNCs are huge. Apple, Microsoft, Amazon, Samsung, and Nestle are among the world's largest corporations, generating revenues that exceed the GDP of many countries. They employ millions of workers worldwide and control vast supply chains stretching across continents.</p>
@@ -2192,65 +2933,66 @@
                             <p>A company that operates and conducts business in multiple countries, typically with significant operations, investments, and subsidiaries spread across different nations.</p>
                         </div>
 
-                        <div class="exam-tip">
-                            <div class="exam-tip-label">EXAM TIP</div>
-                            <p>When defining MNCs, go beyond simply saying they operate in more than one country. The key feature is that they coordinate production, marketing, and strategy across borders, which gives them advantages (like tax optimisation and access to cheaper resources) that purely domestic firms cannot match.</p>
-                        </div>
-
-                        <h3>Benefits and Drawbacks of MNCs for Host Countries</h3>
+                                    <h4>Benefits and Drawbacks of MNCs for Host Countries</h4>
                         <p>When an MNC establishes operations in a country (the host country), it brings both opportunities and challenges.</p>
 
-                        <p><strong>Benefits for Host Countries:</strong></p>
-
-                        <p><strong>Job Creation:</strong> MNCs build factories, offices, and retail locations, creating direct employment. Indirect jobs also appear when suppliers, transport companies, and service providers expand to support MNC operations. Thousands of jobs can result from a single large investment.</p>
-
-                        <p><strong>Investment and Capital Inflows:</strong> MNCs invest billions in factories, infrastructure, and technology. This capital inflow strengthens the host country's economy and improves its balance of payments.</p>
-
-                        <p><strong>Technology Transfer:</strong> MNCs bring advanced technology and expertise to host countries. Local companies learn from MNC operations; workers gain skills and knowledge. Over time, this raises the overall technological capability of the host nation.</p>
-
-                        <p><strong>Tax Revenue:</strong> MNCs pay corporate taxes, income taxes from employees, and property taxes. These revenues fund public services, infrastructure, and education.</p>
-
-                        <p><strong>Infrastructure Development:</strong> MNCs require good roads, electricity, ports, and communication systems. Their presence drives governments to invest in infrastructure, benefiting local communities and other businesses too.</p>
-
-                        <p><strong>Skill Development:</strong> MNCs train workers in modern production methods, management, and technology. These skills raise the quality of the workforce and create a pool of talented workers available to other employers.</p>
-
-                        <p><strong>Drawbacks for Host Countries:</strong></p>
-
-                        <p><strong>Profit Repatriation:</strong> MNCs send profits back to their home country rather than reinvesting locally. An MNC manufacturing in India might generate large profits but transfer them to its US headquarters, removing wealth from the host economy.</p>
-
-                        <p><strong>Exploitation of Workers:</strong> To maximise profits, MNCs sometimes pay minimal wages, offer no benefits, require excessive hours, and provide poor working conditions. Developing countries with weak labour laws are particularly vulnerable.</p>
-
-                        <p><strong>Environmental Damage:</strong> MNCs may use production methods banned in their home countries because they are cheaper, even though they pollute heavily. Waste disposal, chemical runoff, and air pollution from factories damage the host country's environment.</p>
-
-                        <p><strong>Crowding Out of Local Businesses:</strong> MNCs use resources, capital, and consumer spending that might otherwise support local companies. A global supermarket chain may devastate local shops unable to compete on price or range. Over time, local industries disappear.</p>
-
-                        <p><strong>Tax Avoidance:</strong> Large MNCs use complex transfer pricing, subsidiary structures, and offshore accounts to minimise taxes in high-tax countries and shift profits to low-tax jurisdictions. This reduces tax revenue available for host countries.</p>
-
-                        <p><strong>Cultural Erosion:</strong> Global brands and Western consumer culture can erode local traditions, language, and cultural identity. Young people adopt foreign lifestyles and values, abandoning local customs.</p>
+                        <div class="adv-disadv-grid">
+                            <div class="adv-box">
+                                <div class="adv-box-title">Benefits for Host Countries</div>
+                                <ul>
+                                    <li><strong>Job Creation:</strong> MNCs build factories and offices, creating thousands of direct and indirect jobs through suppliers and service providers</li>
+                                    <li><strong>Investment and Capital:</strong> Billions invested in factories, infrastructure, and technology strengthens the economy and balance of payments</li>
+                                    <li><strong>Technology Transfer:</strong> Advanced technology and expertise raises the overall technological capability of the host nation over time</li>
+                                    <li><strong>Tax Revenue:</strong> Corporate taxes, employee income taxes, and property taxes fund public services and education</li>
+                                    <li><strong>Infrastructure Development:</strong> MNC presence drives government investment in roads, electricity, ports, and communications</li>
+                                    <li><strong>Skill Development:</strong> Training in modern production methods, management, and technology raises workforce quality</li>
+                                </ul>
+                            </div>
+                            <div class="disadv-box">
+                                <div class="disadv-box-title">Drawbacks for Host Countries</div>
+                                <ul>
+                                    <li><strong>Profit Repatriation:</strong> Profits are sent back to the home country rather than reinvested locally, removing wealth from the host economy</li>
+                                    <li><strong>Worker Exploitation:</strong> Minimal wages, excessive hours, and poor working conditions, especially in countries with weak labour laws</li>
+                                    <li><strong>Environmental Damage:</strong> Production methods banned in home countries may be used because they are cheaper, causing pollution and harm</li>
+                                    <li><strong>Crowding Out Locals:</strong> MNCs use resources and consumer spending that might otherwise support local businesses, which cannot compete</li>
+                                    <li><strong>Tax Avoidance:</strong> Complex transfer pricing and offshore accounts minimise taxes, reducing revenue for host countries</li>
+                                    <li><strong>Cultural Erosion:</strong> Global brands and Western consumer culture can erode local traditions, language, and cultural identity</li>
+                                </ul>
+                            </div>
+                        </div>
 
                         <div class="exam-tip">
                             <div class="exam-tip-label">EXAM TIP</div>
                             <p>The impact of MNCs on host countries depends heavily on the regulatory environment. In countries with strong labour laws and environmental standards, MNCs tend to bring genuine benefits. In countries with weak regulation, the same MNCs may exploit workers and natural resources. The host government's policies are the decisive factor.</p>
                         </div>
 
-                        <h3>Benefits and Drawbacks of MNCs for Home Countries</h3>
+                        <div class="key-term">
+                            <div class="key-term-label">KEY TERM</div>
+                            <h5>Transfer Pricing</h5>
+                            <p>The price at which one division of an MNC sells goods or services to another division within the same company, often across borders. Used to shift profits to low tax countries, reducing the overall tax bill but depriving host countries of tax revenue.</p>
+                        </div>
+
+                                    <h4>Benefits and Drawbacks of MNCs for Home Countries</h4>
                         <p>MNC operations also affect their home countries, creating distinct advantages and disadvantages.</p>
 
-                        <p><strong>Benefits for Home Countries:</strong></p>
-
-                        <p><strong>Profit Repatriation:</strong> Profits from foreign operations flow back to the home country, increasing national wealth and providing funds for corporate expansion and shareholder returns.</p>
-
-                        <p><strong>Global Influence and Soft Power:</strong> Global companies extend their home country's cultural and political influence worldwide. American companies spread American brands, values, and ideas globally.</p>
-
-                        <p><strong>Brand Recognition and Prestige:</strong> Successful MNCs enhance their home country's international reputation. They demonstrate economic strength and innovation capability.</p>
-
-                        <p><strong>Drawbacks for Home Countries:</strong></p>
-
-                        <p><strong>Job Losses from Offshoring:</strong> As manufacturing moves to cheaper countries, home country factories close and workers lose jobs. UK manufacturing declined dramatically as production shifted to Asia. Entire regions dependent on manufacturing have suffered prolonged unemployment and economic decline.</p>
-
-                        <p><strong>Tax Avoidance Reduces Tax Revenue:</strong> When MNCs shift profits overseas through transfer pricing and other schemes, home country tax revenues decline. This reduces funding for public services and infrastructure.</p>
-
-                        <p><strong>Brain Drain:</strong> Talented workers and researchers are attracted to opportunities in other countries or work for foreign subsidiaries of home country companies. This removes skilled talent from the home economy.</p>
+                        <div class="adv-disadv-grid">
+                            <div class="adv-box">
+                                <div class="adv-box-title">Benefits for Home Countries</div>
+                                <ul>
+                                    <li><strong>Profit Repatriation:</strong> Profits from foreign operations flow back, increasing national wealth and funding corporate expansion and shareholder returns</li>
+                                    <li><strong>Global Influence:</strong> Global companies extend their home country's cultural and political influence, spreading brands, values, and ideas worldwide</li>
+                                    <li><strong>Brand Prestige:</strong> Successful MNCs enhance international reputation, demonstrating economic strength and innovation capability</li>
+                                </ul>
+                            </div>
+                            <div class="disadv-box">
+                                <div class="disadv-box-title">Drawbacks for Home Countries</div>
+                                <ul>
+                                    <li><strong>Job Losses from Offshoring:</strong> Home country factories close as manufacturing moves to cheaper locations; entire regions suffer prolonged unemployment</li>
+                                    <li><strong>Tax Revenue Decline:</strong> Transfer pricing and profit shifting overseas reduces home country tax revenue, cutting funding for public services</li>
+                                    <li><strong>Brain Drain:</strong> Talented workers and researchers are attracted to opportunities abroad, removing skilled talent from the home economy</li>
+                                </ul>
+                            </div>
+                        </div>
 
                         <div class="exam-tip">
                             <div class="exam-tip-label">EXAM TIP</div>
@@ -2263,7 +3005,18 @@
                             <p>Amazon exemplifies both benefits and drawbacks of MNCs. When Amazon opens fulfillment centres in new countries, it creates thousands of jobs and invests heavily in infrastructure and technology. However, investigations reveal that Amazon pays minimal corporation tax despite huge revenues through complex structures routing profits through low tax jurisdictions. Workers in Amazon warehouses report poor conditions and low wages despite the company's enormous wealth. As Amazon's e commerce dominance expands, traditional retailers close and local businesses struggle to compete, eliminating jobs they previously provided.</p>
                         </div>
 
-                        <h3>Controlling MNCs</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SUBSECTION 2: CONTROLLING MNCs -->
+                        <div class="subsection" id="sub-controlling-mncs">
+                            <div class="subsection-header" onclick="toggleSubsection(this)">
+                                <h4>Controlling MNCs</h4>
+                                <span class="subsection-toggle">+</span>
+                            </div>
+                            <div class="subsection-content">
+                                <div class="subsection-inner">
                         <p>Because MNCs operate across borders, no single government can easily control them. This creates challenges for regulating their behaviour and ensuring they benefit society.</p>
 
                         <p><strong>Government Regulation:</strong> Governments establish laws and regulations within their borders. However, MNCs can shift operations to countries with weaker regulations. An MNC can move production to escape strict environmental laws. This creates a "race to the bottom" where countries weaken regulations to attract investment.</p>
@@ -2283,14 +3036,56 @@
                             <p>Evaluate whether individual governments can realistically control MNCs that operate across dozens of countries. If one country tightens regulation, the MNC may simply shift operations elsewhere. This is why international cooperation through bodies like the OECD and WTO is increasingly seen as necessary to hold MNCs accountable.</p>
                         </div>
 
-                        <h3>Foreign Direct Investment (FDI)</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SUBSECTION 3: FDI AND RESHORING -->
+                        <div class="subsection" id="sub-fdi-reshoring">
+                            <div class="subsection-header" onclick="toggleSubsection(this)">
+                                <h4>Foreign Direct Investment and Reshoring</h4>
+                                <span class="subsection-toggle">+</span>
+                            </div>
+                            <div class="subsection-content">
+                                <div class="subsection-inner">
                         <p>Foreign Direct Investment (FDI) is investment by companies or individuals in businesses located in another country. This is the primary mechanism by which MNCs establish and expand operations globally.</p>
 
                         <p><strong>Types of FDI:</strong></p>
 
-                        <p><strong>Greenfield Investment:</strong> A company builds new factories, offices, or infrastructure from scratch in a host country. This creates new assets, jobs, and economic activity. Apple building a new design centre in India is greenfield investment.</p>
-
-                        <p><strong>Brownfield Investment:</strong> A company invests in and improves existing facilities or infrastructure. Buying an existing factory and upgrading its technology is brownfield investment. This is often less disruptive than greenfield but generates fewer new jobs.</p>
+                        <div class="fdi-compare">
+                            <div class="fdi-card fdi-card-green">
+                                <div class="fdi-card-header">
+                                    <div class="fdi-card-icon">&#127793;</div>
+                                    <div class="fdi-card-title">Greenfield Investment</div>
+                                </div>
+                                <div class="fdi-card-body">
+                                    <p>Building new factories, offices, or infrastructure from scratch in a host country. Creates entirely new assets, jobs, and economic activity.</p>
+                                    <ul class="fdi-card-features">
+                                        <li>Creates maximum new employment opportunities</li>
+                                        <li>Builds purpose designed, modern facilities</li>
+                                        <li>Generates significant economic activity during construction</li>
+                                        <li>Signals strong long term commitment to the market</li>
+                                        <li>Higher cost and longer time to become operational</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="fdi-card fdi-card-brown">
+                                <div class="fdi-card-header">
+                                    <div class="fdi-card-icon">&#127959;</div>
+                                    <div class="fdi-card-title">Brownfield Investment</div>
+                                </div>
+                                <div class="fdi-card-body">
+                                    <p>Investing in and upgrading existing facilities or infrastructure. Buying an existing factory and upgrading its technology rather than building from scratch.</p>
+                                    <ul class="fdi-card-features">
+                                        <li>Faster to become operational than greenfield</li>
+                                        <li>Lower initial investment costs</li>
+                                        <li>Existing workforce and local knowledge available</li>
+                                        <li>Less disruptive to the local community</li>
+                                        <li>Fewer new jobs created compared to greenfield</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="key-term">
                             <div class="key-term-label">KEY TERM</div>
@@ -2315,6 +3110,8 @@
                         <p><strong>Stable Government and Political Environment:</strong> Companies invest in countries with stable governments, rule of law, and low corruption. Political instability, civil war, and regime changes deter investment.</p>
 
                         <p><strong>Skilled Workforce:</strong> Countries with educated, trained workers attract higher value investments. Manufacturing requires technical skills; technology and finance sectors need highly educated workers.</p>
+
+                        <p><strong>Skills Shortages as Competitive Pressure:</strong> A lack of skilled workers in specific industries or regions can significantly affect a country's ability to attract and retain investment. When there are not enough trained workers in areas like technology, engineering, or healthcare, businesses face higher wage costs, slower growth, and reduced productivity. Skills shortages can push companies to relocate operations to countries where suitable workers are available, or to invest heavily in automation to reduce their dependence on human labour. Governments address skills shortages through education reform, apprenticeship programmes, and immigration policies that attract skilled workers from abroad.</p>
 
                         <p><strong>Good Infrastructure:</strong> Roads, electricity, ports, and communication networks enable efficient operations. Underdeveloped infrastructure increases costs and complications.</p>
 
@@ -2344,6 +3141,31 @@
                             <p>Relocating business operations or production to another country, typically to reduce costs; a key reason for MNC expansion to developing nations.</p>
                         </div>
 
+                                    <h4>Reshoring</h4>
+                        <p>Reshoring is the process of bringing business operations and manufacturing back to the company's home country after previously offshoring them. This is an increasingly significant trend that reverses the earlier movement of production to low cost countries.</p>
+
+                        <p><strong>Reasons for reshoring:</strong></p>
+
+                        <p><strong>Rising overseas labour costs:</strong> Wages in countries like China have risen significantly, narrowing the cost gap between domestic and foreign production. The savings from offshoring are no longer as large as they once were.</p>
+
+                        <p><strong>Quality control:</strong> Managing quality at a distance is difficult. Bringing production home allows closer oversight, faster problem solving, and higher product consistency.</p>
+
+                        <p><strong>Supply chain risks:</strong> The COVID 19 pandemic and other disruptions exposed the vulnerability of extended global supply chains. Shorter, domestic supply chains are more resilient and predictable.</p>
+
+                        <p><strong>Faster response times:</strong> Domestic production allows businesses to respond more quickly to changes in consumer demand, fashion trends, or market conditions without weeks of shipping delays.</p>
+
+                        <p><strong>Automation and technology:</strong> Advances in robotics and automation mean that domestic production can be cost competitive with overseas manual labour, while maintaining higher quality and consistency.</p>
+
+                        <p><strong>Brand and reputation:</strong> Consumers increasingly value locally made products. "Made in Britain" or "Made in USA" labels can command premium prices and build brand loyalty.</p>
+
+                        <p><strong>Government incentives:</strong> Some governments offer tax breaks, grants, or subsidies to encourage companies to bring production back, creating domestic jobs and reducing trade deficits.</p>
+
+                        <div class="key-term">
+                            <div class="key-term-label">KEY TERM</div>
+                            <h5>Reshoring</h5>
+                            <p>The process of returning business operations and manufacturing to the company's home country after previously moving them overseas. Driven by rising foreign costs, supply chain risks, quality concerns, and advances in automation technology.</p>
+                        </div>
+
                         <div class="key-term">
                             <div class="key-term-label">KEY TERM</div>
                             <h5>Profit Repatriation</h5>
@@ -2363,6 +3185,10 @@
                         <div class="exam-tip">
                             <div class="exam-tip-label">EXAM TIP</div>
                             <p>Consider whether governments should do more to regulate multinational corporations or whether regulation risks driving investment away. Stricter regulation on tax avoidance, environmental standards, and labour conditions protects citizens but may make a country less attractive to foreign investors compared to nations with looser rules. This creates a race to the bottom dilemma, where countries compete by lowering standards. Evaluate this tension by considering which approach delivers the greatest long term benefit to the host economy.</p>
+                        </div>
+
+                                </div>
+                            </div>
                         </div>
 
                         <div class="quiz-section">
@@ -2535,10 +3361,18 @@
                 s.classList.remove('open');
             });
 
+            // Collapse all sidebar topic items
+            document.querySelectorAll('.sidebar-topic-item.expanded').forEach(function(el) {
+                el.classList.remove('expanded');
+            });
+
             if (!wasOpen) {
                 section.classList.add('open');
                 updateSidebarActive(section.id);
                 smoothScrollToSection(section);
+
+                // Expand the matching sidebar topic item
+                expandSidebarForTopic(section.id);
             }
         }
 
@@ -2581,6 +3415,486 @@
             });
         }
 
+
+        function expandSidebarForTopic(topicId) {
+            var links = document.querySelectorAll('.sidebar-topic-link');
+            for (var i = 0; i < links.length; i++) {
+                var onclick = links[i].getAttribute('onclick') || '';
+                if (onclick.indexOf(topicId) !== -1) {
+                    var item = links[i].closest('.sidebar-topic-item');
+                    if (item) item.classList.add('expanded');
+                    break;
+                }
+            }
+        }
+
+        function sidebarTopicClick(topicId, event) {
+            var item = event.currentTarget.parentElement;
+            var wasExpanded = item.classList.contains('expanded');
+            document.querySelectorAll('.sidebar-topic-item.expanded').forEach(function(el) { el.classList.remove('expanded'); });
+            if (!wasExpanded) { item.classList.add('expanded'); }
+            scrollToTopic(topicId);
+        }
+
+        function scrollToSubsection(subId, topicId) {
+            var section = document.getElementById(topicId);
+            if (section) {
+                document.querySelectorAll('.topic-section.open').forEach(function(s) { s.classList.remove('open'); });
+                section.classList.add('open');
+                updateSidebarActive(topicId);
+            }
+            var sidebar = document.getElementById('sidebar');
+            if (sidebar && sidebar.classList.contains('mobile-open')) { toggleSidebar(); }
+            setTimeout(function() {
+                var sub = document.getElementById(subId);
+                if (sub) {
+                    if (!sub.classList.contains('open')) {
+                        sub.classList.add('open');
+                        var toggle = sub.querySelector('.subsection-toggle');
+                        if (toggle) toggle.textContent = '\u2212';
+                    }
+                    var rect = sub.getBoundingClientRect();
+                    var offsetPosition = rect.top + window.pageYOffset - 90;
+                    window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                }
+            }, 100);
+            updateSubLinkActive(subId);
+        }
+
+        function updateSubLinkActive(targetId) {
+            document.querySelectorAll('.sidebar-sub-link.active').forEach(function(el) { el.classList.remove('active'); });
+            document.querySelectorAll('.sidebar-sub-link').forEach(function(link) {
+                var onclick = link.getAttribute('onclick') || '';
+                if (onclick.indexOf(targetId) !== -1) { link.classList.add('active'); }
+            });
+        }
+
+        // ===== SEARCH FUNCTIONALITY =====
+        var searchDebounceTimer = null;
+        var searchResultsData = [];
+        var pageHighlightTimer = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var desktopInput = document.getElementById('searchInput');
+            if (desktopInput) {
+                desktopInput.addEventListener('input', function() {
+                    clearTimeout(searchDebounceTimer);
+                    var val = this.value;
+                    var cb = document.getElementById('searchClearBtn');
+                    if (cb) cb.classList.toggle('visible', val.length > 0);
+                    searchDebounceTimer = setTimeout(function() { runSearch(val, 'desktop'); }, 250);
+                });
+                desktopInput.addEventListener('focus', function() {
+                    if (searchResultsData.length > 0 && this.value.trim().length >= 2) {
+                        showDesktopPanel();
+                    }
+                });
+            }
+            var mobileInput = document.getElementById('searchModalInput');
+            if (mobileInput) {
+                mobileInput.addEventListener('input', function() {
+                    clearTimeout(searchDebounceTimer);
+                    var val = this.value;
+                    var cb = document.getElementById('searchModalClearBtn');
+                    if (cb) cb.classList.toggle('visible', val.length > 0);
+                    searchDebounceTimer = setTimeout(function() { runSearch(val, 'mobile'); }, 250);
+                });
+            }
+        });
+
+        function showDesktopPanel() {
+            var panel = document.getElementById('searchResultsPanel');
+            if (panel) panel.classList.add('open');
+            var bar = document.querySelector('.unit-header-bar');
+            if (bar) bar.classList.add('search-active');
+        }
+
+        function hideDesktopPanel() {
+            var panel = document.getElementById('searchResultsPanel');
+            if (panel) panel.classList.remove('open');
+            var bar = document.querySelector('.unit-header-bar');
+            if (bar) bar.classList.remove('search-active');
+        }
+
+        function runSearch(query, mode) {
+            query = (query || '').trim();
+            if (query.length < 2) {
+                searchResultsData = [];
+                if (mode === 'desktop') { hideDesktopPanel(); }
+                else { var mr = document.getElementById('searchModalResults'); if (mr) mr.innerHTML = ''; }
+                return;
+            }
+
+            // Split into words (AND logic)
+            var rawWords = query.toLowerCase().split(/\s+/);
+            var words = [];
+            for (var i = 0; i < rawWords.length; i++) {
+                if (rawWords[i].length > 0) words.push(rawWords[i]);
+            }
+            if (words.length === 0) return;
+
+            searchResultsData = [];
+            var topics = document.querySelectorAll('.topic-section');
+
+            for (var t = 0; t < topics.length; t++) {
+                var topic = topics[t];
+                var topicId = topic.id || '';
+                var titleEl = topic.querySelector('.topic-title');
+                var topicTitle = titleEl ? titleEl.textContent.trim() : '';
+                var numEl = topic.querySelector('.topic-num-badge');
+                var topicNum = numEl ? numEl.textContent.trim() : '';
+
+                // Search within subsections
+                var subs = topic.querySelectorAll('.subsection');
+                for (var s = 0; s < subs.length; s++) {
+                    var sub = subs[s];
+                    var subId = sub.id || '';
+                    var subH4 = sub.querySelector('h4');
+                    var subTitle = subH4 ? subH4.textContent.trim() : '';
+                    var inner = sub.querySelector('.subsection-inner');
+                    if (!inner) continue;
+
+                    var fullText = inner.textContent.toLowerCase();
+                    if (allWordsPresent(fullText, words)) {
+                        searchResultsData.push({
+                            topicId: topicId, topicNum: topicNum, topicTitle: topicTitle,
+                            subId: subId, subTitle: subTitle,
+                            snippet: getSnippet(inner, words),
+                            words: words
+                        });
+                    }
+                }
+
+                // Search topic-level content (outside subsections)
+                var topicInner = topic.querySelector('.topic-inner');
+                if (topicInner) {
+                    var directText = '';
+                    var kids = topicInner.children;
+                    for (var k = 0; k < kids.length; k++) {
+                        if (!kids[k].classList || !kids[k].classList.contains('subsection')) {
+                            directText += ' ' + kids[k].textContent;
+                        }
+                    }
+                    if (directText.trim().length > 0 && allWordsPresent(directText.toLowerCase(), words)) {
+                        var alreadyHave = false;
+                        for (var r = 0; r < searchResultsData.length; r++) {
+                            if (searchResultsData[r].topicId === topicId) { alreadyHave = true; break; }
+                        }
+                        if (!alreadyHave) {
+                            searchResultsData.push({
+                                topicId: topicId, topicNum: topicNum, topicTitle: topicTitle,
+                                subId: null, subTitle: null,
+                                snippet: getTopicSnippet(topicInner, words),
+                                words: words
+                            });
+                        }
+                    }
+                }
+            }
+
+            if (searchResultsData.length > 20) searchResultsData.length = 20;
+            renderSearchResults(mode, words);
+        }
+
+        function allWordsPresent(text, words) {
+            for (var i = 0; i < words.length; i++) {
+                if (text.indexOf(words[i]) === -1) return false;
+            }
+            return true;
+        }
+
+        function getSnippet(container, words) {
+            var els = container.querySelectorAll('p, .key-term, .exam-tip, .real-world');
+            for (var i = 0; i < els.length; i++) {
+                var t = els[i].textContent.toLowerCase();
+                if (allWordsPresent(t, words)) {
+                    var txt = els[i].textContent.trim();
+                    return txt.length > 150 ? txt.substring(0, 150) + '...' : txt;
+                }
+            }
+            var fb = container.textContent.trim();
+            return fb.length > 150 ? fb.substring(0, 150) + '...' : fb;
+        }
+
+        function getTopicSnippet(topicInner, words) {
+            var kids = topicInner.children;
+            for (var k = 0; k < kids.length; k++) {
+                if (kids[k].classList && kids[k].classList.contains('subsection')) continue;
+                var t = kids[k].textContent.toLowerCase();
+                if (allWordsPresent(t, words)) {
+                    var txt = kids[k].textContent.trim();
+                    return txt.length > 150 ? txt.substring(0, 150) + '...' : txt;
+                }
+            }
+            return '';
+        }
+
+        function renderSearchResults(mode, words) {
+            var html = '';
+            if (searchResultsData.length === 0) {
+                html = '<div class="search-no-results"><span>No results</span>Try different keywords</div>';
+            } else {
+                for (var i = 0; i < searchResultsData.length; i++) {
+                    var r = searchResultsData[i];
+                    var safeSnippet = safeHtml(r.snippet);
+                    var highlighted = addHighlights(safeSnippet, words);
+                    var subLine = r.subTitle ? '<div class="result-subsection-name">' + safeHtml(r.subTitle) + '</div>' : '';
+                    html += '<div class="search-result-item" data-idx="' + i + '" onclick="goToSearchResult(' + i + ')">' +
+                        '<div class="result-location">' +
+                        '<span class="result-topic-badge">' + safeHtml(r.topicNum) + '</span>' +
+                        subLine +
+                        '</div>' +
+                        '<div class="result-preview">' + highlighted + '</div>' +
+                        '</div>';
+                }
+            }
+
+            if (mode === 'desktop') {
+                var content = document.getElementById('searchResultsContent');
+                var count = document.getElementById('searchResultsCount');
+                if (content) content.innerHTML = html;
+                if (count) count.textContent = searchResultsData.length > 0 ?
+                    searchResultsData.length + ' result' + (searchResultsData.length !== 1 ? 's' : '') + ' found' : '';
+                showDesktopPanel();
+            } else {
+                var mr = document.getElementById('searchModalResults');
+                if (mr) mr.innerHTML = html;
+            }
+        }
+
+        function safeHtml(str) {
+            if (!str) return '';
+            var d = document.createElement('div');
+            d.textContent = str;
+            return d.innerHTML;
+        }
+
+        function addHighlights(text, words) {
+            if (!words || words.length === 0 || !text) return text || '';
+            // Simple case-insensitive replacement for each word
+            var result = text;
+            for (var i = 0; i < words.length; i++) {
+                var w = words[i];
+                // Find all occurrences case-insensitively
+                var lower = result.toLowerCase();
+                var idx = 0;
+                var parts = [];
+                var searchFrom = 0;
+                while (true) {
+                    var pos = lower.indexOf(w, searchFrom);
+                    if (pos === -1) {
+                        parts.push(result.substring(searchFrom));
+                        break;
+                    }
+                    parts.push(result.substring(searchFrom, pos));
+                    parts.push('<mark class="search-highlight">' + result.substring(pos, pos + w.length) + '</mark>');
+                    searchFrom = pos + w.length;
+                }
+                result = parts.join('');
+            }
+            return result;
+        }
+
+        function goToSearchResult(idx) {
+            var r = searchResultsData[idx];
+            if (!r) return;
+
+            // Get search words
+            var inputEl = document.getElementById('searchInput');
+            var q = inputEl ? inputEl.value.trim().toLowerCase() : '';
+            var rawW = q.split(/\s+/);
+            var words = [];
+            for (var i = 0; i < rawW.length; i++) {
+                if (rawW[i].length > 0) words.push(rawW[i]);
+            }
+
+            // Navigate
+            if (r.subId && typeof scrollToSubsection === 'function') {
+                scrollToSubsection(r.subId, r.topicId);
+            } else if (typeof scrollToTopic === 'function') {
+                scrollToTopic(r.topicId);
+            }
+
+            // Close search
+            hideDesktopPanel();
+            closeMobileSearch();
+
+            // Highlight on page
+            setTimeout(function() { highlightOnPage(r, words); }, 400);
+        }
+
+        function highlightOnPage(result, words) {
+            if (pageHighlightTimer) { clearTimeout(pageHighlightTimer); pageHighlightTimer = null; }
+            removePageHighlights();
+            if (!words || words.length === 0) return;
+
+            var container = null;
+            if (result.subId) {
+                var subEl = document.getElementById(result.subId);
+                if (subEl) container = subEl.querySelector('.subsection-inner');
+            }
+            if (!container && result.topicId) {
+                var topicEl = document.getElementById(result.topicId);
+                if (topicEl) container = topicEl.querySelector('.topic-inner');
+            }
+            if (!container) return;
+
+            // Walk all text nodes in the container
+            var walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null, false);
+            var nodes = [];
+            while (walker.nextNode()) {
+                if (walker.currentNode.textContent.trim().length > 0) {
+                    nodes.push(walker.currentNode);
+                }
+            }
+
+            for (var n = 0; n < nodes.length; n++) {
+                var node = nodes[n];
+                var text = node.textContent;
+                var lower = text.toLowerCase();
+
+                // Check if any word is in this text node
+                var hasMatch = false;
+                for (var w = 0; w < words.length; w++) {
+                    if (lower.indexOf(words[w]) !== -1) { hasMatch = true; break; }
+                }
+                if (!hasMatch) continue;
+
+                // Build replacement fragment
+                var frag = document.createDocumentFragment();
+                var segments = splitByWords(text, words);
+                for (var s = 0; s < segments.length; s++) {
+                    if (segments[s].match) {
+                        var mark = document.createElement('mark');
+                        mark.className = 'page-search-highlight';
+                        mark.textContent = segments[s].text;
+                        frag.appendChild(mark);
+                    } else {
+                        frag.appendChild(document.createTextNode(segments[s].text));
+                    }
+                }
+                node.parentNode.replaceChild(frag, node);
+            }
+
+            // Scroll to first highlight
+            var first = container.querySelector('.page-search-highlight');
+            if (first) {
+                setTimeout(function() {
+                    var r = first.getBoundingClientRect();
+                    window.scrollTo({ top: r.top + window.pageYOffset - 120, behavior: 'smooth' });
+                }, 150);
+            }
+
+            // Auto-clear after 10 seconds
+            pageHighlightTimer = setTimeout(function() { removePageHighlights(); pageHighlightTimer = null; }, 10000);
+        }
+
+        function splitByWords(text, words) {
+            // Split text into segments, marking which ones match search words
+            var lower = text.toLowerCase();
+            var segments = [];
+            var pos = 0;
+
+            while (pos < text.length) {
+                var bestStart = -1;
+                var bestLen = 0;
+                var bestWord = '';
+
+                // Find earliest matching word from current position
+                for (var w = 0; w < words.length; w++) {
+                    var idx = lower.indexOf(words[w], pos);
+                    if (idx !== -1 && (bestStart === -1 || idx < bestStart)) {
+                        bestStart = idx;
+                        bestLen = words[w].length;
+                        bestWord = words[w];
+                    }
+                }
+
+                if (bestStart === -1) {
+                    // No more matches
+                    segments.push({ text: text.substring(pos), match: false });
+                    break;
+                }
+
+                // Add text before match
+                if (bestStart > pos) {
+                    segments.push({ text: text.substring(pos, bestStart), match: false });
+                }
+
+                // Add matched text
+                segments.push({ text: text.substring(bestStart, bestStart + bestLen), match: true });
+                pos = bestStart + bestLen;
+            }
+
+            return segments;
+        }
+
+        function removePageHighlights() {
+            var marks = document.querySelectorAll('.page-search-highlight');
+            for (var i = 0; i < marks.length; i++) {
+                var mark = marks[i];
+                var parent = mark.parentNode;
+                if (parent) {
+                    parent.replaceChild(document.createTextNode(mark.textContent), mark);
+                    parent.normalize();
+                }
+            }
+        }
+
+        function clearSearch() {
+            var input = document.getElementById('searchInput');
+            if (input) input.value = '';
+            var cb = document.getElementById('searchClearBtn');
+            if (cb) cb.classList.remove('visible');
+            hideDesktopPanel();
+            searchResultsData = [];
+            removePageHighlights();
+        }
+
+        function openMobileSearch() {
+            var modal = document.getElementById('searchModal');
+            if (modal) modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+            setTimeout(function() {
+                var input = document.getElementById('searchModalInput');
+                if (input) input.focus();
+            }, 100);
+        }
+
+        function closeMobileSearch() {
+            var modal = document.getElementById('searchModal');
+            if (modal) modal.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function clearMobileSearch() {
+            var input = document.getElementById('searchModalInput');
+            if (input) input.value = '';
+            var cb = document.getElementById('searchModalClearBtn');
+            if (cb) cb.classList.remove('visible');
+            var mr = document.getElementById('searchModalResults');
+            if (mr) mr.innerHTML = '';
+            searchResultsData = [];
+            removePageHighlights();
+        }
+
+        // Close desktop panel when clicking outside
+        document.addEventListener('click', function(e) {
+            var sc = document.getElementById('searchContainer');
+            if (sc && !sc.contains(e.target)) {
+                hideDesktopPanel();
+            }
+        });
+
+        // ESC key closes search
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                hideDesktopPanel();
+                closeMobileSearch();
+            }
+        });
+
+
         // Quiz functionality
         function checkQuiz(questionId, optionEl, isCorrect) {
             var question = document.getElementById(questionId);
@@ -2588,6 +3902,7 @@
             var correctFb = document.getElementById(questionId + '-correct');
             var incorrectFb = document.getElementById(questionId + '-incorrect');
 
+            // Disable all options
             options.forEach(function(opt) {
                 opt.classList.add('disabled');
             });
@@ -2624,6 +3939,46 @@
         document.querySelectorAll('.topic-section').forEach(function(section) {
             observer.observe(section);
         });
+        // Subsection scroll spy for sidebar
+        var scrollSpyTimer = null;
+        window.addEventListener('scroll', function() {
+            if (scrollSpyTimer) return;
+            scrollSpyTimer = setTimeout(function() {
+                scrollSpyTimer = null;
+                updateScrollSpy();
+            }, 80);
+        });
+
+        function updateScrollSpy() {
+            var openTopic = document.querySelector('.topic-section.open');
+            if (!openTopic) return;
+
+            var subs = openTopic.querySelectorAll('.subsection');
+            if (subs.length === 0) return;
+
+            var headerOffset = 130;
+            var bestSub = null;
+
+            for (var i = 0; i < subs.length; i++) {
+                var rect = subs[i].getBoundingClientRect();
+                if (rect.top <= headerOffset) {
+                    bestSub = subs[i];
+                }
+            }
+
+            // If no subsection has scrolled past the header yet, use the first one
+            if (!bestSub) {
+                var firstRect = subs[0].getBoundingClientRect();
+                if (firstRect.top < window.innerHeight) {
+                    bestSub = subs[0];
+                }
+            }
+
+            if (bestSub && bestSub.id) {
+                updateSubLinkActive(bestSub.id);
+            }
+        }
+
 
         // Open topic from URL hash (e.g. #topic-4-2)
         (function() {
@@ -2643,6 +3998,56 @@
                 }
             }
         })();
+
+
+        // ===== ENTRY METHODS INTERACTIVE =====
+        function showEntryMethod(method) {
+            var data = {
+                exporting: {
+                    title: 'Exporting',
+                    advs: ['Low initial investment and limited financial risk', 'Ability to test market before committing further', 'Company retains full control of production quality and brand', 'Can start quickly without overseas infrastructure'],
+                    disadvs: ['Transport costs reduce profit margins', 'Slower delivery times may damage competitiveness', 'Limited understanding of local customer needs', 'Vulnerable to exchange rate fluctuations and tariffs']
+                },
+                licensing: {
+                    title: 'Licensing',
+                    advs: ['Very low investment and risk for the licensor', 'Rapid market entry without manufacturing locally', 'Licensee handles production and distribution', 'Generates income from intellectual property with minimal effort'],
+                    disadvs: ['Less control over product quality and brand image', 'Lower profit margins than direct operations', 'Risk of licensee creating competition after contract ends', 'Intellectual property may be copied or misused']
+                },
+                ecommerce: {
+                    title: 'E-Commerce',
+                    advs: ['Very low setup costs and instant global reach', 'Minimal physical infrastructure needed', 'Rapid customer feedback and ability to scale quickly', 'Flexible approach to testing new markets before investing'],
+                    disadvs: ['Requires robust logistics and international shipping', 'Customs and import regulations create complexity', 'International payment and currency exchange challenges', 'Intense online competition and customer support across time zones']
+                },
+                franchising: {
+                    title: 'Franchising',
+                    advs: ['Rapid expansion with minimal capital investment', 'Franchisee bears most financial risk and operational costs', 'Consistent quality through brand standards and guidelines', 'Generates ongoing royalty income from every franchise'],
+                    disadvs: ['Less direct control than full ownership of operations', 'Conflict may arise over quality standards and decisions', 'Reputational risk if franchisees perform poorly', 'Difficult to remove underperforming franchisees quickly']
+                },
+                jointventure: {
+                    title: 'Joint Venture',
+                    advs: ['Shares financial burden and risk with local partner', 'Access to partner\'s local knowledge and market expertise', 'Faster market entry through existing partner connections', 'Cultural and regulatory understanding from local partner'],
+                    disadvs: ['Shared control can create decision making conflicts', 'Profits must be split between partners', 'Difficult and costly to dissolve partnerships', 'Disagreements over strategy, culture, and management']
+                },
+                subsidiary: {
+                    title: 'Wholly Owned Subsidiary',
+                    advs: ['Complete ownership, control, and access to all profits', 'Ability to implement exact corporate strategy and values', 'Easier to maintain brand consistency and quality standards', 'Long term commitment signals confidence to local stakeholders'],
+                    disadvs: ['Highest investment and financial risk of all methods', 'Takes longest to establish and become profitable', 'Greatest legal, regulatory, and political exposure', 'Very difficult and costly to exit if unsuccessful']
+                }
+            };
+            var d = data[method];
+            if (!d) return;
+            var cards = document.querySelectorAll('.em-card');
+            cards.forEach(function(c) { c.classList.remove('active'); });
+            event.currentTarget.classList.add('active');
+            var panel = document.getElementById('em-info-panel');
+            var html = '<h6>' + d.title + '</h6><div class="em-info-grid"><div class="em-info-adv"><div class="em-info-adv-title">Advantages</div><ul>';
+            d.advs.forEach(function(a) { html += '<li>' + a + '</li>'; });
+            html += '</ul></div><div class="em-info-disadv"><div class="em-info-disadv-title">Disadvantages</div><ul>';
+            d.disadvs.forEach(function(a) { html += '<li>' + a + '</li>'; });
+            html += '</ul></div></div>';
+            panel.innerHTML = html;
+            panel.className = 'em-info show';
+        }
 
     </script>
 </body>

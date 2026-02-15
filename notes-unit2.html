@@ -1419,7 +1419,184 @@
             .ratio-extra-panels { grid-template-columns: 1fr; }
             .ratio-result-current .ratio-value { font-size: 1.6rem; }
         }
-    </style>
+    
+/* Forms of Business Interactive Graphic */
+.forms-graphic {
+    background: linear-gradient(135deg, #1e3a5f 0%, #2d5a8a 100%);
+    border-radius: 20px;
+    padding: 2rem;
+    margin: 1.5rem 0;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+.forms-graphic::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -30%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(230,126,34,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+}
+.fg-title {
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+.fg-cards {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.8rem;
+    position: relative;
+}
+.fg-card {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 14px;
+    padding: 1.2rem 0.8rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+.fg-card:hover {
+    background: rgba(255,255,255,0.22);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+.fg-card.active {
+    background: rgba(230,126,34,0.3);
+    border-color: var(--accent);
+    box-shadow: 0 0 20px rgba(230,126,34,0.3);
+}
+.fg-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+.fg-card h5 { font-size: 0.9rem; font-weight: 700; color: #ffffff; margin-bottom: 0.3rem; }
+.fg-card p { font-size: 0.78rem; color: rgba(255,255,255,0.95); line-height: 1.3; text-align: center; }
+.fg-info-panel {
+    display: none;
+    background: rgba(255,255,255,0.18);
+    border-radius: 14px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    border: 1px solid rgba(255,255,255,0.25);
+    animation: ansoffSlide 0.3s ease;
+    position: relative;
+}
+.fg-info-panel.active { display: block; }
+.fg-info-panel h5 { color: var(--accent-light); font-size: 1.05rem; font-weight: 700; margin-bottom: 0.6rem; }
+.fg-info-panel p { font-size: 0.92rem; line-height: 1.65; color: #ffffff; }
+@media (max-width: 900px) {
+    .fg-cards { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 600px) {
+    .fg-cards { grid-template-columns: 1fr 1fr; }
+    .forms-graphic { padding: 1.2rem; }
+}
+
+/* Business Failure Interactive Graphic */
+.bf-graphic {
+    background: linear-gradient(135deg, #1e3a5f 0%, #2d5a8a 100%);
+    border-radius: 20px;
+    padding: 2rem;
+    margin: 1.5rem 0;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+.bf-graphic::before {
+    content: '';
+    position: absolute;
+    bottom: -40%;
+    left: -20%;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(231,76,60,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+}
+.bf-title {
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+.bf-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    position: relative;
+}
+.bf-card {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 14px;
+    padding: 1.3rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+.bf-card:hover {
+    background: rgba(255,255,255,0.22);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+.bf-card.active {
+    background: rgba(230,126,34,0.3);
+    border-color: var(--accent);
+    box-shadow: 0 0 20px rgba(230,126,34,0.3);
+}
+.bf-icon { font-size: 2.2rem; margin-bottom: 0.6rem; }
+.bf-card h5 { font-size: 1rem; font-weight: 700; color: #ffffff; margin-bottom: 0.3rem; }
+.bf-card p { font-size: 0.85rem; color: rgba(255,255,255,0.95); line-height: 1.4; text-align: center; }
+.bf-info-panel {
+    display: none;
+    background: rgba(255,255,255,0.18);
+    border-radius: 14px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    border: 1px solid rgba(255,255,255,0.25);
+    animation: ansoffSlide 0.3s ease;
+    position: relative;
+}
+.bf-info-panel.active { display: block; }
+.bf-info-panel h5 { color: var(--accent-light); font-size: 1.05rem; font-weight: 700; margin-bottom: 0.6rem; }
+.bf-info-panel p { font-size: 0.92rem; line-height: 1.65; color: #ffffff; margin-bottom: 0.5rem; }
+.bf-info-panel p:last-child { margin-bottom: 0; }
+@media (max-width: 600px) {
+    .bf-cards { grid-template-columns: 1fr; }
+    .bf-graphic { padding: 1.2rem; }
+}
+
+/* Variance Table */
+.variance-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 0.88rem;
+}
+.variance-table th {
+    background: var(--primary);
+    color: white;
+    padding: 0.7rem 1rem;
+    text-align: left;
+    font-weight: 600;
+}
+.variance-table td {
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid var(--gray-200);
+}
+.variance-table tr:nth-child(even) td {
+    background: rgba(0,0,0,0.02);
+}
+.variance-fav { color: #27ae60; font-weight: 600; }
+.variance-adv { color: #e74c3c; font-weight: 600; }
+
+</style>
 </head>
 <body>
     <!-- Header -->
@@ -1543,6 +1720,8 @@
                                 <a class="sidebar-sub-link" onclick="scrollToSubsection('sub-external-finance', 'topic-2-1')">External Sources</a>
                                 <a class="sidebar-sub-link" onclick="scrollToSubsection('sub-short-long-term', 'topic-2-1')">Short vs Long Term</a>
                                 <a class="sidebar-sub-link" onclick="scrollToSubsection('sub-choosing-source', 'topic-2-1')">Choosing the Right Source</a>
+                                <a class="sidebar-sub-link" onclick="scrollToSubsection('sub-forms-of-business', 'topic-2-1')">Forms of Business</a>
+                                <a class="sidebar-sub-link" onclick="scrollToSubsection('sub-liability', 'topic-2-1')">Limited/Unlimited Liability</a>
                             </div>
                         </div>
                         <div class="sidebar-topic-item" data-topic="topic-2-2">
@@ -1556,6 +1735,10 @@
                                 <a class="sidebar-sub-link" onclick="scrollToSubsection('sub-break-even', 'topic-2-2')">Break Even Analysis</a>
                                 <a class="sidebar-sub-link" onclick="scrollToSubsection('sub-cash-flow-forecast', 'topic-2-2')">Cash Flow Forecasting</a>
                                 <a class="sidebar-sub-link" onclick="scrollToSubsection('sub-improving-cashflow', 'topic-2-2')">Improving Cash Flow</a>
+                                <a class="sidebar-sub-link" onclick="scrollToSubsection('sub-business-plans', 'topic-2-2')">Business Plans</a>
+                                <a class="sidebar-sub-link" onclick="scrollToSubsection('sub-sales-forecasting', 'topic-2-2')">Sales Forecasting</a>
+                                <a class="sidebar-sub-link" onclick="scrollToSubsection('sub-budgets', 'topic-2-2')">Budgets and Variance</a>
+                                <a class="sidebar-sub-link" onclick="scrollToSubsection('sub-business-failure', 'topic-2-2')">Business Failure</a>
                             </div>
                         </div>
                         <div class="sidebar-topic-item" data-topic="topic-2-3">
@@ -1969,60 +2152,6 @@
     <p>In exam questions about finance, always consider the time period. Short term finance should match short term needs, and long term finance should match long term needs. Mismatching can cause problems; for example, using a short term overdraft to buy a 10 year asset is risky because the overdraft must be repaid soon.</p>
 </div>
 
-        </div>
-    </div>
-</div>
-
-<div class="subsection open" id="sub-choosing-source">
-    <div class="subsection-header" onclick="toggleSubsection(this)">
-        <h4>Choosing the Right Source of Finance</h4>
-        <span class="subsection-toggle">&minus;</span>
-    </div>
-    <div class="subsection-content">
-        <div class="subsection-inner">
-
-<p>Choosing the right source of finance is a critical decision for business managers. The choice depends on several factors that must be carefully considered.</p>
-
-<h5>Purpose of the Finance</h5>
-<p>The intended use of the money is crucial. Buying a factory requires long term finance like a mortgage or loan. Paying for short term stock requires short term finance like an overdraft. Investing in a risky new product idea might need venture capital with specialist expertise.</p>
-
-<h5>Amount Needed</h5>
-<p>The quantity of finance required limits the options available. Small amounts might come from owner's savings or retained profit. Medium amounts might use bank loans or trade credit. Large amounts typically require venture capital, share capital, or major bank loans.</p>
-
-<h5>Cost of Finance</h5>
-<p>Different sources have different costs. Owner's capital and retained profit are free, but internal sources may be limited. Bank loans cost interest. Venture capital is expensive in terms of ownership loss but free in terms of repayment. Grants are free but very competitive and difficult to obtain.</p>
-
-<div class="formula-box">
-    <div class="formula-box-label">FINANCE COST COMPARISON</div>
-    <h5>Interest Calculation</h5>
-    <p>To compare finance costs, calculate the total amount to be repaid:</p>
-    <div class="formula-display">Total Repayment = Amount Borrowed + (Amount Borrowed × Interest Rate × Time Period)</div>
-    <p>For example, a 100,000 pound loan at 5% interest per year for 5 years costs 25,000 pounds in interest, making the total repayment 125,000 pounds.</p>
-</div>
-
-<h5>Risk and Security</h5>
-<p>Banks often require security (collateral) before lending. If the business cannot repay, the bank can seize the asset. This is a risk for the business owner. Share capital and venture capital do not require security but do dilute ownership. Internal finance has no security requirements.</p>
-
-<h5>Control and Ownership</h5>
-<p>This is often a key concern for business owners. Taking a bank loan means no loss of control. Venture capital and share capital mean loss of ownership and control to external stakeholders who can influence decisions. Owner's capital maintains full control.</p>
-
-<h5>Business Stage</h5>
-<p>The stage of the business lifecycle affects finance choices. A startup with no track record will struggle to get bank loans and may rely on owner's capital, grants, or venture capital. An established, profitable business can use retained profit or bank loans easily. A growing business might use venture capital or share capital for expansion.</p>
-
-<h5>Speed of Access</h5>
-<p>Different sources take different times. Retained profit and owner's capital are immediate if available. Bank loans take weeks to arrange. Venture capital takes months. Grants take many months. Overdrafts can be arranged quickly. If speed is essential, internal sources or overdrafts are better choices.</p>
-
-<div class="exam-tip">
-    <div class="exam-tip-label">EXAM TIP</div>
-    <p>When answering exam questions about choosing finance, always discuss at least 2 to 3 factors and consider the specific business context given in the question. Don't just list sources; evaluate which would be most appropriate and explain why. Link your answer to the business situation described.</p>
-</div>
-
-<div class="exam-tip"><div class="exam-tip-label">EXAM TIP</div><p>Evaluate whether the source of finance matters as much as how it is used. A business that borrows heavily but invests in high return projects may outperform one that relies on retained profit but makes poor investment decisions. The real question is not which source is cheapest, but whether the investment it funds generates sufficient returns to justify the cost.</p></div>
-
-        </div>
-    </div>
-</div>
-
 <h3>Finance Source Comparison</h3>
 <p>The following table compares the key characteristics of different finance sources to help you understand when each might be most appropriate:</p>
 
@@ -2386,6 +2515,273 @@
         </tbody>
     </table>
 </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="subsection open" id="sub-choosing-source">
+    <div class="subsection-header" onclick="toggleSubsection(this)">
+        <h4>Choosing the Right Source of Finance</h4>
+        <span class="subsection-toggle">&minus;</span>
+    </div>
+    <div class="subsection-content">
+        <div class="subsection-inner">
+
+<p>Choosing the right source of finance is a critical decision for business managers. The choice depends on several factors that must be carefully considered.</p>
+
+<h5>Purpose of the Finance</h5>
+<p>The intended use of the money is crucial. Buying a factory requires long term finance like a mortgage or loan. Paying for short term stock requires short term finance like an overdraft. Investing in a risky new product idea might need venture capital with specialist expertise.</p>
+
+<h5>Amount Needed</h5>
+<p>The quantity of finance required limits the options available. Small amounts might come from owner's savings or retained profit. Medium amounts might use bank loans or trade credit. Large amounts typically require venture capital, share capital, or major bank loans.</p>
+
+<h5>Cost of Finance</h5>
+<p>Different sources have different costs. Owner's capital and retained profit are free, but internal sources may be limited. Bank loans cost interest. Venture capital is expensive in terms of ownership loss but free in terms of repayment. Grants are free but very competitive and difficult to obtain.</p>
+
+<div class="formula-box">
+    <div class="formula-box-label">FINANCE COST COMPARISON</div>
+    <h5>Interest Calculation</h5>
+    <p>To compare finance costs, calculate the total amount to be repaid:</p>
+    <div class="formula-display">Total Repayment = Amount Borrowed + (Amount Borrowed × Interest Rate × Time Period)</div>
+    <p>For example, a 100,000 pound loan at 5% interest per year for 5 years costs 25,000 pounds in interest, making the total repayment 125,000 pounds.</p>
+</div>
+
+<h5>Risk and Security</h5>
+<p>Banks often require security (collateral) before lending. If the business cannot repay, the bank can seize the asset. This is a risk for the business owner. Share capital and venture capital do not require security but do dilute ownership. Internal finance has no security requirements.</p>
+
+<h5>Control and Ownership</h5>
+<p>This is often a key concern for business owners. Taking a bank loan means no loss of control. Venture capital and share capital mean loss of ownership and control to external stakeholders who can influence decisions. Owner's capital maintains full control.</p>
+
+<h5>Business Stage</h5>
+<p>The stage of the business lifecycle affects finance choices. A startup with no track record will struggle to get bank loans and may rely on owner's capital, grants, or venture capital. An established, profitable business can use retained profit or bank loans easily. A growing business might use venture capital or share capital for expansion.</p>
+
+<h5>Speed of Access</h5>
+<p>Different sources take different times. Retained profit and owner's capital are immediate if available. Bank loans take weeks to arrange. Venture capital takes months. Grants take many months. Overdrafts can be arranged quickly. If speed is essential, internal sources or overdrafts are better choices.</p>
+
+<div class="exam-tip">
+    <div class="exam-tip-label">EXAM TIP</div>
+    <p>When answering exam questions about choosing finance, always discuss at least 2 to 3 factors and consider the specific business context given in the question. Don't just list sources; evaluate which would be most appropriate and explain why. Link your answer to the business situation described.</p>
+</div>
+
+<div class="exam-tip"><div class="exam-tip-label">EXAM TIP</div><p>Evaluate whether the source of finance matters as much as how it is used. A business that borrows heavily but invests in high return projects may outperform one that relies on retained profit but makes poor investment decisions. The real question is not which source is cheapest, but whether the investment it funds generates sufficient returns to justify the cost.</p></div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="subsection" id="sub-forms-of-business">
+    <div class="subsection-header" onclick="toggleSubsection(this)">
+        <h4>Forms of Business</h4>
+        <span class="subsection-toggle">+</span>
+    </div>
+    <div class="subsection-content">
+        <div class="subsection-inner">
+<p>The legal structure a business chooses affects how it can raise finance, who is responsible for debts, how profits are distributed, and how much regulation it faces. Choosing the right form of business is one of the most important decisions an entrepreneur makes.</p>
+
+<div class="forms-graphic">
+    <div class="fg-title">Forms of Business: Click to Explore</div>
+    <div class="fg-cards">
+        <div class="fg-card" onclick="showBusinessForm('sole')">
+            <div class="fg-icon">👤</div>
+            <h5>Sole Trader</h5>
+            <p>One person owns and runs the business</p>
+        </div>
+        <div class="fg-card" onclick="showBusinessForm('partnership')">
+            <div class="fg-icon">🤝</div>
+            <h5>Partnership</h5>
+            <p>Two or more owners share the business</p>
+        </div>
+        <div class="fg-card" onclick="showBusinessForm('ltd')">
+            <div class="fg-icon">🏢</div>
+            <h5>Private Ltd</h5>
+            <p>Shares sold privately, limited liability</p>
+        </div>
+        <div class="fg-card" onclick="showBusinessForm('plc')">
+            <div class="fg-icon">📈</div>
+            <h5>Public Plc</h5>
+            <p>Shares traded on the stock exchange</p>
+        </div>
+        <div class="fg-card" onclick="showBusinessForm('nonprofit')">
+            <div class="fg-icon">💚</div>
+            <h5>Not for Profit</h5>
+            <p>Surplus reinvested, not distributed</p>
+        </div>
+    </div>
+    <div class="fg-info-panel" id="fg-info"></div>
+</div>
+
+<p><strong>Sole Trader:</strong> The simplest and most common form of business in the UK. One person owns and operates the business, making all decisions and keeping all profits after tax. There is no legal distinction between the owner and the business.</p>
+
+<div class="adv-disadv-grid">
+    <div class="adv-box">
+        <div class="adv-box-title">Advantages</div>
+        <ul>
+            <li><strong>Easy and inexpensive to set up:</strong> Minimal legal formalities are required; the owner simply needs to register with HMRC for self assessment</li>
+            <li><strong>Complete control over decisions:</strong> The owner makes all decisions without needing to consult partners or shareholders</li>
+            <li><strong>Owner keeps all profits:</strong> After tax, all profit belongs to the owner with no obligation to share</li>
+            <li><strong>Privacy:</strong> Financial information does not need to be made public, unlike limited companies</li>
+        </ul>
+    </div>
+    <div class="disadv-box">
+        <div class="disadv-box-title">Disadvantages</div>
+        <ul>
+            <li><strong>Unlimited liability:</strong> The owner is personally responsible for all business debts, putting personal assets such as their home and savings at risk</li>
+            <li><strong>Limited access to finance:</strong> Banks may be reluctant to lend to sole traders due to higher risk; cannot raise capital by selling shares</li>
+            <li><strong>Heavy workload:</strong> The owner bears all responsibility for running the business, which can lead to long hours and stress</li>
+            <li><strong>Limited continuity:</strong> The business may cease to exist if the owner becomes ill, retires, or dies</li>
+        </ul>
+    </div>
+</div>
+
+<p><strong>Partnership:</strong> A business owned by two or more people (up to 20 in most cases), who share responsibility, decision making, and profits. Partnerships are governed by the Partnership Act 1890 or by a written partnership agreement (deed) that sets out each partner's rights and responsibilities.</p>
+
+<div class="adv-disadv-grid">
+    <div class="adv-box">
+        <div class="adv-box-title">Advantages</div>
+        <ul>
+            <li><strong>More capital available:</strong> Multiple partners can contribute funds, increasing the total capital available to the business</li>
+            <li><strong>Shared workload and expertise:</strong> Partners can specialise in different areas of the business, improving efficiency and decision quality</li>
+            <li><strong>Shared risk:</strong> Business risks and losses are spread among all partners rather than falling on one person</li>
+            <li><strong>Easy to establish:</strong> Relatively simple to set up, particularly with a partnership deed outlining roles and profit shares</li>
+        </ul>
+    </div>
+    <div class="disadv-box">
+        <div class="disadv-box-title">Disadvantages</div>
+        <ul>
+            <li><strong>Unlimited liability (usually):</strong> Each partner is jointly and individually liable for all business debts, including debts created by other partners</li>
+            <li><strong>Shared profits:</strong> Profits must be divided among partners according to the agreement, reducing individual earnings</li>
+            <li><strong>Potential for disagreements:</strong> Different opinions on business direction can cause conflict and slow decision making</li>
+            <li><strong>Limited continuity:</strong> The partnership may dissolve if a partner leaves, retires, or dies unless the deed states otherwise</li>
+        </ul>
+    </div>
+</div>
+
+<p><strong>Private Limited Company (Ltd):</strong> A business that is a separate legal entity from its owners (shareholders). Shares are sold privately and cannot be traded on the stock exchange. The company is run by directors on behalf of shareholders.</p>
+
+<div class="adv-disadv-grid">
+    <div class="adv-box">
+        <div class="adv-box-title">Advantages</div>
+        <ul>
+            <li><strong>Limited liability:</strong> Shareholders can only lose the amount they invested in shares, protecting their personal assets from business debts</li>
+            <li><strong>Easier to raise capital:</strong> Can sell shares to family, friends, and private investors, providing more funding options than sole traders or partnerships</li>
+            <li><strong>Separate legal entity:</strong> The company continues to exist regardless of changes in ownership; it can own property, enter contracts, and sue in its own name</li>
+            <li><strong>Professional credibility:</strong> The Ltd status can improve the business image and make it easier to win contracts and secure credit</li>
+        </ul>
+    </div>
+    <div class="disadv-box">
+        <div class="disadv-box-title">Disadvantages</div>
+        <ul>
+            <li><strong>More expensive and complex to set up:</strong> Must register with Companies House, prepare articles of association, and comply with company law</li>
+            <li><strong>Financial disclosure required:</strong> Annual accounts must be filed with Companies House and are available for public inspection</li>
+            <li><strong>Cannot sell shares publicly:</strong> Shares can only be sold with agreement of existing shareholders, limiting the ability to raise very large amounts of capital</li>
+            <li><strong>More regulation:</strong> Must comply with the Companies Act, hold annual meetings, and maintain detailed records</li>
+        </ul>
+    </div>
+</div>
+
+<p><strong>Public Limited Company (Plc):</strong> A company whose shares are traded on the stock exchange, allowing anyone to buy and sell shares freely. Plcs must have a minimum share capital of 50,000 pounds and are subject to strict regulation by the Financial Conduct Authority.</p>
+
+<div class="adv-disadv-grid">
+    <div class="adv-box">
+        <div class="adv-box-title">Advantages</div>
+        <ul>
+            <li><strong>Access to large amounts of capital:</strong> Can raise substantial finance by selling shares to the public on the stock exchange</li>
+            <li><strong>Greater brand credibility:</strong> Being publicly listed enhances reputation and can attract customers, suppliers, and talented employees</li>
+            <li><strong>Shares are easily transferable:</strong> Shareholders can buy and sell shares freely on the stock exchange without affecting the business</li>
+            <li><strong>Limited liability:</strong> Shareholders' personal assets are protected; they can only lose the value of their shares</li>
+        </ul>
+    </div>
+    <div class="disadv-box">
+        <div class="disadv-box-title">Disadvantages</div>
+        <ul>
+            <li><strong>Expensive and complex to set up:</strong> Flotation (listing on the stock exchange) costs millions in legal, accounting, and underwriting fees</li>
+            <li><strong>Risk of hostile takeover:</strong> If share price falls, another company could buy enough shares to take control without the directors' agreement</li>
+            <li><strong>Pressure for short term profits:</strong> Shareholders expect regular dividends and rising share prices, which can discourage long term investment</li>
+            <li><strong>Full public disclosure:</strong> Must publish detailed financial reports, director pay, and business strategy, which competitors can access</li>
+        </ul>
+    </div>
+</div>
+
+<p><strong>Not for Profit Organisations:</strong> Organisations that exist to benefit society rather than generate profit for owners. Any surplus revenue is reinvested back into the organisation's mission. This category includes charities, social enterprises, community interest companies (CICs), and cooperatives.</p>
+
+<div class="adv-disadv-grid">
+    <div class="adv-box">
+        <div class="adv-box-title">Advantages</div>
+        <ul>
+            <li><strong>Tax benefits:</strong> Charities receive significant tax relief, including exemption from corporation tax on charitable activities and Gift Aid on donations</li>
+            <li><strong>Access to grants and donations:</strong> Can apply for government grants, lottery funding, and charitable donations not available to profit making businesses</li>
+            <li><strong>Positive public image:</strong> Being seen as working for social good builds trust and attracts customers, volunteers, and supporters</li>
+            <li><strong>Attracts motivated staff:</strong> Employees driven by values and purpose may accept lower pay in exchange for meaningful work</li>
+        </ul>
+    </div>
+    <div class="disadv-box">
+        <div class="disadv-box-title">Disadvantages</div>
+        <ul>
+            <li><strong>Cannot distribute profits:</strong> Surplus must be reinvested, which may limit the ability to attract investors seeking financial returns</li>
+            <li><strong>Harder to raise commercial finance:</strong> Banks may be reluctant to lend if the organisation has no profit motive or limited assets for security</li>
+            <li><strong>Dependence on external funding:</strong> Reliance on grants and donations creates financial uncertainty, as funding may be reduced or withdrawn</li>
+            <li><strong>Complex governance:</strong> Charities must comply with Charity Commission regulations, maintain trustees, and demonstrate how funds are used for public benefit</li>
+        </ul>
+    </div>
+</div>
+
+<div class="exam-tip"><div class="exam-tip-label">EXAM TIP</div><p>When evaluating which form of business is most appropriate, always consider the size of the business, how much capital is needed, the owner's attitude to risk and control, and the nature of the industry. A tech startup seeking millions in investment would benefit from becoming a Ltd or Plc, while a local plumber would be best suited as a sole trader. The key trade off is usually between limited liability protection and the cost and complexity of incorporation.</p></div>
+
+        </div>
+    </div>
+</div>
+
+<div class="subsection" id="sub-liability">
+    <div class="subsection-header" onclick="toggleSubsection(this)">
+        <h4>Limited and Unlimited Liability</h4>
+        <span class="subsection-toggle">+</span>
+    </div>
+    <div class="subsection-content">
+        <div class="subsection-inner">
+<p>Liability refers to the legal responsibility a business owner has for the debts of the business. The type of liability directly affects how much personal financial risk the owner faces, and is one of the most important factors when choosing a form of business.</p>
+
+<div class="key-term"><div class="key-term-label">KEY TERM</div><h5>Unlimited Liability</h5><p>A legal situation where the business owner is personally responsible for all the debts of the business. There is no legal separation between the owner's personal finances and the business finances. If the business cannot pay its debts, creditors can claim the owner's personal assets, including savings, property, and possessions.</p></div>
+
+<p><strong>Unlimited liability applies to:</strong> sole traders and most partnerships. Because the business and the owner are legally the same entity, any debts the business incurs are the owner's personal debts. This means that if a sole trader's business fails owing 100,000 pounds and the business only has 20,000 pounds in assets, the owner must find the remaining 80,000 pounds from their personal savings, sell their home, or face bankruptcy.</p>
+
+<div class="key-term"><div class="key-term-label">KEY TERM</div><h5>Limited Liability</h5><p>A legal situation where the business is a separate legal entity from its owners. The owners (shareholders) can only lose the amount of money they have invested in shares. Personal assets are protected from business debts. If the company fails, shareholders lose their investment but creditors cannot claim their personal property.</p></div>
+
+<p><strong>Limited liability applies to:</strong> private limited companies (Ltd) and public limited companies (Plc). Because incorporation creates a separate legal person, the company owns its assets and owes its debts, not the individual shareholders. This legal separation is the single biggest advantage of incorporation and is the main reason many growing businesses choose to become limited companies.</p>
+
+<p><strong>The Link Between Liability and Ownership:</strong></p>
+<p>The type of liability directly influences how much finance a business can raise and how willing investors are to provide it. With unlimited liability, potential investors face the risk of losing not just their investment but also their personal wealth, which makes most people reluctant to invest. With limited liability, investors know exactly the maximum they can lose (their share investment), which encourages investment and allows businesses to raise much more capital. This is why virtually all large businesses are limited companies. The trade off is that limited companies face more regulation, higher setup costs, and must disclose financial information publicly.</p>
+
+<div class="adv-disadv-grid">
+    <div class="adv-box">
+        <div class="adv-box-title">Unlimited Liability</div>
+        <ul>
+            <li><strong>Applies to:</strong> Sole traders and standard partnerships</li>
+            <li><strong>Personal risk:</strong> Owner's personal assets (home, savings, car) can be seized to pay business debts</li>
+            <li><strong>Finance implications:</strong> Harder to attract investors because of high personal risk; banks may require personal guarantees</li>
+            <li><strong>Control benefit:</strong> No requirement to share ownership or decision making power with external shareholders</li>
+        </ul>
+    </div>
+    <div class="disadv-box">
+        <div class="disadv-box-title">Limited Liability</div>
+        <ul>
+            <li><strong>Applies to:</strong> Private limited companies (Ltd) and public limited companies (Plc)</li>
+            <li><strong>Personal protection:</strong> Shareholders can only lose the amount invested in shares; personal assets are fully protected</li>
+            <li><strong>Finance implications:</strong> Easier to attract investors because risk is capped; can raise large amounts through share issues</li>
+            <li><strong>Trade off:</strong> Must comply with Companies Act regulations, file accounts publicly, and share control with other shareholders</li>
+        </ul>
+    </div>
+</div>
+
+<div class="real-world"><div class="real-world-label">REAL WORLD EXAMPLE</div><h5>The Importance of Limited Liability</h5><p>When Facebook was growing rapidly, Mark Zuckerberg incorporated the business as a limited company. This allowed him to attract billions of dollars from investors like Peter Thiel and Accel Partners, who knew their maximum loss was limited to their investment. Without limited liability, these investors would never have risked such large sums, and Facebook might never have grown into the global company it is today. This illustrates why limited liability is essential for businesses that need to raise significant external finance.</p></div>
+
+<div class="exam-tip"><div class="exam-tip-label">EXAM TIP</div><p>Many students confuse liability with the amount of debt. Liability is about who is responsible for the debt, not how much debt there is. A sole trader with 10,000 pounds of debt faces unlimited liability (personal assets at risk), while a Plc with 10 million pounds of debt has limited liability (shareholders only lose their share value). Always explain the legal distinction clearly in your answers.</p></div>
+
+        </div>
+    </div>
+</div>
+
 
 <style>
     .finance-row {
@@ -3058,6 +3454,32 @@
     </div>
 </div>
 
+<h3>Usefulness and Limitations of Break Even Analysis</h3>
+
+<div class="adv-disadv-grid">
+    <div class="adv-box">
+        <div class="adv-box-title">Usefulness</div>
+        <ul>
+            <li><strong>Simple and visual:</strong> Break even charts provide a clear visual representation of costs, revenue, and the point at which a business begins to make profit, making it easy for non financial stakeholders to understand</li>
+            <li><strong>Supports decision making:</strong> Helps managers assess the impact of changes to price, costs, or output levels before committing resources, reducing the risk of poor decisions</li>
+            <li><strong>Useful for start ups:</strong> New businesses can use break even analysis to determine the minimum sales needed to cover costs, helping secure finance from banks and investors</li>
+            <li><strong>Measures margin of safety:</strong> Shows how far sales can fall before the business makes a loss, allowing managers to assess risk and plan accordingly</li>
+            <li><strong>Scenario planning:</strong> Enables "what if" analysis by adjusting variables such as selling price or fixed costs to see how profitability would be affected</li>
+        </ul>
+    </div>
+    <div class="disadv-box">
+        <div class="disadv-box-title">Limitations</div>
+        <ul>
+            <li><strong>Assumes all output is sold:</strong> The model assumes that every unit produced is sold, which is unrealistic as businesses often hold stock or face unsold inventory</li>
+            <li><strong>Assumes fixed costs remain constant:</strong> In reality, fixed costs can change at different output levels (e.g. needing larger premises), making the analysis less accurate at extreme volumes</li>
+            <li><strong>Single product assumption:</strong> Traditional break even analysis works best for businesses selling one product; multi product firms find it much harder to apply accurately</li>
+            <li><strong>Ignores changes in price:</strong> The model assumes a constant selling price, but businesses may need to lower prices to increase sales volume or face competitive pressure</li>
+            <li><strong>Based on estimates:</strong> The accuracy depends on the reliability of cost and revenue data, which may be based on forecasts rather than actual figures, especially for new businesses</li>
+            <li><strong>Static snapshot:</strong> Break even analysis shows a position at one point in time and does not account for seasonal variations, market trends, or changing consumer demand</li>
+        </ul>
+    </div>
+</div>
+
 <div class="real-world">
     <div class="real-world-label">REAL WORLD EXAMPLE</div>
     <h5>McDonald's Break Even Analysis</h5>
@@ -3140,6 +3562,32 @@
     </div>
 </div>
 
+<h3>Usefulness and Limitations of Cash Flow Forecasts</h3>
+
+<div class="adv-disadv-grid">
+    <div class="adv-box">
+        <div class="adv-box-title">Usefulness</div>
+        <ul>
+            <li><strong>Anticipates shortages:</strong> Allows managers to identify periods where cash outflows exceed inflows in advance, giving time to arrange overdrafts, loans, or other sources of finance</li>
+            <li><strong>Supports loan applications:</strong> Banks and investors require cash flow forecasts as part of a business plan to demonstrate the business can manage its finances and repay borrowing</li>
+            <li><strong>Improves financial control:</strong> Regular comparison of forecast versus actual cash flow helps managers spot problems early and take corrective action before a crisis develops</li>
+            <li><strong>Aids planning and budgeting:</strong> Helps businesses plan the timing of major expenditures such as equipment purchases or recruitment to avoid cash flow problems</li>
+            <li><strong>Reduces risk of business failure:</strong> Many profitable businesses fail due to poor cash management; forecasting helps ensure there is always enough cash to meet day to day obligations</li>
+        </ul>
+    </div>
+    <div class="disadv-box">
+        <div class="disadv-box-title">Limitations</div>
+        <ul>
+            <li><strong>Based on predictions:</strong> Forecasts rely on estimates of future income and expenditure which may prove inaccurate, particularly for new businesses with no trading history</li>
+            <li><strong>Cannot predict the unexpected:</strong> External shocks such as economic downturns, supply chain disruptions, or the loss of a major customer cannot be easily anticipated in a forecast</li>
+            <li><strong>Can create false confidence:</strong> A positive forecast may lead managers to believe the business is financially secure, causing them to overlook emerging problems or overspend</li>
+            <li><strong>Time consuming to maintain:</strong> Forecasts must be regularly updated to remain useful, requiring significant management time that could be spent on other business activities</li>
+            <li><strong>Ignores non cash factors:</strong> Cash flow forecasts focus solely on cash movements and do not reflect profitability, asset values, or other important financial indicators</li>
+            <li><strong>Assumes customers pay on time:</strong> Many forecasts assume debtors will pay within agreed terms, but late payments are common and can cause significant cash flow problems</li>
+        </ul>
+    </div>
+</div>
+
 <div class="real-world">
     <div class="real-world-label">REAL WORLD EXAMPLE</div>
     <h5>New Business Cash Flow Challenges</h5>
@@ -3181,6 +3629,228 @@
 
 <div class="exam-tip"><div class="exam-tip-label">EXAM TIP</div><p>Consider the limitations of break even analysis for real business decisions. It assumes all output is sold, that costs are neatly divided into fixed and variable, and that selling price stays constant. In reality, businesses offer discounts, face bulk buying cost reductions, and operate in markets where prices fluctuate. A strong answer acknowledges these simplifications while explaining why the model remains a useful starting point.</p></div>
 
+
+        </div>
+    </div>
+</div>
+
+
+<div class="subsection" id="sub-business-plans">
+    <div class="subsection-header" onclick="toggleSubsection(this)">
+        <h4>Business Plans</h4>
+        <span class="subsection-toggle">+</span>
+    </div>
+    <div class="subsection-content">
+        <div class="subsection-inner">
+<p>A business plan is a detailed written document that sets out the objectives of a business and the strategies it will use to achieve them. It serves as a roadmap for the business and is an essential tool for both planning operations and securing external finance.</p>
+
+<div class="key-term"><div class="key-term-label">KEY TERM</div><h5>Business Plan</h5><p>A formal document that describes a business, its objectives, strategies, target market, and financial projections. It is used to guide decision making internally and to convince external stakeholders (such as banks and investors) to provide finance.</p></div>
+
+<p><strong>Typical Contents of a Business Plan:</strong></p>
+<p><strong>Executive Summary:</strong> A brief overview of the entire plan, including the business concept, key objectives, and the amount of finance required. This is often the most important section because it determines whether investors read the rest of the plan.</p>
+<p><strong>Business Description:</strong> What the business does, its legal form, location, and the products or services it offers. This section explains the unique selling point and what differentiates the business from competitors.</p>
+<p><strong>Market Analysis:</strong> Research into the target market, customer demographics, market size and growth trends, and an assessment of competitors. This demonstrates that the entrepreneur understands the market they are entering.</p>
+<p><strong>Marketing Strategy:</strong> How the business will attract and retain customers, including pricing strategy, promotional methods, distribution channels, and brand positioning.</p>
+<p><strong>Operations Plan:</strong> How the business will produce and deliver its products or services, including premises, equipment, suppliers, and production methods.</p>
+<p><strong>Financial Projections:</strong> Detailed forecasts of revenue, costs, profit, cash flow, and break even analysis, typically covering the first three to five years. This is the section that lenders and investors scrutinise most closely.</p>
+<p><strong>Management Team:</strong> The skills, experience, and qualifications of the people running the business. Investors often say they invest in people, not just ideas.</p>
+
+<div class="adv-disadv-grid">
+    <div class="adv-box">
+        <div class="adv-box-title">Reasons for Creating a Business Plan</div>
+        <ul>
+            <li><strong>Securing finance:</strong> Banks and investors require a detailed plan before lending money or investing; without one, most applications will be rejected</li>
+            <li><strong>Guiding operations:</strong> Provides a clear roadmap for the business, helping the owner stay focused on objectives and track progress</li>
+            <li><strong>Identifying risks:</strong> The planning process forces the entrepreneur to think through potential problems and develop contingency strategies</li>
+            <li><strong>Setting benchmarks:</strong> Financial projections create targets against which actual performance can be measured, enabling early identification of problems</li>
+            <li><strong>Attracting partners and staff:</strong> A professional plan demonstrates credibility and commitment, making it easier to attract talented people</li>
+        </ul>
+    </div>
+    <div class="disadv-box">
+        <div class="disadv-box-title">Limitations of Business Plans</div>
+        <ul>
+            <li><strong>Based on assumptions and estimates:</strong> Financial projections are forecasts that may prove inaccurate, particularly for new businesses entering uncertain markets</li>
+            <li><strong>Time consuming to create:</strong> Writing a thorough plan takes significant time that could otherwise be spent developing the product or making sales</li>
+            <li><strong>Can become outdated quickly:</strong> Markets change rapidly, and a plan written six months ago may no longer reflect current conditions or opportunities</li>
+            <li><strong>Does not guarantee success:</strong> Many businesses with excellent plans still fail due to unforeseen circumstances, poor execution, or bad luck</li>
+            <li><strong>May create false confidence:</strong> An impressive looking plan can make entrepreneurs overconfident and less responsive to warning signs</li>
+        </ul>
+    </div>
+</div>
+
+<div class="exam-tip"><div class="exam-tip-label">EXAM TIP</div><p>When evaluating business plans, consider the context. A business plan for a bank loan needs detailed financial projections and evidence of ability to repay. A plan for a venture capitalist needs to show massive growth potential. A plan for internal use focuses on operational guidance. The value of a plan depends on who it is written for and how realistically it reflects the business environment.</p></div>
+
+        </div>
+    </div>
+</div>
+
+<div class="subsection" id="sub-sales-forecasting">
+    <div class="subsection-header" onclick="toggleSubsection(this)">
+        <h4>Sales Forecasting</h4>
+        <span class="subsection-toggle">+</span>
+    </div>
+    <div class="subsection-content">
+        <div class="subsection-inner">
+<p>Sales forecasting is the process of estimating future sales revenue over a specific period. Accurate forecasting is essential because it underpins almost every other financial decision a business makes, from production planning and staffing to cash flow management and budgeting.</p>
+
+<div class="key-term"><div class="key-term-label">KEY TERM</div><h5>Sales Forecast</h5><p>A prediction of future sales volume or revenue over a given time period, based on historical data, market research, or expert judgement. It forms the foundation of financial planning.</p></div>
+
+<p><strong>Methods of Sales Forecasting:</strong></p>
+<p><strong>Time Series Analysis:</strong> Uses historical sales data to identify patterns and trends over time. Past performance is plotted on a graph and the trend line is extended forward (extrapolation) to predict future sales. This works well in stable markets with consistent patterns but is unreliable when conditions change significantly.</p>
+<p><strong>Moving Averages:</strong> Calculates the average of sales over a set number of periods (e.g., three month or twelve month averages) to smooth out short term fluctuations and reveal the underlying trend. This method removes seasonal spikes and dips, making the trend easier to identify.</p>
+<p><strong>Market Research:</strong> Uses primary research (surveys, focus groups, test marketing) and secondary research (industry reports, competitor analysis) to estimate demand. This is particularly useful for new products where no historical sales data exists.</p>
+<p><strong>Expert Opinion:</strong> Relies on the knowledge and experience of managers, sales teams, or industry experts to estimate future sales. This qualitative approach is useful when data is limited but can be biased by individual optimism or pessimism.</p>
+<p><strong>Correlation Analysis:</strong> Identifies relationships between sales and other variables (such as advertising spend, GDP growth, or seasonal weather patterns) to predict how changes in those variables will affect sales.</p>
+
+<div class="adv-disadv-grid">
+    <div class="adv-box">
+        <div class="adv-box-title">Value of Sales Forecasting</div>
+        <ul>
+            <li><strong>Production planning:</strong> Helps businesses produce the right quantity of goods, avoiding overproduction (waste) or underproduction (lost sales)</li>
+            <li><strong>Staffing decisions:</strong> Enables managers to plan recruitment, shifts, and overtime based on expected demand levels</li>
+            <li><strong>Cash flow management:</strong> Accurate forecasts allow businesses to predict cash inflows and plan for periods when cash may be tight</li>
+            <li><strong>Budgeting:</strong> Sales forecasts form the basis for revenue budgets and influence expenditure budgets across the organisation</li>
+            <li><strong>Investor confidence:</strong> Well supported forecasts demonstrate competence and increase lender and investor confidence in the business</li>
+        </ul>
+    </div>
+    <div class="disadv-box">
+        <div class="disadv-box-title">Difficulties of Sales Forecasting</div>
+        <ul>
+            <li><strong>External shocks:</strong> Unpredictable events like pandemics, economic crises, or natural disasters can make forecasts instantly worthless</li>
+            <li><strong>New markets:</strong> Businesses entering new markets or launching innovative products have no historical data to base forecasts on</li>
+            <li><strong>Competitor actions:</strong> Rival businesses may launch competing products, cut prices, or increase marketing, disrupting expected demand</li>
+            <li><strong>Changing consumer trends:</strong> Shifts in fashion, technology, or social attitudes can rapidly change buying patterns in ways data cannot predict</li>
+            <li><strong>Data quality:</strong> Forecasts are only as good as the data they are based on; inaccurate or incomplete data produces unreliable predictions</li>
+        </ul>
+    </div>
+</div>
+
+<div class="exam-tip"><div class="exam-tip-label">EXAM TIP</div><p>When evaluating sales forecasting, emphasise that forecasts are estimates, not guarantees. A business that treats forecasts as certain and commits heavily to production based on optimistic projections could end up with unsold stock and cash flow problems. The best businesses use forecasts as a guide while remaining flexible enough to adjust quickly when actual sales differ from predictions.</p></div>
+
+        </div>
+    </div>
+</div>
+
+<div class="subsection" id="sub-budgets">
+    <div class="subsection-header" onclick="toggleSubsection(this)">
+        <h4>Budgets and Variance Analysis</h4>
+        <span class="subsection-toggle">+</span>
+    </div>
+    <div class="subsection-content">
+        <div class="subsection-inner">
+<p>A budget is a financial plan that estimates the expected revenue and expenditure of a business over a future period, usually monthly or annually. Budgets allow managers to plan spending, control costs, and measure actual performance against targets.</p>
+
+<div class="key-term"><div class="key-term-label">KEY TERM</div><h5>Budget</h5><p>A financial plan for a future period, setting out expected income and expenditure. Budgets provide spending limits for departments and targets for revenue generation.</p></div>
+
+<p><strong>Purpose of Budgets:</strong></p>
+<p>Budgets serve several important functions in business. They provide a framework for financial planning by forcing managers to think ahead about costs and revenue. They help control spending by setting clear limits that departments must work within. They enable coordination across the business by ensuring all departments are working towards the same financial objectives. They motivate staff by setting clear targets that individuals and teams can aim for. Finally, they provide a basis for performance evaluation by comparing actual results with budgeted figures.</p>
+
+<p><strong>Types of Budgets:</strong></p>
+<p><strong>Revenue Budget:</strong> Forecasts the income the business expects to receive from sales over the budget period. It is based on the sales forecast and pricing decisions. This is usually the starting point for the entire budgeting process because expenditure plans depend on expected income.</p>
+<p><strong>Expenditure Budget:</strong> Sets out the planned spending for each department or cost category, including raw materials, wages, marketing, rent, and other operating costs. Each department typically receives an expenditure budget that it must work within.</p>
+<p><strong>Profit Budget:</strong> Combines the revenue and expenditure budgets to forecast expected profit. If the profit budget shows an unacceptable level of profit, managers may revise revenue targets upward or cut planned expenditure.</p>
+
+<p><strong>Variance Analysis:</strong></p>
+
+<div class="key-term"><div class="key-term-label">KEY TERM</div><h5>Variance</h5><p>The difference between what was budgeted (planned) and what actually happened. Variance analysis compares actual performance with budgeted figures to identify whether the business is on track.</p></div>
+
+<div class="formula-box">
+    <div class="formula-box-label">FORMULA</div>
+    <h5>Variance Calculation</h5>
+    <div class="formula-display">Variance = Actual Figure &minus; Budgeted Figure</div>
+    <p>A positive variance on revenue is favourable (more income than expected). A positive variance on costs is adverse (higher spending than planned).</p>
+</div>
+
+<p><strong>Favourable Variance:</strong> When the actual result is better than budgeted. This means either revenue is higher than expected or costs are lower than planned. For example, if budgeted sales were 50,000 pounds but actual sales were 58,000 pounds, the variance is +8,000 pounds (favourable).</p>
+
+<p><strong>Adverse Variance:</strong> When the actual result is worse than budgeted. This means either revenue is lower than expected or costs are higher than planned. For example, if budgeted materials cost was 12,000 pounds but actual cost was 15,000 pounds, the variance is +3,000 pounds (adverse on cost).</p>
+
+<table class="variance-table">
+    <thead>
+        <tr><th>Budget Item</th><th>Budget (Pounds)</th><th>Actual (Pounds)</th><th>Variance (Pounds)</th><th>Type</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>Sales Revenue</td><td>50,000</td><td>58,000</td><td>+8,000</td><td><span class="variance-fav">Favourable</span></td></tr>
+        <tr><td>Raw Materials</td><td>12,000</td><td>15,000</td><td>+3,000</td><td><span class="variance-adv">Adverse</span></td></tr>
+        <tr><td>Wages</td><td>18,000</td><td>17,200</td><td>&minus;800</td><td><span class="variance-fav">Favourable</span></td></tr>
+        <tr><td>Marketing</td><td>5,000</td><td>6,500</td><td>+1,500</td><td><span class="variance-adv">Adverse</span></td></tr>
+        <tr><td>Net Profit</td><td>15,000</td><td>19,300</td><td>+4,300</td><td><span class="variance-fav">Favourable</span></td></tr>
+    </tbody>
+</table>
+
+<p><strong>Responding to Variances:</strong> Managers should investigate significant variances to understand their causes. A favourable sales variance might be due to effective marketing or a competitor leaving the market. An adverse cost variance might indicate supplier price increases or wasteful production. The response depends on the cause: if raw material costs are permanently higher, the expenditure budget needs revising; if costs spiked due to a one off event, no action may be needed.</p>
+
+<div class="adv-disadv-grid">
+    <div class="adv-box">
+        <div class="adv-box-title">Benefits of Budgeting</div>
+        <ul>
+            <li><strong>Improved financial control:</strong> Spending limits prevent departments from overspending and help the business stay within its means</li>
+            <li><strong>Better planning and coordination:</strong> Forces all departments to plan ahead and ensures spending is aligned with business objectives</li>
+            <li><strong>Performance measurement:</strong> Variance analysis highlights areas performing well and areas that need attention, enabling corrective action</li>
+            <li><strong>Motivation:</strong> Clear targets can motivate managers and staff to achieve or beat their budgeted figures</li>
+        </ul>
+    </div>
+    <div class="disadv-box">
+        <div class="disadv-box-title">Limitations of Budgeting</div>
+        <ul>
+            <li><strong>Based on estimates:</strong> Budgets are forecasts and may be inaccurate, particularly in volatile or unpredictable markets</li>
+            <li><strong>Can be inflexible:</strong> Fixed budgets may not adapt to changing circumstances, leading to missed opportunities or unnecessary constraints</li>
+            <li><strong>May encourage short term thinking:</strong> Managers may cut quality or delay investment to stay within budget, harming long term performance</li>
+            <li><strong>Time consuming to prepare:</strong> Detailed budgeting requires significant management time that could be used for other productive activities</li>
+            <li><strong>Gaming the system:</strong> Managers may deliberately set easy targets to ensure they achieve favourable variances, reducing the value of the process</li>
+        </ul>
+    </div>
+</div>
+
+<div class="exam-tip"><div class="exam-tip-label">EXAM TIP</div><p>When analysing variance, always consider both the direction and the cause. A favourable cost variance is not always good news; it might mean the business cut corners on quality or failed to invest in marketing. Similarly, an adverse cost variance might reflect a wise decision to invest more in training or product development. Always look beyond the numbers to understand what the variance actually means for the business.</p></div>
+
+        </div>
+    </div>
+</div>
+
+<div class="subsection" id="sub-business-failure">
+    <div class="subsection-header" onclick="toggleSubsection(this)">
+        <h4>Business Failure</h4>
+        <span class="subsection-toggle">+</span>
+    </div>
+    <div class="subsection-content">
+        <div class="subsection-inner">
+<p>Business failure occurs when a business is unable to continue operating, usually because it cannot pay its debts or generate sufficient revenue to cover costs. Understanding the causes of failure is essential for entrepreneurs and managers who want to avoid it.</p>
+
+<div class="bf-graphic">
+    <div class="bf-title">Causes of Business Failure: Click to Explore</div>
+    <div class="bf-cards">
+        <div class="bf-card" onclick="showFailureCause('internal')">
+            <div class="bf-icon">🏗️</div>
+            <h5>Internal Causes</h5>
+            <p>Problems within the business that management can influence or control</p>
+        </div>
+        <div class="bf-card" onclick="showFailureCause('external')">
+            <div class="bf-icon">🌍</div>
+            <h5>External Causes</h5>
+            <p>Factors outside the business that management cannot directly control</p>
+        </div>
+    </div>
+    <div class="bf-info-panel" id="bf-info"></div>
+</div>
+
+<div class="key-term"><div class="key-term-label">KEY TERM</div><h5>Working Capital</h5><p>The finance available for the day to day running of a business. It is calculated as current assets minus current liabilities. Insufficient working capital means the business cannot pay its short term obligations, which is the immediate trigger for most business failures.</p></div>
+
+<p><strong>The Link to Cash Flow and Working Capital:</strong></p>
+<p>Cash flow is the movement of money into and out of a business. Positive cash flow means more money is coming in than going out; negative cash flow means the opposite. While a business can survive short periods of negative cash flow (by using reserves or borrowing), prolonged negative cash flow will eventually drain all available funds and lead to failure.</p>
+
+<p>Working capital is the lifeblood of a business. It funds the daily operations: paying suppliers, covering wages, and maintaining stock. When working capital falls too low, the business cannot meet its short term obligations. This is called insolvency, and it is the legal trigger for business closure. Even profitable businesses can fail if their working capital is mismanaged. For example, a business that offers 90 day credit to customers but must pay suppliers within 30 days will have a permanent cash gap that must be funded somehow.</p>
+
+<div class="formula-box">
+    <div class="formula-box-label">FORMULA</div>
+    <h5>Working Capital</h5>
+    <div class="formula-display">Working Capital = Current Assets &minus; Current Liabilities</div>
+    <p>Where Current Assets include cash, stock, and money owed by customers (receivables). Current Liabilities include money owed to suppliers (payables), tax due, and short term loans.</p>
+</div>
+
+<div class="real-world"><div class="real-world-label">REAL WORLD EXAMPLE</div><h5>Toys R Us: A Cautionary Tale</h5><p>Toys R Us was a globally recognised brand with billions in revenue, yet it filed for bankruptcy in 2017. The primary cause was excessive debt (over 5 billion dollars) taken on during a leveraged buyout. The interest payments consumed so much cash that the company could not invest in modernising its stores or developing its online presence. When Amazon and other online retailers attracted customers away, Toys R Us lacked the resources to compete. This demonstrates how internal financial mismanagement (excessive debt) and external competition can combine to destroy even the largest businesses.</p></div>
+
+<div class="exam-tip"><div class="exam-tip-label">EXAM TIP</div><p>When discussing business failure, always distinguish between profitability and cash flow. A business can be profitable (revenue exceeds costs over a year) but still fail because of cash flow timing problems. Cash flow is about when money arrives and when it must be paid out. If a business must pay suppliers today but customers do not pay for 90 days, there is a cash gap that can cause insolvency even if the business is technically profitable. This distinction is frequently tested and separates strong answers from average ones.</p></div>
 
         </div>
     </div>
@@ -3472,8 +4142,49 @@
 
             <div class="real-world">
                 <div class="real-world-label">REAL WORLD EXAMPLE</div>
-                <h5>Manufacturing Business Balance Sheet</h5>
-                <p>A manufacturing company has non current assets (factory buildings and machinery) valued at 500,000 pounds, current assets (cash and inventory) of 150,000 pounds, making total assets of 650,000 pounds. Its liabilities include current liabilities (supplier payments) of 100,000 pounds and non current liabilities (bank loan) of 200,000 pounds, totalling 300,000 pounds. The equity is 650,000 - 300,000 = 350,000 pounds. This shows the owner has invested substantial equity in the business.</p>
+                <h5>Example Balance Sheet</h5>
+                <table style="width: 100%; max-width: 460px; border-collapse: collapse; font-size: 0.9rem; margin: 1rem 0;">
+                    <tr style="background: rgba(52, 73, 94, 0.06);">
+                        <td colspan="2" style="padding: 0.6rem 0.75rem; font-weight: 700; color: var(--gray-800); letter-spacing: 0.03em;">ASSETS</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.4rem 0.75rem; color: var(--gray-600); padding-left: 1.5rem;">Non Current Assets (Factory, Machinery)</td>
+                        <td style="padding: 0.4rem 0.75rem; text-align: right; color: var(--gray-600);">£500,000</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.4rem 0.75rem; color: var(--gray-600); padding-left: 1.5rem;">Current Assets (Cash, Inventory)</td>
+                        <td style="padding: 0.4rem 0.75rem; text-align: right; color: var(--gray-600);">£150,000</td>
+                    </tr>
+                    <tr style="border-top: 2px solid var(--gray-300); border-bottom: 2px solid var(--gray-300);">
+                        <td style="padding: 0.5rem 0.75rem; font-weight: 700; color: var(--gray-800);">Total Assets</td>
+                        <td style="padding: 0.5rem 0.75rem; text-align: right; font-weight: 700; color: var(--gray-800);">£650,000</td>
+                    </tr>
+                    <tr><td colspan="2" style="padding: 0.3rem;"></td></tr>
+                    <tr style="background: rgba(52, 73, 94, 0.06);">
+                        <td colspan="2" style="padding: 0.6rem 0.75rem; font-weight: 700; color: var(--gray-800); letter-spacing: 0.03em;">LIABILITIES</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.4rem 0.75rem; color: var(--gray-600); padding-left: 1.5rem;">Current Liabilities (Supplier Payments)</td>
+                        <td style="padding: 0.4rem 0.75rem; text-align: right; color: var(--gray-600);">£100,000</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.4rem 0.75rem; color: var(--gray-600); padding-left: 1.5rem;">Non Current Liabilities (Bank Loan)</td>
+                        <td style="padding: 0.4rem 0.75rem; text-align: right; color: var(--gray-600);">£200,000</td>
+                    </tr>
+                    <tr style="border-top: 1px solid var(--gray-200); border-bottom: 1px solid var(--gray-200);">
+                        <td style="padding: 0.5rem 0.75rem; font-weight: 600; color: var(--gray-800);">Total Liabilities</td>
+                        <td style="padding: 0.5rem 0.75rem; text-align: right; font-weight: 600; color: var(--gray-800);">£300,000</td>
+                    </tr>
+                    <tr><td colspan="2" style="padding: 0.3rem;"></td></tr>
+                    <tr style="background: rgba(52, 73, 94, 0.06);">
+                        <td colspan="2" style="padding: 0.6rem 0.75rem; font-weight: 700; color: var(--gray-800); letter-spacing: 0.03em;">EQUITY</td>
+                    </tr>
+                    <tr style="border-top: 2px solid var(--gray-400); background: rgba(39, 174, 96, 0.06);">
+                        <td style="padding: 0.6rem 0.75rem; font-weight: 700; color: #27ae60;">Net Assets (Equity)</td>
+                        <td style="padding: 0.6rem 0.75rem; text-align: right; font-weight: 700; color: #27ae60;">£350,000</td>
+                    </tr>
+                </table>
+                <p style="font-size: 0.85rem; color: var(--gray-500); margin-top: 0.5rem;">Notice how Total Assets (£650,000) equals Total Liabilities (£300,000) plus Equity (£350,000). The balance sheet must always balance.</p>
             </div>
 
             <div class="exam-tip">
@@ -4557,6 +5268,12 @@
                                                 <li><strong>Meeting time adds up:</strong> Regular quality circles and discussions take staff away from production</li>
                                             </ul>
                                         </div>
+                                    </div>
+
+                                    <div class="real-world">
+                                        <div class="real-world-label">REAL WORLD EXAMPLE</div>
+                                        <h5>Toyota: Kaizen in Manufacturing</h5>
+                                        <p>Toyota pioneered kaizen and uses it extensively. Workers are encouraged to stop the production line if they see a quality problem. Teams meet daily to discuss improvements. Simple changes like rearranging tools, improving lighting, or streamlining workflows are implemented. Over decades, thousands of small improvements have made Toyota one of the world's most efficient and profitable manufacturers. Toyota's lean production system, built on kaizen principles, reduces waste, improves quality, and lowers costs compared to Western manufacturers.</p>
                                     </div>
 
                                     <h5 style="margin-top: 1.5rem; margin-bottom: 0.8rem; color: var(--primary);">Benefits and Challenges of Lean Production</h5>
@@ -6973,6 +7690,64 @@
             }
         }
 
+</script>
+
+<script>
+    function showBusinessForm(form) {
+        var cards = document.querySelectorAll('.fg-card');
+        cards.forEach(function(c) { c.classList.remove('active'); });
+        event.currentTarget.classList.add('active');
+
+        var data = {
+            'sole': {
+                title: 'Sole Trader',
+                text: 'A sole trader is the simplest business structure, owned and run by one person. There is no legal separation between the owner and the business. The owner makes all decisions, keeps all profits after tax, and bears all risks. Setting up requires only registering with HMRC for self assessment. Sole traders have unlimited liability, meaning personal assets are at risk if the business cannot pay its debts. This form is most common among tradespeople, freelancers, and small retailers. Examples include independent plumbers, graphic designers, and market stall owners.'
+            },
+            'partnership': {
+                title: 'Partnership',
+                text: 'A partnership involves two or more people (usually up to 20) who share ownership, responsibility, and profits. Partnerships are governed by the Partnership Act 1890 or by a partnership deed that specifies each partner\'s capital contribution, profit share, roles, and what happens if a partner leaves. Most partnerships have unlimited liability, though Limited Liability Partnerships (LLPs) exist for professional services firms. Common examples include law firms, accounting practices, medical surgeries, and architectural practices.'
+            },
+            'ltd': {
+                title: 'Private Limited Company (Ltd)',
+                text: 'A private limited company is a separate legal entity from its owners. It is owned by shareholders and managed by directors. Shares are sold privately and cannot be offered to the general public on the stock exchange. All shareholders have limited liability, protecting personal assets. The company must be registered with Companies House and must file annual accounts and a confirmation statement. Ltd companies must include "Limited" or "Ltd" in their name. This is the most popular structure for small to medium sized businesses that want liability protection. Examples include many family businesses and growing startups.'
+            },
+            'plc': {
+                title: 'Public Limited Company (Plc)',
+                text: 'A public limited company can sell shares to the general public through the stock exchange. It must have a minimum share capital of 50,000 pounds, at least two directors, and a qualified company secretary. Plcs face the strictest regulations, including detailed financial reporting and compliance with stock exchange listing rules. The advantage is access to enormous amounts of capital from millions of investors. The risk is loss of control through hostile takeovers and intense pressure from shareholders for short term profits. Examples include Tesco, Barclays, and Unilever.'
+            },
+            'nonprofit': {
+                title: 'Not for Profit Organisation',
+                text: 'Not for profit organisations exist to achieve social, charitable, or community objectives rather than to generate profit for owners. Any surplus revenue is reinvested back into the organisation\'s mission rather than distributed to owners. This category includes registered charities (regulated by the Charity Commission), social enterprises (which trade commercially but reinvest profits), community interest companies (CICs), and cooperatives (owned and run by members). They can access grants, tax relief, and charitable donations but face restrictions on how funds are used. Examples include Oxfam, the National Trust, and the John Lewis Partnership (a cooperative).'
+            }
+        };
+
+        var info = data[form];
+        var panel = document.getElementById('fg-info');
+        panel.innerHTML = '<h5>' + info.title + '</h5><p>' + info.text + '</p>';
+        panel.className = 'fg-info-panel active';
+    }
+
+    function showFailureCause(cause) {
+        var cards = document.querySelectorAll('.bf-card');
+        cards.forEach(function(c) { c.classList.remove('active'); });
+        event.currentTarget.classList.add('active');
+
+        var data = {
+            'internal': {
+                title: 'Internal Causes of Business Failure',
+                text: '<p><strong>Poor cash flow management</strong> is the number one killer of businesses. Even profitable companies fail if they cannot pay bills when due. Common cash flow mistakes include offering too much credit to customers, holding excessive stock, and failing to chase late payments.</p><p><strong>Inadequate planning</strong> means underestimating costs, overestimating demand, or failing to prepare for foreseeable risks. Many startups fail because the founder did not research the market properly or create realistic financial projections.</p><p><strong>Over expansion</strong> stretches resources too thin. Taking on new premises, hiring staff, and increasing stock all require cash upfront, and if the expected sales do not materialise quickly enough, the business runs out of money.</p><p><strong>Poor management and leadership</strong> includes weak decision making, failure to delegate, inability to motivate staff, and resistance to change. Businesses need competent leaders who can adapt to challenges.</p>'
+            },
+            'external': {
+                title: 'External Causes of Business Failure',
+                text: '<p><strong>Economic recession</strong> reduces consumer spending and business investment across the entire economy. During the 2008 financial crisis, thousands of businesses failed as demand collapsed and banks refused to lend.</p><p><strong>Increased competition</strong> from new entrants, online retailers, or international competitors can take market share rapidly. The growth of Amazon destroyed many traditional retailers who could not compete on price or convenience.</p><p><strong>Technological disruption</strong> can make entire business models obsolete. Kodak failed because it did not adapt to digital photography; Blockbuster failed because it did not adapt to streaming.</p><p><strong>Legislative and regulatory changes</strong> can increase costs or restrict operations. New minimum wage laws, environmental regulations, or trade tariffs can make previously profitable businesses unviable.</p>'
+            }
+        };
+
+        var info = data[cause];
+        var panel = document.getElementById('bf-info');
+        panel.innerHTML = '<h5>' + info.title + '</h5>' + info.text;
+        panel.className = 'bf-info-panel active';
+    }
 </script>
 </body>
 </html>
