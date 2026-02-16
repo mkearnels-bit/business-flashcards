@@ -514,6 +514,504 @@
         scroll-behavior: auto !important;
     }
 }
+
+/* ==================== UNIFIED NAVBAR ==================== */
+.site-navbar {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #f1f5f9;
+    padding: 0.75rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.site-navbar-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.site-navbar-logo {
+    height: 55px;
+    width: auto;
+    transition: height 0.3s ease;
+}
+
+.site-nav-buttons {
+    display: flex;
+    gap: 1.25rem;
+    align-items: center;
+}
+
+.site-nav-link {
+    color: #1e3a5f;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.5rem 0;
+    transition: color 0.2s ease;
+}
+
+.site-nav-link:hover {
+    color: #e67e22;
+}
+
+.site-nav-btn {
+    padding: 0.6rem 1.25rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+    display: inline-block;
+}
+
+.site-nav-btn-ghost {
+    background: transparent;
+    color: #1e3a5f;
+    border: 2px solid #cbd5e1;
+}
+
+.site-nav-btn-ghost:hover {
+    background: #f1f5f9;
+    border-color: #1e3a5f;
+}
+
+.site-nav-btn-primary {
+    background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+}
+
+.site-nav-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(230, 126, 34, 0.4);
+}
+
+.site-hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1100;
+    position: relative;
+}
+
+.site-hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: #1e3a5f;
+    border-radius: 2px;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    position: absolute;
+}
+
+.site-hamburger span:nth-child(1) { transform: translateY(-7px); }
+.site-hamburger span:nth-child(2) { opacity: 1; }
+.site-hamburger span:nth-child(3) { transform: translateY(7px); }
+
+.site-hamburger.active span:nth-child(1) { transform: rotate(45deg); }
+.site-hamburger.active span:nth-child(2) { opacity: 0; }
+.site-hamburger.active span:nth-child(3) { transform: rotate(-45deg); }
+
+/* Mobile overlay */
+.site-mobile-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 1040;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.site-mobile-overlay.active { opacity: 1; pointer-events: auto; }
+
+.site-mobile-menu {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 280px;
+    height: 100%;
+    background: white;
+    z-index: 1050;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
+    padding: 5.5rem 1.5rem 2rem;
+}
+
+.site-mobile-menu.active { transform: translateX(0); }
+
+.site-mobile-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.site-mobile-links a {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.875rem 1rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #334155;
+    transition: all 0.2s ease;
+}
+
+.site-mobile-links a:hover {
+    background: #f1f5f9;
+    color: #1e3a5f;
+}
+
+.site-menu-icon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #f1f5f9;
+    flex-shrink: 0;
+}
+
+.site-menu-icon svg {
+    width: 18px;
+    height: 18px;
+    stroke: #64748b;
+}
+
+.site-mobile-divider {
+    height: 1px;
+    background: #f1f5f9;
+    margin: 0.5rem 0;
+}
+
+.site-mobile-cta {
+    margin-top: 0.5rem;
+    background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+    color: white !important;
+    justify-content: center;
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+}
+
+.site-mobile-cta:hover {
+    color: white !important;
+    transform: translateY(-1px);
+}
+
+.site-mobile-cta .site-menu-icon {
+    display: none;
+}
+
+.site-mobile-logout {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.875rem 1rem;
+    border-radius: 12px;
+    border: none;
+    background: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #e74c3c;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+.site-mobile-logout:hover {
+    background: rgba(231, 76, 60, 0.06);
+}
+
+.site-mobile-logout .site-menu-icon {
+    background: rgba(231, 76, 60, 0.08);
+}
+
+.site-mobile-logout .site-menu-icon svg {
+    stroke: #e74c3c;
+}
+
+@media (max-width: 768px) {
+    .site-nav-buttons { display: none; }
+    .site-hamburger { display: flex; }
+    .site-mobile-overlay { display: block; }
+    .site-mobile-menu { display: block; }
+    .site-navbar { padding: 0.5rem 1rem; }
+    .site-navbar-logo { height: 45px; }
+}
+
+
+/* ==================== UNIFIED NAVBAR ==================== */
+.site-navbar {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #f1f5f9;
+    padding: 0.75rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.site-navbar-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.site-navbar-logo {
+    height: 55px;
+    width: auto;
+    transition: height 0.3s ease;
+}
+
+.site-nav-buttons {
+    display: flex;
+    gap: 1.25rem;
+    align-items: center;
+}
+
+.site-nav-link {
+    color: #1e3a5f;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.5rem 0;
+    transition: color 0.2s ease;
+}
+
+.site-nav-link:hover {
+    color: #e67e22;
+}
+
+.site-nav-btn {
+    padding: 0.6rem 1.25rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+    display: inline-block;
+}
+
+.site-nav-btn-ghost {
+    background: transparent;
+    color: #1e3a5f;
+    border: 2px solid #cbd5e1;
+}
+
+.site-nav-btn-ghost:hover {
+    background: #f1f5f9;
+    border-color: #1e3a5f;
+}
+
+.site-nav-btn-primary {
+    background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+}
+
+.site-nav-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(230, 126, 34, 0.4);
+}
+
+.site-hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1100;
+    position: relative;
+}
+
+.site-hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: #1e3a5f;
+    border-radius: 2px;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    position: absolute;
+}
+
+.site-hamburger span:nth-child(1) { transform: translateY(-7px); }
+.site-hamburger span:nth-child(2) { opacity: 1; }
+.site-hamburger span:nth-child(3) { transform: translateY(7px); }
+
+.site-hamburger.active span:nth-child(1) { transform: rotate(45deg); }
+.site-hamburger.active span:nth-child(2) { opacity: 0; }
+.site-hamburger.active span:nth-child(3) { transform: rotate(-45deg); }
+
+/* Mobile overlay */
+.site-mobile-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 1040;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.site-mobile-overlay.active { opacity: 1; pointer-events: auto; }
+
+.site-mobile-menu {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 280px;
+    height: 100%;
+    background: white;
+    z-index: 1050;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
+    padding: 5.5rem 1.5rem 2rem;
+}
+
+.site-mobile-menu.active { transform: translateX(0); }
+
+.site-mobile-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.site-mobile-links a {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.875rem 1rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #334155;
+    transition: all 0.2s ease;
+}
+
+.site-mobile-links a:hover {
+    background: #f1f5f9;
+    color: #1e3a5f;
+}
+
+.site-menu-icon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #f1f5f9;
+    flex-shrink: 0;
+}
+
+.site-menu-icon svg {
+    width: 18px;
+    height: 18px;
+    stroke: #64748b;
+}
+
+.site-mobile-divider {
+    height: 1px;
+    background: #f1f5f9;
+    margin: 0.5rem 0;
+}
+
+.site-mobile-cta {
+    margin-top: 0.5rem;
+    background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+    color: white !important;
+    justify-content: center;
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+}
+
+.site-mobile-cta:hover {
+    color: white !important;
+    transform: translateY(-1px);
+}
+
+.site-mobile-cta .site-menu-icon {
+    display: none;
+}
+
+.site-mobile-logout {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.875rem 1rem;
+    border-radius: 12px;
+    border: none;
+    background: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #e74c3c;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+.site-mobile-logout:hover {
+    background: rgba(231, 76, 60, 0.06);
+}
+
+.site-mobile-logout .site-menu-icon {
+    background: rgba(231, 76, 60, 0.08);
+}
+
+.site-mobile-logout .site-menu-icon svg {
+    stroke: #e74c3c;
+}
+
+@media (max-width: 768px) {
+    .site-nav-buttons { display: none; }
+    .site-hamburger { display: flex; }
+    .site-mobile-overlay { display: block; }
+    .site-mobile-menu { display: block; }
+    .site-navbar { padding: 0.5rem 1rem; }
+    .site-navbar-logo { height: 45px; }
+}
+
 </style>
 <!-- Google Analytics - Replace GA_MEASUREMENT_ID with your actual ID -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
@@ -526,50 +1024,68 @@
 </head>
 <body>
 
-    <header class="page-header">
-        <a href="index.html" class="header-logo"><img src="logo.png" alt="MyBizStudies"></a>
-        <nav class="header-nav">
-            <a href="app.html">Flash Cards</a>
-            <a href="exam-skills-v2.html">Exam Skills</a>
-            <a href="notes.html">Study Notes</a>
-            <a href="blog.html">Blog</a>
-            <a href="contact.html" class="active">Contact</a>
-        </nav>
-        <a href="index.html" class="back-link">Back to Home</a>
-        <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+    <nav class="site-navbar" id="siteNavbar">
+    <div class="site-navbar-content">
+        <a href="index.html"><img src="logo.png" alt="MyBizStudies" class="site-navbar-logo"></a>
+        <div class="site-nav-buttons" id="siteNavButtons">
+            <a href="app.html" class="site-nav-link auth-only" style="display:none;">Flash Cards</a>
+            <a href="exam-skills-v2.html" class="site-nav-link auth-only" style="display:none;">Exam Skills</a>
+            <a href="notes.html" class="site-nav-link auth-only" style="display:none;">Study Notes</a>
+            <a href="blog.html" class="site-nav-link">Blog</a>
+            <a href="contact.html" class="site-nav-link">Contact Us</a>
+            <a href="login.html" class="site-nav-btn site-nav-btn-ghost guest-only">Log In</a>
+            <a href="signup.html" class="site-nav-btn site-nav-btn-primary guest-only">Get Started</a>
+            <button class="site-nav-btn site-nav-btn-ghost auth-only" id="navLogoutBtn" style="display:none;">Logout</button>
+        </div>
+        <button class="site-hamburger" id="siteHamburger" aria-label="Menu">
             <span></span>
             <span></span>
             <span></span>
         </button>
-    </header>
-
-    <!-- Mobile Menu -->
-    <div class="mobile-menu-overlay" id="mobileOverlay"></div>
-    <div class="mobile-menu" id="mobileMenu">
-        <div class="mobile-menu-links">
-            <a href="app.html">
-                <span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
-                Flash Cards
-            </a>
-            <a href="exam-skills-v2.html">
-                <span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg></span>
-                Exam Skills
-            </a>
-            <a href="notes.html">
-                <span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></span>
-                Study Notes
-            </a>
-            <a href="blog.html">
-                <span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"/></svg></span>
-                Blog
-            </a>
-            <div class="mobile-menu-divider"></div>
-            <a href="contact.html" class="active">
-                <span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></span>
-                Contact
-            </a>
-        </div>
     </div>
+</nav>
+
+    <!-- Unified Site Mobile Menu -->
+<div class="site-mobile-overlay" id="siteMobileOverlay"></div>
+<div class="site-mobile-menu" id="siteMobileMenu">
+    <div class="site-mobile-links">
+        <a href="app.html" class="auth-only" style="display:none;">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
+            Flash Cards
+        </a>
+        <a href="exam-skills-v2.html" class="auth-only" style="display:none;">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg></span>
+            Exam Skills
+        </a>
+        <a href="notes.html" class="auth-only" style="display:none;">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></span>
+            Study Notes
+        </a>
+        <div class="site-mobile-divider auth-only" style="display:none;"></div>
+        <a href="blog.html">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"/></svg></span>
+            Blog
+        </a>
+        <div class="site-mobile-divider"></div>
+        <a href="contact.html">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></span>
+            Contact Us
+        </a>
+        <div class="site-mobile-divider guest-only"></div>
+        <a href="login.html" class="guest-only">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"/></svg></span>
+            Log In
+        </a>
+        <a href="signup.html" class="site-mobile-cta guest-only">
+            Get Started
+        </a>
+        <div class="site-mobile-divider auth-only" style="display:none;"></div>
+        <button class="site-mobile-logout auth-only" id="mobileLogoutBtn" style="display:none;">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l3-3m0 0l-3-3m3 3H3"/></svg></span>
+            Logout
+        </button>
+    </div>
+</div>
 
     <div class="contact-hero">
         <h1>Get in Touch</h1>
@@ -706,5 +1222,146 @@
         mobileOverlay.addEventListener('click', toggleMobileMenu);
     </script>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4">
+// Unified Navbar Auth
+(function() {
+    const SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
+
+    // Only create client if not already defined
+    if (typeof window._navSupabase === 'undefined') {
+        window._navSupabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+    }
+    // Also check if a supabaseClient already exists on the page (e.g. app.html, blog.html)
+    const client = window.supabaseClient || window._navSupabase;
+
+    if (!client) return;
+
+    async function setupNav() {
+        try {
+            const { data: { session } } = await client.auth.getSession();
+            const authEls = document.querySelectorAll('.auth-only');
+            const guestEls = document.querySelectorAll('.guest-only');
+
+            if (session) {
+                authEls.forEach(el => el.style.display = '');
+                guestEls.forEach(el => el.style.display = 'none');
+            }
+            // else defaults are fine (auth-only hidden, guest-only visible)
+        } catch (e) {
+            console.log('Nav auth check skipped:', e.message);
+        }
+    }
+
+    setupNav();
+
+    // Hamburger toggle
+    const ham = document.getElementById('siteHamburger');
+    const mob = document.getElementById('siteMobileMenu');
+    const ovl = document.getElementById('siteMobileOverlay');
+
+    function toggleSiteMenu() {
+        if (ham) ham.classList.toggle('active');
+        if (mob) mob.classList.toggle('active');
+        if (ovl) ovl.classList.toggle('active');
+        document.body.style.overflow = mob && mob.classList.contains('active') ? 'hidden' : '';
+    }
+
+    if (ham) ham.addEventListener('click', toggleSiteMenu);
+    if (ovl) ovl.addEventListener('click', toggleSiteMenu);
+
+    // Close mobile menu when clicking a link
+    if (mob) {
+        mob.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (mob.classList.contains('active')) toggleSiteMenu();
+            });
+        });
+    }
+
+    // Logout buttons
+    const navLogout = document.getElementById('navLogoutBtn');
+    const mobileLogout = document.getElementById('mobileLogoutBtn');
+
+    async function handleNavLogout() {
+        await client.auth.signOut();
+        window.location.href = 'login.html';
+    }
+
+    if (navLogout) navLogout.addEventListener('click', handleNavLogout);
+    if (mobileLogout) mobileLogout.addEventListener('click', handleNavLogout);
+})();
+
+
+// Unified Navbar Auth
+(function() {
+    const SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
+
+    // Only create client if not already defined
+    if (typeof window._navSupabase === 'undefined') {
+        window._navSupabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+    }
+    // Also check if a supabaseClient already exists on the page (e.g. app.html, blog.html)
+    const client = window.supabaseClient || window._navSupabase;
+
+    if (!client) return;
+
+    async function setupNav() {
+        try {
+            const { data: { session } } = await client.auth.getSession();
+            const authEls = document.querySelectorAll('.auth-only');
+            const guestEls = document.querySelectorAll('.guest-only');
+
+            if (session) {
+                authEls.forEach(el => el.style.display = '');
+                guestEls.forEach(el => el.style.display = 'none');
+            }
+            // else defaults are fine (auth-only hidden, guest-only visible)
+        } catch (e) {
+            console.log('Nav auth check skipped:', e.message);
+        }
+    }
+
+    setupNav();
+
+    // Hamburger toggle
+    const ham = document.getElementById('siteHamburger');
+    const mob = document.getElementById('siteMobileMenu');
+    const ovl = document.getElementById('siteMobileOverlay');
+
+    function toggleSiteMenu() {
+        if (ham) ham.classList.toggle('active');
+        if (mob) mob.classList.toggle('active');
+        if (ovl) ovl.classList.toggle('active');
+        document.body.style.overflow = mob && mob.classList.contains('active') ? 'hidden' : '';
+    }
+
+    if (ham) ham.addEventListener('click', toggleSiteMenu);
+    if (ovl) ovl.addEventListener('click', toggleSiteMenu);
+
+    // Close mobile menu when clicking a link
+    if (mob) {
+        mob.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (mob.classList.contains('active')) toggleSiteMenu();
+            });
+        });
+    }
+
+    // Logout buttons
+    const navLogout = document.getElementById('navLogoutBtn');
+    const mobileLogout = document.getElementById('mobileLogoutBtn');
+
+    async function handleNavLogout() {
+        await client.auth.signOut();
+        window.location.href = 'login.html';
+    }
+
+    if (navLogout) navLogout.addEventListener('click', handleNavLogout);
+    if (mobileLogout) mobileLogout.addEventListener('click', handleNavLogout);
+})();
+
+</script>
 </body>
 </html>
