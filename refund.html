@@ -1037,7 +1037,7 @@
         window._navSupabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
     }
     // Also check if a supabaseClient already exists on the page (e.g. app.html, blog.html)
-    const client = window.supabaseClient || window._navSupabase;
+    const client = (typeof supabaseClient !== 'undefined') ? supabaseClient : window._navSupabase;
 
     if (!client) return;
 
@@ -1096,75 +1096,6 @@
     if (mobileLogout) mobileLogout.addEventListener('click', handleNavLogout);
 })();
 
-
-// Unified Navbar Auth
-(function() {
-    const SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
-
-    // Only create client if not already defined
-    if (typeof window._navSupabase === 'undefined') {
-        window._navSupabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
-    }
-    // Also check if a supabaseClient already exists on the page (e.g. app.html, blog.html)
-    const client = window.supabaseClient || window._navSupabase;
-
-    if (!client) return;
-
-    async function setupNav() {
-        try {
-            const { data: { session } } = await client.auth.getSession();
-            const authEls = document.querySelectorAll('.auth-only');
-            const guestEls = document.querySelectorAll('.guest-only');
-
-            if (session) {
-                authEls.forEach(el => el.style.display = '');
-                guestEls.forEach(el => el.style.display = 'none');
-            }
-            // else defaults are fine (auth-only hidden, guest-only visible)
-        } catch (e) {
-            console.log('Nav auth check skipped:', e.message);
-        }
-    }
-
-    setupNav();
-
-    // Hamburger toggle
-    const ham = document.getElementById('siteHamburger');
-    const mob = document.getElementById('siteMobileMenu');
-    const ovl = document.getElementById('siteMobileOverlay');
-
-    function toggleSiteMenu() {
-        if (ham) ham.classList.toggle('active');
-        if (mob) mob.classList.toggle('active');
-        if (ovl) ovl.classList.toggle('active');
-        document.body.style.overflow = mob && mob.classList.contains('active') ? 'hidden' : '';
-    }
-
-    if (ham) ham.addEventListener('click', toggleSiteMenu);
-    if (ovl) ovl.addEventListener('click', toggleSiteMenu);
-
-    // Close mobile menu when clicking a link
-    if (mob) {
-        mob.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                if (mob.classList.contains('active')) toggleSiteMenu();
-            });
-        });
-    }
-
-    // Logout buttons
-    const navLogout = document.getElementById('navLogoutBtn');
-    const mobileLogout = document.getElementById('mobileLogoutBtn');
-
-    async function handleNavLogout() {
-        await client.auth.signOut();
-        window.location.href = 'login.html';
-    }
-
-    if (navLogout) navLogout.addEventListener('click', handleNavLogout);
-    if (mobileLogout) mobileLogout.addEventListener('click', handleNavLogout);
-})();
 
 </script>
 </body>

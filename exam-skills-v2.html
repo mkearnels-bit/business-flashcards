@@ -2454,7 +2454,7 @@
         <a href="index.html"><img src="logo.png" alt="MyBizStudies" class="site-navbar-logo"></a>
         <div class="site-nav-buttons" id="siteNavButtons">
             <a href="app.html" class="site-nav-link auth-only" style="display:none;">Flash Cards</a>
-            <a href="exam-skills-v2.html" class="site-nav-link auth-only" style="display:none;">Exam Skills</a>
+            <a href="exam-skills-v2.html" class="active site-nav-link auth-only" style="display:none;">Exam Skills</a>
             <a href="notes.html" class="site-nav-link auth-only" style="display:none;">Study Notes</a>
             <a href="blog.html" class="site-nav-link">Blog</a>
             <a href="contact.html" class="site-nav-link">Contact Us</a>
@@ -2478,7 +2478,7 @@
             <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
             Flash Cards
         </a>
-        <a href="exam-skills-v2.html" class="auth-only" style="display:none;">
+        <a href="exam-skills-v2.html" class="active auth-only" style="display:none;">
             <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg></span>
             Exam Skills
         </a>
@@ -4177,7 +4177,7 @@
         window._navSupabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
     }
     // Also check if a supabaseClient already exists on the page (e.g. app.html, blog.html)
-    const client = window.supabaseClient || window._navSupabase;
+    const client = (typeof supabaseClient !== 'undefined') ? supabaseClient : window._navSupabase;
 
     if (!client) return;
 
@@ -4236,75 +4236,6 @@
     if (mobileLogout) mobileLogout.addEventListener('click', handleNavLogout);
 })();
 
-
-// Unified Navbar Auth
-(function() {
-    const SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
-
-    // Only create client if not already defined
-    if (typeof window._navSupabase === 'undefined') {
-        window._navSupabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
-    }
-    // Also check if a supabaseClient already exists on the page (e.g. app.html, blog.html)
-    const client = window.supabaseClient || window._navSupabase;
-
-    if (!client) return;
-
-    async function setupNav() {
-        try {
-            const { data: { session } } = await client.auth.getSession();
-            const authEls = document.querySelectorAll('.auth-only');
-            const guestEls = document.querySelectorAll('.guest-only');
-
-            if (session) {
-                authEls.forEach(el => el.style.display = '');
-                guestEls.forEach(el => el.style.display = 'none');
-            }
-            // else defaults are fine (auth-only hidden, guest-only visible)
-        } catch (e) {
-            console.log('Nav auth check skipped:', e.message);
-        }
-    }
-
-    setupNav();
-
-    // Hamburger toggle
-    const ham = document.getElementById('siteHamburger');
-    const mob = document.getElementById('siteMobileMenu');
-    const ovl = document.getElementById('siteMobileOverlay');
-
-    function toggleSiteMenu() {
-        if (ham) ham.classList.toggle('active');
-        if (mob) mob.classList.toggle('active');
-        if (ovl) ovl.classList.toggle('active');
-        document.body.style.overflow = mob && mob.classList.contains('active') ? 'hidden' : '';
-    }
-
-    if (ham) ham.addEventListener('click', toggleSiteMenu);
-    if (ovl) ovl.addEventListener('click', toggleSiteMenu);
-
-    // Close mobile menu when clicking a link
-    if (mob) {
-        mob.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                if (mob.classList.contains('active')) toggleSiteMenu();
-            });
-        });
-    }
-
-    // Logout buttons
-    const navLogout = document.getElementById('navLogoutBtn');
-    const mobileLogout = document.getElementById('mobileLogoutBtn');
-
-    async function handleNavLogout() {
-        await client.auth.signOut();
-        window.location.href = 'login.html';
-    }
-
-    if (navLogout) navLogout.addEventListener('click', handleNavLogout);
-    if (mobileLogout) mobileLogout.addEventListener('click', handleNavLogout);
-})();
 
 </script>
 
