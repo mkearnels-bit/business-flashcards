@@ -22,6 +22,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+
     <style>
         * {
             margin: 0;
@@ -783,6 +786,10 @@
                     <span class="nav-icon">⚙️</span>
                     Settings
                 </div>
+                <div class="nav-item" data-page="blog">
+                    <span class="nav-icon">&#9998;</span>
+                    Blog
+                </div>
             </nav>
 
             <!-- Main Content -->
@@ -1073,6 +1080,184 @@
                         </div>
                     </div>
                 </section>
+
+                <!-- Blog Page -->
+                <section class="page-section" id="page-blog">
+                    <div id="blogListView">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <h1 class="page-title">Blog Management</h1>
+                            <button class="btn btn-success" id="newPostBtn">+ New Post</button>
+                        </div>
+                        <p class="page-subtitle">Create and manage blog posts for your site.</p>
+
+                        <div class="stats-grid" id="blogStats">
+                            <div class="stat-card">
+                                <div class="stat-card-header">
+                                    <div>
+                                        <div class="stat-value" id="publishedCount">-</div>
+                                        <div class="stat-label">Published</div>
+                                    </div>
+                                    <div class="stat-icon green">&#128221;</div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-card-header">
+                                    <div>
+                                        <div class="stat-value" id="draftCount">-</div>
+                                        <div class="stat-label">Drafts</div>
+                                    </div>
+                                    <div class="stat-icon amber">&#128196;</div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-card-header">
+                                    <div>
+                                        <div class="stat-value" id="totalPostCount">-</div>
+                                        <div class="stat-label">Total Posts</div>
+                                    </div>
+                                    <div class="stat-icon blue">&#128218;</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="filters-bar">
+                            <input type="text" class="search-input" id="blogSearch" placeholder="Search blog posts...">
+                            <select class="filter-select" id="blogStatusFilter">
+                                <option value="all">All Status</option>
+                                <option value="published">Published</option>
+                                <option value="draft">Draft</option>
+                            </select>
+                            <select class="filter-select" id="blogCategoryFilter">
+                                <option value="all">All Categories</option>
+                                <option value="Exam Tips">Exam Tips</option>
+                                <option value="Study Guides">Study Guides</option>
+                                <option value="Business Concepts">Business Concepts</option>
+                                <option value="Student Life">Student Life</option>
+                                <option value="News">News</option>
+                            </select>
+                        </div>
+
+                        <div class="panel">
+                            <div class="panel-header">
+                                <span class="panel-title">All Posts</span>
+                                <span class="badge badge-info" id="blogPostCount">0 posts</span>
+                            </div>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 50%;">Title</th>
+                                        <th>Category</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                        <th style="width: 140px;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="blogTableBody">
+                                    <tr>
+                                        <td colspan="5" class="loading"><div class="spinner"></div> Loading posts...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Blog Editor (full page overlay) -->
+                    <div id="blogEditorView" style="display: none;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <button class="btn btn-ghost" id="backToBlogList" style="padding: 0.5rem;">&#8592; Back</button>
+                                <h1 class="page-title" id="blogEditorTitle" style="margin-bottom: 0;">New Post</h1>
+                            </div>
+                            <div style="display: flex; gap: 0.75rem;">
+                                <button class="btn btn-ghost" id="previewPostBtn">&#128065; Preview</button>
+                                <button class="btn btn-ghost" id="saveDraftBtn">Save Draft</button>
+                                <button class="btn btn-success" id="publishPostBtn">Publish</button>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 320px; gap: 1.5rem;">
+                            <!-- Main editor column -->
+                            <div>
+                                <div class="panel" style="margin-bottom: 1.5rem;">
+                                    <div class="panel-body" style="padding: 1.5rem;">
+                                        <div class="form-group">
+                                            <label class="form-label">Post Title</label>
+                                            <input type="text" class="form-input" id="blogPostTitle" placeholder="Enter a compelling title..." style="font-size: 1.25rem; padding: 0.875rem 1rem;">
+                                        </div>
+                                        <div class="form-group" style="margin-bottom: 0;">
+                                            <label class="form-label">Slug</label>
+                                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                <span style="color: var(--gray-400); font-size: 0.9rem;">mybizstudies.com/blog-post?slug=</span>
+                                                <input type="text" class="form-input" id="blogPostSlug" placeholder="auto-generated-from-title" style="flex: 1;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="panel">
+                                    <div class="panel-header">
+                                        <span class="panel-title">Content</span>
+                                    </div>
+                                    <div style="background: white; border-radius: 0 0 16px 16px;">
+                                        <div id="blogQuillEditor" style="min-height: 450px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Sidebar settings column -->
+                            <div>
+                                <div class="panel" style="margin-bottom: 1.5rem;">
+                                    <div class="panel-header">
+                                        <span class="panel-title">Cover Image</span>
+                                    </div>
+                                    <div class="panel-body" style="padding: 1.5rem;">
+                                        <div id="coverImageDropzone" style="border: 2px dashed var(--gray-300); border-radius: 12px; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.2s; background: var(--gray-50);">
+                                            <div id="coverImagePreview" style="display: none; margin-bottom: 0.75rem;">
+                                                <img id="coverImageImg" style="max-width: 100%; border-radius: 8px;" alt="Cover preview">
+                                            </div>
+                                            <div id="coverImagePlaceholder">
+                                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">&#128247;</div>
+                                                <div style="font-size: 0.9rem; color: var(--gray-500);">Click or drag image here</div>
+                                                <div style="font-size: 0.8rem; color: var(--gray-400); margin-top: 0.25rem;">Recommended: 1200 x 630px</div>
+                                            </div>
+                                        </div>
+                                        <input type="file" id="coverImageInput" accept="image/*" style="display: none;">
+                                        <button class="btn btn-ghost btn-sm" id="removeCoverImage" style="margin-top: 0.75rem; display: none; width: 100%;">Remove Image</button>
+                                    </div>
+                                </div>
+
+                                <div class="panel" style="margin-bottom: 1.5rem;">
+                                    <div class="panel-header">
+                                        <span class="panel-title">Post Settings</span>
+                                    </div>
+                                    <div class="panel-body" style="padding: 1.5rem;">
+                                        <div class="form-group">
+                                            <label class="form-label">Category</label>
+                                            <select class="form-select" id="blogPostCategory">
+                                                <option value="Exam Tips">Exam Tips</option>
+                                                <option value="Study Guides">Study Guides</option>
+                                                <option value="Business Concepts">Business Concepts</option>
+                                                <option value="Student Life">Student Life</option>
+                                                <option value="News">News</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Excerpt</label>
+                                            <textarea class="form-textarea" id="blogPostExcerpt" placeholder="Brief summary for blog listing and SEO..." style="min-height: 100px;"></textarea>
+                                            <div style="font-size: 0.8rem; color: var(--gray-400); margin-top: 0.25rem;">
+                                                <span id="excerptCharCount">0</span>/200 characters
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="margin-bottom: 0;">
+                                            <label class="form-label">Author</label>
+                                            <input type="text" class="form-input" id="blogPostAuthor" value="MyBizStudies">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </main>
         </div>
     </div>
@@ -1131,6 +1316,20 @@
                 <button class="modal-close" id="closeUserModal">&times;</button>
             </div>
             <div class="modal-body" id="userModalBody">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Blog Preview Modal -->
+    <div class="modal-overlay" id="blogPreviewModal">
+        <div class="modal" style="max-width: 800px; max-height: 90vh; overflow-y: auto;">
+            <div class="modal-header">
+                <h2 class="modal-title">Post Preview</h2>
+                <button class="modal-close" id="closeBlogPreview">&times;</button>
+            </div>
+            <div class="modal-body" id="blogPreviewBody" style="padding: 2rem;">
                 <!-- Populated dynamically -->
             </div>
         </div>
@@ -1229,6 +1428,12 @@
                 // Load page data
                 if (page === 'users') loadUsers();
                 if (page === 'progress') loadProgressStats();
+                if (page === 'blog') {
+                    loadBlogPosts();
+                    // Reset to list view
+                    document.getElementById('blogEditorView').style.display = 'none';
+                    document.getElementById('blogListView').style.display = 'block';
+                }
             });
         });
 
@@ -1812,6 +2017,497 @@
                     overlay.classList.remove('active');
                 }
             });
+        });
+
+
+        // ============================================================
+        // BLOG MANAGEMENT
+        // ============================================================
+
+        let allBlogPosts = [];
+        let editingPostId = null;
+        let blogQuillEditor = null;
+        let coverImageFile = null;
+        let coverImageUrl = null;
+
+        // Initialize Quill editor when blog page is shown
+        function initBlogEditor() {
+            if (blogQuillEditor) return; // already initialized
+
+            blogQuillEditor = new Quill('#blogQuillEditor', {
+                theme: 'snow',
+                placeholder: 'Start writing your blog post...',
+                modules: {
+                    toolbar: {
+                        container: [
+                            [{ 'header': [2, 3, 4, false] }],
+                            ['bold', 'italic', 'underline', 'strike'],
+                            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                            ['blockquote', 'code-block'],
+                            ['link', 'image'],
+                            [{ 'align': [] }],
+                            ['clean']
+                        ],
+                        handlers: {
+                            image: function() {
+                                const input = document.createElement('input');
+                                input.setAttribute('type', 'file');
+                                input.setAttribute('accept', 'image/*');
+                                input.click();
+                                input.onchange = async () => {
+                                    const file = input.files[0];
+                                    if (file) {
+                                        await uploadInlineImage(file);
+                                    }
+                                };
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Upload inline image to Supabase Storage
+        async function uploadInlineImage(file) {
+            const fileName = `inline/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+
+            showToast('Uploading image...', 'success');
+
+            try {
+                const { data, error } = await supabaseClient.storage
+                    .from('blog-images')
+                    .upload(fileName, file, { cacheControl: '3600', upsert: false });
+
+                if (error) throw error;
+
+                const { data: urlData } = supabaseClient.storage
+                    .from('blog-images')
+                    .getPublicUrl(fileName);
+
+                const range = blogQuillEditor.getSelection(true);
+                blogQuillEditor.insertEmbed(range.index, 'image', urlData.publicUrl);
+                blogQuillEditor.setSelection(range.index + 1);
+
+                showToast('Image uploaded!', 'success');
+            } catch (error) {
+                console.error('Image upload error:', error);
+                showToast('Image upload failed: ' + error.message, 'error');
+            }
+        }
+
+        // Cover image handling
+        const coverDropzone = document.getElementById('coverImageDropzone');
+        const coverInput = document.getElementById('coverImageInput');
+        const coverPreview = document.getElementById('coverImagePreview');
+        const coverPlaceholder = document.getElementById('coverImagePlaceholder');
+        const coverImg = document.getElementById('coverImageImg');
+        const removeCoverBtn = document.getElementById('removeCoverImage');
+
+        coverDropzone.addEventListener('click', () => coverInput.click());
+
+        coverDropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            coverDropzone.classList.add('dragover');
+        });
+
+        coverDropzone.addEventListener('dragleave', () => {
+            coverDropzone.classList.remove('dragover');
+        });
+
+        coverDropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            coverDropzone.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                handleCoverImage(file);
+            }
+        });
+
+        coverInput.addEventListener('change', (e) => {
+            if (e.target.files[0]) {
+                handleCoverImage(e.target.files[0]);
+            }
+        });
+
+        function handleCoverImage(file) {
+            coverImageFile = file;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                coverImg.src = e.target.result;
+                coverPreview.style.display = 'block';
+                coverPlaceholder.style.display = 'none';
+                removeCoverBtn.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        removeCoverBtn.addEventListener('click', () => {
+            coverImageFile = null;
+            coverImageUrl = null;
+            coverImg.src = '';
+            coverPreview.style.display = 'none';
+            coverPlaceholder.style.display = 'block';
+            removeCoverBtn.style.display = 'none';
+        });
+
+        // Upload cover image to Supabase Storage
+        async function uploadCoverImage() {
+            if (!coverImageFile) return coverImageUrl; // return existing URL if no new file
+
+            const fileName = `covers/${Date.now()}-${coverImageFile.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+
+            try {
+                const { data, error } = await supabaseClient.storage
+                    .from('blog-images')
+                    .upload(fileName, coverImageFile, { cacheControl: '3600', upsert: false });
+
+                if (error) throw error;
+
+                const { data: urlData } = supabaseClient.storage
+                    .from('blog-images')
+                    .getPublicUrl(fileName);
+
+                return urlData.publicUrl;
+            } catch (error) {
+                console.error('Cover upload error:', error);
+                showToast('Cover image upload failed: ' + error.message, 'error');
+                return null;
+            }
+        }
+
+        // Auto slug generation
+        document.getElementById('blogPostTitle').addEventListener('input', (e) => {
+            if (!editingPostId) {
+                const slug = e.target.value
+                    .toLowerCase()
+                    .replace(/[^a-z0-9\s-]/g, '')
+                    .replace(/\s+/g, '-')
+                    .replace(/-+/g, '-')
+                    .substring(0, 80);
+                document.getElementById('blogPostSlug').value = slug;
+            }
+        });
+
+        // Excerpt character count
+        document.getElementById('blogPostExcerpt').addEventListener('input', (e) => {
+            document.getElementById('excerptCharCount').textContent = e.target.value.length;
+        });
+
+        // Load blog posts
+        async function loadBlogPosts() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('blog_posts')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                allBlogPosts = data || [];
+                renderBlogPosts(allBlogPosts);
+                updateBlogStats();
+            } catch (error) {
+                console.error('Error loading blog posts:', error);
+                document.getElementById('blogTableBody').innerHTML =
+                    '<tr><td colspan="5" class="empty-state">Error loading posts. Make sure the blog_posts table exists in Supabase.</td></tr>';
+            }
+        }
+
+        function updateBlogStats() {
+            const published = allBlogPosts.filter(p => p.status === 'published').length;
+            const drafts = allBlogPosts.filter(p => p.status === 'draft').length;
+            document.getElementById('publishedCount').textContent = published;
+            document.getElementById('draftCount').textContent = drafts;
+            document.getElementById('totalPostCount').textContent = allBlogPosts.length;
+        }
+
+        function renderBlogPosts(posts) {
+            const tbody = document.getElementById('blogTableBody');
+            document.getElementById('blogPostCount').textContent = `${posts.length} posts`;
+
+            if (posts.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No blog posts yet. Click "+ New Post" to create your first post!</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = posts.map(post => {
+                const statusBadge = post.status === 'published' ? 'badge-success' : 'badge-warning';
+                const catBadge = 'badge-info';
+                const dateStr = post.published_at ? formatDate(post.published_at) : formatDate(post.created_at);
+                return `
+                <tr>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            ${post.cover_image_url ? `<img src="${post.cover_image_url}" style="width: 48px; height: 32px; object-fit: cover; border-radius: 6px;">` : '<div style="width: 48px; height: 32px; background: var(--gray-100); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: var(--gray-400);">No img</div>'}
+                            <div>
+                                <div style="font-weight: 600; color: var(--gray-900);">${post.title}</div>
+                                <div style="font-size: 0.8rem; color: var(--gray-400);">/blog-post?slug=${post.slug}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td><span class="badge ${catBadge}">${post.category || 'Uncategorized'}</span></td>
+                    <td><span class="badge ${statusBadge}">${(post.status || 'draft').toUpperCase()}</span></td>
+                    <td>${dateStr}</td>
+                    <td>
+                        <button class="btn btn-ghost btn-sm" onclick="editBlogPost('${post.id}')">Edit</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteBlogPost('${post.id}', '${post.title.replace(/'/g, "\\'")}')" style="margin-left: 4px;">Delete</button>
+                    </td>
+                </tr>
+            `}).join('');
+        }
+
+        // Blog filters
+        document.getElementById('blogSearch').addEventListener('input', filterBlogPosts);
+        document.getElementById('blogStatusFilter').addEventListener('change', filterBlogPosts);
+        document.getElementById('blogCategoryFilter').addEventListener('change', filterBlogPosts);
+
+        function filterBlogPosts() {
+            const search = document.getElementById('blogSearch').value.toLowerCase();
+            const status = document.getElementById('blogStatusFilter').value;
+            const category = document.getElementById('blogCategoryFilter').value;
+
+            const filtered = allBlogPosts.filter(post => {
+                const matchSearch = !search || post.title.toLowerCase().includes(search) || (post.excerpt && post.excerpt.toLowerCase().includes(search));
+                const matchStatus = status === 'all' || post.status === status;
+                const matchCategory = category === 'all' || post.category === category;
+                return matchSearch && matchStatus && matchCategory;
+            });
+
+            renderBlogPosts(filtered);
+        }
+
+        // New post
+        document.getElementById('newPostBtn').addEventListener('click', () => {
+            editingPostId = null;
+            coverImageFile = null;
+            coverImageUrl = null;
+            document.getElementById('blogEditorTitle').textContent = 'New Post';
+            document.getElementById('blogPostTitle').value = '';
+            document.getElementById('blogPostSlug').value = '';
+            document.getElementById('blogPostCategory').value = 'Exam Tips';
+            document.getElementById('blogPostExcerpt').value = '';
+            document.getElementById('blogPostAuthor').value = 'MyBizStudies';
+            document.getElementById('excerptCharCount').textContent = '0';
+
+            // Reset cover image
+            coverImg.src = '';
+            coverPreview.style.display = 'none';
+            coverPlaceholder.style.display = 'block';
+            removeCoverBtn.style.display = 'none';
+
+            document.getElementById('blogListView').style.display = 'none';
+            document.getElementById('blogEditorView').style.display = 'block';
+
+            initBlogEditor();
+            blogQuillEditor.setContents([]);
+        });
+
+        // Back to list
+        document.getElementById('backToBlogList').addEventListener('click', () => {
+            if (blogQuillEditor && blogQuillEditor.getLength() > 1 && !confirm('You have unsaved changes. Are you sure you want to go back?')) {
+                return;
+            }
+            document.getElementById('blogEditorView').style.display = 'none';
+            document.getElementById('blogListView').style.display = 'block';
+        });
+
+        // Edit post
+        async function editBlogPost(postId) {
+            const post = allBlogPosts.find(p => p.id === postId);
+            if (!post) {
+                showToast('Post not found', 'error');
+                return;
+            }
+
+            editingPostId = postId;
+            coverImageFile = null;
+            coverImageUrl = post.cover_image_url || null;
+
+            document.getElementById('blogEditorTitle').textContent = 'Edit Post';
+            document.getElementById('blogPostTitle').value = post.title;
+            document.getElementById('blogPostSlug').value = post.slug;
+            document.getElementById('blogPostCategory').value = post.category || 'Exam Tips';
+            document.getElementById('blogPostExcerpt').value = post.excerpt || '';
+            document.getElementById('blogPostAuthor').value = post.author || 'MyBizStudies';
+            document.getElementById('excerptCharCount').textContent = (post.excerpt || '').length;
+
+            // Set cover image
+            if (post.cover_image_url) {
+                coverImg.src = post.cover_image_url;
+                coverPreview.style.display = 'block';
+                coverPlaceholder.style.display = 'none';
+                removeCoverBtn.style.display = 'block';
+            } else {
+                coverImg.src = '';
+                coverPreview.style.display = 'none';
+                coverPlaceholder.style.display = 'block';
+                removeCoverBtn.style.display = 'none';
+            }
+
+            document.getElementById('blogListView').style.display = 'none';
+            document.getElementById('blogEditorView').style.display = 'block';
+
+            initBlogEditor();
+
+            // Set content - Quill expects delta or HTML
+            if (post.content) {
+                blogQuillEditor.root.innerHTML = post.content;
+            } else {
+                blogQuillEditor.setContents([]);
+            }
+        }
+
+        // Save post (draft or publish)
+        async function saveBlogPost(status) {
+            const title = document.getElementById('blogPostTitle').value.trim();
+            const slug = document.getElementById('blogPostSlug').value.trim();
+            const category = document.getElementById('blogPostCategory').value;
+            const excerpt = document.getElementById('blogPostExcerpt').value.trim();
+            const author = document.getElementById('blogPostAuthor').value.trim();
+            const content = blogQuillEditor.root.innerHTML;
+
+            if (!title) {
+                showToast('Please enter a post title', 'error');
+                return;
+            }
+
+            if (!slug) {
+                showToast('Please enter a URL slug', 'error');
+                return;
+            }
+
+            // Disable buttons
+            const saveBtn = document.getElementById('saveDraftBtn');
+            const pubBtn = document.getElementById('publishPostBtn');
+            saveBtn.disabled = true;
+            pubBtn.disabled = true;
+            saveBtn.textContent = 'Saving...';
+
+            try {
+                // Upload cover image if new file selected
+                let finalCoverUrl = coverImageUrl;
+                if (coverImageFile) {
+                    finalCoverUrl = await uploadCoverImage();
+                }
+
+                const postData = {
+                    title,
+                    slug,
+                    category,
+                    excerpt,
+                    author,
+                    content,
+                    cover_image_url: finalCoverUrl,
+                    status,
+                    updated_at: new Date().toISOString()
+                };
+
+                if (status === 'published' && !editingPostId) {
+                    postData.published_at = new Date().toISOString();
+                }
+
+                if (editingPostId) {
+                    // If changing from draft to published, set published_at
+                    const existingPost = allBlogPosts.find(p => p.id === editingPostId);
+                    if (status === 'published' && existingPost && existingPost.status === 'draft') {
+                        postData.published_at = new Date().toISOString();
+                    }
+
+                    const { error } = await supabaseClient
+                        .from('blog_posts')
+                        .update(postData)
+                        .eq('id', editingPostId);
+
+                    if (error) throw error;
+                    showToast('Post updated successfully!', 'success');
+                } else {
+                    postData.created_at = new Date().toISOString();
+                    if (status === 'published') {
+                        postData.published_at = new Date().toISOString();
+                    }
+
+                    const { data, error } = await supabaseClient
+                        .from('blog_posts')
+                        .insert([postData])
+                        .select();
+
+                    if (error) throw error;
+                    if (data && data[0]) {
+                        editingPostId = data[0].id;
+                    }
+                    showToast('Post created successfully!', 'success');
+                }
+
+                // Reload posts and go back to list
+                await loadBlogPosts();
+                document.getElementById('blogEditorView').style.display = 'none';
+                document.getElementById('blogListView').style.display = 'block';
+            } catch (error) {
+                console.error('Error saving post:', error);
+                showToast('Error saving post: ' + error.message, 'error');
+            } finally {
+                saveBtn.disabled = false;
+                pubBtn.disabled = false;
+                saveBtn.textContent = 'Save Draft';
+            }
+        }
+
+        // Wire up save/publish buttons
+        document.getElementById('saveDraftBtn').addEventListener('click', () => saveBlogPost('draft'));
+        document.getElementById('publishPostBtn').addEventListener('click', () => saveBlogPost('published'));
+
+        // Delete post
+        async function deleteBlogPost(postId, title) {
+            if (!confirm(`Are you sure you want to delete "${title}"? This cannot be undone.`)) {
+                return;
+            }
+
+            try {
+                const { error } = await supabaseClient
+                    .from('blog_posts')
+                    .delete()
+                    .eq('id', postId);
+
+                if (error) throw error;
+
+                showToast('Post deleted successfully!', 'success');
+                await loadBlogPosts();
+            } catch (error) {
+                console.error('Error deleting post:', error);
+                showToast('Error deleting post: ' + error.message, 'error');
+            }
+        }
+
+        // Preview post
+        document.getElementById('previewPostBtn').addEventListener('click', () => {
+            const title = document.getElementById('blogPostTitle').value || 'Untitled Post';
+            const category = document.getElementById('blogPostCategory').value;
+            const author = document.getElementById('blogPostAuthor').value || 'MyBizStudies';
+            const content = blogQuillEditor.root.innerHTML;
+            const coverSrc = coverImg.src;
+
+            let previewHtml = '';
+
+            if (coverSrc && coverPreview.style.display !== 'none') {
+                previewHtml += `<img src="${coverSrc}" class="blog-preview-cover" alt="Cover image">`;
+            }
+
+            previewHtml += `
+                <div class="blog-preview-meta">
+                    <span class="badge badge-info">${category}</span>
+                    <span>By ${author}</span>
+                    <span>${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                </div>
+                <h1 style="font-size: 1.75rem; font-weight: 800; margin-bottom: 1.5rem; color: var(--gray-900);">${title}</h1>
+                <div class="blog-preview-content">${content}</div>
+            `;
+
+            document.getElementById('blogPreviewBody').innerHTML = previewHtml;
+            document.getElementById('blogPreviewModal').classList.add('active');
+        });
+
+        document.getElementById('closeBlogPreview').addEventListener('click', () => {
+            document.getElementById('blogPreviewModal').classList.remove('active');
         });
 
         // Initialize
