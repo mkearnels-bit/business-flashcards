@@ -7,11 +7,11 @@
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
     <title>MyBizStudies | Ace Your A-Level Business Studies Exams</title>
-<meta name="description" content="Interactive A-Level Business Studies revision platform. Study notes, 360+ flashcards, exam technique training, and practice questions for Edexcel IAL students.">
+<meta name="description" content="Interactive A-Level Business Studies revision platform. Study notes, 400+ flashcards, exam technique training, and practice questions for Edexcel IAL students.">
 <meta name="keywords" content="A-Level Business Studies, Edexcel IAL, revision notes, flashcards, exam technique, GCSE Business">
 <link rel="canonical" href="https://mybizstudies.com/index.html">
 <meta property="og:title" content="MyBizStudies | Ace Your A-Level Business Studies Exams">
-<meta property="og:description" content="Interactive A-Level Business Studies revision platform. Study notes, 360+ flashcards, exam technique training, and practice questions for Edexcel IAL students.">
+<meta property="og:description" content="Interactive A-Level Business Studies revision platform. Study notes, 400+ flashcards, exam technique training, and practice questions for Edexcel IAL students.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://mybizstudies.com/index.html">
 <meta property="og:site_name" content="MyBizStudies">
@@ -2225,6 +2225,432 @@
             opacity: 0.7;
         }
 
+        /* ==================== INTERACTIVE NOTES SHOWCASE ==================== */
+        .notes-showcase {
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, var(--gray-50) 0%, white 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .notes-showcase::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gray-300), transparent);
+        }
+
+        .notes-showcase-container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .notes-showcase-header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+
+        .notes-showcase-header h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        .notes-showcase-header p {
+            font-size: 1.1rem;
+            color: var(--gray-600);
+            max-width: 620px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .notes-preview-card {
+            background: white;
+            border-radius: 20px;
+            border: 1px solid var(--gray-200);
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+        }
+
+        .notes-preview-topbar {
+            background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .notes-preview-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .notes-bc-unit {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .notes-bc-sep { opacity: 0.4; }
+
+        .notes-bc-current {
+            color: #e67e22;
+            font-weight: 600;
+        }
+
+        .notes-preview-badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.3rem 0.75rem;
+            border-radius: 50px;
+            background: rgba(230, 126, 34, 0.2);
+            color: #f39c12;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .notes-preview-content {
+            padding: 2rem 2.5rem 2.5rem;
+        }
+
+        /* Break Even Interactive - scoped styles */
+        .be-interactive-container {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .be-interactive-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .be-badge {
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            background: rgba(52, 152, 219, 0.1);
+            color: #3498db;
+            text-transform: uppercase;
+        }
+
+        .be-canvas-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .be-canvas-wrapper canvas {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .be-controls {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .be-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .be-input-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .be-input-row label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #374151;
+            min-width: 140px;
+        }
+
+        .be-input-row input[type="number"] {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            width: 120px;
+            transition: border-color 0.2s;
+        }
+
+        .be-input-row input[type="number"]:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .be-input-row input[type="range"] {
+            flex: 1;
+            max-width: 200px;
+            accent-color: #1e3a5f;
+        }
+
+        .be-result {
+            background: rgba(52, 152, 219, 0.06);
+            border: 1px solid rgba(52, 152, 219, 0.2);
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+            margin-top: 0.75rem;
+        }
+
+        .be-result-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #3498db;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+
+        .be-result-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #111827;
+        }
+
+        @media (max-width: 768px) {
+            .notes-showcase-header h2 { font-size: 1.75rem; }
+            .notes-preview-content { padding: 1.5rem; }
+            .notes-preview-topbar { flex-direction: column; gap: 0.75rem; align-items: flex-start; }
+            .be-input-row { flex-wrap: wrap; }
+            .be-input-row label { min-width: auto; }
+            .be-result-value { font-size: 1.2rem; }
+        }
+
+
+        /* ==================== NOTES PREVIEW SCOPED STYLES ==================== */
+        /* Exact match to notes-unit2.html styling */
+        .np-key-term {
+            border-left: 4px solid #3498db;
+            background: rgba(52, 152, 219, 0.04);
+            padding: 1rem 1.25rem;
+            border-radius: 0 12px 12px 0;
+            margin: 1.25rem 0;
+        }
+        .np-key-term-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #3498db;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.4rem;
+        }
+        .np-key-term h5 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.3rem;
+        }
+        .np-key-term p {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 0;
+            line-height: 1.6;
+        }
+
+        .np-formula-box {
+            border-left: 4px solid #9b59b6;
+            background: rgba(155, 89, 182, 0.04);
+            padding: 1rem 1.25rem;
+            border-radius: 0 12px 12px 0;
+            margin: 1.25rem 0;
+        }
+        .np-formula-box-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #9b59b6;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.4rem;
+        }
+        .np-formula-box h5 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+        .np-formula-box p {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 0.25rem;
+            line-height: 1.6;
+        }
+        .np-formula-display {
+            background: white;
+            border: 1px solid rgba(155, 89, 182, 0.2);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #9b59b6;
+            margin-bottom: 0.75rem;
+            text-align: center;
+        }
+
+        .np-worked-example {
+            background: white;
+            border: 1px solid rgba(155, 89, 182, 0.15);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            margin-top: 0.75rem;
+        }
+        .np-worked-example-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #9b59b6;
+            margin-bottom: 0.4rem;
+        }
+        .np-worked-example p {
+            font-size: 0.88rem;
+            margin-bottom: 0.25rem;
+            line-height: 1.6;
+        }
+
+        .np-exam-tip {
+            border-left: 4px solid #27ae60;
+            background: rgba(39, 174, 96, 0.04);
+            padding: 1rem 1.25rem;
+            border-radius: 0 12px 12px 0;
+            margin: 1.25rem 0;
+        }
+        .np-exam-tip-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #27ae60;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.4rem;
+        }
+        .np-exam-tip p {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 0;
+            line-height: 1.6;
+        }
+
+        .np-real-world {
+            border-left: 4px solid #e67e22;
+            background: rgba(230, 126, 34, 0.04);
+            padding: 1rem 1.25rem;
+            border-radius: 0 12px 12px 0;
+            margin: 1.25rem 0;
+        }
+        .np-real-world-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #e67e22;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.4rem;
+        }
+        .np-real-world h5 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.3rem;
+        }
+        .np-real-world p {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 0.25rem;
+            line-height: 1.6;
+        }
+
+        .np-adv-disadv-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .np-adv-box, .np-disadv-box {
+            border-radius: 10px;
+            padding: 1rem 1.1rem;
+        }
+        .np-adv-box {
+            background: rgba(39, 174, 96, 0.06);
+            border: 1px solid rgba(39, 174, 96, 0.2);
+        }
+        .np-disadv-box {
+            background: rgba(231, 76, 60, 0.06);
+            border: 1px solid rgba(231, 76, 60, 0.2);
+        }
+        .np-adv-box-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #27ae60;
+            margin-bottom: 0.6rem;
+        }
+        .np-disadv-box-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #e74c3c;
+            margin-bottom: 0.6rem;
+        }
+        .np-adv-box ul, .np-disadv-box ul {
+            margin: 0;
+            padding-left: 1.2rem;
+        }
+        .np-adv-box li, .np-disadv-box li {
+            font-size: 0.85rem;
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+            color: #475569;
+        }
+        .np-adv-box li:last-child, .np-disadv-box li:last-child {
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 768px) {
+            .np-adv-disadv-grid { grid-template-columns: 1fr; }
+            .np-formula-display { font-size: 0.85rem; padding: 0.6rem 0.75rem; }
+        }
+
         /* ==================== FOOTER ==================== */
         .footer {
             background: var(--dark);
@@ -3058,7 +3484,7 @@
                     Created by an Expert Business Teacher
                 </div>
                 <h1>Ace Your A-Level <span>Business Studies</span> Exams</h1>
-                <p class="hero-subtitle">Master every topic with interactive flashcards and learn exactly how to write answers that score full marks with our exam skills training. Study smarter, not harder.</p>
+                <p class="hero-subtitle">Master every topic with interactive study notes, 400+ flashcards, and exam technique training that shows you exactly how to write answers that score full marks. Study smarter, not harder.</p>
                 <div class="free-badge">
                     <span class="free-badge-icon">🎉</span>
                     <span class="free-badge-text">Free for a Limited Time</span>
@@ -3069,7 +3495,7 @@
                 </div>
                 <div class="hero-stats">
                     <div class="hero-stat">
-                        <span class="hero-stat-value">360+</span>
+                        <span class="hero-stat-value">400+</span>
                         <span class="hero-stat-label">Flashcards</span>
                     </div>
                     <div class="hero-stat">
@@ -3079,10 +3505,6 @@
                     <div class="hero-stat">
                         <span class="hero-stat-value">100%</span>
                         <span class="hero-stat-label">Syllabus Coverage</span>
-                    </div>
-                    <div class="hero-stat">
-                        <span class="hero-stat-value">✍️</span>
-                        <span class="hero-stat-label">Exam Skills</span>
                     </div>
                 </div>
             </div>
@@ -3098,25 +3520,25 @@
 
                 <!-- Floating Orbit with Bubbles -->
                 <div class="hero-orbit">
-                    <!-- Top: Flashcard Count -->
+                    <!-- Top: 400+ Flash Cards -->
                     <div class="float-bubble float-bubble-1">
                         <div class="float-bubble-icon">📋</div>
                         <div class="float-bubble-text">
-                            <span class="float-bubble-value">360+</span>
-                            <span class="float-bubble-label">Flashcards</span>
+                            <span class="float-bubble-value">400+</span>
+                            <span class="float-bubble-label">Flash Cards</span>
                         </div>
                     </div>
 
-                    <!-- Top Right: Units -->
+                    <!-- Top Right: Interactive Notes -->
                     <div class="float-bubble float-bubble-2">
                         <div class="float-bubble-icon">📚</div>
                         <div class="float-bubble-text">
-                            <span class="float-bubble-value">4 Units</span>
-                            <span class="float-bubble-label">Full Syllabus</span>
+                            <span class="float-bubble-value">Interactive</span>
+                            <span class="float-bubble-label">Notes</span>
                         </div>
                     </div>
 
-                    <!-- Bottom Right: Progress -->
+                    <!-- Bottom Right: Track Your Progress -->
                     <div class="float-bubble float-bubble-3">
                         <div class="float-bubble-icon">📊</div>
                         <div class="float-bubble-text">
@@ -3125,7 +3547,7 @@
                         </div>
                     </div>
 
-                    <!-- Bottom: Coverage -->
+                    <!-- Bottom: 100% Syllabus Coverage -->
                     <div class="float-bubble float-bubble-4">
                         <div class="float-bubble-icon">✅</div>
                         <div class="float-bubble-text">
@@ -3134,21 +3556,21 @@
                         </div>
                     </div>
 
-                    <!-- Bottom Left: Any Device -->
+                    <!-- Bottom Left: Expert Teacher Created -->
                     <div class="float-bubble float-bubble-5">
-                        <div class="float-bubble-icon">📱</div>
-                        <div class="float-bubble-text">
-                            <span class="float-bubble-value">24/7</span>
-                            <span class="float-bubble-label">Any Device</span>
-                        </div>
-                    </div>
-
-                    <!-- Top Left: Expert Teacher -->
-                    <div class="float-bubble float-bubble-6">
                         <div class="float-bubble-icon">👨‍🏫</div>
                         <div class="float-bubble-text">
                             <span class="float-bubble-value">Expert</span>
                             <span class="float-bubble-label">Teacher Created</span>
+                        </div>
+                    </div>
+
+                    <!-- Top Left: Exam Technique -->
+                    <div class="float-bubble float-bubble-6">
+                        <div class="float-bubble-icon">🎯</div>
+                        <div class="float-bubble-text">
+                            <span class="float-bubble-value">Exam</span>
+                            <span class="float-bubble-label">Technique</span>
                         </div>
                     </div>
                 </div>
@@ -3187,97 +3609,189 @@
 
     </section>
 
-    <!-- Pain Points Section -->
-    <section class="pain-points-section">
-        <div class="pain-points-container">
-            <div class="pain-points-header">
-                <h2>We Get It. Revision is Hard.</h2>
-                <p>You're not alone. Business Studies has a lot of content to learn. <span style="white-space: nowrap;">A-Levels</span> are not easy!</p>
+    <section class="notes-showcase" id="notes-preview">
+        <div class="notes-showcase-container">
+            <div class="notes-showcase-header">
+                <span class="section-label" style="background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(30, 58, 95, 0.1)); color: var(--primary);">Interactive Study Notes</span>
+                <h2>Notes That Actually Help You <span style="color: var(--accent);">Understand</span></h2>
+                <p>Our interactive notes go beyond static textbook content. Explore real charts, adjust variables, and see Business concepts come to life.</p>
             </div>
 
-            <div class="pain-points-grid">
-                <div class="pain-point-card">
-                    <div class="pain-point-icon">📚</div>
-                    <div class="pain-point-content">
-                        <h3>Textbooks Are Overwhelming</h3>
-                        <p>Hundreds of pages of content, but what actually matters for the exam? It's hard to know what to focus on.</p>
-                        <span class="solution-text">✓ We've distilled it down to the essentials</span>
+            <!-- Notes Preview Card -->
+            <div class="notes-preview-card">
+                <div class="notes-preview-topbar">
+                    <div class="notes-preview-breadcrumb">
+                        <span class="notes-bc-unit">Unit 2</span>
+                        <span class="notes-bc-sep">/</span>
+                        <span class="notes-bc-topic">Finance</span>
+                        <span class="notes-bc-sep">/</span>
+                        <span class="notes-bc-current">Break Even Analysis</span>
                     </div>
+                    <span class="notes-preview-badge">Live Preview</span>
                 </div>
 
-                <div class="pain-point-card">
-                    <div class="pain-point-icon">📝</div>
-                    <div class="pain-point-content">
-                        <h3>Notes Don't Test You</h3>
-                        <p>You've made great notes, but reading them over and over doesn't mean you actually know the material.</p>
-                        <span class="solution-text">✓ Active recall with every flashcard flip</span>
-                    </div>
-                </div>
+                <!-- Exact Break Even content from notes-unit2 -->
+                <div class="notes-preview-content">
+<p style="font-size: 0.95rem; color: #374151; line-height: 1.8; margin-bottom: 1.25rem; text-align: left;">Break even analysis is a key financial planning tool that helps businesses understand at what level of production or sales they will neither make a profit nor incur a loss. This point is called the break even point.</p>
 
-                <div class="pain-point-card">
-                    <div class="pain-point-icon">🧠</div>
-                    <div class="pain-point-content">
-                        <h3>Concepts Don't Stick</h3>
-                        <p>You understand it in class, but a week later? Gone. Retention is the real challenge.</p>
-                        <span class="solution-text">✓ Spaced repetition reinforces memory</span>
-                    </div>
-                </div>
+<div class="np-key-term"><div class="np-key-term-label">KEY TERM</div><h5>Break Even Point</h5><p>The level of output at which total revenue equals total costs, resulting in zero profit and zero loss.</p></div>
 
-                <div class="pain-point-card">
-                    <div class="pain-point-icon">💬</div>
-                    <div class="pain-point-content">
-                        <h3>Stuck on Discussion Questions</h3>
-                        <p>Essay questions need strong points and examples. Where do you find them quickly?</p>
-                        <span class="solution-text">✓ Ready made points for every topic</span>
+<p style="font-size: 0.95rem; color: #374151; line-height: 1.8; margin-bottom: 1.25rem; text-align: left;">Understanding the break even point is essential for business planning. It tells a business the minimum level of sales needed to cover all costs. Knowing this figure helps managers set realistic sales targets and make informed decisions about production levels and pricing.</p>
+
+<h4 style="margin-top: 1.5rem; color: #1e3a5f; font-size: 1.1rem; font-weight: 700;">Contribution</h4>
+
+<p style="font-size: 0.95rem; color: #374151; line-height: 1.8; margin-bottom: 1.25rem; text-align: left;">Before calculating break even, it is important to understand the concept of contribution. Contribution is the amount of money each unit sold puts towards paying off fixed costs. Once enough units have been sold so that total contribution covers all fixed costs, the business reaches break even. Every unit sold after that point generates profit.</p>
+
+<div class="np-key-term"><div class="np-key-term-label">KEY TERM</div><h5>Contribution per Unit</h5><p>The selling price of one unit minus the variable cost of producing that unit. It represents how much each unit sold "contributes" towards covering fixed costs and eventually generating profit.</p></div>
+
+<div class="np-formula-box">
+    <div class="np-formula-box-label">FORMULA</div>
+    <h5>Contribution per Unit</h5>
+    <div class="np-formula-display">Contribution per Unit = Selling Price per Unit &minus; Variable Cost per Unit</div>
+    <p>This tells you how much money from each sale is left over after covering the direct costs of making that product.</p>
+    <div class="np-worked-example">
+        <div class="np-worked-example-label">WORKED EXAMPLE</div>
+        <p>A bakery sells cakes for 12 pounds each. The ingredients and packaging cost 4 pounds per cake. Contribution per Unit = 12 &minus; 4 = 8 pounds. So every cake sold contributes 8 pounds towards paying fixed costs like rent and salaries.</p>
+    </div>
+</div>
+
+<div class="np-formula-box">
+    <div class="np-formula-box-label">FORMULA</div>
+    <h5>Total Contribution</h5>
+    <div class="np-formula-display">Total Contribution = Contribution per Unit &times; Number of Units Sold</div>
+    <p>Total contribution shows the combined amount all units sold have contributed towards fixed costs. If total contribution exceeds fixed costs, the business is making a profit. If it falls short, the business is making a loss.</p>
+    <div class="np-worked-example">
+        <div class="np-worked-example-label">WORKED EXAMPLE</div>
+        <p>The bakery sells 500 cakes in a month. Total Contribution = 8 &times; 500 = 4,000 pounds. If the bakery's fixed costs are 3,000 pounds per month, then Profit = 4,000 &minus; 3,000 = 1,000 pounds.</p>
+    </div>
+</div>
+
+<div class="np-exam-tip"><div class="np-exam-tip-label">EXAM TIP</div><p>The word "contribution" is very specific in business. It does not mean profit. Contribution is what each unit puts towards fixed costs first. Only after all fixed costs are covered does contribution become profit. Make sure you use the term correctly in your answers.</p></div>
+
+<p style="font-size: 0.95rem; color: #374151; line-height: 1.8; margin-bottom: 1.25rem; text-align: left;">Contribution is directly linked to break even because the break even formula uses contribution per unit as its denominator. The higher the contribution per unit, the fewer units a business needs to sell to cover its fixed costs.</p>
+
+<h4 style="margin-top: 1.5rem; color: #1e3a5f; font-size: 1.1rem; font-weight: 700;">Break Even Calculation</h4>
+
+<div class="np-formula-box">
+    <div class="np-formula-box-label">FORMULA</div>
+    <h5>Break Even Output</h5>
+    <div class="np-formula-display">Break Even Output = Fixed Costs &divide; Contribution per Unit</div>
+    <p>Since Contribution per Unit = Selling Price &minus; Variable Cost per Unit, the formula can also be written as: Fixed Costs / (Selling Price &minus; Variable Cost per Unit).</p>
+    <div class="np-worked-example">
+        <div class="np-worked-example-label">WORKED EXAMPLE</div>
+        <p>Fixed costs are 50,000 pounds, selling price is 25 pounds per unit, variable cost is 10 pounds per unit. Contribution per Unit = 25 &minus; 10 = 15 pounds. Break Even Output = 50,000 / 15 = 3,333 units (rounded). The business must sell at least 3,334 units to start making a profit.</p>
+    </div>
+</div>
+
+<div class="np-key-term"><div class="np-key-term-label">KEY TERM</div><h5>Margin of Safety</h5><p>The difference between the expected sales level and the break even point, showing how much sales can fall before the business starts making a loss.</p></div>
+
+<div class="np-formula-box">
+    <div class="np-formula-box-label">FORMULA</div>
+    <h5>Margin of Safety</h5>
+    <div class="np-formula-display">Margin of Safety = Expected Output - Break Even Output</div>
+    <p>This can also be expressed as a percentage: (Margin of Safety / Expected Output) x 100.</p>
+    <div class="np-worked-example">
+        <div class="np-worked-example-label">WORKED EXAMPLE</div>
+        <p>If expected output is 5,000 units and break even output is 3,333 units, then Margin of Safety = 5,000 - 3,333 = 1,667 units. As a percentage: (1,667 / 5,000) x 100 = 33.4%.</p>
+    </div>
+</div>
+
+<p style="font-size: 0.95rem; color: #374151; line-height: 1.8; margin-bottom: 1.25rem; text-align: left;">A break even chart visually represents the relationship between output and profit. It shows total revenue and total costs as lines, with their intersection point indicating the break even point. The area above the total revenue line shows profit, while the area below shows loss.</p>
+
+                    <div class="be-interactive-container">
+                        <div class="be-interactive-title">Break Even Chart <span class="be-badge">Interactive</span></div>
+                        <div class="be-canvas-wrapper">
+                            <canvas id="showcaseBreakEvenCanvas" width="700" height="450"></canvas>
+                        </div>
+                        <div class="be-controls">
+                            <div class="be-input-group">
+                                <div class="be-input-row">
+                                    <label>Fixed Costs:</label>
+                                    <input type="number" id="sbeFixedCosts" value="50000" min="0" step="1000" onchange="drawShowcaseBEChart()">
+                                </div>
+                                <div class="be-input-row">
+                                    <label>Variable Cost/Unit:</label>
+                                    <input type="number" id="sbeVariableCost" value="10" min="0" step="1" onchange="drawShowcaseBEChart()">
+                                </div>
+                                <div class="be-input-row">
+                                    <label>Selling Price/Unit:</label>
+                                    <input type="number" id="sbeSellingPrice" value="25" min="0" step="1" onchange="drawShowcaseBEChart()">
+                                </div>
+                                <div class="be-input-row" style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid #e5e7eb;">
+                                    <label>Sales Volume:</label>
+                                    <input type="range" id="sbeSalesVolume" min="0" max="10000" value="5000" step="100" oninput="document.getElementById('sbeSalesVolumeVal').textContent=this.value; drawShowcaseBEChart()">
+                                    <span id="sbeSalesVolumeVal" style="min-width: 50px; text-align: right; font-weight: 600; color: #1e3a5f;">5000</span>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                                <div class="be-result">
+                                    <div class="be-result-label">Contribution per Unit</div>
+                                    <div class="be-result-value" id="sbeContribution">£0</div>
+                                </div>
+                                <div class="be-result">
+                                    <div class="be-result-label">Break Even Output</div>
+                                    <div class="be-result-value" id="sbeResult">0 units</div>
+                                </div>
+                                <div class="be-result">
+                                    <div class="be-result-label">Margin of Safety</div>
+                                    <div class="be-result-value" id="sbeMarginResult">0 units</div>
+                                </div>
+                                <div class="be-result">
+                                    <div class="be-result-label">Profit / Loss</div>
+                                    <div class="be-result-value" id="sbeProfitLoss">£0</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
+<h4 style="margin-top: 1.75rem; color: #1e3a5f; font-size: 1.05rem; font-weight: 700;">Usefulness and Limitations of Break Even Analysis</h4>
+
+<div class="np-adv-disadv-grid">
+    <div class="np-adv-box">
+        <div class="np-adv-box-title">Usefulness</div>
+        <ul>
+            <li><strong>Simple and visual:</strong> Break even charts provide a clear visual representation of costs, revenue, and the point at which a business begins to make profit, making it easy for non financial stakeholders to understand</li>
+            <li><strong>Supports decision making:</strong> Helps managers assess the impact of changes to price, costs, or output levels before committing resources, reducing the risk of poor decisions</li>
+            <li><strong>Useful for start ups:</strong> New businesses can use break even analysis to determine the minimum sales needed to cover costs, helping secure finance from banks and investors</li>
+            <li><strong>Measures margin of safety:</strong> Shows how far sales can fall before the business makes a loss, allowing managers to assess risk and plan accordingly</li>
+            <li><strong>Scenario planning:</strong> Enables "what if" analysis by adjusting variables such as selling price or fixed costs to see how profitability would be affected</li>
+        </ul>
+    </div>
+    <div class="np-disadv-box">
+        <div class="np-disadv-box-title">Limitations</div>
+        <ul>
+            <li><strong>Assumes all output is sold:</strong> The model assumes that every unit produced is sold, which is unrealistic as businesses often hold stock or face unsold inventory</li>
+            <li><strong>Assumes fixed costs remain constant:</strong> In reality, fixed costs can change at different output levels (e.g. needing larger premises), making the analysis less accurate at extreme volumes</li>
+            <li><strong>Single product assumption:</strong> Traditional break even analysis works best for businesses selling one product; multi product firms find it much harder to apply accurately</li>
+            <li><strong>Ignores changes in price:</strong> The model assumes a constant selling price, but businesses may need to lower prices to increase sales volume or face competitive pressure</li>
+            <li><strong>Based on estimates:</strong> The accuracy depends on the reliability of cost and revenue data, which may be based on forecasts rather than actual figures, especially for new businesses</li>
+            <li><strong>Static snapshot:</strong> Break even analysis shows a position at one point in time and does not account for seasonal variations, market trends, or changing consumer demand</li>
+        </ul>
+    </div>
+</div>
+
+<div class="np-real-world">
+    <div class="np-real-world-label">REAL WORLD EXAMPLE</div>
+    <h5>McDonald's Break Even Analysis</h5>
+    <p>A McDonald's franchise owner must know their break even point to determine how many meals they need to sell daily to cover costs. With fixed costs like rent, staff salaries, and utilities, and variable costs for food and packaging, understanding break even helps franchisees set realistic profit targets and decide on pricing strategies.</p>
+</div>
+
+<div class="np-exam-tip">
+    <div class="np-exam-tip-label">EXAM TIP</div>
+    <p>When a question asks about margin of safety, remember it shows the cushion a business has before it starts making losses. A larger margin of safety means lower business risk.</p>
+</div>
+
                 </div>
+            </div>
+
+            <!-- Call to action -->
+            <div style="text-align: center; margin-top: 2.5rem;">
+                <p style="font-size: 1rem; color: var(--gray-600); margin-bottom: 1.5rem;">This is just one of dozens of interactive elements across all 4 units</p>
+                <a href="signup.html" class="btn btn-primary btn-large">Explore All Notes</a>
             </div>
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section class="features" id="features">
-        <div class="section-header">
-            <span class="section-label">Why Students Love Us</span>
-            <h2 class="section-title">Smart Revision Tools</h2>
-            <p class="section-subtitle">Our platform is designed specifically for A-Level Business Studies students, with tools that make revision effective and enjoyable.</p>
-        </div>
-
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon feature-icon-1">📋</div>
-                <h3>Interactive Flashcards</h3>
-                <p>360+ cards covering all units with key terms, formulas, and theories. Flip, learn, and master concepts at your own pace.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon feature-icon-2">📊</div>
-                <h3>Progress Tracking</h3>
-                <p>Mark cards as Mastered, Reviewing, or Need to Learn. Track your progress across units and focus on what needs work.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon feature-icon-3">🎯</div>
-                <h3>Smart Filtering</h3>
-                <p>Filter by unit, topic, or card type. Create focused revision sessions tailored to your exam preparation needs.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon feature-icon-4">⚡</div>
-                <h3>Quick 10-Min Sessions</h3>
-                <p>Perfect for busy students. Just 10 minutes a day of focused revision can significantly boost your understanding.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon feature-icon-5">✍️</div>
-                <h3>Exam Skills Training</h3>
-                <p>Learn exactly how to write answers that score full marks with model answers, mark breakdowns, and the PBLI framework.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon feature-icon-6">📱</div>
-                <h3>Works Everywhere</h3>
-                <p>Access your flashcards on any device – phone, tablet, or computer. Your progress syncs automatically.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Exam Skills Showcase Section -->
     <section class="exam-showcase" id="exam-skills">
         <div class="exam-showcase-container">
             <div class="exam-showcase-header">
@@ -3390,12 +3904,11 @@
         </div>
     </section>
 
-    <!-- Interactive Demo Section -->
     <section class="demo-section" id="demo">
         <div class="demo-container">
             <div class="section-header">
-                <span class="section-label">Try It Now</span>
-                <h2 class="section-title">Try It Yourself</h2>
+                <span class="section-label">Interactive Flash Cards</span>
+                <h2 class="section-title">400+ Flash Cards Covering the Full Syllabus</h2>
                 <p class="section-subtitle">Click the card to flip it and reveal the answer.</p>
             </div>
 
@@ -3431,7 +3944,7 @@
                     </div>
 
                     <div class="demo-cta">
-                        <p style="margin-bottom: 1.5rem;">Get access to all 360+ flashcards</p>
+                        <p style="margin-bottom: 1.5rem;">Get access to all 400+ flashcards</p>
                         <a href="signup.html" class="btn btn-primary btn-large">Get Started →</a>
                     </div>
                 </div>
@@ -3439,7 +3952,94 @@
         </div>
     </section>
 
-    <!-- Expert Teacher Section (Replaces Testimonials) -->
+    <section class="pain-points-section">
+        <div class="pain-points-container">
+            <div class="pain-points-header">
+                <h2>We Get It. Revision is Hard.</h2>
+                <p>You're not alone. Business Studies has a lot of content to learn. <span style="white-space: nowrap;">A-Levels</span> are not easy!</p>
+            </div>
+
+            <div class="pain-points-grid">
+                <div class="pain-point-card">
+                    <div class="pain-point-icon">📚</div>
+                    <div class="pain-point-content">
+                        <h3>Textbooks Are Overwhelming</h3>
+                        <p>Hundreds of pages of content, but what actually matters for the exam? It's hard to know what to focus on.</p>
+                        <span class="solution-text">✓ We've distilled it down to the essentials</span>
+                    </div>
+                </div>
+
+                <div class="pain-point-card">
+                    <div class="pain-point-icon">📝</div>
+                    <div class="pain-point-content">
+                        <h3>Notes Don't Test You</h3>
+                        <p>You've made great notes, but reading them over and over doesn't mean you actually know the material.</p>
+                        <span class="solution-text">✓ Active recall with every flashcard flip</span>
+                    </div>
+                </div>
+
+                <div class="pain-point-card">
+                    <div class="pain-point-icon">🧠</div>
+                    <div class="pain-point-content">
+                        <h3>Concepts Don't Stick</h3>
+                        <p>You understand it in class, but a week later? Gone. Retention is the real challenge.</p>
+                        <span class="solution-text">✓ Spaced repetition reinforces memory</span>
+                    </div>
+                </div>
+
+                <div class="pain-point-card">
+                    <div class="pain-point-icon">💬</div>
+                    <div class="pain-point-content">
+                        <h3>Stuck on Discussion Questions</h3>
+                        <p>Essay questions need strong points and examples. Where do you find them quickly?</p>
+                        <span class="solution-text">✓ Ready made points for every topic</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="section-header">
+            <span class="section-label">Why Students Love Us</span>
+            <h2 class="section-title">Smart Revision Tools</h2>
+            <p class="section-subtitle">Our platform is designed specifically for A-Level Business Studies students, with tools that make revision effective and enjoyable.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon feature-icon-1">📋</div>
+                <h3>Interactive Flashcards</h3>
+                <p>400+ cards covering all units with key terms, formulas, and theories. Flip, learn, and master concepts at your own pace.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon feature-icon-2">📊</div>
+                <h3>Progress Tracking</h3>
+                <p>Mark cards as Mastered, Reviewing, or Need to Learn. Track your progress across units and focus on what needs work.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon feature-icon-3">🎯</div>
+                <h3>Smart Filtering</h3>
+                <p>Filter by unit, topic, or card type. Create focused revision sessions tailored to your exam preparation needs.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon feature-icon-4">⚡</div>
+                <h3>Quick 10-Min Sessions</h3>
+                <p>Perfect for busy students. Just 10 minutes a day of focused revision can significantly boost your understanding.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon feature-icon-5">✍️</div>
+                <h3>Exam Skills Training</h3>
+                <p>Learn exactly how to write answers that score full marks with model answers, mark breakdowns, and the PBLI framework.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon feature-icon-6">📱</div>
+                <h3>Works Everywhere</h3>
+                <p>Access your flashcards on any device – phone, tablet, or computer. Your progress syncs automatically.</p>
+            </div>
+        </div>
+    </section>
+
     <section class="testimonials">
         <div class="section-header">
             <span class="section-label">Expert Created Content</span>
@@ -3468,7 +4068,6 @@
         </div>
     </section>
 
-    <!-- How It Works -->
     <section class="how-it-works">
         <div class="section-header">
             <span class="section-label">Simple & Effective</span>
@@ -3482,7 +4081,7 @@
                     <div class="step-number">01</div>
                     <div class="step-text">
                         <h3>Create Your Account</h3>
-                        <p>Sign up in seconds with just your email and get instant access to all 360+ expertly crafted flashcards.</p>
+                        <p>Sign up in seconds with just your email and get instant access to all 400+ expertly crafted flashcards.</p>
                     </div>
                 </div>
                 <div class="step-image">📝</div>
@@ -3512,7 +4111,6 @@
         </div>
     </section>
 
-    <!-- Parents Section -->
     <section class="parents-section">
         <div class="parents-content">
             <div class="parents-text">
@@ -3549,11 +4147,10 @@
         </div>
     </section>
 
-    <!-- Stats Section -->
     <section class="stats-section">
         <div class="stats-grid">
             <div class="stat-item">
-                <h3>360+</h3>
+                <h3>400+</h3>
                 <p>Flashcards</p>
             </div>
             <div class="stat-item">
@@ -3571,7 +4168,6 @@
         </div>
     </section>
 
-    <!-- FAQ Section -->
     <section class="faq-section">
         <div class="faq-container">
             <div class="section-header">
@@ -3616,11 +4212,10 @@
         </div>
     </section>
 
-    <!-- Final CTA -->
     <section class="final-cta">
         <div class="final-cta-content">
             <h2>Ready to Boost Your Business Studies Grade?</h2>
-            <p>Start revising smarter with 360+ expert crafted flashcards covering the entire A-Level syllabus.</p>
+            <p>Start revising smarter with 400+ expert crafted flashcards covering the entire A-Level syllabus.</p>
             <a href="signup.html" class="btn btn-white btn-large">Create Your Free Account</a>
             <p class="final-cta-note">Free for a limited time • Created by an expert teacher</p>
         </div>
@@ -3884,6 +4479,265 @@
 
         hamburgerBtn.addEventListener('click', toggleMobileMenu);
         mobileOverlay.addEventListener('click', toggleMobileMenu);
+
+        // ==================== SHOWCASE BREAK EVEN CHART ====================
+        function drawShowcaseBEChart() {
+            var canvas = document.getElementById('showcaseBreakEvenCanvas');
+            if (!canvas) return;
+            var ctx = canvas.getContext('2d');
+
+            var fixedCosts = parseFloat(document.getElementById('sbeFixedCosts').value) || 0;
+            var variableCost = parseFloat(document.getElementById('sbeVariableCost').value) || 0;
+            var sellingPrice = parseFloat(document.getElementById('sbeSellingPrice').value) || 0;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            var leftPadding = 70;
+            var bottomPadding = 60;
+            var topPadding = 30;
+            var rightPadding = 30;
+            var graphWidth = canvas.width - leftPadding - rightPadding;
+            var graphHeight = canvas.height - topPadding - bottomPadding;
+            var maxOutput = 10000;
+
+            var maxRevenue = sellingPrice * maxOutput;
+            var maxCosts = fixedCosts + (variableCost * maxOutput);
+            var maxY = Math.max(maxRevenue, maxCosts) * 1.1;
+
+            // Draw subtle grid
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 1;
+            for (var i = 0; i <= 10; i++) {
+                var x = leftPadding + (i * graphWidth / 10);
+                var y = topPadding + (i * graphHeight / 10);
+                ctx.beginPath(); ctx.moveTo(x, topPadding); ctx.lineTo(x, canvas.height - bottomPadding); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(leftPadding, y); ctx.lineTo(canvas.width - rightPadding, y); ctx.stroke();
+            }
+
+            // Draw axes
+            ctx.strokeStyle = '#64748b';
+            ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(leftPadding, canvas.height - bottomPadding); ctx.lineTo(canvas.width - rightPadding, canvas.height - bottomPadding); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(leftPadding, canvas.height - bottomPadding); ctx.lineTo(leftPadding, topPadding); ctx.stroke();
+
+            // X-axis labels
+            ctx.fillStyle = '#64748b';
+            ctx.font = '11px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+            for (var i = 0; i <= 10; i++) {
+                var units = (i * maxOutput / 10);
+                var x = leftPadding + (i * graphWidth / 10);
+                ctx.fillText(Math.round(units), x, canvas.height - bottomPadding + 8);
+            }
+
+            // Y-axis labels
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'middle';
+            for (var i = 0; i <= 10; i++) {
+                var pounds = (i * maxY / 10);
+                var y = canvas.height - bottomPadding - (i * graphHeight / 10);
+                ctx.fillText('\u00A3' + Math.round(pounds), leftPadding - 12, y);
+            }
+
+            // Axis titles
+            ctx.font = 'bold 12px Inter, sans-serif';
+            ctx.fillStyle = '#1e293b';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+            ctx.fillText('Output (units)', canvas.width / 2, canvas.height - 5);
+            ctx.save();
+            ctx.translate(12, canvas.height / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillText('Revenue / Costs (pounds)', 0, 0);
+            ctx.restore();
+
+            ctx.lineWidth = 2.5;
+
+            // Fixed Costs line (orange dashed)
+            ctx.strokeStyle = '#ff9800';
+            ctx.setLineDash([6, 4]);
+            ctx.beginPath();
+            var fixedCostsY = canvas.height - bottomPadding - (fixedCosts / maxY) * graphHeight;
+            ctx.moveTo(leftPadding, fixedCostsY);
+            ctx.lineTo(canvas.width - rightPadding, fixedCostsY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Variable Costs line (purple)
+            ctx.strokeStyle = '#9c27b0';
+            ctx.beginPath();
+            var firstPoint = true;
+            for (var i = 0; i <= maxOutput; i += 500) {
+                var varCosts = variableCost * i;
+                var x = leftPadding + (i / maxOutput) * graphWidth;
+                var y = canvas.height - bottomPadding - (varCosts / maxY) * graphHeight;
+                if (firstPoint) { ctx.moveTo(x, y); firstPoint = false; } else { ctx.lineTo(x, y); }
+            }
+            ctx.stroke();
+
+            // Total Costs line (red)
+            ctx.strokeStyle = '#e74c3c';
+            ctx.beginPath();
+            firstPoint = true;
+            for (var i = 0; i <= maxOutput; i += 500) {
+                var totalCosts = fixedCosts + (variableCost * i);
+                var x = leftPadding + (i / maxOutput) * graphWidth;
+                var y = canvas.height - bottomPadding - (totalCosts / maxY) * graphHeight;
+                if (firstPoint) { ctx.moveTo(x, y); firstPoint = false; } else { ctx.lineTo(x, y); }
+            }
+            ctx.stroke();
+
+            // Total Revenue line (green)
+            ctx.strokeStyle = '#27ae60';
+            ctx.beginPath();
+            firstPoint = true;
+            for (var i = 0; i <= maxOutput; i += 500) {
+                var revenue = sellingPrice * i;
+                var x = leftPadding + (i / maxOutput) * graphWidth;
+                var y = canvas.height - bottomPadding - (revenue / maxY) * graphHeight;
+                if (firstPoint) { ctx.moveTo(x, y); firstPoint = false; } else { ctx.lineTo(x, y); }
+            }
+            ctx.stroke();
+
+            // Calculate contribution and break even
+            var contributionPerUnit = sellingPrice - variableCost;
+            document.getElementById('sbeContribution').textContent = '\u00A3' + contributionPerUnit.toFixed(2);
+
+            var salesVolume = parseInt(document.getElementById('sbeSalesVolume').value);
+
+            if (sellingPrice > variableCost) {
+                var breakEvenOutput = Math.round(fixedCosts / (sellingPrice - variableCost));
+                var breakEvenRevenue = sellingPrice * breakEvenOutput;
+
+                var beX = leftPadding + (breakEvenOutput / maxOutput) * graphWidth;
+                var beY = canvas.height - bottomPadding - (breakEvenRevenue / maxY) * graphHeight;
+
+                var svX = leftPadding + (salesVolume / maxOutput) * graphWidth;
+                var svRevenue = sellingPrice * salesVolume;
+                var svY = canvas.height - bottomPadding - (svRevenue / maxY) * graphHeight;
+
+                // Shade margin of safety zone
+                if (salesVolume > breakEvenOutput) {
+                    ctx.fillStyle = 'rgba(39, 174, 96, 0.08)';
+                    ctx.fillRect(beX, topPadding, svX - beX, graphHeight);
+                    ctx.save();
+                    ctx.fillStyle = 'rgba(39, 174, 96, 0.5)';
+                    ctx.font = '600 10px Inter, sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('Margin of Safety', (beX + svX) / 2, topPadding + 14);
+                    ctx.restore();
+                } else if (salesVolume < breakEvenOutput) {
+                    ctx.fillStyle = 'rgba(231, 76, 60, 0.06)';
+                    ctx.fillRect(svX, topPadding, beX - svX, graphHeight);
+                    ctx.save();
+                    ctx.fillStyle = 'rgba(231, 76, 60, 0.5)';
+                    ctx.font = '600 10px Inter, sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('Loss Zone', (beX + svX) / 2, topPadding + 14);
+                    ctx.restore();
+                }
+
+                // Sales volume dashed line
+                ctx.strokeStyle = '#8e44ad';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([6, 4]);
+                ctx.beginPath(); ctx.moveTo(svX, topPadding); ctx.lineTo(svX, canvas.height - bottomPadding); ctx.stroke();
+                ctx.setLineDash([]);
+
+                ctx.fillStyle = '#8e44ad';
+                ctx.beginPath(); ctx.arc(svX, svY, 6, 0, Math.PI * 2); ctx.fill();
+                ctx.font = '600 11px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'top';
+                ctx.fillText('Sales: ' + salesVolume, svX, canvas.height - bottomPadding + 4);
+
+                // Break even point marker
+                ctx.fillStyle = '#f39c12';
+                ctx.beginPath(); ctx.arc(beX, beY, 8, 0, Math.PI * 2); ctx.fill();
+                ctx.strokeStyle = '#d68910';
+                ctx.lineWidth = 2.5;
+                ctx.setLineDash([]);
+                ctx.stroke();
+
+                // Break even dashed line
+                ctx.strokeStyle = 'rgba(243, 156, 18, 0.4)';
+                ctx.lineWidth = 1.5;
+                ctx.setLineDash([4, 4]);
+                ctx.beginPath(); ctx.moveTo(beX, beY + 8); ctx.lineTo(beX, canvas.height - bottomPadding); ctx.stroke();
+                ctx.setLineDash([]);
+
+                // Break even label
+                ctx.fillStyle = '#1e293b';
+                ctx.font = 'bold 12px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'bottom';
+                ctx.fillText('Break Even', beX, beY - 18);
+                ctx.font = '11px Inter, sans-serif';
+                ctx.fillText(breakEvenOutput + ' units', beX, beY - 5);
+
+                // Update results
+                document.getElementById('sbeResult').textContent = breakEvenOutput + ' units';
+                var marginOfSafety = salesVolume - breakEvenOutput;
+                if (marginOfSafety < 0) {
+                    document.getElementById('sbeMarginResult').textContent = 'Below BE by ' + Math.abs(marginOfSafety) + ' units';
+                    document.getElementById('sbeMarginResult').style.color = '#e74c3c';
+                } else {
+                    document.getElementById('sbeMarginResult').textContent = marginOfSafety + ' units';
+                    document.getElementById('sbeMarginResult').style.color = '';
+                }
+
+                var totalRevenue = sellingPrice * salesVolume;
+                var totalCostsCalc = fixedCosts + (variableCost * salesVolume);
+                var profitLoss = totalRevenue - totalCostsCalc;
+                var plEl = document.getElementById('sbeProfitLoss');
+                if (profitLoss >= 0) {
+                    plEl.textContent = '\u00A3' + profitLoss.toLocaleString();
+                    plEl.style.color = '#27ae60';
+                } else {
+                    plEl.textContent = '-\u00A3' + Math.abs(profitLoss).toLocaleString();
+                    plEl.style.color = '#e74c3c';
+                }
+            } else {
+                document.getElementById('sbeContribution').textContent = contributionPerUnit <= 0 ? 'Invalid' : '\u00A3' + contributionPerUnit.toFixed(2);
+                document.getElementById('sbeResult').textContent = 'Invalid inputs';
+                document.getElementById('sbeMarginResult').textContent = 'N/A';
+                document.getElementById('sbeMarginResult').style.color = '';
+                document.getElementById('sbeProfitLoss').textContent = 'N/A';
+                document.getElementById('sbeProfitLoss').style.color = '';
+            }
+
+            // Legend
+            var legendX = canvas.width - rightPadding - 160;
+            var legendY = topPadding + 10;
+            var legendLineHeight = 20;
+            ctx.font = '11px Inter, sans-serif';
+            ctx.textAlign = 'left';
+
+            ctx.strokeStyle = '#ff9800'; ctx.setLineDash([6, 4]); ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(legendX, legendY); ctx.lineTo(legendX + 25, legendY); ctx.stroke(); ctx.setLineDash([]);
+            ctx.fillStyle = '#1e293b'; ctx.textBaseline = 'middle'; ctx.fillText('Fixed Costs', legendX + 35, legendY);
+
+            ctx.strokeStyle = '#9c27b0'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(legendX, legendY + legendLineHeight); ctx.lineTo(legendX + 25, legendY + legendLineHeight); ctx.stroke();
+            ctx.fillStyle = '#1e293b'; ctx.fillText('Variable Costs', legendX + 35, legendY + legendLineHeight);
+
+            ctx.strokeStyle = '#e74c3c';
+            ctx.beginPath(); ctx.moveTo(legendX, legendY + legendLineHeight * 2); ctx.lineTo(legendX + 25, legendY + legendLineHeight * 2); ctx.stroke();
+            ctx.fillStyle = '#1e293b'; ctx.fillText('Total Costs', legendX + 35, legendY + legendLineHeight * 2);
+
+            ctx.strokeStyle = '#27ae60';
+            ctx.beginPath(); ctx.moveTo(legendX, legendY + legendLineHeight * 3); ctx.lineTo(legendX + 25, legendY + legendLineHeight * 3); ctx.stroke();
+            ctx.fillStyle = '#1e293b'; ctx.fillText('Total Revenue', legendX + 35, legendY + legendLineHeight * 3);
+
+            ctx.fillStyle = '#f39c12';
+            ctx.beginPath(); ctx.arc(legendX + 12, legendY + legendLineHeight * 4, 4, 0, Math.PI * 2); ctx.fill();
+            ctx.strokeStyle = '#d68910'; ctx.lineWidth = 1; ctx.stroke();
+            ctx.fillStyle = '#1e293b'; ctx.fillText('Break Even Point', legendX + 35, legendY + legendLineHeight * 4);
+        }
+
+        // Initialize showcase chart
+        setTimeout(function() { drawShowcaseBEChart(); }, 200);
     </script>
 </body>
 </html>
