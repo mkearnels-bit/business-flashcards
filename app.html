@@ -2659,27 +2659,7 @@
             try {
                 await supabaseClient.auth.signOut();
                 window.location.href = 'login.html';
-            }
-        
-// Site navbar mobile menu
-var siteHamburger = document.getElementById('siteHamburger');
-var siteMobileMenu = document.getElementById('siteMobileMenu');
-var siteMobileOverlay = document.getElementById('siteMobileOverlay');
-
-function toggleSiteMenu() {
-    siteHamburger.classList.toggle('active');
-    siteMobileMenu.classList.toggle('active');
-    siteMobileOverlay.classList.toggle('active');
-    document.body.style.overflow = siteMobileMenu.classList.contains('active') ? 'hidden' : '';
-}
-
-if (siteHamburger) siteHamburger.addEventListener('click', toggleSiteMenu);
-if (siteMobileOverlay) siteMobileOverlay.addEventListener('click', toggleSiteMenu);
-
-// Logout handlers for new nav buttons
-document.getElementById('navLogoutBtn').addEventListener('click', function() { handleLogout(); });
-document.getElementById('mobileLogoutBtn').addEventListener('click', function() { handleLogout(); });
- catch (error) {
+            } catch (error) {
                 console.error('Logout error:', error);
                 // Force redirect even if signout fails
                 window.location.href = 'login.html';
@@ -2688,12 +2668,24 @@ document.getElementById('mobileLogoutBtn').addEventListener('click', function() 
 
         checkAuth();
 
-        // Mobile hamburger menu
-        const hamburgerBtn = document.getElementById('hamburgerBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-        const mobileOverlay = document.getElementById('mobileOverlay');
+        // Site navbar mobile menu
+        var siteHamburger = document.getElementById('siteHamburger');
+        var siteMobileMenu = document.getElementById('siteMobileMenu');
+        var siteMobileOverlay = document.getElementById('siteMobileOverlay');
 
-        
+        function toggleSiteMenu() {
+            siteHamburger.classList.toggle('active');
+            siteMobileMenu.classList.toggle('active');
+            siteMobileOverlay.classList.toggle('active');
+            document.body.style.overflow = siteMobileMenu.classList.contains('active') ? 'hidden' : '';
+        }
+
+        if (siteHamburger) siteHamburger.addEventListener('click', toggleSiteMenu);
+        if (siteMobileOverlay) siteMobileOverlay.addEventListener('click', toggleSiteMenu);
+
+        // Logout handlers for new nav buttons
+        if (document.getElementById('navLogoutBtn')) document.getElementById('navLogoutBtn').addEventListener('click', function() { handleLogout(); });
+        if (document.getElementById('mobileLogoutBtn')) document.getElementById('mobileLogoutBtn').addEventListener('click', function() { handleLogout(); });
     </script>
 </body>
 </html>

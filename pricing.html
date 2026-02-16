@@ -1531,28 +1531,27 @@
             await supabaseClient.auth.signOut();
             window.location.href = 'login.html';
         }
-        
-// Site navbar mobile menu
-var siteHamburger = document.getElementById('siteHamburger');
-var siteMobileMenu = document.getElementById('siteMobileMenu');
-var siteMobileOverlay = document.getElementById('siteMobileOverlay');
 
-function toggleSiteMenu() {
-    siteHamburger.classList.toggle('active');
-    siteMobileMenu.classList.toggle('active');
-    siteMobileOverlay.classList.toggle('active');
-    document.body.style.overflow = siteMobileMenu.classList.contains('active') ? 'hidden' : '';
-}
+        // Site navbar mobile menu
+        var siteHamburger = document.getElementById('siteHamburger');
+        var siteMobileMenu = document.getElementById('siteMobileMenu');
+        var siteMobileOverlay = document.getElementById('siteMobileOverlay');
 
-if (siteHamburger) siteHamburger.addEventListener('click', toggleSiteMenu);
-if (siteMobileOverlay) siteMobileOverlay.addEventListener('click', toggleSiteMenu);
+        function toggleSiteMenu() {
+            siteHamburger.classList.toggle('active');
+            siteMobileMenu.classList.toggle('active');
+            siteMobileOverlay.classList.toggle('active');
+            document.body.style.overflow = siteMobileMenu.classList.contains('active') ? 'hidden' : '';
+        }
 
-// Logout handlers for new nav buttons
-document.getElementById('navLogoutBtn').addEventListener('click', function() { handleLogout(); });
-document.getElementById('mobileLogoutBtn').addEventListener('click', function() { handleLogout(); });
+        if (siteHamburger) siteHamburger.addEventListener('click', toggleSiteMenu);
+        if (siteMobileOverlay) siteMobileOverlay.addEventListener('click', toggleSiteMenu);
 
+        // Logout handlers for new nav buttons
+        if (document.getElementById('navLogoutBtn')) document.getElementById('navLogoutBtn').addEventListener('click', function() { handleLogout(); });
+        if (document.getElementById('mobileLogoutBtn')) document.getElementById('mobileLogoutBtn').addEventListener('click', function() { handleLogout(); });
 
-        // Mobile menu
+        // Mobile menu (legacy)
         function toggleMobileMenu() {
             document.getElementById('hamburger').classList.toggle('active');
             document.getElementById('mobileMenu').classList.toggle('active');
