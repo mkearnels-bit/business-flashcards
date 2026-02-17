@@ -1970,6 +1970,11 @@
     color: #e67e22;
 }
 
+.site-nav-link.active {
+    color: #e67e22;
+    font-weight: 600;
+}
+
 .site-nav-btn {
     padding: 0.6rem 1.25rem;
     border-radius: 50px;
@@ -3757,28 +3762,40 @@
 
         // Check authentication
         async function checkAuth() {
+            // Step 1: Check auth (redirect only if genuinely not logged in)
+            let session;
             try {
-                const { data: { session } } = await supabaseClient.auth.getSession();
-                if (!session) {
-                    window.location.href = 'login.html';
-                    return;
-                }
-                // Show logged-in nav links
-                document.querySelectorAll('.auth-only').forEach(function(el) { el.style.display = ''; });
-                document.querySelectorAll('.guest-only').forEach(function(el) { el.style.display = 'none'; });
-                // Get user's name from Google OAuth metadata
-                const fullName = session.user.user_metadata?.full_name || session.user.user_metadata?.name || '';
-                const firstName = fullName ? fullName.split(' ')[0] : '';
+                const result = await supabaseClient.auth.getSession();
+                session = result.data.session;
+            } catch (error) {
+                console.error('Auth check error:', error);
+                window.location.href = 'login.html';
+                return;
+            }
 
-                // Display welcome message with first name (or email fallback)
-                const welcomeEl = document.getElementById('userEmail');
-                if (firstName) {
-                    welcomeEl.textContent = `Welcome, ${firstName}!`;
-                } else if (session.user.email) {
-                    welcomeEl.textContent = session.user.email;
-                }
+            if (!session) {
+                window.location.href = 'login.html';
+                return;
+            }
 
-                // Auto-create subscription if user doesn't have one yet
+            // Show logged-in nav links
+            document.querySelectorAll('.auth-only').forEach(function(el) { el.style.display = ''; });
+            document.querySelectorAll('.guest-only').forEach(function(el) { el.style.display = 'none'; });
+
+            // Get user's name from Google OAuth metadata
+            const fullName = session.user.user_metadata?.full_name || session.user.user_metadata?.name || '';
+            const firstName = fullName ? fullName.split(' ')[0] : '';
+
+            // Display welcome message with first name (or email fallback)
+            const welcomeEl = document.getElementById('userEmail');
+            if (firstName) {
+                welcomeEl.textContent = 'Welcome, ' + firstName + '!';
+            } else if (session.user.email) {
+                welcomeEl.textContent = session.user.email;
+            }
+
+            // Step 2: Subscription check (errors here should NOT redirect)
+            try {
                 const { data: subs } = await supabaseClient
                     .from('subscriptions')
                     .select('id, name')
@@ -3799,15 +3816,14 @@
                             expires_at: expiresAt.toISOString()
                         });
                 } else if (fullName && subs[0].name !== fullName) {
-                    // Update name if changed or not previously stored
                     await supabaseClient
                         .from('subscriptions')
                         .update({ name: fullName })
                         .eq('user_id', session.user.id);
                 }
             } catch (error) {
-                console.error('Auth check error:', error);
-                window.location.href = 'login.html';
+                console.error('Subscription check error:', error);
+                // Continue anyway - user is authenticated
             }
         }
 
