@@ -224,14 +224,13 @@
             position: fixed;
             inset: 0;
             background: rgba(15, 23, 42, 0.4);
-            backdrop-filter: blur(4px);
             z-index: 1040;
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s ease;
         }
 
-        .mobile-menu-overlay.active { opacity: 1; pointer-events: auto; }
+        .mobile-menu-overlay.active { opacity: 1; pointer-events: auto; backdrop-filter: blur(4px); }
 
         .mobile-menu {
             display: none;
@@ -2890,11 +2889,11 @@
             }
 
             .mobile-menu-overlay {
-                display: block;
+                display: none;
             }
 
             .mobile-menu {
-                display: block;
+                display: none;
             }
 
             .hero {
@@ -4513,10 +4512,25 @@
         const mobileOverlay = document.getElementById('mobileOverlay');
 
         function toggleMobileMenu() {
-            hamburgerBtn.classList.toggle('active');
-            mobileMenu.classList.toggle('active');
-            mobileOverlay.classList.toggle('active');
-            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+            var isOpening = !mobileMenu.classList.contains('active');
+            if (isOpening) {
+                mobileMenu.style.display = 'block';
+                mobileOverlay.style.display = 'block';
+                void mobileMenu.offsetHeight;
+                hamburgerBtn.classList.add('active');
+                mobileMenu.classList.add('active');
+                mobileOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            } else {
+                hamburgerBtn.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                mobileOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+                setTimeout(function() {
+                    mobileMenu.style.display = 'none';
+                    mobileOverlay.style.display = 'none';
+                }, 400);
+            }
         }
 
         hamburgerBtn.addEventListener('click', toggleMobileMenu);
