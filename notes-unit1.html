@@ -159,6 +159,7 @@
     transition: opacity 0.3s ease;
 }
 .site-mobile-overlay.active {
+    display: block;
     opacity: 1;
     pointer-events: auto;
 }
@@ -179,6 +180,7 @@
     padding: 5.5rem 1.5rem 2rem;
 }
 .site-mobile-menu.active {
+    display: block;
     transform: translateX(0);
 }
 .site-mobile-links {
@@ -5550,10 +5552,22 @@
         var siteMobileOverlay = document.getElementById('siteMobileOverlay');
 
         function toggleSiteMenu() {
+            var _isOpening = !siteMobileMenu.classList.contains('active');
+            if (_isOpening) {
+                siteMobileMenu.style.display = 'block';
+                siteMobileOverlay.style.display = 'block';
+                void siteMobileMenu.offsetHeight;
+            }
             siteHamburger.classList.toggle('active');
             siteMobileMenu.classList.toggle('active');
             siteMobileOverlay.classList.toggle('active');
             document.body.style.overflow = siteMobileMenu.classList.contains('active') ? 'hidden' : '';
+            if (!_isOpening) {
+                setTimeout(function() {
+                    siteMobileMenu.style.display = 'none';
+                    siteMobileOverlay.style.display = 'none';
+                }, 400);
+            }
         }
 
         if (siteHamburger) siteHamburger.addEventListener('click', toggleSiteMenu);

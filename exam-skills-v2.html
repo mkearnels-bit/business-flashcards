@@ -2056,7 +2056,7 @@
     transition: opacity 0.3s ease;
 }
 
-.site-mobile-overlay.active { opacity: 1; pointer-events: auto; }
+.site-mobile-overlay.active { display: block; opacity: 1; pointer-events: auto; }
 
 .site-mobile-menu {
     display: none;
@@ -2073,7 +2073,7 @@
     padding: 5.5rem 1.5rem 2rem;
 }
 
-.site-mobile-menu.active { transform: translateX(0); }
+.site-mobile-menu.active { display: block; transform: translateX(0); }
 
 .site-mobile-links {
     display: flex;
@@ -3928,10 +3928,22 @@
         var siteOvl = document.getElementById('siteMobileOverlay');
 
         function toggleSiteMenu() {
+            var _isOpening = siteMob && !siteMob.classList.contains('active');
+            if (_isOpening) {
+                if (siteMob) siteMob.style.display = 'block';
+                if (siteOvl) siteOvl.style.display = 'block';
+                void (siteMob && siteMob.offsetHeight);
+            }
             if (siteHam) siteHam.classList.toggle('active');
             if (siteMob) siteMob.classList.toggle('active');
             if (siteOvl) siteOvl.classList.toggle('active');
             document.body.style.overflow = siteMob && siteMob.classList.contains('active') ? 'hidden' : '';
+            if (!_isOpening) {
+                setTimeout(function() {
+                    if (siteMob) siteMob.style.display = 'none';
+                    if (siteOvl) siteOvl.style.display = 'none';
+                }, 400);
+            }
         }
 
         if (siteHam) siteHam.addEventListener('click', toggleSiteMenu);
