@@ -6,14 +6,14 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-    <title>Flashcards App | Learn A-Level Business Studies Online</title>
-<meta name="description" content="Study A-Level Business Studies with 400+ interactive flashcards. Features progress tracking, smart filtering, and exam focused content. Study on any device.">
-<meta name="keywords" content="A-Level Business Studies, Edexcel IAL, revision notes, flashcards, exam technique, GCSE Business">
-<link rel="canonical" href="https://mybizstudies.com/app.html">
-<meta property="og:title" content="Flashcards App | Learn A-Level Business Studies Online">
-<meta property="og:description" content="Study A-Level Business Studies with 400+ interactive flashcards. Features progress tracking, smart filtering, and exam focused content. Study on any device.">
+    <title>Flashcards App | Learn GCSE Business Studies Online</title>
+<meta name="description" content="Study GCSE Business Studies with 300+ interactive flashcards. Features progress tracking, smart filtering, and exam focused content. Study on any device.">
+<meta name="keywords" content="GCSE Business Studies, Edexcel IGCSE, revision notes, flashcards, exam technique, GCSE Business">
+<link rel="canonical" href="https://mybizstudies.com/gcse-app.html">
+<meta property="og:title" content="Flashcards App | Learn GCSE Business Studies Online">
+<meta property="og:description" content="Study GCSE Business Studies with 300+ interactive flashcards. Features progress tracking, smart filtering, and exam focused content. Study on any device.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://mybizstudies.com/app.html">
+<meta property="og:url" content="https://mybizstudies.com/gcse-app.html">
 <meta property="og:site_name" content="MyBizStudies">
     <meta property="og:image" content="https://mybizstudies.com/og-image.png">
     <meta name="twitter:card" content="summary_large_image">
@@ -52,6 +52,7 @@
             --unit2: #3498db;
             --unit3: #27ae60;
             --unit4: #f39c12;
+            --unit5: #9b59b6;
             --term-color: #3498db;
             --formula-color: #9b59b6;
             --theory-color: #17a2b8;
@@ -1120,11 +1121,13 @@
         .flashcard.unit-2 { border-left-color: var(--unit2); }
         .flashcard.unit-3 { border-left-color: var(--unit3); }
         .flashcard.unit-4 { border-left-color: var(--unit4); }
+        .flashcard.unit-5 { border-left-color: var(--unit5); }
 
         .unit-badge.unit-1 { color: var(--unit1); }
         .unit-badge.unit-2 { color: var(--unit2); }
         .unit-badge.unit-3 { color: var(--unit3); }
         .unit-badge.unit-4 { color: var(--unit4); }
+        .unit-badge.unit-5 { color: var(--unit5); }
 
         /* ========== MOBILE OPTIMIZATIONS ========== */
         @media (max-width: 768px) {
@@ -1573,10 +1576,10 @@
 {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  "name": "MyBizStudies Flashcards",
+  "name": "MyBizStudies GCSE Flashcards",
   "applicationCategory": "EducationalApplication",
   "operatingSystem": "Web",
-  "description": "Interactive flashcard app with 400+ cards covering all A-Level Business Studies units. Features progress tracking, smart filtering, and exam focused content.",
+  "description": "Interactive flashcard app with 300+ cards covering all GCSE Business Studies units. Features progress tracking, smart filtering, and exam focused content.",
   "offers": {
     "@type": "Offer",
     "price": "0",
@@ -1591,7 +1594,7 @@
 </script>
 </head>
 <body>
-<h1 style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">A-Level Business Studies Flashcards</h1>
+<h1 style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">GCSE Business Studies Flashcards</h1>
 
     <!-- Header with logo and navigation -->
     <!-- NAVBAR -->
@@ -1599,11 +1602,11 @@
     <div class="site-navbar-content">
         <a href="index.html"><img src="logo.png" alt="MyBizStudies" class="site-navbar-logo"></a>
         <div class="level-toggle" id="desktopLevelToggle">
-            <button class="level-toggle-btn active" data-level="alevel">A-Level</button>
-            <button class="level-toggle-btn" data-level="gcse">GCSE</button>
+            <button class="level-toggle-btn" data-level="alevel">A-Level</button>
+            <button class="level-toggle-btn active" data-level="gcse">GCSE</button>
         </div>
         <div class="site-nav-buttons" id="siteNavButtons">
-            <a href="app.html" class="site-nav-link active">Flash Cards</a>
+            <a href="gcse-app.html" class="site-nav-link active">Flash Cards</a>
             <a href="exam-skills-v2.html" class="site-nav-link">Exam Skills</a>
             <a href="notes.html" class="site-nav-link">Study Notes</a>
             <a href="blog.html" class="site-nav-link">Blog</a>
@@ -1623,7 +1626,7 @@
 <div class="site-mobile-overlay" id="siteMobileOverlay"></div>
 <div class="site-mobile-menu" id="siteMobileMenu">
     <div class="site-mobile-links">
-        <a href="app.html" class="active">
+        <a href="gcse-app.html" class="active">
             <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
             Flash Cards
         </a>
@@ -1667,6 +1670,7 @@
                         <option value="2">Unit 2</option>
                         <option value="3">Unit 3</option>
                         <option value="4">Unit 4</option>
+                        <option value="5">Unit 5</option>
                     </select>
                 </div>
                 <div class="control-group">
@@ -1808,7 +1812,7 @@
             console.log('Loading flashcards from Supabase...');
             try {
                 const { data, error } = await supabaseClient
-                    .from('flashcards')
+                    .from('gcse_flashcards')
                     .select('*')
                     .order('unit', { ascending: true })
                     .order('topic', { ascending: true });
@@ -2783,7 +2787,7 @@
 // ==================== LEVEL TOGGLE ====================
 (function() {
     var LEVEL_KEY = 'mybiz_study_level';
-    var currentLevel = localStorage.getItem(LEVEL_KEY) || 'alevel';
+    var currentLevel = localStorage.getItem(LEVEL_KEY) || 'gcse'; localStorage.setItem(LEVEL_KEY, 'gcse');
 
     // Page routing map
     var alevelPages = {

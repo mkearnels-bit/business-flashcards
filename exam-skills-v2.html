@@ -2178,6 +2178,80 @@
     .site-navbar-logo { height: 45px; }
 }
 
+
+/* ==================== LEVEL TOGGLE ==================== */
+.level-toggle {
+    display: flex;
+    align-items: center;
+    background: #f1f5f9;
+    border-radius: 8px;
+    padding: 3px;
+    gap: 0;
+    flex-shrink: 0;
+}
+.level-toggle-btn {
+    padding: 5px 14px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: inherit;
+    color: #64748b;
+    background: transparent;
+    white-space: nowrap;
+}
+.level-toggle-btn.active {
+    background: #1e3a5f;
+    color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+.level-toggle-btn:hover:not(.active) {
+    color: #1e3a5f;
+    background: rgba(30, 58, 95, 0.08);
+}
+/* Mobile level toggle in slide-out menu */
+.mobile-level-toggle {
+    display: flex;
+    align-items: center;
+    background: #f1f5f9;
+    border-radius: 10px;
+    padding: 4px;
+    margin-bottom: 1rem;
+    gap: 0;
+}
+.mobile-level-toggle .level-toggle-btn {
+    flex: 1;
+    padding: 8px 0;
+    font-size: 0.85rem;
+    border-radius: 8px;
+    text-align: center;
+}
+/* Coming soon toast */
+.coming-soon-toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: #1e293b;
+    color: #ffffff;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    z-index: 9999;
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+.coming-soon-toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
 </style>
 <!-- Google Analytics - Replace GA_MEASUREMENT_ID with your actual ID -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
@@ -2208,6 +2282,10 @@
     <nav class="site-navbar" id="siteNavbar">
     <div class="site-navbar-content">
         <a href="index.html"><img src="logo.png" alt="MyBizStudies" class="site-navbar-logo"></a>
+        <div class="level-toggle" id="desktopLevelToggle">
+            <button class="level-toggle-btn active" data-level="alevel">A-Level</button>
+            <button class="level-toggle-btn" data-level="gcse">GCSE</button>
+        </div>
         <div class="site-nav-buttons" id="siteNavButtons">
             <a href="app.html" class="site-nav-link auth-only" style="display:none;">Flash Cards</a>
             <a href="exam-skills-v2.html" class="active site-nav-link auth-only" style="display:none;">Exam Skills</a>
@@ -3964,7 +4042,121 @@
         if (mobileLogout) mobileLogout.addEventListener('click', function() { handleLogout(); });
 
 
-</script>
+
+
+// ==================== LEVEL TOGGLE ====================
+(function() {
+    var LEVEL_KEY = 'mybiz_study_level';
+    var currentLevel = localStorage.getItem(LEVEL_KEY) || 'alevel';
+
+    // Page routing map
+    var alevelPages = {
+        'app.html': 'gcse-app.html',
+        'exam-skills-v2.html': null,
+        'notes.html': null,
+        'notes-unit1.html': null,
+        'notes-unit2.html': null,
+        'notes-unit3.html': null,
+        'notes-unit4.html': null
+    };
+    var gcsePages = {
+        'gcse-app.html': 'app.html'
+    };
+
+    // Coming soon GCSE pages
+    var comingSoon = ['exam-skills-v2.html', 'notes.html', 'notes-unit1.html', 'notes-unit2.html', 'notes-unit3.html', 'notes-unit4.html'];
+
+    function getCurrentPage() {
+        var path = window.location.pathname;
+        var page = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
+        return page;
+    }
+
+    function showComingSoonToast() {
+        var toast = document.getElementById('comingSoonToast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'comingSoonToast';
+            toast.className = 'coming-soon-toast';
+            toast.textContent = 'GCSE version coming soon!';
+            document.body.appendChild(toast);
+        }
+        toast.classList.add('show');
+        setTimeout(function() { toast.classList.remove('show'); }, 2500);
+    }
+
+    function updateNavLinks(level) {
+        // Update desktop nav links
+        var navLinks = document.querySelectorAll('.site-nav-link, .nav-link, a[href]');
+        navLinks.forEach(function(link) {
+            var href = link.getAttribute('href');
+            if (!href) return;
+
+            if (level === 'gcse') {
+                if (href === 'app.html') link.setAttribute('href', 'gcse-app.html');
+            } else {
+                if (href === 'gcse-app.html') link.setAttribute('href', 'app.html');
+            }
+        });
+    }
+
+    function setLevel(level) {
+        localStorage.setItem(LEVEL_KEY, level);
+        currentLevel = level;
+
+        // Update all toggle buttons
+        document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
+            btn.classList.toggle('active', btn.dataset.level === level);
+        });
+
+        // Update nav links
+        updateNavLinks(level);
+
+        // Check if we need to redirect
+        var page = getCurrentPage();
+        if (level === 'gcse') {
+            if (alevelPages[page] === null) {
+                showComingSoonToast();
+                // Revert toggle visually
+                localStorage.setItem(LEVEL_KEY, 'alevel');
+                currentLevel = 'alevel';
+                document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
+                    btn.classList.toggle('active', btn.dataset.level === 'alevel');
+                });
+                updateNavLinks('alevel');
+                return;
+            }
+            if (alevelPages[page]) {
+                window.location.href = alevelPages[page];
+                return;
+            }
+        } else {
+            if (gcsePages[page]) {
+                window.location.href = gcsePages[page];
+                return;
+            }
+        }
+    }
+
+    // Initialize toggles on page load
+    function initToggles() {
+        document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
+            btn.classList.toggle('active', btn.dataset.level === currentLevel);
+            btn.addEventListener('click', function() {
+                setLevel(this.dataset.level);
+            });
+        });
+        updateNavLinks(currentLevel);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initToggles);
+    } else {
+        initToggles();
+    }
+})();
+
+    </script>
 
 <footer style="background: #0f172a; color: rgba(255,255,255,0.6); text-align: center; padding: 1.5rem 2rem; font-size: 0.8rem; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;">
     <p>&copy; 2026 MyBizStudies. All rights reserved. | <a href="about.html" style="color: rgba(255,255,255,0.8); text-decoration: none;">About</a> | <a href="privacy.html" style="color: rgba(255,255,255,0.8); text-decoration: none;">Privacy</a> | <a href="terms.html" style="color: rgba(255,255,255,0.8); text-decoration: none;">Terms</a> | <a href="refund.html" style="color: rgba(255,255,255,0.8); text-decoration: none;">Refund Policy</a> | <a href="contact.html" style="color: rgba(255,255,255,0.8); text-decoration: none;">Contact</a></p>
