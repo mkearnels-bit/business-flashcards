@@ -2822,7 +2822,6 @@
     }
 
     function updateNavLinks(level) {
-        // Update desktop nav links
         var navLinks = document.querySelectorAll('.site-nav-link, .nav-link, a[href]');
         navLinks.forEach(function(link) {
             var href = link.getAttribute('href');
@@ -2830,10 +2829,23 @@
 
             if (level === 'gcse') {
                 if (href === 'app.html') link.setAttribute('href', 'gcse-app.html');
+                if (comingSoon.indexOf(href) !== -1) {
+                    link.setAttribute('data-coming-soon', 'true');
+                    link.addEventListener('click', comingSoonHandler);
+                }
             } else {
                 if (href === 'gcse-app.html') link.setAttribute('href', 'app.html');
+                link.removeAttribute('data-coming-soon');
+                link.removeEventListener('click', comingSoonHandler);
             }
         });
+    }
+
+    function comingSoonHandler(e) {
+        if (this.getAttribute('data-coming-soon') === 'true') {
+            e.preventDefault();
+            showComingSoonToast();
+        }
     }
 
     function setLevel(level) {
