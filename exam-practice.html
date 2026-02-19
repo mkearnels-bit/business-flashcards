@@ -1,0 +1,2429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <title>AI Exam Practice | MyBizStudies</title>
+    <meta name="description" content="Practice exam questions with AI-powered marking. Get instant feedback on your Business Studies answers with detailed AO breakdowns and improvement tips.">
+    <meta name="keywords" content="A-Level Business Studies, exam practice, AI marking, Edexcel IAL, AQA GCSE, CIE IGCSE, mock exam, revision">
+    <link rel="canonical" href="https://mybizstudies.com/exam-practice.html">
+    <meta property="og:title" content="AI Exam Practice | MyBizStudies">
+    <meta property="og:description" content="Practice exam questions with AI-powered marking. Get instant feedback with detailed AO breakdowns.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mybizstudies.com/exam-practice.html">
+    <meta property="og:site_name" content="MyBizStudies">
+    <meta property="og:image" content="https://mybizstudies.com/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://mybizstudies.com/og-image.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
+    <style>
+        :root {
+            --primary: #1e3a5f;
+            --primary-dark: #152a45;
+            --primary-light: #2d5a8a;
+            --accent: #e67e22;
+            --accent-light: #f39c12;
+            --accent-glow: rgba(230, 126, 34, 0.3);
+            --white: #ffffff;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-900: #1e293b;
+            --skill-knowledge: #3498db;
+            --skill-application: #2ecc71;
+            --skill-analysis: #9b59b6;
+            --skill-evaluation: #e67e22;
+            --success: #27ae60;
+            --success-light: #d4edda;
+            --error: #e74c3c;
+            --error-light: #fce4ec;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-700);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ===== NAVBAR ===== */
+        .site-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 0.75rem 2rem;
+            border-bottom: 1px solid var(--gray-100);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .site-navbar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .site-navbar-logo { height: 65px; width: auto; }
+
+        .site-nav-buttons {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            background: var(--gray-100);
+            border-radius: 10px;
+            padding: 0.25rem;
+        }
+
+        .site-nav-link {
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            color: var(--gray-500);
+            transition: all 0.2s ease;
+        }
+
+        .site-nav-link:hover { color: var(--primary); background: rgba(255,255,255,0.5); }
+        .site-nav-link.active { background: white; color: var(--primary); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+
+        .site-nav-btn {
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+        }
+
+        .site-nav-btn-ghost { background: transparent; color: var(--gray-500); }
+        .site-nav-btn-ghost:hover { color: var(--primary); background: rgba(255,255,255,0.5); }
+        .site-nav-btn-primary { background: var(--accent); color: white; }
+        .site-nav-btn-primary:hover { background: #d35400; }
+
+        .site-hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .site-hamburger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--gray-700);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .site-hamburger.open span:nth-child(1) { transform: rotate(45deg) translateY(7px); }
+        .site-hamburger.open span:nth-child(2) { opacity: 0; }
+        .site-hamburger.open span:nth-child(3) { transform: rotate(-45deg) translateY(-7px); }
+
+        .site-mobile-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 998;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .site-mobile-overlay.show { opacity: 1; }
+
+        .site-mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0; right: -280px;
+            width: 280px; height: 100vh;
+            background: white;
+            z-index: 999;
+            padding: 80px 1.5rem 2rem;
+            transition: right 0.3s ease;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+        }
+
+        .site-mobile-menu.show { right: 0; }
+
+        .site-mobile-links { display: flex; flex-direction: column; gap: 0.5rem; }
+
+        .site-mobile-links a, .site-mobile-links button {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            color: var(--gray-700);
+            background: none;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .site-mobile-links a:hover, .site-mobile-links button:hover {
+            background: var(--gray-100);
+            color: var(--primary);
+        }
+
+        .site-mobile-links a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            position: relative;
+            min-height: 280px;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 2rem 50px;
+            overflow: hidden;
+        }
+
+        .hero-orb {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.08;
+            filter: blur(40px);
+        }
+
+        .hero-orb-1 {
+            width: 300px; height: 300px;
+            background: var(--skill-knowledge);
+            top: -50px; left: -50px;
+            animation: float1 6s ease-in-out infinite;
+        }
+
+        .hero-orb-2 {
+            width: 200px; height: 200px;
+            background: var(--accent);
+            top: 30px; right: 10%;
+            animation: float2 7s ease-in-out infinite;
+        }
+
+        .hero-orb-3 {
+            width: 250px; height: 250px;
+            background: var(--skill-analysis);
+            bottom: -60px; left: 30%;
+            animation: float3 5s ease-in-out infinite;
+        }
+
+        .hero-orb-4 {
+            width: 180px; height: 180px;
+            background: var(--skill-application);
+            bottom: 20px; right: 20%;
+            animation: float1 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float1 { 0%, 100% { transform: translateY(0) translateX(0); } 50% { transform: translateY(-20px) translateX(10px); } }
+        @keyframes float2 { 0%, 100% { transform: translateY(0) translateX(0); } 50% { transform: translateY(15px) translateX(-15px); } }
+        @keyframes float3 { 0%, 100% { transform: translateY(0) translateX(0); } 50% { transform: translateY(-15px) translateX(5px); } }
+
+        .hero-content { position: relative; z-index: 2; }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.7);
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 6px 16px;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.85);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            backdrop-filter: blur(5px);
+        }
+
+        .hero-badge-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.3); } }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2.5rem 2rem 4rem;
+        }
+
+        /* ===== PHASE 1: BOARD SELECTION ===== */
+        .phase { display: none; }
+        .phase.active { display: block; }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-subtitle {
+            color: var(--gray-500);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+        }
+
+        .board-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .board-card {
+            background: white;
+            border: 2px solid var(--gray-200);
+            border-radius: 16px;
+            padding: 1.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .board-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+            transform-origin: left;
+        }
+
+        .board-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 32px rgba(30, 58, 95, 0.12);
+            border-color: var(--primary-light);
+        }
+
+        .board-card:hover::before { transform: scaleX(1); }
+
+        .board-card.selected {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, rgba(30, 58, 95, 0.03), rgba(30, 58, 95, 0.08));
+            box-shadow: 0 8px 24px rgba(30, 58, 95, 0.15);
+        }
+
+        .board-card.selected::before { transform: scaleX(1); }
+
+        .board-card.coming-soon {
+            opacity: 0.6;
+            cursor: default;
+        }
+
+        .board-card.coming-soon:hover {
+            transform: none;
+            box-shadow: none;
+            border-color: var(--gray-200);
+        }
+
+        .board-card.coming-soon::before { display: none; }
+
+        .board-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .board-card-icon {
+            width: 48px; height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: white;
+        }
+
+        .board-card-check {
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            border: 2px solid var(--gray-300);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .board-card.selected .board-card-check {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .board-card.selected .board-card-check::after {
+            content: '';
+            width: 10px; height: 6px;
+            border-left: 2px solid white;
+            border-bottom: 2px solid white;
+            transform: rotate(-45deg) translateY(-1px);
+        }
+
+        .board-card-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .board-card-desc {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+        }
+
+        .coming-soon-badge {
+            display: inline-block;
+            background: var(--gray-200);
+            color: var(--gray-500);
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 0.5rem;
+        }
+
+        /* Unit Selection */
+        .unit-section, .qtype-section {
+            animation: fadeSlideUp 0.4s ease-out;
+        }
+
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .unit-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .unit-card {
+            background: white;
+            border: 2px solid var(--gray-200);
+            border-radius: 14px;
+            padding: 1.25rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .unit-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        .unit-card.selected {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, rgba(30, 58, 95, 0.03), rgba(30, 58, 95, 0.07));
+        }
+
+        .unit-card-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.25rem;
+        }
+
+        .unit-card-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        /* Question Type Selection */
+        .qtype-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .qtype-card {
+            background: white;
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .qtype-card:hover {
+            border-color: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        }
+
+        .qtype-card.selected {
+            border-color: var(--accent);
+            background: rgba(230, 126, 34, 0.04);
+        }
+
+        .qtype-marks {
+            width: 44px; height: 44px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .qtype-info { flex: 1; }
+
+        .qtype-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .qtype-desc {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+
+        /* Generate Button */
+        .generate-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--accent), #d35400);
+            color: white;
+            border: none;
+            padding: 14px 36px;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px var(--accent-glow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .generate-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(230, 126, 34, 0.4);
+        }
+
+        .generate-btn:hover::before { left: 100%; }
+
+        .generate-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .generate-btn:disabled:hover::before { left: -100%; }
+
+        .generate-btn svg {
+            width: 20px; height: 20px;
+        }
+
+        /* ===== PHASE 2: LOADING ===== */
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            min-height: 400px;
+        }
+
+        .loading-orbs {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 2rem;
+        }
+
+        .loading-orb {
+            width: 18px; height: 18px;
+            border-radius: 50%;
+            animation: orbBounce 1.4s ease-in-out infinite;
+        }
+
+        .loading-orb:nth-child(1) { background: var(--skill-knowledge); animation-delay: 0s; }
+        .loading-orb:nth-child(2) { background: var(--skill-application); animation-delay: 0.15s; }
+        .loading-orb:nth-child(3) { background: var(--skill-analysis); animation-delay: 0.3s; }
+        .loading-orb:nth-child(4) { background: var(--skill-evaluation); animation-delay: 0.45s; }
+
+        @keyframes orbBounce {
+            0%, 80%, 100% { transform: translateY(0) scale(1); opacity: 0.6; }
+            40% { transform: translateY(-28px) scale(1.15); opacity: 1; }
+        }
+
+        .loading-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--gray-500);
+            animation: fadeInOut 2s ease-in-out infinite;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* ===== PHASE 3: QUESTION DISPLAY ===== */
+        .question-section {
+            animation: fadeSlideUp 0.5s ease-out;
+        }
+
+        .case-study-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            margin-bottom: 1.5rem;
+            animation: fadeSlideUp 0.5s ease-out;
+        }
+
+        .case-study-header {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            padding: 1.25rem 1.75rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .case-study-header svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+        .case-study-header-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+        .case-study-body {
+            padding: 1.75rem;
+            font-size: 0.95rem;
+            line-height: 1.75;
+            color: var(--gray-700);
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            margin-bottom: 1.5rem;
+            animation: fadeSlideUp 0.5s ease-out;
+            animation-delay: 0.15s;
+            animation-fill-mode: both;
+        }
+
+        .chart-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--gray-700);
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .chart-container {
+            position: relative;
+            max-height: 350px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .data-table th {
+            background: var(--gray-100);
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 700;
+            color: var(--gray-700);
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        .data-table td {
+            padding: 0.65rem 1rem;
+            border-bottom: 1px solid var(--gray-100);
+            color: var(--gray-600);
+        }
+
+        .data-table tr:last-child td { border-bottom: none; }
+        .data-table tr:hover td { background: var(--gray-50); }
+
+        .question-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.75rem;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            margin-bottom: 2rem;
+            position: relative;
+            animation: fadeSlideUp 0.5s ease-out;
+            animation-delay: 0.3s;
+            animation-fill-mode: both;
+        }
+
+        .marks-badge {
+            position: absolute;
+            top: -12px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--accent), #d35400);
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 800;
+            padding: 6px 16px;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+
+        .question-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray-400);
+            margin-bottom: 0.75rem;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            line-height: 1.6;
+        }
+
+        /* ===== PHASE 4: ANSWER WRITING ===== */
+        .answer-section {
+            animation: fadeSlideUp 0.4s ease-out;
+        }
+
+        .answer-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.75rem;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            margin-bottom: 1.5rem;
+        }
+
+        .answer-textarea {
+            width: 100%;
+            min-height: 300px;
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 1.25rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--gray-700);
+            resize: vertical;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            outline: none;
+        }
+
+        .answer-textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(30, 58, 95, 0.1);
+        }
+
+        .answer-textarea:read-only {
+            background: var(--gray-50);
+            color: var(--gray-500);
+        }
+
+        .answer-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .word-counter {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--gray-400);
+            transition: color 0.3s ease;
+        }
+
+        .word-counter.low { color: var(--gray-400); }
+        .word-counter.medium { color: var(--primary); }
+        .word-counter.high { color: var(--accent); }
+
+        .submit-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--accent), #d35400);
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(230, 126, 34, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .submit-btn .spinner {
+            width: 18px; height: 18px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .timer-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            font-weight: 600;
+        }
+
+        .timer-toggle input[type="checkbox"] {
+            width: 18px; height: 18px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .timer-display {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            font-variant-numeric: tabular-nums;
+            display: none;
+        }
+
+        .timer-display.active { display: block; }
+        .timer-display.warning { color: var(--error); }
+
+        /* ===== PHASE 5: MARKING FEEDBACK ===== */
+        .feedback-section {
+            animation: fadeSlideUp 0.5s ease-out;
+        }
+
+        .score-card {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary), var(--primary-light));
+            border-radius: 24px;
+            padding: 2.5rem;
+            text-align: center;
+            color: white;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .score-card::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 60%);
+            animation: shimmer 4s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(5%, 5%); }
+        }
+
+        .score-content { position: relative; z-index: 2; }
+
+        .score-ring-container {
+            width: 180px; height: 180px;
+            margin: 0 auto 1.5rem;
+            position: relative;
+        }
+
+        .score-ring {
+            transform: rotate(-90deg);
+            width: 100%; height: 100%;
+        }
+
+        .score-ring-bg {
+            fill: none;
+            stroke: rgba(255,255,255,0.15);
+            stroke-width: 10;
+        }
+
+        .score-ring-fill {
+            fill: none;
+            stroke: var(--accent);
+            stroke-width: 10;
+            stroke-linecap: round;
+            stroke-dasharray: 502;
+            stroke-dashoffset: 502;
+            transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .score-number {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .score-value {
+            font-size: 3rem;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .score-total {
+            font-size: 1rem;
+            font-weight: 500;
+            opacity: 0.7;
+        }
+
+        .score-level {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 20px;
+            padding: 6px 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            backdrop-filter: blur(5px);
+        }
+
+        /* AO Breakdown */
+        .ao-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .ao-card {
+            background: white;
+            border-radius: 14px;
+            padding: 1.25rem;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border-top: 4px solid;
+            opacity: 0;
+            transform: translateY(15px);
+            animation: fadeSlideUp 0.4s ease-out forwards;
+        }
+
+        .ao-card:nth-child(1) { border-color: var(--skill-knowledge); animation-delay: 0.1s; }
+        .ao-card:nth-child(2) { border-color: var(--skill-application); animation-delay: 0.17s; }
+        .ao-card:nth-child(3) { border-color: var(--skill-analysis); animation-delay: 0.24s; }
+        .ao-card:nth-child(4) { border-color: var(--skill-evaluation); animation-delay: 0.31s; }
+
+        .ao-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .ao-card:nth-child(1) .ao-label { color: var(--skill-knowledge); }
+        .ao-card:nth-child(2) .ao-label { color: var(--skill-application); }
+        .ao-card:nth-child(3) .ao-label { color: var(--skill-analysis); }
+        .ao-card:nth-child(4) .ao-label { color: var(--skill-evaluation); }
+
+        .ao-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--gray-900);
+        }
+
+        .ao-name {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            font-weight: 500;
+        }
+
+        /* Feedback Cards */
+        .feedback-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.75rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            margin-bottom: 1.25rem;
+            animation: fadeSlideUp 0.4s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .feedback-card-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-card-title svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+        .feedback-text {
+            font-size: 0.92rem;
+            color: var(--gray-600);
+            line-height: 1.7;
+        }
+
+        .www-card { border-left: 4px solid var(--success); animation-delay: 0.5s; }
+        .ebi-card { border-left: 4px solid var(--accent); animation-delay: 0.65s; }
+        .improved-card { border-left: 4px solid var(--skill-knowledge); animation-delay: 0.8s; }
+
+        .feedback-detail { animation-delay: 0.4s; }
+
+        .feedback-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feedback-list li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            font-size: 0.92rem;
+            color: var(--gray-600);
+            line-height: 1.6;
+            opacity: 0;
+            animation: fadeSlideUp 0.3s ease-out forwards;
+        }
+
+        .feedback-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.85rem;
+            width: 8px; height: 8px;
+            border-radius: 50%;
+        }
+
+        .www-card .feedback-list li::before { background: var(--success); }
+        .ebi-card .feedback-list li::before { background: var(--accent); }
+
+        .www-card .feedback-list li:nth-child(1) { animation-delay: 0.6s; }
+        .www-card .feedback-list li:nth-child(2) { animation-delay: 0.75s; }
+        .www-card .feedback-list li:nth-child(3) { animation-delay: 0.9s; }
+        .ebi-card .feedback-list li:nth-child(1) { animation-delay: 0.75s; }
+        .ebi-card .feedback-list li:nth-child(2) { animation-delay: 0.9s; }
+        .ebi-card .feedback-list li:nth-child(3) { animation-delay: 1.05s; }
+
+        .improved-text {
+            font-size: 0.92rem;
+            color: var(--gray-600);
+            line-height: 1.7;
+            padding: 1rem 1.25rem;
+            background: var(--gray-50);
+            border-radius: 10px;
+            border-left: 3px solid var(--skill-knowledge);
+            font-style: italic;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            animation: fadeSlideUp 0.4s ease-out;
+            animation-delay: 1s;
+            animation-fill-mode: both;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            border: none;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .action-btn-primary {
+            background: linear-gradient(135deg, var(--accent), #d35400);
+            color: white;
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+
+        .action-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(230, 126, 34, 0.4);
+        }
+
+        .action-btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--gray-200);
+        }
+
+        .action-btn-secondary:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        }
+
+        /* Confetti */
+        .confetti-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
+        }
+
+        .confetti-piece {
+            position: absolute;
+            top: -10px;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+            animation: confettiFall 3s ease-out forwards;
+        }
+
+        @keyframes confettiFall {
+            0% { opacity: 1; transform: translateY(0) rotate(0deg); }
+            100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
+        }
+
+        /* ===== PHASE 6: PROGRESS DASHBOARD ===== */
+        .dashboard-section {
+            animation: fadeSlideUp 0.5s ease-out;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 14px;
+            padding: 1.25rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--gray-500);
+            margin-top: 0.25rem;
+        }
+
+        .recent-attempts {
+            background: white;
+            border-radius: 16px;
+            padding: 1.75rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            margin-bottom: 2rem;
+        }
+
+        .recent-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .recent-table th {
+            text-align: left;
+            padding: 0.75rem 1rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray-400);
+            border-bottom: 2px solid var(--gray-100);
+        }
+
+        .recent-table td {
+            padding: 0.85rem 1rem;
+            font-size: 0.9rem;
+            color: var(--gray-600);
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .recent-table tr:last-child td { border-bottom: none; }
+        .recent-table tr:hover td { background: var(--gray-50); }
+
+        .score-pill {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .score-pill.high { background: var(--success-light); color: var(--success); }
+        .score-pill.medium { background: #fff3cd; color: #856404; }
+        .score-pill.low { background: var(--error-light); color: var(--error); }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray-400);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: none;
+            border: none;
+            color: var(--gray-500);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 8px 0;
+            margin-bottom: 1.5rem;
+            transition: color 0.2s ease;
+        }
+
+        .back-btn:hover { color: var(--primary); }
+
+        .back-btn svg { width: 16px; height: 16px; }
+
+        /* ===== ERROR STATE ===== */
+        .error-card {
+            background: var(--error-light);
+            border: 1px solid rgba(231, 76, 60, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            animation: fadeSlideUp 0.3s ease-out;
+        }
+
+        .error-card svg { width: 20px; height: 20px; color: var(--error); flex-shrink: 0; margin-top: 2px; }
+
+        .error-text {
+            font-size: 0.9rem;
+            color: var(--error);
+            font-weight: 500;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .ao-grid { grid-template-columns: repeat(2, 1fr); }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .site-nav-buttons { display: none; }
+            .site-hamburger { display: flex; }
+            .site-mobile-overlay { display: block; }
+            .site-mobile-menu { display: block; }
+
+            .hero { padding: 100px 1.5rem 40px; min-height: 220px; }
+            .hero h1 { font-size: 1.8rem; }
+            .hero-subtitle { font-size: 0.95rem; }
+
+            .main-content { padding: 1.5rem 1rem 3rem; }
+
+            .board-grid { grid-template-columns: 1fr; }
+            .unit-grid { grid-template-columns: 1fr; }
+            .qtype-grid { grid-template-columns: 1fr; }
+
+            .ao-grid { grid-template-columns: repeat(2, 1fr); }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+
+            .score-ring-container { width: 140px; height: 140px; }
+            .score-value { font-size: 2.2rem; }
+
+            .action-buttons { flex-direction: column; }
+
+            .answer-footer { flex-direction: column; gap: 1rem; align-items: stretch; }
+            .submit-btn { justify-content: center; }
+
+            .recent-table { font-size: 0.8rem; }
+            .recent-table th, .recent-table td { padding: 0.6rem 0.5rem; }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 1.5rem; }
+            .board-card { padding: 1.25rem; }
+            .score-card { padding: 1.75rem; }
+            .score-ring-container { width: 120px; height: 120px; }
+            .score-value { font-size: 1.8rem; }
+            .ao-grid { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="site-navbar" id="siteNavbar">
+    <div class="site-navbar-content">
+        <a href="index.html"><img src="logo.png" alt="MyBizStudies" class="site-navbar-logo"></a>
+        <div class="site-nav-buttons" id="siteNavButtons">
+            <a href="app.html" class="site-nav-link auth-only" style="display:none;">Flash Cards</a>
+            <a href="exam-skills-v2.html" class="site-nav-link auth-only" style="display:none;">Exam Skills</a>
+            <a href="exam-practice.html" class="active site-nav-link auth-only" style="display:none;">AI Practice</a>
+            <a href="notes.html" class="site-nav-link auth-only" style="display:none;">Study Notes</a>
+            <a href="blog.html" class="site-nav-link">Blog</a>
+            <a href="contact.html" class="site-nav-link">Contact Us</a>
+            <a href="login.html" class="site-nav-btn site-nav-btn-ghost guest-only">Log In</a>
+            <a href="signup.html" class="site-nav-btn site-nav-btn-primary guest-only">Get Started</a>
+            <button class="site-nav-btn site-nav-btn-ghost auth-only" id="navLogoutBtn" style="display:none;">Logout</button>
+        </div>
+        <button class="site-hamburger" id="siteHamburger" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="site-mobile-overlay" id="siteMobileOverlay"></div>
+<div class="site-mobile-menu" id="siteMobileMenu">
+    <div class="site-mobile-links">
+        <a href="app.html" class="auth-only" style="display:none;">Flash Cards</a>
+        <a href="exam-skills-v2.html" class="auth-only" style="display:none;">Exam Skills</a>
+        <a href="exam-practice.html" class="active auth-only" style="display:none;">AI Practice</a>
+        <a href="notes.html" class="auth-only" style="display:none;">Study Notes</a>
+        <a href="blog.html">Blog</a>
+        <a href="contact.html">Contact Us</a>
+        <a href="login.html" class="guest-only">Log In</a>
+        <a href="signup.html" class="guest-only">Get Started</a>
+        <button class="auth-only" id="mobileLogoutBtn" style="display:none;">Logout</button>
+    </div>
+</div>
+
+<!-- Hero -->
+<section class="hero">
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-orb hero-orb-3"></div>
+    <div class="hero-orb hero-orb-4"></div>
+    <div class="hero-content">
+        <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            AI Powered
+        </div>
+        <h1>Exam Practice</h1>
+        <p class="hero-subtitle">Generate real exam style questions and get instant AI marking with detailed feedback</p>
+    </div>
+</section>
+
+<!-- Main Content -->
+<div class="main-content">
+
+    <!-- PHASE 1: Selection -->
+    <div class="phase active" id="phase-selection">
+
+        <div class="section-title">Choose Your Exam Board</div>
+        <div class="section-subtitle">Select the exam board and qualification you are studying</div>
+
+        <div class="board-grid" id="boardGrid">
+            <div class="board-card" data-board="edexcel_ial" onclick="selectBoard(this)">
+                <div class="board-card-header">
+                    <div class="board-card-icon" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">IAL</div>
+                    <div class="board-card-check"></div>
+                </div>
+                <div class="board-card-title">Edexcel International A Level</div>
+                <div class="board-card-desc">Pearson Edexcel IAL Business Studies (WBS11 to WBS14)</div>
+            </div>
+            <div class="board-card coming-soon" data-board="edexcel_uk">
+                <div class="board-card-header">
+                    <div class="board-card-icon" style="background: linear-gradient(135deg, #3498db, #2980b9);">A2</div>
+                    <div class="board-card-check"></div>
+                </div>
+                <div class="board-card-title">Edexcel UK A Level</div>
+                <div class="board-card-desc">Pearson Edexcel A Level Business (9BS0)</div>
+                <span class="coming-soon-badge">Coming Soon</span>
+            </div>
+            <div class="board-card coming-soon" data-board="aqa_gcse">
+                <div class="board-card-header">
+                    <div class="board-card-icon" style="background: linear-gradient(135deg, #27ae60, #229954);">GC</div>
+                    <div class="board-card-check"></div>
+                </div>
+                <div class="board-card-title">AQA GCSE</div>
+                <div class="board-card-desc">AQA GCSE Business Studies (8132)</div>
+                <span class="coming-soon-badge">Coming Soon</span>
+            </div>
+            <div class="board-card coming-soon" data-board="cie_igcse">
+                <div class="board-card-header">
+                    <div class="board-card-icon" style="background: linear-gradient(135deg, #f39c12, #e67e22);">IG</div>
+                    <div class="board-card-check"></div>
+                </div>
+                <div class="board-card-title">CIE IGCSE</div>
+                <div class="board-card-desc">Cambridge IGCSE Business Studies (0450)</div>
+                <span class="coming-soon-badge">Coming Soon</span>
+            </div>
+        </div>
+
+        <!-- Unit Selection (shown after board) -->
+        <div id="unitSection" style="display:none;"></div>
+
+        <!-- Question Type Selection (shown after unit) -->
+        <div id="qtypeSection" style="display:none;"></div>
+
+        <!-- Generate Button -->
+        <div id="generateSection" style="display:none;">
+            <button class="generate-btn" id="generateBtn" onclick="generateQuestion()" disabled>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                Generate Question
+            </button>
+        </div>
+    </div>
+
+    <!-- PHASE 2: Loading -->
+    <div class="phase" id="phase-loading">
+        <div class="loading-container">
+            <div class="loading-orbs">
+                <div class="loading-orb"></div>
+                <div class="loading-orb"></div>
+                <div class="loading-orb"></div>
+                <div class="loading-orb"></div>
+            </div>
+            <div class="loading-text" id="loadingText">Generating your question...</div>
+        </div>
+    </div>
+
+    <!-- PHASE 3: Question Display + PHASE 4: Answer Writing -->
+    <div class="phase" id="phase-question">
+        <button class="back-btn" onclick="resetToSelection()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+            New Question
+        </button>
+
+        <!-- Question Display -->
+        <div class="question-section" id="questionDisplay"></div>
+
+        <!-- Answer Writing -->
+        <div class="answer-section">
+            <div class="answer-card">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                    <div class="section-title" style="margin-bottom:0; font-size:1.15rem;">Your Answer</div>
+                    <div class="timer-display" id="timerDisplay">00:00</div>
+                </div>
+                <textarea class="answer-textarea" id="answerTextarea" placeholder="Write your answer here..." oninput="updateWordCount()"></textarea>
+                <div class="answer-footer">
+                    <div style="display:flex; align-items:center; gap:1.5rem;">
+                        <div class="word-counter" id="wordCounter">0 words</div>
+                        <label class="timer-toggle">
+                            <input type="checkbox" id="timerToggle" onchange="toggleTimer()">
+                            Exam Timer
+                        </label>
+                    </div>
+                    <button class="submit-btn" id="submitBtn" onclick="submitAnswer()" disabled>
+                        Submit for Marking
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PHASE 5: Marking Feedback -->
+    <div class="phase" id="phase-feedback">
+        <button class="back-btn" onclick="resetToSelection()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+            New Question
+        </button>
+
+        <div class="feedback-section" id="feedbackDisplay"></div>
+    </div>
+
+    <!-- PHASE 6: Progress Dashboard -->
+    <div class="phase" id="phase-dashboard">
+        <button class="back-btn" onclick="showPhase('selection')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+            Back to Practice
+        </button>
+
+        <div class="section-title">Your Progress</div>
+        <div class="section-subtitle">Track your exam practice performance over time</div>
+
+        <div class="dashboard-section" id="dashboardContent"></div>
+    </div>
+
+</div>
+
+<!-- Confetti Container -->
+<div class="confetti-container" id="confettiContainer"></div>
+
+<script>
+// ===== CONFIG =====
+const SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ===== BOARD DATA =====
+const BOARD_DATA = {
+    edexcel_ial: {
+        name: 'Edexcel International A Level',
+        units: [
+            { id: 'unit1', code: 'WBS11', name: 'Marketing and People', color: '#e74c3c' },
+            { id: 'unit2', code: 'WBS12', name: 'Managing Business Activities', color: '#3498db' },
+            { id: 'unit3', code: 'WBS13', name: 'Business Decisions and Strategy', color: '#27ae60' },
+            { id: 'unit4', code: 'WBS14', name: 'Global Business', color: '#f39c12' }
+        ],
+        questionTypes: [
+            { id: 'define_2', marks: 2, name: 'Define', desc: 'Knowledge recall', command: 'define' },
+            { id: 'explain_4', marks: 4, name: 'Explain', desc: 'Knowledge + Application', command: 'explain' },
+            { id: 'calculate_4', marks: 4, name: 'Calculate', desc: 'Quantitative skills', command: 'calculate' },
+            { id: 'analyse_6', marks: 6, name: 'Analyse', desc: 'Two reasons/ways', command: 'analyse' },
+            { id: 'discuss_8', marks: 8, name: 'Discuss', desc: 'Balanced arguments', command: 'discuss' },
+            { id: 'assess_10', marks: 10, name: 'Assess', desc: 'Evaluate impact', command: 'assess' },
+            { id: 'evaluate_10', marks: 10, name: 'Evaluate', desc: 'Weigh up + conclude', command: 'evaluate' },
+            { id: 'essay_20', marks: 20, name: 'Essay', desc: 'Extended evaluation', command: 'evaluate' }
+        ]
+    },
+    edexcel_uk: {
+        name: 'Edexcel UK A Level',
+        units: [
+            { id: 'paper1', code: '9BS0/01', name: 'Marketing, People and Global Businesses', color: '#e74c3c' },
+            { id: 'paper2', code: '9BS0/02', name: 'Business Activities, Decisions and Strategy', color: '#3498db' },
+            { id: 'paper3', code: '9BS0/03', name: 'Investigating Business in a Competitive Environment', color: '#27ae60' }
+        ],
+        questionTypes: [
+            { id: 'define_2', marks: 2, name: 'Define', desc: 'Knowledge recall', command: 'define' },
+            { id: 'explain_4', marks: 4, name: 'Explain', desc: 'Knowledge + Application', command: 'explain' },
+            { id: 'evaluate_10', marks: 10, name: 'Evaluate', desc: 'Extended analysis', command: 'evaluate' },
+            { id: 'essay_20', marks: 20, name: 'Essay', desc: 'Extended evaluation', command: 'evaluate' }
+        ]
+    },
+    aqa_gcse: {
+        name: 'AQA GCSE',
+        units: [
+            { id: 'paper1', code: '8132/1', name: 'Influences of Operations and HRM', color: '#e74c3c' },
+            { id: 'paper2', code: '8132/2', name: 'Influences of Marketing and Finance', color: '#3498db' }
+        ],
+        questionTypes: [
+            { id: 'state_1', marks: 1, name: 'Multiple Choice', desc: 'Select correct answer', command: 'state' },
+            { id: 'give_2', marks: 2, name: 'Give/State', desc: 'Recall knowledge', command: 'state' },
+            { id: 'explain_3', marks: 3, name: 'Explain One', desc: 'Single explanation', command: 'explain' },
+            { id: 'explain_4', marks: 4, name: 'Explain Two', desc: 'Two explanations', command: 'explain' },
+            { id: 'analyse_6', marks: 6, name: 'Analyse', desc: 'No AO1 marks', command: 'analyse' },
+            { id: 'recommend_9', marks: 9, name: 'Recommend', desc: 'Two options, choose one', command: 'recommend' },
+            { id: 'evaluate_12', marks: 12, name: 'Evaluate', desc: 'Interdependent analysis', command: 'evaluate' }
+        ]
+    },
+    cie_igcse: {
+        name: 'CIE IGCSE',
+        units: [
+            { id: 'paper1', code: '0450/11', name: 'Short Answer and Data Response', color: '#e74c3c' },
+            { id: 'paper2', code: '0450/21', name: 'Case Study', color: '#3498db' }
+        ],
+        questionTypes: [
+            { id: 'define_2', marks: 2, name: 'Define', desc: 'Knowledge recall', command: 'define' },
+            { id: 'explain_4', marks: 4, name: 'Explain', desc: 'Knowledge + Application', command: 'explain' },
+            { id: 'analyse_6', marks: 6, name: 'Analyse', desc: 'Causes and effects', command: 'analyse' },
+            { id: 'evaluate_8', marks: 8, name: 'Evaluate', desc: 'Judgement + conclusion', command: 'evaluate' }
+        ]
+    }
+};
+
+// Timer mappings (minutes per mark)
+const TIMER_MINUTES = {
+    2: 2, 4: 5, 6: 8, 8: 12, 9: 14, 10: 15, 12: 18, 20: 30
+};
+
+// ===== STATE =====
+let currentSession = null;
+let currentBoard = null;
+let currentUnit = null;
+let currentQType = null;
+let currentQuestion = null;
+let currentAttemptId = null;
+let timerInterval = null;
+let timerSeconds = 0;
+let chartInstance = null;
+
+// ===== AUTH =====
+async function checkAuth() {
+    let session;
+    try {
+        const result = await supabaseClient.auth.getSession();
+        session = result.data.session;
+    } catch (error) {
+        console.error('Auth check error:', error);
+        window.location.href = 'login.html';
+        return;
+    }
+
+    if (!session) {
+        window.location.href = 'login.html';
+        return;
+    }
+
+    currentSession = session;
+
+    // Show auth elements
+    document.querySelectorAll('.auth-only').forEach(function(el) { el.style.display = ''; });
+    document.querySelectorAll('.guest-only').forEach(function(el) { el.style.display = 'none'; });
+}
+
+async function handleLogout() {
+    try {
+        await supabaseClient.auth.signOut();
+        window.location.href = 'login.html';
+    } catch (error) {
+        console.error('Logout error:', error);
+        window.location.href = 'login.html';
+    }
+}
+
+// ===== NAVIGATION =====
+function showPhase(phase) {
+    document.querySelectorAll('.phase').forEach(function(el) { el.classList.remove('active'); });
+    document.getElementById('phase-' + phase).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function resetToSelection() {
+    stopTimer();
+    currentQuestion = null;
+    currentAttemptId = null;
+    if (chartInstance) { chartInstance.destroy(); chartInstance = null; }
+    document.getElementById('answerTextarea').value = '';
+    document.getElementById('answerTextarea').readOnly = false;
+    document.getElementById('wordCounter').textContent = '0 words';
+    document.getElementById('wordCounter').className = 'word-counter low';
+    document.getElementById('submitBtn').disabled = true;
+    document.getElementById('submitBtn').innerHTML = 'Submit for Marking';
+    showPhase('selection');
+}
+
+// ===== PHASE 1: SELECTION =====
+function selectBoard(el) {
+    if (el.classList.contains('coming-soon')) return;
+
+    // Deselect all
+    document.querySelectorAll('.board-card').forEach(function(c) { c.classList.remove('selected'); });
+    el.classList.add('selected');
+
+    currentBoard = el.getAttribute('data-board');
+    currentUnit = null;
+    currentQType = null;
+
+    // Hide downstream sections
+    document.getElementById('qtypeSection').style.display = 'none';
+    document.getElementById('generateSection').style.display = 'none';
+    document.getElementById('generateBtn').disabled = true;
+
+    // Show units
+    renderUnits();
+}
+
+function renderUnits() {
+    var boardData = BOARD_DATA[currentBoard];
+    var html = '<div class="unit-section">';
+    html += '<div class="section-title" style="font-size:1.2rem;">Select Unit</div>';
+    html += '<div class="section-subtitle">Choose which unit you want to practise</div>';
+    html += '<div class="unit-grid">';
+
+    boardData.units.forEach(function(unit) {
+        html += '<div class="unit-card" data-unit="' + unit.id + '" onclick="selectUnit(this)">';
+        html += '<div class="unit-card-label" style="color:' + unit.color + ';">' + unit.code + '</div>';
+        html += '<div class="unit-card-name">' + unit.name + '</div>';
+        html += '</div>';
+    });
+
+    html += '</div></div>';
+    document.getElementById('unitSection').innerHTML = html;
+    document.getElementById('unitSection').style.display = 'block';
+}
+
+function selectUnit(el) {
+    document.querySelectorAll('.unit-card').forEach(function(c) { c.classList.remove('selected'); });
+    el.classList.add('selected');
+
+    currentUnit = el.getAttribute('data-unit');
+    currentQType = null;
+    document.getElementById('generateBtn').disabled = true;
+
+    // Show question types
+    renderQuestionTypes();
+}
+
+function renderQuestionTypes() {
+    var boardData = BOARD_DATA[currentBoard];
+    var html = '<div class="qtype-section">';
+    html += '<div class="section-title" style="font-size:1.2rem;">Select Question Type</div>';
+    html += '<div class="section-subtitle">Choose the type and mark allocation</div>';
+    html += '<div class="qtype-grid">';
+
+    boardData.questionTypes.forEach(function(qt) {
+        html += '<div class="qtype-card" data-qtype="' + qt.id + '" onclick="selectQType(this)">';
+        html += '<div class="qtype-marks">' + qt.marks + '</div>';
+        html += '<div class="qtype-info">';
+        html += '<div class="qtype-name">' + qt.name + '</div>';
+        html += '<div class="qtype-desc">' + qt.desc + '</div>';
+        html += '</div></div>';
+    });
+
+    html += '</div></div>';
+    document.getElementById('qtypeSection').innerHTML = html;
+    document.getElementById('qtypeSection').style.display = 'block';
+    document.getElementById('generateSection').style.display = 'block';
+}
+
+function selectQType(el) {
+    document.querySelectorAll('.qtype-card').forEach(function(c) { c.classList.remove('selected'); });
+    el.classList.add('selected');
+
+    currentQType = el.getAttribute('data-qtype');
+    document.getElementById('generateBtn').disabled = false;
+}
+
+// ===== PHASE 2: GENERATE QUESTION =====
+async function generateQuestion() {
+    if (!currentBoard || !currentUnit || !currentQType) return;
+
+    showPhase('loading');
+    document.getElementById('loadingText').textContent = 'Generating your question...';
+
+    // Fallback text after 8 seconds
+    var fallbackTimer = setTimeout(function() {
+        document.getElementById('loadingText').textContent = 'Still thinking...';
+    }, 8000);
+
+    try {
+        var boardData = BOARD_DATA[currentBoard];
+        var unitData = boardData.units.find(function(u) { return u.id === currentUnit; });
+        var qtypeData = boardData.questionTypes.find(function(q) { return q.id === currentQType; });
+
+        var questionTypeStr = qtypeData.marks + '_mark_' + qtypeData.command;
+
+        var response = await fetch(SUPABASE_URL + '/functions/v1/generate-question', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + currentSession.access_token,
+                'apikey': SUPABASE_ANON_KEY
+            },
+            body: JSON.stringify({
+                board: currentBoard,
+                unit: unitData.code,
+                question_type: questionTypeStr
+            })
+        });
+
+        clearTimeout(fallbackTimer);
+
+        if (!response.ok) {
+            var errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to generate question');
+        }
+
+        var data = await response.json();
+        currentQuestion = data.question;
+        currentAttemptId = data.attempt_id || null;
+
+        renderQuestion(currentQuestion);
+        showPhase('question');
+
+    } catch (error) {
+        clearTimeout(fallbackTimer);
+        console.error('Generate error:', error);
+        showPhase('selection');
+        showError(error.message || 'Something went wrong. Please try again.');
+    }
+}
+
+// ===== PHASE 3: RENDER QUESTION =====
+function renderQuestion(q) {
+    var html = '';
+
+    // Case Study Card
+    html += '<div class="case-study-card">';
+    html += '<div class="case-study-header">';
+    html += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>';
+    html += '<span class="case-study-header-title">Business Context</span>';
+    html += '</div>';
+    html += '<div class="case-study-body">' + escapeHtml(q.question_context || '') + '</div>';
+    html += '</div>';
+
+    // Chart (if present)
+    if (q.chart) {
+        html += '<div class="chart-card">';
+        html += '<div class="chart-title">' + escapeHtml(q.chart.title || '') + '</div>';
+        if (q.chart.type === 'table') {
+            html += renderDataTable(q.chart);
+        } else {
+            html += '<div class="chart-container"><canvas id="questionChart"></canvas></div>';
+        }
+        html += '</div>';
+    }
+
+    // Question Card
+    html += '<div class="question-card">';
+    html += '<div class="marks-badge">' + q.marks + ' marks</div>';
+    html += '<div class="question-label">Question</div>';
+    html += '<div class="question-text">' + escapeHtml(q.question_text || '') + '</div>';
+    html += '</div>';
+
+    document.getElementById('questionDisplay').innerHTML = html;
+
+    // Render chart if needed
+    if (q.chart && q.chart.type !== 'table') {
+        setTimeout(function() { renderChart(q.chart); }, 100);
+    }
+
+    // Reset answer area
+    document.getElementById('answerTextarea').value = '';
+    document.getElementById('answerTextarea').readOnly = false;
+    updateWordCount();
+}
+
+function renderDataTable(chartData) {
+    var html = '<table class="data-table">';
+    if (chartData.columns) {
+        html += '<thead><tr>';
+        chartData.columns.forEach(function(col) {
+            html += '<th>' + escapeHtml(col) + '</th>';
+        });
+        html += '</tr></thead>';
+    }
+    if (chartData.rows) {
+        html += '<tbody>';
+        chartData.rows.forEach(function(row) {
+            html += '<tr>';
+            row.forEach(function(cell) {
+                html += '<td>' + escapeHtml(String(cell)) + '</td>';
+            });
+            html += '</tr>';
+        });
+        html += '</tbody>';
+    }
+    html += '</table>';
+    return html;
+}
+
+function renderChart(chartData) {
+    if (chartInstance) { chartInstance.destroy(); chartInstance = null; }
+    var canvas = document.getElementById('questionChart');
+    if (!canvas) return;
+
+    var ctx = canvas.getContext('2d');
+    var chartColors = ['#3498db', '#e74c3c', '#27ae60', '#f39c12', '#9b59b6', '#1abc9c', '#e67e22', '#34495e'];
+    var type = chartData.type;
+
+    if (type === 'horizontal_bar') type = 'bar';
+
+    var config = {
+        type: type === 'stacked_bar' ? 'bar' : type,
+        data: {
+            labels: chartData.labels || [],
+            datasets: (chartData.series || []).map(function(s, i) {
+                var dataset = {
+                    label: s.name,
+                    data: s.data,
+                    borderWidth: type === 'line' ? 2 : 0,
+                    tension: 0.3
+                };
+
+                if (type === 'pie') {
+                    dataset.backgroundColor = chartColors.slice(0, s.data.length);
+                    dataset.borderWidth = 2;
+                    dataset.borderColor = '#fff';
+                } else if (type === 'line') {
+                    dataset.borderColor = chartColors[i];
+                    dataset.backgroundColor = chartColors[i] + '20';
+                    dataset.fill = true;
+                    dataset.pointBackgroundColor = chartColors[i];
+                    dataset.pointRadius = 4;
+                } else {
+                    dataset.backgroundColor = chartColors[i];
+                    dataset.borderRadius = 6;
+                }
+
+                return dataset;
+            })
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            indexAxis: chartData.type === 'horizontal_bar' ? 'y' : 'x',
+            plugins: {
+                legend: {
+                    display: (chartData.series || []).length > 1 || type === 'pie',
+                    position: 'bottom',
+                    labels: { font: { family: 'Inter', size: 12 }, padding: 16 }
+                }
+            },
+            scales: type === 'pie' ? {} : {
+                x: {
+                    title: {
+                        display: !!chartData.x_label,
+                        text: chartData.x_label || '',
+                        font: { family: 'Inter', size: 12, weight: 600 }
+                    },
+                    stacked: type === 'stacked_bar',
+                    grid: { display: false }
+                },
+                y: {
+                    title: {
+                        display: !!chartData.y_label,
+                        text: chartData.y_label || '',
+                        font: { family: 'Inter', size: 12, weight: 600 }
+                    },
+                    stacked: type === 'stacked_bar',
+                    beginAtZero: true,
+                    grid: { color: 'rgba(0,0,0,0.05)' }
+                }
+            }
+        }
+    };
+
+    chartInstance = new Chart(ctx, config);
+}
+
+// ===== PHASE 4: ANSWER WRITING =====
+function updateWordCount() {
+    var text = document.getElementById('answerTextarea').value.trim();
+    var words = text === '' ? 0 : text.split(/\s+/).length;
+    var counter = document.getElementById('wordCounter');
+    counter.textContent = words + ' word' + (words !== 1 ? 's' : '');
+
+    if (words < 50) {
+        counter.className = 'word-counter low';
+    } else if (words < 300) {
+        counter.className = 'word-counter medium';
+    } else {
+        counter.className = 'word-counter high';
+    }
+
+    document.getElementById('submitBtn').disabled = words < 20;
+}
+
+function toggleTimer() {
+    var timerDisplay = document.getElementById('timerDisplay');
+    if (document.getElementById('timerToggle').checked) {
+        var marks = currentQuestion ? currentQuestion.marks : 8;
+        var minutes = TIMER_MINUTES[marks] || Math.ceil(marks * 1.5);
+        timerSeconds = minutes * 60;
+        timerDisplay.textContent = formatTime(timerSeconds);
+        timerDisplay.classList.add('active');
+        timerDisplay.classList.remove('warning');
+        startTimer();
+    } else {
+        stopTimer();
+        timerDisplay.classList.remove('active');
+    }
+}
+
+function startTimer() {
+    stopTimer();
+    timerInterval = setInterval(function() {
+        timerSeconds--;
+        var display = document.getElementById('timerDisplay');
+        display.textContent = formatTime(timerSeconds);
+
+        if (timerSeconds <= 60) {
+            display.classList.add('warning');
+        }
+
+        if (timerSeconds <= 0) {
+            stopTimer();
+            display.textContent = 'Time Up!';
+        }
+    }, 1000);
+}
+
+function stopTimer() {
+    if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+    }
+}
+
+function formatTime(seconds) {
+    var m = Math.floor(Math.max(0, seconds) / 60);
+    var s = Math.max(0, seconds) % 60;
+    return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+}
+
+// ===== SUBMIT ANSWER =====
+async function submitAnswer() {
+    var answer = document.getElementById('answerTextarea').value.trim();
+    if (!answer || !currentQuestion) return;
+
+    stopTimer();
+
+    // Show loading state
+    var btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<div class="spinner"></div> Marking...';
+    document.getElementById('answerTextarea').readOnly = true;
+
+    try {
+        var response = await fetch(SUPABASE_URL + '/functions/v1/mark-answer', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + currentSession.access_token,
+                'apikey': SUPABASE_ANON_KEY
+            },
+            body: JSON.stringify({
+                board: currentBoard,
+                question_data: currentQuestion,
+                student_answer: answer,
+                attempt_id: currentAttemptId
+            })
+        });
+
+        if (!response.ok) {
+            var errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to mark answer');
+        }
+
+        var data = await response.json();
+        renderFeedback(data.marking, currentQuestion);
+        showPhase('feedback');
+
+    } catch (error) {
+        console.error('Marking error:', error);
+        btn.disabled = false;
+        btn.innerHTML = 'Submit for Marking';
+        document.getElementById('answerTextarea').readOnly = false;
+        showError(error.message || 'Something went wrong. Please try again.');
+    }
+}
+
+// ===== PHASE 5: RENDER FEEDBACK =====
+function renderFeedback(marking, question) {
+    var totalMarks = marking.total_marks || question.marks;
+    var percentage = Math.round((marking.marks / totalMarks) * 100);
+    var isHighScore = false;
+
+    // Determine if high score (for confetti)
+    if (totalMarks === 8 && marking.marks >= 7) isHighScore = true;
+    if (totalMarks === 10 && marking.marks >= 8) isHighScore = true;
+    if (totalMarks === 20 && marking.marks >= 15) isHighScore = true;
+    if (totalMarks === 12 && marking.marks >= 10) isHighScore = true;
+    if (totalMarks === 9 && marking.marks >= 7) isHighScore = true;
+    if (totalMarks === 6 && marking.marks >= 5) isHighScore = true;
+
+    var html = '';
+
+    // Score Card
+    html += '<div class="score-card">';
+    html += '<div class="score-content">';
+    html += '<div class="score-ring-container">';
+    html += '<svg class="score-ring" viewBox="0 0 180 180">';
+    html += '<circle class="score-ring-bg" cx="90" cy="90" r="80"/>';
+    html += '<circle class="score-ring-fill" id="scoreRingFill" cx="90" cy="90" r="80"/>';
+    html += '</svg>';
+    html += '<div class="score-number">';
+    html += '<div class="score-value" id="scoreValue">0</div>';
+    html += '<div class="score-total">out of ' + totalMarks + '</div>';
+    html += '</div></div>';
+
+    if (marking.level) {
+        html += '<div class="score-level">Level ' + marking.level + '</div>';
+    }
+
+    html += '</div></div>';
+
+    // AO Breakdown
+    var ao = marking.ao_breakdown || {};
+    var aoLabels = ['AO1', 'AO2', 'AO3', 'AO4'];
+    var aoNames = ['Knowledge', 'Application', 'Analysis', 'Evaluation'];
+    var hasAO4 = currentBoard === 'edexcel_ial' || currentBoard === 'edexcel_uk';
+
+    var visibleAOs = aoLabels.filter(function(label, i) {
+        if (label === 'AO4' && !hasAO4) return false;
+        return ao[label] !== null && ao[label] !== undefined;
+    });
+
+    if (visibleAOs.length > 0) {
+        html += '<div class="ao-grid" style="grid-template-columns: repeat(' + Math.min(visibleAOs.length, 4) + ', 1fr);">';
+        visibleAOs.forEach(function(label, i) {
+            var idx = aoLabels.indexOf(label);
+            html += '<div class="ao-card" style="border-color: var(--skill-' + aoNames[idx].toLowerCase() + '); animation-delay: ' + (0.1 + i * 0.07) + 's;">';
+            html += '<div class="ao-label" style="color: var(--skill-' + aoNames[idx].toLowerCase() + ');">' + label + '</div>';
+            html += '<div class="ao-value">' + (ao[label] || 0) + '</div>';
+            html += '<div class="ao-name">' + aoNames[idx] + '</div>';
+            html += '</div>';
+        });
+        html += '</div>';
+    }
+
+    // Detailed Feedback
+    if (marking.feedback) {
+        html += '<div class="feedback-card feedback-detail" style="animation-delay: 0.4s;">';
+        html += '<div class="feedback-card-title">';
+        html += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
+        html += 'Examiner Feedback</div>';
+        html += '<div class="feedback-text">' + escapeHtml(marking.feedback) + '</div>';
+        html += '</div>';
+    }
+
+    // What Went Well
+    if (marking.what_went_well) {
+        html += '<div class="feedback-card www-card">';
+        html += '<div class="feedback-card-title">';
+        html += '<svg viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>';
+        html += 'What Went Well</div>';
+        html += renderFeedbackList(marking.what_went_well);
+        html += '</div>';
+    }
+
+    // Areas for Improvement
+    if (marking.areas_for_improvement) {
+        html += '<div class="feedback-card ebi-card">';
+        html += '<div class="feedback-card-title">';
+        html += '<svg viewBox="0 0 24 24" fill="none" stroke="#e67e22" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+        html += 'Areas for Improvement</div>';
+        html += renderFeedbackList(marking.areas_for_improvement);
+        html += '</div>';
+    }
+
+    // Improved Paragraph
+    if (marking.improved_paragraph) {
+        html += '<div class="feedback-card improved-card">';
+        html += '<div class="feedback-card-title">';
+        html += '<svg viewBox="0 0 24 24" fill="none" stroke="#3498db" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>';
+        html += 'Example Improved Paragraph</div>';
+        html += '<div class="improved-text">' + escapeHtml(marking.improved_paragraph) + '</div>';
+        html += '</div>';
+    }
+
+    // Action Buttons
+    html += '<div class="action-buttons">';
+    html += '<button class="action-btn action-btn-primary" onclick="resetToSelection()">';
+    html += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>';
+    html += 'Try Another Question</button>';
+    html += '<button class="action-btn action-btn-secondary" onclick="showDashboard()">';
+    html += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>';
+    html += 'View Progress</button>';
+    html += '</div>';
+
+    document.getElementById('feedbackDisplay').innerHTML = html;
+
+    // Animate score counter
+    setTimeout(function() { animateScore(marking.marks, totalMarks); }, 200);
+
+    // Confetti for high scores
+    if (isHighScore) {
+        setTimeout(function() { launchConfetti(); }, 600);
+    }
+}
+
+function renderFeedbackList(text) {
+    // Split by numbered items or bullet points or sentences
+    var items = text.split(/(?:\d+\.\s*|\n\s*[-*]\s*|\n\s*\d+\)\s*)/).filter(function(s) { return s.trim().length > 0; });
+    if (items.length <= 1) {
+        // Try splitting by periods for long single strings
+        items = text.split(/\.\s+/).filter(function(s) { return s.trim().length > 10; });
+        if (items.length <= 1) items = [text];
+    }
+
+    var html = '<ul class="feedback-list">';
+    items.slice(0, 3).forEach(function(item) {
+        html += '<li>' + escapeHtml(item.trim().replace(/\.$/, '')) + '</li>';
+    });
+    html += '</ul>';
+    return html;
+}
+
+function animateScore(target, total) {
+    var el = document.getElementById('scoreValue');
+    var ring = document.getElementById('scoreRingFill');
+    if (!el || !ring) return;
+
+    var circumference = 2 * Math.PI * 80; // r=80
+    var targetOffset = circumference - (target / total) * circumference;
+
+    // Animate ring
+    ring.style.strokeDashoffset = targetOffset;
+
+    // Animate number
+    var start = 0;
+    var duration = 1200;
+    var startTime = null;
+
+    function step(timestamp) {
+        if (!startTime) startTime = timestamp;
+        var progress = Math.min((timestamp - startTime) / duration, 1);
+        // Cubic ease out
+        var eased = 1 - Math.pow(1 - progress, 3);
+        var current = Math.round(eased * target);
+        el.textContent = current;
+        if (progress < 1) {
+            requestAnimationFrame(step);
+        }
+    }
+    requestAnimationFrame(step);
+}
+
+function launchConfetti() {
+    var container = document.getElementById('confettiContainer');
+    container.innerHTML = '';
+
+    var colors = ['#3498db', '#2ecc71', '#9b59b6', '#e67e22', '#e74c3c', '#f39c12', '#1abc9c'];
+    var count = window.innerWidth < 768 ? 20 : 40;
+
+    for (var i = 0; i < count; i++) {
+        var piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.left = Math.random() * 100 + '%';
+        piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.width = (6 + Math.random() * 8) + 'px';
+        piece.style.height = (6 + Math.random() * 8) + 'px';
+        piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        piece.style.animationDuration = (2.5 + Math.random() * 1.5) + 's';
+        piece.style.animationDelay = (Math.random() * 0.5) + 's';
+        container.appendChild(piece);
+    }
+
+    // Clean up
+    setTimeout(function() { container.innerHTML = ''; }, 4500);
+}
+
+// ===== PHASE 6: DASHBOARD =====
+async function showDashboard() {
+    showPhase('dashboard');
+
+    var content = document.getElementById('dashboardContent');
+    content.innerHTML = '<div class="loading-container" style="min-height:200px;padding:2rem;"><div class="loading-orbs"><div class="loading-orb"></div><div class="loading-orb"></div><div class="loading-orb"></div><div class="loading-orb"></div></div><div class="loading-text">Loading your progress...</div></div>';
+
+    try {
+        var { data: attempts, error } = await supabaseClient
+            .from('exam_practice_attempts')
+            .select('*')
+            .order('created_at', { ascending: false })
+            .limit(50);
+
+        if (error) throw error;
+
+        if (!attempts || attempts.length === 0) {
+            content.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📝</div><p>No attempts yet. Generate a question to get started!</p></div>';
+            return;
+        }
+
+        var markedAttempts = attempts.filter(function(a) { return a.marks_awarded !== null; });
+
+        // Stats
+        var totalAttempts = attempts.length;
+        var avgScore = 0;
+        if (markedAttempts.length > 0) {
+            var sum = markedAttempts.reduce(function(acc, a) { return acc + (a.percentage_score || 0); }, 0);
+            avgScore = Math.round(sum / markedAttempts.length);
+        }
+
+        // Trend (compare last 5 to previous 5)
+        var trend = 'N/A';
+        if (markedAttempts.length >= 10) {
+            var recent5 = markedAttempts.slice(0, 5).reduce(function(a, b) { return a + (b.percentage_score || 0); }, 0) / 5;
+            var prev5 = markedAttempts.slice(5, 10).reduce(function(a, b) { return a + (b.percentage_score || 0); }, 0) / 5;
+            var diff = Math.round(recent5 - prev5);
+            trend = (diff >= 0 ? '+' : '') + diff + '%';
+        }
+
+        var html = '';
+
+        // Stats Grid
+        html += '<div class="stats-grid">';
+        html += '<div class="stat-card"><div class="stat-value">' + totalAttempts + '</div><div class="stat-label">Questions Attempted</div></div>';
+        html += '<div class="stat-card"><div class="stat-value">' + avgScore + '%</div><div class="stat-label">Average Score</div></div>';
+        html += '<div class="stat-card"><div class="stat-value">' + trend + '</div><div class="stat-label">Recent Trend</div></div>';
+        html += '<div class="stat-card"><div class="stat-value">' + markedAttempts.length + '</div><div class="stat-label">Answers Marked</div></div>';
+        html += '</div>';
+
+        // Recent Attempts Table
+        html += '<div class="recent-attempts">';
+        html += '<div class="section-title" style="font-size:1.15rem; margin-bottom:1rem;">Recent Attempts</div>';
+        html += '<table class="recent-table">';
+        html += '<thead><tr><th>Board</th><th>Unit</th><th>Type</th><th>Score</th><th>Date</th></tr></thead>';
+        html += '<tbody>';
+
+        attempts.slice(0, 20).forEach(function(a) {
+            var scoreHtml = '';
+            if (a.marks_awarded !== null) {
+                var pct = a.percentage_score || 0;
+                var pillClass = pct >= 70 ? 'high' : (pct >= 40 ? 'medium' : 'low');
+                scoreHtml = '<span class="score-pill ' + pillClass + '">' + a.marks_awarded + '/' + a.total_marks + '</span>';
+            } else {
+                scoreHtml = '<span style="color:var(--gray-400);font-size:0.8rem;">Not marked</span>';
+            }
+
+            var dateStr = new Date(a.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+
+            html += '<tr>';
+            html += '<td>' + escapeHtml(a.board || '') + '</td>';
+            html += '<td>' + escapeHtml(a.unit || '') + '</td>';
+            html += '<td>' + escapeHtml(a.question_type || '') + '</td>';
+            html += '<td>' + scoreHtml + '</td>';
+            html += '<td>' + dateStr + '</td>';
+            html += '</tr>';
+        });
+
+        html += '</tbody></table></div>';
+
+        content.innerHTML = html;
+
+    } catch (error) {
+        console.error('Dashboard error:', error);
+        content.innerHTML = '<div class="error-card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><div class="error-text">Could not load your progress. Please try again later.</div></div>';
+    }
+}
+
+// ===== UTILITIES =====
+function escapeHtml(text) {
+    var div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function showError(message) {
+    // Remove existing errors
+    var existing = document.querySelector('.error-card');
+    if (existing) existing.remove();
+
+    var errorHtml = '<div class="error-card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><div class="error-text">' + escapeHtml(message) + '</div></div>';
+
+    var mainContent = document.querySelector('.main-content');
+    mainContent.insertAdjacentHTML('afterbegin', errorHtml);
+
+    // Auto remove after 8 seconds
+    setTimeout(function() {
+        var err = document.querySelector('.error-card');
+        if (err) err.remove();
+    }, 8000);
+}
+
+// ===== MOBILE MENU =====
+function setupMobileMenu() {
+    var hamburger = document.getElementById('siteHamburger');
+    var overlay = document.getElementById('siteMobileOverlay');
+    var menu = document.getElementById('siteMobileMenu');
+
+    function toggleMenu() {
+        hamburger.classList.toggle('open');
+        overlay.classList.toggle('show');
+        menu.classList.toggle('show');
+    }
+
+    hamburger.addEventListener('click', toggleMenu);
+    overlay.addEventListener('click', toggleMenu);
+}
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', function() {
+    checkAuth();
+    setupMobileMenu();
+
+    // Logout buttons
+    var navLogout = document.getElementById('navLogoutBtn');
+    var mobileLogout = document.getElementById('mobileLogoutBtn');
+    if (navLogout) navLogout.addEventListener('click', handleLogout);
+    if (mobileLogout) mobileLogout.addEventListener('click', handleLogout);
+});
+</script>
+
+</body>
+</html>
