@@ -1608,8 +1608,9 @@
         <div class="section-title">Choose Your Exam Board</div>
         <div class="section-subtitle">Select the exam board and qualification you are studying</div>
 
-        <div class="board-grid" id="boardGrid">
-            <div class="board-card" data-board="edexcel_ial" onclick="selectBoard(this)">
+        <!-- A-Level Boards -->
+        <div class="board-grid" id="boardGridAlevel">
+            <div class="board-card" data-board="edexcel_ial" data-level="alevel" onclick="selectBoard(this)">
                 <div class="board-card-header">
                     <div class="board-card-icon" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">IAL</div>
                     <div class="board-card-check"></div>
@@ -1617,7 +1618,16 @@
                 <div class="board-card-title">Edexcel International A Level</div>
                 <div class="board-card-desc">Pearson Edexcel IAL Business Studies (WBS11 to WBS14)</div>
             </div>
-            <div class="board-card coming-soon" data-board="edexcel_uk">
+            <div class="board-card coming-soon" data-board="cie_ial" data-level="alevel">
+                <div class="board-card-header">
+                    <div class="board-card-icon" style="background: linear-gradient(135deg, #f39c12, #e67e22);">IAL</div>
+                    <div class="board-card-check"></div>
+                </div>
+                <div class="board-card-title">CIE International A Level</div>
+                <div class="board-card-desc">Cambridge International A Level Business (9609)</div>
+                <span class="coming-soon-badge">Coming Soon</span>
+            </div>
+            <div class="board-card coming-soon" data-board="edexcel_uk" data-level="alevel">
                 <div class="board-card-header">
                     <div class="board-card-icon" style="background: linear-gradient(135deg, #3498db, #2980b9);">A2</div>
                     <div class="board-card-check"></div>
@@ -1626,22 +1636,53 @@
                 <div class="board-card-desc">Pearson Edexcel A Level Business (9BS0)</div>
                 <span class="coming-soon-badge">Coming Soon</span>
             </div>
-            <div class="board-card coming-soon" data-board="aqa_gcse">
+            <div class="board-card coming-soon" data-board="aqa_uk" data-level="alevel">
                 <div class="board-card-header">
-                    <div class="board-card-icon" style="background: linear-gradient(135deg, #27ae60, #229954);">GC</div>
+                    <div class="board-card-icon" style="background: linear-gradient(135deg, #8e44ad, #7d3c98);">A2</div>
                     <div class="board-card-check"></div>
                 </div>
-                <div class="board-card-title">AQA GCSE</div>
-                <div class="board-card-desc">AQA GCSE Business Studies (8132)</div>
+                <div class="board-card-title">AQA UK A Level</div>
+                <div class="board-card-desc">AQA A Level Business (7132)</div>
                 <span class="coming-soon-badge">Coming Soon</span>
             </div>
-            <div class="board-card coming-soon" data-board="cie_igcse">
+        </div>
+
+        <!-- GCSE Boards -->
+        <div class="board-grid" id="boardGridGcse" style="display:none;">
+            <div class="board-card coming-soon" data-board="edexcel_igcse" data-level="gcse">
+                <div class="board-card-header">
+                    <div class="board-card-icon" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">IG</div>
+                    <div class="board-card-check"></div>
+                </div>
+                <div class="board-card-title">Edexcel IGCSE</div>
+                <div class="board-card-desc">Pearson Edexcel IGCSE Business (4BS1)</div>
+                <span class="coming-soon-badge">Coming Soon</span>
+            </div>
+            <div class="board-card coming-soon" data-board="cie_igcse" data-level="gcse">
                 <div class="board-card-header">
                     <div class="board-card-icon" style="background: linear-gradient(135deg, #f39c12, #e67e22);">IG</div>
                     <div class="board-card-check"></div>
                 </div>
                 <div class="board-card-title">CIE IGCSE</div>
                 <div class="board-card-desc">Cambridge IGCSE Business Studies (0450)</div>
+                <span class="coming-soon-badge">Coming Soon</span>
+            </div>
+            <div class="board-card coming-soon" data-board="aqa_gcse" data-level="gcse">
+                <div class="board-card-header">
+                    <div class="board-card-icon" style="background: linear-gradient(135deg, #8e44ad, #7d3c98);">GC</div>
+                    <div class="board-card-check"></div>
+                </div>
+                <div class="board-card-title">AQA GCSE</div>
+                <div class="board-card-desc">AQA GCSE Business Studies (8132)</div>
+                <span class="coming-soon-badge">Coming Soon</span>
+            </div>
+            <div class="board-card coming-soon" data-board="edexcel_gcse_uk" data-level="gcse">
+                <div class="board-card-header">
+                    <div class="board-card-icon" style="background: linear-gradient(135deg, #3498db, #2980b9);">GC</div>
+                    <div class="board-card-check"></div>
+                </div>
+                <div class="board-card-title">Edexcel UK GCSE</div>
+                <div class="board-card-desc">Pearson Edexcel GCSE Business (1BS0)</div>
                 <span class="coming-soon-badge">Coming Soon</span>
             </div>
         </div>
@@ -2978,66 +3019,26 @@ document.addEventListener('DOMContentLoaded', function() {
     var LEVEL_KEY = 'mybiz_study_level';
     var currentLevel = localStorage.getItem(LEVEL_KEY) || 'alevel';
 
-    var alevelPages = {
-        'app.html': 'gcse-app.html',
-        'glossary.html': 'gcse-glossary.html',
-        'exam-skills-v2.html': null,
-        'exam-practice.html': null,
-        'notes.html': null,
-        'notes-unit1.html': null,
-        'notes-unit2.html': null,
-        'notes-unit3.html': null,
-        'notes-unit4.html': null
-    };
-    var gcsePages = {
-        'gcse-app.html': 'app.html',
-        'gcse-glossary.html': 'glossary.html'
-    };
-    var comingSoon = ['exam-skills-v2.html', 'exam-practice.html', 'notes.html', 'notes-unit1.html', 'notes-unit2.html', 'notes-unit3.html', 'notes-unit4.html'];
+    function showBoardGrid(level) {
+        var alevelGrid = document.getElementById('boardGridAlevel');
+        var gcseGrid = document.getElementById('boardGridGcse');
+        if (alevelGrid) alevelGrid.style.display = (level === 'alevel') ? '' : 'none';
+        if (gcseGrid) gcseGrid.style.display = (level === 'gcse') ? '' : 'none';
 
-    function getCurrentPage() {
-        var path = window.location.pathname;
-        return path.substring(path.lastIndexOf('/') + 1) || 'index.html';
-    }
-
-    function showComingSoonToast() {
-        var toast = document.getElementById('comingSoonToast');
-        if (!toast) {
-            toast = document.createElement('div');
-            toast.id = 'comingSoonToast';
-            toast.style.cssText = 'position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:#1e3a5f;color:#fff;padding:0.75rem 1.5rem;border-radius:10px;font-size:0.9rem;font-weight:600;opacity:0;transition:all 0.3s ease;z-index:10000;pointer-events:none;';
-            toast.textContent = 'GCSE version coming soon!';
-            document.body.appendChild(toast);
-        }
-        toast.style.opacity = '1';
-        toast.style.transform = 'translateX(-50%) translateY(0)';
-        setTimeout(function() { toast.style.opacity = '0'; toast.style.transform = 'translateX(-50%) translateY(20px)'; }, 2500);
-    }
-
-    function updateNavLinks(level) {
-        var navLinks = document.querySelectorAll('.site-nav-link, a[href]');
-        navLinks.forEach(function(link) {
-            var href = link.getAttribute('href');
-            if (!href) return;
-            if (level === 'gcse') {
-                if (href === 'app.html') link.setAttribute('href', 'gcse-app.html');
-                if (comingSoon.indexOf(href) !== -1) {
-                    link.setAttribute('data-coming-soon', 'true');
-                    link.addEventListener('click', comingSoonHandler);
-                }
-            } else {
-                if (href === 'gcse-app.html') link.setAttribute('href', 'app.html');
-                link.removeAttribute('data-coming-soon');
-                link.removeEventListener('click', comingSoonHandler);
-            }
-        });
-    }
-
-    function comingSoonHandler(e) {
-        if (this.getAttribute('data-coming-soon') === 'true') {
-            e.preventDefault();
-            showComingSoonToast();
-        }
+        // Reset selection state when switching levels
+        document.querySelectorAll('.board-card').forEach(function(c) { c.classList.remove('selected'); });
+        currentBoard = null;
+        currentUnit = null;
+        currentQType = null;
+        selectedTopics = [];
+        var unitSec = document.getElementById('unitSection');
+        var topicSec = document.getElementById('topicSection');
+        var qtypeSec = document.getElementById('qtypeSection');
+        var genSec = document.getElementById('generateSection');
+        if (unitSec) unitSec.style.display = 'none';
+        if (topicSec) topicSec.style.display = 'none';
+        if (qtypeSec) qtypeSec.style.display = 'none';
+        if (genSec) genSec.style.display = 'none';
     }
 
     function setLevel(level) {
@@ -3046,29 +3047,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
             btn.classList.toggle('active', btn.dataset.level === level);
         });
-        updateNavLinks(level);
-        var page = getCurrentPage();
-        if (level === 'gcse') {
-            if (alevelPages[page] === null) {
-                showComingSoonToast();
-                localStorage.setItem(LEVEL_KEY, 'alevel');
-                currentLevel = 'alevel';
-                document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
-                    btn.classList.toggle('active', btn.dataset.level === 'alevel');
-                });
-                updateNavLinks('alevel');
-                return;
-            }
-            if (alevelPages[page]) {
-                window.location.href = alevelPages[page];
-                return;
-            }
-        } else {
-            if (gcsePages[page]) {
-                window.location.href = gcsePages[page];
-                return;
-            }
-        }
+        showBoardGrid(level);
     }
 
     function initToggles() {
@@ -3076,7 +3055,7 @@ document.addEventListener('DOMContentLoaded', function() {
             btn.classList.toggle('active', btn.dataset.level === currentLevel);
             btn.addEventListener('click', function() { setLevel(this.dataset.level); });
         });
-        updateNavLinks(currentLevel);
+        showBoardGrid(currentLevel);
     }
 
     if (document.readyState === 'loading') {
