@@ -247,96 +247,250 @@
         /* ===== HERO SECTION ===== */
         .hero {
             position: relative;
-            min-height: 280px;
-            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
+            min-height: 420px;
+            background: linear-gradient(160deg, #0f2439 0%, var(--primary) 35%, var(--primary-light) 70%, #3a7bd5 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 120px 2rem 50px;
+            padding: 120px 2rem 60px;
             overflow: hidden;
         }
 
-        .hero-orb {
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                radial-gradient(ellipse 600px 400px at 20% 50%, rgba(230, 126, 34, 0.12) 0%, transparent 70%),
+                radial-gradient(ellipse 500px 500px at 80% 30%, rgba(59, 130, 246, 0.1) 0%, transparent 60%),
+                radial-gradient(ellipse 400px 300px at 60% 80%, rgba(155, 89, 182, 0.08) 0%, transparent 60%);
+            animation: meshShift 12s ease-in-out infinite alternate;
+        }
+
+        @keyframes meshShift {
+            0% { transform: scale(1) translate(0, 0); opacity: 1; }
+            100% { transform: scale(1.1) translate(-2%, 1%); opacity: 0.8; }
+        }
+
+        .hero-particle {
             position: absolute;
             border-radius: 50%;
-            opacity: 0.08;
-            filter: blur(40px);
+            pointer-events: none;
         }
 
-        .hero-orb-1 {
-            width: 300px; height: 300px;
-            background: var(--skill-knowledge);
-            top: -50px; left: -50px;
-            animation: float1 6s ease-in-out infinite;
+        .hero-particle-1 { width: 4px; height: 4px; background: rgba(230, 126, 34, 0.5); top: 20%; left: 15%; animation: particleDrift1 8s ease-in-out infinite; }
+        .hero-particle-2 { width: 3px; height: 3px; background: rgba(255, 255, 255, 0.3); top: 60%; left: 10%; animation: particleDrift2 10s ease-in-out infinite; }
+        .hero-particle-3 { width: 5px; height: 5px; background: rgba(59, 130, 246, 0.4); top: 30%; right: 12%; animation: particleDrift3 7s ease-in-out infinite; }
+        .hero-particle-4 { width: 3px; height: 3px; background: rgba(230, 126, 34, 0.4); top: 70%; right: 20%; animation: particleDrift1 9s ease-in-out infinite reverse; }
+        .hero-particle-5 { width: 4px; height: 4px; background: rgba(255, 255, 255, 0.25); top: 45%; left: 25%; animation: particleDrift2 11s ease-in-out infinite; }
+        .hero-particle-6 { width: 3px; height: 3px; background: rgba(155, 89, 182, 0.4); top: 25%; right: 30%; animation: particleDrift3 8s ease-in-out infinite reverse; }
+
+        @keyframes particleDrift1 {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+            25% { transform: translate(15px, -20px) scale(1.3); opacity: 1; }
+            50% { transform: translate(-10px, -35px) scale(0.8); opacity: 0.4; }
+            75% { transform: translate(20px, -15px) scale(1.1); opacity: 0.8; }
+        }
+        @keyframes particleDrift2 {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.5; }
+            33% { transform: translate(-20px, -25px) scale(1.4); opacity: 0.9; }
+            66% { transform: translate(15px, -40px) scale(0.7); opacity: 0.3; }
+        }
+        @keyframes particleDrift3 {
+            0%, 100% { transform: translate(0, 0); opacity: 0.5; }
+            50% { transform: translate(-15px, -30px); opacity: 1; }
         }
 
-        .hero-orb-2 {
-            width: 200px; height: 200px;
-            background: var(--accent);
-            top: 30px; right: 10%;
-            animation: float2 7s ease-in-out infinite;
+        .hero-grid {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridPan 30s linear infinite;
         }
 
-        .hero-orb-3 {
-            width: 250px; height: 250px;
-            background: var(--skill-analysis);
-            bottom: -60px; left: 30%;
-            animation: float3 5s ease-in-out infinite;
+        @keyframes gridPan {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(60px, 60px); }
         }
 
-        .hero-orb-4 {
-            width: 180px; height: 180px;
-            background: var(--skill-application);
-            bottom: 20px; right: 20%;
-            animation: float1 8s ease-in-out infinite reverse;
-        }
-
-        @keyframes float1 { 0%, 100% { transform: translateY(0) translateX(0); } 50% { transform: translateY(-20px) translateX(10px); } }
-        @keyframes float2 { 0%, 100% { transform: translateY(0) translateX(0); } 50% { transform: translateY(15px) translateX(-15px); } }
-        @keyframes float3 { 0%, 100% { transform: translateY(0) translateX(0); } 50% { transform: translateY(-15px) translateX(5px); } }
-
-        .hero-content { position: relative; z-index: 2; }
-
-        .hero h1 {
-            font-size: 2.5rem;
-            font-weight: 900;
-            color: white;
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.5px;
-        }
-
-        .hero-subtitle {
-            font-size: 1.1rem;
-            color: rgba(255,255,255,0.7);
-            font-weight: 400;
-            max-width: 600px;
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 780px;
             margin: 0 auto;
         }
 
         .hero-badge {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            background: rgba(255,255,255,0.12);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 20px;
-            padding: 6px 16px;
-            font-size: 0.8rem;
-            color: rgba(255,255,255,0.85);
+            gap: 8px;
+            background: rgba(230, 126, 34, 0.15);
+            border: 1px solid rgba(230, 126, 34, 0.35);
+            border-radius: 50px;
+            padding: 7px 18px 7px 10px;
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.95);
             font-weight: 600;
-            margin-bottom: 1rem;
-            backdrop-filter: blur(5px);
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+            animation: badgeFadeIn 0.8s ease-out both;
+            letter-spacing: 0.02em;
         }
 
-        .hero-badge-dot {
-            width: 8px; height: 8px;
-            border-radius: 50%;
+        .hero-badge-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
             background: var(--accent);
-            animation: pulse-dot 2s ease-in-out infinite;
+            border-radius: 50%;
+            flex-shrink: 0;
         }
 
-        @keyframes pulse-dot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.3); } }
+        .hero-badge-icon svg { width: 13px; height: 13px; fill: white; }
+
+        @keyframes badgeFadeIn {
+            from { opacity: 0; transform: translateY(10px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 0.25rem;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+            animation: titleSlideUp 0.9s ease-out 0.15s both;
+        }
+
+        .hero h1 .accent-text {
+            background: linear-gradient(135deg, var(--accent-light) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        @keyframes titleSlideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.75);
+            font-weight: 400;
+            max-width: 580px;
+            margin: 0.75rem auto 0;
+            line-height: 1.65;
+            animation: subtitleFade 0.9s ease-out 0.35s both;
+        }
+
+        @keyframes subtitleFade {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-pillars {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            animation: pillarsFade 0.9s ease-out 0.55s both;
+            flex-wrap: wrap;
+        }
+
+        @keyframes pillarsFade {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-pillar {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 12px;
+            backdrop-filter: blur(8px);
+            transition: all 0.3s ease;
+        }
+
+        .hero-pillar:hover {
+            background: rgba(255,255,255,0.12);
+            border-color: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        .hero-pillar-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+
+        .hero-pillar-icon svg { width: 20px; height: 20px; stroke-width: 1.8; }
+
+        .hero-pillar-icon.teacher { background: rgba(230, 126, 34, 0.2); }
+        .hero-pillar-icon.teacher svg { stroke: var(--accent-light); }
+
+        .hero-pillar-icon.spec { background: rgba(59, 130, 246, 0.2); }
+        .hero-pillar-icon.spec svg { stroke: #60a5fa; }
+
+        .hero-pillar-icon.feedback { background: rgba(46, 204, 113, 0.2); }
+        .hero-pillar-icon.feedback svg { stroke: #4ade80; }
+
+        .hero-pillar-text { text-align: left; }
+
+        .hero-pillar-label {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: rgba(255,255,255,0.95);
+            line-height: 1.2;
+        }
+
+        .hero-pillar-desc {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.55);
+            font-weight: 400;
+            line-height: 1.3;
+            margin-top: 1px;
+        }
+
+        .hero-line-left, .hero-line-right {
+            position: absolute;
+            top: 50%;
+            width: 120px;
+            height: 1px;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .hero-line-left {
+            left: 3%;
+            background: linear-gradient(90deg, transparent, rgba(230, 126, 34, 0.3), transparent);
+            animation: lineGlow 3s ease-in-out infinite;
+        }
+
+        .hero-line-right {
+            right: 3%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.3), transparent);
+            animation: lineGlow 3s ease-in-out infinite 1.5s;
+        }
+
+        @keyframes lineGlow {
+            0%, 100% { opacity: 0.3; width: 80px; }
+            50% { opacity: 0.8; width: 120px; }
+        }
 
         /* ===== MAIN CONTENT ===== */
         .main-content {
@@ -1499,9 +1653,15 @@
             .site-mobile-overlay { display: block; }
             .site-mobile-menu { display: block; }
 
-            .hero { padding: 100px 1.5rem 40px; min-height: 220px; }
-            .hero h1 { font-size: 1.8rem; }
+            .hero { padding: 100px 1.5rem 45px; min-height: 360px; }
+            .hero h1 { font-size: 2rem; }
             .hero-subtitle { font-size: 0.95rem; }
+            .hero-pillars { gap: 0.75rem; }
+            .hero-pillar { padding: 0.4rem 0.75rem; }
+            .hero-pillar-icon { width: 32px; height: 32px; }
+            .hero-pillar-label { font-size: 0.75rem; }
+            .hero-pillar-desc { font-size: 0.65rem; }
+            .hero-line-left, .hero-line-right { display: none; }
 
             .main-content { padding: 1.5rem 1rem 3rem; }
 
@@ -1525,7 +1685,9 @@
         }
 
         @media (max-width: 480px) {
-            .hero h1 { font-size: 1.5rem; }
+            .hero h1 { font-size: 1.65rem; }
+            .hero-pillars { flex-direction: column; align-items: center; gap: 0.6rem; }
+            .hero-pillar { width: 100%; max-width: 280px; }
             .board-card { padding: 1.25rem; }
             .score-card { padding: 1.75rem; }
             .score-ring-container { width: 120px; height: 120px; }
@@ -1585,17 +1747,51 @@
 
 <!-- Hero -->
 <section class="hero">
-    <div class="hero-orb hero-orb-1"></div>
-    <div class="hero-orb hero-orb-2"></div>
-    <div class="hero-orb hero-orb-3"></div>
-    <div class="hero-orb hero-orb-4"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-particle hero-particle-1"></div>
+    <div class="hero-particle hero-particle-2"></div>
+    <div class="hero-particle hero-particle-3"></div>
+    <div class="hero-particle hero-particle-4"></div>
+    <div class="hero-particle hero-particle-5"></div>
+    <div class="hero-particle hero-particle-6"></div>
+    <div class="hero-line-left"></div>
+    <div class="hero-line-right"></div>
     <div class="hero-content">
         <div class="hero-badge">
-            <span class="hero-badge-dot"></span>
-            AI Powered
+            <span class="hero-badge-icon"><svg viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></span>
+            Expert Trained AI
         </div>
-        <h1>Exam Practice</h1>
-        <p class="hero-subtitle">Generate real exam style questions and get instant AI marking with detailed feedback</p>
+        <h1>Your AI Examiner,<br>Trained by <span class="accent-text">a Real One</span></h1>
+        <p class="hero-subtitle">Built by an experienced Business Studies teacher and trained on real exam board mark schemes. Every question, every mark, every piece of feedback aligned to your specification.</p>
+        <div class="hero-pillars">
+            <div class="hero-pillar">
+                <div class="hero-pillar-icon teacher">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M12 14l9-5-9-5-9 5 9 5z"/><path d="M12 14l6.16-3.422A12.083 12.083 0 0121 17.5C21 20 16.97 22 12 22S3 20 3 17.5a12.083 12.083 0 012.84-6.922L12 14z"/></svg>
+                </div>
+                <div class="hero-pillar-text">
+                    <div class="hero-pillar-label">Teacher Built</div>
+                    <div class="hero-pillar-desc">Designed by a practising examiner</div>
+                </div>
+            </div>
+            <div class="hero-pillar">
+                <div class="hero-pillar-icon spec">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                </div>
+                <div class="hero-pillar-text">
+                    <div class="hero-pillar-label">Spec Aligned</div>
+                    <div class="hero-pillar-desc">Questions match your exam board</div>
+                </div>
+            </div>
+            <div class="hero-pillar">
+                <div class="hero-pillar-icon feedback">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                </div>
+                <div class="hero-pillar-text">
+                    <div class="hero-pillar-label">Detailed Feedback</div>
+                    <div class="hero-pillar-desc">See exactly where to improve</div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
