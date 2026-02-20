@@ -491,6 +491,134 @@
             color: var(--gray-900);
         }
 
+        /* ===== TOPIC SELECTION ===== */
+        .topic-section {
+            background: white;
+            border-radius: 16px;
+            padding: 1.75rem;
+            border: 1px solid var(--gray-200);
+            margin-bottom: 2rem;
+        }
+
+        .topic-select-all {
+            padding-bottom: 0.75rem;
+            margin-bottom: 0.75rem;
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        .topic-checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            cursor: pointer;
+            padding: 0.4rem 0.5rem;
+            border-radius: 8px;
+            transition: background 0.15s ease;
+            user-select: none;
+        }
+
+        .topic-checkbox-label:hover {
+            background: var(--gray-50);
+        }
+
+        .topic-checkbox {
+            display: none;
+        }
+
+        .topic-checkbox-custom {
+            width: 20px;
+            height: 20px;
+            min-width: 20px;
+            border: 2px solid var(--gray-300);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        .topic-checkbox:checked + .topic-checkbox-custom {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .topic-checkbox:checked + .topic-checkbox-custom::after {
+            content: '\2713';
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .topic-unit-label .topic-label-text {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--primary);
+        }
+
+        .topic-section-label .topic-label-text {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--gray-900);
+        }
+
+        .topic-section-icon {
+            font-size: 0.7rem;
+            color: var(--gray-400);
+            transition: transform 0.2s ease;
+        }
+
+        .topic-tree-section {
+            margin-bottom: 0.25rem;
+        }
+
+        .topic-tree-topics {
+            margin-left: 2.25rem;
+            padding-left: 0.75rem;
+            border-left: 2px solid var(--gray-100);
+        }
+
+        .topic-item-label .topic-label-text {
+            font-weight: 400;
+            font-size: 0.9rem;
+            color: var(--gray-700);
+        }
+
+        .topic-item-label:hover .topic-label-text {
+            color: var(--primary);
+        }
+
+        .topic-summary {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--gray-100);
+        }
+
+        .topic-summary-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .topic-summary-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+
+        .topic-tag {
+            background: linear-gradient(135deg, rgba(30, 58, 95, 0.08), rgba(30, 58, 95, 0.04));
+            border: 1px solid rgba(30, 58, 95, 0.15);
+            color: var(--primary);
+            padding: 0.3rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 500;
+        }
+
         /* Question Type Selection */
         .qtype-grid {
             display: grid;
@@ -1466,7 +1594,10 @@
         <!-- Unit Selection (shown after board) -->
         <div id="unitSection" style="display:none;"></div>
 
-        <!-- Question Type Selection (shown after unit) -->
+        <!-- Topic Selection (shown after unit) -->
+        <div id="topicSection" style="display:none;"></div>
+
+        <!-- Question Type Selection (shown after topics) -->
         <div id="qtypeSection" style="display:none;"></div>
 
         <!-- Generate Button -->
@@ -1559,6 +1690,210 @@ const SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+// ===== TOPIC DATA (Edexcel IAL) =====
+const EDEXCEL_IAL_TOPICS = {
+    unit1: {
+        name: 'Marketing and People',
+        sections: [
+            {
+                id: 'u1s1', name: 'Meeting Customer Needs',
+                topics: [
+                    { id: 'u1s1t1', name: 'The Market' },
+                    { id: 'u1s1t2', name: 'Market Research' },
+                    { id: 'u1s1t3', name: 'Market Positioning' }
+                ]
+            },
+            {
+                id: 'u1s2', name: 'The Market',
+                topics: [
+                    { id: 'u1s2t1', name: 'Demand' },
+                    { id: 'u1s2t2', name: 'Supply' },
+                    { id: 'u1s2t3', name: 'Markets and Equilibrium' },
+                    { id: 'u1s2t4', name: 'Price Elasticity of Demand (PED)' },
+                    { id: 'u1s2t5', name: 'Income Elasticity of Demand (YED)' }
+                ]
+            },
+            {
+                id: 'u1s3', name: 'Marketing Mix and Strategy',
+                topics: [
+                    { id: 'u1s3t1', name: 'Marketing Objectives and Strategy' },
+                    { id: 'u1s3t2', name: 'Product/Service Design' },
+                    { id: 'u1s3t3', name: 'Promotion and Branding' },
+                    { id: 'u1s3t4', name: 'Pricing Strategies' },
+                    { id: 'u1s3t5', name: 'Distribution' }
+                ]
+            },
+            {
+                id: 'u1s4', name: 'Managing People',
+                topics: [
+                    { id: 'u1s4t1', name: 'Approaches to Staffing' },
+                    { id: 'u1s4t2', name: 'Recruitment, Selection and Training' },
+                    { id: 'u1s4t3', name: 'Organisational Design' },
+                    { id: 'u1s4t4', name: 'Motivation in Theory and Practice' },
+                    { id: 'u1s4t5', name: 'Leadership' }
+                ]
+            },
+            {
+                id: 'u1s5', name: 'Entrepreneurs and Leaders',
+                topics: [
+                    { id: 'u1s5t1', name: 'Role of an Entrepreneur' },
+                    { id: 'u1s5t2', name: 'Entrepreneurial Motives and Characteristics' },
+                    { id: 'u1s5t3', name: 'Business Objectives' },
+                    { id: 'u1s5t4', name: 'Business Choices' }
+                ]
+            }
+        ]
+    },
+    unit2: {
+        name: 'Managing Business Activities',
+        sections: [
+            {
+                id: 'u2s1', name: 'Planning a Business and Raising Finance',
+                topics: [
+                    { id: 'u2s1t1', name: 'Planning' },
+                    { id: 'u2s1t2', name: 'Internal Finance' },
+                    { id: 'u2s1t3', name: 'External Finance' },
+                    { id: 'u2s1t4', name: 'Forms of Business' },
+                    { id: 'u2s1t5', name: 'Forms of Business: PLCs' },
+                    { id: 'u2s1t6', name: 'Liability' }
+                ]
+            },
+            {
+                id: 'u2s2', name: 'Financial Planning',
+                topics: [
+                    { id: 'u2s2t1', name: 'Sales Revenue and Costs' },
+                    { id: 'u2s2t2', name: 'Sales Forecasting' },
+                    { id: 'u2s2t3', name: 'Break Even' },
+                    { id: 'u2s2t4', name: 'Cash Flow' },
+                    { id: 'u2s2t5', name: 'Budgets' }
+                ]
+            },
+            {
+                id: 'u2s3', name: 'Managing Finance',
+                topics: [
+                    { id: 'u2s3t1', name: 'Profit' },
+                    { id: 'u2s3t2', name: 'Liquidity' },
+                    { id: 'u2s3t3', name: 'Business Failure' }
+                ]
+            },
+            {
+                id: 'u2s4', name: 'Resource Management',
+                topics: [
+                    { id: 'u2s4t1', name: 'Production, Productivity and Efficiency' },
+                    { id: 'u2s4t2', name: 'Capacity Utilisation' },
+                    { id: 'u2s4t3', name: 'Inventory Control' },
+                    { id: 'u2s4t4', name: 'Quality Management' }
+                ]
+            },
+            {
+                id: 'u2s5', name: 'External Influences',
+                topics: [
+                    { id: 'u2s5t1', name: 'Economic Influences' },
+                    { id: 'u2s5t2', name: 'Legislation' },
+                    { id: 'u2s5t3', name: 'The Competitive Environment' }
+                ]
+            }
+        ]
+    },
+    unit3: {
+        name: 'Business Decisions and Strategy',
+        sections: [
+            {
+                id: 'u3s1', name: 'Business Objectives and Strategy',
+                topics: [
+                    { id: 'u3s1t1', name: 'Corporate Objectives' },
+                    { id: 'u3s1t2', name: 'Theories of Corporate Strategy' },
+                    { id: 'u3s1t3', name: 'SWOT Analysis' },
+                    { id: 'u3s1t4', name: 'Impact of External Influences' }
+                ]
+            },
+            {
+                id: 'u3s2', name: 'Business Growth',
+                topics: [
+                    { id: 'u3s2t1', name: 'Growth' },
+                    { id: 'u3s2t2', name: 'Organic Growth' },
+                    { id: 'u3s2t3', name: 'Inorganic Growth' },
+                    { id: 'u3s2t4', name: 'Problems Arising from Growth' }
+                ]
+            },
+            {
+                id: 'u3s3', name: 'Decision Making Techniques',
+                topics: [
+                    { id: 'u3s3t1', name: 'Quantitative Sales Forecasting' },
+                    { id: 'u3s3t2', name: 'Investment Appraisal' },
+                    { id: 'u3s3t3', name: 'Decision Trees' },
+                    { id: 'u3s3t4', name: 'Critical Path Analysis' },
+                    { id: 'u3s3t5', name: 'Contribution' }
+                ]
+            },
+            {
+                id: 'u3s4', name: 'Influences on Business Decisions',
+                topics: [
+                    { id: 'u3s4t1', name: 'Corporate Culture' },
+                    { id: 'u3s4t2', name: 'Stakeholder Model versus Shareholder Model' },
+                    { id: 'u3s4t3', name: 'Business Ethics' }
+                ]
+            },
+            {
+                id: 'u3s5', name: 'Assessing Competitiveness',
+                topics: [
+                    { id: 'u3s5t1', name: 'Interpretation of Financial Statements' },
+                    { id: 'u3s5t2', name: 'Ratio Analysis' },
+                    { id: 'u3s5t3', name: 'Human Resources' }
+                ]
+            },
+            {
+                id: 'u3s6', name: 'Managing Change',
+                topics: [
+                    { id: 'u3s6t1', name: 'Key Factors in Change' },
+                    { id: 'u3s6t2', name: 'Contingency Planning' }
+                ]
+            }
+        ]
+    },
+    unit4: {
+        name: 'Global Business',
+        sections: [
+            {
+                id: 'u4s1', name: 'Globalisation',
+                topics: [
+                    { id: 'u4s1t1', name: 'Growing Economies' },
+                    { id: 'u4s1t2', name: 'International Trade and Business Growth' },
+                    { id: 'u4s1t3', name: 'Factors Contributing to Increased Globalisation' },
+                    { id: 'u4s1t4', name: 'Protectionism' },
+                    { id: 'u4s1t5', name: 'Trading Blocs' }
+                ]
+            },
+            {
+                id: 'u4s2', name: 'Global Markets and Business Expansion',
+                topics: [
+                    { id: 'u4s2t1', name: 'Conditions that Prompt Trade' },
+                    { id: 'u4s2t2', name: 'Assessment of a Country as a Market' },
+                    { id: 'u4s2t3', name: 'Assessment of a Country as a Production Location' },
+                    { id: 'u4s2t4', name: 'Reasons for Global Mergers, Takeovers or Joint Ventures' },
+                    { id: 'u4s2t5', name: 'Global Expansion and Uncertainty' }
+                ]
+            },
+            {
+                id: 'u4s3', name: 'Global Marketing',
+                topics: [
+                    { id: 'u4s3t1', name: 'Marketing' },
+                    { id: 'u4s3t2', name: 'Niche Markets' },
+                    { id: 'u4s3t3', name: 'Cultural/Social Factors' }
+                ]
+            },
+            {
+                id: 'u4s4', name: 'Global Industries and Companies',
+                topics: [
+                    { id: 'u4s4t1', name: 'The Impact of MNCs' },
+                    { id: 'u4s4t2', name: 'International Business Ethics' },
+                    { id: 'u4s4t3', name: 'Controlling MNCs' }
+                ]
+            }
+        ]
+    }
+};
+
 // ===== BOARD DATA =====
 const BOARD_DATA = {
     edexcel_ial: {
@@ -1635,6 +1970,7 @@ let currentSession = null;
 let currentBoard = null;
 let currentUnit = null;
 let currentQType = null;
+let selectedTopics = [];
 let currentQuestion = null;
 let currentAttemptId = null;
 let timerInterval = null;
@@ -1686,6 +2022,7 @@ function resetToSelection() {
     stopTimer();
     currentQuestion = null;
     currentAttemptId = null;
+    selectedTopics = [];
     if (chartInstance) { chartInstance.destroy(); chartInstance = null; }
     document.getElementById('answerTextarea').value = '';
     document.getElementById('answerTextarea').readOnly = false;
@@ -1707,8 +2044,10 @@ function selectBoard(el) {
     currentBoard = el.getAttribute('data-board');
     currentUnit = null;
     currentQType = null;
+    selectedTopics = [];
 
     // Hide downstream sections
+    document.getElementById('topicSection').style.display = 'none';
     document.getElementById('qtypeSection').style.display = 'none';
     document.getElementById('generateSection').style.display = 'none';
     document.getElementById('generateBtn').disabled = true;
@@ -1742,10 +2081,161 @@ function selectUnit(el) {
 
     currentUnit = el.getAttribute('data-unit');
     currentQType = null;
+    selectedTopics = [];
     document.getElementById('generateBtn').disabled = true;
+    document.getElementById('qtypeSection').style.display = 'none';
+    document.getElementById('generateSection').style.display = 'none';
 
-    // Show question types
-    renderQuestionTypes();
+    // Show topics (for boards that have topic data)
+    if (currentBoard === 'edexcel_ial' && EDEXCEL_IAL_TOPICS[currentUnit]) {
+        renderTopics();
+    } else {
+        // For boards without topic data, skip to question types
+        document.getElementById('topicSection').style.display = 'none';
+        renderQuestionTypes();
+    }
+}
+
+// ===== TOPIC SELECTION =====
+function renderTopics() {
+    var unitTopics = EDEXCEL_IAL_TOPICS[currentUnit];
+    if (!unitTopics) return;
+
+    var html = '<div class="topic-section">';
+    html += '<div class="section-title" style="font-size:1.2rem;">Select Topics</div>';
+    html += '<div class="section-subtitle">Choose specific topics to practise, or select entire sections. You can select multiple.</div>';
+
+    // Select All Unit button
+    html += '<div class="topic-select-all">';
+    html += '<label class="topic-checkbox-label topic-unit-label" onclick="toggleAllTopics(event)">';
+    html += '<input type="checkbox" id="selectAllUnit" class="topic-checkbox">';
+    html += '<span class="topic-checkbox-custom"></span>';
+    html += '<span class="topic-label-text">Select All of ' + unitTopics.name + '</span>';
+    html += '</label>';
+    html += '</div>';
+
+    // Sections
+    unitTopics.sections.forEach(function(section) {
+        html += '<div class="topic-tree-section">';
+
+        // Section header with checkbox
+        html += '<label class="topic-checkbox-label topic-section-label" onclick="toggleSection(event, \'' + section.id + '\')">';
+        html += '<input type="checkbox" class="topic-checkbox section-checkbox" data-section="' + section.id + '">';
+        html += '<span class="topic-checkbox-custom"></span>';
+        html += '<span class="topic-section-icon">&#9662;</span>';
+        html += '<span class="topic-label-text">' + section.name + '</span>';
+        html += '</label>';
+
+        // Topics under this section
+        html += '<div class="topic-tree-topics" id="topics-' + section.id + '">';
+        section.topics.forEach(function(topic) {
+            html += '<label class="topic-checkbox-label topic-item-label" onclick="toggleTopic(event, \'' + topic.id + '\', \'' + section.id + '\')">';
+            html += '<input type="checkbox" class="topic-checkbox topic-item-checkbox" data-topic="' + topic.id + '" data-section="' + section.id + '" data-name="' + topic.name + '">';
+            html += '<span class="topic-checkbox-custom"></span>';
+            html += '<span class="topic-label-text">' + topic.name + '</span>';
+            html += '</label>';
+        });
+        html += '</div>';
+
+        html += '</div>';
+    });
+
+    // Selected topics summary
+    html += '<div class="topic-summary" id="topicSummary" style="display:none;">';
+    html += '<div class="topic-summary-label">Selected topics:</div>';
+    html += '<div class="topic-summary-tags" id="topicSummaryTags"></div>';
+    html += '</div>';
+
+    html += '</div>';
+
+    document.getElementById('topicSection').innerHTML = html;
+    document.getElementById('topicSection').style.display = 'block';
+}
+
+function toggleAllTopics(e) {
+    e.stopPropagation();
+    var allCheckbox = document.getElementById('selectAllUnit');
+    var isChecked = !allCheckbox.checked;
+    allCheckbox.checked = isChecked;
+
+    document.querySelectorAll('.section-checkbox, .topic-item-checkbox').forEach(function(cb) {
+        cb.checked = isChecked;
+    });
+
+    updateSelectedTopics();
+}
+
+function toggleSection(e, sectionId) {
+    e.stopPropagation();
+    var sectionCb = document.querySelector('.section-checkbox[data-section="' + sectionId + '"]');
+    var isChecked = !sectionCb.checked;
+    sectionCb.checked = isChecked;
+
+    document.querySelectorAll('.topic-item-checkbox[data-section="' + sectionId + '"]').forEach(function(cb) {
+        cb.checked = isChecked;
+    });
+
+    updateSelectAllState();
+    updateSelectedTopics();
+}
+
+function toggleTopic(e, topicId, sectionId) {
+    e.stopPropagation();
+    var topicCb = document.querySelector('.topic-item-checkbox[data-topic="' + topicId + '"]');
+    topicCb.checked = !topicCb.checked;
+
+    // Update section checkbox state
+    var sectionTopics = document.querySelectorAll('.topic-item-checkbox[data-section="' + sectionId + '"]');
+    var allChecked = true;
+    sectionTopics.forEach(function(cb) { if (!cb.checked) allChecked = false; });
+    document.querySelector('.section-checkbox[data-section="' + sectionId + '"]').checked = allChecked;
+
+    updateSelectAllState();
+    updateSelectedTopics();
+}
+
+function updateSelectAllState() {
+    var allSections = document.querySelectorAll('.section-checkbox');
+    var allChecked = true;
+    allSections.forEach(function(cb) { if (!cb.checked) allChecked = false; });
+    var selectAll = document.getElementById('selectAllUnit');
+    if (selectAll) selectAll.checked = allChecked;
+}
+
+function updateSelectedTopics() {
+    selectedTopics = [];
+    document.querySelectorAll('.topic-item-checkbox:checked').forEach(function(cb) {
+        selectedTopics.push({
+            id: cb.getAttribute('data-topic'),
+            name: cb.getAttribute('data-name'),
+            section: cb.getAttribute('data-section')
+        });
+    });
+
+    // Update summary
+    var summary = document.getElementById('topicSummary');
+    var tagsDiv = document.getElementById('topicSummaryTags');
+
+    if (selectedTopics.length > 0) {
+        summary.style.display = 'block';
+        var tagsHtml = '';
+        if (selectedTopics.length > 8) {
+            tagsHtml = '<span class="topic-tag">' + selectedTopics.length + ' topics selected</span>';
+        } else {
+            selectedTopics.forEach(function(t) {
+                tagsHtml += '<span class="topic-tag">' + t.name + '</span>';
+            });
+        }
+        tagsDiv.innerHTML = tagsHtml;
+
+        // Show question types section
+        renderQuestionTypes();
+    } else {
+        summary.style.display = 'none';
+        document.getElementById('qtypeSection').style.display = 'none';
+        document.getElementById('generateSection').style.display = 'none';
+        document.getElementById('generateBtn').disabled = true;
+    }
 }
 
 function renderQuestionTypes() {
@@ -1797,6 +2287,9 @@ async function generateQuestion() {
 
         var questionTypeStr = qtypeData.marks + '_mark_' + qtypeData.command;
 
+        // Build topic names list for the prompt
+        var topicNames = selectedTopics.map(function(t) { return t.name; });
+
         var response = await fetch(SUPABASE_URL + '/functions/v1/generate-question', {
             method: 'POST',
             headers: {
@@ -1807,7 +2300,8 @@ async function generateQuestion() {
             body: JSON.stringify({
                 board: currentBoard,
                 unit: unitData.code,
-                question_type: questionTypeStr
+                question_type: questionTypeStr,
+                topics: topicNames.length > 0 ? topicNames : null
             })
         });
 
