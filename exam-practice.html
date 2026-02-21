@@ -2976,41 +2976,41 @@ function downloadFeedbackPDF() {
     }
     
     // ========== HEADER SECTION ==========
-    // Top accent bar
-    doc.setFillColor(primaryDark[0], primaryDark[1], primaryDark[2]);
-    doc.rect(0, 0, pageWidth, 45, 'F');
-    
-    // Accent stripe
+    // White background header
+    doc.setFillColor(255, 255, 255);
+    doc.rect(0, 0, pageWidth, 48, 'F');
+
+    // Accent stripe below header
     doc.setFillColor(accent[0], accent[1], accent[2]);
-    doc.rect(0, 45, pageWidth, 3, 'F');
-    
-    // Logo
+    doc.rect(0, 48, pageWidth, 3, 'F');
+
+    // Logo — vertically centred in header
     try {
-        doc.addImage(LOGO_BASE64, 'PNG', margin, 8, 55, 18);
+        doc.addImage(LOGO_BASE64, 'PNG', margin, 10, 55, 18);
     } catch(e) {
         doc.setFontSize(16);
-        doc.setTextColor(255, 255, 255);
+        doc.setTextColor(primaryDark[0], primaryDark[1], primaryDark[2]);
         doc.setFont('helvetica', 'bold');
-        doc.text('MyBizStudies', margin, 22);
+        doc.text('MyBizStudies', margin, 24);
     }
-    
-    // Header text
+
+    // Header text — dark blue, right-aligned, vertically centred with logo
     doc.setFontSize(18);
-    doc.setTextColor(255, 255, 255);
+    doc.setTextColor(primaryDark[0], primaryDark[1], primaryDark[2]);
     doc.setFont('helvetica', 'bold');
     doc.text('Exam Practice Feedback', pageWidth - margin, 20, { align: 'right' });
-    
+
     doc.setFontSize(10);
-    doc.setTextColor(200, 215, 235);
+    doc.setTextColor(grayMuted[0], grayMuted[1], grayMuted[2]);
     doc.setFont('helvetica', 'normal');
     var dateStr = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
     doc.text(dateStr, pageWidth - margin, 30, { align: 'right' });
-    
+
     // Board and unit info
     var boardName = BOARD_DATA[currentBoard] ? BOARD_DATA[currentBoard].name : currentBoard;
     doc.text(boardName, pageWidth - margin, 38, { align: 'right' });
-    
-    y = 55;
+
+    y = 58;
     
     // ========== SCORE SECTION ==========
     // Score box with gradient effect
@@ -3058,14 +3058,15 @@ function downloadFeedbackPDF() {
     doc.setFont('helvetica', 'bold');
     doc.text(qtName + ' (' + totalMarks + ' marks)', pageWidth - margin - 5, y + 15, { align: 'right' });
     
-    // Selected topics if any
-    if (selectedTopics && selectedTopics.length > 0) {
-        doc.setFontSize(9);
-        doc.setTextColor(grayMuted[0], grayMuted[1], grayMuted[2]);
-        doc.setFont('helvetica', 'normal');
-        var topicNames = selectedTopics.map(function(t) { return t.name; }).join(', ');
-        if (topicNames.length > 60) topicNames = topicNames.substring(0, 57) + '...';
-        doc.text(topicNames, pageWidth - margin - 5, y + 23, { align: 'right' });
+    // Unit name
+    if (currentUnit && BOARD_DATA[currentBoard]) {
+        var unitObj = BOARD_DATA[currentBoard].units.find(function(u) { return u.id === currentUnit; });
+        if (unitObj) {
+            doc.setFontSize(9);
+            doc.setTextColor(grayMuted[0], grayMuted[1], grayMuted[2]);
+            doc.setFont('helvetica', 'normal');
+            doc.text(unitObj.name, pageWidth - margin - 5, y + 23, { align: 'right' });
+        }
     }
     
     y += scoreBoxHeight + 8;
