@@ -2327,7 +2327,7 @@ function renderTopics() {
         html += '<div class="topic-tree-topics" id="topics-' + section.id + '">';
         section.topics.forEach(function(topic) {
             html += '<label class="topic-checkbox-label topic-item-label" onclick="toggleTopic(event, \'' + topic.id + '\', \'' + section.id + '\')">';
-            html += '<input type="checkbox" class="topic-checkbox topic-item-checkbox" data-topic="' + topic.id + '" data-section="' + section.id + '" data-name="' + topic.name + '">';
+            html += '<input type="checkbox" class="topic-checkbox topic-item-checkbox" data-topic="' + topic.id + '" data-section="' + section.id + '" data-section-name="' + section.name + '" data-name="' + topic.name + '">';
             html += '<span class="topic-checkbox-custom"></span>';
             html += '<span class="topic-label-text">' + topic.name + '</span>';
             html += '</label>';
@@ -2405,7 +2405,8 @@ function updateSelectedTopics() {
         selectedTopics.push({
             id: cb.getAttribute('data-topic'),
             name: cb.getAttribute('data-name'),
-            section: cb.getAttribute('data-section')
+            section: cb.getAttribute('data-section'),
+            sectionName: cb.getAttribute('data-section-name')
         });
     });
 
@@ -2495,7 +2496,9 @@ async function generateQuestion() {
                 board: currentBoard,
                 unit: unitData.code,
                 question_type: questionTypeStr,
-                selected_topics: selectedTopics.map(function(t) { return t.name; })
+                topics: selectedTopics.map(function(t) {
+                    return t.sectionName ? (t.name + ' (under section: ' + t.sectionName + ')') : t.name;
+                })
             })
         });
 
