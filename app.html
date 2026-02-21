@@ -23,41 +23,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary: #1e3a5f;
-            --primary-dark: #152a45;
-            --primary-light: #2d5a8a;
-            --accent: #e67e22;
-            --accent-light: #f39c12;
-            --secondary: #3498db;
-            --gradient-start: #1e3a5f;
-            --gradient-end: #2d5a8a;
-            --dark: #0f172a;
-            --gray-900: #1e293b;
-            --gray-700: #334155;
-            --gray-500: #64748b;
-            --gray-300: #cbd5e1;
-            --gray-100: #f1f5f9;
-            --gray-200: #e2e8f0;
-            --white: #ffffff;
-            --success: #27ae60;
-            --error: #e74c3c;
-            --unit1: #e74c3c;
-            --unit2: #3498db;
-            --unit3: #27ae60;
-            --unit4: #f39c12;
-            --term-color: #3498db;
-            --formula-color: #9b59b6;
-            --theory-color: #17a2b8;
-            --proscons-color: #e67e22;
-        }
-        /* ==================== SITE NAVBAR ==================== */
+/* ==================== SITE NAVBAR ==================== */
 .site-navbar {
     background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(10px);
@@ -274,6 +240,118 @@
     .site-navbar-logo {
         height: 45px;
     }
+}
+
+/* Profile Avatar Dropdown */
+.profile-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e67e22, #f39c12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid #f1f5f9;
+}
+.profile-avatar:hover {
+    box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
+    transform: scale(1.05);
+}
+.profile-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    z-index: 1100;
+    min-width: 200px;
+    display: none;
+    margin-top: 0.5rem;
+    overflow: hidden;
+}
+.profile-dropdown.active { display: block; }
+.profile-dropdown a,
+.profile-dropdown button {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border: none;
+    background: none;
+    color: #334155;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+.profile-dropdown a:hover,
+.profile-dropdown button:hover {
+    background: #f1f5f9;
+    color: #1e3a5f;
+}
+.profile-dropdown button:last-child {
+    color: #dc2626;
+    border-top: 1px solid #f1f5f9;
+}
+.profile-dropdown button:last-child:hover { background: #fef2f2; }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1e3a5f;
+            --primary-dark: #152a45;
+            --primary-light: #2d5a8a;
+            --accent: #e67e22;
+            --accent-light: #f39c12;
+            --secondary: #3498db;
+            --gradient-start: #1e3a5f;
+            --gradient-end: #2d5a8a;
+            --dark: #0f172a;
+            --gray-900: #1e293b;
+            --gray-700: #334155;
+            --gray-500: #64748b;
+            --gray-300: #cbd5e1;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --white: #ffffff;
+            --success: #27ae60;
+            --error: #e74c3c;
+            --unit1: #e74c3c;
+            --unit2: #3498db;
+            --unit3: #27ae60;
+            --unit4: #f39c12;
+            --term-color: #3498db;
+            --formula-color: #9b59b6;
+            --theory-color: #17a2b8;
+            --proscons-color: #e67e22;
+        }
+        
+
+.site-mobile-menu a.active 
+.site-mobile-menu a.active 
+
+
+.site-mobile-logout 
+.site-mobile-logout 
+
+@media (max-width: 768px) {
+    
+    
+    
+    
+    
 }
 
 
@@ -1560,67 +1638,6 @@
     opacity: 1;
 }
 
-/* Profile Avatar Dropdown */
-.profile-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #e67e22, #f39c12);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: 700;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    border: 2px solid #f1f5f9;
-}
-.profile-avatar:hover {
-    box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
-    transform: scale(1.05);
-}
-.profile-dropdown {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-    z-index: 1100;
-    min-width: 200px;
-    display: none;
-    margin-top: 0.5rem;
-    overflow: hidden;
-}
-.profile-dropdown.active { display: block; }
-.profile-dropdown a,
-.profile-dropdown button {
-    display: block;
-    width: 100%;
-    padding: 0.75rem 1rem;
-    text-align: left;
-    border: none;
-    background: none;
-    color: #334155;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.2s;
-    text-decoration: none;
-}
-.profile-dropdown a:hover,
-.profile-dropdown button:hover {
-    background: #f1f5f9;
-    color: #1e3a5f;
-}
-.profile-dropdown button:last-child {
-    color: #dc2626;
-    border-top: 1px solid #f1f5f9;
-}
-.profile-dropdown button:last-child:hover { background: #fef2f2; }
-
 </style>
 <!-- Google Analytics - Replace G-HFSYK32ZFT with your actual ID -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-HFSYK32ZFT"></script>
@@ -1668,7 +1685,6 @@
             <a href="exam-skills-v2.html" class="site-nav-link">Exam Skills</a>
             <a href="exam-practice.html" class="site-nav-link auth-only" style="display:none;">Exam Practice</a>
             <a href="notes.html" class="site-nav-link">Study Notes</a>
-            <a href="glossary.html" class="site-nav-link auth-only" style="display:none;">Glossary</a>
             <a href="blog.html" class="site-nav-link">Blog</a>
             <a href="contact.html" class="site-nav-link">Contact Us</a>
             <div class="profile-wrapper" style="position: relative;">
