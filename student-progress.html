@@ -1126,6 +1126,37 @@
             });
         }
 
+        // Fallback AO max marks per question type (for older data without ao_max)
+        // Based on Edexcel IAL fixed allocations for points-based questions
+        function getAoMaxFallback(questionType) {
+            const qt = questionType.toLowerCase();
+            // Points-based questions have fixed AO allocations
+            if (qt.includes('define') || qt === '2_mark_define') {
+                return { AO1: 2, AO2: null, AO3: null, AO4: null };
+            }
+            if (qt.includes('explain') || qt === '4_mark_explain') {
+                return { AO1: 2, AO2: 2, AO3: null, AO4: null };
+            }
+            if (qt.includes('analyse') || qt === '6_mark_analyse') {
+                return { AO1: 2, AO2: 2, AO3: 2, AO4: null };
+            }
+            // Levels-based questions: estimate reasonable max per AO
+            // Discuss 8 marks: AO1~2, AO2~2, AO3~4
+            if (qt.includes('discuss') || qt === '8_mark_discuss') {
+                return { AO1: 2, AO2: 2, AO3: 4, AO4: null };
+            }
+            // Assess/Evaluate 10 marks: AO1~2, AO2~2, AO3~3, AO4~3
+            if (qt.includes('assess') || qt.includes('evaluate') || qt === '10_mark_assess' || qt === '10_mark_evaluate') {
+                return { AO1: 2, AO2: 2, AO3: 3, AO4: 3 };
+            }
+            // Essay 20 marks: AO1~4, AO2~4, AO3~6, AO4~6
+            if (qt.includes('essay') || qt === '20_mark_evaluate') {
+                return { AO1: 4, AO2: 4, AO3: 6, AO4: 6 };
+            }
+            // Unknown: return nulls (will skip AO display)
+            return { AO1: null, AO2: null, AO3: null, AO4: null };
+        }
+
         function prepareChartData(attempts, filterType, skillFilter) {
             const groupedByDate = {};
 
@@ -1149,20 +1180,30 @@
 
                 const marking = attempt.marking_data || {};
                 const aoBreakdown = marking.ao_breakdown || {};
-                const totalMarks = marking.total_marks || 1;
+                const aoMax = marking.ao_max || {};
 
-                if (aoBreakdown.AO1 != null && typeof aoBreakdown.AO1 === 'number') {
-                    groupedByDate[dateKey].ao1.push((aoBreakdown.AO1 / totalMarks) * 100);
+                // Fallback AO max lookup for older data without ao_max
+                // Based on Edexcel IAL mark allocations per question type
+                const qt = (attempt.question_type || '').toLowerCase();
+                const fallbackAoMax = getAoMaxFallback(qt);
+
+                // Calculate AO % as (marks awarded / marks available for that AO) * 100
+                function aoPercent(ao, key) {
+                    if (ao == null || typeof ao !== 'number') return null;
+                    const max = (aoMax[key] != null) ? aoMax[key] : fallbackAoMax[key];
+                    if (!max || max <= 0) return null;
+                    return Math.min((ao / max) * 100, 100);
                 }
-                if (aoBreakdown.AO2 != null && typeof aoBreakdown.AO2 === 'number') {
-                    groupedByDate[dateKey].ao2.push((aoBreakdown.AO2 / totalMarks) * 100);
-                }
-                if (aoBreakdown.AO3 != null && typeof aoBreakdown.AO3 === 'number') {
-                    groupedByDate[dateKey].ao3.push((aoBreakdown.AO3 / totalMarks) * 100);
-                }
-                if (aoBreakdown.AO4 != null && typeof aoBreakdown.AO4 === 'number') {
-                    groupedByDate[dateKey].ao4.push((aoBreakdown.AO4 / totalMarks) * 100);
-                }
+
+                const ao1Pct = aoPercent(aoBreakdown.AO1, 'AO1');
+                const ao2Pct = aoPercent(aoBreakdown.AO2, 'AO2');
+                const ao3Pct = aoPercent(aoBreakdown.AO3, 'AO3');
+                const ao4Pct = aoPercent(aoBreakdown.AO4, 'AO4');
+
+                if (ao1Pct != null) groupedByDate[dateKey].ao1.push(ao1Pct);
+                if (ao2Pct != null) groupedByDate[dateKey].ao2.push(ao2Pct);
+                if (ao3Pct != null) groupedByDate[dateKey].ao3.push(ao3Pct);
+                if (ao4Pct != null) groupedByDate[dateKey].ao4.push(ao4Pct);
             });
 
             const labels = Object.keys(groupedByDate).sort((a, b) => {
