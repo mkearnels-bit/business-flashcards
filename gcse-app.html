@@ -2236,6 +2236,9 @@
                 // ========================================
 
                 console.log('Access granted - Free access period active!');
+                // Show auth-only elements
+                document.querySelectorAll('.auth-only').forEach(function(el) { el.style.display = ''; });
+                document.querySelectorAll('.guest-only').forEach(function(el) { el.style.display = 'none'; });
                 initializeApp();
             } catch (error) {
                 console.error('Auth error:', error);

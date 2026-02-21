@@ -2150,6 +2150,16 @@
 
                 console.log('Session found, user:', session.user.id);
 
+                // Show auth-only elements (like Exam Practice tab)
+                document.querySelectorAll('.auth-only').forEach(function(el) { el.style.display = ''; });
+                document.querySelectorAll('.guest-only').forEach(function(el) { el.style.display = 'none'; });
+
+                // Populate profile avatar with initials
+                var avatar = document.getElementById('profileAvatar');
+                if (avatar && session.user && session.user.email) {
+                    avatar.textContent = getProfileInitials(session.user.email);
+                }
+
                 // Store current user ID for progress tracking
                 currentUserId = session.user.id;
 
@@ -2165,10 +2175,7 @@
                     welcomeEl.textContent = session.user.email;
                 }
 
-                // Populate profile avatar with initials
-                if (profileAvatar && session.user && session.user.email) {
-                    profileAvatar.textContent = getProfileInitials(session.user.email);
-                }
+                // (profile avatar initials set above)
 
                 // FIXED: Use limit(1) instead of single() for more lenient query
                 const { data: subscriptions, error: subError } = await supabaseClient

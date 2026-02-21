@@ -1011,6 +1011,10 @@
                 const initials = getInitials(currentUser.email);
                 document.getElementById('profileAvatar').textContent = initials;
 
+                // Show auth-only elements (like Exam Practice tab)
+                document.querySelectorAll('.auth-only').forEach(function(el) { el.style.display = ''; });
+                document.querySelectorAll('.guest-only').forEach(function(el) { el.style.display = 'none'; });
+
                 loadProgressData();
             } catch (error) {
                 console.error('Auth check failed:', error);

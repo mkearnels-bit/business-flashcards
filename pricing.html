@@ -1723,6 +1723,9 @@
                 }
                 var pa = document.getElementById('profileAvatar');
                 if (pa && session.user.email) pa.textContent = getProfileInitials(session.user.email);
+                // Show auth-only elements
+                document.querySelectorAll('.auth-only').forEach(function(el) { el.style.display = ''; });
+                document.querySelectorAll('.guest-only').forEach(function(el) { el.style.display = 'none'; });
             }
         }
 

@@ -6865,6 +6865,9 @@
                 if (profileAvatar && session.user && session.user.email) {
                     profileAvatar.textContent = getProfileInitials(session.user.email);
                 }
+                // Show auth-only elements
+                document.querySelectorAll('.auth-only').forEach(function(el) { el.style.display = ''; });
+                document.querySelectorAll('.guest-only').forEach(function(el) { el.style.display = 'none'; });
             }
         }
         checkAuth();
