@@ -2227,6 +2227,7 @@ let currentAttemptId = null;
 let timerInterval = null;
 let timerSeconds = 0;
 let chartInstance = null;
+let studentFirstName = '';
 let lastMarking = null;
 let lastQuestion = null;
 let lastAnswer = null;
@@ -2249,6 +2250,10 @@ async function checkAuth() {
     }
 
     currentSession = session;
+
+    // Extract student first name from profile metadata
+    var fullName = (session.user.user_metadata && session.user.user_metadata.full_name) || '';
+    studentFirstName = fullName.split(' ')[0] || '';
 
     // Show auth elements
     document.querySelectorAll('.auth-only').forEach(function(el) { el.style.display = ''; });
@@ -2886,7 +2891,8 @@ async function submitAnswer() {
                 board: currentBoard,
                 question_data: currentQuestion,
                 student_answer: answer,
-                attempt_id: currentAttemptId
+                attempt_id: currentAttemptId,
+                student_name: studentFirstName
             })
         });
 
