@@ -1563,6 +1563,67 @@
     opacity: 1;
 }
 
+/* Profile Avatar Dropdown */
+.profile-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e67e22, #f39c12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid #f1f5f9;
+}
+.profile-avatar:hover {
+    box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
+    transform: scale(1.05);
+}
+.profile-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    z-index: 1100;
+    min-width: 200px;
+    display: none;
+    margin-top: 0.5rem;
+    overflow: hidden;
+}
+.profile-dropdown.active { display: block; }
+.profile-dropdown a,
+.profile-dropdown button {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border: none;
+    background: none;
+    color: #334155;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+.profile-dropdown a:hover,
+.profile-dropdown button:hover {
+    background: #f1f5f9;
+    color: #1e3a5f;
+}
+.profile-dropdown button:last-child {
+    color: #dc2626;
+    border-top: 1px solid #f1f5f9;
+}
+.profile-dropdown button:last-child:hover { background: #fef2f2; }
+
 </style>
 <!-- Google Analytics - Replace G-HFSYK32ZFT with your actual ID -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-HFSYK32ZFT"></script>
@@ -1612,7 +1673,14 @@
             <a href="glossary.html" class="site-nav-link auth-only" style="display:none;">Glossary</a>
             <a href="blog.html" class="site-nav-link">Blog</a>
             <a href="contact.html" class="site-nav-link">Contact Us</a>
-            <button class="site-nav-btn site-nav-btn-ghost" id="navLogoutBtn">Logout</button>
+            <div class="profile-wrapper" style="position: relative;">
+                <div class="profile-avatar" id="profileAvatar">--</div>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <a href="student-progress.html">Student Progress</a>
+                    <a href="#manage-account">My Account</a>
+                    <button id="navLogoutBtn">Log Out</button>
+                </div>
+            </div>
         </div>
         <button class="site-hamburger" id="siteHamburger" aria-label="Menu">
             <span></span>
@@ -1647,6 +1715,14 @@
         <a href="contact.html">
             <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></span>
             Contact Us
+        </a>
+        <a href="student-progress.html">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg></span>
+            Student Progress
+        </a>
+        <a href="#manage-account">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"/></svg></span>
+            My Account
         </a>
         <div class="site-mobile-divider"></div>
         <button class="site-mobile-logout" id="mobileLogoutBtn">
@@ -2783,7 +2859,38 @@
         // Logout handlers for new nav buttons
         if (document.getElementById('navLogoutBtn')) document.getElementById('navLogoutBtn').addEventListener('click', function() { handleLogout(); });
         if (document.getElementById('mobileLogoutBtn')) document.getElementById('mobileLogoutBtn').addEventListener('click', function() { handleLogout(); });
-    
+
+        // Profile avatar dropdown
+        var profileAvatar = document.getElementById('profileAvatar');
+        var profileDropdown = document.getElementById('profileDropdown');
+        if (profileAvatar && profileDropdown) {
+            profileAvatar.addEventListener('click', function(e) {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('active');
+            });
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.profile-avatar') && !e.target.closest('.profile-dropdown')) {
+                    profileDropdown.classList.remove('active');
+                }
+            });
+        }
+        // Populate profile initials
+        function getProfileInitials(email) {
+            if (!email) return '--';
+            var parts = email.split('@')[0].split('.');
+            if (parts.length >= 2) return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
+            return email.substring(0, 2).toUpperCase();
+        }
+        async function setupProfileAvatar() {
+            try {
+                const { data: { user } } = await supabaseClient.auth.getUser();
+                if (profileAvatar && user && user.email) {
+                    profileAvatar.textContent = getProfileInitials(user.email);
+                }
+            } catch (e) { console.log('Profile avatar setup skipped:', e.message); }
+        }
+        setupProfileAvatar();
+
 
 // ==================== LEVEL TOGGLE ====================
 (function() {

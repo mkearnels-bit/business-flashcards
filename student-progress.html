@@ -380,11 +380,11 @@
 
         .chart-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 2rem;
+            justify-content: space-between;
             flex-wrap: wrap;
             gap: 1rem;
+            margin-bottom: 2rem;
         }
 
         .chart-title {
@@ -778,6 +778,15 @@
                 Contact Us
             </a>
             <div class="site-mobile-divider"></div>
+            <a href="student-progress.html">
+                <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg></span>
+                Student Progress
+            </a>
+            <a href="#manage-account">
+                <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"/></svg></span>
+                My Account
+            </a>
+            <div class="site-mobile-divider"></div>
             <button class="site-mobile-logout" id="mobileLogoutBtn">
                 <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l3-3m0 0l-3-3m3 3H3"/></svg></span>
                 Logout
@@ -797,7 +806,7 @@
             <div class="chart-header">
                 <div class="chart-title">Performance Over Time</div>
                 <div class="filter-group">
-                    <label class="filter-label">Filter by question type:</label>
+                    <label class="filter-label">Question type:</label>
                     <select id="questionTypeFilter" class="filter-select">
                         <option value="all">All Questions</option>
                         <option value="define">Define (2 marks)</option>
@@ -807,6 +816,16 @@
                         <option value="assess">Assess (10 marks)</option>
                         <option value="evaluate">Evaluate (10 marks)</option>
                         <option value="essay">Essay (20 marks)</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Skill:</label>
+                    <select id="skillFilter" class="filter-select">
+                        <option value="all">All Skills</option>
+                        <option value="AO1">Knowledge (AO1)</option>
+                        <option value="AO2">Application (AO2)</option>
+                        <option value="AO3">Analysis (AO3)</option>
+                        <option value="AO4">Evaluation (AO4)</option>
                     </select>
                 </div>
                 <div class="overall-score">
@@ -987,6 +1006,7 @@
         // ========== CHART FUNCTIONALITY ==========
         function updateChart() {
             const filterValue = document.getElementById('questionTypeFilter').value;
+            const skillValue = document.getElementById('skillFilter').value;
             const filteredData = filterAttemptsByType(filterValue);
 
             if (filteredData.length === 0) {
@@ -994,7 +1014,7 @@
                 return;
             }
 
-            const { labels, datasets, overallAvg } = prepareChartData(filteredData, filterValue);
+            const { labels, datasets, overallAvg } = prepareChartData(filteredData, filterValue, skillValue);
 
             document.getElementById('overallScore').textContent = overallAvg.toFixed(1) + '%';
             renderChart(labels, datasets);
@@ -1020,7 +1040,7 @@
             });
         }
 
-        function prepareChartData(attempts, filterType) {
+        function prepareChartData(attempts, filterType, skillFilter) {
             const groupedByDate = {};
 
             attempts.forEach(attempt => {
@@ -1109,7 +1129,7 @@
                 }
             ];
 
-            if (aoRelevance.includes('AO1')) {
+            if (aoRelevance.includes('AO1') && (skillFilter === 'all' || skillFilter === 'AO1')) {
                 datasets.push({
                     label: 'Knowledge (AO1)',
                     data: ao1Scores,
@@ -1127,7 +1147,7 @@
                 });
             }
 
-            if (aoRelevance.includes('AO2')) {
+            if (aoRelevance.includes('AO2') && (skillFilter === 'all' || skillFilter === 'AO2')) {
                 datasets.push({
                     label: 'Application (AO2)',
                     data: ao2Scores,
@@ -1145,7 +1165,7 @@
                 });
             }
 
-            if (aoRelevance.includes('AO3')) {
+            if (aoRelevance.includes('AO3') && (skillFilter === 'all' || skillFilter === 'AO3')) {
                 datasets.push({
                     label: 'Analysis (AO3)',
                     data: ao3Scores,
@@ -1163,7 +1183,7 @@
                 });
             }
 
-            if (aoRelevance.includes('AO4')) {
+            if (aoRelevance.includes('AO4') && (skillFilter === 'all' || skillFilter === 'AO4')) {
                 datasets.push({
                     label: 'Evaluation (AO4)',
                     data: ao4Scores,
@@ -1476,12 +1496,37 @@
             }
         }
 
+        // ========== FILTER OPTIONS UPDATE ==========
+        function updateSkillFilterOptions() {
+            const questionType = document.getElementById('questionTypeFilter').value;
+            const relevantAOs = getAORelevance(questionType);
+            const skillSelect = document.getElementById('skillFilter');
+
+            // Enable/disable options
+            Array.from(skillSelect.options).forEach(option => {
+                if (option.value === 'all') return; // always enabled
+                option.disabled = !relevantAOs.includes(option.value);
+            });
+
+            // If current selection is now disabled, reset to 'all'
+            if (skillSelect.value !== 'all' && !relevantAOs.includes(skillSelect.value)) {
+                skillSelect.value = 'all';
+            }
+        }
+
         // ========== FILTER CHANGE LISTENER ==========
         document.getElementById('questionTypeFilter').addEventListener('change', function() {
+            updateSkillFilterOptions();
             updateChart();
             updateStats();
             updateAreas();
             updateCalendar();
+        });
+
+        document.getElementById('skillFilter').addEventListener('change', function() {
+            updateChart();
+            updateStats();
+            updateAreas();
         });
     </script>
 </body>

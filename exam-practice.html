@@ -62,15 +62,15 @@
 
         /* ===== NAVBAR ===== */
         .site-navbar {
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid #f1f5f9;
-            padding: 0.75rem 2rem;
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
             z-index: 1000;
+            padding: 0.75rem 2rem;
+            border-bottom: 1px solid var(--gray-100);
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
@@ -82,92 +82,45 @@
             align-items: center;
         }
 
-        .site-navbar-logo { height: 55px; width: auto; }
+        .site-navbar-logo { height: 65px; width: auto; }
 
         .site-nav-buttons {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.25rem;
+            background: var(--gray-100);
+            border-radius: 10px;
+            padding: 0.25rem;
         }
 
         .site-nav-link {
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: #334155;
-            text-decoration: none;
+            padding: 0.5rem 1.25rem;
             border-radius: 8px;
-            transition: all 0.2s;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            color: var(--gray-500);
+            transition: all 0.2s ease;
         }
 
-        .site-nav-link:hover { color: #1e3a5f; background: #f1f5f9; }
-        .site-nav-link.active { color: #e67e22; font-weight: 600; }
+        .site-nav-link:hover { color: var(--primary); background: rgba(255,255,255,0.5); }
+        .site-nav-link.active { background: white; color: var(--primary); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
 
         .site-nav-btn {
             padding: 0.5rem 1.25rem;
-            font-size: 0.9rem;
-            font-weight: 600;
             border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
             text-decoration: none;
             cursor: pointer;
-            transition: all 0.2s;
             border: none;
-            font-family: inherit;
+            transition: all 0.2s ease;
         }
 
-        .site-nav-btn-ghost { color: #1e3a5f; background: transparent; border: 1px solid #cbd5e1; }
-        .site-nav-btn-ghost:hover { background: #f1f5f9; border-color: #1e3a5f; }
+        .site-nav-btn-ghost { background: transparent; color: var(--gray-500); }
+        .site-nav-btn-ghost:hover { color: var(--primary); background: rgba(255,255,255,0.5); }
         .site-nav-btn-primary { background: var(--accent); color: white; }
         .site-nav-btn-primary:hover { background: #d35400; }
-
-        /* ===== LEVEL TOGGLE ===== */
-        .level-toggle {
-            display: flex;
-            align-items: center;
-            background: #f1f5f9;
-            border-radius: 8px;
-            padding: 3px;
-            gap: 0;
-            flex-shrink: 0;
-        }
-        .level-toggle-btn {
-            padding: 5px 14px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            font-family: inherit;
-            color: #64748b;
-            background: transparent;
-            white-space: nowrap;
-        }
-        .level-toggle-btn.active {
-            background: #1e3a5f;
-            color: #ffffff;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.15);
-        }
-        .level-toggle-btn:hover:not(.active) {
-            color: #1e3a5f;
-            background: rgba(30, 58, 95, 0.08);
-        }
-        .mobile-level-toggle {
-            display: flex;
-            align-items: center;
-            background: #f1f5f9;
-            border-radius: 10px;
-            padding: 4px;
-            margin-bottom: 1rem;
-            gap: 0;
-        }
-        .mobile-level-toggle .level-toggle-btn {
-            flex: 1;
-            padding: 8px 0;
-            font-size: 0.85rem;
-            border-radius: 8px;
-            text-align: center;
-        }
 
         .site-hamburger {
             display: none;
@@ -247,250 +200,96 @@
         /* ===== HERO SECTION ===== */
         .hero {
             position: relative;
-            min-height: 420px;
-            background: linear-gradient(160deg, #0f2439 0%, var(--primary) 35%, var(--primary-light) 70%, #3a7bd5 100%);
+            min-height: 280px;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 120px 2rem 60px;
+            padding: 120px 2rem 50px;
             overflow: hidden;
         }
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background:
-                radial-gradient(ellipse 600px 400px at 20% 50%, rgba(230, 126, 34, 0.12) 0%, transparent 70%),
-                radial-gradient(ellipse 500px 500px at 80% 30%, rgba(59, 130, 246, 0.1) 0%, transparent 60%),
-                radial-gradient(ellipse 400px 300px at 60% 80%, rgba(155, 89, 182, 0.08) 0%, transparent 60%);
-            animation: meshShift 12s ease-in-out infinite alternate;
-        }
-
-        @keyframes meshShift {
-            0% { transform: scale(1) translate(0, 0); opacity: 1; }
-            100% { transform: scale(1.1) translate(-2%, 1%); opacity: 0.8; }
-        }
-
-        .hero-particle {
+        .hero-orb {
             position: absolute;
             border-radius: 50%;
-            pointer-events: none;
+            opacity: 0.08;
+            filter: blur(40px);
         }
 
-        .hero-particle-1 { width: 4px; height: 4px; background: rgba(230, 126, 34, 0.5); top: 20%; left: 15%; animation: particleDrift1 8s ease-in-out infinite; }
-        .hero-particle-2 { width: 3px; height: 3px; background: rgba(255, 255, 255, 0.3); top: 60%; left: 10%; animation: particleDrift2 10s ease-in-out infinite; }
-        .hero-particle-3 { width: 5px; height: 5px; background: rgba(59, 130, 246, 0.4); top: 30%; right: 12%; animation: particleDrift3 7s ease-in-out infinite; }
-        .hero-particle-4 { width: 3px; height: 3px; background: rgba(230, 126, 34, 0.4); top: 70%; right: 20%; animation: particleDrift1 9s ease-in-out infinite reverse; }
-        .hero-particle-5 { width: 4px; height: 4px; background: rgba(255, 255, 255, 0.25); top: 45%; left: 25%; animation: particleDrift2 11s ease-in-out infinite; }
-        .hero-particle-6 { width: 3px; height: 3px; background: rgba(155, 89, 182, 0.4); top: 25%; right: 30%; animation: particleDrift3 8s ease-in-out infinite reverse; }
-
-        @keyframes particleDrift1 {
-            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
-            25% { transform: translate(15px, -20px) scale(1.3); opacity: 1; }
-            50% { transform: translate(-10px, -35px) scale(0.8); opacity: 0.4; }
-            75% { transform: translate(20px, -15px) scale(1.1); opacity: 0.8; }
-        }
-        @keyframes particleDrift2 {
-            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.5; }
-            33% { transform: translate(-20px, -25px) scale(1.4); opacity: 0.9; }
-            66% { transform: translate(15px, -40px) scale(0.7); opacity: 0.3; }
-        }
-        @keyframes particleDrift3 {
-            0%, 100% { transform: translate(0, 0); opacity: 0.5; }
-            50% { transform: translate(-15px, -30px); opacity: 1; }
+        .hero-orb-1 {
+            width: 300px; height: 300px;
+            background: var(--skill-knowledge);
+            top: -50px; left: -50px;
+            animation: float1 6s ease-in-out infinite;
         }
 
-        .hero-grid {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-image:
-                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-            background-size: 60px 60px;
-            animation: gridPan 30s linear infinite;
+        .hero-orb-2 {
+            width: 200px; height: 200px;
+            background: var(--accent);
+            top: 30px; right: 10%;
+            animation: float2 7s ease-in-out infinite;
         }
 
-        @keyframes gridPan {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(60px, 60px); }
+        .hero-orb-3 {
+            width: 250px; height: 250px;
+            background: var(--skill-analysis);
+            bottom: -60px; left: 30%;
+            animation: float3 5s ease-in-out infinite;
         }
 
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 780px;
+        .hero-orb-4 {
+            width: 180px; height: 180px;
+            background: var(--skill-application);
+            bottom: 20px; right: 20%;
+            animation: float1 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float1 { 0%, 100% { transform: translateY(0) translateX(0); } 50% { transform: translateY(-20px) translateX(10px); } }
+        @keyframes float2 { 0%, 100% { transform: translateY(0) translateX(0); } 50% { transform: translateY(15px) translateX(-15px); } }
+        @keyframes float3 { 0%, 100% { transform: translateY(0) translateX(0); } 50% { transform: translateY(-15px) translateX(5px); } }
+
+        .hero-content { position: relative; z-index: 2; }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.7);
+            font-weight: 400;
+            max-width: 600px;
             margin: 0 auto;
         }
 
         .hero-badge {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            background: rgba(230, 126, 34, 0.15);
-            border: 1px solid rgba(230, 126, 34, 0.35);
-            border-radius: 50px;
-            padding: 7px 18px 7px 10px;
-            font-size: 0.78rem;
-            color: rgba(255,255,255,0.95);
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            backdrop-filter: blur(10px);
-            animation: badgeFadeIn 0.8s ease-out both;
-            letter-spacing: 0.02em;
-        }
-
-        .hero-badge-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 24px;
-            height: 24px;
-            background: var(--accent);
-            border-radius: 50%;
-            flex-shrink: 0;
-        }
-
-        .hero-badge-icon svg { width: 13px; height: 13px; fill: white; }
-
-        @keyframes badgeFadeIn {
-            from { opacity: 0; transform: translateY(10px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            font-weight: 900;
-            color: white;
-            margin-bottom: 0.25rem;
-            letter-spacing: -0.03em;
-            line-height: 1.15;
-            animation: titleSlideUp 0.9s ease-out 0.15s both;
-        }
-
-        .hero h1 .accent-text {
-            background: linear-gradient(135deg, var(--accent-light) 0%, var(--accent) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        @keyframes titleSlideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .hero-subtitle {
-            font-size: 1.1rem;
-            color: rgba(255,255,255,0.75);
-            font-weight: 400;
-            max-width: 580px;
-            margin: 0.75rem auto 0;
-            line-height: 1.65;
-            animation: subtitleFade 0.9s ease-out 0.35s both;
-        }
-
-        @keyframes subtitleFade {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .hero-pillars {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 2rem;
-            animation: pillarsFade 0.9s ease-out 0.55s both;
-            flex-wrap: wrap;
-        }
-
-        @keyframes pillarsFade {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .hero-pillar {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            padding: 0.5rem 1rem;
-            background: rgba(255,255,255,0.07);
-            border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 12px;
-            backdrop-filter: blur(8px);
-            transition: all 0.3s ease;
-        }
-
-        .hero-pillar:hover {
+            gap: 6px;
             background: rgba(255,255,255,0.12);
-            border-color: rgba(255,255,255,0.2);
-            transform: translateY(-2px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 6px 16px;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.85);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            backdrop-filter: blur(5px);
         }
 
-        .hero-pillar-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            flex-shrink: 0;
+        .hero-badge-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: pulse-dot 2s ease-in-out infinite;
         }
 
-        .hero-pillar-icon svg { width: 20px; height: 20px; stroke-width: 1.8; }
-
-        .hero-pillar-icon.teacher { background: rgba(230, 126, 34, 0.2); }
-        .hero-pillar-icon.teacher svg { stroke: var(--accent-light); }
-
-        .hero-pillar-icon.spec { background: rgba(59, 130, 246, 0.2); }
-        .hero-pillar-icon.spec svg { stroke: #60a5fa; }
-
-        .hero-pillar-icon.feedback { background: rgba(46, 204, 113, 0.2); }
-        .hero-pillar-icon.feedback svg { stroke: #4ade80; }
-
-        .hero-pillar-text { text-align: left; }
-
-        .hero-pillar-label {
-            font-size: 0.82rem;
-            font-weight: 700;
-            color: rgba(255,255,255,0.95);
-            line-height: 1.2;
-        }
-
-        .hero-pillar-desc {
-            font-size: 0.7rem;
-            color: rgba(255,255,255,0.55);
-            font-weight: 400;
-            line-height: 1.3;
-            margin-top: 1px;
-        }
-
-        .hero-line-left, .hero-line-right {
-            position: absolute;
-            top: 50%;
-            width: 120px;
-            height: 1px;
-            transform: translateY(-50%);
-            z-index: 1;
-        }
-
-        .hero-line-left {
-            left: 3%;
-            background: linear-gradient(90deg, transparent, rgba(230, 126, 34, 0.3), transparent);
-            animation: lineGlow 3s ease-in-out infinite;
-        }
-
-        .hero-line-right {
-            right: 3%;
-            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.3), transparent);
-            animation: lineGlow 3s ease-in-out infinite 1.5s;
-        }
-
-        @keyframes lineGlow {
-            0%, 100% { opacity: 0.3; width: 80px; }
-            50% { opacity: 0.8; width: 120px; }
-        }
+        @keyframes pulse-dot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.3); } }
 
         /* ===== MAIN CONTENT ===== */
         .main-content {
@@ -690,134 +489,6 @@
             font-size: 0.95rem;
             font-weight: 600;
             color: var(--gray-900);
-        }
-
-        /* ===== TOPIC SELECTION ===== */
-        .topic-section {
-            background: white;
-            border-radius: 16px;
-            padding: 1.75rem;
-            border: 1px solid var(--gray-200);
-            margin-bottom: 2rem;
-        }
-
-        .topic-select-all {
-            padding-bottom: 0.75rem;
-            margin-bottom: 0.75rem;
-            border-bottom: 2px solid var(--gray-200);
-        }
-
-        .topic-checkbox-label {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            cursor: pointer;
-            padding: 0.4rem 0.5rem;
-            border-radius: 8px;
-            transition: background 0.15s ease;
-            user-select: none;
-        }
-
-        .topic-checkbox-label:hover {
-            background: var(--gray-50);
-        }
-
-        .topic-checkbox {
-            display: none;
-        }
-
-        .topic-checkbox-custom {
-            width: 20px;
-            height: 20px;
-            min-width: 20px;
-            border: 2px solid var(--gray-300);
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-            background: white;
-        }
-
-        .topic-checkbox:checked + .topic-checkbox-custom {
-            background: var(--accent);
-            border-color: var(--accent);
-        }
-
-        .topic-checkbox:checked + .topic-checkbox-custom::after {
-            content: '\2713';
-            color: white;
-            font-size: 0.75rem;
-            font-weight: 700;
-        }
-
-        .topic-unit-label .topic-label-text {
-            font-weight: 700;
-            font-size: 1rem;
-            color: var(--primary);
-        }
-
-        .topic-section-label .topic-label-text {
-            font-weight: 600;
-            font-size: 0.95rem;
-            color: var(--gray-900);
-        }
-
-        .topic-section-icon {
-            font-size: 0.7rem;
-            color: var(--gray-400);
-            transition: transform 0.2s ease;
-        }
-
-        .topic-tree-section {
-            margin-bottom: 0.25rem;
-        }
-
-        .topic-tree-topics {
-            margin-left: 2.25rem;
-            padding-left: 0.75rem;
-            border-left: 2px solid var(--gray-100);
-        }
-
-        .topic-item-label .topic-label-text {
-            font-weight: 400;
-            font-size: 0.9rem;
-            color: var(--gray-700);
-        }
-
-        .topic-item-label:hover .topic-label-text {
-            color: var(--primary);
-        }
-
-        .topic-summary {
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--gray-100);
-        }
-
-        .topic-summary-label {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--gray-500);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 0.5rem;
-        }
-
-        .topic-summary-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.4rem;
-        }
-
-        .topic-tag {
-            background: linear-gradient(135deg, rgba(30, 58, 95, 0.08), rgba(30, 58, 95, 0.04));
-            border: 1px solid rgba(30, 58, 95, 0.15);
-            color: var(--primary);
-            padding: 0.3rem 0.7rem;
-            border-radius: 20px;
-            font-size: 0.78rem;
-            font-weight: 500;
         }
 
         /* Question Type Selection */
@@ -1653,15 +1324,9 @@
             .site-mobile-overlay { display: block; }
             .site-mobile-menu { display: block; }
 
-            .hero { padding: 100px 1.5rem 45px; min-height: 360px; }
-            .hero h1 { font-size: 2rem; }
+            .hero { padding: 100px 1.5rem 40px; min-height: 220px; }
+            .hero h1 { font-size: 1.8rem; }
             .hero-subtitle { font-size: 0.95rem; }
-            .hero-pillars { gap: 0.75rem; }
-            .hero-pillar { padding: 0.4rem 0.75rem; }
-            .hero-pillar-icon { width: 32px; height: 32px; }
-            .hero-pillar-label { font-size: 0.75rem; }
-            .hero-pillar-desc { font-size: 0.65rem; }
-            .hero-line-left, .hero-line-right { display: none; }
 
             .main-content { padding: 1.5rem 1rem 3rem; }
 
@@ -1685,15 +1350,75 @@
         }
 
         @media (max-width: 480px) {
-            .hero h1 { font-size: 1.65rem; }
-            .hero-pillars { flex-direction: column; align-items: center; gap: 0.6rem; }
-            .hero-pillar { width: 100%; max-width: 280px; }
+            .hero h1 { font-size: 1.5rem; }
             .board-card { padding: 1.25rem; }
             .score-card { padding: 1.75rem; }
             .score-ring-container { width: 120px; height: 120px; }
             .score-value { font-size: 1.8rem; }
             .ao-grid { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
         }
+
+        /* Profile Avatar Dropdown */
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid #f1f5f9;
+        }
+        .profile-avatar:hover {
+            box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
+            transform: scale(1.05);
+        }
+        .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            z-index: 1100;
+            min-width: 200px;
+            display: none;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+        .profile-dropdown.active { display: block; }
+        .profile-dropdown a,
+        .profile-dropdown button {
+            display: block;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border: none;
+            background: none;
+            color: #334155;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .profile-dropdown a:hover,
+        .profile-dropdown button:hover {
+            background: #f1f5f9;
+            color: #1e3a5f;
+        }
+        .profile-dropdown button:last-child {
+            color: #dc2626;
+            border-top: 1px solid #f1f5f9;
+        }
+        .profile-dropdown button:last-child:hover { background: #fef2f2; }
+
     </style>
 </head>
 <body>
@@ -1702,10 +1427,6 @@
 <nav class="site-navbar" id="siteNavbar">
     <div class="site-navbar-content">
         <a href="index.html"><img src="logo.png" alt="MyBizStudies" class="site-navbar-logo"></a>
-        <div class="level-toggle" id="desktopLevelToggle">
-            <button class="level-toggle-btn active" data-level="alevel">A-Level</button>
-            <button class="level-toggle-btn" data-level="gcse">GCSE</button>
-        </div>
         <div class="site-nav-buttons" id="siteNavButtons">
             <a href="app.html" class="site-nav-link auth-only" style="display:none;">Flash Cards</a>
             <a href="exam-skills-v2.html" class="site-nav-link auth-only" style="display:none;">Exam Skills</a>
@@ -1715,7 +1436,14 @@
             <a href="contact.html" class="site-nav-link">Contact Us</a>
             <a href="login.html" class="site-nav-btn site-nav-btn-ghost guest-only">Log In</a>
             <a href="signup.html" class="site-nav-btn site-nav-btn-primary guest-only">Get Started</a>
-            <button class="site-nav-btn site-nav-btn-ghost auth-only" id="navLogoutBtn" style="display:none;">Logout</button>
+            <div class="profile-wrapper auth-only" style="position: relative; display:none;">
+                <div class="profile-avatar" id="profileAvatar">--</div>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <a href="student-progress.html">Student Progress</a>
+                    <a href="#manage-account">My Account</a>
+                    <button id="navLogoutBtn">Log Out</button>
+                </div>
+            </div>
         </div>
         <button class="site-hamburger" id="siteHamburger" aria-label="Menu">
             <span></span>
@@ -1729,10 +1457,6 @@
 <div class="site-mobile-overlay" id="siteMobileOverlay"></div>
 <div class="site-mobile-menu" id="siteMobileMenu">
     <div class="site-mobile-links">
-        <div class="mobile-level-toggle">
-            <button class="level-toggle-btn active" data-level="alevel">A-Level</button>
-            <button class="level-toggle-btn" data-level="gcse">GCSE</button>
-        </div>
         <a href="app.html" class="auth-only" style="display:none;">Flash Cards</a>
         <a href="exam-skills-v2.html" class="auth-only" style="display:none;">Exam Skills</a>
         <a href="exam-practice.html" class="active auth-only" style="display:none;">Exam Practice</a>
@@ -1741,57 +1465,31 @@
         <a href="contact.html">Contact Us</a>
         <a href="login.html" class="guest-only">Log In</a>
         <a href="signup.html" class="guest-only">Get Started</a>
+        <a href="student-progress.html" class="auth-only" style="display:none;">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg></span>
+            Student Progress
+        </a>
+        <a href="#manage-account" class="auth-only" style="display:none;">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"/></svg></span>
+            My Account
+        </a>
         <button class="auth-only" id="mobileLogoutBtn" style="display:none;">Logout</button>
     </div>
 </div>
 
 <!-- Hero -->
 <section class="hero">
-    <div class="hero-grid"></div>
-    <div class="hero-particle hero-particle-1"></div>
-    <div class="hero-particle hero-particle-2"></div>
-    <div class="hero-particle hero-particle-3"></div>
-    <div class="hero-particle hero-particle-4"></div>
-    <div class="hero-particle hero-particle-5"></div>
-    <div class="hero-particle hero-particle-6"></div>
-    <div class="hero-line-left"></div>
-    <div class="hero-line-right"></div>
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-orb hero-orb-3"></div>
+    <div class="hero-orb hero-orb-4"></div>
     <div class="hero-content">
         <div class="hero-badge">
-            <span class="hero-badge-icon"><svg viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></span>
-            Expert Trained AI
+            <span class="hero-badge-dot"></span>
+            AI Powered
         </div>
-        <h1>Your AI Examiner,<br>Trained by <span class="accent-text">a Real One</span></h1>
-        <p class="hero-subtitle">Built by an experienced Business Studies teacher and trained on real exam board mark schemes. Every question, every mark, every piece of feedback aligned to your specification.</p>
-        <div class="hero-pillars">
-            <div class="hero-pillar">
-                <div class="hero-pillar-icon teacher">
-                    <svg viewBox="0 0 24 24" fill="none"><path d="M12 14l9-5-9-5-9 5 9 5z"/><path d="M12 14l6.16-3.422A12.083 12.083 0 0121 17.5C21 20 16.97 22 12 22S3 20 3 17.5a12.083 12.083 0 012.84-6.922L12 14z"/></svg>
-                </div>
-                <div class="hero-pillar-text">
-                    <div class="hero-pillar-label">Teacher Built</div>
-                    <div class="hero-pillar-desc">Designed by a practising examiner</div>
-                </div>
-            </div>
-            <div class="hero-pillar">
-                <div class="hero-pillar-icon spec">
-                    <svg viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
-                </div>
-                <div class="hero-pillar-text">
-                    <div class="hero-pillar-label">Spec Aligned</div>
-                    <div class="hero-pillar-desc">Questions match your exam board</div>
-                </div>
-            </div>
-            <div class="hero-pillar">
-                <div class="hero-pillar-icon feedback">
-                    <svg viewBox="0 0 24 24" fill="none"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-                </div>
-                <div class="hero-pillar-text">
-                    <div class="hero-pillar-label">Detailed Feedback</div>
-                    <div class="hero-pillar-desc">See exactly where to improve</div>
-                </div>
-            </div>
-        </div>
+        <h1>Exam Practice</h1>
+        <p class="hero-subtitle">Generate real exam style questions and get instant AI marking with detailed feedback</p>
     </div>
 </section>
 
@@ -1804,9 +1502,8 @@
         <div class="section-title">Choose Your Exam Board</div>
         <div class="section-subtitle">Select the exam board and qualification you are studying</div>
 
-        <!-- A-Level Boards -->
-        <div class="board-grid" id="boardGridAlevel">
-            <div class="board-card" data-board="edexcel_ial" data-level="alevel" onclick="selectBoard(this)">
+        <div class="board-grid" id="boardGrid">
+            <div class="board-card" data-board="edexcel_ial" onclick="selectBoard(this)">
                 <div class="board-card-header">
                     <div class="board-card-icon" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">IAL</div>
                     <div class="board-card-check"></div>
@@ -1814,16 +1511,7 @@
                 <div class="board-card-title">Edexcel International A Level</div>
                 <div class="board-card-desc">Pearson Edexcel IAL Business Studies (WBS11 to WBS14)</div>
             </div>
-            <div class="board-card coming-soon" data-board="cie_ial" data-level="alevel">
-                <div class="board-card-header">
-                    <div class="board-card-icon" style="background: linear-gradient(135deg, #f39c12, #e67e22);">IAL</div>
-                    <div class="board-card-check"></div>
-                </div>
-                <div class="board-card-title">CIE International A Level</div>
-                <div class="board-card-desc">Cambridge International A Level Business (9609)</div>
-                <span class="coming-soon-badge">Coming Soon</span>
-            </div>
-            <div class="board-card coming-soon" data-board="edexcel_uk" data-level="alevel">
+            <div class="board-card coming-soon" data-board="edexcel_uk">
                 <div class="board-card-header">
                     <div class="board-card-icon" style="background: linear-gradient(135deg, #3498db, #2980b9);">A2</div>
                     <div class="board-card-check"></div>
@@ -1832,29 +1520,16 @@
                 <div class="board-card-desc">Pearson Edexcel A Level Business (9BS0)</div>
                 <span class="coming-soon-badge">Coming Soon</span>
             </div>
-            <div class="board-card coming-soon" data-board="aqa_uk" data-level="alevel">
+            <div class="board-card coming-soon" data-board="aqa_gcse">
                 <div class="board-card-header">
-                    <div class="board-card-icon" style="background: linear-gradient(135deg, #8e44ad, #7d3c98);">A2</div>
+                    <div class="board-card-icon" style="background: linear-gradient(135deg, #27ae60, #229954);">GC</div>
                     <div class="board-card-check"></div>
                 </div>
-                <div class="board-card-title">AQA UK A Level</div>
-                <div class="board-card-desc">AQA A Level Business (7132)</div>
+                <div class="board-card-title">AQA GCSE</div>
+                <div class="board-card-desc">AQA GCSE Business Studies (8132)</div>
                 <span class="coming-soon-badge">Coming Soon</span>
             </div>
-        </div>
-
-        <!-- GCSE Boards -->
-        <div class="board-grid" id="boardGridGcse" style="display:none;">
-            <div class="board-card coming-soon" data-board="edexcel_igcse" data-level="gcse">
-                <div class="board-card-header">
-                    <div class="board-card-icon" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">IG</div>
-                    <div class="board-card-check"></div>
-                </div>
-                <div class="board-card-title">Edexcel IGCSE</div>
-                <div class="board-card-desc">Pearson Edexcel IGCSE Business (4BS1)</div>
-                <span class="coming-soon-badge">Coming Soon</span>
-            </div>
-            <div class="board-card coming-soon" data-board="cie_igcse" data-level="gcse">
+            <div class="board-card coming-soon" data-board="cie_igcse">
                 <div class="board-card-header">
                     <div class="board-card-icon" style="background: linear-gradient(135deg, #f39c12, #e67e22);">IG</div>
                     <div class="board-card-check"></div>
@@ -1863,33 +1538,12 @@
                 <div class="board-card-desc">Cambridge IGCSE Business Studies (0450)</div>
                 <span class="coming-soon-badge">Coming Soon</span>
             </div>
-            <div class="board-card coming-soon" data-board="aqa_gcse" data-level="gcse">
-                <div class="board-card-header">
-                    <div class="board-card-icon" style="background: linear-gradient(135deg, #8e44ad, #7d3c98);">GC</div>
-                    <div class="board-card-check"></div>
-                </div>
-                <div class="board-card-title">AQA GCSE</div>
-                <div class="board-card-desc">AQA GCSE Business Studies (8132)</div>
-                <span class="coming-soon-badge">Coming Soon</span>
-            </div>
-            <div class="board-card coming-soon" data-board="edexcel_gcse_uk" data-level="gcse">
-                <div class="board-card-header">
-                    <div class="board-card-icon" style="background: linear-gradient(135deg, #3498db, #2980b9);">GC</div>
-                    <div class="board-card-check"></div>
-                </div>
-                <div class="board-card-title">Edexcel UK GCSE</div>
-                <div class="board-card-desc">Pearson Edexcel GCSE Business (1BS0)</div>
-                <span class="coming-soon-badge">Coming Soon</span>
-            </div>
         </div>
 
         <!-- Unit Selection (shown after board) -->
         <div id="unitSection" style="display:none;"></div>
 
-        <!-- Topic Selection (shown after unit) -->
-        <div id="topicSection" style="display:none;"></div>
-
-        <!-- Question Type Selection (shown after topics) -->
+        <!-- Question Type Selection (shown after unit) -->
         <div id="qtypeSection" style="display:none;"></div>
 
         <!-- Generate Button -->
@@ -1982,210 +1636,6 @@ const SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// ===== TOPIC DATA (Edexcel IAL) =====
-const EDEXCEL_IAL_TOPICS = {
-    unit1: {
-        name: 'Marketing and People',
-        sections: [
-            {
-                id: 'u1s1', name: 'Meeting Customer Needs',
-                topics: [
-                    { id: 'u1s1t1', name: 'The Market' },
-                    { id: 'u1s1t2', name: 'Market Research' },
-                    { id: 'u1s1t3', name: 'Market Positioning' }
-                ]
-            },
-            {
-                id: 'u1s2', name: 'The Market',
-                topics: [
-                    { id: 'u1s2t1', name: 'Demand' },
-                    { id: 'u1s2t2', name: 'Supply' },
-                    { id: 'u1s2t3', name: 'Markets and Equilibrium' },
-                    { id: 'u1s2t4', name: 'Price Elasticity of Demand (PED)' },
-                    { id: 'u1s2t5', name: 'Income Elasticity of Demand (YED)' }
-                ]
-            },
-            {
-                id: 'u1s3', name: 'Marketing Mix and Strategy',
-                topics: [
-                    { id: 'u1s3t1', name: 'Marketing Objectives and Strategy' },
-                    { id: 'u1s3t2', name: 'Product/Service Design' },
-                    { id: 'u1s3t3', name: 'Promotion and Branding' },
-                    { id: 'u1s3t4', name: 'Pricing Strategies' },
-                    { id: 'u1s3t5', name: 'Distribution' }
-                ]
-            },
-            {
-                id: 'u1s4', name: 'Managing People',
-                topics: [
-                    { id: 'u1s4t1', name: 'Approaches to Staffing' },
-                    { id: 'u1s4t2', name: 'Recruitment, Selection and Training' },
-                    { id: 'u1s4t3', name: 'Organisational Design' },
-                    { id: 'u1s4t4', name: 'Motivation in Theory and Practice' },
-                    { id: 'u1s4t5', name: 'Leadership' }
-                ]
-            },
-            {
-                id: 'u1s5', name: 'Entrepreneurs and Leaders',
-                topics: [
-                    { id: 'u1s5t1', name: 'Role of an Entrepreneur' },
-                    { id: 'u1s5t2', name: 'Entrepreneurial Motives and Characteristics' },
-                    { id: 'u1s5t3', name: 'Business Objectives' },
-                    { id: 'u1s5t4', name: 'Business Choices' }
-                ]
-            }
-        ]
-    },
-    unit2: {
-        name: 'Managing Business Activities',
-        sections: [
-            {
-                id: 'u2s1', name: 'Planning a Business and Raising Finance',
-                topics: [
-                    { id: 'u2s1t1', name: 'Planning' },
-                    { id: 'u2s1t2', name: 'Internal Finance' },
-                    { id: 'u2s1t3', name: 'External Finance' },
-                    { id: 'u2s1t4', name: 'Forms of Business' },
-                    { id: 'u2s1t5', name: 'Forms of Business: PLCs' },
-                    { id: 'u2s1t6', name: 'Liability' }
-                ]
-            },
-            {
-                id: 'u2s2', name: 'Financial Planning',
-                topics: [
-                    { id: 'u2s2t1', name: 'Sales Revenue and Costs' },
-                    { id: 'u2s2t2', name: 'Sales Forecasting' },
-                    { id: 'u2s2t3', name: 'Break Even' },
-                    { id: 'u2s2t4', name: 'Cash Flow' },
-                    { id: 'u2s2t5', name: 'Budgets' }
-                ]
-            },
-            {
-                id: 'u2s3', name: 'Managing Finance',
-                topics: [
-                    { id: 'u2s3t1', name: 'Profit' },
-                    { id: 'u2s3t2', name: 'Liquidity' },
-                    { id: 'u2s3t3', name: 'Business Failure' }
-                ]
-            },
-            {
-                id: 'u2s4', name: 'Resource Management',
-                topics: [
-                    { id: 'u2s4t1', name: 'Production, Productivity and Efficiency' },
-                    { id: 'u2s4t2', name: 'Capacity Utilisation' },
-                    { id: 'u2s4t3', name: 'Inventory Control' },
-                    { id: 'u2s4t4', name: 'Quality Management' }
-                ]
-            },
-            {
-                id: 'u2s5', name: 'External Influences',
-                topics: [
-                    { id: 'u2s5t1', name: 'Economic Influences' },
-                    { id: 'u2s5t2', name: 'Legislation' },
-                    { id: 'u2s5t3', name: 'The Competitive Environment' }
-                ]
-            }
-        ]
-    },
-    unit3: {
-        name: 'Business Decisions and Strategy',
-        sections: [
-            {
-                id: 'u3s1', name: 'Business Objectives and Strategy',
-                topics: [
-                    { id: 'u3s1t1', name: 'Corporate Objectives' },
-                    { id: 'u3s1t2', name: 'Theories of Corporate Strategy' },
-                    { id: 'u3s1t3', name: 'SWOT Analysis' },
-                    { id: 'u3s1t4', name: 'Impact of External Influences' }
-                ]
-            },
-            {
-                id: 'u3s2', name: 'Business Growth',
-                topics: [
-                    { id: 'u3s2t1', name: 'Growth' },
-                    { id: 'u3s2t2', name: 'Organic Growth' },
-                    { id: 'u3s2t3', name: 'Inorganic Growth' },
-                    { id: 'u3s2t4', name: 'Problems Arising from Growth' }
-                ]
-            },
-            {
-                id: 'u3s3', name: 'Decision Making Techniques',
-                topics: [
-                    { id: 'u3s3t1', name: 'Quantitative Sales Forecasting' },
-                    { id: 'u3s3t2', name: 'Investment Appraisal' },
-                    { id: 'u3s3t3', name: 'Decision Trees' },
-                    { id: 'u3s3t4', name: 'Critical Path Analysis' },
-                    { id: 'u3s3t5', name: 'Contribution' }
-                ]
-            },
-            {
-                id: 'u3s4', name: 'Influences on Business Decisions',
-                topics: [
-                    { id: 'u3s4t1', name: 'Corporate Culture' },
-                    { id: 'u3s4t2', name: 'Stakeholder Model versus Shareholder Model' },
-                    { id: 'u3s4t3', name: 'Business Ethics' }
-                ]
-            },
-            {
-                id: 'u3s5', name: 'Assessing Competitiveness',
-                topics: [
-                    { id: 'u3s5t1', name: 'Interpretation of Financial Statements' },
-                    { id: 'u3s5t2', name: 'Ratio Analysis' },
-                    { id: 'u3s5t3', name: 'Human Resources' }
-                ]
-            },
-            {
-                id: 'u3s6', name: 'Managing Change',
-                topics: [
-                    { id: 'u3s6t1', name: 'Key Factors in Change' },
-                    { id: 'u3s6t2', name: 'Contingency Planning' }
-                ]
-            }
-        ]
-    },
-    unit4: {
-        name: 'Global Business',
-        sections: [
-            {
-                id: 'u4s1', name: 'Globalisation',
-                topics: [
-                    { id: 'u4s1t1', name: 'Growing Economies' },
-                    { id: 'u4s1t2', name: 'International Trade and Business Growth' },
-                    { id: 'u4s1t3', name: 'Factors Contributing to Increased Globalisation' },
-                    { id: 'u4s1t4', name: 'Protectionism' },
-                    { id: 'u4s1t5', name: 'Trading Blocs' }
-                ]
-            },
-            {
-                id: 'u4s2', name: 'Global Markets and Business Expansion',
-                topics: [
-                    { id: 'u4s2t1', name: 'Conditions that Prompt Trade' },
-                    { id: 'u4s2t2', name: 'Assessment of a Country as a Market' },
-                    { id: 'u4s2t3', name: 'Assessment of a Country as a Production Location' },
-                    { id: 'u4s2t4', name: 'Reasons for Global Mergers, Takeovers or Joint Ventures' },
-                    { id: 'u4s2t5', name: 'Global Expansion and Uncertainty' }
-                ]
-            },
-            {
-                id: 'u4s3', name: 'Global Marketing',
-                topics: [
-                    { id: 'u4s3t1', name: 'Marketing' },
-                    { id: 'u4s3t2', name: 'Niche Markets' },
-                    { id: 'u4s3t3', name: 'Cultural/Social Factors' }
-                ]
-            },
-            {
-                id: 'u4s4', name: 'Global Industries and Companies',
-                topics: [
-                    { id: 'u4s4t1', name: 'The Impact of MNCs' },
-                    { id: 'u4s4t2', name: 'International Business Ethics' },
-                    { id: 'u4s4t3', name: 'Controlling MNCs' }
-                ]
-            }
-        ]
-    }
-};
-
 // ===== BOARD DATA =====
 const BOARD_DATA = {
     edexcel_ial: {
@@ -2262,7 +1712,6 @@ let currentSession = null;
 let currentBoard = null;
 let currentUnit = null;
 let currentQType = null;
-let selectedTopics = [];
 let currentQuestion = null;
 let currentAttemptId = null;
 let timerInterval = null;
@@ -2291,6 +1740,12 @@ async function checkAuth() {
     // Show auth elements
     document.querySelectorAll('.auth-only').forEach(function(el) { el.style.display = ''; });
     document.querySelectorAll('.guest-only').forEach(function(el) { el.style.display = 'none'; });
+
+    // Populate profile avatar with initials
+    if (document.getElementById('profileAvatar') && session.user && session.user.email) {
+        document.getElementById('profileAvatar').textContent = getProfileInitials(session.user.email);
+    }
+
 }
 
 async function handleLogout() {
@@ -2301,6 +1756,13 @@ async function handleLogout() {
         console.error('Logout error:', error);
         window.location.href = 'login.html';
     }
+}
+
+function getProfileInitials(email) {
+    if (!email) return '--';
+    var parts = email.split('@')[0].split('.');
+    if (parts.length >= 2) return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
+    return email.substring(0, 2).toUpperCase();
 }
 
 // ===== NAVIGATION =====
@@ -2314,7 +1776,6 @@ function resetToSelection() {
     stopTimer();
     currentQuestion = null;
     currentAttemptId = null;
-    selectedTopics = [];
     if (chartInstance) { chartInstance.destroy(); chartInstance = null; }
     document.getElementById('answerTextarea').value = '';
     document.getElementById('answerTextarea').readOnly = false;
@@ -2336,10 +1797,8 @@ function selectBoard(el) {
     currentBoard = el.getAttribute('data-board');
     currentUnit = null;
     currentQType = null;
-    selectedTopics = [];
 
     // Hide downstream sections
-    document.getElementById('topicSection').style.display = 'none';
     document.getElementById('qtypeSection').style.display = 'none';
     document.getElementById('generateSection').style.display = 'none';
     document.getElementById('generateBtn').disabled = true;
@@ -2373,161 +1832,10 @@ function selectUnit(el) {
 
     currentUnit = el.getAttribute('data-unit');
     currentQType = null;
-    selectedTopics = [];
     document.getElementById('generateBtn').disabled = true;
-    document.getElementById('qtypeSection').style.display = 'none';
-    document.getElementById('generateSection').style.display = 'none';
 
-    // Show topics (for boards that have topic data)
-    if (currentBoard === 'edexcel_ial' && EDEXCEL_IAL_TOPICS[currentUnit]) {
-        renderTopics();
-    } else {
-        // For boards without topic data, skip to question types
-        document.getElementById('topicSection').style.display = 'none';
-        renderQuestionTypes();
-    }
-}
-
-// ===== TOPIC SELECTION =====
-function renderTopics() {
-    var unitTopics = EDEXCEL_IAL_TOPICS[currentUnit];
-    if (!unitTopics) return;
-
-    var html = '<div class="topic-section">';
-    html += '<div class="section-title" style="font-size:1.2rem;">Select Topics</div>';
-    html += '<div class="section-subtitle">Choose specific topics to practise, or select entire sections. You can select multiple.</div>';
-
-    // Select All Unit button
-    html += '<div class="topic-select-all">';
-    html += '<label class="topic-checkbox-label topic-unit-label" onclick="toggleAllTopics(event)">';
-    html += '<input type="checkbox" id="selectAllUnit" class="topic-checkbox">';
-    html += '<span class="topic-checkbox-custom"></span>';
-    html += '<span class="topic-label-text">Select All of ' + unitTopics.name + '</span>';
-    html += '</label>';
-    html += '</div>';
-
-    // Sections
-    unitTopics.sections.forEach(function(section) {
-        html += '<div class="topic-tree-section">';
-
-        // Section header with checkbox
-        html += '<label class="topic-checkbox-label topic-section-label" onclick="toggleSection(event, \'' + section.id + '\')">';
-        html += '<input type="checkbox" class="topic-checkbox section-checkbox" data-section="' + section.id + '">';
-        html += '<span class="topic-checkbox-custom"></span>';
-        html += '<span class="topic-section-icon">&#9662;</span>';
-        html += '<span class="topic-label-text">' + section.name + '</span>';
-        html += '</label>';
-
-        // Topics under this section
-        html += '<div class="topic-tree-topics" id="topics-' + section.id + '">';
-        section.topics.forEach(function(topic) {
-            html += '<label class="topic-checkbox-label topic-item-label" onclick="toggleTopic(event, \'' + topic.id + '\', \'' + section.id + '\')">';
-            html += '<input type="checkbox" class="topic-checkbox topic-item-checkbox" data-topic="' + topic.id + '" data-section="' + section.id + '" data-name="' + topic.name + '">';
-            html += '<span class="topic-checkbox-custom"></span>';
-            html += '<span class="topic-label-text">' + topic.name + '</span>';
-            html += '</label>';
-        });
-        html += '</div>';
-
-        html += '</div>';
-    });
-
-    // Selected topics summary
-    html += '<div class="topic-summary" id="topicSummary" style="display:none;">';
-    html += '<div class="topic-summary-label">Selected topics:</div>';
-    html += '<div class="topic-summary-tags" id="topicSummaryTags"></div>';
-    html += '</div>';
-
-    html += '</div>';
-
-    document.getElementById('topicSection').innerHTML = html;
-    document.getElementById('topicSection').style.display = 'block';
-}
-
-function toggleAllTopics(e) {
-    e.stopPropagation();
-    var allCheckbox = document.getElementById('selectAllUnit');
-    var isChecked = !allCheckbox.checked;
-    allCheckbox.checked = isChecked;
-
-    document.querySelectorAll('.section-checkbox, .topic-item-checkbox').forEach(function(cb) {
-        cb.checked = isChecked;
-    });
-
-    updateSelectedTopics();
-}
-
-function toggleSection(e, sectionId) {
-    e.stopPropagation();
-    var sectionCb = document.querySelector('.section-checkbox[data-section="' + sectionId + '"]');
-    var isChecked = !sectionCb.checked;
-    sectionCb.checked = isChecked;
-
-    document.querySelectorAll('.topic-item-checkbox[data-section="' + sectionId + '"]').forEach(function(cb) {
-        cb.checked = isChecked;
-    });
-
-    updateSelectAllState();
-    updateSelectedTopics();
-}
-
-function toggleTopic(e, topicId, sectionId) {
-    e.stopPropagation();
-    var topicCb = document.querySelector('.topic-item-checkbox[data-topic="' + topicId + '"]');
-    topicCb.checked = !topicCb.checked;
-
-    // Update section checkbox state
-    var sectionTopics = document.querySelectorAll('.topic-item-checkbox[data-section="' + sectionId + '"]');
-    var allChecked = true;
-    sectionTopics.forEach(function(cb) { if (!cb.checked) allChecked = false; });
-    document.querySelector('.section-checkbox[data-section="' + sectionId + '"]').checked = allChecked;
-
-    updateSelectAllState();
-    updateSelectedTopics();
-}
-
-function updateSelectAllState() {
-    var allSections = document.querySelectorAll('.section-checkbox');
-    var allChecked = true;
-    allSections.forEach(function(cb) { if (!cb.checked) allChecked = false; });
-    var selectAll = document.getElementById('selectAllUnit');
-    if (selectAll) selectAll.checked = allChecked;
-}
-
-function updateSelectedTopics() {
-    selectedTopics = [];
-    document.querySelectorAll('.topic-item-checkbox:checked').forEach(function(cb) {
-        selectedTopics.push({
-            id: cb.getAttribute('data-topic'),
-            name: cb.getAttribute('data-name'),
-            section: cb.getAttribute('data-section')
-        });
-    });
-
-    // Update summary
-    var summary = document.getElementById('topicSummary');
-    var tagsDiv = document.getElementById('topicSummaryTags');
-
-    if (selectedTopics.length > 0) {
-        summary.style.display = 'block';
-        var tagsHtml = '';
-        if (selectedTopics.length > 8) {
-            tagsHtml = '<span class="topic-tag">' + selectedTopics.length + ' topics selected</span>';
-        } else {
-            selectedTopics.forEach(function(t) {
-                tagsHtml += '<span class="topic-tag">' + t.name + '</span>';
-            });
-        }
-        tagsDiv.innerHTML = tagsHtml;
-
-        // Show question types section
-        renderQuestionTypes();
-    } else {
-        summary.style.display = 'none';
-        document.getElementById('qtypeSection').style.display = 'none';
-        document.getElementById('generateSection').style.display = 'none';
-        document.getElementById('generateBtn').disabled = true;
-    }
+    // Show question types
+    renderQuestionTypes();
 }
 
 function renderQuestionTypes() {
@@ -2579,9 +1887,6 @@ async function generateQuestion() {
 
         var questionTypeStr = qtypeData.marks + '_mark_' + qtypeData.command;
 
-        // Build topic names list for the prompt
-        var topicNames = selectedTopics.map(function(t) { return t.name; });
-
         var response = await fetch(SUPABASE_URL + '/functions/v1/generate-question', {
             method: 'POST',
             headers: {
@@ -2592,8 +1897,7 @@ async function generateQuestion() {
             body: JSON.stringify({
                 board: currentBoard,
                 unit: unitData.code,
-                question_type: questionTypeStr,
-                topics: topicNames.length > 0 ? topicNames : null
+                question_type: questionTypeStr
             })
         });
 
@@ -3203,63 +2507,27 @@ document.addEventListener('DOMContentLoaded', function() {
     checkAuth();
     setupMobileMenu();
 
+    // Profile avatar dropdown
+    var profileAvatar = document.getElementById('profileAvatar');
+    var profileDropdown = document.getElementById('profileDropdown');
+    if (profileAvatar && profileDropdown) {
+        profileAvatar.addEventListener('click', function(e) {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('active');
+        });
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.profile-avatar') && !e.target.closest('.profile-dropdown')) {
+                profileDropdown.classList.remove('active');
+            }
+        });
+    }
+
     // Logout buttons
     var navLogout = document.getElementById('navLogoutBtn');
     var mobileLogout = document.getElementById('mobileLogoutBtn');
     if (navLogout) navLogout.addEventListener('click', handleLogout);
     if (mobileLogout) mobileLogout.addEventListener('click', handleLogout);
 });
-
-// ===== LEVEL TOGGLE =====
-(function() {
-    var LEVEL_KEY = 'mybiz_study_level';
-    var currentLevel = localStorage.getItem(LEVEL_KEY) || 'alevel';
-
-    function showBoardGrid(level) {
-        var alevelGrid = document.getElementById('boardGridAlevel');
-        var gcseGrid = document.getElementById('boardGridGcse');
-        if (alevelGrid) alevelGrid.style.display = (level === 'alevel') ? '' : 'none';
-        if (gcseGrid) gcseGrid.style.display = (level === 'gcse') ? '' : 'none';
-
-        // Reset selection state when switching levels
-        document.querySelectorAll('.board-card').forEach(function(c) { c.classList.remove('selected'); });
-        currentBoard = null;
-        currentUnit = null;
-        currentQType = null;
-        selectedTopics = [];
-        var unitSec = document.getElementById('unitSection');
-        var topicSec = document.getElementById('topicSection');
-        var qtypeSec = document.getElementById('qtypeSection');
-        var genSec = document.getElementById('generateSection');
-        if (unitSec) unitSec.style.display = 'none';
-        if (topicSec) topicSec.style.display = 'none';
-        if (qtypeSec) qtypeSec.style.display = 'none';
-        if (genSec) genSec.style.display = 'none';
-    }
-
-    function setLevel(level) {
-        localStorage.setItem(LEVEL_KEY, level);
-        currentLevel = level;
-        document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
-            btn.classList.toggle('active', btn.dataset.level === level);
-        });
-        showBoardGrid(level);
-    }
-
-    function initToggles() {
-        document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
-            btn.classList.toggle('active', btn.dataset.level === currentLevel);
-            btn.addEventListener('click', function() { setLevel(this.dataset.level); });
-        });
-        showBoardGrid(currentLevel);
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initToggles);
-    } else {
-        initToggles();
-    }
-})();
 </script>
 
 </body>

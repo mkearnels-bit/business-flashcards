@@ -146,55 +146,6 @@
 .site-hamburger.active span:nth-child(2) { opacity: 0; }
 .site-hamburger.active span:nth-child(3) { transform: rotate(-45deg); }
 
-/* ===== LEVEL TOGGLE ===== */
-.level-toggle {
-    display: flex;
-    align-items: center;
-    background: #f1f5f9;
-    border-radius: 8px;
-    padding: 3px;
-    gap: 0;
-    flex-shrink: 0;
-}
-.level-toggle-btn {
-    padding: 5px 14px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    font-family: inherit;
-    color: #64748b;
-    background: transparent;
-    white-space: nowrap;
-}
-.level-toggle-btn.active {
-    background: #1e3a5f;
-    color: #ffffff;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
-}
-.level-toggle-btn:hover:not(.active) {
-    color: #1e3a5f;
-    background: rgba(30, 58, 95, 0.08);
-}
-.mobile-level-toggle {
-    display: flex;
-    align-items: center;
-    background: #f1f5f9;
-    border-radius: 10px;
-    padding: 4px;
-    margin-bottom: 1rem;
-    gap: 0;
-}
-.mobile-level-toggle .level-toggle-btn {
-    flex: 1;
-    padding: 8px 0;
-    font-size: 0.85rem;
-    border-radius: 8px;
-    text-align: center;
-}
-
 /* Mobile overlay */
 .site-mobile-overlay {
     display: none;
@@ -208,6 +159,7 @@
     transition: opacity 0.3s ease;
 }
 .site-mobile-overlay.active {
+    display: block;
     opacity: 1;
     pointer-events: auto;
 }
@@ -228,6 +180,7 @@
     padding: 5.5rem 1.5rem 2rem;
 }
 .site-mobile-menu.active {
+    display: block;
     transform: translateX(0);
 }
 .site-mobile-links {
@@ -1741,14 +1694,149 @@
         scroll-behavior: auto !important;
     }
 }
+
+/* ==================== LEVEL TOGGLE ==================== */
+.level-toggle {
+    display: flex;
+    align-items: center;
+    background: #f1f5f9;
+    border-radius: 8px;
+    padding: 3px;
+    gap: 0;
+    flex-shrink: 0;
+}
+.level-toggle-btn {
+    padding: 5px 14px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: inherit;
+    color: #64748b;
+    background: transparent;
+    white-space: nowrap;
+}
+.level-toggle-btn.active {
+    background: #1e3a5f;
+    color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+.level-toggle-btn:hover:not(.active) {
+    color: #1e3a5f;
+    background: rgba(30, 58, 95, 0.08);
+}
+/* Mobile level toggle in slide-out menu */
+.mobile-level-toggle {
+    display: flex;
+    align-items: center;
+    background: #f1f5f9;
+    border-radius: 10px;
+    padding: 4px;
+    margin-bottom: 1rem;
+    gap: 0;
+}
+.mobile-level-toggle .level-toggle-btn {
+    flex: 1;
+    padding: 8px 0;
+    font-size: 0.85rem;
+    border-radius: 8px;
+    text-align: center;
+}
+/* Coming soon toast */
+.coming-soon-toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: #1e293b;
+    color: #ffffff;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    z-index: 9999;
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+.coming-soon-toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+/* Profile Avatar Dropdown */
+.profile-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e67e22, #f39c12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid #f1f5f9;
+}
+.profile-avatar:hover {
+    box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
+    transform: scale(1.05);
+}
+.profile-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    z-index: 1100;
+    min-width: 200px;
+    display: none;
+    margin-top: 0.5rem;
+    overflow: hidden;
+}
+.profile-dropdown.active { display: block; }
+.profile-dropdown a,
+.profile-dropdown button {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border: none;
+    background: none;
+    color: #334155;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+.profile-dropdown a:hover,
+.profile-dropdown button:hover {
+    background: #f1f5f9;
+    color: #1e3a5f;
+}
+.profile-dropdown button:last-child {
+    color: #dc2626;
+    border-top: 1px solid #f1f5f9;
+}
+.profile-dropdown button:last-child:hover { background: #fef2f2; }
+
 </style>
-<!-- Google Analytics - Replace GA_MEASUREMENT_ID with your actual ID -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+<!-- Google Analytics - Replace G-HFSYK32ZFT with your actual ID -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HFSYK32ZFT"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'GA_MEASUREMENT_ID');
+  gtag('config', 'G-HFSYK32ZFT');
 </script>
 <script type="application/ld+json">
 {
@@ -1779,11 +1867,18 @@
         <div class="site-nav-buttons" id="siteNavButtons">
             <a href="app.html" class="site-nav-link">Flash Cards</a>
             <a href="exam-skills-v2.html" class="site-nav-link">Exam Skills</a>
-            <a href="exam-practice.html" class="site-nav-link auth-only" style="display:none;">Exam Practice</a>
             <a href="notes.html" class="site-nav-link active">Study Notes</a>
+            <a href="glossary.html" class="site-nav-link auth-only" style="display:none;">Glossary</a>
             <a href="blog.html" class="site-nav-link">Blog</a>
             <a href="contact.html" class="site-nav-link">Contact Us</a>
-            <button class="site-nav-btn site-nav-btn-ghost" id="navLogoutBtn">Logout</button>
+            <div class="profile-wrapper" style="position: relative;">
+                <div class="profile-avatar" id="profileAvatar">--</div>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <a href="student-progress.html">Student Progress</a>
+                    <a href="#manage-account">My Account</a>
+                    <button id="navLogoutBtn">Log Out</button>
+                </div>
+            </div>
         </div>
         <button class="search-mobile-btn" id="searchMobileBtn" onclick="openMobileSearch()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg></button>
         <button class="site-hamburger" id="siteHamburger" aria-label="Menu">
@@ -1799,10 +1894,6 @@
 <div class="site-mobile-overlay" id="siteMobileOverlay"></div>
 <div class="site-mobile-menu" id="siteMobileMenu">
     <div class="site-mobile-links">
-        <div class="mobile-level-toggle">
-            <button class="level-toggle-btn active" data-level="alevel">A-Level</button>
-            <button class="level-toggle-btn" data-level="gcse">GCSE</button>
-        </div>
         <a href="app.html">
             <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
             Flash Cards
@@ -1811,7 +1902,6 @@
             <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg></span>
             Exam Skills
         </a>
-        <a href="exam-practice.html" class="auth-only" style="display:none;">Exam Practice</a>
         <a href="notes.html" class="active">
             <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></span>
             Study Notes
@@ -1824,6 +1914,14 @@
         <a href="contact.html">
             <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></span>
             Contact Us
+        </a>
+        <a href="student-progress.html">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg></span>
+            Student Progress
+        </a>
+        <a href="#manage-account">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"/></svg></span>
+            My Account
         </a>
         <div class="site-mobile-divider"></div>
         <button class="site-mobile-logout" id="mobileLogoutBtn">
@@ -5593,6 +5691,12 @@
                 var welcomeEl = document.getElementById('userEmail');
                 if (firstName) { welcomeEl.textContent = 'Welcome, ' + firstName + '!'; }
                 else { welcomeEl.textContent = session.user.email; }
+
+                // Populate profile avatar with initials
+                var profileAvatar = document.getElementById('profileAvatar');
+                if (profileAvatar && session.user && session.user.email) {
+                    profileAvatar.textContent = getProfileInitials(session.user.email);
+                }
             }
         }
         checkAuth();
@@ -5609,14 +5713,48 @@
         var siteMobileOverlay = document.getElementById('siteMobileOverlay');
 
         function toggleSiteMenu() {
+            var _isOpening = !siteMobileMenu.classList.contains('active');
+            if (_isOpening) {
+                siteMobileMenu.style.display = 'block';
+                siteMobileOverlay.style.display = 'block';
+                void siteMobileMenu.offsetHeight;
+            }
             siteHamburger.classList.toggle('active');
             siteMobileMenu.classList.toggle('active');
             siteMobileOverlay.classList.toggle('active');
             document.body.style.overflow = siteMobileMenu.classList.contains('active') ? 'hidden' : '';
+            if (!_isOpening) {
+                setTimeout(function() {
+                    siteMobileMenu.style.display = 'none';
+                    siteMobileOverlay.style.display = 'none';
+                }, 400);
+            }
         }
 
         if (siteHamburger) siteHamburger.addEventListener('click', toggleSiteMenu);
         if (siteMobileOverlay) siteMobileOverlay.addEventListener('click', toggleSiteMenu);
+
+        // Profile avatar dropdown
+        var profileAvatar = document.getElementById('profileAvatar');
+        var profileDropdown = document.getElementById('profileDropdown');
+        if (profileAvatar && profileDropdown) {
+            profileAvatar.addEventListener('click', function(e) {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('active');
+            });
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.profile-avatar') && !e.target.closest('.profile-dropdown')) {
+                    profileDropdown.classList.remove('active');
+                }
+            });
+        }
+        // Populate profile initials
+        function getProfileInitials(email) {
+            if (!email) return '--';
+            var parts = email.split('@')[0].split('.');
+            if (parts.length >= 2) return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
+            return email.substring(0, 2).toUpperCase();
+        }
 
         // Logout handlers for new nav buttons
         if (document.getElementById('navLogoutBtn')) document.getElementById('navLogoutBtn').addEventListener('click', function() { handleLogout(); });
@@ -7749,80 +7887,6 @@
                 }
             }
         })();
-
-        // ===== LEVEL TOGGLE =====
-        (function() {
-            var LEVEL_KEY = 'mybiz_study_level';
-            var currentLevel = localStorage.getItem(LEVEL_KEY) || 'alevel';
-            var alevelPages = {
-                'app.html': 'gcse-app.html', 'glossary.html': 'gcse-glossary.html',
-                'exam-skills-v2.html': null, 'exam-practice.html': null, 'notes.html': null,
-                'notes-unit1.html': null, 'notes-unit2.html': null, 'notes-unit3.html': null, 'notes-unit4.html': null
-            };
-            var gcsePages = { 'gcse-app.html': 'app.html', 'gcse-glossary.html': 'glossary.html' };
-            var comingSoon = ['exam-skills-v2.html', 'exam-practice.html', 'notes.html', 'notes-unit1.html', 'notes-unit2.html', 'notes-unit3.html', 'notes-unit4.html'];
-            function getCurrentPage() {
-                var path = window.location.pathname;
-                return path.substring(path.lastIndexOf('/') + 1) || 'index.html';
-            }
-            function showComingSoonToast() {
-                var toast = document.getElementById('comingSoonToast');
-                if (!toast) {
-                    toast = document.createElement('div');
-                    toast.id = 'comingSoonToast';
-                    toast.style.cssText = 'position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:#1e3a5f;color:#fff;padding:0.75rem 1.5rem;border-radius:10px;font-size:0.9rem;font-weight:600;opacity:0;transition:all 0.3s ease;z-index:10000;pointer-events:none;';
-                    toast.textContent = 'GCSE version coming soon!';
-                    document.body.appendChild(toast);
-                }
-                toast.style.opacity = '1';
-                toast.style.transform = 'translateX(-50%) translateY(0)';
-                setTimeout(function() { toast.style.opacity = '0'; toast.style.transform = 'translateX(-50%) translateY(20px)'; }, 2500);
-            }
-            function updateNavLinks(level) {
-                var navLinks = document.querySelectorAll('.site-nav-link, a[href]');
-                navLinks.forEach(function(link) {
-                    var href = link.getAttribute('href');
-                    if (!href) return;
-                    if (level === 'gcse') {
-                        if (href === 'app.html') link.setAttribute('href', 'gcse-app.html');
-                        if (comingSoon.indexOf(href) !== -1) { link.setAttribute('data-coming-soon', 'true'); link.addEventListener('click', comingSoonHandler); }
-                    } else {
-                        if (href === 'gcse-app.html') link.setAttribute('href', 'app.html');
-                        link.removeAttribute('data-coming-soon');
-                        link.removeEventListener('click', comingSoonHandler);
-                    }
-                });
-            }
-            function comingSoonHandler(e) {
-                if (this.getAttribute('data-coming-soon') === 'true') { e.preventDefault(); showComingSoonToast(); }
-            }
-            function setLevel(level) {
-                localStorage.setItem(LEVEL_KEY, level);
-                currentLevel = level;
-                document.querySelectorAll('.level-toggle-btn').forEach(function(btn) { btn.classList.toggle('active', btn.dataset.level === level); });
-                updateNavLinks(level);
-                var page = getCurrentPage();
-                if (level === 'gcse') {
-                    if (alevelPages[page] === null) {
-                        showComingSoonToast();
-                        localStorage.setItem(LEVEL_KEY, 'alevel'); currentLevel = 'alevel';
-                        document.querySelectorAll('.level-toggle-btn').forEach(function(btn) { btn.classList.toggle('active', btn.dataset.level === 'alevel'); });
-                        updateNavLinks('alevel'); return;
-                    }
-                    if (alevelPages[page]) { window.location.href = alevelPages[page]; return; }
-                } else {
-                    if (gcsePages[page]) { window.location.href = gcsePages[page]; return; }
-                }
-            }
-            function initToggles() {
-                document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
-                    btn.classList.toggle('active', btn.dataset.level === currentLevel);
-                    btn.addEventListener('click', function() { setLevel(this.dataset.level); });
-                });
-                updateNavLinks(currentLevel);
-            }
-            if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initToggles); } else { initToggles(); }
-        })();
     </script>
 <script>
     function showDesignMix(element) {
@@ -7935,6 +7999,134 @@
         panel.innerHTML = html;
         panel.className = 'barrier-info active';
     }
-</script>
+
+
+// ==================== LEVEL TOGGLE ====================
+(function() {
+    var LEVEL_KEY = 'mybiz_study_level';
+    var currentLevel = localStorage.getItem(LEVEL_KEY) || 'alevel';
+
+    // Page routing map
+    var alevelPages = {
+        'app.html': 'gcse-app.html',
+        'glossary.html': 'gcse-glossary.html',
+        'exam-skills-v2.html': null,
+        'notes.html': null,
+        'notes-unit1.html': null,
+        'notes-unit2.html': null,
+        'notes-unit3.html': null,
+        'notes-unit4.html': null
+    };
+    var gcsePages = {
+        'gcse-app.html': 'app.html',
+        'gcse-glossary.html': 'glossary.html'
+    };
+
+    // Coming soon GCSE pages
+    var comingSoon = ['exam-skills-v2.html', 'notes.html', 'notes-unit1.html', 'notes-unit2.html', 'notes-unit3.html', 'notes-unit4.html'];
+
+    function getCurrentPage() {
+        var path = window.location.pathname;
+        var page = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
+        return page;
+    }
+
+    function showComingSoonToast() {
+        var toast = document.getElementById('comingSoonToast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'comingSoonToast';
+            toast.className = 'coming-soon-toast';
+            toast.textContent = 'GCSE version coming soon!';
+            document.body.appendChild(toast);
+        }
+        toast.classList.add('show');
+        setTimeout(function() { toast.classList.remove('show'); }, 2500);
+    }
+
+    function updateNavLinks(level) {
+        var navLinks = document.querySelectorAll('.site-nav-link, .nav-link, a[href]');
+        navLinks.forEach(function(link) {
+            var href = link.getAttribute('href');
+            if (!href) return;
+
+            if (level === 'gcse') {
+                if (href === 'app.html') link.setAttribute('href', 'gcse-app.html');
+                if (comingSoon.indexOf(href) !== -1) {
+                    link.setAttribute('data-coming-soon', 'true');
+                    link.addEventListener('click', comingSoonHandler);
+                }
+            } else {
+                if (href === 'gcse-app.html') link.setAttribute('href', 'app.html');
+                link.removeAttribute('data-coming-soon');
+                link.removeEventListener('click', comingSoonHandler);
+            }
+        });
+    }
+
+    function comingSoonHandler(e) {
+        if (this.getAttribute('data-coming-soon') === 'true') {
+            e.preventDefault();
+            showComingSoonToast();
+        }
+    }
+
+    function setLevel(level) {
+        localStorage.setItem(LEVEL_KEY, level);
+        currentLevel = level;
+
+        // Update all toggle buttons
+        document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
+            btn.classList.toggle('active', btn.dataset.level === level);
+        });
+
+        // Update nav links
+        updateNavLinks(level);
+
+        // Check if we need to redirect
+        var page = getCurrentPage();
+        if (level === 'gcse') {
+            if (alevelPages[page] === null) {
+                showComingSoonToast();
+                // Revert toggle visually
+                localStorage.setItem(LEVEL_KEY, 'alevel');
+                currentLevel = 'alevel';
+                document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
+                    btn.classList.toggle('active', btn.dataset.level === 'alevel');
+                });
+                updateNavLinks('alevel');
+                return;
+            }
+            if (alevelPages[page]) {
+                window.location.href = alevelPages[page];
+                return;
+            }
+        } else {
+            if (gcsePages[page]) {
+                window.location.href = gcsePages[page];
+                return;
+            }
+        }
+    }
+
+    // Initialize toggles on page load
+    function initToggles() {
+        document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
+            btn.classList.toggle('active', btn.dataset.level === currentLevel);
+            btn.addEventListener('click', function() {
+                setLevel(this.dataset.level);
+            });
+        });
+        updateNavLinks(currentLevel);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initToggles);
+    } else {
+        initToggles();
+    }
+})();
+
+    </script>
 </body>
 </html>
