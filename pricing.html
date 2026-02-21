@@ -1716,10 +1716,12 @@
                 const fullName = session.user.user_metadata?.full_name || session.user.user_metadata?.name || '';
                 const firstName = fullName ? fullName.split(' ')[0] : '';
                 const welcomeEl = document.getElementById('userEmail');
-                if (firstName) {
-                    welcomeEl.textContent = `Welcome, ${firstName}!`;
-                } else {
-                    welcomeEl.textContent = session.user.email;
+                if (welcomeEl) {
+                    if (firstName) {
+                        welcomeEl.textContent = `Welcome, ${firstName}!`;
+                    } else {
+                        welcomeEl.textContent = session.user.email;
+                    }
                 }
                 var pa = document.getElementById('profileAvatar');
                 if (pa && session.user.email) pa.textContent = getProfileInitials(session.user.email);

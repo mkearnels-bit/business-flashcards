@@ -6857,8 +6857,10 @@
                 var fullName = session.user.user_metadata?.full_name || session.user.user_metadata?.name || '';
                 var firstName = fullName ? fullName.split(' ')[0] : '';
                 var welcomeEl = document.getElementById('userEmail');
-                if (firstName) { welcomeEl.textContent = 'Welcome, ' + firstName + '!'; }
-                else { welcomeEl.textContent = session.user.email; }
+                if (welcomeEl) {
+                    if (firstName) { welcomeEl.textContent = 'Welcome, ' + firstName + '!'; }
+                    else { welcomeEl.textContent = session.user.email; }
+                }
 
                 // Populate profile avatar with initials
                 var profileAvatar = document.getElementById('profileAvatar');

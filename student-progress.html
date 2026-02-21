@@ -1047,8 +1047,9 @@
 
                 if (error) throw error;
 
-                allAttempts = data || [];
-                console.log('Loaded attempts:', allAttempts.length, allAttempts);
+                // Filter to only include marked attempts (ones with marking_data)
+                allAttempts = (data || []).filter(a => a.marking_data && a.marks_awarded != null);
+                console.log('Loaded attempts:', allAttempts.length, 'of', (data || []).length, 'total');
 
                 if (allAttempts.length === 0) {
                     showEmptyState();
@@ -1166,7 +1167,7 @@
 
             const labels = Object.keys(groupedByDate).sort((a, b) => {
                 // Parse dates like '21 Feb', '3 Mar'
-                return new Date(a + ' 2025') - new Date(b + ' 2025');
+                return new Date(a + ' ' + new Date().getFullYear()) - new Date(b + ' ' + new Date().getFullYear());
             });
 
             const overallScores = [];

@@ -3955,10 +3955,12 @@
 
             // Display welcome message with first name (or email fallback)
             const welcomeEl = document.getElementById('userEmail');
-            if (firstName) {
-                welcomeEl.textContent = 'Welcome, ' + firstName + '!';
-            } else if (session.user.email) {
-                welcomeEl.textContent = session.user.email;
+            if (welcomeEl) {
+                if (firstName) {
+                    welcomeEl.textContent = 'Welcome, ' + firstName + '!';
+                } else if (session.user.email) {
+                    welcomeEl.textContent = session.user.email;
+                }
             }
 
             // Populate profile avatar with initials
