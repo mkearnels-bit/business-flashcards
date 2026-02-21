@@ -806,10 +806,10 @@
             animation: orbBounce 1.4s ease-in-out infinite;
         }
 
-        .loading-orb:nth-child(1) { background: var(--skill-knowledge); animation-delay: 0s; }
-        .loading-orb:nth-child(2) { background: var(--skill-application); animation-delay: 0.15s; }
-        .loading-orb:nth-child(3) { background: var(--skill-analysis); animation-delay: 0.3s; }
-        .loading-orb:nth-child(4) { background: var(--skill-evaluation); animation-delay: 0.45s; }
+        .loading-orb:nth-child(1) { background: var(--primary); animation-delay: 0s; }
+        .loading-orb:nth-child(2) { background: var(--accent); animation-delay: 0.15s; }
+        .loading-orb:nth-child(3) { background: var(--error); animation-delay: 0.3s; }
+        .loading-orb:nth-child(4) { background: var(--gray-400); animation-delay: 0.45s; }
 
         @keyframes orbBounce {
             0%, 80%, 100% { transform: translateY(0) scale(1); opacity: 0.6; }
@@ -826,6 +826,34 @@
         @keyframes fadeInOut {
             0%, 100% { opacity: 0.5; }
             50% { opacity: 1; }
+        }
+
+        /* ===== EXAM TIP BOX ===== */
+        .exam-tip-box {
+            background: white;
+            border-radius: 16px;
+            padding: 1.25rem 1.75rem;
+            margin-bottom: 2rem;
+            max-width: 480px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border-left: 4px solid var(--accent);
+            animation: fadeSlideUp 0.5s ease-out;
+        }
+
+        .exam-tip-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .exam-tip-text {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--gray-700);
+            font-weight: 500;
         }
 
         /* ===== PHASE 3: QUESTION DISPLAY ===== */
@@ -1830,6 +1858,23 @@
         </div>
     </div>
 
+    <!-- PHASE 4b: Marking Loading -->
+    <div class="phase" id="phase-marking">
+        <div class="loading-container">
+            <div class="exam-tip-box" id="examTipBox">
+                <div class="exam-tip-label">Exam Tip</div>
+                <div class="exam-tip-text" id="examTipText"></div>
+            </div>
+            <div class="loading-orbs">
+                <div class="loading-orb"></div>
+                <div class="loading-orb"></div>
+                <div class="loading-orb"></div>
+                <div class="loading-orb"></div>
+            </div>
+            <div class="loading-text">Marking your answer...</div>
+        </div>
+    </div>
+
     <!-- PHASE 5: Marking Feedback -->
     <div class="phase" id="phase-feedback">
         <button class="back-btn" onclick="resetToSelection()">
@@ -2737,6 +2782,40 @@ function formatTime(seconds) {
     return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
 }
 
+// ===== EXAM TIPS =====
+var EXAM_TIPS = [
+    "Always apply your knowledge to the specific business in the question. Generic answers lose application marks.",
+    "For 'Analyse' questions, build a chain of reasoning: point, explain, develop the impact on the business.",
+    "In 'Evaluate' questions, always consider both sides before reaching a justified conclusion.",
+    "Use real-world business examples to strengthen your arguments where relevant.",
+    "For calculation questions, always show your workings clearly. You can earn marks even if your final answer is wrong.",
+    "Read the question twice. Underline the command word and the number of marks to plan your response length.",
+    "For 'Discuss' questions, explore advantages AND disadvantages before making a judgement.",
+    "Context is king. Use the business name, the data provided, and the specific scenario in every paragraph.",
+    "Start evaluation answers with the strongest argument, not the weakest. Lead with impact.",
+    "For 'Define' questions, be precise and concise. Two clear sentences are usually enough for 2 marks.",
+    "When analysing data, describe the trend AND explain what it means for the business.",
+    "Use connective phrases like 'This means that...', 'As a result...' and 'This could lead to...' to extend your analysis.",
+    "In essay questions, a brief introduction and a strong conclusion can make your answer stand out.",
+    "Avoid listing points without development. One well-developed argument is worth more than three shallow ones.",
+    "Time management matters. Spend roughly one minute per mark in the exam.",
+    "For 'Assess' questions, weigh up the significance of different factors and decide which matters most.",
+    "Always think about short-term vs long-term effects on the business. This shows evaluative thinking.",
+    "Use business terminology correctly. Terms like 'cash flow', 'market share', and 'profit margin' show examiner you know the subject.",
+    "For questions about stakeholders, consider how different groups might be affected in different ways.",
+    "When discussing business decisions, consider the opportunity cost. What is the business giving up?",
+    "Structure matters. Use paragraphs to separate different arguments or points of analysis.",
+    "For 'Explain' questions, do not just state a fact. Develop your point by explaining WHY or HOW it affects the business.",
+    "Quantitative data in the question is there for a reason. Reference specific figures in your answer.",
+    "For 'To what extent' questions, your conclusion should clearly state the degree to which you agree or disagree.",
+    "Think about the type of business in the question. A strategy that works for a multinational may not suit a sole trader.",
+    "Link back to business objectives. How does this decision help the business achieve its goals?",
+    "For higher mark questions, consider external factors like the economy, competition, and market trends.",
+    "Quality over quantity. A focused, well-structured answer beats a long, rambling one every time.",
+    "Always re-read your answer before moving on. Small corrections can pick up extra marks.",
+    "For 'Recommend' questions, choose one option and justify why it is better than the alternative. Sit on the fence and you lose marks."
+];
+
 // ===== SUBMIT ANSWER =====
 async function submitAnswer() {
     var answer = document.getElementById('answerTextarea').value.trim();
@@ -2744,11 +2823,10 @@ async function submitAnswer() {
 
     stopTimer();
 
-    // Show loading state
-    var btn = document.getElementById('submitBtn');
-    btn.disabled = true;
-    btn.innerHTML = '<div class="spinner"></div> Marking...';
-    document.getElementById('answerTextarea').readOnly = true;
+    // Show marking loading phase with random exam tip
+    var randomTip = EXAM_TIPS[Math.floor(Math.random() * EXAM_TIPS.length)];
+    document.getElementById('examTipText').textContent = randomTip;
+    showPhase('marking');
 
     try {
         var response = await fetch(SUPABASE_URL + '/functions/v1/mark-answer', {
@@ -2780,8 +2858,9 @@ async function submitAnswer() {
 
     } catch (error) {
         console.error('Marking error:', error);
-        btn.disabled = false;
-        btn.innerHTML = 'Submit for Marking';
+        showPhase('question');
+        document.getElementById('submitBtn').disabled = false;
+        document.getElementById('submitBtn').innerHTML = 'Submit for Marking';
         document.getElementById('answerTextarea').readOnly = false;
         showError(error.message || 'Something went wrong. Please try again.');
     }
