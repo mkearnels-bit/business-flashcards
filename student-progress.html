@@ -722,77 +722,81 @@
 <body>
     <!-- NAVBAR -->
     <nav class="site-navbar" id="siteNavbar">
-        <div class="site-navbar-content">
-            <a href="index.html"><img src="logo.png" alt="MyBizStudies" class="site-navbar-logo"></a>
-            <div class="level-toggle" id="desktopLevelToggle">
-                <button class="level-toggle-btn active" data-level="alevel">A-Level</button>
-                <button class="level-toggle-btn" data-level="gcse">GCSE</button>
-            </div>
-            <div class="site-nav-buttons" id="siteNavButtons">
-                <a href="app.html" class="site-nav-link">Flash Cards</a>
-                <a href="exam-skills-v2.html" class="site-nav-link">Exam Skills</a>
-                <a href="notes.html" class="site-nav-link">Study Notes</a>
-                <a href="glossary.html" class="site-nav-link auth-only" style="display:none;">Glossary</a>
-                <a href="blog.html" class="site-nav-link">Blog</a>
-                <a href="contact.html" class="site-nav-link">Contact Us</a>
-                <div style="position: relative;">
-                    <div class="profile-avatar" id="profileAvatar">--</div>
-                    <div class="profile-dropdown" id="profileDropdown">
-                        <a href="student-progress.html">Student Progress</a>
-                        <a href="#manage-account">Manage Account</a>
-                        <button id="navLogoutBtn">Log Out</button>
-                    </div>
+    <div class="site-navbar-content">
+        <a href="index.html"><img src="logo.png" alt="MyBizStudies" class="site-navbar-logo"></a>
+        <div class="level-toggle" id="desktopLevelToggle">
+            <button class="level-toggle-btn active" data-level="alevel">A-Level</button>
+            <button class="level-toggle-btn" data-level="gcse">GCSE</button>
+        </div>
+        <div class="site-nav-buttons" id="siteNavButtons">
+            <a href="app.html" class="site-nav-link">Flash Cards</a>
+            <a href="exam-skills-v2.html" class="site-nav-link">Exam Skills</a>
+            <a href="exam-practice.html" class="site-nav-link auth-only" style="display:none;">Exam Practice</a>
+            <a href="notes.html" class="site-nav-link">Study Notes</a>
+            <a href="glossary.html" class="site-nav-link auth-only" style="display:none;">Glossary</a>
+            <a href="blog.html" class="site-nav-link">Blog</a>
+            <a href="contact.html" class="site-nav-link">Contact Us</a>
+            <div class="profile-wrapper" style="position: relative;">
+                <div class="profile-avatar" id="profileAvatar">--</div>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <a href="student-progress.html">Student Progress</a>
+                    <a href="#manage-account">My Account</a>
+                    <button id="navLogoutBtn">Log Out</button>
                 </div>
             </div>
-            <button class="site-hamburger" id="siteHamburger" aria-label="Menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
         </div>
-    </nav>
+        <button class="site-hamburger" id="siteHamburger" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</nav>
 
     <!-- Mobile Menu -->
     <div class="site-mobile-overlay" id="siteMobileOverlay"></div>
-    <div class="site-mobile-menu" id="siteMobileMenu">
-        <div class="site-mobile-links">
-            <a href="app.html">
-                <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
-                Flash Cards
-            </a>
-            <a href="exam-skills-v2.html">
-                <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg></span>
-                Exam Skills
-            </a>
-            <a href="notes.html">
-                <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></span>
-                Study Notes
-            </a>
-            <a href="blog.html">
-                <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"/></svg></span>
-                Blog
-            </a>
-            <div class="site-mobile-divider"></div>
-            <a href="contact.html">
-                <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></span>
-                Contact Us
-            </a>
-            <div class="site-mobile-divider"></div>
-            <a href="student-progress.html">
-                <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg></span>
-                Student Progress
-            </a>
-            <a href="#manage-account">
-                <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"/></svg></span>
-                My Account
-            </a>
-            <div class="site-mobile-divider"></div>
-            <button class="site-mobile-logout" id="mobileLogoutBtn">
-                <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l3-3m0 0l-3-3m3 3H3"/></svg></span>
-                Logout
-            </button>
-        </div>
+<div class="site-mobile-menu" id="siteMobileMenu">
+    <div class="site-mobile-links">
+        <a href="app.html">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
+            Flash Cards
+        </a>
+        <a href="exam-skills-v2.html">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg></span>
+            Exam Skills
+        </a>
+        <a href="exam-practice.html" class="auth-only" style="display:none;">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5"/></svg></span>
+            Exam Practice
+        </a>
+        <a href="notes.html">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></span>
+            Study Notes
+        </a>
+        <a href="blog.html">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"/></svg></span>
+            Blog
+        </a>
+        <div class="site-mobile-divider"></div>
+        <a href="contact.html">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></span>
+            Contact Us
+        </a>
+        <a href="student-progress.html">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg></span>
+            Student Progress
+        </a>
+        <a href="#manage-account">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"/></svg></span>
+            My Account
+        </a>
+        <div class="site-mobile-divider"></div>
+        <button class="site-mobile-logout" id="mobileLogoutBtn">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l3-3m0 0l-3-3m3 3H3"/></svg></span>
+            Logout
+        </button>
     </div>
+</div>
 
     <!-- MAIN CONTENT -->
     <main>
@@ -978,6 +982,7 @@
                 if (error) throw error;
 
                 allAttempts = data || [];
+                console.log('Loaded attempts:', allAttempts.length, allAttempts);
 
                 if (allAttempts.length === 0) {
                     showEmptyState();
@@ -1025,18 +1030,32 @@
                 return allAttempts;
             }
 
+            // question_type in DB is stored as e.g. '2_mark_define', '4_mark_explain', '20_mark_evaluate'
+            // We match on the command part (after the last underscore) and/or mark count
             const typeMap = {
-                'define': 'define',
-                'explain': 'explain',
-                'analyse': 'analyse',
-                'discuss': 'discuss',
-                'assess': 'assess',
-                'evaluate': 'evaluate',
-                'essay': 'essay'
+                'define': { command: 'define', marks: 2 },
+                'explain': { command: 'explain', marks: 4 },
+                'analyse': { command: 'analyse', marks: 6 },
+                'discuss': { command: 'discuss', marks: 8 },
+                'assess': { command: 'assess', marks: 10 },
+                'evaluate': { command: 'evaluate', marks: 10 },
+                'essay': { command: 'evaluate', marks: 20 }
             };
 
+            const filter = typeMap[typeFilter];
+            if (!filter) return allAttempts;
+
             return allAttempts.filter(attempt => {
-                return attempt.question_type === typeMap[typeFilter];
+                const qt = (attempt.question_type || '').toLowerCase();
+                // Match format like '2_mark_define' or just 'define'
+                if (qt.includes('_mark_')) {
+                    const parts = qt.split('_mark_');
+                    const marks = parseInt(parts[0]);
+                    const command = parts[1];
+                    return command === filter.command && marks === filter.marks;
+                }
+                // Fallback: direct match
+                return qt === typeFilter;
             });
         }
 
@@ -1065,22 +1084,23 @@
                 const aoBreakdown = marking.ao_breakdown || {};
                 const totalMarks = marking.total_marks || 1;
 
-                if (aoBreakdown.AO1 !== undefined) {
+                if (aoBreakdown.AO1 != null && typeof aoBreakdown.AO1 === 'number') {
                     groupedByDate[dateKey].ao1.push((aoBreakdown.AO1 / totalMarks) * 100);
                 }
-                if (aoBreakdown.AO2 !== undefined) {
+                if (aoBreakdown.AO2 != null && typeof aoBreakdown.AO2 === 'number') {
                     groupedByDate[dateKey].ao2.push((aoBreakdown.AO2 / totalMarks) * 100);
                 }
-                if (aoBreakdown.AO3 !== undefined) {
+                if (aoBreakdown.AO3 != null && typeof aoBreakdown.AO3 === 'number') {
                     groupedByDate[dateKey].ao3.push((aoBreakdown.AO3 / totalMarks) * 100);
                 }
-                if (aoBreakdown.AO4 !== undefined) {
+                if (aoBreakdown.AO4 != null && typeof aoBreakdown.AO4 === 'number') {
                     groupedByDate[dateKey].ao4.push((aoBreakdown.AO4 / totalMarks) * 100);
                 }
             });
 
             const labels = Object.keys(groupedByDate).sort((a, b) => {
-                return new Date('20 ' + a) - new Date('20 ' + b);
+                // Parse dates like '21 Feb', '3 Mar'
+                return new Date(a + ' 2025') - new Date(b + ' 2025');
             });
 
             const overallScores = [];
