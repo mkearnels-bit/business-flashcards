@@ -1128,31 +1128,37 @@
         }
 
         // Fallback AO max marks per question type (for older data without ao_max)
-        // Based on Edexcel IAL fixed allocations for points-based questions
+        // Based on Edexcel IAL fixed allocations per question type
         function getAoMaxFallback(questionType) {
             const qt = questionType.toLowerCase();
-            // Points-based questions have fixed AO allocations
-            if (qt.includes('define') || qt === '2_mark_define') {
+
+            // Essay 20 marks MUST be checked first (before evaluate, since 20_mark_evaluate contains 'evaluate')
+            if (qt.includes('20_mark') || qt.includes('essay')) {
+                return { AO1: 4, AO2: 4, AO3: 6, AO4: 6 };
+            }
+            // Define 2 marks
+            if (qt.includes('define')) {
                 return { AO1: 2, AO2: null, AO3: null, AO4: null };
             }
-            if (qt.includes('explain') || qt === '4_mark_explain') {
+            // Explain 4 marks
+            if (qt.includes('explain')) {
                 return { AO1: 2, AO2: 2, AO3: null, AO4: null };
             }
-            if (qt.includes('analyse') || qt === '6_mark_analyse') {
+            // Calculate 4 marks
+            if (qt.includes('calculate')) {
+                return { AO1: 2, AO2: 2, AO3: null, AO4: null };
+            }
+            // Analyse 6 marks
+            if (qt.includes('analyse')) {
                 return { AO1: 2, AO2: 2, AO3: 2, AO4: null };
             }
-            // Levels-based questions: estimate reasonable max per AO
-            // Discuss 8 marks: AO1~2, AO2~2, AO3~4
-            if (qt.includes('discuss') || qt === '8_mark_discuss') {
+            // Discuss 8 marks
+            if (qt.includes('discuss')) {
                 return { AO1: 2, AO2: 2, AO3: 4, AO4: null };
             }
-            // Assess/Evaluate 10 marks: AO1~2, AO2~2, AO3~3, AO4~3
-            if (qt.includes('assess') || qt.includes('evaluate') || qt === '10_mark_assess' || qt === '10_mark_evaluate') {
+            // Assess/Evaluate 10 marks
+            if (qt.includes('assess') || qt.includes('evaluate')) {
                 return { AO1: 2, AO2: 2, AO3: 3, AO4: 3 };
-            }
-            // Essay 20 marks: AO1~4, AO2~4, AO3~6, AO4~6
-            if (qt.includes('essay') || qt === '20_mark_evaluate') {
-                return { AO1: 4, AO2: 4, AO3: 6, AO4: 6 };
             }
             // Unknown: return nulls (will skip AO display)
             return { AO1: null, AO2: null, AO3: null, AO4: null };
@@ -1180,10 +1186,14 @@
                 const fallbackAoMax = getAoMaxFallback(qt);
 
                 function aoPercent(ao, key) {
-                    if (ao == null || typeof ao !== 'number') return null;
-                    const max = (aoMax[key] != null) ? aoMax[key] : fallbackAoMax[key];
-                    if (!max || max <= 0) return null;
-                    return Math.min((ao / max) * 100, 100);
+                    // Handle strings, numbers, or null — Claude sometimes returns "2" instead of 2
+                    if (ao == null) return null;
+                    const aoNum = typeof ao === 'number' ? ao : parseFloat(ao);
+                    if (isNaN(aoNum)) return null;
+                    const rawMax = (aoMax[key] != null) ? aoMax[key] : fallbackAoMax[key];
+                    const maxNum = typeof rawMax === 'number' ? rawMax : parseFloat(rawMax);
+                    if (!maxNum || isNaN(maxNum) || maxNum <= 0) return null;
+                    return Math.min((aoNum / maxNum) * 100, 100);
                 }
 
                 const ao1Pct = aoPercent(aoBreakdown.AO1, 'AO1');
