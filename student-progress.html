@@ -498,27 +498,53 @@
             box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1);
         }
 
-        .overall-score {
+        .chart-filters {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .chart-summary {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            padding: 1.25rem 2rem;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            margin-top: 0.5rem;
+        }
+
+        .chart-summary-stat {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 1.5rem;
-            background: linear-gradient(135deg, #e67e22, #f39c12);
-            border-radius: 12px;
-            color: white;
-            min-width: 150px;
-            text-align: center;
+            gap: 0.2rem;
         }
 
-        .overall-score-value {
-            font-size: 2.5rem;
+        .chart-summary-value {
+            font-size: 1.4rem;
             font-weight: 700;
+            color: #1e3a5f;
         }
 
-        .overall-score-label {
-            font-size: 0.85rem;
-            opacity: 0.95;
-            margin-top: 0.25rem;
+        .chart-summary-value.positive { color: #27ae60; }
+        .chart-summary-value.negative { color: #dc2626; }
+
+        .chart-summary-label {
+            font-size: 0.78rem;
+            color: #64748b;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .chart-summary-divider {
+            width: 1px;
+            height: 36px;
+            background: #cbd5e1;
         }
 
         .chart-canvas-wrapper {
@@ -543,160 +569,7 @@
             margin-bottom: 0.5rem;
         }
 
-        /* ========== STATS CARDS ========== */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background: white;
-            border-radius: 16px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            border: 1px solid #e2e8f0;
-            transition: all 0.2s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-        }
-
-        .stat-label {
-            font-size: 0.85rem;
-            color: #64748b;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-value {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: #0f172a;
-        }
-
-        .stat-change {
-            font-size: 0.85rem;
-            margin-top: 0.5rem;
-            font-weight: 500;
-        }
-
-        .stat-change.positive {
-            color: #27ae60;
-        }
-
-        .stat-change.negative {
-            color: #dc2626;
-        }
-
-        /* ========== AREAS SECTION ========== */
-        .areas-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .areas-card {
-            background: white;
-            border-radius: 16px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            border: 1px solid #e2e8f0;
-        }
-
-        .areas-card h3 {
-            font-size: 1.1rem;
-            color: #0f172a;
-            margin-bottom: 1rem;
-            font-weight: 700;
-        }
-
-        .areas-list {
-            list-style: none;
-        }
-
-        .areas-item {
-            padding: 0.75rem 0;
-            border-bottom: 1px solid #f1f5f9;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .areas-item:last-child {
-            border-bottom: none;
-        }
-
-        .areas-name {
-            color: #334155;
-            font-weight: 500;
-        }
-
-        .areas-score {
-            font-weight: 700;
-            color: #e67e22;
-        }
-
-        /* ========== CALENDAR ========== */
-        .calendar-card {
-            background: white;
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            border: 1px solid #e2e8f0;
-            margin-bottom: 2rem;
-        }
-
-        .calendar-card h3 {
-            font-size: 1.3rem;
-            color: #0f172a;
-            margin-bottom: 1.5rem;
-            font-weight: 700;
-        }
-
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 0.5rem;
-        }
-
-        .calendar-day {
-            aspect-ratio: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 6px;
-            background: #f1f5f9;
-            font-size: 0.75rem;
-            color: #94a3b8;
-            font-weight: 600;
-        }
-
-        .calendar-day.has-activity-light {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-
-        .calendar-day.has-activity-medium {
-            background: #86efac;
-            color: #166534;
-        }
-
-        .calendar-day.has-activity-heavy {
-            background: #27ae60;
-            color: white;
-        }
-
-        .calendar-day.has-activity-very-heavy {
-            background: #1e3a5f;
-            color: white;
-        }
+        /* (Stats cards, areas, calendar sections removed) */
 
         /* ========== RESPONSIVE ========== */
         @media (max-width: 768px) {
@@ -729,20 +602,13 @@
                 width: 100%;
             }
 
-            .overall-score {
-                align-self: flex-start;
-            }
-
             .chart-container {
                 padding: 1.5rem;
             }
 
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .areas-grid {
-                grid-template-columns: 1fr;
+            .chart-summary {
+                gap: 1rem;
+                padding: 1rem;
             }
 
             .chart-canvas-wrapper {
@@ -765,16 +631,14 @@
                 padding: 1rem;
             }
 
-            .overall-score {
-                min-width: 120px;
+            .chart-summary {
+                flex-direction: column;
+                gap: 0.75rem;
             }
 
-            .overall-score-value {
-                font-size: 2rem;
-            }
-
-            .stat-value {
-                font-size: 1.5rem;
+            .chart-summary-divider {
+                width: 60px;
+                height: 1px;
             }
 
             .chart-canvas-wrapper {
@@ -872,76 +736,57 @@
         <div class="chart-container">
             <div class="chart-header">
                 <div class="chart-title">Performance Over Time</div>
-                <div class="filter-group">
-                    <label class="filter-label">Question type:</label>
-                    <select id="questionTypeFilter" class="filter-select">
-                        <option value="all">All Questions</option>
-                        <option value="define">Define (2 marks)</option>
-                        <option value="explain">Explain (4 marks)</option>
-                        <option value="analyse">Analyse (6 marks)</option>
-                        <option value="discuss">Discuss (8 marks)</option>
-                        <option value="assess">Assess (10 marks)</option>
-                        <option value="evaluate">Evaluate (10 marks)</option>
-                        <option value="essay">Essay (20 marks)</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label class="filter-label">Skill:</label>
-                    <select id="skillFilter" class="filter-select">
-                        <option value="all">All Skills</option>
-                        <option value="AO1">Knowledge (AO1)</option>
-                        <option value="AO2">Application (AO2)</option>
-                        <option value="AO3">Analysis (AO3)</option>
-                        <option value="AO4">Evaluation (AO4)</option>
-                    </select>
-                </div>
-                <div class="overall-score">
-                    <div class="overall-score-value" id="overallScore">--</div>
-                    <div class="overall-score-label">Overall Avg</div>
+                <div class="chart-filters">
+                    <div class="filter-group">
+                        <label class="filter-label">Question type:</label>
+                        <select id="questionTypeFilter" class="filter-select">
+                            <option value="all">All Questions</option>
+                            <option value="define">Define (2 marks)</option>
+                            <option value="explain">Explain (4 marks)</option>
+                            <option value="analyse">Analyse (6 marks)</option>
+                            <option value="discuss">Discuss (8 marks)</option>
+                            <option value="assess">Assess (10 marks)</option>
+                            <option value="evaluate">Evaluate (10 marks)</option>
+                            <option value="essay">Essay (20 marks)</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Unit:</label>
+                        <select id="unitFilter" class="filter-select">
+                            <option value="all">All Units</option>
+                            <option value="unit1">Unit 1: Marketing and People</option>
+                            <option value="unit2">Unit 2: Managing Business Activities</option>
+                            <option value="unit3">Unit 3: Business Decisions and Strategy</option>
+                            <option value="unit4">Unit 4: Global Business</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Topic:</label>
+                        <select id="topicFilter" class="filter-select">
+                            <option value="all">All Topics</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
             <div id="chartContent"></div>
-        </div>
 
-        <!-- STATS GRID -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-label">Questions Attempted</div>
-                <div class="stat-value" id="statsAttempted">0</div>
+            <div class="chart-summary" id="chartSummary">
+                <div class="chart-summary-stat">
+                    <span class="chart-summary-value" id="summaryAttempted">0</span>
+                    <span class="chart-summary-label">Questions</span>
+                </div>
+                <div class="chart-summary-divider"></div>
+                <div class="chart-summary-stat">
+                    <span class="chart-summary-value" id="summaryAverage">--</span>
+                    <span class="chart-summary-label">Average</span>
+                </div>
+                <div class="chart-summary-divider"></div>
+                <div class="chart-summary-stat">
+                    <span class="chart-summary-value" id="summaryTrend">--</span>
+                    <span class="chart-summary-label">Recent Trend</span>
+                </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-label">Average Score</div>
-                <div class="stat-value" id="statsAverage">0%</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Study Streak</div>
-                <div class="stat-value" id="statsStreak">0</div>
-                <div class="stat-change" id="statsStreakDesc">days</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Recent Trend</div>
-                <div class="stat-value" id="statsTrend">--</div>
-                <div class="stat-change" id="statsTrendDesc"></div>
-            </div>
-        </div>
-
-        <!-- AREAS SECTION -->
-        <div class="areas-grid">
-            <div class="areas-card">
-                <h3>Strongest Areas</h3>
-                <ul class="areas-list" id="strongestAreas"></ul>
-            </div>
-            <div class="areas-card">
-                <h3>Areas for Improvement</h3>
-                <ul class="areas-list" id="weakestAreas"></ul>
-            </div>
-        </div>
-
-        <!-- CALENDAR -->
-        <div class="calendar-card">
-            <h3>Study Streak Calendar (12 weeks)</h3>
-            <div class="calendar-grid" id="studyCalendar"></div>
         </div>
     </main>
 
@@ -1055,10 +900,8 @@
                 if (allAttempts.length === 0) {
                     showEmptyState();
                 } else {
+                    populateTopicFilter();
                     updateChart();
-                    updateStats();
-                    updateAreas();
-                    updateCalendar();
                 }
             } catch (error) {
                 console.error('Failed to load progress data:', error);
@@ -1068,34 +911,66 @@
 
         function showEmptyState() {
             document.getElementById('chartContent').innerHTML = '<div class="empty-state"><div class="empty-state-icon">📊</div><h3>No Data Yet</h3><p>Start practicing exam questions to see your progress here!</p></div>';
-            document.getElementById('statsAttempted').textContent = '0';
-            document.getElementById('statsAverage').textContent = '0%';
-            document.getElementById('statsStreak').textContent = '0';
-            document.getElementById('strongestAreas').innerHTML = '<li class="areas-item"><span class="areas-name">No data available</span></li>';
-            document.getElementById('weakestAreas').innerHTML = '<li class="areas-item"><span class="areas-name">No data available</span></li>';
-            document.getElementById('studyCalendar').innerHTML = '<div class="empty-state" style="grid-column: 1/-1; padding: 2rem 0;"><p>No study activity yet</p></div>';
+            document.getElementById('summaryAttempted').textContent = '0';
+            document.getElementById('summaryAverage').textContent = '--';
+            document.getElementById('summaryTrend').textContent = '--';
         }
 
         // ========== CHART FUNCTIONALITY ==========
         function updateChart() {
-            const filterValue = document.getElementById('questionTypeFilter').value;
-            const skillValue = document.getElementById('skillFilter').value;
-            const filteredData = filterAttemptsByType(filterValue);
+            const filteredData = getFilteredAttempts();
 
             if (filteredData.length === 0) {
-                document.getElementById('chartContent').innerHTML = '<div class="empty-state"><div class="empty-state-icon">📈</div><h3>No Data for This Filter</h3><p>Try selecting a different question type</p></div>';
+                document.getElementById('chartContent').innerHTML = '<div class="empty-state"><div class="empty-state-icon">📈</div><h3>No Data for This Filter</h3><p>Try selecting a different filter combination</p></div>';
+                updateSummary(filteredData);
                 return;
             }
 
-            const { datasets, overallAvg } = prepareChartData(filteredData, filterValue, skillValue);
-
-            document.getElementById('overallScore').textContent = overallAvg.toFixed(1) + '%';
+            const { datasets } = prepareChartData(filteredData);
             renderChart(null, datasets);
+            updateSummary(filteredData);
         }
 
-        function filterAttemptsByType(typeFilter) {
+        // Combined filter function: question type + unit + topic
+        function getFilteredAttempts() {
+            let data = allAttempts;
+
+            const typeFilter = document.getElementById('questionTypeFilter').value;
+            if (typeFilter !== 'all') {
+                data = filterAttemptsByType(typeFilter, data);
+            }
+
+            const unitFilter = document.getElementById('unitFilter').value;
+            if (unitFilter !== 'all') {
+                const unitCodes = {
+                    'unit1': 'WBS11', 'unit2': 'WBS12', 'unit3': 'WBS13', 'unit4': 'WBS14'
+                };
+                const unitCode = unitCodes[unitFilter];
+                data = data.filter(a => {
+                    // Match unit code in the stored unit field
+                    const u = (a.unit || '').toUpperCase();
+                    return u.includes(unitCode) || u.includes(unitFilter.toUpperCase());
+                });
+            }
+
+            const topicFilter = document.getElementById('topicFilter').value;
+            if (topicFilter !== 'all') {
+                data = data.filter(a => {
+                    const testedTopics = (a.question_data && a.question_data.tested_topics) || [];
+                    return testedTopics.some(t =>
+                        (t.topic && t.topic === topicFilter) ||
+                        (t.section && t.section === topicFilter)
+                    );
+                });
+            }
+
+            return data;
+        }
+
+        function filterAttemptsByType(typeFilter, source) {
+            const data = source || allAttempts;
             if (typeFilter === 'all') {
-                return allAttempts;
+                return data;
             }
 
             // question_type in DB is stored as e.g. '2_mark_define', '4_mark_explain', '20_mark_evaluate'
@@ -1111,9 +986,9 @@
             };
 
             const filter = typeMap[typeFilter];
-            if (!filter) return allAttempts;
+            if (!filter) return data;
 
-            return allAttempts.filter(attempt => {
+            return data.filter(attempt => {
                 const qt = (attempt.question_type || '').toLowerCase();
                 // Match format like '2_mark_define' or just 'define'
                 if (qt.includes('_mark_')) {
@@ -1127,98 +1002,21 @@
             });
         }
 
-        // Fallback AO max marks per question type (for older data without ao_max)
-        // Based on Edexcel IAL fixed allocations per question type
-        function getAoMaxFallback(questionType) {
-            const qt = questionType.toLowerCase();
-
-            // Essay 20 marks MUST be checked first (before evaluate, since 20_mark_evaluate contains 'evaluate')
-            if (qt.includes('20_mark') || qt.includes('essay')) {
-                return { AO1: 4, AO2: 4, AO3: 6, AO4: 6 };
-            }
-            // Define 2 marks
-            if (qt.includes('define')) {
-                return { AO1: 2, AO2: null, AO3: null, AO4: null };
-            }
-            // Explain 4 marks
-            if (qt.includes('explain')) {
-                return { AO1: 2, AO2: 2, AO3: null, AO4: null };
-            }
-            // Calculate 4 marks
-            if (qt.includes('calculate')) {
-                return { AO1: 2, AO2: 2, AO3: null, AO4: null };
-            }
-            // Analyse 6 marks
-            if (qt.includes('analyse')) {
-                return { AO1: 2, AO2: 2, AO3: 2, AO4: null };
-            }
-            // Discuss 8 marks
-            if (qt.includes('discuss')) {
-                return { AO1: 2, AO2: 2, AO3: 4, AO4: null };
-            }
-            // Assess/Evaluate 10 marks
-            if (qt.includes('assess') || qt.includes('evaluate')) {
-                return { AO1: 2, AO2: 2, AO3: 3, AO4: 3 };
-            }
-            // Unknown: return nulls (will skip AO display)
-            return { AO1: null, AO2: null, AO3: null, AO4: null };
-        }
-
-        function prepareChartData(attempts, filterType, skillFilter) {
-            // Each attempt = one data point, plotted at its exact timestamp
+        function prepareChartData(attempts) {
             const overallData = [];
-            const ao1Data = [];
-            const ao2Data = [];
-            const ao3Data = [];
-            const ao4Data = [];
 
             attempts.forEach(attempt => {
                 const timestamp = new Date(attempt.created_at);
                 const percentage = attempt.percentage_score || 0;
-
                 overallData.push({ x: timestamp, y: percentage });
-
-                const marking = attempt.marking_data || {};
-                const aoBreakdown = marking.ao_breakdown || {};
-                const aoMax = marking.ao_max || {};
-
-                const qt = (attempt.question_type || '').toLowerCase();
-                const fallbackAoMax = getAoMaxFallback(qt);
-
-                function aoPercent(ao, key) {
-                    // Handle strings, numbers, or null — Claude sometimes returns "2" instead of 2
-                    if (ao == null) return null;
-                    const aoNum = typeof ao === 'number' ? ao : parseFloat(ao);
-                    if (isNaN(aoNum)) return null;
-                    const rawMax = (aoMax[key] != null) ? aoMax[key] : fallbackAoMax[key];
-                    const maxNum = typeof rawMax === 'number' ? rawMax : parseFloat(rawMax);
-                    if (!maxNum || isNaN(maxNum) || maxNum <= 0) return null;
-                    return Math.min((aoNum / maxNum) * 100, 100);
-                }
-
-                const ao1Pct = aoPercent(aoBreakdown.AO1, 'AO1');
-                const ao2Pct = aoPercent(aoBreakdown.AO2, 'AO2');
-                const ao3Pct = aoPercent(aoBreakdown.AO3, 'AO3');
-                const ao4Pct = aoPercent(aoBreakdown.AO4, 'AO4');
-
-                if (ao1Pct != null) ao1Data.push({ x: timestamp, y: ao1Pct });
-                if (ao2Pct != null) ao2Data.push({ x: timestamp, y: ao2Pct });
-                if (ao3Pct != null) ao3Data.push({ x: timestamp, y: ao3Pct });
-                if (ao4Pct != null) ao4Data.push({ x: timestamp, y: ao4Pct });
             });
-
-            const overallAvg = overallData.length > 0
-                ? overallData.reduce((sum, p) => sum + p.y, 0) / overallData.length
-                : 0;
-
-            const aoRelevance = getAORelevance(filterType);
 
             const datasets = [
                 {
-                    label: 'Overall Score %',
+                    label: 'Score %',
                     data: overallData,
                     borderColor: '#1e3a5f',
-                    backgroundColor: 'rgba(30, 58, 95, 0.05)',
+                    backgroundColor: 'rgba(30, 58, 95, 0.08)',
                     borderWidth: 3,
                     fill: true,
                     tension: 0.3,
@@ -1230,94 +1028,7 @@
                 }
             ];
 
-            if (aoRelevance.includes('AO1') && (skillFilter === 'all' || skillFilter === 'AO1')) {
-                datasets.push({
-                    label: 'Knowledge (AO1)',
-                    data: ao1Data,
-                    borderColor: '#3498db',
-                    backgroundColor: 'rgba(52, 152, 219, 0.05)',
-                    borderWidth: 2,
-                    fill: false,
-                    tension: 0.3,
-                    spanGaps: true,
-                    pointBackgroundColor: '#3498db',
-                    pointBorderColor: '#ffffff',
-                    pointBorderWidth: 2,
-                    pointRadius: 4,
-                    pointHoverRadius: 6
-                });
-            }
-
-            if (aoRelevance.includes('AO2') && (skillFilter === 'all' || skillFilter === 'AO2')) {
-                datasets.push({
-                    label: 'Application (AO2)',
-                    data: ao2Data,
-                    borderColor: '#27ae60',
-                    backgroundColor: 'rgba(39, 174, 96, 0.05)',
-                    borderWidth: 2,
-                    fill: false,
-                    tension: 0.3,
-                    spanGaps: true,
-                    pointBackgroundColor: '#27ae60',
-                    pointBorderColor: '#ffffff',
-                    pointBorderWidth: 2,
-                    pointRadius: 4,
-                    pointHoverRadius: 6
-                });
-            }
-
-            if (aoRelevance.includes('AO3') && (skillFilter === 'all' || skillFilter === 'AO3')) {
-                datasets.push({
-                    label: 'Analysis (AO3)',
-                    data: ao3Data,
-                    borderColor: '#e67e22',
-                    backgroundColor: 'rgba(230, 126, 34, 0.05)',
-                    borderWidth: 2,
-                    fill: false,
-                    tension: 0.3,
-                    spanGaps: true,
-                    pointBackgroundColor: '#e67e22',
-                    pointBorderColor: '#ffffff',
-                    pointBorderWidth: 2,
-                    pointRadius: 4,
-                    pointHoverRadius: 6
-                });
-            }
-
-            if (aoRelevance.includes('AO4') && (skillFilter === 'all' || skillFilter === 'AO4')) {
-                datasets.push({
-                    label: 'Evaluation (AO4)',
-                    data: ao4Data,
-                    borderColor: '#9b59b6',
-                    backgroundColor: 'rgba(155, 89, 182, 0.05)',
-                    borderWidth: 2,
-                    fill: false,
-                    tension: 0.3,
-                    spanGaps: true,
-                    pointBackgroundColor: '#9b59b6',
-                    pointBorderColor: '#ffffff',
-                    pointBorderWidth: 2,
-                    pointRadius: 4,
-                    pointHoverRadius: 6
-                });
-            }
-
-            return { labels: null, datasets, overallAvg };
-        }
-
-        function getAORelevance(filterType) {
-            const relevanceMap = {
-                'all': ['AO1', 'AO2', 'AO3', 'AO4'],
-                'define': ['AO1'],
-                'explain': ['AO1', 'AO2'],
-                'analyse': ['AO1', 'AO2', 'AO3'],
-                'discuss': ['AO1', 'AO2', 'AO3', 'AO4'],
-                'assess': ['AO1', 'AO2', 'AO3', 'AO4'],
-                'evaluate': ['AO1', 'AO2', 'AO3', 'AO4'],
-                'essay': ['AO1', 'AO2', 'AO3', 'AO4']
-            };
-
-            return relevanceMap[filterType] || ['AO1', 'AO2', 'AO3', 'AO4'];
+            return { datasets };
         }
 
         function renderChart(labels, datasets) {
@@ -1365,15 +1076,7 @@
                         },
                         plugins: {
                             legend: {
-                                display: true,
-                                position: 'bottom',
-                                labels: {
-                                    font: { family: "'Inter', sans-serif", size: 12, weight: '500' },
-                                    color: '#334155',
-                                    padding: 15,
-                                    usePointStyle: true,
-                                    pointStyle: 'circle'
-                                }
+                                display: false
                             },
                             tooltip: {
                                 backgroundColor: 'rgba(30, 58, 95, 0.9)',
@@ -1452,77 +1155,31 @@
             }, 0);
         }
 
-        // ========== STATS UPDATE ==========
-        function updateStats() {
-            const filterValue = document.getElementById('questionTypeFilter').value;
-            const filteredData = filterAttemptsByType(filterValue);
+        // ========== SUMMARY UPDATE ==========
+        function updateSummary(filteredData) {
+            document.getElementById('summaryAttempted').textContent = filteredData.length;
 
             if (filteredData.length === 0) {
-                document.getElementById('statsAttempted').textContent = '0';
-                document.getElementById('statsAverage').textContent = '0%';
-                document.getElementById('statsStreak').textContent = '0';
-                document.getElementById('statsTrend').textContent = '--';
+                document.getElementById('summaryAverage').textContent = '--';
+                document.getElementById('summaryTrend').textContent = '--';
                 return;
             }
 
-            document.getElementById('statsAttempted').textContent = filteredData.length;
-
             const avgScore = filteredData.reduce((sum, a) => sum + (a.percentage_score || 0), 0) / filteredData.length;
-            document.getElementById('statsAverage').textContent = avgScore.toFixed(1) + '%';
-
-            const streak = calculateStreak(filteredData);
-            document.getElementById('statsStreak').textContent = streak;
-            document.getElementById('statsStreakDesc').textContent = streak === 1 ? 'day' : 'days';
+            document.getElementById('summaryAverage').textContent = avgScore.toFixed(1) + '%';
 
             const trend = calculateTrend(filteredData);
-            const trendEl = document.getElementById('statsTrend');
-            const trendDescEl = document.getElementById('statsTrendDesc');
-
+            const trendEl = document.getElementById('summaryTrend');
             if (trend > 0) {
                 trendEl.textContent = '+' + trend.toFixed(1) + '%';
-                trendDescEl.textContent = 'Improving';
-                trendDescEl.className = 'stat-change positive';
+                trendEl.style.color = '#16a34a';
             } else if (trend < 0) {
                 trendEl.textContent = trend.toFixed(1) + '%';
-                trendDescEl.textContent = 'Declining';
-                trendDescEl.className = 'stat-change negative';
+                trendEl.style.color = '#dc2626';
             } else {
-                trendEl.textContent = '→ Stable';
-                trendDescEl.textContent = '';
+                trendEl.textContent = 'Stable';
+                trendEl.style.color = '#64748b';
             }
-        }
-
-        function calculateStreak(attempts) {
-            if (attempts.length === 0) return 0;
-
-            const dates = attempts.map(a => new Date(a.created_at).toLocaleDateString());
-            const uniqueDates = [...new Set(dates)].sort().reverse();
-
-            let streak = 0;
-            const today = new Date();
-
-            for (let i = 0; i < uniqueDates.length; i++) {
-                const attemptDate = new Date(uniqueDates[i]);
-                const daysDiff = Math.floor((today - attemptDate) / (1000 * 60 * 60 * 24));
-
-                if (i === 0) {
-                    if (daysDiff <= 1) {
-                        streak = 1;
-                    } else {
-                        break;
-                    }
-                } else {
-                    const prevDate = new Date(uniqueDates[i - 1]);
-                    const daysBetween = Math.floor((prevDate - attemptDate) / (1000 * 60 * 60 * 24));
-                    if (daysBetween === 1) {
-                        streak++;
-                    } else {
-                        break;
-                    }
-                }
-            }
-
-            return streak;
         }
 
         function calculateTrend(attempts) {
@@ -1538,134 +1195,74 @@
             return secondAvg - firstAvg;
         }
 
-        // ========== AREAS UPDATE ==========
-        function updateAreas() {
-            const filterValue = document.getElementById('questionTypeFilter').value;
-            const filteredData = filterAttemptsByType(filterValue);
+        // ========== TOPIC FILTER POPULATION ==========
+        function populateTopicFilter() {
+            const topicSelect = document.getElementById('topicFilter');
+            // Keep the "All Topics" default option
+            topicSelect.innerHTML = '<option value="all">All Topics</option>';
 
-            if (filteredData.length === 0) {
-                document.getElementById('strongestAreas').innerHTML = '<li class="areas-item"><span class="areas-name">No data available</span></li>';
-                document.getElementById('weakestAreas').innerHTML = '<li class="areas-item"><span class="areas-name">No data available</span></li>';
-                return;
-            }
+            // Get the current unit filter to only show topics for that unit
+            const unitFilter = document.getElementById('unitFilter').value;
 
-            const areaScores = {};
+            // Collect unique topics from tested_topics in all attempts
+            const topicSet = new Set();
+            const topicEntries = [];
 
-            filteredData.forEach(attempt => {
-                const unit = attempt.unit || 'Unknown';
-                if (!areaScores[unit]) {
-                    areaScores[unit] = [];
-                }
-                areaScores[unit].push(attempt.percentage_score || 0);
-            });
-
-            const areaAverages = Object.keys(areaScores).map(unit => {
-                const scores = areaScores[unit];
-                const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
-                return { unit, avg };
-            }).sort((a, b) => b.avg - a.avg);
-
-            const strongestEl = document.getElementById('strongestAreas');
-            const weakestEl = document.getElementById('weakestAreas');
-
-            strongestEl.innerHTML = '';
-            weakestEl.innerHTML = '';
-
-            areaAverages.slice(0, 3).forEach(area => {
-                const li = document.createElement('li');
-                li.className = 'areas-item';
-                li.innerHTML = '<span class="areas-name">' + area.unit + '</span><span class="areas-score">' + area.avg.toFixed(1) + '%</span>';
-                strongestEl.appendChild(li);
-            });
-
-            areaAverages.slice(-3).reverse().forEach(area => {
-                const li = document.createElement('li');
-                li.className = 'areas-item';
-                li.innerHTML = '<span class="areas-name">' + area.unit + '</span><span class="areas-score">' + area.avg.toFixed(1) + '%</span>';
-                weakestEl.appendChild(li);
-            });
-
-            if (areaAverages.length === 0) {
-                strongestEl.innerHTML = '<li class="areas-item"><span class="areas-name">No data available</span></li>';
-                weakestEl.innerHTML = '<li class="areas-item"><span class="areas-name">No data available</span></li>';
-            }
-        }
-
-        // ========== CALENDAR UPDATE ==========
-        function updateCalendar() {
-            const filterValue = document.getElementById('questionTypeFilter').value;
-            const filteredData = filterAttemptsByType(filterValue);
-
-            const activityMap = {};
-            filteredData.forEach(attempt => {
-                const date = new Date(attempt.created_at).toLocaleDateString();
-                activityMap[date] = (activityMap[date] || 0) + 1;
-            });
-
-            const calendarEl = document.getElementById('studyCalendar');
-            calendarEl.innerHTML = '';
-
-            const today = new Date();
-            const weeksBack = 12;
-            const startDate = new Date(today.getTime() - (weeksBack * 7 * 24 * 60 * 60 * 1000));
-
-            for (let i = 0; i < weeksBack * 7; i++) {
-                const date = new Date(startDate.getTime() + (i * 24 * 60 * 60 * 1000));
-                const dateStr = date.toLocaleDateString();
-                const count = activityMap[dateStr] || 0;
-
-                let className = 'calendar-day';
-                if (count === 0) {
-                    className += '';
-                } else if (count <= 1) {
-                    className += ' has-activity-light';
-                } else if (count <= 3) {
-                    className += ' has-activity-medium';
-                } else if (count <= 5) {
-                    className += ' has-activity-heavy';
-                } else {
-                    className += ' has-activity-very-heavy';
+            allAttempts.forEach(attempt => {
+                // If unit filter is active, skip attempts from other units
+                if (unitFilter !== 'all') {
+                    const unitCodes = {
+                        'unit1': 'WBS11', 'unit2': 'WBS12', 'unit3': 'WBS13', 'unit4': 'WBS14'
+                    };
+                    const unitCode = unitCodes[unitFilter];
+                    const u = (attempt.unit || '').toUpperCase();
+                    if (!u.includes(unitCode) && !u.includes(unitFilter.toUpperCase())) {
+                        return;
+                    }
                 }
 
-                const div = document.createElement('div');
-                div.className = className;
-                div.textContent = date.getDate();
-                div.title = dateStr + ' (' + count + ' attempt' + (count !== 1 ? 's' : '') + ')';
-                calendarEl.appendChild(div);
-            }
-        }
-
-        // ========== FILTER OPTIONS UPDATE ==========
-        function updateSkillFilterOptions() {
-            const questionType = document.getElementById('questionTypeFilter').value;
-            const relevantAOs = getAORelevance(questionType);
-            const skillSelect = document.getElementById('skillFilter');
-
-            // Enable/disable options
-            Array.from(skillSelect.options).forEach(option => {
-                if (option.value === 'all') return; // always enabled
-                option.disabled = !relevantAOs.includes(option.value);
+                const testedTopics = (attempt.question_data && attempt.question_data.tested_topics) || [];
+                testedTopics.forEach(t => {
+                    const topicName = t.topic || t.section || '';
+                    if (topicName && !topicSet.has(topicName)) {
+                        topicSet.add(topicName);
+                        topicEntries.push({
+                            value: topicName,
+                            label: topicName,
+                            section: t.section || ''
+                        });
+                    }
+                });
             });
 
-            // If current selection is now disabled, reset to 'all'
-            if (skillSelect.value !== 'all' && !relevantAOs.includes(skillSelect.value)) {
-                skillSelect.value = 'all';
-            }
+            // Sort alphabetically by section then topic
+            topicEntries.sort((a, b) => {
+                if (a.section !== b.section) return a.section.localeCompare(b.section);
+                return a.label.localeCompare(b.label);
+            });
+
+            topicEntries.forEach(entry => {
+                const option = document.createElement('option');
+                option.value = entry.value;
+                option.textContent = entry.label;
+                topicSelect.appendChild(option);
+            });
         }
 
-        // ========== FILTER CHANGE LISTENER ==========
+        // ========== FILTER CHANGE LISTENERS ==========
         document.getElementById('questionTypeFilter').addEventListener('change', function() {
-            updateSkillFilterOptions();
             updateChart();
-            updateStats();
-            updateAreas();
-            updateCalendar();
         });
 
-        document.getElementById('skillFilter').addEventListener('change', function() {
+        document.getElementById('unitFilter').addEventListener('change', function() {
+            // Re-populate topic filter based on new unit selection
+            populateTopicFilter();
+            document.getElementById('topicFilter').value = 'all';
             updateChart();
-            updateStats();
-            updateAreas();
+        });
+
+        document.getElementById('topicFilter').addEventListener('change', function() {
+            updateChart();
         });
     </script>
 </body>

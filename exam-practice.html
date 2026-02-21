@@ -861,6 +861,35 @@
             animation: fadeSlideUp 0.5s ease-out;
         }
 
+        .tested-topics-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            padding: 0.75rem 1rem;
+            background: var(--gray-50);
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .tested-topics-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .tested-topic-tag {
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--primary);
+            background: rgba(26, 54, 93, 0.08);
+            padding: 0.3rem 0.75rem;
+            border-radius: 20px;
+        }
+
         .case-study-card {
             background: white;
             border-radius: 20px;
@@ -2395,6 +2424,7 @@ function renderTopics() {
 }
 
 function toggleAllTopics(e) {
+    e.preventDefault();
     e.stopPropagation();
     var allCheckbox = document.getElementById('selectAllUnit');
     var isChecked = !allCheckbox.checked;
@@ -2408,6 +2438,7 @@ function toggleAllTopics(e) {
 }
 
 function toggleSection(e, sectionId) {
+    e.preventDefault();
     e.stopPropagation();
     var sectionCb = document.querySelector('.section-checkbox[data-section="' + sectionId + '"]');
     var isChecked = !sectionCb.checked;
@@ -2422,6 +2453,7 @@ function toggleSection(e, sectionId) {
 }
 
 function toggleTopic(e, topicId, sectionId) {
+    e.preventDefault();
     e.stopPropagation();
     var topicCb = document.querySelector('.topic-item-checkbox[data-topic="' + topicId + '"]');
     topicCb.checked = !topicCb.checked;
@@ -2572,6 +2604,20 @@ async function generateQuestion() {
 // ===== PHASE 3: RENDER QUESTION =====
 function renderQuestion(q) {
     var html = '';
+
+    // Tested Topics Tags (shows which areas the AI actually tested)
+    if (q.tested_topics && q.tested_topics.length > 0) {
+        html += '<div class="tested-topics-bar">';
+        html += '<span class="tested-topics-label">Topics examined:</span>';
+        q.tested_topics.forEach(function(t) {
+            var display = t.topic || t.section || '';
+            if (t.section && t.topic && t.section !== t.topic) {
+                display = t.section + ' — ' + t.topic;
+            }
+            html += '<span class="tested-topic-tag">' + escapeHtml(display) + '</span>';
+        });
+        html += '</div>';
+    }
 
     // Case Study Card
     html += '<div class="case-study-card">';
