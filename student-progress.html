@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
@@ -1086,10 +1087,10 @@
                 return;
             }
 
-            const { labels, datasets, overallAvg } = prepareChartData(filteredData, filterValue, skillValue);
+            const { datasets, overallAvg } = prepareChartData(filteredData, filterValue, skillValue);
 
             document.getElementById('overallScore').textContent = overallAvg.toFixed(1) + '%';
-            renderChart(labels, datasets);
+            renderChart(null, datasets);
         }
 
         function filterAttemptsByType(typeFilter) {
@@ -1158,36 +1159,26 @@
         }
 
         function prepareChartData(attempts, filterType, skillFilter) {
-            const groupedByDate = {};
+            // Each attempt = one data point, plotted at its exact timestamp
+            const overallData = [];
+            const ao1Data = [];
+            const ao2Data = [];
+            const ao3Data = [];
+            const ao4Data = [];
 
             attempts.forEach(attempt => {
-                const date = new Date(attempt.created_at);
-                const dateKey = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-
-                if (!groupedByDate[dateKey]) {
-                    groupedByDate[dateKey] = {
-                        date: dateKey,
-                        scores: [],
-                        ao1: [],
-                        ao2: [],
-                        ao3: [],
-                        ao4: []
-                    };
-                }
-
+                const timestamp = new Date(attempt.created_at);
                 const percentage = attempt.percentage_score || 0;
-                groupedByDate[dateKey].scores.push(percentage);
+
+                overallData.push({ x: timestamp, y: percentage });
 
                 const marking = attempt.marking_data || {};
                 const aoBreakdown = marking.ao_breakdown || {};
                 const aoMax = marking.ao_max || {};
 
-                // Fallback AO max lookup for older data without ao_max
-                // Based on Edexcel IAL mark allocations per question type
                 const qt = (attempt.question_type || '').toLowerCase();
                 const fallbackAoMax = getAoMaxFallback(qt);
 
-                // Calculate AO % as (marks awarded / marks available for that AO) * 100
                 function aoPercent(ao, key) {
                     if (ao == null || typeof ao !== 'number') return null;
                     const max = (aoMax[key] != null) ? aoMax[key] : fallbackAoMax[key];
@@ -1200,136 +1191,108 @@
                 const ao3Pct = aoPercent(aoBreakdown.AO3, 'AO3');
                 const ao4Pct = aoPercent(aoBreakdown.AO4, 'AO4');
 
-                if (ao1Pct != null) groupedByDate[dateKey].ao1.push(ao1Pct);
-                if (ao2Pct != null) groupedByDate[dateKey].ao2.push(ao2Pct);
-                if (ao3Pct != null) groupedByDate[dateKey].ao3.push(ao3Pct);
-                if (ao4Pct != null) groupedByDate[dateKey].ao4.push(ao4Pct);
+                if (ao1Pct != null) ao1Data.push({ x: timestamp, y: ao1Pct });
+                if (ao2Pct != null) ao2Data.push({ x: timestamp, y: ao2Pct });
+                if (ao3Pct != null) ao3Data.push({ x: timestamp, y: ao3Pct });
+                if (ao4Pct != null) ao4Data.push({ x: timestamp, y: ao4Pct });
             });
 
-            const labels = Object.keys(groupedByDate).sort((a, b) => {
-                // Parse dates like '21 Feb', '3 Mar'
-                return new Date(a + ' ' + new Date().getFullYear()) - new Date(b + ' ' + new Date().getFullYear());
-            });
-
-            const overallScores = [];
-            const ao1Scores = [];
-            const ao2Scores = [];
-            const ao3Scores = [];
-            const ao4Scores = [];
-
-            labels.forEach(label => {
-                const data = groupedByDate[label];
-
-                overallScores.push(data.scores.length > 0 ?
-                    (data.scores.reduce((a, b) => a + b, 0) / data.scores.length) : 0);
-
-                ao1Scores.push(data.ao1.length > 0 ?
-                    (data.ao1.reduce((a, b) => a + b, 0) / data.ao1.length) : null);
-
-                ao2Scores.push(data.ao2.length > 0 ?
-                    (data.ao2.reduce((a, b) => a + b, 0) / data.ao2.length) : null);
-
-                ao3Scores.push(data.ao3.length > 0 ?
-                    (data.ao3.reduce((a, b) => a + b, 0) / data.ao3.length) : null);
-
-                ao4Scores.push(data.ao4.length > 0 ?
-                    (data.ao4.reduce((a, b) => a + b, 0) / data.ao4.length) : null);
-            });
-
-            const overallAvg = overallScores.reduce((a, b) => a + b, 0) / (overallScores.length || 1);
+            const overallAvg = overallData.length > 0
+                ? overallData.reduce((sum, p) => sum + p.y, 0) / overallData.length
+                : 0;
 
             const aoRelevance = getAORelevance(filterType);
 
             const datasets = [
                 {
                     label: 'Overall Score %',
-                    data: overallScores,
+                    data: overallData,
                     borderColor: '#1e3a5f',
                     backgroundColor: 'rgba(30, 58, 95, 0.05)',
                     borderWidth: 3,
                     fill: true,
-                    tension: 0.4,
+                    tension: 0.3,
                     pointBackgroundColor: '#1e3a5f',
                     pointBorderColor: '#ffffff',
                     pointBorderWidth: 2,
-                    pointRadius: 4,
-                    pointHoverRadius: 6
+                    pointRadius: 5,
+                    pointHoverRadius: 8
                 }
             ];
 
             if (aoRelevance.includes('AO1') && (skillFilter === 'all' || skillFilter === 'AO1')) {
                 datasets.push({
                     label: 'Knowledge (AO1)',
-                    data: ao1Scores,
+                    data: ao1Data,
                     borderColor: '#3498db',
                     backgroundColor: 'rgba(52, 152, 219, 0.05)',
                     borderWidth: 2,
                     fill: false,
-                    tension: 0.4,
+                    tension: 0.3,
                     spanGaps: true,
                     pointBackgroundColor: '#3498db',
                     pointBorderColor: '#ffffff',
                     pointBorderWidth: 2,
-                    pointRadius: 3,
-                    pointHoverRadius: 5
+                    pointRadius: 4,
+                    pointHoverRadius: 6
                 });
             }
 
             if (aoRelevance.includes('AO2') && (skillFilter === 'all' || skillFilter === 'AO2')) {
                 datasets.push({
                     label: 'Application (AO2)',
-                    data: ao2Scores,
+                    data: ao2Data,
                     borderColor: '#27ae60',
                     backgroundColor: 'rgba(39, 174, 96, 0.05)',
                     borderWidth: 2,
                     fill: false,
-                    tension: 0.4,
+                    tension: 0.3,
                     spanGaps: true,
                     pointBackgroundColor: '#27ae60',
                     pointBorderColor: '#ffffff',
                     pointBorderWidth: 2,
-                    pointRadius: 3,
-                    pointHoverRadius: 5
+                    pointRadius: 4,
+                    pointHoverRadius: 6
                 });
             }
 
             if (aoRelevance.includes('AO3') && (skillFilter === 'all' || skillFilter === 'AO3')) {
                 datasets.push({
                     label: 'Analysis (AO3)',
-                    data: ao3Scores,
+                    data: ao3Data,
                     borderColor: '#e67e22',
                     backgroundColor: 'rgba(230, 126, 34, 0.05)',
                     borderWidth: 2,
                     fill: false,
-                    tension: 0.4,
+                    tension: 0.3,
                     spanGaps: true,
                     pointBackgroundColor: '#e67e22',
                     pointBorderColor: '#ffffff',
                     pointBorderWidth: 2,
-                    pointRadius: 3,
-                    pointHoverRadius: 5
+                    pointRadius: 4,
+                    pointHoverRadius: 6
                 });
             }
 
             if (aoRelevance.includes('AO4') && (skillFilter === 'all' || skillFilter === 'AO4')) {
                 datasets.push({
                     label: 'Evaluation (AO4)',
-                    data: ao4Scores,
+                    data: ao4Data,
                     borderColor: '#9b59b6',
                     backgroundColor: 'rgba(155, 89, 182, 0.05)',
                     borderWidth: 2,
                     fill: false,
-                    tension: 0.4,
+                    tension: 0.3,
                     spanGaps: true,
                     pointBackgroundColor: '#9b59b6',
                     pointBorderColor: '#ffffff',
                     pointBorderWidth: 2,
-                    pointRadius: 3,
-                    pointHoverRadius: 5
+                    pointRadius: 4,
+                    pointHoverRadius: 6
                 });
             }
 
-            return { labels, datasets, overallAvg };
+            return { labels: null, datasets, overallAvg };
         }
 
         function getAORelevance(filterType) {
@@ -1357,12 +1320,29 @@
             const html = '<div class="chart-canvas-wrapper"><canvas id="performanceChart"></canvas></div>';
             chartContent.innerHTML = html;
 
+            // Work out sensible time unit based on data spread
+            let timeUnit = 'day';
+            if (datasets.length > 0 && datasets[0].data.length > 1) {
+                const points = datasets[0].data;
+                const firstTime = points[0].x.getTime();
+                const lastTime = points[points.length - 1].x.getTime();
+                const spanHours = (lastTime - firstTime) / (1000 * 60 * 60);
+                if (spanHours <= 24) {
+                    timeUnit = 'hour';
+                } else if (spanHours <= 24 * 7) {
+                    timeUnit = 'day';
+                } else if (spanHours <= 24 * 90) {
+                    timeUnit = 'week';
+                } else {
+                    timeUnit = 'month';
+                }
+            }
+
             setTimeout(() => {
                 const ctx = document.getElementById('performanceChart').getContext('2d');
                 chartInstance = new Chart(ctx, {
                     type: 'line',
                     data: {
-                        labels: labels,
                         datasets: datasets
                     },
                     options: {
@@ -1370,7 +1350,8 @@
                         maintainAspectRatio: false,
                         interaction: {
                             intersect: false,
-                            mode: 'index'
+                            mode: 'nearest',
+                            axis: 'x'
                         },
                         plugins: {
                             legend: {
@@ -1395,11 +1376,17 @@
                                 titleFont: { family: "'Inter', sans-serif", size: 13, weight: '600' },
                                 bodyFont: { family: "'Inter', sans-serif", size: 12 },
                                 callbacks: {
+                                    title: function(tooltipItems) {
+                                        if (tooltipItems.length > 0) {
+                                            const d = new Date(tooltipItems[0].parsed.x);
+                                            return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) +
+                                                   ' at ' + d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+                                        }
+                                        return '';
+                                    },
                                     label: function(context) {
                                         let label = context.dataset.label || '';
-                                        if (label) {
-                                            label += ': ';
-                                        }
+                                        if (label) label += ': ';
                                         if (context.parsed.y !== null) {
                                             label += context.parsed.y.toFixed(1) + '%';
                                         } else {
@@ -1427,9 +1414,23 @@
                                 }
                             },
                             x: {
+                                type: 'time',
+                                time: {
+                                    unit: timeUnit,
+                                    displayFormats: {
+                                        hour: 'HH:mm',
+                                        day: 'd MMM',
+                                        week: 'd MMM',
+                                        month: 'MMM yyyy'
+                                    },
+                                    tooltipFormat: 'd MMM yyyy HH:mm'
+                                },
                                 ticks: {
                                     color: '#94a3b8',
-                                    font: { family: "'Inter', sans-serif", size: 12 }
+                                    font: { family: "'Inter', sans-serif", size: 11 },
+                                    maxRotation: 0,
+                                    autoSkip: true,
+                                    maxTicksLimit: 12
                                 },
                                 grid: {
                                     display: false
