@@ -2246,7 +2246,7 @@ const BOARD_DATA = {
             { id: 'discuss_8', marks: 8, name: 'Discuss', desc: 'Balanced arguments', command: 'discuss' },
             { id: 'assess_10', marks: 10, name: 'Assess', desc: 'Weigh up significance', command: 'assess' },
             { id: 'assess_12', marks: 12, name: 'Assess', desc: 'Extended assessment', command: 'assess' },
-            { id: 'essay_20', marks: 20, name: 'Essay', desc: 'Extended evaluation', command: 'evaluate' }
+            { id: 'evaluate_20', marks: 20, name: 'Evaluate', desc: 'Extended evaluation', command: 'evaluate' }
         ]
     },
     edexcel_uk: {
@@ -2260,7 +2260,7 @@ const BOARD_DATA = {
             { id: 'define_2', marks: 2, name: 'Define', desc: 'Knowledge recall', command: 'define' },
             { id: 'explain_4', marks: 4, name: 'Explain', desc: 'Knowledge + Application', command: 'explain' },
             { id: 'evaluate_10', marks: 10, name: 'Evaluate', desc: 'Extended analysis', command: 'evaluate' },
-            { id: 'essay_20', marks: 20, name: 'Essay', desc: 'Extended evaluation', command: 'evaluate' }
+            { id: 'evaluate_20', marks: 20, name: 'Evaluate', desc: 'Extended evaluation', command: 'evaluate' }
         ]
     },
     aqa_gcse: {
@@ -3323,7 +3323,6 @@ function downloadFeedbackPDF() {
         y += 10;
 
         pdfDescriptors.forEach(function(desc) {
-            if (desc.level === 0) return;
             var isAchieved = desc.level === marking.level;
 
             // Estimate height needed
@@ -3620,14 +3619,12 @@ function renderLevelDescriptors(totalMarks, achievedLevel, achievedMarks) {
     html += '<div class="level-descriptors-title">Marking Grid</div>';
     html += '<div class="level-descriptors-table">';
 
-    // Skip Level 0, show from Level 1 upwards
     descriptors.forEach(function(desc) {
-        if (desc.level === 0) return;
         var isAchieved = desc.level === achievedLevel;
         html += '<div class="level-row' + (isAchieved ? ' level-achieved' : '') + '">';
         html += '<div class="level-row-header">';
-        html += '<span class="level-row-name">Level ' + desc.level + '</span>';
-        html += '<span class="level-row-marks">(' + desc.marks + ' marks)</span>';
+        html += '<span class="level-row-name">' + (desc.level === 0 ? 'Level 0' : 'Level ' + desc.level) + '</span>';
+        html += '<span class="level-row-marks">(' + desc.marks + ' mark' + (desc.marks !== '0' ? 's' : '') + ')</span>';
         if (isAchieved) {
             html += '<span class="level-achieved-badge">' + achievedMarks + '/' + totalMarks + '</span>';
         }
