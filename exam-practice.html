@@ -1228,6 +1228,81 @@
             line-height: 1.6;
         }
 
+        /* Hint / Help Section */
+        .hint-area {
+            margin-bottom: 1.5rem;
+            animation: fadeSlideUp 0.4s ease-out;
+            animation-delay: 0.4s;
+            animation-fill-mode: both;
+        }
+        .hint-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            background: white;
+            border: 1.5px solid var(--gray-200);
+            border-radius: 10px;
+            color: var(--gray-500);
+            font-size: 0.88rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .hint-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(30, 58, 95, 0.03);
+        }
+        .hint-btn.active {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(30, 58, 95, 0.05);
+        }
+        .hint-card {
+            margin-top: 0.75rem;
+            background: linear-gradient(135deg, rgba(30, 58, 95, 0.04), rgba(39, 174, 96, 0.04));
+            border: 1px solid rgba(30, 58, 95, 0.12);
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            animation: fadeSlideUp 0.3s ease-out;
+        }
+        .hint-section-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--primary);
+            margin-bottom: 0.4rem;
+            margin-top: 1rem;
+        }
+        .hint-section-label:first-child { margin-top: 0; }
+        .hint-prompts {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .hint-prompts li {
+            position: relative;
+            padding-left: 1.2rem;
+            margin-bottom: 0.4rem;
+            font-size: 0.9rem;
+            color: var(--gray-700);
+            line-height: 1.5;
+        }
+        .hint-prompts li::before {
+            content: '?';
+            position: absolute;
+            left: 0;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .hint-text {
+            font-size: 0.9rem;
+            color: var(--gray-700);
+            line-height: 1.5;
+        }
+
         /* ===== PHASE 4: ANSWER WRITING ===== */
         .answer-section {
             animation: fadeSlideUp 0.4s ease-out;
@@ -2168,6 +2243,15 @@
 
         <!-- Question Display -->
         <div class="question-section" id="questionDisplay"></div>
+
+        <!-- Hint / Help Area -->
+        <div class="hint-area" id="hintArea" style="display:none;">
+            <button class="hint-btn" id="hintBtn" onclick="toggleHint()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                I need some help
+            </button>
+            <div class="hint-card" id="hintCard" style="display:none;"></div>
+        </div>
 
         <!-- Answer Writing -->
         <div class="answer-section">
@@ -3285,10 +3369,57 @@ function renderQuestion(q) {
         setTimeout(function() { renderChart(q.chart); }, 100);
     }
 
+    // Populate hint area
+    var hintArea = document.getElementById('hintArea');
+    var hintCard = document.getElementById('hintCard');
+    var hintBtn = document.getElementById('hintBtn');
+
+    if (q.hints && (q.hints.thinking_prompts || q.hints.knowledge_nudge || q.hints.structure_tip)) {
+        var hintHtml = '';
+
+        if (q.hints.thinking_prompts && q.hints.thinking_prompts.length > 0) {
+            hintHtml += '<div class="hint-section-label">Think about</div>';
+            hintHtml += '<ul class="hint-prompts">';
+            q.hints.thinking_prompts.forEach(function(prompt) {
+                hintHtml += '<li>' + escapeHtml(prompt) + '</li>';
+            });
+            hintHtml += '</ul>';
+        }
+
+        if (q.hints.knowledge_nudge) {
+            hintHtml += '<div class="hint-section-label">Key knowledge</div>';
+            hintHtml += '<div class="hint-text">' + escapeHtml(q.hints.knowledge_nudge) + '</div>';
+        }
+
+        if (q.hints.structure_tip) {
+            hintHtml += '<div class="hint-section-label">Structure tip</div>';
+            hintHtml += '<div class="hint-text">' + escapeHtml(q.hints.structure_tip) + '</div>';
+        }
+
+        hintCard.innerHTML = hintHtml;
+        hintCard.style.display = 'none';
+        hintBtn.classList.remove('active');
+        hintArea.style.display = '';
+    } else {
+        hintArea.style.display = 'none';
+    }
+
     // Reset answer area
     document.getElementById('answerTextarea').value = '';
     document.getElementById('answerTextarea').readOnly = false;
     updateWordCount();
+}
+
+function toggleHint() {
+    var hintCard = document.getElementById('hintCard');
+    var hintBtn = document.getElementById('hintBtn');
+    if (hintCard.style.display === 'none') {
+        hintCard.style.display = '';
+        hintBtn.classList.add('active');
+    } else {
+        hintCard.style.display = 'none';
+        hintBtn.classList.remove('active');
+    }
 }
 
 function renderDataTable(chartData) {
