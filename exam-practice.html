@@ -1271,6 +1271,89 @@
             font-weight: 500;
         }
 
+        /* Level Descriptors */
+        .level-descriptors-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.75rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            margin-bottom: 1.25rem;
+            animation: fadeSlideUp 0.4s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .level-descriptors-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 1rem;
+        }
+
+        .level-descriptors-table {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .level-row {
+            padding: 0.875rem 1rem;
+            border-left: 3px solid var(--gray-200);
+            background: var(--gray-50);
+            border-bottom: 1px solid var(--gray-100);
+            transition: all 0.2s ease;
+        }
+
+        .level-row:first-child { border-radius: 8px 8px 0 0; }
+        .level-row:last-child { border-radius: 0 0 8px 8px; border-bottom: none; }
+
+        .level-row.level-achieved {
+            border-left-color: var(--primary);
+            background: rgba(30, 58, 95, 0.06);
+        }
+
+        .level-row-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .level-row-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--gray-800);
+        }
+
+        .level-achieved .level-row-name {
+            color: var(--primary);
+        }
+
+        .level-row-marks {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            font-weight: 500;
+        }
+
+        .level-achieved-badge {
+            margin-left: auto;
+            background: var(--primary);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+        }
+
+        .level-row-descriptor {
+            font-size: 0.82rem;
+            line-height: 1.5;
+            color: var(--gray-600);
+        }
+
+        .level-achieved .level-row-descriptor {
+            color: var(--gray-800);
+        }
+
         /* Feedback Cards */
         .feedback-card {
             background: white;
@@ -2161,8 +2244,8 @@ const BOARD_DATA = {
             { id: 'calculate_4', marks: 4, name: 'Calculate', desc: 'Quantitative skills', command: 'calculate' },
             { id: 'analyse_6', marks: 6, name: 'Analyse', desc: 'Two reasons/ways', command: 'analyse' },
             { id: 'discuss_8', marks: 8, name: 'Discuss', desc: 'Balanced arguments', command: 'discuss' },
-            { id: 'assess_10', marks: 10, name: 'Assess', desc: 'Evaluate impact', command: 'assess' },
-            { id: 'evaluate_10', marks: 10, name: 'Evaluate', desc: 'Weigh up + conclude', command: 'evaluate' },
+            { id: 'assess_10', marks: 10, name: 'Assess', desc: 'Weigh up significance', command: 'assess' },
+            { id: 'assess_12', marks: 12, name: 'Assess', desc: 'Extended assessment', command: 'assess' },
             { id: 'essay_20', marks: 20, name: 'Essay', desc: 'Extended evaluation', command: 'evaluate' }
         ]
     },
@@ -2561,6 +2644,12 @@ async function generateQuestion() {
     }, 8000);
 
     try {
+        // Refresh session token in case it has expired
+        var refreshResult = await supabaseClient.auth.getSession();
+        if (refreshResult.data.session) {
+            currentSession = refreshResult.data.session;
+        }
+
         var boardData = BOARD_DATA[currentBoard];
         var unitData = boardData.units.find(function(u) { return u.id === currentUnit; });
         var qtypeData = boardData.questionTypes.find(function(q) { return q.id === currentQType; });
@@ -2880,6 +2969,12 @@ async function submitAnswer() {
     showPhase('marking');
 
     try {
+        // Refresh session token in case it has expired while the student was writing
+        var refreshResult = await supabaseClient.auth.getSession();
+        if (refreshResult.data.session) {
+            currentSession = refreshResult.data.session;
+        }
+
         var response = await fetch(SUPABASE_URL + '/functions/v1/mark-answer', {
             method: 'POST',
             headers: {
@@ -2924,13 +3019,13 @@ function renderFeedback(marking, question) {
     var percentage = Math.round((marking.marks / totalMarks) * 100);
     var isHighScore = false;
 
-    // Determine if high score (for confetti)
-    if (totalMarks === 8 && marking.marks >= 7) isHighScore = true;
-    if (totalMarks === 10 && marking.marks >= 8) isHighScore = true;
-    if (totalMarks === 20 && marking.marks >= 15) isHighScore = true;
-    if (totalMarks === 12 && marking.marks >= 10) isHighScore = true;
-    if (totalMarks === 9 && marking.marks >= 7) isHighScore = true;
+    // Determine if high score (for confetti) - top level achieved
     if (totalMarks === 6 && marking.marks >= 5) isHighScore = true;
+    if (totalMarks === 8 && marking.marks >= 6) isHighScore = true;
+    if (totalMarks === 9 && marking.marks >= 7) isHighScore = true;
+    if (totalMarks === 10 && marking.marks >= 8) isHighScore = true;
+    if (totalMarks === 12 && marking.marks >= 9) isHighScore = true;
+    if (totalMarks === 20 && marking.marks >= 15) isHighScore = true;
 
     var html = '';
 
@@ -2953,28 +3048,36 @@ function renderFeedback(marking, question) {
 
     html += '</div></div>';
 
-    // AO Breakdown
-    var ao = marking.ao_breakdown || {};
-    var aoLabels = ['AO1', 'AO2', 'AO3', 'AO4'];
-    var aoNames = ['Knowledge', 'Application', 'Analysis', 'Evaluation'];
-    var hasAO4 = currentBoard === 'edexcel_ial' || currentBoard === 'edexcel_uk';
+    // For levels-based questions: show level descriptor grid
+    // For points-based questions: show AO breakdown cards
+    var isLevelsBased = marking.marking_method === 'levels_based' || totalMarks >= 8;
 
-    var visibleAOs = aoLabels.filter(function(label, i) {
-        if (label === 'AO4' && !hasAO4) return false;
-        return ao[label] !== null && ao[label] !== undefined;
-    });
+    if (isLevelsBased && marking.level !== null && marking.level !== undefined) {
+        html += renderLevelDescriptors(totalMarks, marking.level, marking.marks);
+    } else {
+        // AO Breakdown for points-based questions
+        var ao = marking.ao_breakdown || {};
+        var aoLabels = ['AO1', 'AO2', 'AO3', 'AO4'];
+        var aoNames = ['Knowledge', 'Application', 'Analysis', 'Evaluation'];
+        var hasAO4 = currentBoard === 'edexcel_ial' || currentBoard === 'edexcel_uk';
 
-    if (visibleAOs.length > 0) {
-        html += '<div class="ao-grid" style="grid-template-columns: repeat(' + Math.min(visibleAOs.length, 4) + ', 1fr);">';
-        visibleAOs.forEach(function(label, i) {
-            var idx = aoLabels.indexOf(label);
-            html += '<div class="ao-card" style="border-color: var(--skill-' + aoNames[idx].toLowerCase() + '); animation-delay: ' + (0.1 + i * 0.07) + 's;">';
-            html += '<div class="ao-label" style="color: var(--skill-' + aoNames[idx].toLowerCase() + ');">' + label + '</div>';
-            html += '<div class="ao-value">' + (ao[label] || 0) + '</div>';
-            html += '<div class="ao-name">' + aoNames[idx] + '</div>';
-            html += '</div>';
+        var visibleAOs = aoLabels.filter(function(label, i) {
+            if (label === 'AO4' && !hasAO4) return false;
+            return ao[label] !== null && ao[label] !== undefined;
         });
-        html += '</div>';
+
+        if (visibleAOs.length > 0) {
+            html += '<div class="ao-grid" style="grid-template-columns: repeat(' + Math.min(visibleAOs.length, 4) + ', 1fr);">';
+            visibleAOs.forEach(function(label, i) {
+                var idx = aoLabels.indexOf(label);
+                html += '<div class="ao-card" style="border-color: var(--skill-' + aoNames[idx].toLowerCase() + '); animation-delay: ' + (0.1 + i * 0.07) + 's;">';
+                html += '<div class="ao-label" style="color: var(--skill-' + aoNames[idx].toLowerCase() + ');">' + label + '</div>';
+                html += '<div class="ao-value">' + (ao[label] || 0) + '</div>';
+                html += '<div class="ao-name">' + aoNames[idx] + '</div>';
+                html += '</div>';
+            });
+            html += '</div>';
+        }
     }
 
     // Detailed Feedback
@@ -3205,50 +3308,111 @@ function downloadFeedbackPDF() {
     
     y += scoreBoxHeight + 8;
     
-    // ========== AO BREAKDOWN ==========
-    var ao = marking.ao_breakdown || {};
-    var aoLabels = ['AO1', 'AO2', 'AO3', 'AO4'];
-    var aoNames = ['Knowledge', 'Application', 'Analysis', 'Evaluation'];
-    var aoColors = [blue, green, purple, accent];
-    var hasAO4 = currentBoard === 'edexcel_ial' || currentBoard === 'edexcel_uk';
-    
-    var visibleAOs = [];
-    aoLabels.forEach(function(label, i) {
-        if (label === 'AO4' && !hasAO4) return;
-        if (ao[label] !== null && ao[label] !== undefined) {
-            visibleAOs.push({ label: label, name: aoNames[i], value: ao[label], color: aoColors[i] });
-        }
-    });
-    
-    if (visibleAOs.length > 0) {
-        var aoBoxWidth = (contentWidth - (visibleAOs.length - 1) * 4) / visibleAOs.length;
-        var aoBoxHeight = 22;
-        
-        visibleAOs.forEach(function(aoItem, i) {
-            var aoX = margin + i * (aoBoxWidth + 4);
-            
-            // AO card background
-            doc.setFillColor(aoItem.color[0], aoItem.color[1], aoItem.color[2]);
-            doc.roundedRect(aoX, y, aoBoxWidth, aoBoxHeight, 3, 3, 'F');
-            
-            // AO label
+    // ========== AO BREAKDOWN or LEVEL DESCRIPTORS ==========
+    var pdfIsLevelsBased = marking.marking_method === 'levels_based' || totalMarks >= 8;
+
+    if (pdfIsLevelsBased && marking.level !== null && marking.level !== undefined && LEVEL_DESCRIPTORS[totalMarks]) {
+        // Show level descriptors in PDF for levels-based questions
+        var pdfDescriptors = LEVEL_DESCRIPTORS[totalMarks];
+
+        // Section title
+        doc.setFontSize(11);
+        doc.setTextColor(primaryDark[0], primaryDark[1], primaryDark[2]);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Marking Grid', margin, y + 5);
+        y += 10;
+
+        pdfDescriptors.forEach(function(desc) {
+            if (desc.level === 0) return;
+            var isAchieved = desc.level === marking.level;
+
+            // Estimate height needed
+            var descLines = doc.splitTextToSize(desc.descriptor, contentWidth - 10);
+            var rowHeight = 8 + descLines.length * 4 + 4;
+            checkPage(rowHeight);
+
+            // Row background
+            if (isAchieved) {
+                doc.setFillColor(230, 240, 250);
+                doc.setDrawColor(primaryDark[0], primaryDark[1], primaryDark[2]);
+            } else {
+                doc.setFillColor(248, 248, 248);
+                doc.setDrawColor(220, 220, 220);
+            }
+            doc.roundedRect(margin, y, contentWidth, rowHeight, 2, 2, 'FD');
+
+            // Level name + marks
             doc.setFontSize(9);
-            doc.setTextColor(255, 255, 255);
             doc.setFont('helvetica', 'bold');
-            doc.text(aoItem.label, aoX + aoBoxWidth / 2, y + 8, { align: 'center' });
-            
-            // AO value
-            doc.setFontSize(14);
-            doc.text(aoItem.value + '', aoX + aoBoxWidth / 2, y + 17, { align: 'center' });
-            
-            // AO name below
-            doc.setFontSize(7);
-            doc.setTextColor(255, 255, 255);
+            doc.setTextColor(isAchieved ? primaryDark[0] : 60, isAchieved ? primaryDark[1] : 60, isAchieved ? primaryDark[2] : 60);
+            doc.text('Level ' + desc.level + ' (' + desc.marks + ' marks)', margin + 5, y + 6);
+
+            // Achieved badge
+            if (isAchieved) {
+                var badgeText = marking.marks + '/' + totalMarks;
+                doc.setFillColor(primaryDark[0], primaryDark[1], primaryDark[2]);
+                var badgeWidth = doc.getTextWidth(badgeText) + 6;
+                doc.roundedRect(pageWidth - margin - badgeWidth - 5, y + 1.5, badgeWidth, 6, 2, 2, 'F');
+                doc.setFontSize(7);
+                doc.setTextColor(255, 255, 255);
+                doc.text(badgeText, pageWidth - margin - badgeWidth / 2 - 5, y + 5.5, { align: 'center' });
+            }
+
+            // Descriptor text
+            doc.setFontSize(7.5);
             doc.setFont('helvetica', 'normal');
-            doc.text(aoItem.name, aoX + aoBoxWidth / 2, y + aoBoxHeight + 5, { align: 'center' });
+            doc.setTextColor(isAchieved ? 40 : 100, isAchieved ? 40 : 100, isAchieved ? 40 : 100);
+            var textY = y + 10;
+            descLines.forEach(function(line) {
+                doc.text(line, margin + 5, textY);
+                textY += 4;
+            });
+
+            y += rowHeight + 2;
         });
-        
-        y += aoBoxHeight + 12;
+        y += 4;
+    } else {
+        // AO Breakdown for points-based questions
+        var ao = marking.ao_breakdown || {};
+        var aoLabels = ['AO1', 'AO2', 'AO3', 'AO4'];
+        var aoNames = ['Knowledge', 'Application', 'Analysis', 'Evaluation'];
+        var aoColors = [blue, green, purple, accent];
+        var hasAO4 = currentBoard === 'edexcel_ial' || currentBoard === 'edexcel_uk';
+
+        var visibleAOs = [];
+        aoLabels.forEach(function(label, i) {
+            if (label === 'AO4' && !hasAO4) return;
+            if (ao[label] !== null && ao[label] !== undefined) {
+                visibleAOs.push({ label: label, name: aoNames[i], value: ao[label], color: aoColors[i] });
+            }
+        });
+
+        if (visibleAOs.length > 0) {
+            var aoBoxWidth = (contentWidth - (visibleAOs.length - 1) * 4) / visibleAOs.length;
+            var aoBoxHeight = 22;
+
+            visibleAOs.forEach(function(aoItem, i) {
+                var aoX = margin + i * (aoBoxWidth + 4);
+
+                doc.setFillColor(aoItem.color[0], aoItem.color[1], aoItem.color[2]);
+                doc.roundedRect(aoX, y, aoBoxWidth, aoBoxHeight, 3, 3, 'F');
+
+                doc.setFontSize(9);
+                doc.setTextColor(255, 255, 255);
+                doc.setFont('helvetica', 'bold');
+                doc.text(aoItem.label, aoX + aoBoxWidth / 2, y + 8, { align: 'center' });
+
+                doc.setFontSize(14);
+                doc.text(aoItem.value + '', aoX + aoBoxWidth / 2, y + 17, { align: 'center' });
+
+                doc.setFontSize(7);
+                doc.setTextColor(255, 255, 255);
+                doc.setFont('helvetica', 'normal');
+                doc.text(aoItem.name, aoX + aoBoxWidth / 2, y + aoBoxHeight + 5, { align: 'center' });
+            });
+
+            y += aoBoxHeight + 12;
+        }
     }
     
     // ========== QUESTION ==========
@@ -3416,6 +3580,65 @@ function downloadFeedbackPDF() {
     doc.save(filename);
 }
 
+
+// ===== LEVEL DESCRIPTORS =====
+var LEVEL_DESCRIPTORS = {
+    8: [
+        { level: 0, marks: '0', descriptor: 'No rewardable material.' },
+        { level: 1, marks: '1\u20132', descriptor: 'Isolated elements of knowledge and understanding, recall based. Weak or no relevant application to business examples. Generic assertions may be presented.' },
+        { level: 2, marks: '3\u20135', descriptor: 'Accurate knowledge and understanding. Applied accurately to the business and its context. Chains of reasoning are presented, showing cause(s) and/or effect(s) but may be assertions or incomplete. An attempt at an assessment is presented that is unbalanced and unlikely to show the significance of competing arguments.' },
+        { level: 3, marks: '6\u20138', descriptor: 'Accurate and thorough knowledge and understanding, supported throughout by relevant and effective use of the business behaviour/context. Logical chains of reasoning, showing cause(s) and/or effect(s). Assessment is balanced, well contextualised, using quantitative and/or qualitative information, and shows an awareness of competing arguments/factors.' }
+    ],
+    10: [
+        { level: 0, marks: '0', descriptor: 'No rewardable material.' },
+        { level: 1, marks: '1\u20132', descriptor: 'Isolated elements of knowledge and understanding, recall based. Weak or no relevant application to business examples. Generic assertions may be presented.' },
+        { level: 2, marks: '3\u20134', descriptor: 'Elements of knowledge and understanding, which are applied to the business example. Chains of reasoning are presented, but may be assertions or incomplete. A generic or superficial assessment is presented.' },
+        { level: 3, marks: '5\u20137', descriptor: 'Accurate and thorough knowledge and understanding, supported throughout by relevant and effective use of the business behaviour/context. Analytical perspectives are presented, with developed chains of reasoning, showing cause(s) and/or effect(s). An attempt at an assessment is presented, using quantitative and/or qualitative information, though unlikely to show the significance of competing arguments.' },
+        { level: 4, marks: '8\u201310', descriptor: 'Accurate and thorough knowledge and understanding, supported throughout by relevant and effective use of the business behaviour/context. A coherent and logical chain of reasoning, showing cause(s) and/or effect(s). Assessment is balanced, wide ranging and well contextualised, using quantitative and/or qualitative information and shows an awareness of competing arguments/factors, leading to a supported judgement.' }
+    ],
+    12: [
+        { level: 0, marks: '0', descriptor: 'No rewardable material.' },
+        { level: 1, marks: '1\u20132', descriptor: 'Isolated elements of knowledge and understanding, recall based. Weak or no relevant application to business examples. Generic assertions may be presented.' },
+        { level: 2, marks: '3\u20134', descriptor: 'Elements of knowledge and understanding, which are applied to the business example. Chains of reasoning are presented, but may be assertions or incomplete. A generic or superficial assessment is presented.' },
+        { level: 3, marks: '5\u20138', descriptor: 'Accurate and thorough knowledge and understanding, supported throughout by relevant and effective use of the business behaviour/context. Analytical perspectives are presented, with developed chains of reasoning, showing cause(s) and/or effect(s). An attempt at an assessment is presented, using quantitative and/or qualitative information, though unlikely to show the significance of competing arguments.' },
+        { level: 4, marks: '9\u201312', descriptor: 'Accurate and thorough knowledge and understanding, supported throughout by relevant and effective use of the business behaviour/context. A coherent and logical chain of reasoning, showing cause(s) and/or effect(s). Assessment is balanced, wide ranging and well contextualised, using quantitative and/or qualitative information and shows an awareness of competing arguments/factors, leading to a supported judgement.' }
+    ],
+    20: [
+        { level: 0, marks: '0', descriptor: 'No rewardable material.' },
+        { level: 1, marks: '1\u20134', descriptor: 'Isolated elements of knowledge and understanding, recall based. Weak or no relevant application to business examples. Generic assertions may be presented.' },
+        { level: 2, marks: '5\u20138', descriptor: 'Arguments and chains of reasoning are presented but connections between causes and/or consequences are incomplete. Attempts to address the question. A comparison or judgement may be attempted but it will not successfully show an awareness of the key features of business behaviour or business situation.' },
+        { level: 3, marks: '9\u201314', descriptor: 'Accurate knowledge and understanding, supported by relevant and effective use of the business behaviour/context. Uses developed chains of reasoning, so that causes and/or consequences are complete, showing an understanding of the question. Arguments are well developed. Quantitative and/or qualitative information is introduced in an attempt to support judgements, a partial awareness of the validity and/or significance of competing arguments and may lead to a conclusion.' },
+        { level: 4, marks: '15\u201320', descriptor: 'Accurate and thorough knowledge and understanding, supported throughout by relevant and effective use of the business behaviour/context. Uses well developed and logical, coherent chains of reasoning, showing a range of cause and/or effect(s). Arguments are fully developed. Quantitative and/or qualitative information is/are used well to support judgements. A full awareness of the validity and significance of competing arguments/factors, leading to balanced comparisons, judgements and an effective conclusion that proposes a solution and/or recommendations.' }
+    ]
+};
+
+function renderLevelDescriptors(totalMarks, achievedLevel, achievedMarks) {
+    var descriptors = LEVEL_DESCRIPTORS[totalMarks];
+    if (!descriptors) return '';
+
+    var html = '<div class="level-descriptors-card" style="animation-delay: 0.15s;">';
+    html += '<div class="level-descriptors-title">Marking Grid</div>';
+    html += '<div class="level-descriptors-table">';
+
+    // Skip Level 0, show from Level 1 upwards
+    descriptors.forEach(function(desc) {
+        if (desc.level === 0) return;
+        var isAchieved = desc.level === achievedLevel;
+        html += '<div class="level-row' + (isAchieved ? ' level-achieved' : '') + '">';
+        html += '<div class="level-row-header">';
+        html += '<span class="level-row-name">Level ' + desc.level + '</span>';
+        html += '<span class="level-row-marks">(' + desc.marks + ' marks)</span>';
+        if (isAchieved) {
+            html += '<span class="level-achieved-badge">' + achievedMarks + '/' + totalMarks + '</span>';
+        }
+        html += '</div>';
+        html += '<div class="level-row-descriptor">' + desc.descriptor + '</div>';
+        html += '</div>';
+    });
+
+    html += '</div></div>';
+    return html;
+}
 
 function renderFeedbackList(text) {
     // Split by numbered items or bullet points or sentences
