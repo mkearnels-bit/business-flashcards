@@ -1265,6 +1265,12 @@
             color: var(--gray-900);
         }
 
+        .ao-max {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--gray-400);
+        }
+
         .ao-name {
             font-size: 0.8rem;
             color: var(--gray-500);
@@ -3057,22 +3063,26 @@ function renderFeedback(marking, question) {
     } else {
         // AO Breakdown for points-based questions
         var ao = marking.ao_breakdown || {};
+        var aoMax = marking.ao_max || {};
         var aoLabels = ['AO1', 'AO2', 'AO3', 'AO4'];
         var aoNames = ['Knowledge', 'Application', 'Analysis', 'Evaluation'];
         var hasAO4 = currentBoard === 'edexcel_ial' || currentBoard === 'edexcel_uk';
 
         var visibleAOs = aoLabels.filter(function(label, i) {
             if (label === 'AO4' && !hasAO4) return false;
-            return ao[label] !== null && ao[label] !== undefined;
+            var max = aoMax[label];
+            return max !== null && max !== undefined && max > 0;
         });
 
         if (visibleAOs.length > 0) {
             html += '<div class="ao-grid" style="grid-template-columns: repeat(' + Math.min(visibleAOs.length, 4) + ', 1fr);">';
             visibleAOs.forEach(function(label, i) {
                 var idx = aoLabels.indexOf(label);
+                var earned = ao[label] || 0;
+                var max = aoMax[label] || 0;
                 html += '<div class="ao-card" style="border-color: var(--skill-' + aoNames[idx].toLowerCase() + '); animation-delay: ' + (0.1 + i * 0.07) + 's;">';
                 html += '<div class="ao-label" style="color: var(--skill-' + aoNames[idx].toLowerCase() + ');">' + label + '</div>';
-                html += '<div class="ao-value">' + (ao[label] || 0) + '</div>';
+                html += '<div class="ao-value">' + earned + '<span class="ao-max">/' + max + '</span></div>';
                 html += '<div class="ao-name">' + aoNames[idx] + '</div>';
                 html += '</div>';
             });
