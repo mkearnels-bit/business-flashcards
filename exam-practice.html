@@ -633,107 +633,268 @@
             color: var(--gray-500);
         }
 
-        /* Topic Selection */
-        .topic-section {
-            margin-top: 1.5rem;
+        /* Topic Dashboard */
+        .recommendations-bar {
+            background: linear-gradient(135deg, rgba(230, 126, 34, 0.08), rgba(30, 58, 95, 0.06));
+            border: 1px solid rgba(230, 126, 34, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
         }
-        .topic-select-all {
-            margin-bottom: 1rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        .topic-checkbox-label {
+        .recommendations-bar-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.75rem;
             display: flex;
             align-items: center;
-            gap: 0.6rem;
-            padding: 0.5rem 0.75rem;
+            gap: 0.5rem;
+        }
+        .recommendations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 0.75rem;
+        }
+        .recommendation-card {
+            background: white;
+            border-radius: 10px;
+            padding: 0.875rem 1rem;
+            border-left: 4px solid var(--accent);
             cursor: pointer;
-            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        .recommendation-card:hover {
+            box-shadow: 0 4px 12px rgba(230, 126, 34, 0.15);
+            transform: translateY(-1px);
+        }
+        .recommendation-reason {
+            font-size: 0.7rem;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 0.2rem;
+        }
+        .recommendation-topic {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--gray-900);
+        }
+        .recommendation-score {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            margin-top: 0.15rem;
+        }
+
+        .topics-dashboard-msg {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--gray-500);
+            font-size: 0.9rem;
+        }
+
+        .td-section {
+            margin-bottom: 1rem;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--gray-200);
+        }
+        .td-section-header {
+            background: var(--gray-50);
+            padding: 1rem 1.25rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             transition: background 0.15s;
             user-select: none;
         }
-        .topic-checkbox-label:hover {
-            background: #f1f5f9;
-        }
-        .topic-checkbox {
-            display: none;
-        }
-        .topic-checkbox-custom {
-            width: 18px;
-            height: 18px;
-            border: 2px solid #cbd5e1;
-            border-radius: 4px;
-            flex-shrink: 0;
-            position: relative;
-            transition: all 0.15s;
-        }
-        .topic-checkbox:checked + .topic-checkbox-custom {
-            background: #e67e22;
-            border-color: #e67e22;
-        }
-        .topic-checkbox:checked + .topic-checkbox-custom::after {
-            content: '';
-            position: absolute;
-            top: 2px;
-            left: 5px;
-            width: 5px;
-            height: 9px;
-            border: solid white;
-            border-width: 0 2px 2px 0;
-            transform: rotate(45deg);
-        }
-        .topic-unit-label {
-            font-weight: 600;
-            font-size: 1rem;
-            color: #1e3a5f;
-        }
-        .topic-section-label {
+        .td-section-header:hover { background: #f1f5f9; }
+        .td-section-header-left { flex: 1; }
+        .td-section-title {
             font-weight: 600;
             font-size: 0.95rem;
-            color: #334155;
+            color: var(--gray-900);
+            margin-bottom: 0.2rem;
         }
-        .topic-section-icon {
-            font-size: 0.7rem;
-            color: #94a3b8;
+        .td-section-stats {
+            display: flex;
+            gap: 1.25rem;
+            font-size: 0.8rem;
+            color: var(--gray-500);
+        }
+        .td-section-chevron {
+            font-size: 0.75rem;
+            color: var(--gray-400);
             transition: transform 0.2s;
         }
-        .topic-item-label {
-            padding-left: 2.5rem;
+        .td-section.collapsed .td-section-chevron { transform: rotate(-90deg); }
+        .td-section.collapsed .td-topics-list { display: none; }
+
+        .td-topics-list { background: white; }
+
+        .td-topic-row {
+            padding: 0.875rem 1.25rem;
+            border-top: 1px solid var(--gray-100);
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .td-topic-row:hover { background: var(--gray-50); }
+        .td-topic-row.selected {
+            background: rgba(30, 58, 95, 0.04);
+            border-left: 3px solid var(--primary);
+            padding-left: calc(1.25rem - 3px);
+        }
+
+        .td-topic-cb {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--gray-300);
+            border-radius: 5px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+            background: white;
+            color: transparent;
+            font-size: 13px;
+            line-height: 1;
+        }
+        .td-topic-row.selected .td-topic-cb {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .td-topic-info { flex: 1; min-width: 0; }
+        .td-topic-name {
+            font-weight: 500;
             font-size: 0.9rem;
-            color: #475569;
+            color: var(--gray-900);
+            margin-bottom: 0.2rem;
         }
-        .topic-tree-section {
-            margin-bottom: 0.5rem;
+        .td-topic-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
         }
-        .topic-tree-topics {
-            margin-left: 0.5rem;
+        .td-topic-attempts {
+            font-size: 0.75rem;
+            background: var(--gray-100);
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            color: var(--gray-600);
+            font-weight: 500;
         }
-        .topic-summary {
-            margin-top: 1rem;
+        .td-qtype-tag {
+            font-size: 0.7rem;
+            background: var(--gray-200);
+            color: var(--gray-600);
+            padding: 0.1rem 0.45rem;
+            border-radius: 3px;
+            font-weight: 500;
+        }
+
+        .td-topic-stats {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-shrink: 0;
+        }
+        .td-topic-score {
+            text-align: right;
+            min-width: 50px;
+        }
+        .td-topic-score-val {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+        .td-topic-score-lbl {
+            font-size: 0.65rem;
+            color: var(--gray-500);
+        }
+        .td-status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .td-status-dot.strong { background: #27ae60; }
+        .td-status-dot.developing { background: #e67e22; }
+        .td-status-dot.needs-work { background: #e74c3c; }
+        .td-status-dot.not-attempted { background: var(--gray-300); }
+
+        .td-selection-summary {
+            margin-top: 1.5rem;
             padding: 1rem;
-            background: #f8fafc;
+            background: var(--gray-50);
             border-radius: 10px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid var(--gray-200);
         }
-        .topic-summary-label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #64748b;
-            margin-bottom: 0.5rem;
-        }
-        .topic-summary-tags {
+        .td-selected-chips {
             display: flex;
             flex-wrap: wrap;
             gap: 0.4rem;
+            min-height: 28px;
+            margin-bottom: 1rem;
         }
-        .topic-tag {
-            display: inline-block;
-            padding: 0.25rem 0.65rem;
-            background: #e67e22;
-            color: white;
-            border-radius: 20px;
+        .td-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: white;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 0.3rem 0.7rem;
+            border-radius: 6px;
             font-size: 0.8rem;
             font-weight: 500;
+        }
+        .td-chip-x {
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.9rem;
+            line-height: 1;
+            opacity: 0.7;
+        }
+        .td-chip-x:hover { opacity: 1; }
+        .td-selected-placeholder {
+            color: var(--gray-400);
+            font-size: 0.85rem;
+        }
+        .td-selection-summary .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.65rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .td-selection-summary .btn-primary:hover { background: var(--primary-dark, #152d4d); }
+        .td-selection-summary .btn-primary:disabled {
+            background: var(--gray-300);
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 768px) {
+            .recommendations-grid { grid-template-columns: 1fr; }
+            .td-section-stats { flex-direction: column; gap: 0.25rem; }
+            .td-topic-row { flex-wrap: wrap; }
+            .td-topic-info { flex-basis: calc(100% - 30px); }
+            .td-topic-stats { margin-left: 30px; margin-top: 0.4rem; }
         }
 
         /* Generate Button */
@@ -2455,156 +2616,427 @@ function selectUnit(el) {
 
     // Show topics for Edexcel IAL, skip for others
     if (currentBoard === 'edexcel_ial' && EDEXCEL_IAL_TOPICS[currentUnit]) {
-        renderTopics();
+        renderTopicsDashboard();
     } else {
         document.getElementById('topicSection').style.display = 'none';
         renderQuestionTypes();
     }
 }
 
-function renderTopics() {
+// ===== TOPIC DASHBOARD =====
+
+async function fetchAttemptDataForUnit(unitCode) {
+    try {
+        var result = await supabaseClient
+            .from('exam_practice_attempts')
+            .select('question_type, percentage_score, question_data, created_at')
+            .eq('user_id', currentSession.user.id)
+            .eq('board', currentBoard)
+            .eq('unit', unitCode)
+            .not('percentage_score', 'is', null)
+            .order('created_at', { ascending: false });
+
+        if (result.error) throw result.error;
+        return result.data || [];
+    } catch (err) {
+        console.error('Error fetching attempt data:', err);
+        return [];
+    }
+}
+
+function processAttemptsByTopic(attempts, unitKey) {
+    var topicMap = {};
+    var unitData = EDEXCEL_IAL_TOPICS[unitKey];
+    if (!unitData) return topicMap;
+
+    // Initialise all topics with empty stats
+    unitData.sections.forEach(function(section) {
+        section.topics.forEach(function(topic) {
+            var key = section.name + '|' + topic.name;
+            topicMap[key] = {
+                sectionName: section.name,
+                sectionId: section.id,
+                topicName: topic.name,
+                topicId: topic.id,
+                attempts: 0,
+                totalScore: 0,
+                avgScore: null,
+                questionTypes: {},
+                status: 'not_attempted'
+            };
+        });
+    });
+
+    // Process each attempt
+    attempts.forEach(function(attempt) {
+        var testedTopics = attempt.question_data && attempt.question_data.tested_topics;
+        if (!testedTopics || !Array.isArray(testedTopics)) return;
+
+        var qtype = attempt.question_type || '';
+        var score = attempt.percentage_score;
+
+        testedTopics.forEach(function(tt) {
+            var key = tt.section + '|' + tt.topic;
+            if (!topicMap[key]) return;
+
+            topicMap[key].attempts++;
+            topicMap[key].totalScore += score;
+
+            // Track question type counts
+            var typeLabel = formatQuestionType(qtype);
+            if (!topicMap[key].questionTypes[typeLabel]) {
+                topicMap[key].questionTypes[typeLabel] = 0;
+            }
+            topicMap[key].questionTypes[typeLabel]++;
+        });
+    });
+
+    // Calculate averages and status
+    Object.keys(topicMap).forEach(function(key) {
+        var t = topicMap[key];
+        if (t.attempts > 0) {
+            t.avgScore = Math.round(t.totalScore / t.attempts);
+            if (t.avgScore >= 70) t.status = 'strong';
+            else if (t.avgScore >= 40) t.status = 'developing';
+            else t.status = 'needs_work';
+        }
+    });
+
+    return topicMap;
+}
+
+function formatQuestionType(qtype) {
+    // Convert "4_mark_explain" → "Explain 4"
+    var parts = qtype.split('_mark_');
+    if (parts.length === 2) {
+        var marks = parts[0];
+        var cmd = parts[1].charAt(0).toUpperCase() + parts[1].slice(1);
+        return cmd + ' ' + marks;
+    }
+    return qtype;
+}
+
+function calculateRecommendations(topicMap, unitKey) {
+    var recs = [];
+
+    // Priority 1: Not attempted
+    Object.keys(topicMap).forEach(function(key) {
+        var t = topicMap[key];
+        if (t.status === 'not_attempted') {
+            recs.push({ key: key, topic: t.topicName, section: t.sectionName, reason: 'Not yet attempted', priority: 1 });
+        }
+    });
+
+    // Priority 2: Needs work (avg < 40%)
+    Object.keys(topicMap).forEach(function(key) {
+        var t = topicMap[key];
+        if (t.status === 'needs_work') {
+            recs.push({ key: key, topic: t.topicName, section: t.sectionName, reason: 'Avg ' + t.avgScore + '% — needs practice', priority: 2 });
+        }
+    });
+
+    // Priority 3: Developing with only easy questions tried
+    Object.keys(topicMap).forEach(function(key) {
+        var t = topicMap[key];
+        if (t.status === 'developing') {
+            var hasHard = Object.keys(t.questionTypes).some(function(qt) {
+                var markMatch = qt.match(/\d+/);
+                return markMatch && parseInt(markMatch[0]) >= 8;
+            });
+            if (!hasHard) {
+                recs.push({ key: key, topic: t.topicName, section: t.sectionName, reason: 'Try higher-mark questions', priority: 3 });
+            }
+        }
+    });
+
+    // Sort by priority and return top 3
+    recs.sort(function(a, b) { return a.priority - b.priority; });
+    return recs.slice(0, 3);
+}
+
+async function renderTopicsDashboard() {
     var unitTopics = EDEXCEL_IAL_TOPICS[currentUnit];
     if (!unitTopics) return;
 
+    // Show loading state
+    var container = document.getElementById('topicSection');
+    container.innerHTML = '<div class="topic-section" style="text-align:center;padding:2rem;"><div class="spinner" style="width:24px;height:24px;border:3px solid var(--gray-200);border-top-color:var(--primary);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto;"></div><div style="margin-top:1rem;color:var(--gray-400);">Loading your topic data...</div></div>';
+    container.style.display = 'block';
+
+    // Fetch attempt data
+    var boardData = BOARD_DATA[currentBoard];
+    var unitInfo = boardData.units.find(function(u) { return u.id === currentUnit; });
+    var attempts = await fetchAttemptDataForUnit(unitInfo.code);
+    var topicMap = processAttemptsByTopic(attempts, currentUnit);
+
+    var hasAttempts = attempts.length > 0;
+    var recs = hasAttempts ? calculateRecommendations(topicMap, currentUnit) : [];
+
+    // Build dashboard HTML
     var html = '<div class="topic-section">';
     html += '<div class="section-title" style="font-size:1.2rem;">Select Topics</div>';
-    html += '<div class="section-subtitle">Choose specific topics to practise, or select entire sections. You can select multiple.</div>';
+    html += '<div class="section-subtitle">Choose topics to practise. Your past performance is shown to help guide your choices.</div>';
 
-    // Select All Unit button
-    html += '<div class="topic-select-all">';
-    html += '<label class="topic-checkbox-label topic-unit-label" onclick="toggleAllTopics(event)">';
-    html += '<input type="checkbox" id="selectAllUnit" class="topic-checkbox">';
-    html += '<span class="topic-checkbox-custom"></span>';
-    html += '<span class="topic-label-text">Select All of ' + unitTopics.name + '</span>';
-    html += '</label>';
-    html += '</div>';
+    // Recommendations bar
+    if (hasAttempts && recs.length > 0) {
+        html += renderRecommendationsBar(recs);
+    } else if (!hasAttempts) {
+        html += '<div class="recommendations-bar" style="text-align:center;padding:1rem 1.25rem;">';
+        html += '<div style="color:var(--gray-400);font-size:0.9rem;">Start practising to see your stats and personalised recommendations here.</div>';
+        html += '</div>';
+    }
 
     // Sections
-    unitTopics.sections.forEach(function(section) {
-        html += '<div class="topic-tree-section">';
+    unitTopics.sections.forEach(function(section, idx) {
+        html += renderTopicSection(section, topicMap, idx === 0);
+    });
 
-        // Section header with checkbox
-        html += '<label class="topic-checkbox-label topic-section-label" onclick="toggleSection(event, \'' + section.id + '\')">';
-        html += '<input type="checkbox" class="topic-checkbox section-checkbox" data-section="' + section.id + '">';
-        html += '<span class="topic-checkbox-custom"></span>';
-        html += '<span class="topic-section-icon">&#9662;</span>';
-        html += '<span class="topic-label-text">' + section.name + '</span>';
-        html += '</label>';
+    // Selection summary bar
+    html += '<div class="td-selection-summary" id="tdSelectionSummary" style="display:none;">';
+    html += '<div class="td-selected-chips" id="tdSelectedChips"></div>';
+    html += '<button class="btn btn-primary" id="tdContinueBtn" onclick="proceedToQuestionType()" disabled>Continue to Question Type</button>';
+    html += '</div>';
 
-        // Topics under this section
-        html += '<div class="topic-tree-topics" id="topics-' + section.id + '">';
-        section.topics.forEach(function(topic) {
-            html += '<label class="topic-checkbox-label topic-item-label" onclick="toggleTopic(event, \'' + topic.id + '\', \'' + section.id + '\')">';
-            html += '<input type="checkbox" class="topic-checkbox topic-item-checkbox" data-topic="' + topic.id + '" data-section="' + section.id + '" data-section-name="' + section.name + '" data-name="' + topic.name + '">';
-            html += '<span class="topic-checkbox-custom"></span>';
-            html += '<span class="topic-label-text">' + topic.name + '</span>';
-            html += '</label>';
+    html += '</div>';
+
+    container.innerHTML = html;
+}
+
+function renderRecommendationsBar(recs) {
+    var html = '<div class="recommendations-bar">';
+    html += '<div style="font-weight:600;margin-bottom:0.5rem;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.03em;color:var(--gray-500);">Recommended Focus Areas</div>';
+    html += '<div style="display:flex;gap:0.75rem;flex-wrap:wrap;">';
+
+    recs.forEach(function(rec) {
+        html += '<div class="recommendation-card" onclick="selectRecommendation(\'' + rec.key.replace(/'/g, "\\'") + '\')">';
+        html += '<div class="recommendation-topic">' + rec.topic + '</div>';
+        html += '<div class="recommendation-reason">' + rec.reason + '</div>';
+        html += '</div>';
+    });
+
+    html += '</div></div>';
+    return html;
+}
+
+function renderTopicSection(section, topicMap, expanded) {
+    var sectionAttempts = 0;
+    var sectionTotalScore = 0;
+    var sectionScored = 0;
+
+    section.topics.forEach(function(topic) {
+        var key = section.name + '|' + topic.name;
+        var data = topicMap[key];
+        if (data && data.attempts > 0) {
+            sectionAttempts += data.attempts;
+            sectionTotalScore += data.totalScore;
+            sectionScored += data.attempts;
+        }
+    });
+
+    var sectionAvg = sectionScored > 0 ? Math.round(sectionTotalScore / sectionScored) : null;
+
+    var html = '<div class="td-section' + (expanded ? ' expanded' : '') + '" data-section-id="' + section.id + '">';
+
+    // Section header
+    html += '<div class="td-section-header' + (!expanded ? ' collapsed' : '') + '" onclick="toggleDashboardSection(\'' + section.id + '\')">';
+    html += '<div class="td-section-title">' + section.name + '</div>';
+    html += '<div class="td-section-stats">';
+    if (sectionAttempts > 0) {
+        html += '<span>' + sectionAttempts + ' attempt' + (sectionAttempts !== 1 ? 's' : '') + '</span>';
+        html += '<span style="margin:0 0.25rem;">·</span>';
+        html += '<span>Avg ' + sectionAvg + '%</span>';
+    } else {
+        html += '<span style="color:var(--gray-400);">No attempts yet</span>';
+    }
+    html += '</div>';
+    html += '<div class="td-section-chevron">&#9662;</div>';
+    html += '</div>';
+
+    // Topic rows
+    html += '<div class="td-section-topics"' + (!expanded ? ' style="display:none;"' : '') + '>';
+    section.topics.forEach(function(topic) {
+        var key = section.name + '|' + topic.name;
+        var data = topicMap[key] || { attempts: 0, avgScore: null, questionTypes: {}, status: 'not_attempted', topicId: topic.id, sectionId: section.id };
+        html += renderTopicRow(section, topic, data);
+    });
+    html += '</div>';
+
+    html += '</div>';
+    return html;
+}
+
+function renderTopicRow(section, topic, data) {
+    var key = section.name + '|' + topic.name;
+    var isSelected = selectedTopics.some(function(t) { return t.section === section.id && t.id === topic.id; });
+
+    var html = '<div class="td-topic-row' + (isSelected ? ' selected' : '') + '" data-key="' + key.replace(/"/g, '&quot;') + '" data-topic-id="' + topic.id + '" data-section-id="' + section.id + '" onclick="toggleTopicSelection(\'' + section.id + '\', \'' + topic.id + '\', \'' + section.name.replace(/'/g, "\\'") + '\', \'' + topic.name.replace(/'/g, "\\'") + '\')">';
+
+    // Checkbox
+    html += '<div class="td-topic-cb">' + (isSelected ? '&#10003;' : '') + '</div>';
+
+    // Topic info
+    html += '<div class="td-topic-info">';
+    html += '<div class="td-topic-name">' + topic.name + '</div>';
+
+    if (data.attempts > 0) {
+        html += '<div class="td-topic-meta">';
+        html += '<span class="td-topic-attempts">' + data.attempts + ' attempt' + (data.attempts !== 1 ? 's' : '') + '</span>';
+
+        // Question type tags
+        Object.keys(data.questionTypes).forEach(function(qt) {
+            html += '<span class="td-qtype-tag">' + qt + ' &times;' + data.questionTypes[qt] + '</span>';
         });
-        html += '</div>';
 
         html += '</div>';
-    });
-
-    // Selected topics summary
-    html += '<div class="topic-summary" id="topicSummary" style="display:none;">';
-    html += '<div class="topic-summary-label">Selected topics:</div>';
-    html += '<div class="topic-summary-tags" id="topicSummaryTags"></div>';
-    html += '</div>';
+    }
 
     html += '</div>';
 
-    document.getElementById('topicSection').innerHTML = html;
-    document.getElementById('topicSection').style.display = 'block';
+    // Stats (score + status dot)
+    html += '<div class="td-topic-stats">';
+    if (data.avgScore !== null) {
+        html += '<div class="td-topic-score">' + data.avgScore + '%</div>';
+    }
+
+    var statusClass = '';
+    if (data.status === 'strong') statusClass = 'strong';
+    else if (data.status === 'developing') statusClass = 'developing';
+    else if (data.status === 'needs_work') statusClass = 'needs-work';
+    else statusClass = 'not-attempted';
+
+    html += '<div class="td-status-dot ' + statusClass + '"></div>';
+    html += '</div>';
+
+    html += '</div>';
+    return html;
 }
 
-function toggleAllTopics(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    var allCheckbox = document.getElementById('selectAllUnit');
-    var isChecked = !allCheckbox.checked;
-    allCheckbox.checked = isChecked;
+function toggleDashboardSection(sectionId) {
+    var section = document.querySelector('.td-section[data-section-id="' + sectionId + '"]');
+    if (!section) return;
 
-    document.querySelectorAll('.section-checkbox, .topic-item-checkbox').forEach(function(cb) {
-        cb.checked = isChecked;
-    });
+    var header = section.querySelector('.td-section-header');
+    var topics = section.querySelector('.td-section-topics');
 
-    updateSelectedTopics();
+    if (section.classList.contains('expanded')) {
+        section.classList.remove('expanded');
+        header.classList.add('collapsed');
+        topics.style.display = 'none';
+    } else {
+        section.classList.add('expanded');
+        header.classList.remove('collapsed');
+        topics.style.display = '';
+    }
 }
 
-function toggleSection(e, sectionId) {
-    e.preventDefault();
-    e.stopPropagation();
-    var sectionCb = document.querySelector('.section-checkbox[data-section="' + sectionId + '"]');
-    var isChecked = !sectionCb.checked;
-    sectionCb.checked = isChecked;
+function toggleTopicSelection(sectionId, topicId, sectionName, topicName) {
+    var idx = selectedTopics.findIndex(function(t) { return t.section === sectionId && t.id === topicId; });
 
-    document.querySelectorAll('.topic-item-checkbox[data-section="' + sectionId + '"]').forEach(function(cb) {
-        cb.checked = isChecked;
-    });
-
-    updateSelectAllState();
-    updateSelectedTopics();
-}
-
-function toggleTopic(e, topicId, sectionId) {
-    e.preventDefault();
-    e.stopPropagation();
-    var topicCb = document.querySelector('.topic-item-checkbox[data-topic="' + topicId + '"]');
-    topicCb.checked = !topicCb.checked;
-
-    // Update section checkbox state
-    var sectionTopics = document.querySelectorAll('.topic-item-checkbox[data-section="' + sectionId + '"]');
-    var allChecked = true;
-    sectionTopics.forEach(function(cb) { if (!cb.checked) allChecked = false; });
-    document.querySelector('.section-checkbox[data-section="' + sectionId + '"]').checked = allChecked;
-
-    updateSelectAllState();
-    updateSelectedTopics();
-}
-
-function updateSelectAllState() {
-    var allSections = document.querySelectorAll('.section-checkbox');
-    var allChecked = true;
-    allSections.forEach(function(cb) { if (!cb.checked) allChecked = false; });
-    var selectAll = document.getElementById('selectAllUnit');
-    if (selectAll) selectAll.checked = allChecked;
-}
-
-function updateSelectedTopics() {
-    selectedTopics = [];
-    document.querySelectorAll('.topic-item-checkbox:checked').forEach(function(cb) {
+    if (idx >= 0) {
+        selectedTopics.splice(idx, 1);
+    } else {
         selectedTopics.push({
-            id: cb.getAttribute('data-topic'),
-            name: cb.getAttribute('data-name'),
-            section: cb.getAttribute('data-section'),
-            sectionName: cb.getAttribute('data-section-name')
+            id: topicId,
+            name: topicName,
+            section: sectionId,
+            sectionName: sectionName
         });
-    });
+    }
 
-    // Update summary
-    var summary = document.getElementById('topicSummary');
-    var tagsDiv = document.getElementById('topicSummaryTags');
+    updateTopicRowUI();
+    updateSelectionSummary();
+}
 
-    if (selectedTopics.length > 0) {
-        summary.style.display = 'block';
-        var tagsHtml = '';
-        if (selectedTopics.length > 8) {
-            tagsHtml = '<span class="topic-tag">' + selectedTopics.length + ' topics selected</span>';
-        } else {
-            selectedTopics.forEach(function(t) {
-                tagsHtml += '<span class="topic-tag">' + t.name + '</span>';
+function selectRecommendation(key) {
+    var parts = key.split('|');
+    if (parts.length !== 2) return;
+    var sectionName = parts[0];
+    var topicName = parts[1];
+
+    // Find the section and topic IDs from EDEXCEL_IAL_TOPICS
+    var unitTopics = EDEXCEL_IAL_TOPICS[currentUnit];
+    if (!unitTopics) return;
+
+    var sectionId = null, topicId = null;
+    unitTopics.sections.forEach(function(s) {
+        if (s.name === sectionName) {
+            sectionId = s.id;
+            s.topics.forEach(function(t) {
+                if (t.name === topicName) topicId = t.id;
             });
         }
-        tagsDiv.innerHTML = tagsHtml;
+    });
 
-        // Show question types section
-        renderQuestionTypes();
+    if (!sectionId || !topicId) return;
+
+    // Only add if not already selected
+    var exists = selectedTopics.some(function(t) { return t.section === sectionId && t.id === topicId; });
+    if (!exists) {
+        selectedTopics.push({ id: topicId, name: topicName, section: sectionId, sectionName: sectionName });
+        updateTopicRowUI();
+        updateSelectionSummary();
+    }
+
+    // Expand the section containing this topic
+    var sectionEl = document.querySelector('.td-section[data-section-id="' + sectionId + '"]');
+    if (sectionEl && !sectionEl.classList.contains('expanded')) {
+        toggleDashboardSection(sectionId);
+    }
+}
+
+function updateTopicRowUI() {
+    document.querySelectorAll('.td-topic-row').forEach(function(row) {
+        var topicId = row.getAttribute('data-topic-id');
+        var sectionId = row.getAttribute('data-section-id');
+        var isSelected = selectedTopics.some(function(t) { return t.section === sectionId && t.id === topicId; });
+        var cb = row.querySelector('.td-topic-cb');
+
+        if (isSelected) {
+            row.classList.add('selected');
+            cb.innerHTML = '&#10003;';
+        } else {
+            row.classList.remove('selected');
+            cb.innerHTML = '';
+        }
+    });
+}
+
+function updateSelectionSummary() {
+    var summary = document.getElementById('tdSelectionSummary');
+    var chipsDiv = document.getElementById('tdSelectedChips');
+    var continueBtn = document.getElementById('tdContinueBtn');
+
+    if (selectedTopics.length > 0) {
+        summary.style.display = '';
+        var chipsHtml = '';
+        selectedTopics.forEach(function(t) {
+            chipsHtml += '<span class="td-chip">' + t.name + '<span class="td-chip-x" onclick="event.stopPropagation(); removeTopicChip(\'' + t.section + '\', \'' + t.id + '\')">&times;</span></span>';
+        });
+        chipsDiv.innerHTML = chipsHtml;
+        continueBtn.disabled = false;
     } else {
         summary.style.display = 'none';
+        chipsDiv.innerHTML = '';
+        continueBtn.disabled = true;
+        // Hide downstream sections
         document.getElementById('qtypeSection').style.display = 'none';
         document.getElementById('generateSection').style.display = 'none';
         document.getElementById('generateBtn').disabled = true;
     }
+}
+
+function removeTopicChip(sectionId, topicId) {
+    var idx = selectedTopics.findIndex(function(t) { return t.section === sectionId && t.id === topicId; });
+    if (idx >= 0) {
+        selectedTopics.splice(idx, 1);
+        updateTopicRowUI();
+        updateSelectionSummary();
+    }
+}
+
+function proceedToQuestionType() {
+    if (selectedTopics.length === 0) return;
+    renderQuestionTypes();
 }
 
 function renderQuestionTypes() {
