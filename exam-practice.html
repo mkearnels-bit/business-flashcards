@@ -633,6 +633,62 @@
             color: var(--gray-500);
         }
 
+        /* Random Question Quick-Start */
+        .random-question-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .random-question-card {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            border: 2px solid var(--gray-200);
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .random-question-card:hover {
+            border-color: var(--primary);
+            background: rgba(30, 58, 95, 0.03);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        }
+        .random-question-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .random-question-icon.short {
+            background: rgba(39, 174, 96, 0.12);
+            color: #27ae60;
+        }
+        .random-question-icon.long {
+            background: rgba(142, 68, 173, 0.12);
+            color: #8e44ad;
+        }
+        .random-question-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--gray-900);
+            margin-bottom: 0.15rem;
+        }
+        .random-question-desc {
+            font-size: 0.8rem;
+            color: var(--gray-400);
+        }
+        @media (max-width: 768px) {
+            .random-question-bar { flex-direction: column; }
+        }
+
         /* Topic Dashboard */
         .recommendations-bar {
             background: linear-gradient(135deg, rgba(230, 126, 34, 0.08), rgba(30, 58, 95, 0.06));
@@ -2199,7 +2255,7 @@ const EDEXCEL_IAL_TOPICS = {
             {
                 id: 'u1s1', name: 'Meeting Customer Needs',
                 topics: [
-                    { id: 'u1s1t1', name: 'The Market' },
+                    { id: 'u1s1t1', name: 'Markets' },
                     { id: 'u1s1t2', name: 'Market Research' },
                     { id: 'u1s1t3', name: 'Market Positioning' }
                 ]
@@ -2754,6 +2810,35 @@ function calculateRecommendations(topicMap, unitKey) {
     return recs.slice(0, 3);
 }
 
+function startRandomQuestion(type) {
+    var unitTopics = EDEXCEL_IAL_TOPICS[currentUnit];
+    if (!unitTopics) return;
+
+    // Pick question type pool
+    var shortTypes = ['define_2', 'explain_4', 'calculate_4', 'analyse_6'];
+    var longTypes = ['discuss_8', 'assess_10', 'assess_12', 'evaluate_20'];
+    var pool = type === 'short' ? shortTypes : longTypes;
+
+    // Random pick
+    var pickedId = pool[Math.floor(Math.random() * pool.length)];
+    currentQType = pickedId;
+
+    // Set selectedTopics to ALL topics in the unit
+    selectedTopics = [];
+    unitTopics.sections.forEach(function(section) {
+        section.topics.forEach(function(topic) {
+            selectedTopics.push({
+                id: topic.id,
+                name: topic.name,
+                section: section.id,
+                sectionName: section.name
+            });
+        });
+    });
+
+    generateQuestion();
+}
+
 async function renderTopicsDashboard() {
     var unitTopics = EDEXCEL_IAL_TOPICS[currentUnit];
     if (!unitTopics) return;
@@ -2775,7 +2860,21 @@ async function renderTopicsDashboard() {
     // Build dashboard HTML
     var html = '<div class="topic-section">';
     html += '<div class="section-title" style="font-size:1.2rem;">Select Topics</div>';
-    html += '<div class="section-subtitle">Choose topics to practise. Your past performance is shown to help guide your choices.</div>';
+    html += '<div class="section-subtitle">Choose topics to practise, or jump straight in with a random question.</div>';
+
+    // Random question quick-start cards
+    html += '<div class="random-question-bar">';
+    html += '<div class="random-question-card" onclick="startRandomQuestion(\'short\')">';
+    html += '<div class="random-question-icon short">&#9889;</div>';
+    html += '<div><div class="random-question-title">Random Short Question</div>';
+    html += '<div class="random-question-desc">2\u20136 marks · Typical exam topics</div></div>';
+    html += '</div>';
+    html += '<div class="random-question-card" onclick="startRandomQuestion(\'long\')">';
+    html += '<div class="random-question-icon long">&#9998;</div>';
+    html += '<div><div class="random-question-title">Random Long Question</div>';
+    html += '<div class="random-question-desc">8\u201320 marks · Typical exam topics</div></div>';
+    html += '</div>';
+    html += '</div>';
 
     // Recommendations bar
     if (hasAttempts && recs.length > 0) {
