@@ -802,6 +802,18 @@
             gap: 0.5rem;
         }
 
+        /* Paywall lock for topic list items */
+        .topic-list li.topic-locked-item {
+            opacity: 0.5;
+            pointer-events: none;
+            position: relative;
+        }
+        .topic-list li.topic-locked-item::after {
+            content: '\1F512';
+            font-size: 0.7rem;
+            margin-left: auto;
+        }
+
         .topic-list li {
             display: flex;
             align-items: center;
@@ -1618,6 +1630,54 @@
         }
 
         checkAuth();
+
+        // ==================== PAYWALL GATING ====================
+        async function checkNotesOverviewPlan() {
+            try {
+                const { data: { session } } = await supabaseClient.auth.getSession();
+                if (!session) return;
+
+                const { data: subs } = await supabaseClient
+                    .from('subscriptions')
+                    .select('plan')
+                    .eq('user_id', session.user.id)
+                    .limit(1);
+
+                var plan = 'free';
+                if (subs && subs.length > 0) {
+                    plan = subs[0].plan;
+                } else {
+                    var expiresAt = new Date();
+                    expiresAt.setFullYear(expiresAt.getFullYear() + 1);
+                    await supabaseClient.from('subscriptions').insert({
+                        user_id: session.user.id,
+                        email: session.user.email,
+                        name: session.user.user_metadata?.full_name || '',
+                        plan: 'free',
+                        status: 'active',
+                        expires_at: expiresAt.toISOString()
+                    });
+                }
+
+                if (plan === 'pro' || plan === 'grandfathered') return;
+
+                // Free users: lock all topics except the first in each unit
+                document.querySelectorAll('.topic-list').forEach(function(list) {
+                    var items = list.querySelectorAll('li');
+                    items.forEach(function(item, index) {
+                        if (index > 0) {
+                            item.classList.add('topic-locked-item');
+                            var link = item.querySelector('a');
+                            if (link) link.removeAttribute('href');
+                        }
+                    });
+                });
+            } catch (err) {
+                console.error('Plan check error:', err);
+            }
+        }
+
+        checkNotesOverviewPlan();
 
         // Logout
         async function handleLogout() {

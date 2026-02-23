@@ -3013,7 +3013,74 @@
     opacity: 1;
 }
 
-</style>
+
+        /* ==================== PAYWALL LOCK ==================== */
+        .topic-locked {
+            position: relative;
+            pointer-events: none;
+        }
+        .topic-locked .topic-content {
+            display: none !important;
+        }
+        .topic-locked .topic-header {
+            opacity: 0.5;
+        }
+        .topic-locked .topic-header::after {
+            content: '\1F512';
+            position: absolute;
+            right: 60px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+        }
+        .sidebar-topic-locked {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        .sidebar-topic-locked .sidebar-topic-link::after {
+            content: '\1F512';
+            margin-left: 0.5rem;
+            font-size: 0.75rem;
+        }
+        .paywall-banner {
+            background: linear-gradient(135deg, #1e3a5f 0%, #152a45 100%);
+            border-radius: 16px;
+            padding: 2.5rem;
+            text-align: center;
+            margin: 2rem auto;
+            max-width: 600px;
+            color: white;
+        }
+        .paywall-banner h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: white;
+        }
+        .paywall-banner p {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        .paywall-banner a {
+            display: inline-block;
+            background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+            color: white;
+            padding: 0.85rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+        }
+        .paywall-banner a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(230, 126, 34, 0.4);
+        }
+
+    </style>
 <!-- Google Analytics - Replace G-HFSYK32ZFT with your actual ID -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-HFSYK32ZFT"></script>
 <script>
@@ -6873,6 +6940,86 @@
             }
         }
         checkAuth();
+
+        // ==================== PAYWALL GATING ====================
+        async function checkPlanAndGateContent() {
+            try {
+                const { data: { session } } = await supabaseClient.auth.getSession();
+                if (!session) return; // Not logged in, auth redirect handles this
+
+                // Check subscription plan
+                const { data: subs } = await supabaseClient
+                    .from('subscriptions')
+                    .select('plan')
+                    .eq('user_id', session.user.id)
+                    .limit(1);
+
+                var plan = 'free';
+                if (subs && subs.length > 0) {
+                    plan = subs[0].plan;
+                } else {
+                    // Auto-create subscription for new users
+                    var expiresAt = new Date();
+                    expiresAt.setFullYear(expiresAt.getFullYear() + 1);
+                    await supabaseClient.from('subscriptions').insert({
+                        user_id: session.user.id,
+                        email: session.user.email,
+                        name: session.user.user_metadata?.full_name || '',
+                        plan: 'free',
+                        status: 'active',
+                        expires_at: expiresAt.toISOString()
+                    });
+                }
+
+                // Pro and grandfathered users get full access to notes
+                if (plan === 'pro' || plan === 'grandfathered') return;
+
+                // Free users: lock all topics except the first one
+                var allTopics = document.querySelectorAll('.topic-section');
+                var allSidebarItems = document.querySelectorAll('.sidebar-topic-item');
+                var lockedCount = 0;
+
+                allTopics.forEach(function(topic) {
+                    var topicId = topic.id; // e.g. 'topic-1-2'
+                    if (!topicId) return;
+                    var parts = topicId.split('-');
+                    var topicNum = parseInt(parts[2]); // The topic number within the unit
+                    if (topicNum > 1) {
+                        topic.classList.add('topic-locked');
+                        topic.classList.remove('open');
+                        lockedCount++;
+                    }
+                });
+
+                allSidebarItems.forEach(function(item) {
+                    var dataTopic = item.getAttribute('data-topic');
+                    if (!dataTopic) return;
+                    var parts = dataTopic.split('-');
+                    var topicNum = parseInt(parts[2]);
+                    if (topicNum > 1) {
+                        item.classList.add('sidebar-topic-locked');
+                    }
+                });
+
+                // Add upgrade banner after the first topic
+                if (lockedCount > 0) {
+                    var firstTopic = document.querySelector('.topic-section');
+                    if (firstTopic) {
+                        var banner = document.createElement('div');
+                        banner.className = 'paywall-banner';
+                        banner.innerHTML = '<h3>Unlock All Study Notes</h3>' +
+                            '<p>Upgrade to Pro to access all topics across every unit, plus exam practice with instant AI feedback and mind maps.</p>' +
+                            '<a href="pricing.html">View Pro Plans</a>';
+                        firstTopic.parentNode.insertBefore(banner, firstTopic.nextSibling);
+                    }
+                }
+            } catch (err) {
+                console.error('Plan check error:', err);
+            }
+        }
+
+        checkPlanAndGateContent();
+
 
         // Logout
         async function handleLogout() {

@@ -428,6 +428,100 @@
             max-width: 1100px;
             margin: 0 auto;
             padding: 2.5rem 2rem 4rem;
+            position: relative;
+        }
+
+        /* ==================== PAYWALL OVERLAY ==================== */
+        .exam-paywall-overlay {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(248, 250, 252, 0.95);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 4rem;
+        }
+
+        .exam-paywall-card {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem 2.5rem;
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            border: 2px solid #e2e8f0;
+        }
+
+        .exam-paywall-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .exam-paywall-card h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #1e3a5f;
+            margin-bottom: 0.75rem;
+        }
+
+        .exam-paywall-card p {
+            font-size: 0.95rem;
+            color: #64748b;
+            line-height: 1.7;
+            margin-bottom: 1.75rem;
+        }
+
+        .exam-paywall-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 2rem;
+            padding: 0;
+        }
+
+        .exam-paywall-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+            color: #334155;
+        }
+
+        .exam-paywall-features li::before {
+            content: '\2705';
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .exam-paywall-cta {
+            display: inline-block;
+            background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+        }
+
+        .exam-paywall-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(230, 126, 34, 0.4);
+        }
+
+        .exam-paywall-free-note {
+            margin-top: 1rem;
+            font-size: 0.82rem;
+            color: #94a3b8;
         }
 
         /* ===== PHASE 1: BOARD SELECTION ===== */
@@ -2213,6 +2307,23 @@
 
 <!-- Main Content -->
 <div class="main-content">
+
+    <!-- Paywall Overlay (hidden by default, shown for non-Pro users) -->
+    <div class="exam-paywall-overlay" id="examPaywall" style="display: none;">
+        <div class="exam-paywall-card">
+            <div class="exam-paywall-icon">&#128218;</div>
+            <h2>Unlock Exam Practice</h2>
+            <p>Get instant AI feedback on your answers, marked against real exam board specifications. See exactly how to improve and move up the mark bands.</p>
+            <ul class="exam-paywall-features">
+                <li>Unlimited practice questions across all units</li>
+                <li>Instant AI marking aligned to exam board specs</li>
+                <li>Detailed feedback showing how to improve</li>
+                <li>Full access to Study Notes and Mind Maps</li>
+            </ul>
+            <a href="pricing.html" class="exam-paywall-cta">Upgrade to Pro</a>
+            <p class="exam-paywall-free-note">Already enjoying free Flashcards and Exam Skills</p>
+        </div>
+    </div>
 
     <!-- PHASE 1: Selection -->
     <div class="phase active" id="phase-selection">
@@ -4647,9 +4758,34 @@ function setupLevelToggle() {
     });
 }
 
+// ===== PAYWALL CHECK =====
+async function checkExamPracticePlan() {
+    try {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (!session) return;
+
+        const { data: subs } = await supabaseClient
+            .from('subscriptions')
+            .select('plan')
+            .eq('user_id', session.user.id)
+            .limit(1);
+
+        var plan = (subs && subs.length > 0) ? subs[0].plan : 'free';
+
+        // Only Pro users get exam practice access
+        if (plan !== 'pro') {
+            var overlay = document.getElementById('examPaywall');
+            if (overlay) overlay.style.display = 'flex';
+        }
+    } catch (err) {
+        console.error('Plan check error:', err);
+    }
+}
+
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded', function() {
     checkAuth();
+    checkExamPracticePlan();
     setupMobileMenu();
     setupLevelToggle();
 
