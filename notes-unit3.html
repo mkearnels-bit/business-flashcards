@@ -3080,7 +3080,33 @@
             box-shadow: 0 6px 25px rgba(230, 126, 34, 0.4);
         }
 
-    </style>
+    
+        .footer-social {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .footer-social a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+        }
+
+        .footer-social a:hover {
+            background: var(--accent, #e67e22);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+</style>
 <!-- Google Analytics - Replace G-HFSYK32ZFT with your actual ID -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-HFSYK32ZFT"></script>
 <script>
