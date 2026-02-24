@@ -1961,6 +1961,27 @@
             box-shadow: 0 6px 20px rgba(230, 126, 34, 0.4);
         }
 
+        .action-btn-share {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+            border: none;
+            padding: 0.85rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+        }
+
+        .action-btn-share:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+        }
+
         /* Confetti */
         .confetti-container {
             position: fixed;
@@ -4010,6 +4031,9 @@ function renderFeedback(marking, question) {
     html += '<button class="action-btn action-btn-download" onclick="downloadFeedbackPDF()">';
     html += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
     html += 'Download Feedback PDF</button>';
+    html += '<button class="action-btn action-btn-share" onclick="shareFeedbackPDF()">';
+    html += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>';
+    html += 'Share Results</button>';
     html += '<button class="action-btn action-btn-primary" onclick="resetToSelection()">';
     html += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>';
     html += 'Try Another Question</button>';
@@ -4458,6 +4482,77 @@ function downloadFeedbackPDF() {
     doc.save(filename);
 }
 
+// ===== SHARE FEEDBACK PDF =====
+function shareFeedbackPDF() {
+    var question = lastQuestion;
+    var marking = lastMarking;
+
+    if (!question || !marking) {
+        alert('No feedback to share. Please complete a question first.');
+        return;
+    }
+
+    var filename = 'MyBizStudies_Feedback_' + (question.command_word || 'exam') + '_' + new Date().toISOString().split('T')[0] + '.pdf';
+    var scoreText = marking.marks_awarded + '/' + marking.total_marks;
+    var shareTitle = 'I scored ' + scoreText + ' on a ' + (question.command_word || 'exam') + ' question on MyBizStudies!';
+
+    try {
+        // Check if Web Share API with files is supported (mainly mobile)
+        var canShareFiles = false;
+        try {
+            canShareFiles = navigator.canShare && navigator.canShare({ files: [new File([''], 'test.pdf', { type: 'application/pdf' })] });
+        } catch (e) {}
+
+        if (canShareFiles) {
+            // Generate PDF blob by temporarily intercepting doc.save
+            var pdfBlob = generateFeedbackPDFBlob();
+            if (!pdfBlob) {
+                shareViaWhatsApp(shareTitle);
+                return;
+            }
+            var file = new File([pdfBlob], filename, { type: 'application/pdf' });
+
+            navigator.share({
+                title: shareTitle,
+                text: shareTitle + ' Try it at mybizstudies.com',
+                files: [file]
+            }).catch(function(err) {
+                if (err.name !== 'AbortError') {
+                    shareViaWhatsApp(shareTitle);
+                }
+            });
+        } else {
+            // Desktop fallback: share via WhatsApp Web
+            shareViaWhatsApp(shareTitle);
+        }
+    } catch (err) {
+        console.error('Share error:', err);
+        shareViaWhatsApp(shareTitle);
+    }
+}
+
+function shareViaWhatsApp(text) {
+    var url = 'https://wa.me/?text=' + encodeURIComponent(text + ' Try it at https://mybizstudies.com');
+    window.open(url, '_blank');
+}
+
+function generateFeedbackPDFBlob() {
+    var { jsPDF } = window.jspdf;
+    var capturedBlob = null;
+
+    var origSave = jsPDF.prototype.save;
+    jsPDF.prototype.save = function() {
+        capturedBlob = this.output('blob');
+    };
+
+    try {
+        downloadFeedbackPDF();
+    } finally {
+        jsPDF.prototype.save = origSave;
+    }
+
+    return capturedBlob;
+}
 
 // ===== LEVEL DESCRIPTORS =====
 var LEVEL_DESCRIPTORS = {
