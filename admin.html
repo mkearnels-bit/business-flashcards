@@ -1555,6 +1555,8 @@
                 const displayName = user.name || (user.email ? user.email.split('@')[0] : 'User');
                 const initial = (user.name || user.email || 'U')[0].toUpperCase();
                 const planBadge = user.plan === 'free' ? 'badge-gray' :
+                                  user.plan === 'pro' ? 'badge-success' :
+                                  user.plan === 'grandfathered' ? 'badge-info' :
                                   user.plan === 'yearly' ? 'badge-success' : 'badge-info';
                 const statusBadge = user.status === 'active' ? 'badge-success' :
                                     user.status === 'expired' ? 'badge-danger' : 'badge-warning';
@@ -1864,12 +1866,15 @@
             const mastered = progress ? progress.filter(p => p.status === 'mastered').length : 0;
 
             const planBadge = user.plan === 'free' ? 'badge-gray' :
+                              user.plan === 'pro' ? 'badge-success' :
+                              user.plan === 'grandfathered' ? 'badge-info' :
                               user.plan === 'yearly' ? 'badge-success' : 'badge-info';
             const statusBadge = user.status === 'active' ? 'badge-success' :
                                 user.status === 'expired' ? 'badge-danger' : 'badge-warning';
 
             const displayName = user.name || (user.email ? user.email.split('@')[0] : 'User');
             const initial = (user.name || user.email || 'U')[0].toUpperCase();
+            const currentPlan = user.plan || 'free';
 
             document.getElementById('userModalBody').innerHTML = `
                 <div style="text-align: center; margin-bottom: 1.5rem;">
@@ -1879,8 +1884,22 @@
                     <h3 style="margin-bottom: 0.25rem;">${displayName}</h3>
                     <p style="color: var(--gray-500);">${user.email}</p>
                     <div style="margin-top: 0.5rem;">
-                        <span class="badge ${planBadge}">${(user.plan || 'free').toUpperCase()}</span>
                         <span class="badge ${statusBadge}">${(user.status || 'active').toUpperCase()}</span>
+                    </div>
+                </div>
+
+                <div style="background: var(--gray-50); padding: 1.25rem; border-radius: 10px; margin-bottom: 1rem;">
+                    <div style="font-size: 0.8rem; color: var(--gray-500); margin-bottom: 0.5rem; font-weight: 600;">Manage Plan</div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <select id="userPlanSelect" style="flex: 1; padding: 0.6rem 0.75rem; border: 2px solid var(--gray-200); border-radius: 8px; font-size: 0.9rem; font-weight: 600; background: white; cursor: pointer;">
+                            <option value="free" ${currentPlan === 'free' ? 'selected' : ''}>Free</option>
+                            <option value="pro" ${currentPlan === 'pro' ? 'selected' : ''}>Pro</option>
+                            <option value="grandfathered" ${currentPlan === 'grandfathered' ? 'selected' : ''}>Grandfathered</option>
+                        </select>
+                        <button class="btn btn-primary btn-sm" onclick="changePlan('${user.user_id}', '${user.email}')" style="white-space: nowrap;">Update Plan</button>
+                    </div>
+                    <div style="font-size: 0.75rem; color: var(--gray-400); margin-top: 0.5rem;">
+                        Free = limited access &bull; Pro = full access &bull; Grandfathered = full access except exam practice
                     </div>
                 </div>
 
@@ -1915,6 +1934,33 @@
             `;
 
             document.getElementById('userModal').classList.add('active');
+        }
+
+        // Change user plan from admin modal
+        async function changePlan(userId, email) {
+            const newPlan = document.getElementById('userPlanSelect').value;
+            try {
+                const { error } = await supabaseClient
+                    .from('subscriptions')
+                    .update({ plan: newPlan })
+                    .eq('user_id', userId);
+
+                if (error) throw error;
+
+                // Update local data
+                const user = allUsers.find(u => u.user_id === userId);
+                if (user) user.plan = newPlan;
+
+                showToast(`Plan updated to ${newPlan.toUpperCase()} for ${email}`, 'success');
+
+                // Refresh the user table
+                renderUsers(allUsers);
+
+                // Close modal
+                document.getElementById('userModal').classList.remove('active');
+            } catch (err) {
+                showToast('Failed to update plan: ' + err.message, 'error');
+            }
         }
 
         // Load Progress Stats
