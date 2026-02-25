@@ -22,6 +22,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
     <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
 
@@ -774,6 +775,10 @@
                     <span class="nav-icon">👥</span>
                     Users
                 </div>
+                <div class="nav-item" data-page="exam-practice">
+                    <span class="nav-icon">📝</span>
+                    Exam Practice
+                </div>
                 <div class="nav-item" data-page="flashcards">
                     <span class="nav-icon">📚</span>
                     Flashcards
@@ -900,12 +905,48 @@
                     <h1 class="page-title">User Management</h1>
                     <p class="page-subtitle">Manage registered users and their access.</p>
 
-                    <!-- Exam Practice Usage Stats -->
-                    <div class="stats-grid" id="examUsageStats">
+                    <div class="filters-bar">
+                        <input type="text" class="search-input" id="userSearch" placeholder="Search by name or email...">
+                        <button class="btn btn-primary" id="exportUsersBtn">📥 Export Users</button>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-header">
+                            <span class="panel-title">All Users</span>
+                            <span class="badge badge-info" id="userCount">0 users</span>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Plan</th>
+                                    <th>Status</th>
+                                    <th>Signed Up</th>
+                                    <th>Cards Studied</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <tr>
+                                    <td colspan="7" class="loading"><div class="spinner"></div> Loading users...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Exam Practice Analytics Page -->
+                <section class="page-section" id="page-exam-practice">
+                    <h1 class="page-title">Exam Practice Analytics</h1>
+                    <p class="page-subtitle">Monitor AI exam practice usage, costs, and student activity.</p>
+
+                    <!-- Overall Stats -->
+                    <div class="stats-grid">
                         <div class="stat-card">
                             <div class="stat-card-header">
                                 <div>
-                                    <div class="stat-label">Total Attempts</div>
+                                    <div class="stat-label">Total Usage</div>
                                     <div class="stat-value" id="epTotalAttempts">—</div>
                                 </div>
                                 <div class="stat-icon purple">📝</div>
@@ -942,33 +983,68 @@
                             </div>
                             <div class="stat-change neutral" id="ep30DayActive">Loading...</div>
                         </div>
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div>
+                                    <div class="stat-label">Est. Cost (30d)</div>
+                                    <div class="stat-value" id="epEstCost30">—</div>
+                                </div>
+                                <div class="stat-icon amber">💰</div>
+                            </div>
+                            <div class="stat-change neutral" id="epEstCostTotal">Loading...</div>
+                        </div>
                     </div>
 
-                    <div class="filters-bar">
-                        <input type="text" class="search-input" id="userSearch" placeholder="Search by name or email...">
-                        <button class="btn btn-primary" id="exportUsersBtn">📥 Export Users</button>
+                    <!-- Usage Chart -->
+                    <div class="panel" style="margin-bottom: 1.5rem;">
+                        <div class="panel-header">
+                            <span class="panel-title">Daily Usage (Last 30 Days)</span>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button class="btn btn-ghost btn-sm ep-chart-range active" data-range="30">30 Days</button>
+                                <button class="btn btn-ghost btn-sm ep-chart-range" data-range="7">7 Days</button>
+                                <button class="btn btn-ghost btn-sm ep-chart-range" data-range="90">90 Days</button>
+                            </div>
+                        </div>
+                        <div class="panel-body" style="padding: 1.5rem;">
+                            <canvas id="epUsageChart" height="280"></canvas>
+                        </div>
                     </div>
 
+                    <!-- Alerts Panel -->
+                    <div class="panel" id="epAlertsPanel" style="margin-bottom: 1.5rem; display: none;">
+                        <div class="panel-header" style="background: #fef2f2; border-bottom-color: #fecaca;">
+                            <span class="panel-title" style="color: #dc2626;">⚠️ Usage Alerts</span>
+                        </div>
+                        <div class="panel-body" id="epAlertsBody" style="padding: 1rem;">
+                        </div>
+                    </div>
+
+                    <!-- Individual User Usage -->
                     <div class="panel">
                         <div class="panel-header">
-                            <span class="panel-title">All Users</span>
-                            <span class="badge badge-info" id="userCount">0 users</span>
+                            <span class="panel-title">Individual User Usage</span>
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <input type="text" class="search-input" id="epUserSearch" placeholder="Search users..." style="width: 250px; margin: 0;">
+                                <span class="badge badge-info" id="epUserCount">0 users</span>
+                            </div>
                         </div>
                         <table class="data-table">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Plan</th>
+                                    <th>User</th>
+                                    <th>Total</th>
+                                    <th>Marked</th>
+                                    <th>Avg Daily</th>
+                                    <th>Avg Score</th>
+                                    <th>Last 7d</th>
+                                    <th>Last 30d</th>
+                                    <th>Est. Cost</th>
                                     <th>Status</th>
-                                    <th>Signed Up</th>
-                                    <th>Cards Studied</th>
-                                    <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="usersTableBody">
+                            <tbody id="epUsersTableBody">
                                 <tr>
-                                    <td colspan="7" class="loading"><div class="spinner"></div> Loading users...</td>
+                                    <td colspan="9" class="loading"><div class="spinner"></div> Loading usage data...</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -1470,7 +1546,8 @@
                 document.getElementById(`page-${page}`).classList.add('active');
 
                 // Load page data
-                if (page === 'users') { loadUsers(); loadExamPracticeUsage(); }
+                if (page === 'users') loadUsers();
+                if (page === 'exam-practice') loadExamPracticePage();
                 if (page === 'progress') loadProgressStats();
                 if (page === 'blog') {
                     loadBlogPosts();
@@ -1625,27 +1702,29 @@
             `}).join('');
         }
 
-        // Load Exam Practice Usage Stats
-        async function loadExamPracticeUsage() {
+        // ===== EXAM PRACTICE ANALYTICS =====
+        const COST_PER_ATTEMPT = 0.035; // Estimated cost per attempt (generate + mark) using Sonnet
+        let epUsageChart = null;
+        let epAllUserStats = [];
+
+        async function loadExamPracticePage() {
+            await Promise.all([
+                loadExamPracticeOverview(),
+                loadExamPracticeChart(30),
+                loadExamPracticeUsers()
+            ]);
+        }
+
+        // Overall stats
+        async function loadExamPracticeOverview() {
             try {
                 const { data, error } = await supabaseClient.rpc('get_exam_practice_stats');
-
                 if (error) {
-                    console.warn('Exam practice stats RPC not available:', error.message);
-                    document.getElementById('epTotalAttempts').textContent = '—';
-                    document.getElementById('epTotalMarked').textContent = 'RPC function not set up';
-                    document.getElementById('epAvgDaily').textContent = '—';
-                    document.getElementById('epAvgScore').textContent = 'Run SQL setup in Supabase';
-                    document.getElementById('epLast7').textContent = '—';
-                    document.getElementById('ep7DayTrend').textContent = '';
-                    document.getElementById('epLast30').textContent = '—';
-                    document.getElementById('ep30DayActive').textContent = '';
+                    console.warn('Exam practice stats RPC error:', error.message);
                     return;
                 }
-
                 if (data && data.length > 0) {
                     const s = data[0];
-
                     document.getElementById('epTotalAttempts').textContent = s.total_attempts || '0';
                     const markedPct = s.total_attempts > 0 ? Math.round((s.total_marked / s.total_attempts) * 100) : 0;
                     document.getElementById('epTotalMarked').textContent = `${s.total_marked || 0} marked (${markedPct}%)`;
@@ -1659,20 +1738,193 @@
 
                     document.getElementById('epLast30').textContent = s.last_30_days || '0';
                     document.getElementById('ep30DayActive').textContent = `${s.unique_users_30d || 0} active users`;
+
+                    // Cost estimates
+                    const cost30 = (s.last_30_days || 0) * COST_PER_ATTEMPT;
+                    const costTotal = (s.total_attempts || 0) * COST_PER_ATTEMPT;
+                    document.getElementById('epEstCost30').textContent = '$' + cost30.toFixed(2);
+                    document.getElementById('epEstCostTotal').textContent = '$' + costTotal.toFixed(2) + ' total est.';
                 }
             } catch (err) {
-                console.error('Error loading exam practice stats:', err);
+                console.error('Error loading exam practice overview:', err);
             }
         }
 
-        // Load per-user exam practice stats for modal
+        // Daily usage chart
+        async function loadExamPracticeChart(days) {
+            try {
+                const { data, error } = await supabaseClient.rpc('get_exam_practice_daily', { p_days: days });
+                if (error) {
+                    console.warn('Daily chart RPC error:', error.message);
+                    return;
+                }
+
+                const labels = (data || []).map(d => {
+                    const date = new Date(d.day);
+                    return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+                });
+                const attempts = (data || []).map(d => d.attempts);
+                const marked = (data || []).map(d => d.marked);
+
+                const ctx = document.getElementById('epUsageChart').getContext('2d');
+
+                if (epUsageChart) epUsageChart.destroy();
+
+                epUsageChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: 'Questions Generated',
+                                data: attempts,
+                                backgroundColor: 'rgba(30, 58, 95, 0.7)',
+                                borderRadius: 4
+                            },
+                            {
+                                label: 'Marked',
+                                data: marked,
+                                backgroundColor: 'rgba(245, 158, 11, 0.7)',
+                                borderRadius: 4
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'top' },
+                            tooltip: {
+                                callbacks: {
+                                    afterBody: function(context) {
+                                        const idx = context[0].dataIndex;
+                                        const cost = attempts[idx] * COST_PER_ATTEMPT;
+                                        return 'Est. cost: $' + cost.toFixed(2);
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { stepSize: 1 }
+                            }
+                        }
+                    }
+                });
+            } catch (err) {
+                console.error('Error loading chart:', err);
+            }
+        }
+
+        // Chart range buttons
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('ep-chart-range')) {
+                document.querySelectorAll('.ep-chart-range').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                const range = parseInt(e.target.dataset.range);
+                loadExamPracticeChart(range);
+
+                // Update chart title
+                const titles = { 7: '7 Days', 30: '30 Days', 90: '90 Days' };
+                e.target.closest('.panel').querySelector('.panel-title').textContent = 'Daily Usage (Last ' + (titles[range] || range + ' Days') + ')';
+            }
+        });
+
+        // Individual user usage table
+        async function loadExamPracticeUsers() {
+            try {
+                const { data, error } = await supabaseClient.rpc('get_exam_practice_per_user');
+                if (error) {
+                    console.warn('Per-user RPC error:', error.message);
+                    return;
+                }
+
+                epAllUserStats = data || [];
+                renderExamPracticeUsers(epAllUserStats);
+            } catch (err) {
+                console.error('Error loading per-user exam stats:', err);
+            }
+        }
+
+        function renderExamPracticeUsers(users) {
+            const tbody = document.getElementById('epUsersTableBody');
+            document.getElementById('epUserCount').textContent = `${users.length} users`;
+
+            // Check for alerts
+            const alertUsers = users.filter(u => parseFloat(u.avg_daily || 0) >= 10);
+            const alertsPanel = document.getElementById('epAlertsPanel');
+            const alertsBody = document.getElementById('epAlertsBody');
+
+            if (alertUsers.length > 0) {
+                alertsPanel.style.display = 'block';
+                alertsBody.innerHTML = alertUsers.map(u => `
+                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem; background: #fff5f5; border-radius: 8px; margin-bottom: 0.5rem; border-left: 3px solid #ef4444;">
+                        <div>
+                            <span style="font-weight: 600;">${u.user_name || u.user_email || 'Unknown'}</span>
+                            <span style="color: var(--gray-500); font-size: 0.85rem; margin-left: 0.5rem;">${u.user_email || ''}</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <span style="font-weight: 700; color: #dc2626;">${parseFloat(u.avg_daily).toFixed(1)} avg/day</span>
+                            <span class="badge badge-danger">HIGH USAGE</span>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                alertsPanel.style.display = 'none';
+            }
+
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" class="empty-state">No exam practice data yet</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = users.map(u => {
+                const avgDaily = parseFloat(u.avg_daily || 0).toFixed(1);
+                const avgScore = u.avg_score ? parseFloat(u.avg_score).toFixed(0) + '%' : '—';
+                const estCost = '$' + ((u.total_attempts || 0) * COST_PER_ATTEMPT).toFixed(2);
+                const isHighUsage = parseFloat(avgDaily) >= 10;
+                const displayName = u.user_name || (u.user_email ? u.user_email.split('@')[0] : 'User');
+                const initial = (u.user_name || u.user_email || 'U')[0].toUpperCase();
+
+                return `
+                <tr${isHighUsage ? ' style="background: #fff5f5;"' : ''}>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <div class="user-avatar">${initial}</div>
+                            <div>
+                                <div style="font-weight: 600;">${displayName}</div>
+                                <div style="font-size: 0.8rem; color: var(--gray-400);">${u.user_email || ''}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td><strong>${u.total_attempts || 0}</strong></td>
+                    <td>${u.total_marked || 0}</td>
+                    <td${isHighUsage ? ' style="color: #dc2626; font-weight: 700;"' : ''}>${avgDaily}</td>
+                    <td>${avgScore}</td>
+                    <td>${u.last_7_days || 0}</td>
+                    <td>${u.last_30_days || 0}</td>
+                    <td>${estCost}</td>
+                    <td>${isHighUsage ? '<span class="badge badge-danger">HIGH</span>' : '<span class="badge badge-success">OK</span>'}</td>
+                </tr>`;
+            }).join('');
+        }
+
+        // Search within exam practice users
+        document.getElementById('epUserSearch')?.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const filtered = epAllUserStats.filter(u =>
+                (u.user_email && u.user_email.toLowerCase().includes(query)) ||
+                (u.user_name && u.user_name.toLowerCase().includes(query))
+            );
+            renderExamPracticeUsers(filtered);
+        });
+
+        // Load per-user exam practice stats for user modal
         async function loadUserExamStats(userId) {
             try {
                 const { data, error } = await supabaseClient.rpc('get_user_exam_stats', { p_user_id: userId });
-
-                if (error || !data || data.length === 0) {
-                    return null;
-                }
+                if (error || !data || data.length === 0) return null;
                 return data[0];
             } catch (err) {
                 console.error('Error loading user exam stats:', err);
@@ -2044,7 +2296,7 @@
             const container = document.getElementById('userExamStatsContainer');
             if (examStats && examStats.total_attempts > 0) {
                 const avgScoreDisplay = examStats.avg_score ? parseFloat(examStats.avg_score).toFixed(0) + '%' : '—';
-                const lastAttempt = examStats.last_attempt ? formatDate(examStats.last_attempt) : '—';
+                const avgDailyDisplay = examStats.avg_daily ? parseFloat(examStats.avg_daily).toFixed(1) : '0.0';
                 container.innerHTML = `
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
                         <div style="text-align: center; padding: 0.75rem; background: #ede9fe; border-radius: 8px;">
@@ -2055,13 +2307,13 @@
                             <div style="font-size: 1.25rem; font-weight: 800; color: #1e40af;">${avgScoreDisplay}</div>
                             <div style="font-size: 0.75rem; color: #2563eb;">Avg Score</div>
                         </div>
+                        <div style="text-align: center; padding: 0.75rem; background: #fef3c7; border-radius: 8px;">
+                            <div style="font-size: 1.25rem; font-weight: 800; color: #92400e;">${avgDailyDisplay}</div>
+                            <div style="font-size: 0.75rem; color: #d97706;">Daily Avg</div>
+                        </div>
                         <div style="text-align: center; padding: 0.75rem; background: #d1fae5; border-radius: 8px;">
                             <div style="font-size: 1.25rem; font-weight: 800; color: #065f46;">${examStats.total_marked || 0}</div>
                             <div style="font-size: 0.75rem; color: #059669;">Marked</div>
-                        </div>
-                        <div style="text-align: center; padding: 0.75rem; background: #fef3c7; border-radius: 8px;">
-                            <div style="font-size: 1.25rem; font-weight: 800; color: #92400e;">${lastAttempt}</div>
-                            <div style="font-size: 0.75rem; color: #d97706;">Last Attempt</div>
                         </div>
                     </div>
                 `;
