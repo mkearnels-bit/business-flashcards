@@ -900,6 +900,50 @@
                     <h1 class="page-title">User Management</h1>
                     <p class="page-subtitle">Manage registered users and their access.</p>
 
+                    <!-- Exam Practice Usage Stats -->
+                    <div class="stats-grid" id="examUsageStats">
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div>
+                                    <div class="stat-label">Total Attempts</div>
+                                    <div class="stat-value" id="epTotalAttempts">—</div>
+                                </div>
+                                <div class="stat-icon purple">📝</div>
+                            </div>
+                            <div class="stat-change neutral" id="epTotalMarked">Loading...</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div>
+                                    <div class="stat-label">Avg Daily</div>
+                                    <div class="stat-value" id="epAvgDaily">—</div>
+                                </div>
+                                <div class="stat-icon blue">📊</div>
+                            </div>
+                            <div class="stat-change neutral" id="epAvgScore">Loading...</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div>
+                                    <div class="stat-label">Last 7 Days</div>
+                                    <div class="stat-value" id="epLast7">—</div>
+                                </div>
+                                <div class="stat-icon green">📈</div>
+                            </div>
+                            <div class="stat-change neutral" id="ep7DayTrend">Loading...</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div>
+                                    <div class="stat-label">Last 30 Days</div>
+                                    <div class="stat-value" id="epLast30">—</div>
+                                </div>
+                                <div class="stat-icon amber">📅</div>
+                            </div>
+                            <div class="stat-change neutral" id="ep30DayActive">Loading...</div>
+                        </div>
+                    </div>
+
                     <div class="filters-bar">
                         <input type="text" class="search-input" id="userSearch" placeholder="Search by name or email...">
                         <button class="btn btn-primary" id="exportUsersBtn">📥 Export Users</button>
@@ -1426,7 +1470,7 @@
                 document.getElementById(`page-${page}`).classList.add('active');
 
                 // Load page data
-                if (page === 'users') loadUsers();
+                if (page === 'users') { loadUsers(); loadExamPracticeUsage(); }
                 if (page === 'progress') loadProgressStats();
                 if (page === 'blog') {
                     loadBlogPosts();
@@ -1579,6 +1623,61 @@
                     </td>
                 </tr>
             `}).join('');
+        }
+
+        // Load Exam Practice Usage Stats
+        async function loadExamPracticeUsage() {
+            try {
+                const { data, error } = await supabaseClient.rpc('get_exam_practice_stats');
+
+                if (error) {
+                    console.warn('Exam practice stats RPC not available:', error.message);
+                    document.getElementById('epTotalAttempts').textContent = '—';
+                    document.getElementById('epTotalMarked').textContent = 'RPC function not set up';
+                    document.getElementById('epAvgDaily').textContent = '—';
+                    document.getElementById('epAvgScore').textContent = 'Run SQL setup in Supabase';
+                    document.getElementById('epLast7').textContent = '—';
+                    document.getElementById('ep7DayTrend').textContent = '';
+                    document.getElementById('epLast30').textContent = '—';
+                    document.getElementById('ep30DayActive').textContent = '';
+                    return;
+                }
+
+                if (data && data.length > 0) {
+                    const s = data[0];
+
+                    document.getElementById('epTotalAttempts').textContent = s.total_attempts || '0';
+                    const markedPct = s.total_attempts > 0 ? Math.round((s.total_marked / s.total_attempts) * 100) : 0;
+                    document.getElementById('epTotalMarked').textContent = `${s.total_marked || 0} marked (${markedPct}%)`;
+
+                    document.getElementById('epAvgDaily').textContent = parseFloat(s.avg_daily || 0).toFixed(1);
+                    const avgScore = s.avg_score ? parseFloat(s.avg_score).toFixed(0) + '% avg score' : 'No scores yet';
+                    document.getElementById('epAvgScore').textContent = avgScore;
+
+                    document.getElementById('epLast7').textContent = s.last_7_days || '0';
+                    document.getElementById('ep7DayTrend').textContent = `${s.unique_users_7d || 0} active users`;
+
+                    document.getElementById('epLast30').textContent = s.last_30_days || '0';
+                    document.getElementById('ep30DayActive').textContent = `${s.unique_users_30d || 0} active users`;
+                }
+            } catch (err) {
+                console.error('Error loading exam practice stats:', err);
+            }
+        }
+
+        // Load per-user exam practice stats for modal
+        async function loadUserExamStats(userId) {
+            try {
+                const { data, error } = await supabaseClient.rpc('get_user_exam_stats', { p_user_id: userId });
+
+                if (error || !data || data.length === 0) {
+                    return null;
+                }
+                return data[0];
+            } catch (err) {
+                console.error('Error loading user exam stats:', err);
+                return null;
+            }
         }
 
         // User search (by name or email)
@@ -1931,9 +2030,46 @@
                         <div style="font-size: 0.8rem; color: #065f46;">Mastered</div>
                     </div>
                 </div>
+
+                <h4 style="margin: 1.25rem 0 0.75rem;">Exam Practice</h4>
+                <div id="userExamStatsContainer" style="background: var(--gray-50); padding: 1rem; border-radius: 10px;">
+                    <div style="color: var(--gray-400); font-size: 0.85rem; text-align: center;">Loading exam practice data...</div>
+                </div>
             `;
 
             document.getElementById('userModal').classList.add('active');
+
+            // Load exam practice stats for this user asynchronously
+            const examStats = await loadUserExamStats(userId);
+            const container = document.getElementById('userExamStatsContainer');
+            if (examStats && examStats.total_attempts > 0) {
+                const avgScoreDisplay = examStats.avg_score ? parseFloat(examStats.avg_score).toFixed(0) + '%' : '—';
+                const lastAttempt = examStats.last_attempt ? formatDate(examStats.last_attempt) : '—';
+                container.innerHTML = `
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                        <div style="text-align: center; padding: 0.75rem; background: #ede9fe; border-radius: 8px;">
+                            <div style="font-size: 1.25rem; font-weight: 800; color: #5b21b6;">${examStats.total_attempts}</div>
+                            <div style="font-size: 0.75rem; color: #7c3aed;">Total Attempts</div>
+                        </div>
+                        <div style="text-align: center; padding: 0.75rem; background: #dbeafe; border-radius: 8px;">
+                            <div style="font-size: 1.25rem; font-weight: 800; color: #1e40af;">${avgScoreDisplay}</div>
+                            <div style="font-size: 0.75rem; color: #2563eb;">Avg Score</div>
+                        </div>
+                        <div style="text-align: center; padding: 0.75rem; background: #d1fae5; border-radius: 8px;">
+                            <div style="font-size: 1.25rem; font-weight: 800; color: #065f46;">${examStats.total_marked || 0}</div>
+                            <div style="font-size: 0.75rem; color: #059669;">Marked</div>
+                        </div>
+                        <div style="text-align: center; padding: 0.75rem; background: #fef3c7; border-radius: 8px;">
+                            <div style="font-size: 1.25rem; font-weight: 800; color: #92400e;">${lastAttempt}</div>
+                            <div style="font-size: 0.75rem; color: #d97706;">Last Attempt</div>
+                        </div>
+                    </div>
+                `;
+            } else if (examStats) {
+                container.innerHTML = '<div style="color: var(--gray-400); font-size: 0.85rem; text-align: center;">No exam practice attempts yet</div>';
+            } else {
+                container.innerHTML = '<div style="color: var(--gray-400); font-size: 0.85rem; text-align: center;">Exam stats unavailable (RPC not set up)</div>';
+            }
         }
 
         // Change user plan from admin modal
