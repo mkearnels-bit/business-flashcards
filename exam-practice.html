@@ -4146,12 +4146,14 @@ function downloadFeedbackPDF() {
     }
     
     // Helper: draw wrapped text and return new y
-    function drawWrappedText(text, x, startY, maxWidth, lineHeight, fontSize, color) {
-        doc.setFontSize(fontSize);
-        doc.setTextColor(color[0], color[1], color[2]);
+    function drawWrappedText(text, x, startY, maxWidth, lineHeight, fontSize, color, fontStyle) {
         var lines = doc.splitTextToSize(text, maxWidth);
         for (var i = 0; i < lines.length; i++) {
             checkPage(lineHeight);
+            // Re-apply font settings on every line (footer drawing resets them on page breaks)
+            doc.setFontSize(fontSize);
+            doc.setTextColor(color[0], color[1], color[2]);
+            if (fontStyle) doc.setFont('helvetica', fontStyle);
             doc.text(lines[i], x, y);
             y += lineHeight;
         }
@@ -4376,14 +4378,12 @@ function downloadFeedbackPDF() {
     
     // Context
     if (question.question_context) {
-        doc.setFont('helvetica', 'italic');
-        y = drawWrappedText(question.question_context, margin, y, contentWidth, 5, 9, grayText);
+        y = drawWrappedText(question.question_context, margin, y, contentWidth, 5, 9, grayText, 'italic');
         y += 3;
     }
-    
+
     // Question text
-    doc.setFont('helvetica', 'bold');
-    y = drawWrappedText(question.question_text || '', margin, y, contentWidth, 5.5, 10, primaryDark);
+    y = drawWrappedText(question.question_text || '', margin, y, contentWidth, 5.5, 10, primaryDark, 'bold');
     y += 6;
     
     // ========== STUDENT ANSWER ==========
@@ -4397,14 +4397,13 @@ function downloadFeedbackPDF() {
     doc.text('Your Answer', margin + 5, y + 5.5);
     y += 12;
     
-    doc.setFont('helvetica', 'normal');
-    y = drawWrappedText(answer || '', margin, y, contentWidth, 4.5, 9, grayText);
+    y = drawWrappedText(answer || '', margin, y, contentWidth, 4.5, 9, grayText, 'normal');
     y += 6;
-    
+
     // ========== EXAMINER FEEDBACK ==========
     if (marking.feedback) {
         checkPage(30);
-        
+
         doc.setFillColor(accent[0], accent[1], accent[2]);
         doc.roundedRect(margin, y, contentWidth, 8, 2, 2, 'F');
         doc.setFontSize(10);
@@ -4412,9 +4411,8 @@ function downloadFeedbackPDF() {
         doc.setFont('helvetica', 'bold');
         doc.text('Examiner Feedback', margin + 5, y + 5.5);
         y += 12;
-        
-        doc.setFont('helvetica', 'normal');
-        y = drawWrappedText(marking.feedback, margin, y, contentWidth, 4.5, 9, grayText);
+
+        y = drawWrappedText(marking.feedback, margin, y, contentWidth, 4.5, 9, grayText, 'normal');
         y += 6;
     }
     
@@ -4440,11 +4438,12 @@ function downloadFeedbackPDF() {
             // Green bullet
             doc.setFillColor(green[0], green[1], green[2]);
             doc.circle(margin + 3, y - 1.5, 1.5, 'F');
-            doc.setFont('helvetica', 'normal');
             var lines = doc.splitTextToSize(item.trim().replace(/\.$/, ''), contentWidth - 10);
-            doc.setFontSize(9);
-            doc.setTextColor(grayText[0], grayText[1], grayText[2]);
             for (var li = 0; li < lines.length; li++) {
+                checkPage(4.5);
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(9);
+                doc.setTextColor(grayText[0], grayText[1], grayText[2]);
                 doc.text(lines[li], margin + 8, y);
                 y += 4.5;
             }
@@ -4473,11 +4472,12 @@ function downloadFeedbackPDF() {
             checkPage(10);
             doc.setFillColor(accent[0], accent[1], accent[2]);
             doc.circle(margin + 3, y - 1.5, 1.5, 'F');
-            doc.setFont('helvetica', 'normal');
             var lines = doc.splitTextToSize(item.trim().replace(/\.$/, ''), contentWidth - 10);
-            doc.setFontSize(9);
-            doc.setTextColor(grayText[0], grayText[1], grayText[2]);
             for (var li = 0; li < lines.length; li++) {
+                checkPage(4.5);
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(9);
+                doc.setTextColor(grayText[0], grayText[1], grayText[2]);
                 doc.text(lines[li], margin + 8, y);
                 y += 4.5;
             }
@@ -4510,11 +4510,12 @@ function downloadFeedbackPDF() {
         doc.setFillColor(blue[0], blue[1], blue[2]);
         doc.rect(margin, y - 3, 3, improvedHeight, 'F');
         
-        doc.setFont('helvetica', 'italic');
-        doc.setFontSize(9);
-        doc.setTextColor(grayText[0], grayText[1], grayText[2]);
         y += 2;
         for (var li = 0; li < improvedLines.length; li++) {
+            checkPage(4.5);
+            doc.setFont('helvetica', 'italic');
+            doc.setFontSize(9);
+            doc.setTextColor(grayText[0], grayText[1], grayText[2]);
             doc.text(improvedLines[li], margin + 8, y);
             y += 4.5;
         }
