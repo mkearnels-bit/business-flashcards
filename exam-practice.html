@@ -4421,7 +4421,7 @@ function downloadFeedbackPDF() {
     // ========== WHAT WENT WELL ==========
     if (marking.what_went_well) {
         checkPage(25);
-        
+
         doc.setFillColor(green[0], green[1], green[2]);
         doc.roundedRect(margin, y, contentWidth, 8, 2, 2, 'F');
         doc.setFontSize(10);
@@ -4429,10 +4429,11 @@ function downloadFeedbackPDF() {
         doc.setFont('helvetica', 'bold');
         doc.text('What Went Well', margin + 5, y + 5.5);
         y += 12;
-        
-        // Parse items
-        var wwwItems = marking.what_went_well.split(/(?:\d+\.\s*|\n\s*[-*]\s*|\n\s*\d+\)\s*)/).filter(function(s) { return s.trim().length > 0; });
-        if (wwwItems.length <= 1) wwwItems = [marking.what_went_well];
+
+        // Parse items (ensure string)
+        var wwwText = typeof marking.what_went_well === 'string' ? marking.what_went_well : String(marking.what_went_well || '');
+        var wwwItems = wwwText.split(/(?:\d+\.\s*|\n\s*[-*]\s*|\n\s*\d+\)\s*)/).filter(function(s) { return s.trim().length > 0; });
+        if (wwwItems.length <= 1) wwwItems = [wwwText];
         
         wwwItems.slice(0, 3).forEach(function(item) {
             checkPage(10);
@@ -4464,8 +4465,9 @@ function downloadFeedbackPDF() {
         doc.text('Areas for Improvement', margin + 5, y + 5.5);
         y += 12;
         
-        var ebiItems = marking.areas_for_improvement.split(/(?:\d+\.\s*|\n\s*[-*]\s*|\n\s*\d+\)\s*)/).filter(function(s) { return s.trim().length > 0; });
-        if (ebiItems.length <= 1) ebiItems = [marking.areas_for_improvement];
+        var ebiText = typeof marking.areas_for_improvement === 'string' ? marking.areas_for_improvement : String(marking.areas_for_improvement || '');
+        var ebiItems = ebiText.split(/(?:\d+\.\s*|\n\s*[-*]\s*|\n\s*\d+\)\s*)/).filter(function(s) { return s.trim().length > 0; });
+        if (ebiItems.length <= 1) ebiItems = [ebiText];
         
         ebiItems.slice(0, 3).forEach(function(item) {
             checkPage(10);
@@ -4679,6 +4681,8 @@ function renderLevelDescriptors(totalMarks, achievedLevel, achievedMarks) {
 }
 
 function renderFeedbackList(text) {
+    // Ensure text is a string
+    if (!text || typeof text !== 'string') text = String(text || '');
     // Split by numbered items or bullet points or sentences
     var items = text.split(/(?:\d+\.\s*|\n\s*[-*]\s*|\n\s*\d+\)\s*)/).filter(function(s) { return s.trim().length > 0; });
     if (items.length <= 1) {
