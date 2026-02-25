@@ -4493,8 +4493,12 @@ function shareFeedbackPDF() {
     }
 
     var filename = 'MyBizStudies_Feedback_' + (question.command_word || 'exam') + '_' + new Date().toISOString().split('T')[0] + '.pdf';
-    var scoreText = marking.marks_awarded + '/' + marking.total_marks;
+    var totalMarks = marking.total_marks || question.marks;
+    var scoreText = marking.marks + '/' + totalMarks;
     var shareTitle = 'I scored ' + scoreText + ' on a ' + (question.command_word || 'exam') + ' question on MyBizStudies!';
+
+    var shareText = shareTitle + ' Try it at mybizstudies.com';
+    var shareUrl = 'https://mybizstudies.com';
 
     try {
         // Check if Web Share API with files is supported (mainly mobile)
@@ -4504,35 +4508,53 @@ function shareFeedbackPDF() {
         } catch (e) {}
 
         if (canShareFiles) {
-            // Generate PDF blob by temporarily intercepting doc.save
+            // Best case: share the actual PDF file via native share sheet
             var pdfBlob = generateFeedbackPDFBlob();
-            if (!pdfBlob) {
-                shareViaWhatsApp(shareTitle);
-                return;
+            if (pdfBlob) {
+                var file = new File([pdfBlob], filename, { type: 'application/pdf' });
+                navigator.share({
+                    title: shareTitle,
+                    text: shareText,
+                    url: shareUrl,
+                    files: [file]
+                }).catch(function(err) {
+                    if (err.name !== 'AbortError') {
+                        nativeShareText(shareTitle, shareText, shareUrl);
+                    }
+                });
+            } else {
+                nativeShareText(shareTitle, shareText, shareUrl);
             }
-            var file = new File([pdfBlob], filename, { type: 'application/pdf' });
-
-            navigator.share({
-                title: shareTitle,
-                text: shareTitle + ' Try it at mybizstudies.com',
-                files: [file]
-            }).catch(function(err) {
-                if (err.name !== 'AbortError') {
-                    shareViaWhatsApp(shareTitle);
-                }
-            });
         } else {
-            // Desktop fallback: share via WhatsApp Web
-            shareViaWhatsApp(shareTitle);
+            // No file sharing - try native share sheet with text only
+            nativeShareText(shareTitle, shareText, shareUrl);
         }
     } catch (err) {
         console.error('Share error:', err);
-        shareViaWhatsApp(shareTitle);
+        nativeShareText(shareTitle, shareText, shareUrl);
+    }
+}
+
+function nativeShareText(title, text, url) {
+    // Use native share sheet if available (works on most phones and some desktops)
+    if (navigator.share) {
+        navigator.share({
+            title: title,
+            text: text,
+            url: url
+        }).catch(function(err) {
+            if (err.name !== 'AbortError') {
+                shareViaWhatsApp(text);
+            }
+        });
+    } else {
+        // Absolute last resort for old browsers: WhatsApp direct link
+        shareViaWhatsApp(text);
     }
 }
 
 function shareViaWhatsApp(text) {
-    var url = 'https://wa.me/?text=' + encodeURIComponent(text + ' Try it at https://mybizstudies.com');
+    var url = 'https://wa.me/?text=' + encodeURIComponent(text);
     window.open(url, '_blank');
 }
 
