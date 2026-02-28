@@ -2116,12 +2116,14 @@
         function submitTest() {
             showDialog('Submit Test', 'Are you sure you want to submit your test? You cannot make changes after submission.', function() {
                 var answers = [];
+                var studentAnswerTexts = [];
                 document.querySelectorAll('.answer-textarea').forEach(function(textarea) {
                     answers.push({
                         question_id: textarea.dataset.questionId,
                         student_answer: textarea.value,
                         time_taken_seconds: Math.floor(totalSeconds / paper.questions.length)
                     });
+                    studentAnswerTexts.push(textarea.value);
                 });
 
                 clearInterval(timerInterval);
@@ -2156,10 +2158,31 @@
                     })
                     .then(function(response) { return response.json(); })
                     .then(function(data) {
-                        if (data.success && data.results) {
-                            showFeedback(data.results);
+                        if (data.success && data.test_summary) {
+                            var mappedResults = {
+                                total_marks: data.test_summary.total_marks,
+                                total_possible: data.test_summary.total_available,
+                                ao_breakdown: data.test_summary.ao_totals,
+                                question_results: (data.question_results || []).map(function(qr, idx) {
+                                    return {
+                                        question_display: qr.question_display || ('Q' + (idx + 1)),
+                                        marks_awarded: qr.marks || 0,
+                                        total_marks: qr.total_marks || 0,
+                                        feedback: qr.feedback || '',
+                                        what_went_well: qr.what_went_well || '',
+                                        areas_for_improvement: qr.areas_for_improvement || '',
+                                        improved_paragraph: qr.improved_paragraph || '',
+                                        student_answer: studentAnswerTexts[idx] || ''
+                                    };
+                                }),
+                                strengths: data.strengths || [],
+                                areas_for_development: data.development_areas || [],
+                                overall_feedback: data.overall_feedback || '',
+                                time_management_feedback: data.time_management_feedback || ''
+                            };
+                            showFeedback(mappedResults);
                         } else {
-                            showError('Failed to mark test. Please try again.');
+                            showError('Failed to mark test: ' + (data.error || 'Unknown error'));
                             showPhase('exam');
                         }
                     })
