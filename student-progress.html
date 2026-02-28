@@ -3,294 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
     <title>Student Progress | MyBizStudies</title>
+    <meta name="description" content="Track your A-Level Business Studies progress with detailed analytics, performance graphs, and personalized insights.">
+    <link rel="canonical" href="https://mybizstudies.com/student-progress.html">
+    <meta property="og:title" content="Student Progress | MyBizStudies">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mybizstudies.com/student-progress.html">
+    <meta property="og:image" content="https://mybizstudies.com/og-image.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
     <style>
-/* ==================== SITE NAVBAR ==================== */
-.site-navbar {
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid #f1f5f9;
-    padding: 0.75rem 2rem;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-}
-.site-navbar-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-.site-navbar-logo {
-    height: 55px;
-    width: auto;
-}
-.site-nav-buttons {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-.site-nav-link {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #334155;
-    text-decoration: none;
-    border-radius: 8px;
-    transition: all 0.2s;
-}
-.site-nav-link:hover {
-    color: #1e3a5f;
-    background: #f1f5f9;
-}
-.site-nav-link.active {
-    color: #e67e22;
-    font-weight: 600;
-}
-.site-nav-btn {
-    padding: 0.5rem 1.25rem;
-    font-size: 0.9rem;
-    font-weight: 600;
-    border-radius: 8px;
-    text-decoration: none;
-    cursor: pointer;
-    transition: all 0.2s;
-    border: none;
-    font-family: inherit;
-}
-.site-nav-btn-ghost {
-    color: #1e3a5f;
-    background: transparent;
-    border: 1px solid #cbd5e1;
-}
-.site-nav-btn-ghost:hover {
-    background: #f1f5f9;
-    border-color: #1e3a5f;
-}
-.site-hamburger {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 44px;
-    height: 44px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    z-index: 1100;
-    position: relative;
-}
-.site-hamburger span {
-    display: block;
-    width: 22px;
-    height: 2px;
-    background: #1e3a5f;
-    border-radius: 2px;
-    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    position: absolute;
-}
-.site-hamburger span:nth-child(1) { transform: translateY(-7px); }
-.site-hamburger span:nth-child(2) { opacity: 1; }
-.site-hamburger span:nth-child(3) { transform: translateY(7px); }
-.site-hamburger.active span:nth-child(1) { transform: rotate(45deg); }
-.site-hamburger.active span:nth-child(2) { opacity: 0; }
-.site-hamburger.active span:nth-child(3) { transform: rotate(-45deg); }
-
-/* Mobile overlay */
-.site-mobile-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(15, 23, 42, 0.4);
-    backdrop-filter: blur(4px);
-    z-index: 1040;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-}
-.site-mobile-overlay.active {
-    display: block;
-    opacity: 1;
-    pointer-events: auto;
-}
-
-/* Mobile slide-out menu */
-.site-mobile-menu {
-    display: none;
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 280px;
-    height: 100%;
-    background: #ffffff;
-    z-index: 1050;
-    transform: translateX(100%);
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
-    padding: 5.5rem 1.5rem 2rem;
-}
-.site-mobile-menu.active {
-    display: block;
-    transform: translateX(0);
-}
-.site-mobile-links {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-}
-.site-mobile-menu a,
-.site-mobile-menu button {
-    display: flex;
-    align-items: center;
-    gap: 0.875rem;
-    padding: 0.875rem 1rem;
-    border-radius: 12px;
-    text-decoration: none;
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: #334155;
-    transition: all 0.2s ease;
-    border: none;
-    background: none;
-    cursor: pointer;
-    font-family: inherit;
-    width: 100%;
-}
-.site-mobile-menu a:hover,
-.site-mobile-menu button:hover {
-    background: #f1f5f9;
-    color: #1e3a5f;
-}
-.site-mobile-menu a.active {
-    background: #f1f5f9;
-    color: #1e3a5f;
-}
-.site-menu-icon {
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 10px;
-    background: #f1f5f9;
-    flex-shrink: 0;
-}
-.site-menu-icon svg {
-    width: 18px;
-    height: 18px;
-    stroke: #64748b;
-}
-.site-mobile-menu a.active .site-menu-icon {
-    background: #1e3a5f;
-}
-.site-mobile-menu a.active .site-menu-icon svg {
-    stroke: white;
-}
-.site-mobile-divider {
-    height: 1px;
-    background: #f1f5f9;
-    margin: 0.5rem 0;
-}
-.site-mobile-logout {
-    color: #e74c3c !important;
-}
-.site-mobile-logout .site-menu-icon {
-    background: rgba(231, 76, 60, 0.08);
-}
-.site-mobile-logout .site-menu-icon svg {
-    stroke: #e74c3c;
-}
-
-@media (max-width: 768px) {
-    .site-hamburger {
-        display: flex;
-    }
-    .site-nav-buttons {
-        display: none;
-    }
-    .site-navbar {
-        padding: 0.5rem 1rem;
-    }
-    .site-navbar-content {
-        padding: 0;
-    }
-    .site-navbar-logo {
-        height: 45px;
-    }
-}
-
-/* Profile Avatar Dropdown */
-.profile-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #e67e22, #f39c12);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: 700;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    border: 2px solid #f1f5f9;
-}
-.profile-avatar:hover {
-    box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
-    transform: scale(1.05);
-}
-.profile-dropdown {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-    z-index: 1100;
-    min-width: 200px;
-    display: none;
-    margin-top: 0.5rem;
-    overflow: hidden;
-}
-.profile-dropdown.active { display: block; }
-.profile-dropdown a,
-.profile-dropdown button {
-    display: block;
-    width: 100%;
-    padding: 0.75rem 1rem;
-    text-align: left;
-    border: none;
-    background: none;
-    color: #334155;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.2s;
-    text-decoration: none;
-}
-.profile-dropdown a:hover,
-.profile-dropdown button:hover {
-    background: #f1f5f9;
-    color: #1e3a5f;
-}
-.profile-dropdown button:last-child {
-    color: #dc2626;
-    border-top: 1px solid #f1f5f9;
-}
-.profile-dropdown button:last-child:hover { background: #fef2f2; }
+        :root {
+            --primary: #1e3a5f;
+            --primary-dark: #152a45;
+            --primary-light: #2d5a8a;
+            --accent: #e67e22;
+            --accent-light: #f39c12;
+            --accent-glow: rgba(230, 126, 34, 0.3);
+            --white: #ffffff;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-900: #1e293b;
+            --blue: #3498db;
+            --green: #27ae60;
+            --green-light: #d4edda;
+            --red: #e74c3c;
+            --purple: #9b59b6;
+            --skill-knowledge: #3498db;
+            --skill-application: #2ecc71;
+            --skill-analysis: #9b59b6;
+            --skill-evaluation: #e67e22;
+        }
 
         * {
             margin: 0;
@@ -299,264 +53,523 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: #f8fafc;
-            color: #334155;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-700);
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        /* ========== NAVBAR STYLES ========== */
-        
+        /* ===== NAVBAR ===== */
+        .site-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 0.75rem 2rem;
+            border-bottom: 1px solid var(--gray-100);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
 
-        
+        .site-navbar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-        
-        
-
-        
-        
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        .site-mobile-logout 
-
-        .site-mobile-logout 
+        .site-navbar-logo {
+            height: 65px;
+            width: auto;
+        }
 
         .level-toggle {
             display: flex;
-            background: #f1f5f9;
-            border-radius: 8px;
-            padding: 3px;
-            gap: 2px;
+            gap: 0.5rem;
+            align-items: center;
         }
 
         .level-toggle-btn {
-            padding: 0.35rem 1rem;
-            border: none;
+            padding: 0.4rem 1rem;
             border-radius: 6px;
-            font-size: 0.8rem;
+            border: 1px solid var(--gray-300);
+            background: transparent;
+            color: var(--gray-600);
+            font-size: 0.85rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
-            background: transparent;
-            color: #64748b;
+            transition: all 0.2s ease;
             font-family: inherit;
         }
 
         .level-toggle-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .site-nav-buttons {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            background: var(--gray-100);
+            border-radius: 10px;
+            padding: 0.25rem;
+        }
+
+        .site-nav-link {
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            color: var(--gray-500);
+            transition: all 0.2s ease;
+        }
+
+        .site-nav-link:hover {
+            color: var(--primary);
+            background: rgba(255,255,255,0.5);
+        }
+
+        .site-nav-link.active {
             background: white;
-            color: #1e3a5f;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            color: var(--primary);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
         }
 
-        .level-toggle-btn:hover:not(.active) {
-            color: #334155;
+        .site-nav-btn {
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            font-family: inherit;
         }
 
-        /* ========== MAIN CONTENT ========== */
-        main {
-            max-width: 1200px;
-            margin: 100px auto 0;
-            padding: 0 2rem;
+        .site-nav-btn-ghost {
+            background: transparent;
+            color: var(--gray-500);
         }
 
-        .page-header {
-            margin: 2rem 0 3rem 0;
+        .site-nav-btn-ghost:hover {
+            color: var(--primary);
+            background: rgba(255,255,255,0.5);
         }
 
-        .page-header h1 {
-            font-size: 2.5rem;
-            color: #0f172a;
-            margin-bottom: 0.5rem;
+        .site-nav-btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .site-nav-btn-primary:hover {
+            background: #d35400;
+        }
+
+        /* Profile Dropdown */
+        .profile-dropdown-wrapper {
+            position: relative;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            color: white;
+            border: 2px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(230, 126, 34, 0.3);
         }
 
-        .page-header p {
-            color: #64748b;
-            font-size: 1rem;
+        .profile-avatar:hover {
+            transform: scale(1.08);
+            box-shadow: 0 4px 12px rgba(230, 126, 34, 0.4);
         }
 
-        /* ========== CHART SECTION ========== */
-        .chart-container {
+        .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
             background: white;
-            border-radius: 16px;
-            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            min-width: 220px;
+            padding: 0;
+            margin-top: 0.75rem;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 2000;
+        }
+
+        .profile-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .profile-dropdown-header {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .profile-dropdown-name {
+            font-weight: 700;
+            color: var(--gray-900);
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .profile-dropdown-email {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+        }
+
+        .profile-dropdown-divider {
+            height: 1px;
+            background: var(--gray-100);
+        }
+
+        .profile-dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.25rem;
+            color: var(--gray-700);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-family: inherit;
+            width: 100%;
+            text-align: left;
+        }
+
+        .profile-dropdown-item:hover {
+            background: var(--gray-100);
+            color: var(--primary);
+        }
+
+        .profile-dropdown-item.active {
+            background: rgba(230, 126, 34, 0.1);
+            color: var(--accent);
+        }
+
+        .profile-dropdown-item svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        .profile-dropdown-item.logout-item {
+            color: var(--red);
+        }
+
+        .profile-dropdown-item.logout-item:hover {
+            background: rgba(231, 76, 60, 0.1);
+        }
+
+        .site-hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .site-hamburger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--gray-700);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+        }
+
+        /* ===== HERO STATS ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 14px;
+            padding: 1.75rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--blue));
+        }
+
+        .stat-card:nth-child(1)::before {
+            background: linear-gradient(90deg, #ff6b6b, #ee5a6f);
+        }
+
+        .stat-card:nth-child(2)::before {
+            background: linear-gradient(90deg, #3498db, #2980b9);
+        }
+
+        .stat-card:nth-child(3)::before {
+            background: linear-gradient(90deg, #27ae60, #229954);
+        }
+
+        .stat-card:nth-child(4)::before {
+            background: linear-gradient(90deg, #f39c12, #e67e22);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: var(--gray-600);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stat-change {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .stat-change.positive {
+            color: var(--green);
+        }
+
+        .stat-change.negative {
+            color: var(--red);
+        }
+
+        /* ===== TARGET GRADE TRACKER ===== */
+        .target-section {
+            background: white;
+            border-radius: 14px;
+            padding: 2.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.6s ease-out 0.1s backwards;
+        }
+
+        .target-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
             margin-bottom: 2rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            border: 1px solid #e2e8f0;
+        }
+
+        .target-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .target-select {
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            border: 2px solid var(--gray-200);
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .target-select:hover {
+            border-color: var(--accent);
+        }
+
+        .target-select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1);
+        }
+
+        .target-content {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .target-gauge {
+            flex: 0 0 auto;
+        }
+
+        .gauge-svg {
+            width: 180px;
+            height: 180px;
+        }
+
+        .target-message {
+            flex: 1;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            line-height: 1.6;
+        }
+
+        .target-message.success {
+            color: var(--green);
+        }
+
+        /* ===== PERFORMANCE CHART ===== */
+        .chart-section {
+            background: white;
+            border-radius: 14px;
+            padding: 2.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.6s ease-out 0.2s backwards;
         }
 
         .chart-header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 1rem;
+            align-items: center;
             margin-bottom: 2rem;
         }
 
         .chart-title {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 700;
-            color: #0f172a;
+            color: var(--primary);
         }
 
-        .filter-group {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .filter-label {
-            font-weight: 600;
-            color: #334155;
-            font-size: 0.9rem;
-        }
-
-        .filter-select {
-            padding: 0.5rem 1rem;
-            border: 1px solid #cbd5e1;
+        .chart-filter {
+            padding: 0.6rem 1rem;
             border-radius: 8px;
+            border: 2px solid var(--gray-200);
             font-size: 0.9rem;
-            color: #334155;
+            font-weight: 600;
+            color: var(--gray-700);
             background: white;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
             font-family: inherit;
-            font-weight: 500;
         }
 
-        .filter-select:hover {
-            border-color: #1e3a5f;
-            background: #f8fafc;
+        .chart-filter:hover {
+            border-color: var(--accent);
         }
 
-        .filter-select:focus {
+        .chart-filter:focus {
             outline: none;
-            border-color: #e67e22;
+            border-color: var(--accent);
             box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1);
         }
 
-        .chart-filters {
+        .chart-legend {
             display: flex;
-            gap: 1rem;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
             flex-wrap: wrap;
-            align-items: center;
         }
 
-        .chart-summary {
+        .chart-legend-item {
             display: flex;
-            justify-content: center;
             align-items: center;
-            gap: 2rem;
-            padding: 1.25rem 2rem;
-            background: #f8fafc;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            margin-top: 0.5rem;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--gray-600);
         }
 
-        .chart-summary-stat {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.2rem;
+        .chart-legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
         }
 
-        .chart-summary-value {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #1e3a5f;
-        }
-
-        .chart-summary-value.positive { color: #27ae60; }
-        .chart-summary-value.negative { color: #dc2626; }
-
-        .chart-summary-label {
-            font-size: 0.78rem;
-            color: #64748b;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-        }
-
-        .chart-summary-divider {
-            width: 1px;
-            height: 36px;
-            background: #cbd5e1;
-        }
-
-        .chart-canvas-wrapper {
+        .chart-container {
             position: relative;
-            height: 400px;
-            margin: 2rem 0;
+            height: 350px;
+            margin-bottom: 2rem;
         }
 
+        .chart-average {
+            background: rgba(230, 126, 34, 0.05);
+            border-left: 4px solid var(--accent);
+            border-radius: 8px;
+            padding: 1.25rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .chart-average-label {
+            font-size: 0.9rem;
+            color: var(--gray-600);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .chart-average-value {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        /* ===== EMPTY STATE ===== */
         .empty-state {
             text-align: center;
             padding: 3rem 2rem;
-            color: #64748b;
+            background: white;
+            border-radius: 14px;
+            margin-bottom: 3rem;
         }
 
         .empty-state-icon {
@@ -564,85 +577,430 @@
             margin-bottom: 1rem;
         }
 
-        .empty-state h3 {
-            color: #334155;
+        .empty-state-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
             margin-bottom: 0.5rem;
         }
 
-        /* (Stats cards, areas, calendar sections removed) */
+        .empty-state-text {
+            color: var(--gray-600);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
 
-        /* ========== RESPONSIVE ========== */
+        .empty-state-btn {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            background: var(--accent);
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.95rem;
+        }
+
+        .empty-state-btn:hover {
+            background: #d35400;
+            transform: translateY(-2px);
+        }
+
+        /* ===== STRENGTHS & WEAKNESSES ===== */
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.6s ease-out 0.3s backwards;
+        }
+
+        .insights-card {
+            background: white;
+            border-radius: 14px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transition: all 0.3s ease;
+        }
+
+        .insights-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .insights-card.strengths {
+            border-top: 4px solid var(--green);
+        }
+
+        .insights-card.weaknesses {
+            border-top: 4px solid var(--accent);
+        }
+
+        .insights-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .insight-item {
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            background: var(--gray-50);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .insight-item:hover {
+            background: var(--gray-100);
+        }
+
+        .insight-name {
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .insight-score {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .insight-percentage {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary);
+        }
+
+        .insight-bar {
+            height: 6px;
+            background: var(--gray-200);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .insight-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.6s ease-out;
+            background: linear-gradient(90deg, var(--green), var(--green-light));
+        }
+
+        .insights-card.weaknesses .insight-bar-fill {
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+        }
+
+        .insights-placeholder {
+            color: var(--gray-500);
+            font-style: italic;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        /* ===== STUDY STREAK CALENDAR ===== */
+        .streak-section {
+            background: white;
+            border-radius: 14px;
+            padding: 2.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.6s ease-out 0.4s backwards;
+        }
+
+        .streak-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .streak-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .streak-message {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--green);
+        }
+
+        .calendar-grid {
+            display: grid;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .calendar-row {
+            display: grid;
+            grid-template-columns: 30px repeat(7, 1fr);
+            gap: 0.4rem;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .calendar-day-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--gray-500);
+            text-align: center;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .calendar-square {
+            width: 25px;
+            height: 25px;
+            border-radius: 4px;
+            background: #ebedf0;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .calendar-square:hover {
+            transform: scale(1.15);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .calendar-square.activity-1 {
+            background: #9be9a8;
+        }
+
+        .calendar-square.activity-2 {
+            background: #40c463;
+        }
+
+        .calendar-square.activity-3 {
+            background: #216e39;
+        }
+
+        .calendar-square.current {
+            position: relative;
+            animation: pulse-current 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-current {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .streak-legend {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            font-size: 0.85rem;
+            color: var(--gray-600);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .legend-square {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+        }
+
+        /* ===== MOTIVATIONAL FOOTER ===== */
+        .footer-section {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
+            border-radius: 14px;
+            padding: 2.5rem;
+            text-align: center;
+            color: white;
+            animation: fadeInUp 0.6s ease-out 0.5s backwards;
+        }
+
+        .motivational-quote {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .footer-btn {
+            display: inline-block;
+            padding: 0.85rem 2.5rem;
+            background: var(--accent);
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .footer-btn:hover {
+            background: var(--accent-light);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px var(--accent-glow);
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .auth-only {
+            display: none;
+        }
+
+        .guest-only {
+            display: block;
+        }
+
+        .authenticated .auth-only {
+            display: flex;
+        }
+
+        .authenticated .guest-only {
+            display: none;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .insights-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .target-content {
+                flex-direction: column;
+                gap: 1.5rem;
+                align-items: center;
+            }
+
+            .gauge-svg {
+                width: 150px;
+                height: 150px;
+            }
+
+            .target-message {
+                text-align: center;
+            }
+
+            .site-navbar {
+                padding: 0.5rem 1rem;
+            }
+
+            .site-navbar-logo {
+                height: 55px;
+            }
+
+            .main-content {
+                padding: 110px 1.5rem 3rem;
+            }
+        }
+
         @media (max-width: 768px) {
-            
-            
-            .level-toggle { display: none; }
-            
-            
-
-            main {
-                margin-top: 80px;
-                padding: 0 1rem;
+            .stats-grid {
+                grid-template-columns: 1fr;
             }
 
-            .page-header h1 {
-                font-size: 1.75rem;
+            .site-hamburger {
+                display: flex;
             }
 
-            .chart-header {
-                flex-direction: column;
-                align-items: flex-start;
+            .site-nav-buttons {
+                display: none;
             }
 
-            .filter-group {
-                flex-direction: column;
-                width: 100%;
+            .level-toggle {
+                display: none;
             }
 
-            .filter-select {
-                width: 100%;
+            .main-content {
+                padding: 80px 1rem 2rem;
             }
 
             .chart-container {
-                padding: 1.5rem;
-            }
-
-            .chart-summary {
-                gap: 1rem;
-                padding: 1rem;
-            }
-
-            .chart-canvas-wrapper {
                 height: 300px;
             }
 
-            
-        }
-
-        @media (max-width: 480px) {
-            main {
-                margin-top: 70px;
-            }
-
-            .page-header h1 {
-                font-size: 1.4rem;
-            }
-
-            .chart-container {
-                padding: 1rem;
-            }
-
-            .chart-summary {
+            .chart-legend {
                 flex-direction: column;
                 gap: 0.75rem;
             }
 
-            .chart-summary-divider {
-                width: 60px;
-                height: 1px;
+            .target-section,
+            .chart-section,
+            .streak-section,
+            .footer-section {
+                padding: 1.5rem;
             }
 
-            .chart-canvas-wrapper {
-                height: 250px;
+            .stat-value {
+                font-size: 2rem;
+            }
+
+            .insights-title,
+            .chart-title,
+            .target-title,
+            .streak-title {
+                font-size: 1.1rem;
+            }
+
+            .motivational-quote {
+                font-size: 1.1rem;
+            }
+
+            .calendar-row {
+                grid-template-columns: 24px repeat(7, 1fr);
+                gap: 0.3rem;
+            }
+
+            .calendar-square {
+                width: 20px;
+                height: 20px;
+            }
+
+            .calendar-day-label {
+                font-size: 0.7rem;
+                height: 20px;
+            }
+
+            .streak-legend {
+                font-size: 0.8rem;
+                gap: 1rem;
+            }
+
+            .legend-square {
+                width: 14px;
+                height: 14px;
             }
         }
     </style>
@@ -650,619 +1008,730 @@
 <body>
     <!-- NAVBAR -->
     <nav class="site-navbar" id="siteNavbar">
-    <div class="site-navbar-content">
-        <a href="index.html"><img src="logo.png" alt="MyBizStudies" class="site-navbar-logo"></a>
-        <div class="level-toggle" id="desktopLevelToggle">
-            <button class="level-toggle-btn active" data-level="alevel">A-Level</button>
-            <button class="level-toggle-btn" data-level="gcse">GCSE</button>
-        </div>
-        <div class="site-nav-buttons" id="siteNavButtons">
-            <a href="app.html" class="site-nav-link">Flash Cards</a>
-            <a href="exam-skills-v2.html" class="site-nav-link">Exam Skills</a>
-            <a href="exam-practice.html" class="site-nav-link auth-only" style="display:none;">Exam Practice</a>
-            <a href="notes.html" class="site-nav-link">Study Notes</a>
-            <a href="blog.html" class="site-nav-link">Blog</a>
-            <a href="contact.html" class="site-nav-link">Contact Us</a>
-            <div class="profile-wrapper" style="position: relative;">
-                <div class="profile-avatar" id="profileAvatar">--</div>
-                <div class="profile-dropdown" id="profileDropdown">
-                    <a href="student-progress.html">Student Progress</a>
-                    <a href="#manage-account">My Account</a>
-                    <button id="navLogoutBtn">Log Out</button>
+        <div class="site-navbar-content">
+            <a href="index.html"><img src="logo.png" alt="MyBizStudies" class="site-navbar-logo"></a>
+            <div class="level-toggle" id="desktopLevelToggle">
+                <button class="level-toggle-btn active" data-level="alevel">A-Level</button>
+                <button class="level-toggle-btn" data-level="gcse">GCSE</button>
+            </div>
+            <div class="site-nav-buttons" id="siteNavButtons">
+                <a href="app.html" class="site-nav-link auth-only">Flash Cards</a>
+                <a href="exam-practice.html" class="site-nav-link auth-only">Exam Practice</a>
+                <a href="exam-skills-v2.html" class="site-nav-link auth-only">Exam Skills</a>
+                <a href="notes.html" class="site-nav-link auth-only">Study Notes</a>
+                <a href="glossary.html" class="site-nav-link auth-only">Glossary</a>
+                <a href="blog.html" class="site-nav-link">Blog</a>
+                <a href="contact.html" class="site-nav-link">Contact Us</a>
+                <a href="login.html" class="site-nav-btn site-nav-btn-ghost guest-only">Log In</a>
+                <a href="signup.html" class="site-nav-btn site-nav-btn-primary guest-only">Get Started</a>
+                <!-- USER PROFILE DROPDOWN -->
+                <div class="profile-dropdown-wrapper auth-only">
+                    <button class="profile-avatar" id="profileAvatar" onclick="toggleProfileDropdown()">
+                        <span id="profileInitials">?</span>
+                    </button>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <div class="profile-dropdown-header">
+                            <div class="profile-dropdown-name" id="profileName">Student</div>
+                            <div class="profile-dropdown-email" id="profileEmail">Loading...</div>
+                        </div>
+                        <div class="profile-dropdown-divider"></div>
+                        <a href="student-progress.html" class="profile-dropdown-item active">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+                            Student Progress
+                        </a>
+                        <a href="#" class="profile-dropdown-item" onclick="event.preventDefault();">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                            Manage Account
+                        </a>
+                        <div class="profile-dropdown-divider"></div>
+                        <button class="profile-dropdown-item logout-item" onclick="handleLogout()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                            Log Out
+                        </button>
+                    </div>
                 </div>
             </div>
+            <button class="site-hamburger" id="siteHamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
         </div>
-        <button class="site-hamburger" id="siteHamburger" aria-label="Menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-    </div>
-</nav>
-
-    <!-- Mobile Menu -->
-    <div class="site-mobile-overlay" id="siteMobileOverlay"></div>
-<div class="site-mobile-menu" id="siteMobileMenu">
-    <div class="site-mobile-links">
-        <a href="app.html">
-            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
-            Flash Cards
-        </a>
-        <a href="exam-skills-v2.html">
-            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg></span>
-            Exam Skills
-        </a>
-        <a href="exam-practice.html" class="auth-only" style="display:none;">
-            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5"/></svg></span>
-            Exam Practice
-        </a>
-        <a href="notes.html">
-            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></span>
-            Study Notes
-        </a>
-        <a href="blog.html">
-            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"/></svg></span>
-            Blog
-        </a>
-        <div class="site-mobile-divider"></div>
-        <a href="contact.html">
-            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></span>
-            Contact Us
-        </a>
-        <a href="student-progress.html">
-            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg></span>
-            Student Progress
-        </a>
-        <a href="#manage-account">
-            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"/></svg></span>
-            My Account
-        </a>
-        <div class="site-mobile-divider"></div>
-        <button class="site-mobile-logout" id="mobileLogoutBtn">
-            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l3-3m0 0l-3-3m3 3H3"/></svg></span>
-            Logout
-        </button>
-    </div>
-</div>
+    </nav>
 
     <!-- MAIN CONTENT -->
-    <main>
-        <div class="page-header">
-            <h1>Student Progress</h1>
-            <p>Track your performance across all exam practice attempts</p>
+    <div class="main-content">
+        <!-- HERO STATS -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-value" id="streakValue">0</div>
+                <div class="stat-label">🔥 Study Streak</div>
+                <div class="stat-change" id="streakMessage"></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="attemptsValue">0</div>
+                <div class="stat-label">📝 Questions Attempted</div>
+                <div class="stat-change" id="attemptsMessage"></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="averageValue">0%</div>
+                <div class="stat-label">📊 Average Score</div>
+                <div class="stat-change" id="averageMessage"></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="trendValue">0%</div>
+                <div class="stat-label">📈 Recent Trend</div>
+                <div class="stat-change" id="trendMessage"></div>
+            </div>
         </div>
 
-        <!-- CHART SECTION -->
-        <div class="chart-container">
+        <!-- TARGET GRADE TRACKER -->
+        <div class="target-section" id="targetSection">
+            <div class="target-header">
+                <div class="target-title">🎯 Target Grade Tracker</div>
+                <select class="target-select" id="targetGradeSelect" onchange="updateTargetGauge()">
+                    <option value="90">A* (90%+)</option>
+                    <option value="80" selected>A (80%+)</option>
+                    <option value="70">B (70%+)</option>
+                    <option value="60">C (60%+)</option>
+                    <option value="50">D (50%+)</option>
+                    <option value="40">E (40%+)</option>
+                </select>
+            </div>
+            <div class="target-content">
+                <div class="target-gauge">
+                    <svg class="gauge-svg" viewBox="0 0 200 120">
+                        <!-- Background arc -->
+                        <path d="M 30 100 A 70 70 0 0 1 170 100" fill="none" stroke="#e2e8f0" stroke-width="12" stroke-linecap="round"/>
+                        <!-- Progress arc -->
+                        <path class="gauge-progress" d="M 30 100 A 70 70 0 0 1 170 100" fill="none" stroke="#e67e22" stroke-width="12" stroke-linecap="round" style="stroke-dasharray: 219.8; stroke-dashoffset: 219.8; transition: stroke-dashoffset 0.8s ease-out;"/>
+                        <!-- Percentage text -->
+                        <text x="100" y="85" text-anchor="middle" font-size="36" font-weight="800" fill="#1e3a5f" id="gaugePercent">0%</text>
+                    </svg>
+                </div>
+                <div class="target-message" id="targetMessage">Select a target grade to get started</div>
+            </div>
+        </div>
+
+        <!-- PERFORMANCE OVER TIME -->
+        <div class="chart-section" id="chartSection" style="display: none;">
             <div class="chart-header">
-                <div class="chart-title">Performance Over Time</div>
-                <div class="chart-filters">
-                    <div class="filter-group">
-                        <label class="filter-label">Question type:</label>
-                        <select id="questionTypeFilter" class="filter-select">
-                            <option value="all">All Questions</option>
-                            <option value="define">Define (2 marks)</option>
-                            <option value="explain">Explain (4 marks)</option>
-                            <option value="analyse">Analyse (6 marks)</option>
-                            <option value="discuss">Discuss (8 marks)</option>
-                            <option value="assess_10">Assess (10 marks)</option>
-                            <option value="assess_12">Assess (12 marks)</option>
-                            <option value="evaluate_20">Evaluate (20 marks)</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label class="filter-label">Unit:</label>
-                        <select id="unitFilter" class="filter-select">
-                            <option value="all">All Units</option>
-                            <option value="unit1">Unit 1: Marketing and People</option>
-                            <option value="unit2">Unit 2: Managing Business Activities</option>
-                            <option value="unit3">Unit 3: Business Decisions and Strategy</option>
-                            <option value="unit4">Unit 4: Global Business</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label class="filter-label">Topic:</label>
-                        <select id="topicFilter" class="filter-select">
-                            <option value="all">All Topics</option>
-                        </select>
-                    </div>
+                <div class="chart-title">📈 Performance Over Time</div>
+                <select class="chart-filter" id="questionTypeFilter" onchange="updateChart()">
+                    <option value="all">All Questions</option>
+                    <option value="2-mark">Define (2 marks)</option>
+                    <option value="4-mark">Explain (4 marks)</option>
+                    <option value="6-mark">Analyse (6 marks)</option>
+                    <option value="8-mark">Discuss (8 marks)</option>
+                    <option value="10-mark">Assess/Evaluate (10 marks)</option>
+                    <option value="20-mark">Essay (20 marks)</option>
+                </select>
+            </div>
+            <div class="chart-legend" id="chartLegend">
+                <div class="chart-legend-item">
+                    <div class="chart-legend-dot" style="background: var(--primary);"></div>
+                    <span>Overall Score</span>
+                </div>
+                <div class="chart-legend-item" style="display: none;" id="legend-ao1">
+                    <div class="chart-legend-dot" style="background: var(--skill-knowledge);"></div>
+                    <span>Knowledge (AO1)</span>
+                </div>
+                <div class="chart-legend-item" style="display: none;" id="legend-ao2">
+                    <div class="chart-legend-dot" style="background: var(--skill-application);"></div>
+                    <span>Application (AO2)</span>
+                </div>
+                <div class="chart-legend-item" style="display: none;" id="legend-ao3">
+                    <div class="chart-legend-dot" style="background: var(--skill-analysis);"></div>
+                    <span>Analysis (AO3)</span>
+                </div>
+                <div class="chart-legend-item" style="display: none;" id="legend-ao4">
+                    <div class="chart-legend-dot" style="background: var(--skill-evaluation);"></div>
+                    <span>Evaluation (AO4)</span>
                 </div>
             </div>
+            <div class="chart-container">
+                <canvas id="performanceChart"></canvas>
+            </div>
+            <div class="chart-average">
+                <div class="chart-average-label">Current Average Score</div>
+                <div class="chart-average-value" id="chartAverage">0%</div>
+            </div>
+        </div>
 
-            <div id="chartContent"></div>
+        <!-- EMPTY STATE FOR NO DATA -->
+        <div class="empty-state" id="emptyState">
+            <div class="empty-state-icon">📚</div>
+            <div class="empty-state-title">Start Your Progress Journey</div>
+            <div class="empty-state-text">Complete your first exam practice question to see your progress tracking dashboard and personalized insights.</div>
+            <a href="exam-practice.html" class="empty-state-btn">Go to Exam Practice</a>
+        </div>
 
-            <div class="chart-summary" id="chartSummary">
-                <div class="chart-summary-stat">
-                    <span class="chart-summary-value" id="summaryAttempted">0</span>
-                    <span class="chart-summary-label">Questions</span>
+        <!-- STRENGTHS & WEAKNESSES -->
+        <div class="insights-grid" id="insightsGrid" style="display: none;">
+            <div class="insights-card strengths">
+                <div class="insights-title">💪 Your Strengths</div>
+                <div id="strengthsContainer"></div>
+            </div>
+            <div class="insights-card weaknesses">
+                <div class="insights-title">🎯 Areas to Focus On</div>
+                <div id="weaknessesContainer"></div>
+            </div>
+        </div>
+
+        <!-- STUDY STREAK CALENDAR -->
+        <div class="streak-section" id="streakSection" style="display: none;">
+            <div class="streak-header">
+                <div class="streak-title">📅 Study Streak Calendar</div>
+                <div class="streak-message" id="streakFireMessage">0 day streak! Keep it up! 🔥</div>
+            </div>
+            <div class="calendar-grid" id="calendarGrid"></div>
+            <div class="streak-legend">
+                <div class="legend-item">
+                    <div class="legend-square" style="background: #ebedf0;"></div>
+                    <span>No activity</span>
                 </div>
-                <div class="chart-summary-divider"></div>
-                <div class="chart-summary-stat">
-                    <span class="chart-summary-value" id="summaryAverage">--</span>
-                    <span class="chart-summary-label">Average</span>
+                <div class="legend-item">
+                    <div class="legend-square" style="background: #9be9a8;"></div>
+                    <span>1 question</span>
                 </div>
-                <div class="chart-summary-divider"></div>
-                <div class="chart-summary-stat">
-                    <span class="chart-summary-value" id="summaryTrend">--</span>
-                    <span class="chart-summary-label">Recent Trend</span>
+                <div class="legend-item">
+                    <div class="legend-square" style="background: #40c463;"></div>
+                    <span>2-3 questions</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-square" style="background: #216e39;"></div>
+                    <span>4+ questions</span>
                 </div>
             </div>
         </div>
-    </main>
+
+        <!-- MOTIVATIONAL FOOTER -->
+        <div class="footer-section">
+            <div class="motivational-quote" id="motivationalQuote">Keep going! Every question you practice gets you closer to your goals.</div>
+            <a href="exam-practice.html" class="footer-btn">Back to Exam Practice</a>
+        </div>
+    </div>
 
     <script>
-        // ========== SUPABASE CONFIG ==========
-        const SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
+        // ===== SUPABASE CONFIG =====
+        var SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
+        var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
+        var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // ===== GLOBALS =====
+        var currentLevel = 'alevel';
+        var userSession = null;
+        var allAttempts = [];
+        var performanceChart = null;
 
-        // ========== NAVBAR LOGIC ==========
-        let chartInstance = null;
-        let allAttempts = [];
-        let currentUser = null;
+        // ===== INITIALIZATION =====
+        async function init() {
+            userSession = await checkAuth();
+            if (!userSession) return;
 
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeNavbar();
-            checkAuth();
-        });
-
-        function initializeNavbar() {
-            const hamburger = document.getElementById('siteHamburger');
-            const mobileOverlay = document.getElementById('siteMobileOverlay');
-            const mobileMenu = document.getElementById('siteMobileMenu');
-            const profileAvatar = document.getElementById('profileAvatar');
-            const profileDropdown = document.getElementById('profileDropdown');
-
-            hamburger.addEventListener('click', function() {
-                hamburger.classList.toggle('active');
-                mobileOverlay.classList.toggle('active');
-                mobileMenu.classList.toggle('active');
-            });
-
-            mobileOverlay.addEventListener('click', function() {
-                hamburger.classList.remove('active');
-                mobileOverlay.classList.remove('active');
-                mobileMenu.classList.remove('active');
-            });
-
-            profileAvatar.addEventListener('click', function(e) {
-                e.stopPropagation();
-                profileDropdown.classList.toggle('active');
-            });
-
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('.profile-avatar') && !e.target.closest('.profile-dropdown')) {
-                    profileDropdown.classList.remove('active');
-                }
-            });
-
-            const logoutButtons = document.querySelectorAll('#navLogoutBtn, #mobileLogoutBtn');
-            logoutButtons.forEach(btn => {
-                btn.addEventListener('click', logout);
-            });
+            setupUI();
+            await loadAttempts();
+            renderStats();
+            updateTargetGauge();
+            initProfileDropdown();
         }
 
         async function checkAuth() {
             try {
-                const { data: { session } } = await supabaseClient.auth.getSession();
-
+                var response = await supabaseClient.auth.getSession();
+                var session = response.data.session;
                 if (!session) {
-                    window.location.href = 'index.html';
-                    return;
+                    window.location.href = 'login.html';
+                    return null;
                 }
-
-                currentUser = session.user;
-                const initials = getInitials(currentUser.email);
-                document.getElementById('profileAvatar').textContent = initials;
-
-                // Show auth-only elements (like Exam Practice tab)
-                document.querySelectorAll('.auth-only').forEach(function(el) { el.style.display = ''; });
-                document.querySelectorAll('.guest-only').forEach(function(el) { el.style.display = 'none'; });
-
-                loadProgressData();
+                document.body.classList.add('authenticated');
+                return session;
             } catch (error) {
-                console.error('Auth check failed:', error);
-                window.location.href = 'index.html';
+                console.error('Auth check error:', error);
+                window.location.href = 'login.html';
+                return null;
             }
         }
 
-        function getInitials(email) {
-            if (!email) return '--';
-            const parts = email.split('@')[0].split('.');
-            if (parts.length >= 2) {
-                return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
-            }
-            return email.substring(0, 2).toUpperCase();
+        function setupUI() {
+            var authElements = document.querySelectorAll('.auth-only');
+            var guestElements = document.querySelectorAll('.guest-only');
+            authElements.forEach(function(el) { el.style.display = 'flex'; });
+            guestElements.forEach(function(el) { el.style.display = 'none'; });
+
+            var levelButtons = document.querySelectorAll('.level-toggle-btn');
+            levelButtons.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    levelButtons.forEach(function(b) { b.classList.remove('active'); });
+                    this.classList.add('active');
+                    currentLevel = this.dataset.level;
+                });
+            });
         }
 
-        async function logout() {
-            await supabaseClient.auth.signOut();
-            window.location.href = 'index.html';
-        }
-
-        // ========== PROGRESS DATA LOADING ==========
-        async function loadProgressData() {
+        async function loadAttempts() {
             try {
-                const { data, error } = await supabaseClient
+                var response = await supabaseClient
                     .from('exam_practice_attempts')
                     .select('*')
-                    .eq('user_id', currentUser.id)
+                    .eq('user_id', userSession.user.id)
                     .order('created_at', { ascending: true });
 
-                if (error) throw error;
-
-                // Filter to only include marked attempts (ones with marking_data)
-                allAttempts = (data || []).filter(a => a.marking_data && a.marks_awarded != null);
-                console.log('Loaded attempts:', allAttempts.length, 'of', (data || []).length, 'total');
-
-                if (allAttempts.length === 0) {
-                    showEmptyState();
-                } else {
-                    populateTopicFilter();
-                    updateChart();
-                }
+                if (response.error) throw response.error;
+                allAttempts = (response.data || []).filter(function(a) { return a.marks_awarded !== null; });
             } catch (error) {
-                console.error('Failed to load progress data:', error);
-                showEmptyState();
+                console.error('Error loading attempts:', error);
+                allAttempts = [];
             }
         }
 
-        function showEmptyState() {
-            document.getElementById('chartContent').innerHTML = '<div class="empty-state"><div class="empty-state-icon">📊</div><h3>No Data Yet</h3><p>Start practicing exam questions to see your progress here!</p></div>';
-            document.getElementById('summaryAttempted').textContent = '0';
-            document.getElementById('summaryAverage').textContent = '--';
-            document.getElementById('summaryTrend').textContent = '--';
-        }
-
-        // ========== CHART FUNCTIONALITY ==========
-        function updateChart() {
-            const filteredData = getFilteredAttempts();
-
-            if (filteredData.length === 0) {
-                document.getElementById('chartContent').innerHTML = '<div class="empty-state"><div class="empty-state-icon">📈</div><h3>No Data for This Filter</h3><p>Try selecting a different filter combination</p></div>';
-                updateSummary(filteredData);
+        function renderStats() {
+            if (allAttempts.length === 0) {
+                document.getElementById('emptyState').style.display = 'block';
+                document.getElementById('chartSection').style.display = 'none';
+                document.getElementById('insightsGrid').style.display = 'none';
+                document.getElementById('streakSection').style.display = 'none';
                 return;
             }
 
-            const { datasets } = prepareChartData(filteredData);
-            renderChart(null, datasets);
-            updateSummary(filteredData);
+            document.getElementById('emptyState').style.display = 'none';
+            document.getElementById('chartSection').style.display = 'block';
+            document.getElementById('insightsGrid').style.display = 'grid';
+            document.getElementById('streakSection').style.display = 'block';
+
+            // Streak
+            var streak = calculateStreak();
+            animateCountUp('streakValue', streak);
+            document.getElementById('streakMessage').textContent = '';
+            document.getElementById('streakFireMessage').textContent = streak + ' day streak! Keep it up! 🔥';
+
+            // Attempts
+            animateCountUp('attemptsValue', allAttempts.length);
+            document.getElementById('attemptsMessage').textContent = '';
+
+            // Average
+            var totalMarks = allAttempts.reduce(function(sum, a) { return sum + (a.marks_awarded || 0); }, 0);
+            var totalPossible = allAttempts.reduce(function(sum, a) { return sum + (a.total_marks || 0); }, 0);
+            var average = totalPossible > 0 ? Math.round((totalMarks / totalPossible) * 100) : 0;
+            animateCountUp('averageValue', average, true);
+
+            // Trend
+            var recentFive = allAttempts.slice(-5);
+            var previousFive = allAttempts.slice(-10, -5);
+            var recentAvg = recentFive.length > 0 ? calculateAverageScore(recentFive) : 0;
+            var prevAvg = previousFive.length > 0 ? calculateAverageScore(previousFive) : 0;
+            var trend = recentAvg - prevAvg;
+            var trendElement = document.getElementById('trendValue');
+            var trendMessageElement = document.getElementById('trendMessage');
+
+            if (previousFive.length === 0) {
+                trendElement.textContent = '0%';
+                trendMessageElement.textContent = '';
+            } else {
+                animateCountUp('trendValue', Math.abs(trend), true);
+                trendMessageElement.textContent = trend >= 0 ? 'positive' : 'negative';
+                trendMessageElement.className = 'stat-change ' + (trend >= 0 ? 'positive' : 'negative');
+                trendMessageElement.textContent = (trend >= 0 ? '+' : '') + trend.toFixed(1) + '% vs last 5';
+            }
+
+            renderInsights();
+            renderStreak();
+            updateChart();
+            updateMotivationalQuote(average);
         }
 
-        // Combined filter function: question type + unit + topic
-        function getFilteredAttempts() {
-            let data = allAttempts;
+        function calculateStreak() {
+            var dates = {};
+            allAttempts.forEach(function(a) {
+                var d = new Date(a.created_at);
+                var dateStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+                dates[dateStr] = (dates[dateStr] || 0) + 1;
+            });
 
-            const typeFilter = document.getElementById('questionTypeFilter').value;
-            if (typeFilter !== 'all') {
-                data = filterAttemptsByType(typeFilter, data);
-            }
+            var today = new Date();
+            var streak = 0;
+            var current = new Date(today);
 
-            const unitFilter = document.getElementById('unitFilter').value;
-            if (unitFilter !== 'all') {
-                const unitCodes = {
-                    'unit1': 'WBS11', 'unit2': 'WBS12', 'unit3': 'WBS13', 'unit4': 'WBS14'
-                };
-                const unitCode = unitCodes[unitFilter];
-                data = data.filter(a => {
-                    // Match unit code in the stored unit field
-                    const u = (a.unit || '').toUpperCase();
-                    return u.includes(unitCode) || u.includes(unitFilter.toUpperCase());
-                });
-            }
-
-            const topicFilter = document.getElementById('topicFilter').value;
-            if (topicFilter !== 'all') {
-                data = data.filter(a => {
-                    const testedTopics = (a.question_data && a.question_data.tested_topics) || [];
-                    return testedTopics.some(t =>
-                        (t.topic && t.topic === topicFilter) ||
-                        (t.section && t.section === topicFilter)
-                    );
-                });
-            }
-
-            return data;
-        }
-
-        function filterAttemptsByType(typeFilter, source) {
-            const data = source || allAttempts;
-            if (typeFilter === 'all') {
-                return data;
-            }
-
-            // question_type in DB is stored as e.g. '2_mark_define', '4_mark_explain', '20_mark_evaluate'
-            // We match on the command part (after the last underscore) and/or mark count
-            const typeMap = {
-                'define': { command: 'define', marks: 2 },
-                'explain': { command: 'explain', marks: 4 },
-                'analyse': { command: 'analyse', marks: 6 },
-                'discuss': { command: 'discuss', marks: 8 },
-                'assess_10': { command: 'assess', marks: 10 },
-                'assess_12': { command: 'assess', marks: 12 },
-                'evaluate_20': { command: 'evaluate', marks: 20 }
-            };
-
-            const filter = typeMap[typeFilter];
-            if (!filter) return data;
-
-            return data.filter(attempt => {
-                const qt = (attempt.question_type || '').toLowerCase();
-                // Match format like '2_mark_define' or just 'define'
-                if (qt.includes('_mark_')) {
-                    const parts = qt.split('_mark_');
-                    const marks = parseInt(parts[0]);
-                    const command = parts[1];
-                    return command === filter.command && marks === filter.marks;
+            for (var i = 0; i < 365; i++) {
+                var dateStr = current.getFullYear() + '-' + String(current.getMonth() + 1).padStart(2, '0') + '-' + String(current.getDate()).padStart(2, '0');
+                if (dates[dateStr]) {
+                    streak++;
+                    current.setDate(current.getDate() - 1);
+                } else {
+                    break;
                 }
-                // Fallback: direct match
-                return qt === typeFilter;
+            }
+            return streak;
+        }
+
+        function calculateAverageScore(attempts) {
+            if (attempts.length === 0) return 0;
+            var total = attempts.reduce(function(sum, a) { return sum + (a.percentage_score || 0); }, 0);
+            return total / attempts.length;
+        }
+
+        function renderInsights() {
+            var unitScores = {};
+            allAttempts.forEach(function(a) {
+                if (!unitScores[a.unit]) unitScores[a.unit] = [];
+                unitScores[a.unit].push(a.percentage_score || 0);
+            });
+
+            var units = Object.keys(unitScores).map(function(unit) {
+                var scores = unitScores[unit];
+                var avg = scores.reduce(function(s, v) { return s + v; }, 0) / scores.length;
+                return { name: unit || 'General', avg: avg };
+            }).sort(function(a, b) { return b.avg - a.avg; });
+
+            var strengthsContainer = document.getElementById('strengthsContainer');
+            var weaknessesContainer = document.getElementById('weaknessesContainer');
+            strengthsContainer.innerHTML = '';
+            weaknessesContainer.innerHTML = '';
+
+            if (units.length === 0) {
+                strengthsContainer.innerHTML = '<div class="insights-placeholder">No data yet. Keep practising!</div>';
+                weaknessesContainer.innerHTML = '<div class="insights-placeholder">No data yet. Keep practising!</div>';
+                return;
+            }
+
+            var strengths = units.slice(0, 3);
+            var weaknesses = units.slice(-3).reverse();
+
+            strengths.forEach(function(u) {
+                var html = '<div class="insight-item">' +
+                    '<div class="insight-name">' + u.name + '</div>' +
+                    '<div class="insight-score">' +
+                    '<span class="insight-percentage">' + u.avg.toFixed(1) + '%</span>' +
+                    '</div>' +
+                    '<div class="insight-bar">' +
+                    '<div class="insight-bar-fill" style="width: ' + u.avg + '%;"></div>' +
+                    '</div></div>';
+                strengthsContainer.innerHTML += html;
+            });
+
+            weaknesses.forEach(function(u) {
+                var html = '<div class="insight-item">' +
+                    '<div class="insight-name">' + u.name + '</div>' +
+                    '<div class="insight-score">' +
+                    '<span class="insight-percentage">' + u.avg.toFixed(1) + '%</span>' +
+                    '</div>' +
+                    '<div class="insight-bar">' +
+                    '<div class="insight-bar-fill" style="width: ' + u.avg + '%;"></div>' +
+                    '</div></div>';
+                weaknessesContainer.innerHTML += html;
             });
         }
 
-        function prepareChartData(attempts) {
-            const overallData = [];
-
-            attempts.forEach(attempt => {
-                const timestamp = new Date(attempt.created_at);
-                const percentage = attempt.percentage_score || 0;
-                overallData.push({ x: timestamp, y: percentage });
+        function renderStreak() {
+            var dates = {};
+            allAttempts.forEach(function(a) {
+                var d = new Date(a.created_at);
+                var dateStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+                dates[dateStr] = (dates[dateStr] || 0) + 1;
             });
 
-            const datasets = [
-                {
-                    label: 'Score %',
-                    data: overallData,
-                    borderColor: '#1e3a5f',
-                    backgroundColor: 'rgba(30, 58, 95, 0.08)',
-                    borderWidth: 3,
-                    fill: true,
-                    tension: 0.3,
-                    pointBackgroundColor: '#1e3a5f',
-                    pointBorderColor: '#ffffff',
-                    pointBorderWidth: 2,
-                    pointRadius: 5,
-                    pointHoverRadius: 8
+            var grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
+            var today = new Date();
+            var startDate = new Date(today);
+            startDate.setDate(startDate.getDate() - 84);
+
+            var weeks = [];
+            var currentWeek = null;
+            var dayLabels = ['Mon', 'Wed', 'Fri'];
+
+            for (var i = 0; i < 84; i++) {
+                var d = new Date(startDate);
+                d.setDate(d.getDate() + i);
+                var weekNum = Math.floor(i / 7);
+
+                if (!weeks[weekNum]) weeks[weekNum] = [];
+                weeks[weekNum].push(d);
+            }
+
+            weeks.forEach(function(week, weekIdx) {
+                var row = document.createElement('div');
+                row.className = 'calendar-row';
+
+                if (weekIdx === 0) {
+                    var label = document.createElement('div');
+                    label.className = 'calendar-day-label';
+                    label.textContent = dayLabels[0];
+                    row.appendChild(label);
+                } else if (weekIdx === 6) {
+                    var label = document.createElement('div');
+                    label.className = 'calendar-day-label';
+                    label.textContent = dayLabels[1];
+                    row.appendChild(label);
+                } else if (weekIdx === 12) {
+                    var label = document.createElement('div');
+                    label.className = 'calendar-day-label';
+                    label.textContent = dayLabels[2];
+                    row.appendChild(label);
+                } else {
+                    var label = document.createElement('div');
+                    label.className = 'calendar-day-label';
+                    row.appendChild(label);
                 }
+
+                week.forEach(function(d) {
+                    var dateStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+                    var count = dates[dateStr] || 0;
+                    var square = document.createElement('div');
+                    square.className = 'calendar-square';
+
+                    if (count === 0) {
+                        square.style.background = '#ebedf0';
+                    } else if (count === 1) {
+                        square.className += ' activity-1';
+                    } else if (count <= 3) {
+                        square.className += ' activity-2';
+                    } else {
+                        square.className += ' activity-3';
+                    }
+
+                    var isToday = d.toDateString() === today.toDateString();
+                    if (isToday && count > 0) square.classList.add('current');
+
+                    square.title = dateStr + ' (' + count + ' questions)';
+                    row.appendChild(square);
+                });
+
+                grid.appendChild(row);
+            });
+        }
+
+        function updateTargetGauge() {
+            var target = parseInt(document.getElementById('targetGradeSelect').value);
+            var totalMarks = allAttempts.reduce(function(sum, a) { return sum + (a.marks_awarded || 0); }, 0);
+            var totalPossible = allAttempts.reduce(function(sum, a) { return sum + (a.total_marks || 0); }, 0);
+            var current = totalPossible > 0 ? Math.round((totalMarks / totalPossible) * 100) : 0;
+
+            var percentage = Math.min(100, (current / target) * 100);
+            var dashOffset = 219.8 * (1 - percentage / 100);
+
+            var gaugeProgress = document.querySelector('.gauge-progress');
+            if (gaugeProgress) {
+                gaugeProgress.style.strokeDashoffset = dashOffset;
+            }
+
+            document.getElementById('gaugePercent').textContent = current + '%';
+
+            var gradeNames = { 90: 'A*', 80: 'A', 70: 'B', 60: 'C', 50: 'D', 40: 'E' };
+            var gradeName = gradeNames[target];
+            var message = document.getElementById('targetMessage');
+
+            if (current >= target) {
+                message.className = 'target-message success';
+                message.textContent = 'Amazing! You are exceeding your ' + gradeName + ' target! Keep up this excellent work!';
+            } else {
+                var diff = target - current;
+                message.className = 'target-message';
+                message.textContent = 'You\'re ' + diff + '% away from your ' + gradeName + ' target — keep going! You\'ve got this!';
+            }
+
+            localStorage.setItem('targetGrade', target);
+        }
+
+        function updateChart() {
+            var filterVal = document.getElementById('questionTypeFilter').value;
+            var filtered = allAttempts;
+
+            if (filterVal !== 'all') {
+                filtered = allAttempts.filter(function(a) {
+                    var qType = getQuestionTypeMarks(a.question_data);
+                    return getQuestionTypeLabel(qType) === filterVal;
+                });
+            }
+
+            if (filtered.length === 0) {
+                document.getElementById('chartSection').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('chartSection').style.display = 'block';
+
+            var chartData = { labels: [], overall: [], ao1: [], ao2: [], ao3: [], ao4: [] };
+            var aoPresent = { ao1: false, ao2: false, ao3: false, ao4: false };
+
+            filtered.forEach(function(a) {
+                var d = new Date(a.created_at);
+                var label = ('0' + d.getDate()).slice(-2) + ' ' + ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];
+                chartData.labels.push(label);
+                chartData.overall.push(a.percentage_score || 0);
+
+                if (a.marking_data && a.marking_data.ao_breakdown) {
+                    var maxMarks = a.total_marks || 0;
+                    var breakdown = a.marking_data.ao_breakdown;
+                    ['AO1', 'AO2', 'AO3', 'AO4'].forEach(function(ao, idx) {
+                        var aoKey = 'ao' + (idx + 1);
+                        var marks = breakdown[ao] || 0;
+                        var percent = maxMarks > 0 ? (marks / maxMarks) * 100 : 0;
+                        chartData[aoKey].push(percent);
+                        if (marks > 0) aoPresent[aoKey] = true;
+                    });
+                }
+            });
+
+            ['ao1', 'ao2', 'ao3', 'ao4'].forEach(function(ao, idx) {
+                var legend = document.getElementById('legend-' + ao);
+                if (legend) legend.style.display = aoPresent[ao] ? 'flex' : 'none';
+            });
+
+            var ctx = document.getElementById('performanceChart').getContext('2d');
+            if (performanceChart) performanceChart.destroy();
+
+            var datasets = [
+                { label: 'Overall Score', data: chartData.overall, borderColor: '#1e3a5f', backgroundColor: 'rgba(30, 58, 95, 0.05)', borderWidth: 3, fill: true, tension: 0.4, pointRadius: 5, pointBackgroundColor: '#1e3a5f', pointBorderColor: '#fff', pointBorderWidth: 2, pointHoverRadius: 7 }
             ];
 
-            return { datasets };
-        }
+            if (aoPresent.ao1) datasets.push({ label: 'Knowledge (AO1)', data: chartData.ao1, borderColor: '#3498db', backgroundColor: 'rgba(52, 152, 219, 0.05)', borderWidth: 2, fill: false, tension: 0.4, pointRadius: 4, pointBackgroundColor: '#3498db', borderDash: [5, 5] });
+            if (aoPresent.ao2) datasets.push({ label: 'Application (AO2)', data: chartData.ao2, borderColor: '#2ecc71', backgroundColor: 'rgba(46, 204, 113, 0.05)', borderWidth: 2, fill: false, tension: 0.4, pointRadius: 4, pointBackgroundColor: '#2ecc71', borderDash: [5, 5] });
+            if (aoPresent.ao3) datasets.push({ label: 'Analysis (AO3)', data: chartData.ao3, borderColor: '#9b59b6', backgroundColor: 'rgba(155, 89, 182, 0.05)', borderWidth: 2, fill: false, tension: 0.4, pointRadius: 4, pointBackgroundColor: '#9b59b6', borderDash: [5, 5] });
+            if (aoPresent.ao4) datasets.push({ label: 'Evaluation (AO4)', data: chartData.ao4, borderColor: '#e67e22', backgroundColor: 'rgba(230, 126, 34, 0.05)', borderWidth: 2, fill: false, tension: 0.4, pointRadius: 4, pointBackgroundColor: '#e67e22', borderDash: [5, 5] });
 
-        function renderChart(labels, datasets) {
-            const chartContent = document.getElementById('chartContent');
-
-            if (chartInstance) {
-                chartInstance.destroy();
-            }
-
-            const html = '<div class="chart-canvas-wrapper"><canvas id="performanceChart"></canvas></div>';
-            chartContent.innerHTML = html;
-
-            // Work out sensible time unit based on data spread
-            let timeUnit = 'day';
-            if (datasets.length > 0 && datasets[0].data.length > 1) {
-                const points = datasets[0].data;
-                const firstTime = points[0].x.getTime();
-                const lastTime = points[points.length - 1].x.getTime();
-                const spanHours = (lastTime - firstTime) / (1000 * 60 * 60);
-                if (spanHours <= 24) {
-                    timeUnit = 'hour';
-                } else if (spanHours <= 24 * 7) {
-                    timeUnit = 'day';
-                } else if (spanHours <= 24 * 90) {
-                    timeUnit = 'week';
-                } else {
-                    timeUnit = 'month';
-                }
-            }
-
-            setTimeout(() => {
-                const ctx = document.getElementById('performanceChart').getContext('2d');
-                chartInstance = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        datasets: datasets
+            performanceChart = new Chart(ctx, {
+                type: 'line',
+                data: { labels: chartData.labels, datasets: datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { mode: 'index', backgroundColor: 'rgba(30, 58, 95, 0.9)', padding: 12, borderRadius: 8, titleFont: { size: 14, weight: 'bold' }, bodyFont: { size: 13 } }
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        interaction: {
-                            intersect: false,
-                            mode: 'nearest',
-                            axis: 'x'
-                        },
-                        plugins: {
-                            legend: {
-                                display: false
-                            },
-                            tooltip: {
-                                backgroundColor: 'rgba(30, 58, 95, 0.9)',
-                                titleColor: '#ffffff',
-                                bodyColor: '#ffffff',
-                                borderColor: '#e67e22',
-                                borderWidth: 1,
-                                padding: 12,
-                                displayColors: true,
-                                titleFont: { family: "'Inter', sans-serif", size: 13, weight: '600' },
-                                bodyFont: { family: "'Inter', sans-serif", size: 12 },
-                                callbacks: {
-                                    title: function(tooltipItems) {
-                                        if (tooltipItems.length > 0) {
-                                            const d = new Date(tooltipItems[0].parsed.x);
-                                            return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) +
-                                                   ' at ' + d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-                                        }
-                                        return '';
-                                    },
-                                    label: function(context) {
-                                        let label = context.dataset.label || '';
-                                        if (label) label += ': ';
-                                        if (context.parsed.y !== null) {
-                                            label += context.parsed.y.toFixed(1) + '%';
-                                        } else {
-                                            label += 'N/A';
-                                        }
-                                        return label;
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                max: 100,
-                                ticks: {
-                                    color: '#94a3b8',
-                                    font: { family: "'Inter', sans-serif", size: 12 },
-                                    callback: function(value) {
-                                        return value + '%';
-                                    }
-                                },
-                                grid: {
-                                    color: 'rgba(241, 245, 249, 0.6)',
-                                    drawBorder: false
-                                }
-                            },
-                            x: {
-                                type: 'time',
-                                time: {
-                                    unit: timeUnit,
-                                    displayFormats: {
-                                        hour: 'HH:mm',
-                                        day: 'd MMM',
-                                        week: 'd MMM',
-                                        month: 'MMM yyyy'
-                                    },
-                                    tooltipFormat: 'd MMM yyyy HH:mm'
-                                },
-                                ticks: {
-                                    color: '#94a3b8',
-                                    font: { family: "'Inter', sans-serif", size: 11 },
-                                    maxRotation: 0,
-                                    autoSkip: true,
-                                    maxTicksLimit: 12
-                                },
-                                grid: {
-                                    display: false
-                                }
-                            }
-                        }
-                    }
-                });
-            }, 0);
-        }
-
-        // ========== SUMMARY UPDATE ==========
-        function updateSummary(filteredData) {
-            document.getElementById('summaryAttempted').textContent = filteredData.length;
-
-            if (filteredData.length === 0) {
-                document.getElementById('summaryAverage').textContent = '--';
-                document.getElementById('summaryTrend').textContent = '--';
-                return;
-            }
-
-            const avgScore = filteredData.reduce((sum, a) => sum + (a.percentage_score || 0), 0) / filteredData.length;
-            document.getElementById('summaryAverage').textContent = avgScore.toFixed(1) + '%';
-
-            const trend = calculateTrend(filteredData);
-            const trendEl = document.getElementById('summaryTrend');
-            if (trend > 0) {
-                trendEl.textContent = '+' + trend.toFixed(1) + '%';
-                trendEl.style.color = '#16a34a';
-            } else if (trend < 0) {
-                trendEl.textContent = trend.toFixed(1) + '%';
-                trendEl.style.color = '#dc2626';
-            } else {
-                trendEl.textContent = 'Stable';
-                trendEl.style.color = '#64748b';
-            }
-        }
-
-        function calculateTrend(attempts) {
-            if (attempts.length < 2) return 0;
-
-            const mid = Math.floor(attempts.length / 2);
-            const firstHalf = attempts.slice(0, mid);
-            const secondHalf = attempts.slice(mid);
-
-            const firstAvg = firstHalf.reduce((sum, a) => sum + (a.percentage_score || 0), 0) / firstHalf.length;
-            const secondAvg = secondHalf.reduce((sum, a) => sum + (a.percentage_score || 0), 0) / secondHalf.length;
-
-            return secondAvg - firstAvg;
-        }
-
-        // ========== TOPIC FILTER POPULATION ==========
-        function populateTopicFilter() {
-            const topicSelect = document.getElementById('topicFilter');
-            // Keep the "All Topics" default option
-            topicSelect.innerHTML = '<option value="all">All Topics</option>';
-
-            // Get the current unit filter to only show topics for that unit
-            const unitFilter = document.getElementById('unitFilter').value;
-
-            // Collect unique topics from tested_topics in all attempts
-            const topicSet = new Set();
-            const topicEntries = [];
-
-            allAttempts.forEach(attempt => {
-                // If unit filter is active, skip attempts from other units
-                if (unitFilter !== 'all') {
-                    const unitCodes = {
-                        'unit1': 'WBS11', 'unit2': 'WBS12', 'unit3': 'WBS13', 'unit4': 'WBS14'
-                    };
-                    const unitCode = unitCodes[unitFilter];
-                    const u = (attempt.unit || '').toUpperCase();
-                    if (!u.includes(unitCode) && !u.includes(unitFilter.toUpperCase())) {
-                        return;
+                    scales: {
+                        y: { beginAtZero: true, max: 100, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 12, weight: 600 }, callback: function(v) { return v + '%'; } } },
+                        x: { grid: { display: false }, ticks: { font: { size: 12 } } }
                     }
                 }
-
-                const testedTopics = (attempt.question_data && attempt.question_data.tested_topics) || [];
-                testedTopics.forEach(t => {
-                    const topicName = t.topic || t.section || '';
-                    if (topicName && !topicSet.has(topicName)) {
-                        topicSet.add(topicName);
-                        topicEntries.push({
-                            value: topicName,
-                            label: topicName,
-                            section: t.section || ''
-                        });
-                    }
-                });
             });
 
-            // Sort alphabetically by section then topic
-            topicEntries.sort((a, b) => {
-                if (a.section !== b.section) return a.section.localeCompare(b.section);
-                return a.label.localeCompare(b.label);
-            });
+            var avg = (chartData.overall.reduce(function(a, b) { return a + b; }, 0) / chartData.overall.length).toFixed(1);
+            document.getElementById('chartAverage').textContent = avg + '%';
+        }
 
-            topicEntries.forEach(entry => {
-                const option = document.createElement('option');
-                option.value = entry.value;
-                option.textContent = entry.label;
-                topicSelect.appendChild(option);
+        function getQuestionTypeMarks(questionData) {
+            if (!questionData || !questionData.total_marks) return 'unknown';
+            var marks = questionData.total_marks;
+            if (marks === 2) return '2-mark';
+            if (marks === 4) return '4-mark';
+            if (marks === 6) return '6-mark';
+            if (marks === 8) return '8-mark';
+            if (marks === 10) return '10-mark';
+            if (marks === 20) return '20-mark';
+            return 'other';
+        }
+
+        function getQuestionTypeLabel(type) {
+            var map = { '2-mark': '2-mark', '4-mark': '4-mark', '6-mark': '6-mark', '8-mark': '8-mark', '10-mark': '10-mark', '20-mark': '20-mark' };
+            return map[type] || type;
+        }
+
+        function updateMotivationalQuote(score) {
+            var quotes;
+            if (score >= 90) {
+                quotes = [
+                    'You\'re an outstanding student! Keep this momentum going!',
+                    'Exceptional work! You\'re clearly a Business Studies master!',
+                    'Outstanding performance! You\'re in elite territory now!'
+                ];
+            } else if (score >= 80) {
+                quotes = [
+                    'Excellent work! You\'re well on your way to the top grades!',
+                    'Great progress! Your hard work is paying off!',
+                    'Strong performance! Keep pushing towards perfection!'
+                ];
+            } else if (score >= 70) {
+                quotes = [
+                    'Good progress! You\'re building strong foundations!',
+                    'Well done! Keep practising to reach the next level!',
+                    'You\'re on the right track! Keep it up!'
+                ];
+            } else if (score >= 60) {
+                quotes = [
+                    'Keep going! Every practice session brings improvement!',
+                    'You\'re making steady progress. Consistency is key!',
+                    'Stay focused! Small improvements add up to big results!'
+                ];
+            } else {
+                quotes = [
+                    'Every expert was once a beginner. Keep practicing!',
+                    'Don\'t give up! You\'re building valuable skills!',
+                    'The more you practice, the stronger you become!'
+                ];
+            }
+            document.getElementById('motivationalQuote').textContent = quotes[Math.floor(Math.random() * quotes.length)];
+        }
+
+        function animateCountUp(elementId, endValue, isPercent) {
+            var element = document.getElementById(elementId);
+            var startValue = 0;
+            var duration = 1200;
+            var startTime = Date.now();
+
+            function easeOutCubic(t) {
+                return 1 - Math.pow(1 - t, 3);
+            }
+
+            function animate() {
+                var now = Date.now();
+                var progress = (now - startTime) / duration;
+
+                if (progress >= 1) {
+                    element.textContent = endValue + (isPercent ? '%' : '');
+                } else {
+                    var easeProgress = easeOutCubic(progress);
+                    var currentValue = Math.floor(endValue * easeProgress);
+                    element.textContent = currentValue + (isPercent ? '%' : '');
+                    requestAnimationFrame(animate);
+                }
+            }
+
+            animate();
+        }
+
+        function toggleProfileDropdown() {
+            var dropdown = document.getElementById('profileDropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        function closeProfileDropdown() {
+            var dropdown = document.getElementById('profileDropdown');
+            dropdown.classList.remove('show');
+        }
+
+        function initProfileDropdown() {
+            if (!userSession) return;
+
+            var fullName = userSession.user.user_metadata?.full_name || userSession.user.email || 'Student';
+            var initials = fullName.split(' ').map(function(n) { return n[0]; }).join('').toUpperCase().slice(0, 2);
+
+            document.getElementById('profileInitials').textContent = initials || '?';
+            document.getElementById('profileName').textContent = fullName;
+            document.getElementById('profileEmail').textContent = userSession.user.email;
+
+            document.addEventListener('click', function(e) {
+                var dropdown = document.getElementById('profileDropdown');
+                var avatar = document.getElementById('profileAvatar');
+                if (!e.target.closest('.profile-dropdown-wrapper')) {
+                    dropdown.classList.remove('show');
+                }
             });
         }
 
-        // ========== FILTER CHANGE LISTENERS ==========
-        document.getElementById('questionTypeFilter').addEventListener('change', function() {
-            updateChart();
-        });
+        async function handleLogout() {
+            await supabaseClient.auth.signOut();
+            window.location.href = 'login.html';
+        }
 
-        document.getElementById('unitFilter').addEventListener('change', function() {
-            // Re-populate topic filter based on new unit selection
-            populateTopicFilter();
-            document.getElementById('topicFilter').value = 'all';
-            updateChart();
-        });
+        // ===== START =====
+        init();
 
-        document.getElementById('topicFilter').addEventListener('change', function() {
-            updateChart();
+        // Load target grade from localStorage
+        window.addEventListener('load', function() {
+            var saved = localStorage.getItem('targetGrade');
+            if (saved) document.getElementById('targetGradeSelect').value = saved;
+            updateTargetGauge();
         });
     </script>
 </body>

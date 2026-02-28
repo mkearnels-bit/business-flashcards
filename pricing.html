@@ -6,28 +6,23 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-    <title>Pricing Plans | MyBizStudies</title>
-    <meta name="description" content="Choose the perfect MyBizStudies plan for your GCSE and A Level Business Studies revision. Free flashcards and exam skills, or upgrade to Pro for full access.">
-    <meta name="keywords" content="A-Level Business Studies, GCSE Business Studies, Edexcel IAL, revision notes, flashcards, exam technique, pricing">
-    <link rel="canonical" href="https://mybizstudies.com/pricing.html">
-    <meta property="og:title" content="Pricing Plans | MyBizStudies">
-    <meta property="og:description" content="Choose the perfect MyBizStudies plan. Free flashcards and exam skills, or upgrade to Pro for full access.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://mybizstudies.com/pricing.html">
-    <meta property="og:site_name" content="MyBizStudies">
+    <title>Pricing | MyBizStudies</title>
+<meta name="description" content="Affordable subscription plans for MyBizStudies. Access interactive study notes, flashcards, and exam technique training.">
+<meta name="keywords" content="A-Level Business Studies, Edexcel IAL, revision notes, flashcards, exam technique, GCSE Business">
+<link rel="canonical" href="https://mybizstudies.com/pricing.html">
+<meta property="og:title" content="Pricing | MyBizStudies">
+<meta property="og:description" content="Affordable subscription plans for MyBizStudies. Access interactive study notes, flashcards, and exam technique training.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mybizstudies.com/pricing.html">
+<meta property="og:site_name" content="MyBizStudies">
     <meta property="og:image" content="https://mybizstudies.com/og-image.png">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="https://mybizstudies.com/og-image.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
             --primary: #1e3a5f;
@@ -49,102 +44,319 @@
             --gray-50: #f8fafc;
             --white: #ffffff;
         }
+        /* ==================== SITE NAVBAR ==================== */
+.site-navbar {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #f1f5f9;
+    padding: 0.75rem 2rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.site-navbar-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.site-navbar-logo {
+    height: 55px;
+    width: auto;
+}
+.site-nav-buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.site-nav-link {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #334155;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+.site-nav-link:hover {
+    color: #1e3a5f;
+    background: #f1f5f9;
+}
+.site-nav-link.active {
+    color: #e67e22;
+    font-weight: 600;
+}
+.site-nav-btn {
+    padding: 0.5rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    font-family: inherit;
+}
+.site-nav-btn-ghost {
+    color: #1e3a5f;
+    background: transparent;
+    border: 1px solid #cbd5e1;
+}
+.site-nav-btn-ghost:hover {
+    background: #f1f5f9;
+    border-color: #1e3a5f;
+}
+.site-hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1100;
+    position: relative;
+}
+.site-hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: #1e3a5f;
+    border-radius: 2px;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    position: absolute;
+}
+.site-hamburger span:nth-child(1) { transform: translateY(-7px); }
+.site-hamburger span:nth-child(2) { opacity: 1; }
+.site-hamburger span:nth-child(3) { transform: translateY(7px); }
+.site-hamburger.active span:nth-child(1) { transform: rotate(45deg); }
+.site-hamburger.active span:nth-child(2) { opacity: 0; }
+.site-hamburger.active span:nth-child(3) { transform: rotate(-45deg); }
 
-        html {
-            scroll-behavior: smooth;
-            overflow-x: hidden;
-        }
+/* Mobile overlay */
+.site-mobile-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 1040;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+.site-mobile-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Mobile slide-out menu */
+.site-mobile-menu {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 280px;
+    height: 100%;
+    background: #ffffff;
+    z-index: 1050;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
+    padding: 5.5rem 1.5rem 2rem;
+}
+.site-mobile-menu.active {
+    transform: translateX(0);
+}
+.site-mobile-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+.site-mobile-menu a,
+.site-mobile-menu button {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.875rem 1rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #334155;
+    transition: all 0.2s ease;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: inherit;
+    width: 100%;
+}
+.site-mobile-menu a:hover,
+.site-mobile-menu button:hover {
+    background: #f1f5f9;
+    color: #1e3a5f;
+}
+.site-mobile-menu a.active {
+    background: #f1f5f9;
+    color: #1e3a5f;
+}
+.site-menu-icon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #f1f5f9;
+    flex-shrink: 0;
+}
+.site-menu-icon svg {
+    width: 18px;
+    height: 18px;
+    stroke: #64748b;
+}
+.site-mobile-menu a.active .site-menu-icon {
+    background: #1e3a5f;
+}
+.site-mobile-menu a.active .site-menu-icon svg {
+    stroke: white;
+}
+.site-mobile-divider {
+    height: 1px;
+    background: #f1f5f9;
+    margin: 0.5rem 0;
+}
+.site-mobile-logout {
+    color: #e74c3c !important;
+}
+.site-mobile-logout .site-menu-icon {
+    background: rgba(231, 76, 60, 0.08);
+}
+.site-mobile-logout .site-menu-icon svg {
+    stroke: #e74c3c;
+}
+
+@media (max-width: 768px) {
+    .site-hamburger {
+        display: flex;
+    }
+    .site-nav-buttons {
+        display: none;
+    }
+    .site-navbar {
+        padding: 0.5rem 1rem;
+    }
+    .site-navbar-content {
+        padding: 0;
+    }
+    .site-navbar-logo {
+        height: 45px;
+    }
+}
+
+
+        html { scroll-behavior: smooth; }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             color: var(--gray-900);
             line-height: 1.6;
             overflow-x: hidden;
+            background: var(--gray-50);
         }
 
-        /* ==================== NAVBAR ==================== */
-        .navbar {
+        /* ==================== HEADER ==================== */
+        .app-header {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            z-index: 1000;
-            padding: 1rem 2rem;
-            transition: all 0.3s ease;
             background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(20px);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .navbar-content {
-            max-width: 1200px;
-            margin: 0 auto;
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 0.75rem 2rem;
+            border-bottom: 1px solid var(--gray-100);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .logo {
-            height: 65px;
-            transition: height 0.3s ease;
-        }
-
-        .nav-buttons {
+        .header-logo {
             display: flex;
-            gap: 1rem;
             align-items: center;
+            text-decoration: none;
         }
 
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 50px;
+        .header-logo img {
+            height: 65px;
+            width: auto;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            background: var(--gray-100);
+            border-radius: 10px;
+            padding: 0.25rem;
+        }
+
+        .header-nav a {
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
             font-weight: 600;
-            font-size: 0.95rem;
             text-decoration: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
+            color: var(--gray-500);
+            transition: all 0.2s ease;
+        }
+
+        .header-nav a:hover {
+            color: var(--primary);
+            background: rgba(255,255,255,0.5);
+        }
+
+        .header-nav a.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-email {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+        }
+
+        .logout-btn {
+            background: var(--accent);
+            color: white;
             border: none;
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
             font-family: inherit;
         }
 
-        .btn-ghost {
-            background: transparent;
-            color: var(--primary);
-            border: 2px solid var(--gray-300);
-        }
-
-        .btn-ghost:hover {
-            background: var(--gray-100);
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
-            color: white;
-            box-shadow: 0 4px 15px var(--accent-glow);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px var(--accent-glow);
-        }
-
-        .btn-large {
-            padding: 1rem 2.5rem;
-            font-size: 1.1rem;
-        }
-
-        .nav-contact {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            padding: 0.5rem 0;
-            position: relative;
-            transition: opacity 0.2s ease;
-        }
-
-        .nav-contact:hover {
-            opacity: 0.7;
+        .logout-btn:hover {
+            background: #d35400;
+            transform: translateY(-1px);
         }
 
         /* Hamburger Menu */
@@ -181,22 +393,19 @@
         .hamburger.active span:nth-child(2) { opacity: 0; }
         .hamburger.active span:nth-child(3) { transform: rotate(-45deg); }
 
-        .hamburger.active span {
-            background: var(--primary) !important;
-        }
-
         .mobile-menu-overlay {
             display: none;
             position: fixed;
             inset: 0;
             background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(4px);
             z-index: 1040;
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s ease;
         }
 
-        .mobile-menu-overlay.active { opacity: 1; pointer-events: auto; backdrop-filter: blur(4px); }
+        .mobile-menu-overlay.active { opacity: 1; pointer-events: auto; }
 
         .mobile-menu {
             display: none;
@@ -253,9 +462,18 @@
             transition: stroke 0.2s ease;
         }
 
-        .mobile-menu-links a:hover {
+        .mobile-menu-links a:hover,
+        .mobile-menu-links a.active {
             background: var(--gray-100);
             color: var(--primary);
+        }
+
+        .mobile-menu-links a.active .menu-icon {
+            background: var(--primary);
+        }
+
+        .mobile-menu-links a.active .menu-icon svg {
+            stroke: white;
         }
 
         .mobile-menu-divider {
@@ -264,214 +482,165 @@
             margin: 0.5rem 0;
         }
 
-        .mobile-menu-links .btn-mobile-cta {
-            margin-top: 0.5rem;
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
-            color: white;
-            justify-content: center;
-            font-weight: 700;
-            box-shadow: 0 4px 15px var(--accent-glow);
+        .mobile-menu-logout { margin-top: 1rem; }
+
+        .mobile-menu-logout button {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            padding: 0.875rem 1rem;
+            border-radius: 12px;
+            border: none;
+            background: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--error);
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s ease;
         }
 
-        .mobile-menu-links .btn-mobile-cta .menu-icon {
-            display: none;
-        }
-
-        .mobile-menu-links .btn-mobile-cta:hover {
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
-            color: white;
-            transform: translateY(-1px);
-        }
-
-        /* Profile Avatar Dropdown */
-        .profile-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #e67e22, #f39c12);
+        .mobile-menu-logout button .menu-icon {
+            width: 36px;
+            height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 2px solid #f1f5f9;
-        }
-        .profile-avatar:hover {
-            box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
-            transform: scale(1.05);
-        }
-        .profile-dropdown {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            z-index: 1100;
-            min-width: 200px;
-            display: none;
-            margin-top: 0.5rem;
-            overflow: hidden;
-        }
-        .profile-dropdown.active { display: block; }
-        .profile-dropdown a,
-        .profile-dropdown button {
-            display: block;
-            width: 100%;
-            padding: 0.75rem 1rem;
-            text-align: left;
-            text-decoration: none;
-            color: var(--gray-700);
-            font-size: 0.9rem;
-            font-weight: 500;
-            border: none;
-            background: none;
-            cursor: pointer;
-            font-family: inherit;
-            transition: background 0.15s;
-        }
-        .profile-dropdown a:hover,
-        .profile-dropdown button:hover {
-            background: var(--gray-50);
-        }
-        .profile-dropdown button {
-            color: var(--error);
+            border-radius: 10px;
+            background: rgba(231, 76, 60, 0.08);
+            flex-shrink: 0;
         }
 
-        /* ==================== PRICING HERO ==================== */
+        .mobile-menu-logout button .menu-icon svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--error);
+        }
+
+        .mobile-menu-logout button:hover {
+            background: rgba(231, 76, 60, 0.06);
+        }
+
+        /* ==================== HERO SECTION ==================== */
         .pricing-hero {
-            padding: 10rem 2rem 4rem;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            text-align: center;
+            padding-top: 120px;
+            padding-bottom: 60px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 50%, #3a7bd5 100%);
             position: relative;
             overflow: hidden;
+            text-align: center;
         }
 
         .pricing-hero::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(230, 126, 34, 0.08) 0%, transparent 40%);
+            animation: subtleFloat 20s ease-in-out infinite;
         }
 
-        .pricing-hero-content {
+        @keyframes subtleFloat {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-2%, -1%); }
+        }
+
+        .pricing-hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: linear-gradient(to top, var(--gray-50), transparent);
+        }
+
+        .hero-content {
             position: relative;
-            z-index: 1;
+            z-index: 2;
             max-width: 700px;
             margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 24px;
+            letter-spacing: 0.3px;
+        }
+
+        .hero-badge svg {
+            width: 16px;
+            height: 16px;
+            fill: var(--accent-light);
         }
 
         .pricing-hero h1 {
             font-size: 3rem;
             font-weight: 800;
             color: white;
-            margin-bottom: 1rem;
-            line-height: 1.2;
+            line-height: 1.15;
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+
+        .pricing-hero h1 span {
+            background: linear-gradient(135deg, var(--accent-light), #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .pricing-hero p {
             font-size: 1.15rem;
             color: rgba(255, 255, 255, 0.8);
+            max-width: 520px;
+            margin: 0 auto;
             line-height: 1.7;
         }
 
-        /* ==================== PRICING SECTION ==================== */
+        /* ==================== PRICING CARDS ==================== */
         .pricing-section {
-            padding: 4rem 2rem 6rem;
-            background: var(--gray-50);
-        }
-
-        .pricing-container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        /* Toggle */
-        .pricing-toggle {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 3rem;
-        }
-
-        .pricing-toggle-label {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--gray-500);
-            transition: color 0.3s;
-        }
-
-        .pricing-toggle-label.active {
-            color: var(--primary);
-        }
-
-        .pricing-toggle-switch {
-            width: 56px;
-            height: 30px;
-            background: var(--gray-300);
-            border-radius: 50px;
+            max-width: 880px;
+            margin: -40px auto 0;
+            padding: 0 1.5rem 80px;
             position: relative;
-            cursor: pointer;
-            transition: background 0.3s;
+            z-index: 10;
         }
 
-        .pricing-toggle-switch.yearly {
-            background: var(--accent);
-        }
-
-        .pricing-toggle-switch::after {
-            content: '';
-            position: absolute;
-            width: 24px;
-            height: 24px;
-            background: white;
-            border-radius: 50%;
-            top: 3px;
-            left: 3px;
-            transition: transform 0.3s;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-        }
-
-        .pricing-toggle-switch.yearly::after {
-            transform: translateX(26px);
-        }
-
-        .pricing-save-badge {
-            background: var(--success);
-            color: white;
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 0.3rem 0.75rem;
-            border-radius: 50px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* Cards */
-        .pricing-cards {
+        .pricing-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 2rem;
+            gap: 24px;
             align-items: start;
         }
 
         .pricing-card {
-            background: white;
+            background: var(--white);
             border-radius: 20px;
-            padding: 2.5rem;
+            padding: 40px 36px;
             border: 2px solid var(--gray-200);
-            transition: all 0.3s ease;
             position: relative;
+            transition: all 0.3s ease;
+            overflow: hidden;
         }
 
         .pricing-card:hover {
+            transform: translateY(-4px);
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
         }
 
@@ -481,731 +650,895 @@
         }
 
         .pricing-card.featured:hover {
+            transform: translateY(-4px);
             box-shadow: 0 25px 70px rgba(230, 126, 34, 0.2);
         }
 
-        .pricing-popular-badge {
+        .featured-banner {
             position: absolute;
-            top: -14px;
-            left: 50%;
-            transform: translateX(-50%);
+            top: 0;
+            left: 0;
+            right: 0;
             background: linear-gradient(135deg, var(--accent), var(--accent-light));
             color: white;
-            font-size: 0.78rem;
+            text-align: center;
+            padding: 8px;
+            font-size: 0.8rem;
             font-weight: 700;
-            padding: 0.4rem 1.25rem;
-            border-radius: 50px;
+            letter-spacing: 1px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
         }
 
-        .pricing-card-header {
-            margin-bottom: 2rem;
+        .pricing-card.featured .card-inner {
+            padding-top: 12px;
         }
 
-        .pricing-plan-name {
-            font-size: 1.35rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .pricing-plan-desc {
-            font-size: 0.9rem;
-            color: var(--gray-500);
-            line-height: 1.5;
-        }
-
-        .pricing-amount {
-            margin-bottom: 2rem;
-        }
-
-        .pricing-price {
-            font-size: 3.5rem;
-            font-weight: 800;
-            color: var(--primary);
-            line-height: 1;
-        }
-
-        .pricing-price .currency {
-            font-size: 1.5rem;
-            font-weight: 700;
-            vertical-align: super;
-        }
-
-        .pricing-period {
-            font-size: 0.9rem;
-            color: var(--gray-500);
-            margin-top: 0.25rem;
-        }
-
-        .pricing-yearly-note {
-            font-size: 0.85rem;
-            color: var(--success);
-            font-weight: 600;
-            margin-top: 0.35rem;
-            display: none;
-        }
-
-        .pricing-yearly-note.visible {
-            display: block;
-        }
-
-        .pricing-features {
-            list-style: none;
-            margin-bottom: 2rem;
-        }
-
-        .pricing-features li {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.75rem;
-            padding: 0.6rem 0;
-            font-size: 0.92rem;
-            color: var(--gray-700);
-            line-height: 1.5;
-        }
-
-        .pricing-features li .check {
-            flex-shrink: 0;
-            width: 20px;
-            height: 20px;
-            background: rgba(39, 174, 96, 0.1);
-            border-radius: 50%;
+        .plan-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-top: 1px;
+            margin-bottom: 20px;
         }
 
-        .pricing-features li .check svg {
-            width: 12px;
-            height: 12px;
-            stroke: var(--success);
-            stroke-width: 3;
+        .plan-icon.monthly {
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.12), rgba(52, 152, 219, 0.05));
+        }
+
+        .plan-icon.monthly svg {
+            stroke: var(--secondary);
+        }
+
+        .plan-icon.yearly {
+            background: linear-gradient(135deg, rgba(230, 126, 34, 0.15), rgba(230, 126, 34, 0.05));
+        }
+
+        .plan-icon.yearly svg {
+            stroke: var(--accent);
+        }
+
+        .plan-icon svg {
+            width: 28px;
+            height: 28px;
             fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
-        .pricing-features li.included-label {
+        .plan-name {
+            font-size: 1.25rem;
             font-weight: 700;
-            color: var(--primary);
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+
+        .plan-desc {
+            font-size: 0.9rem;
+            color: var(--gray-500);
+            margin-bottom: 24px;
+        }
+
+        .price-row {
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+            margin-bottom: 6px;
+        }
+
+        .price-currency {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            align-self: flex-start;
+            margin-top: 8px;
+        }
+
+        .price-amount {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            line-height: 1;
+            letter-spacing: -2px;
+        }
+
+        .price-period {
+            font-size: 1rem;
+            color: var(--gray-500);
+            font-weight: 500;
+        }
+
+        .price-yearly-total {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            margin-bottom: 24px;
+        }
+
+        .price-monthly-note {
+            margin-bottom: 24px;
+        }
+
+        .savings-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(39, 174, 96, 0.1);
+            color: var(--success);
             font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding-top: 1rem;
-            border-top: 1px solid var(--gray-100);
-            margin-top: 0.5rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 50px;
+            margin-bottom: 24px;
         }
 
-        .pricing-features li.included-label .check {
-            display: none;
+        .savings-badge svg {
+            width: 14px;
+            height: 14px;
+            fill: none;
+            stroke: var(--success);
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
-        .pricing-cta {
+        .subscribe-btn {
             display: block;
             width: 100%;
-            padding: 1rem;
-            border-radius: 50px;
-            font-weight: 700;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 12px;
             font-size: 1rem;
-            text-align: center;
-            text-decoration: none;
-            transition: all 0.3s ease;
+            font-weight: 700;
             font-family: inherit;
             cursor: pointer;
-            border: none;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            letter-spacing: 0.3px;
         }
 
-        .pricing-cta-free {
+        .subscribe-btn.secondary {
             background: var(--gray-100);
             color: var(--primary);
             border: 2px solid var(--gray-200);
         }
 
-        .pricing-cta-free:hover {
+        .subscribe-btn.secondary:hover {
             background: var(--gray-200);
-        }
-
-        .pricing-cta-pro {
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
-            color: white;
-            box-shadow: 0 4px 15px var(--accent-glow);
-        }
-
-        .pricing-cta-pro:hover {
+            border-color: var(--gray-300);
             transform: translateY(-2px);
-            box-shadow: 0 6px 25px var(--accent-glow);
         }
 
-        /* ==================== FAQ SECTION ==================== */
-        .pricing-faq {
-            padding: 5rem 2rem;
-            background: white;
+        .subscribe-btn.primary {
+            background: linear-gradient(135deg, var(--accent), #d35400);
+            color: white;
+            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.35);
         }
 
-        .pricing-faq-container {
-            max-width: 700px;
+        .subscribe-btn.primary:hover {
+            box-shadow: 0 6px 25px rgba(230, 126, 34, 0.45);
+            transform: translateY(-2px);
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-top: 28px;
+            padding-top: 28px;
+            border-top: 1px solid var(--gray-100);
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 0;
+            font-size: 0.92rem;
+            color: var(--gray-700);
+            line-height: 1.5;
+        }
+
+        .feature-list li svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .check-icon {
+            fill: none;
+            stroke: var(--success);
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* ==================== WHAT'S INCLUDED ==================== */
+        .included-section {
+            max-width: 880px;
             margin: 0 auto;
+            padding: 0 1.5rem 80px;
         }
 
-        .pricing-faq h2 {
+        .included-header {
             text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .included-header h2 {
             font-size: 2rem;
             font-weight: 800;
-            color: var(--primary);
-            margin-bottom: 2.5rem;
+            color: var(--gray-900);
+            margin-bottom: 10px;
         }
 
-        .pricing-faq-item {
-            border-bottom: 1px solid var(--gray-200);
+        .included-header p {
+            font-size: 1.05rem;
+            color: var(--gray-500);
         }
 
-        .pricing-faq-q {
-            width: 100%;
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 28px 24px;
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+        }
+
+        .feature-card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .feature-card-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .feature-card-icon.blue { background: rgba(52, 152, 219, 0.1); }
+        .feature-card-icon.blue svg { stroke: var(--secondary); }
+        .feature-card-icon.orange { background: rgba(230, 126, 34, 0.1); }
+        .feature-card-icon.orange svg { stroke: var(--accent); }
+        .feature-card-icon.green { background: rgba(39, 174, 96, 0.1); }
+        .feature-card-icon.green svg { stroke: var(--success); }
+        .feature-card-icon.purple { background: rgba(155, 89, 182, 0.1); }
+        .feature-card-icon.purple svg { stroke: #9b59b6; }
+        .feature-card-icon.red { background: rgba(231, 76, 60, 0.1); }
+        .feature-card-icon.red svg { stroke: var(--error); }
+        .feature-card-icon.teal { background: rgba(23, 162, 184, 0.1); }
+        .feature-card-icon.teal svg { stroke: #17a2b8; }
+
+        .feature-card h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 6px;
+        }
+
+        .feature-card p {
+            font-size: 0.88rem;
+            color: var(--gray-500);
+            line-height: 1.6;
+        }
+
+        /* ==================== FAQ ==================== */
+        .faq-section {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 0 1.5rem 80px;
+        }
+
+        .faq-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .faq-header h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 10px;
+        }
+
+        .faq-header p {
+            font-size: 1.05rem;
+            color: var(--gray-500);
+        }
+
+        .faq-item {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 14px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .faq-item:hover {
+            border-color: var(--gray-300);
+        }
+
+        .faq-question {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.25rem 0;
+            padding: 20px 24px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--gray-900);
             background: none;
             border: none;
-            font-family: inherit;
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--primary);
-            cursor: pointer;
+            width: 100%;
             text-align: left;
-            gap: 1rem;
+            font-family: inherit;
+            transition: color 0.2s;
         }
 
-        .pricing-faq-q::after {
-            content: '+';
-            font-size: 1.5rem;
-            font-weight: 300;
-            color: var(--gray-500);
+        .faq-question:hover {
+            color: var(--primary);
+        }
+
+        .faq-question svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--gray-400);
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: transform 0.3s ease;
             flex-shrink: 0;
-            transition: transform 0.3s;
+            margin-left: 16px;
         }
 
-        .pricing-faq-item.open .pricing-faq-q::after {
-            content: '\2212';
+        .faq-item.open .faq-question svg {
+            transform: rotate(180deg);
         }
 
-        .pricing-faq-a {
+        .faq-answer {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease, padding 0.3s ease;
         }
 
-        .pricing-faq-item.open .pricing-faq-a {
+        .faq-item.open .faq-answer {
             max-height: 300px;
-            padding-bottom: 1.25rem;
         }
 
-        .pricing-faq-a p {
-            font-size: 0.92rem;
-            color: var(--gray-600, #475569);
+        .faq-answer-inner {
+            padding: 0 24px 20px;
+            font-size: 0.9rem;
+            color: var(--gray-500);
             line-height: 1.7;
+        }
+
+        /* ==================== TRUST BAR ==================== */
+        .trust-bar {
+            text-align: center;
+            padding: 40px 1.5rem 60px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .trust-items {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.88rem;
+            color: var(--gray-500);
+            font-weight: 500;
+        }
+
+        .trust-item svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* ==================== CTA BOTTOM ==================== */
+        .bottom-cta {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            padding: 60px 2rem;
+            text-align: center;
+        }
+
+        .bottom-cta h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .bottom-cta p {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.75);
+            margin-bottom: 28px;
+            max-width: 460px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .bottom-cta .subscribe-btn.primary {
+            display: inline-block;
+            width: auto;
+            padding: 16px 40px;
         }
 
         /* ==================== FOOTER ==================== */
-        .footer {
+        .pricing-footer {
             background: var(--dark);
-            color: rgba(255, 255, 255, 0.7);
-            padding: 4rem 2rem 2rem;
+            padding: 32px 2rem;
+            text-align: center;
         }
 
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 4rem;
+        .pricing-footer p {
+            color: rgba(255,255,255,0.4);
+            font-size: 0.82rem;
         }
 
-        .footer-brand img {
-            height: 50px;
-            margin-bottom: 1rem;
-            filter: brightness(0) invert(1);
-        }
-
-        .footer-brand p {
-            font-size: 0.9rem;
-            line-height: 1.7;
-        }
-
-        .footer-links h4 {
-            color: white;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        .footer-links ul {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 0.5rem;
-        }
-
-        .footer-links a {
-            color: rgba(255, 255, 255, 0.7);
+        .pricing-footer a {
+            color: rgba(255,255,255,0.5);
             text-decoration: none;
-            font-size: 0.9rem;
             transition: color 0.2s;
         }
 
-        .footer-links a:hover {
-            color: var(--accent);
+        .pricing-footer a:hover {
+            color: rgba(255,255,255,0.8);
         }
 
-        
-        .footer-social {
+        /* ==================== PAYMENT ICONS ==================== */
+        .payment-methods {
             display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .footer-social a {
-            display: flex;
-            align-items: center;
             justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.7);
-            transition: all 0.3s ease;
+            align-items: center;
+            gap: 16px;
+            margin-top: 20px;
+            padding-top: 20px;
+            opacity: 0.5;
         }
 
-        .footer-social a:hover {
-            background: var(--accent);
-            color: white;
-            transform: translateY(-2px);
+        .payment-icon {
+            height: 24px;
+            width: auto;
         }
 
-        .footer-bottom {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding-top: 2rem;
-            margin-top: 3rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        .payment-label {
+            font-size: 0.78rem;
+            color: var(--gray-500);
             text-align: center;
-            font-size: 0.85rem;
+            margin-top: 16px;
         }
 
         /* ==================== RESPONSIVE ==================== */
-        @media (max-width: 1024px) {
-            .nav-buttons {
-                display: none;
-            }
-
-            .hamburger {
-                display: flex;
-            }
-        }
-
         @media (max-width: 768px) {
+            .header-nav { display: none; }
+            .header-right { display: none; }
+            .header-logo img { height: 50px; }
+            .hamburger { display: flex; }
+            .mobile-menu-overlay { display: block; }
+            .mobile-menu { display: block; }
+
+            .pricing-hero {
+                padding-top: 100px;
+                padding-bottom: 50px;
+            }
+
             .pricing-hero h1 {
-                font-size: 2.25rem;
+                font-size: 2rem;
             }
 
             .pricing-hero p {
                 font-size: 1rem;
             }
 
-            .pricing-cards {
+            .pricing-grid {
                 grid-template-columns: 1fr;
-                max-width: 450px;
+                max-width: 420px;
                 margin: 0 auto;
             }
 
             .pricing-card.featured {
+                transform: none;
                 order: -1;
             }
 
-            .footer-content {
-                grid-template-columns: 1fr 1fr;
-                gap: 2rem;
+            .pricing-card.featured:hover {
+                transform: translateY(-4px);
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .trust-items {
+                gap: 20px;
+            }
+
+            .bottom-cta h2 {
+                font-size: 1.4rem;
             }
         }
 
         @media (max-width: 480px) {
-            .pricing-hero {
-                padding: 8rem 1.5rem 3rem;
-            }
-
             .pricing-hero h1 {
-                font-size: 1.85rem;
-            }
-
-            .pricing-section {
-                padding: 3rem 1.25rem 4rem;
+                font-size: 1.7rem;
             }
 
             .pricing-card {
-                padding: 2rem 1.5rem;
+                padding: 28px 24px;
             }
 
-            .pricing-price {
-                font-size: 2.75rem;
+            .price-amount {
+                font-size: 2.8rem;
             }
 
-            .pricing-faq {
-                padding: 3rem 1.25rem;
-            }
-
-            .footer-content {
-                grid-template-columns: 1fr;
-                gap: 2rem;
+            .trust-items {
+                flex-direction: column;
+                gap: 12px;
             }
         }
-    </style>
+    
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ===== LEVEL TOGGLE ===== */
+.level-toggle { display: flex; align-items: center; background: #f1f5f9; border-radius: 8px; padding: 3px; gap: 0; flex-shrink: 0; }
+.level-toggle-btn { padding: 5px 14px; font-size: 0.8rem; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; transition: all 0.25s ease; font-family: inherit; color: #64748b; background: transparent; white-space: nowrap; }
+.level-toggle-btn.active { background: #1e3a5f; color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
+.level-toggle-btn:hover:not(.active) { color: #1e3a5f; background: rgba(30, 58, 95, 0.08); }
+.mobile-level-toggle { display: flex; align-items: center; background: #f1f5f9; border-radius: 10px; padding: 4px; margin-bottom: 1rem; gap: 0; }
+.mobile-level-toggle .level-toggle-btn { flex: 1; padding: 8px 0; font-size: 0.85rem; border-radius: 8px; text-align: center; }
+</style>
+<!-- Google Analytics - Replace GA_MEASUREMENT_ID with your actual ID -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'GA_MEASUREMENT_ID');
+</script>
 </head>
 <body>
-
-    <nav class="navbar" id="navbar">
-        <div class="navbar-content">
-            <a href="/">
-                <img src="logo.png" alt="MyBizStudies" class="logo">
-            </a>
-            <div class="nav-buttons">
-                <a href="app.html" class="nav-contact auth-only" style="display:none;">Flash Cards</a>
-                <a href="exam-skills-v2.html" class="nav-contact auth-only" style="display:none;">Exam Skills</a>
-                <a href="exam-practice.html" class="nav-contact auth-only" style="display:none;">Exam Practice</a>
-                <a href="notes.html" class="nav-contact auth-only" style="display:none;">Study Notes</a>
-                <a href="blog.html" class="nav-contact">Blog</a>
-                <a href="contact.html" class="nav-contact">Contact Us</a>
-                <a href="login.html" class="btn btn-ghost guest-only">Log In</a>
-                <a href="signup.html" class="btn btn-primary guest-only">Get Started</a>
-                <div class="profile-wrapper auth-only" style="position: relative; display:none;">
-                    <div class="profile-avatar" id="profileAvatar">--</div>
-                    <div class="profile-dropdown" id="profileDropdown">
-                        <a href="student-progress.html">Student Progress</a>
-                        <a href="#manage-account">My Account</a>
-                        <button id="navLogoutBtn">Log Out</button>
-                    </div>
-                </div>
-            </div>
-            <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+    <!-- Header -->
+    <!-- NAVBAR -->
+<nav class="site-navbar" id="siteNavbar">
+    <div class="site-navbar-content">
+        <a href="index.html"><img src="logo.png" alt="MyBizStudies" class="site-navbar-logo"></a>
+        <div class="level-toggle" id="desktopLevelToggle">
+            <button class="level-toggle-btn active" data-level="alevel">A-Level</button>
+            <button class="level-toggle-btn" data-level="gcse">GCSE</button>
         </div>
-    </nav>
+        <div class="site-nav-buttons" id="siteNavButtons">
+            <a href="app.html" class="site-nav-link">Flash Cards</a>
+            <a href="exam-skills-v2.html" class="site-nav-link">Exam Skills</a>
+            <a href="exam-practice.html" class="site-nav-link auth-only" style="display:none;">Exam Practice</a>
+            <a href="notes.html" class="site-nav-link">Study Notes</a>
+            <a href="blog.html" class="site-nav-link">Blog</a>
+            <a href="contact.html" class="site-nav-link">Contact Us</a>
+            <button class="site-nav-btn site-nav-btn-ghost" id="navLogoutBtn">Logout</button>
+        </div>
+        <button class="site-hamburger" id="siteHamburger" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</nav>
 
     <!-- Mobile Menu -->
-    <div class="mobile-menu-overlay" id="mobileOverlay"></div>
-    <div class="mobile-menu" id="mobileMenu">
-        <div class="mobile-menu-links">
-            <a href="app.html" class="auth-only" style="display:none;">
-                <span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
-                Flash Cards
-            </a>
-            <a href="exam-skills-v2.html" class="auth-only" style="display:none;">
-                <span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg></span>
-                Exam Skills
-            </a>
-            <a href="exam-practice.html" class="auth-only" style="display:none;">
-                <span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg></span>
-                Exam Practice
-            </a>
-            <a href="notes.html" class="auth-only" style="display:none;">
-                <span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></span>
-                Study Notes
-            </a>
-            <div class="mobile-menu-divider auth-only" style="display:none;"></div>
-            <a href="login.html" class="guest-only">
-                <span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"/></svg></span>
-                Log In
-            </a>
-            <div class="mobile-menu-divider"></div>
-            <a href="blog.html">
-                <span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"/></svg></span>
-                Blog
-            </a>
-            <div class="mobile-menu-divider"></div>
-            <a href="contact.html">
-                <span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></span>
-                Contact Us
-            </a>
-            <a href="signup.html" class="btn-mobile-cta guest-only">
-                Get Started
-            </a>
-            <div class="mobile-menu-divider auth-only" style="display:none;"></div>
-            <a href="student-progress.html" class="auth-only" style="display:none;">
-                <span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>
-                Student Progress
-            </a>
-            <a href="#manage-account" class="auth-only" style="display:none;">
-                <span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>
-                My Account
-            </a>
-            <button class="auth-only" id="mobileLogoutBtn" style="display:none; width:100%; border:none; background:rgba(231,76,60,0.06); color:#e74c3c; padding:0.875rem 1rem; border-radius:12px; font-size:0.95rem; font-weight:600; cursor:pointer; font-family:inherit; display:flex; align-items:center; gap:0.875rem;">
-                <span class="menu-icon" style="background:rgba(231,76,60,0.08);"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="#e74c3c" width="18" height="18"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l3-3m0 0l-3-3m3 3H3"/></svg></span>
-                Logout
+    <!-- MOBILE MENU -->
+<div class="site-mobile-overlay" id="siteMobileOverlay"></div>
+<div class="site-mobile-menu" id="siteMobileMenu">
+    <div class="site-mobile-links">
+        <div class="mobile-level-toggle">
+            <button class="level-toggle-btn active" data-level="alevel">A-Level</button>
+            <button class="level-toggle-btn" data-level="gcse">GCSE</button>
+        </div>
+        <a href="app.html">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
+            Flash Cards
+        </a>
+        <a href="exam-skills-v2.html">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg></span>
+            Exam Skills
+        </a>
+        <a href="exam-practice.html" class="auth-only" style="display:none;">Exam Practice</a>
+        <a href="notes.html">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></span>
+            Study Notes
+        </a>
+        <a href="blog.html">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"/></svg></span>
+            Blog
+        </a>
+        <div class="site-mobile-divider"></div>
+        <a href="contact.html">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></span>
+            Contact Us
+        </a>
+        <div class="site-mobile-divider"></div>
+        <button class="site-mobile-logout" id="mobileLogoutBtn">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l3-3m0 0l-3-3m3 3H3"/></svg></span>
+            Logout
+        </button>
+    </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="pricing-hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <svg viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+                Premium Access
+            </div>
+            <h1>Unlock Your <span>Full Potential</span></h1>
+            <p>One payment. Lifetime access. Get every flashcard, exam technique, model answer, and study tool designed to help you ace your Edexcel A-Level Business Studies exams.</p>
+        </div>
+    </section>
+
+    <!-- Pricing Card -->
+    <section class="pricing-section">
+        <div class="pricing-grid" style="grid-template-columns: 1fr; max-width: 480px; margin: 0 auto;">
+            <!-- Lifetime Access -->
+            <div class="pricing-card featured">
+                <div class="featured-banner">Lifetime Access</div>
+                <div class="card-inner">
+                    <div class="plan-icon yearly">
+                        <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    </div>
+                    <div class="plan-name">One Payment. Forever Yours.</div>
+                    <div class="plan-desc">Pay once and get lifetime access to everything</div>
+                    <div class="price-row">
+                        <span class="price-currency">$</span>
+                        <span class="price-amount">15</span>
+                        <span class="price-period">one time</span>
+                    </div>
+                    <div class="savings-badge">
+                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        No subscriptions. No recurring charges.
+                    </div>
+                    <button class="subscribe-btn primary" onclick="subscribe('lifetime')">Get Lifetime Access</button>
+                    <ul class="feature-list">
+                        <li>
+                            <svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg>
+                            <strong>400+ Interactive Flashcards</strong> covering all topics across Units 1, 2, 3, and 4
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg>
+                            <strong>Exam Skills Training</strong> with the PBLI framework for writing answers that score full marks
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg>
+                            <strong>Weak vs Model Answers</strong> for every question type (2, 4, 8, 12, and 20 mark questions)
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg>
+                            <strong>Colour Coded Mark Breakdowns</strong> showing exactly where Knowledge, Application, Analysis, and Evaluation marks are earned
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg>
+                            <strong>Case Study Practice Questions</strong> with realistic business scenarios and full sample answers
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg>
+                            <strong>Progress Tracking</strong> so you can see what you have mastered and what needs work
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg>
+                            <strong>All Future Content Updates</strong> including new flashcards, case studies, and revision notes as they are added
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Methods -->
+        <div class="payment-label">Secure payments powered by Flutterwave</div>
+        <div class="payment-methods">
+            <svg width="38" height="24" viewBox="0 0 38 24"><rect width="38" height="24" rx="4" fill="#1A1F71"/><text x="19" y="15" font-size="8" fill="white" text-anchor="middle" font-weight="700" font-family="Inter,sans-serif">VISA</text></svg>
+            <svg width="38" height="24" viewBox="0 0 38 24"><rect width="38" height="24" rx="4" fill="#252525"/><circle cx="15" cy="12" r="7" fill="#EB001B"/><circle cx="23" cy="12" r="7" fill="#F79E1B"/><path d="M19 6.7a7 7 0 0 1 0 10.6 7 7 0 0 1 0-10.6z" fill="#FF5F00"/></svg>
+            <svg width="38" height="24" viewBox="0 0 38 24"><rect width="38" height="24" rx="4" fill="#000"/><text x="19" y="15" font-size="7" fill="white" text-anchor="middle" font-weight="600" font-family="Inter,sans-serif">Apple Pay</text></svg>
+            <svg width="38" height="24" viewBox="0 0 38 24"><rect width="38" height="24" rx="4" fill="#fff" stroke="#ddd"/><text x="19" y="15" font-size="6" fill="#333" text-anchor="middle" font-weight="600" font-family="Inter,sans-serif">EFT</text></svg>
+        </div>
+    </section>
+
+    <!-- What's Included -->
+    <section class="included-section">
+        <div class="included-header">
+            <h2>Everything You Need to Succeed</h2>
+            <p>Built specifically for Edexcel IAL Business Studies students</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-card-icon blue">
+                    <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                </div>
+                <h3>500+ Flashcards</h3>
+                <p>Covering every topic across Units 1, 2, 3, and 4 of the Edexcel IAL specification.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-card-icon orange">
+                    <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                </div>
+                <h3>Exam Techniques</h3>
+                <p>Learn exactly how Edexcel marks each type of question with real model answers and breakdowns.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-card-icon green">
+                    <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                </div>
+                <h3>Progress Tracking</h3>
+                <p>Track what you've mastered, what needs reviewing, and focus your study where it counts.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-card-icon purple">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                </div>
+                <h3>Mark Scheme Insights</h3>
+                <p>Understand exactly where marks are awarded using the Knowledge, Application, Analysis framework.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-card-icon red">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                </div>
+                <h3>Case Study Practice</h3>
+                <p>Apply your knowledge to realistic business scenarios, just like in the actual exam.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-card-icon teal">
+                    <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <h3>Regular Updates</h3>
+                <p>New content added regularly to keep up with the latest exam trends and specification changes.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section">
+        <div class="faq-header">
+            <h2>Common Questions</h2>
+            <p>Everything you need to know before subscribing</p>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Is this really a one time payment?
+                <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
+            <div class="faq-answer">
+                <div class="faq-answer-inner">Yes! You pay $15 once and you have lifetime access to everything on the platform. There are no recurring charges, no hidden fees, and no subscription to cancel. Your access never expires.</div>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                What payment methods do you accept?
+                <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">
+                <div class="faq-answer-inner">We accept Visa, Mastercard, Apple Pay, Google Pay, and EFT bank transfers. All payments are securely processed through Flutterwave, a trusted payment provider.</div>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Which exam board is this for?
+                <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">
+                <div class="faq-answer-inner">MyBizStudies is built specifically for Edexcel International A-Level (IAL) Business Studies. All content, flashcards, and exam techniques are aligned with the Edexcel specification and mark schemes.</div>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Is my payment information safe?
+                <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">
+                <div class="faq-answer-inner">Your payment details are handled entirely by Flutterwave, which is PCI DSS compliant (the highest level of security for payment processing). We never see or store your card information on our servers.</div>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                What if I need a refund?
+                <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer">
+                <div class="faq-answer-inner">If you're not satisfied within the first 7 days, contact us and we'll issue a full refund. No questions asked.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Bar -->
+    <div class="trust-bar">
+        <div class="trust-items">
+            <div class="trust-item">
+                <svg viewBox="0 0 24 24" stroke="var(--success)"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Secure Payments
+            </div>
+            <div class="trust-item">
+                <svg viewBox="0 0 24 24" stroke="var(--secondary)"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                One Time Payment
+            </div>
+            <div class="trust-item">
+                <svg viewBox="0 0 24 24" stroke="var(--accent)"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                7 Day Refund
+            </div>
         </div>
     </div>
 
-    <!-- Hero -->
-    <section class="pricing-hero">
-        <div class="pricing-hero-content">
-            <h1>Simple, Transparent Pricing</h1>
-            <p>Start revising for free or unlock the full platform with Pro. No hidden fees, cancel anytime.</p>
-        </div>
-    </section>
-
-    <!-- Pricing Cards -->
-    <section class="pricing-section">
-        <div class="pricing-container">
-
-            <!-- Toggle -->
-            <div class="pricing-toggle">
-                <span class="pricing-toggle-label active" id="monthlyLabel">Monthly</span>
-                <div class="pricing-toggle-switch" id="pricingToggle"></div>
-                <span class="pricing-toggle-label" id="yearlyLabel">Yearly</span>
-                <span class="pricing-save-badge">Save 50%</span>
-            </div>
-
-            <div class="pricing-cards">
-                <!-- Free Plan -->
-                <div class="pricing-card">
-                    <div class="pricing-card-header">
-                        <div class="pricing-plan-name">Free</div>
-                        <p class="pricing-plan-desc">Get started with the essentials at no cost</p>
-                    </div>
-                    <div class="pricing-amount">
-                        <div class="pricing-price"><span class="currency">$</span>0</div>
-                        <div class="pricing-period">Free forever</div>
-                    </div>
-                    <ul class="pricing-features">
-                        <li>
-                            <span class="check"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                            Access to Flashcards
-                        </li>
-                        <li>
-                            <span class="check"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                            Exam Skills Training
-                        </li>
-                        <li>
-                            <span class="check"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                            Limited Study Notes Access
-                        </li>
-                    </ul>
-                    <a href="signup.html" class="pricing-cta pricing-cta-free">Get Started Free</a>
-                </div>
-
-                <!-- Pro Plan -->
-                <div class="pricing-card featured">
-                    <div class="pricing-popular-badge">Most Popular</div>
-                    <div class="pricing-card-header">
-                        <div class="pricing-plan-name">Pro</div>
-                        <p class="pricing-plan-desc">Everything you need to ace your exams</p>
-                    </div>
-                    <div class="pricing-amount">
-                        <div class="pricing-price" id="proPrice"><span class="currency">$</span>18</div>
-                        <div class="pricing-period" id="proPeriod">per month</div>
-                        <div class="pricing-yearly-note" id="proYearlyNote">That's just $9/month, save 50%</div>
-                    </div>
-                    <ul class="pricing-features">
-                        <li class="included-label">Everything in Free, plus:</li>
-                        <li>
-                            <span class="check"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                            Exam Practice with Instant AI Feedback
-                        </li>
-                        <li>
-                            <span class="check"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                            Full Access to Study Notes
-                        </li>
-                        <li>
-                            <span class="check"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                            Mind Maps
-                        </li>
-                    </ul>
-                    <a href="#" onclick="openPaddleCheckout(); return false;" class="pricing-cta pricing-cta-pro">Get Pro Access</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Pricing FAQ -->
-    <section class="pricing-faq">
-        <div class="pricing-faq-container">
-            <h2>Questions About Pricing</h2>
-
-            <div class="pricing-faq-item">
-                <button class="pricing-faq-q" onclick="togglePricingFaq(this)">Can I try the platform before paying?</button>
-                <div class="pricing-faq-a">
-                    <p>Yes. The Free plan gives you full access to Flashcards, Exam Skills Training, and a selection of Study Notes at no cost. You can explore the platform and upgrade to Pro whenever you are ready.</p>
-                </div>
-            </div>
-
-            <div class="pricing-faq-item">
-                <button class="pricing-faq-q" onclick="togglePricingFaq(this)">What payment methods do you accept?</button>
-                <div class="pricing-faq-a">
-                    <p>We accept all major credit and debit cards. Payments are processed securely and you can cancel your subscription at any time from your account settings.</p>
-                </div>
-            </div>
-
-            <div class="pricing-faq-item">
-                <button class="pricing-faq-q" onclick="togglePricingFaq(this)">Can I switch between monthly and yearly?</button>
-                <div class="pricing-faq-a">
-                    <p>Absolutely. You can switch from monthly to yearly at any time to take advantage of the 50% saving. If you switch from yearly to monthly, the change will take effect at the end of your current billing period.</p>
-                </div>
-            </div>
-
-            <div class="pricing-faq-item">
-                <button class="pricing-faq-q" onclick="togglePricingFaq(this)">What happens if I cancel my Pro subscription?</button>
-                <div class="pricing-faq-a">
-                    <p>If you cancel, you will keep Pro access until the end of your current billing period. After that, your account will revert to the Free plan and you will still have access to Flashcards, Exam Skills Training, and limited Study Notes.</p>
-                </div>
-            </div>
-        </div>
+    <!-- Bottom CTA -->
+    <section class="bottom-cta">
+        <h2>Ready to Start Studying Smarter?</h2>
+        <p>Join students who are already using MyBizStudies to improve their grades. One payment, lifetime access.</p>
+        <button class="subscribe-btn primary" onclick="subscribe('lifetime')">Get Lifetime Access for $15</button>
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-brand">
-                <img src="logo.png" alt="MyBizStudies">
-                <p>The smart way to revise GCSE and A Level Business Studies. Study notes, exam practice, and AI feedback to help you achieve your best grades.</p>
-                <div class="footer-social">
-                    <a href="https://www.tiktok.com/@mybizstudies" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.34-6.34V8.73a8.19 8.19 0 004.76 1.52V6.81a4.84 4.84 0 01-1-.12z"/></svg>
-                    </a>
-                    <a href="https://www.instagram.com/mybizstudies" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-                    </a>
-                    <a href="https://www.facebook.com/mybizstudies" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                    </a>
-                </div>
-            </div>
-            <div class="footer-links">
-                <h4>Platform</h4>
-                <ul>
-                    <li><a href="index.html#features">Features</a></li>
-                    <li><a href="glossary.html">Glossary</a></li>
-                    <li><a href="login.html">Log In</a></li>
-                    <li><a href="signup.html">Sign Up</a></li>
-                </ul>
-            </div>
-            <div class="footer-links">
-                <h4>Company</h4>
-                <ul>
-                    <li><a href="about.html">About Us</a></li>
-                    <li><a href="blog.html">Blog</a></li>
-                    <li><a href="contact.html">Contact Us</a></li>
-                </ul>
-            </div>
-            <div class="footer-links">
-                <h4>Legal</h4>
-                <ul>
-                    <li><a href="privacy.html">Privacy Policy</a></li>
-                    <li><a href="terms.html">Terms of Service</a></li>
-                    <li><a href="refund.html">Refund Policy</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 MyBizStudies. All rights reserved.</p>
-        </div>
+    <footer class="pricing-footer">
+        <p>&copy; 2026 MyBizStudies. All rights reserved. &nbsp; <a href="about.html">About</a> &nbsp; | &nbsp; <a href="privacy.html">Privacy</a> &nbsp; | &nbsp; <a href="terms.html">Terms</a> &nbsp; | &nbsp; <a href="refund.html">Refund Policy</a> &nbsp; | &nbsp; <a href="blog.html">Blog</a> &nbsp; | &nbsp; <a href="contact.html">Contact</a></p>
     </footer>
 
-    <script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // ==================== PADDLE SETUP ====================
-        // TODO: Replace with your Paddle client-side token and price IDs
-        // 1. Create a Paddle account at paddle.com
-        // 2. Create two prices: Monthly ($18) and Yearly ($108)
-        // 3. Replace the values below with your real credentials
-        // 4. Remove Paddle.Environment.set("sandbox") when going live
-        var PADDLE_TOKEN = 'YOUR_PADDLE_CLIENT_TOKEN';   // Replace this
-        var PADDLE_PRICE_MONTHLY = 'pri_MONTHLY_ID';     // Replace this
-        var PADDLE_PRICE_YEARLY = 'pri_YEARLY_ID';       // Replace this
-
-        // Initialize Paddle (remove sandbox line for production)
-        if (PADDLE_TOKEN !== 'YOUR_PADDLE_CLIENT_TOKEN') {
-            Paddle.Environment.set("sandbox");
-            Paddle.Initialize({
-                token: PADDLE_TOKEN,
-                eventCallback: function(event) {
-                    if (event.name === 'checkout.completed') {
-                        // Checkout successful - update subscription in Supabase
-                        updateSubscriptionToPro();
-                    }
-                }
-            });
-        }
-
-        async function updateSubscriptionToPro() {
-            try {
-                const { data: { session } } = await supabaseClient.auth.getSession();
-                if (!session) return;
-                await supabaseClient
-                    .from('subscriptions')
-                    .update({ plan: 'pro', status: 'active' })
-                    .eq('user_id', session.user.id);
-                // Redirect to a success state
-                alert('Welcome to Pro! You now have full access to MyBizStudies.');
-                window.location.href = 'notes.html';
-            } catch (err) {
-                console.error('Error updating subscription:', err);
-            }
-        }
-
-        function openPaddleCheckout() {
-            var priceId = isYearly ? PADDLE_PRICE_YEARLY : PADDLE_PRICE_MONTHLY;
-
-            if (PADDLE_TOKEN === 'YOUR_PADDLE_CLIENT_TOKEN') {
-                alert('Paddle is not configured yet. Please set your Paddle token and price IDs in pricing.html.');
-                return;
-            }
-
-            // Get user email if logged in
-            var checkoutConfig = {
-                items: [{ priceId: priceId, quantity: 1 }],
-                settings: {
-                    displayMode: 'overlay',
-                    theme: 'light',
-                    locale: 'en'
-                }
-            };
-
-            // Pre-fill email if user is logged in
-            if (currentUserEmail) {
-                checkoutConfig.customer = { email: currentUserEmail };
-            }
-
-            Paddle.Checkout.open(checkoutConfig);
-        }
-
-        var currentUserEmail = null;
-
         // Supabase setup
-        const supabaseUrl = 'https://zyaywzzmjpctpodpxhge.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
+        const supabaseUrl = 'https://kxfcnbgpyqwxatawvuty.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt4ZmNuYmdweXF3eGF0YXd2dXR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIzMjI2MDAsImV4cCI6MjA1Nzg5ODYwMH0.YOqSBe4IkBjmnAikPNoHbrpkEqGPPFR0hfONsTDnj7s';
         const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
-
-        // Get profile initials from email
-        function getProfileInitials(email) {
-            if (!email) return '--';
-            var parts = email.split('@')[0].split('.');
-            if (parts.length >= 2) return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
-            return email.substring(0, 2).toUpperCase();
-        }
 
         // Check auth state
         async function checkAuth() {
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (session) {
-                currentUserEmail = session.user.email;
-                var pa = document.getElementById('profileAvatar');
-                if (pa && session.user.email) pa.textContent = getProfileInitials(session.user.email);
-                document.querySelectorAll('.auth-only').forEach(function(el) { el.style.display = ''; });
-                document.querySelectorAll('.guest-only').forEach(function(el) { el.style.display = 'none'; });
+                const fullName = session.user.user_metadata?.full_name || session.user.user_metadata?.name || '';
+                const firstName = fullName ? fullName.split(' ')[0] : '';
+                const welcomeEl = document.getElementById('userEmail');
+                if (firstName) {
+                    welcomeEl.textContent = `Welcome, ${firstName}!`;
+                } else {
+                    welcomeEl.textContent = session.user.email;
+                }
             }
         }
 
@@ -1217,87 +1550,81 @@
             window.location.href = 'login.html';
         }
 
-        // Mobile hamburger menu
-        var hamburgerBtn = document.getElementById('hamburgerBtn');
-        var mobileMenu = document.getElementById('mobileMenu');
-        var mobileOverlay = document.getElementById('mobileOverlay');
+        // Site navbar mobile menu
+        var siteHamburger = document.getElementById('siteHamburger');
+        var siteMobileMenu = document.getElementById('siteMobileMenu');
+        var siteMobileOverlay = document.getElementById('siteMobileOverlay');
 
-        function toggleMobileMenu() {
-            var isOpening = !mobileMenu.classList.contains('active');
-            if (isOpening) {
-                mobileMenu.style.display = 'block';
-                mobileOverlay.style.display = 'block';
-                void mobileMenu.offsetHeight;
-                hamburgerBtn.classList.add('active');
-                mobileMenu.classList.add('active');
-                mobileOverlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            } else {
-                hamburgerBtn.classList.remove('active');
-                mobileMenu.classList.remove('active');
-                mobileOverlay.classList.remove('active');
-                document.body.style.overflow = '';
-                setTimeout(function() {
-                    mobileMenu.style.display = 'none';
-                    mobileOverlay.style.display = 'none';
-                }, 400);
-            }
+        function toggleSiteMenu() {
+            siteHamburger.classList.toggle('active');
+            siteMobileMenu.classList.toggle('active');
+            siteMobileOverlay.classList.toggle('active');
+            document.body.style.overflow = siteMobileMenu.classList.contains('active') ? 'hidden' : '';
         }
 
-        hamburgerBtn.addEventListener('click', toggleMobileMenu);
-        mobileOverlay.addEventListener('click', toggleMobileMenu);
+        if (siteHamburger) siteHamburger.addEventListener('click', toggleSiteMenu);
+        if (siteMobileOverlay) siteMobileOverlay.addEventListener('click', toggleSiteMenu);
 
-        // Logout handlers
+        // Logout handlers for new nav buttons
         if (document.getElementById('navLogoutBtn')) document.getElementById('navLogoutBtn').addEventListener('click', function() { handleLogout(); });
         if (document.getElementById('mobileLogoutBtn')) document.getElementById('mobileLogoutBtn').addEventListener('click', function() { handleLogout(); });
 
-        // Profile avatar dropdown
-        var profileAvatar = document.getElementById('profileAvatar');
-        var profileDropdown = document.getElementById('profileDropdown');
-        if (profileAvatar && profileDropdown) {
-            profileAvatar.addEventListener('click', function(e) {
-                e.stopPropagation();
-                profileDropdown.classList.toggle('active');
-            });
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('.profile-avatar') && !e.target.closest('.profile-dropdown')) {
-                    profileDropdown.classList.remove('active');
-                }
-            });
+        // ===== LEVEL TOGGLE =====
+        (function() {
+            var LEVEL_KEY = 'mybiz_study_level';
+            var currentLevel = localStorage.getItem(LEVEL_KEY) || 'alevel';
+            var alevelPages = { 'app.html': 'gcse-app.html', 'glossary.html': 'gcse-glossary.html', 'exam-skills-v2.html': null, 'exam-practice.html': null, 'notes.html': null, 'notes-unit1.html': null, 'notes-unit2.html': null, 'notes-unit3.html': null, 'notes-unit4.html': null };
+            var gcsePages = { 'gcse-app.html': 'app.html', 'gcse-glossary.html': 'glossary.html' };
+            var comingSoon = ['exam-skills-v2.html', 'exam-practice.html', 'notes.html', 'notes-unit1.html', 'notes-unit2.html', 'notes-unit3.html', 'notes-unit4.html'];
+            function getCurrentPage() { var path = window.location.pathname; return path.substring(path.lastIndexOf('/') + 1) || 'index.html'; }
+            function showComingSoonToast() {
+                var toast = document.getElementById('comingSoonToast');
+                if (!toast) { toast = document.createElement('div'); toast.id = 'comingSoonToast'; toast.style.cssText = 'position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:#1e3a5f;color:#fff;padding:0.75rem 1.5rem;border-radius:10px;font-size:0.9rem;font-weight:600;opacity:0;transition:all 0.3s ease;z-index:10000;pointer-events:none;'; toast.textContent = 'GCSE version coming soon!'; document.body.appendChild(toast); }
+                toast.style.opacity = '1'; toast.style.transform = 'translateX(-50%) translateY(0)';
+                setTimeout(function() { toast.style.opacity = '0'; toast.style.transform = 'translateX(-50%) translateY(20px)'; }, 2500);
+            }
+            function updateNavLinks(level) {
+                document.querySelectorAll('.site-nav-link, a[href]').forEach(function(link) {
+                    var href = link.getAttribute('href'); if (!href) return;
+                    if (level === 'gcse') { if (href === 'app.html') link.setAttribute('href', 'gcse-app.html'); if (comingSoon.indexOf(href) !== -1) { link.setAttribute('data-coming-soon', 'true'); link.addEventListener('click', comingSoonHandler); } }
+                    else { if (href === 'gcse-app.html') link.setAttribute('href', 'app.html'); link.removeAttribute('data-coming-soon'); link.removeEventListener('click', comingSoonHandler); }
+                });
+            }
+            function comingSoonHandler(e) { if (this.getAttribute('data-coming-soon') === 'true') { e.preventDefault(); showComingSoonToast(); } }
+            function setLevel(level) {
+                localStorage.setItem(LEVEL_KEY, level); currentLevel = level;
+                document.querySelectorAll('.level-toggle-btn').forEach(function(btn) { btn.classList.toggle('active', btn.dataset.level === level); });
+                updateNavLinks(level);
+                var page = getCurrentPage();
+                if (level === 'gcse') { if (alevelPages[page] === null) { showComingSoonToast(); localStorage.setItem(LEVEL_KEY, 'alevel'); currentLevel = 'alevel'; document.querySelectorAll('.level-toggle-btn').forEach(function(btn) { btn.classList.toggle('active', btn.dataset.level === 'alevel'); }); updateNavLinks('alevel'); return; } if (alevelPages[page]) { window.location.href = alevelPages[page]; return; } }
+                else { if (gcsePages[page]) { window.location.href = gcsePages[page]; return; } }
+            }
+            function initToggles() {
+                document.querySelectorAll('.level-toggle-btn').forEach(function(btn) { btn.classList.toggle('active', btn.dataset.level === currentLevel); btn.addEventListener('click', function() { setLevel(this.dataset.level); }); });
+                updateNavLinks(currentLevel);
+            }
+            if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initToggles); } else { initToggles(); }
+        })();
+
+        // Mobile menu (legacy)
+        function toggleMobileMenu() {
+            document.getElementById('hamburger').classList.toggle('active');
+            document.getElementById('mobileMenu').classList.toggle('active');
+            document.getElementById('mobileOverlay').classList.toggle('active');
+            document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('active') ? 'hidden' : '';
         }
 
-        // Pricing toggle
-        var isYearly = false;
-        var pricingToggle = document.getElementById('pricingToggle');
-        var monthlyLabel = document.getElementById('monthlyLabel');
-        var yearlyLabel = document.getElementById('yearlyLabel');
-        var proPrice = document.getElementById('proPrice');
-        var proPeriod = document.getElementById('proPeriod');
-        var proYearlyNote = document.getElementById('proYearlyNote');
-
-        pricingToggle.addEventListener('click', function() {
-            isYearly = !isYearly;
-            pricingToggle.classList.toggle('yearly', isYearly);
-            monthlyLabel.classList.toggle('active', !isYearly);
-            yearlyLabel.classList.toggle('active', isYearly);
-
-            if (isYearly) {
-                proPrice.innerHTML = '<span class="currency">$</span>108';
-                proPeriod.textContent = 'per year';
-                proYearlyNote.classList.add('visible');
-            } else {
-                proPrice.innerHTML = '<span class="currency">$</span>18';
-                proPeriod.textContent = 'per month';
-                proYearlyNote.classList.remove('visible');
-            }
-        });
-
         // FAQ toggle
-        function togglePricingFaq(btn) {
-            var item = btn.parentElement;
-            var wasOpen = item.classList.contains('open');
-            document.querySelectorAll('.pricing-faq-item').forEach(function(i) { i.classList.remove('open'); });
+        function toggleFaq(btn) {
+            const item = btn.parentElement;
+            const wasOpen = item.classList.contains('open');
+            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
             if (!wasOpen) item.classList.add('open');
+        }
+
+        // Subscribe placeholder (will be replaced with Flutterwave integration)
+        function subscribe(plan) {
+            alert('Payment integration coming soon! You selected the ' + plan + ' access plan.');
         }
     </script>
 </body>

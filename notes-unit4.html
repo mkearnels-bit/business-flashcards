@@ -2044,7 +2044,8 @@
                 <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
             </a>
             <div class="unit-header-info">
-                <div class="unit-header-label">Unit 4</div>
+                <div class="unit-header-label">Unit 4
+            <a href="test.html?type=unit&unit=4" class="unit-exam-link" onclick="event.stopPropagation()">Take Unit Exam</a></div>
                 <h1 class="unit-header-title">Global Business</h1>
             </div>
             <div class="search-container" id="searchContainer">
@@ -2490,97 +2491,16 @@
                         </div>
 
                         <!-- QUIZ SECTION -->
-                        <div class="quiz-section">
-                            <div class="quiz-title">Knowledge Check</div>
-                            <div class="quiz-subtitle">Test your understanding of globalisation concepts</div>
-
-                            <!-- Question 1 -->
-                            <div class="quiz-question" id="q4-1-1">
-                                <div class="quiz-q-text">1. Which of the following is NOT a cause of globalisation?</div>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q4-1-1', this, false)">
-                                        <span class="quiz-option-letter">A</span>
-                                        <span>Improvements in transport and containerisation</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-1-1', this, true)">
-                                        <span class="quiz-option-letter">B</span>
-                                        <span>Increased restrictions on international trade</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-1-1', this, false)">
-                                        <span class="quiz-option-letter">C</span>
-                                        <span>Trade liberalisation and removal of tariffs</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-1-1', this, false)">
-                                        <span class="quiz-option-letter">D</span>
-                                        <span>Advances in communication technology like the internet</span>
-                                    </div>
-                                </div>
-                                <div class="quiz-feedback" id="q4-1-1-correct">
-                                    Correct. Increased trade restrictions would work against globalisation, not cause it. Globalisation results from removing barriers, not creating them.
-                                </div>
-                                <div class="quiz-feedback" id="q4-1-1-incorrect">
-                                    Incorrect. Think about what drives globalisation. Trade liberalisation, technology, and transport improvements all fuel globalisation. What would work against it?
-                                </div>
-                            </div>
-
-                            <!-- Question 2 -->
-                            <div class="quiz-question" id="q4-1-2">
-                                <div class="quiz-q-text">2. A country imposes a 40% tariff on imported steel to protect its steel industry from foreign competition. This is an example of?</div>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q4-1-2', this, false)">
-                                        <span class="quiz-option-letter">A</span>
-                                        <span>Free trade policy</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-1-2', this, true)">
-                                        <span class="quiz-option-letter">B</span>
-                                        <span>Protectionism</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-1-2', this, false)">
-                                        <span class="quiz-option-letter">C</span>
-                                        <span>Comparative advantage</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-1-2', this, false)">
-                                        <span class="quiz-option-letter">D</span>
-                                        <span>Trade liberalisation</span>
-                                    </div>
-                                </div>
-                                <div class="quiz-feedback" id="q4-1-2-correct">
-                                    Correct. Tariffs are a classic protectionist tool, restricting imports to shield domestic industries from international competition.
-                                </div>
-                                <div class="quiz-feedback" id="q4-1-2-incorrect">
-                                    Incorrect. A tariff restricts trade and protects a domestic industry. This is the opposite of free trade and trade liberalisation. Think about whether this policy opens or closes the market.
-                                </div>
-                            </div>
-
-                            <!-- Question 3 -->
-                            <div class="quiz-question" id="q4-1-3">
-                                <div class="quiz-q-text">3. Which of the following is an advantage of globalisation for businesses?</div>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q4-1-3', this, false)">
-                                        <span class="quiz-option-letter">A</span>
-                                        <span>Reduced access to international suppliers and capital</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-1-3', this, true)">
-                                        <span class="quiz-option-letter">B</span>
-                                        <span>Access to larger markets and economies of scale</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-1-3', this, false)">
-                                        <span class="quiz-option-letter">C</span>
-                                        <span>Elimination of exchange rate risk</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-1-3', this, false)">
-                                        <span class="quiz-option-letter">D</span>
-                                        <span>Reduced competition from international competitors</span>
-                                    </div>
-                                </div>
-                                <div class="quiz-feedback" id="q4-1-3-correct">
-                                    Correct. Larger global markets enable higher sales volumes, leading to economies of scale that reduce per-unit costs and increase profitability.
-                                </div>
-                                <div class="quiz-feedback" id="q4-1-3-incorrect">
-                                    Incorrect. Globalisation actually increases competition, creates exchange rate risk, and expands rather than restricts supplier options. Think about what larger markets means for business growth.
-                                </div>
-                            </div>
-                        </div>
+                        <div class="test-cta-section">
+    <div class="test-cta-content">
+        <svg class="test-cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+        <div class="test-cta-text">
+            <div class="test-cta-title">Ready to test your knowledge?</div>
+            <div class="test-cta-sub">Take a timed test on this topic with AI marking and feedback</div>
+        </div>
+        <a href="test.html?type=topic&unit=4&topic=4-1" class="test-cta-btn" onclick="event.stopPropagation()">Take Topic Test</a>
+    </div>
+</div>
 
                         <!-- KEY TAKEAWAYS -->
                         <div class="takeaways">
@@ -2606,7 +2526,7 @@
                     <div class="topic-header-text">
                         <div class="topic-title">Global Markets and Expansion</div>
                         <div class="topic-subtitle">Entering and operating in global markets</div>
-                    </div>
+                    </div><a href="test.html?type=topic&unit=4&topic=4.1" class="topic-test-link" onclick="event.stopPropagation()">Take Topic Test</a>
                     <div class="topic-toggle"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
                 </div>
                 <div class="topic-content">
@@ -3035,85 +2955,16 @@
                         </div>
 
                         <!-- Quiz Section -->
-                        <div class="quiz-section">
-                            <h3 class="quiz-title">Knowledge Check</h3>
-                            <p class="quiz-subtitle">Test your understanding of global markets and expansion</p>
-
-                            <!-- Question 1 -->
-                            <div class="quiz-question" id="q4-2-1">
-                                <p class="quiz-q-text">Q1. Which entry method into global markets carries the lowest financial risk but requires less control over quality?</p>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q4-2-1', this, false)">
-                                        <span class="quiz-option-letter">A</span>
-                                        <span>Wholly owned subsidiary</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-2-1', this, true)">
-                                        <span class="quiz-option-letter">B</span>
-                                        <span>Indirect exporting using intermediaries</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-2-1', this, false)">
-                                        <span class="quiz-option-letter">C</span>
-                                        <span>Joint venture with local partners</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-2-1', this, false)">
-                                        <span class="quiz-option-letter">D</span>
-                                        <span>Foreign direct investment</span>
-                                    </div>
-                                </div>
-                                <div class="quiz-feedback" id="q4-2-1-correct">Correct. Indirect exporting through agents minimizes investment and risk, though margins are lower and control is limited.</div>
-                                <div class="quiz-feedback" id="q4-2-1-incorrect">Incorrect. Consider the method requiring least financial commitment and carrying least risk.</div>
-                            </div>
-
-                            <!-- Question 2 -->
-                            <div class="quiz-question" id="q4-2-2">
-                                <p class="quiz-q-text">Q2. A company assessing entry into a new market discovers strong consumer demand for its products and favorable purchasing power. What would this primarily represent?</p>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q4-2-2', this, true)">
-                                        <span class="quiz-option-letter">A</span>
-                                        <span>Pull factors attracting market entry</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-2-2', this, false)">
-                                        <span class="quiz-option-letter">B</span>
-                                        <span>Push factors encouraging market entry</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-2-2', this, false)">
-                                        <span class="quiz-option-letter">C</span>
-                                        <span>Barriers to market entry</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-2-2', this, false)">
-                                        <span class="quiz-option-letter">D</span>
-                                        <span>Legal regulatory requirements</span>
-                                    </div>
-                                </div>
-                                <div class="quiz-feedback" id="q4-2-2-correct">Correct. Pull factors are attractive opportunities in target markets that encourage investment.</div>
-                                <div class="quiz-feedback" id="q4-2-2-incorrect">Incorrect. Consider whether this represents opportunities in the new market rather than problems in the home market.</div>
-                            </div>
-
-                            <!-- Question 3 -->
-                            <div class="quiz-question" id="q4-2-3">
-                                <p class="quiz-q-text">Q3. How does technology particularly benefit small businesses operating in global niche markets?</p>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q4-2-3', this, false)">
-                                        <span class="quiz-option-letter">A</span>
-                                        <span>It eliminates cultural and language barriers completely</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-2-3', this, false)">
-                                        <span class="quiz-option-letter">B</span>
-                                        <span>It allows large corporations to crush small business competition</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-2-3', this, true)">
-                                        <span class="quiz-option-letter">C</span>
-                                        <span>It enables affordable global reach to dispersed specialty customers without expensive physical retail networks</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-2-3', this, false)">
-                                        <span class="quiz-option-letter">D</span>
-                                        <span>It removes tariff and regulatory barriers to entry</span>
-                                    </div>
-                                </div>
-                                <div class="quiz-feedback" id="q4-2-3-correct">Correct. E-commerce and internet technology allow small businesses to serve global niche markets economically, reaching customers worldwide from simple websites.</div>
-                                <div class="quiz-feedback" id="q4-2-3-incorrect">Incorrect. Consider how internet and e-commerce specifically enable affordable global reach for small specialist businesses.</div>
-                            </div>
-                        </div>
+                        <div class="test-cta-section">
+    <div class="test-cta-content">
+        <svg class="test-cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+        <div class="test-cta-text">
+            <div class="test-cta-title">Ready to test your knowledge?</div>
+            <div class="test-cta-sub">Take a timed test on this topic with AI marking and feedback</div>
+        </div>
+        <a href="test.html?type=topic&unit=4&topic=4-2" class="test-cta-btn" onclick="event.stopPropagation()">Take Topic Test</a>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -3125,7 +2976,7 @@
                     <div class="topic-header-text">
                         <div class="topic-title">Global Marketing</div>
                         <div class="topic-subtitle">Adapting marketing strategies for international markets</div>
-                    </div>
+                    </div><a href="test.html?type=topic&unit=4&topic=4.1" class="topic-test-link" onclick="event.stopPropagation()">Take Topic Test</a>
                     <div class="topic-toggle"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
                 </div>
                 <div class="topic-content">
@@ -3335,94 +3186,16 @@
                             </div>
                         </div>
 
-                        <div class="quiz-section">
-                            <h3 class="quiz-title">Knowledge Check</h3>
-                            <p class="quiz-subtitle">Test your understanding of global marketing strategies.</p>
-
-                            <div class="quiz-question" id="q4-3-1">
-                                <p class="quiz-q-text">What is the main advantage of standardised global marketing compared to adaptation?</p>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q4-3-1', this, true)">
-                                        <span class="quiz-option-letter">A</span>
-                                        <span>It reduces costs by using the same marketing approach everywhere</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-3-1', this, false)">
-                                        <span class="quiz-option-letter">B</span>
-                                        <span>It guarantees higher sales in developing markets</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-3-1', this, false)">
-                                        <span class="quiz-option-letter">C</span>
-                                        <span>It eliminates the need for market research</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-3-1', this, false)">
-                                        <span class="quiz-option-letter">D</span>
-                                        <span>It removes all language barriers in advertising</span>
-                                    </div>
-                                </div>
-                                <div class="quiz-feedback" id="q4-3-1-correct">
-                                    Correct! Standardised marketing reduces costs through economies of scale, using one set of advertisements and maintaining consistent operations globally.
-                                </div>
-                                <div class="quiz-feedback" id="q4-3-1-incorrect">
-                                    Incorrect. The main advantage of standardisation is cost reduction, not sales guarantees. Adaptation respects local preferences and may actually increase sales in individual markets.
-                                </div>
-                            </div>
-
-                            <div class="quiz-question" id="q4-3-2">
-                                <p class="quiz-q-text">Which of the following is an example of the glocal approach?</p>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q4-3-2', this, false)">
-                                        <span class="quiz-option-letter">A</span>
-                                        <span>Selling exactly the same product at the same price in every country</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-3-2', this, true)">
-                                        <span class="quiz-option-letter">B</span>
-                                        <span>Maintaining the same brand identity globally while adapting product menus for local tastes, like McDonald's</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-3-2', this, false)">
-                                        <span class="quiz-option-letter">C</span>
-                                        <span>Creating completely different brands for each international market</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-3-2', this, false)">
-                                        <span class="quiz-option-letter">D</span>
-                                        <span>Only operating in countries with the same cultural values</span>
-                                    </div>
-                                </div>
-                                <div class="quiz-feedback" id="q4-3-2-correct">
-                                    Correct! The glocal approach balances global brand consistency with local market adaptation. McDonald's is the classic example.
-                                </div>
-                                <div class="quiz-feedback" id="q4-3-2-incorrect">
-                                    Incorrect. Glocal means thinking global but acting local. It maintains consistent brand values while adapting specific elements to local markets, not creating completely different brands or selling identical products everywhere.
-                                </div>
-                            </div>
-
-                            <div class="quiz-question" id="q4-3-3">
-                                <p class="quiz-q-text">A company sets a very high price for its new product when entering an international market, planning to lower prices as competition increases. What is this pricing strategy called?</p>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q4-3-3', this, false)">
-                                        <span class="quiz-option-letter">A</span>
-                                        <span>Penetration pricing</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-3-3', this, true)">
-                                        <span class="quiz-option-letter">B</span>
-                                        <span>Price skimming</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-3-3', this, false)">
-                                        <span class="quiz-option-letter">C</span>
-                                        <span>Predatory pricing</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-3-3', this, false)">
-                                        <span class="quiz-option-letter">D</span>
-                                        <span>Transfer pricing</span>
-                                    </div>
-                                </div>
-                                <div class="quiz-feedback" id="q4-3-3-correct">
-                                    Correct! Price skimming sets high initial prices to target premium customers and recover development costs, then lowers prices over time as the market matures.
-                                </div>
-                                <div class="quiz-feedback" id="q4-3-3-incorrect">
-                                    Incorrect. Price skimming means setting high prices initially when the product is new, targeting early adopters, then lowering prices as competition increases. Predatory pricing is setting low prices to eliminate competitors (and is usually illegal).
-                                </div>
-                            </div>
-                        </div>
+                        <div class="test-cta-section">
+    <div class="test-cta-content">
+        <svg class="test-cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+        <div class="test-cta-text">
+            <div class="test-cta-title">Ready to test your knowledge?</div>
+            <div class="test-cta-sub">Take a timed test on this topic with AI marking and feedback</div>
+        </div>
+        <a href="test.html?type=topic&unit=4&topic=4-3" class="test-cta-btn" onclick="event.stopPropagation()">Take Topic Test</a>
+    </div>
+</div>
 
                         <div class="takeaways">
                             <h4>Key Takeaways</h4>
@@ -3446,7 +3219,7 @@
                     <div class="topic-header-text">
                         <div class="topic-title">Global Industries and Multinational Corporations</div>
                         <div class="topic-subtitle">The role of MNCs, FDI, and global competitiveness</div>
-                    </div>
+                    </div><a href="test.html?type=topic&unit=4&topic=4.3" class="topic-test-link" onclick="event.stopPropagation()">Take Topic Test</a>
                     <div class="topic-toggle"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
                 </div>
                 <div class="topic-content">
@@ -3729,94 +3502,16 @@
                             </div>
                         </div>
 
-                        <div class="quiz-section">
-                            <h3 class="quiz-title">Knowledge Check</h3>
-                            <p class="quiz-subtitle">Test your understanding of MNCs and foreign direct investment.</p>
-
-                            <div class="quiz-question" id="q4-4-1">
-                                <p class="quiz-q-text">Which of the following is a major benefit of MNC investment for host countries?</p>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q4-4-1', this, false)">
-                                        <span class="quiz-option-letter">A</span>
-                                        <span>Job losses in traditional industries</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-4-1', this, true)">
-                                        <span class="quiz-option-letter">B</span>
-                                        <span>Job creation, technology transfer, and infrastructure development</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-4-1', this, false)">
-                                        <span class="quiz-option-letter">C</span>
-                                        <span>Guaranteed profits for local businesses</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-4-1', this, false)">
-                                        <span class="quiz-option-letter">D</span>
-                                        <span>Elimination of all environmental concerns</span>
-                                    </div>
-                                </div>
-                                <div class="quiz-feedback" id="q4-4-1-correct">
-                                    Correct! MNCs create jobs, bring advanced technology and expertise, and invest in infrastructure that benefits the entire host country, not just the MNC.
-                                </div>
-                                <div class="quiz-feedback" id="q4-4-1-incorrect">
-                                    Incorrect. While MNCs do create jobs, they may also displace local workers. The main benefits are job creation, technology transfer, infrastructure investment, and tax revenue, not job losses or guaranteed local profits.
-                                </div>
-                            </div>
-
-                            <div class="quiz-question" id="q4-4-2">
-                                <p class="quiz-q-text">What is the main difference between greenfield and brownfield FDI?</p>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q4-4-2', this, true)">
-                                        <span class="quiz-option-letter">A</span>
-                                        <span>Greenfield builds new facilities from scratch; brownfield upgrades existing ones</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-4-2', this, false)">
-                                        <span class="quiz-option-letter">B</span>
-                                        <span>Greenfield is less expensive than brownfield</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-4-2', this, false)">
-                                        <span class="quiz-option-letter">C</span>
-                                        <span>Brownfield investment creates more jobs than greenfield</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-4-2', this, false)">
-                                        <span class="quiz-option-letter">D</span>
-                                        <span>Greenfield is only used in developing countries</span>
-                                    </div>
-                                </div>
-                                <div class="quiz-feedback" id="q4-4-2-correct">
-                                    Correct! Greenfield means building new facilities from the ground up, creating new assets and more new jobs. Brownfield means investing in existing facilities, which is often less disruptive but creates fewer new positions.
-                                </div>
-                                <div class="quiz-feedback" id="q4-4-2-incorrect">
-                                    Incorrect. Greenfield involves constructing new facilities from scratch, while brownfield involves upgrading existing ones. Greenfield typically creates more new jobs and is more expensive than brownfield.
-                                </div>
-                            </div>
-
-                            <div class="quiz-question" id="q4-4-3">
-                                <p class="quiz-q-text">Which of the following does NOT typically attract Foreign Direct Investment to a country?</p>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q4-4-3', this, false)">
-                                        <span class="quiz-option-letter">A</span>
-                                        <span>Stable government and rule of law</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-4-3', this, false)">
-                                        <span class="quiz-option-letter">B</span>
-                                        <span>Good infrastructure and skilled workforce</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-4-3', this, true)">
-                                        <span class="quiz-option-letter">C</span>
-                                        <span>Political instability and poor infrastructure</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q4-4-3', this, false)">
-                                        <span class="quiz-option-letter">D</span>
-                                        <span>Low tax rates and labour costs</span>
-                                    </div>
-                                </div>
-                                <div class="quiz-feedback" id="q4-4-3-correct">
-                                    Correct! Political instability and poor infrastructure deter FDI because they create risks and increase operational costs. Companies avoid investing in unstable environments.
-                                </div>
-                                <div class="quiz-feedback" id="q4-4-3-incorrect">
-                                    Incorrect. FDI is attracted to stable, well-governed countries with good infrastructure, skilled workforces, low taxes, and low labour costs. Political instability and poor infrastructure are major deterrents to foreign investment.
-                                </div>
-                            </div>
-                        </div>
+                        <div class="test-cta-section">
+    <div class="test-cta-content">
+        <svg class="test-cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+        <div class="test-cta-text">
+            <div class="test-cta-title">Ready to test your knowledge?</div>
+            <div class="test-cta-sub">Take a timed test on this topic with AI marking and feedback</div>
+        </div>
+        <a href="test.html?type=topic&unit=4&topic=4-4" class="test-cta-btn" onclick="event.stopPropagation()">Take Topic Test</a>
+    </div>
+</div>
 
                         <div class="takeaways">
                             <h4>Key Takeaways</h4>
@@ -4590,31 +4285,6 @@
 
 
         // Quiz functionality
-        function checkQuiz(questionId, optionEl, isCorrect) {
-            var question = document.getElementById(questionId);
-            var options = question.querySelectorAll('.quiz-option');
-            var correctFb = document.getElementById(questionId + '-correct');
-            var incorrectFb = document.getElementById(questionId + '-incorrect');
-
-            // Disable all options
-            options.forEach(function(opt) {
-                opt.classList.add('disabled');
-            });
-
-            if (isCorrect) {
-                optionEl.classList.add('correct');
-                correctFb.classList.add('show');
-            } else {
-                optionEl.classList.add('incorrect');
-                incorrectFb.classList.add('show');
-                options.forEach(function(opt) {
-                    if (opt.getAttribute('onclick') && opt.getAttribute('onclick').indexOf('true') !== -1) {
-                        opt.classList.add('correct');
-                    }
-                });
-            }
-        }
-
         // Scroll spy for sidebar
         var observerOptions = {
             root: null,
@@ -4872,5 +4542,202 @@
 })();
 
     </script>
+
+
+    <!-- Share Button for Study Notes Topics -->
+    <style>
+    .topic-share-bar {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e5e7eb;
+    }
+    .topic-share-bar span {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #1a3c5e;
+    }
+    .topic-share-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.5rem 1rem;
+        border: 1.5px solid #1a3c5e;
+        background: white;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: #1a3c5e;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-decoration: none;
+    }
+    .topic-share-btn:hover {
+        background: #1a3c5e;
+        color: white;
+        transform: translateY(-1px);
+    }
+    .topic-share-btn.whatsapp:hover {
+        background: #25D366;
+        border-color: #25D366;
+    }
+    .topic-share-btn.copy-link:hover {
+        background: #1a3c5e;
+        border-color: #1a3c5e;
+    }
+    .topic-share-btn svg { width: 16px; height: 16px; }
+    .topic-share-btn .copied-msg { display: none; }
+    .topic-share-btn.copied .copied-msg { display: inline; }
+    .topic-share-btn.copied .default-msg { display: none; }
+    
+/* Test CTA Section */
+.test-cta-section {
+    margin: 2rem 0;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(230, 126, 34, 0.05), rgba(243, 156, 18, 0.08));
+    border: 2px solid rgba(230, 126, 34, 0.2);
+    padding: 1.5rem;
+}
+.test-cta-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.test-cta-icon {
+    width: 40px;
+    height: 40px;
+    color: #e67e22;
+    flex-shrink: 0;
+}
+.test-cta-text {
+    flex: 1;
+}
+.test-cta-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1e3a5f;
+    margin-bottom: 0.25rem;
+}
+.test-cta-sub {
+    font-size: 0.85rem;
+    color: #64748b;
+}
+.test-cta-btn {
+    display: inline-block;
+    padding: 0.6rem 1.2rem;
+    background: linear-gradient(135deg, #e67e22, #f39c12);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    transition: all 0.2s;
+}
+.test-cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
+}
+.topic-test-link {
+    display: inline-block;
+    padding: 0.35rem 0.8rem;
+    background: rgba(255, 255, 255, 0.9);
+    color: #e67e22;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.75rem;
+    border: 1.5px solid rgba(230, 126, 34, 0.3);
+    white-space: nowrap;
+    transition: all 0.2s;
+    margin-right: 0.5rem;
+}
+.topic-test-link:hover {
+    background: #e67e22;
+    color: white;
+    border-color: #e67e22;
+}
+.unit-exam-link {
+    display: inline-block;
+    padding: 0.45rem 1rem;
+    background: linear-gradient(135deg, #e67e22, #f39c12);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    transition: all 0.2s;
+    margin-left: 1rem;
+}
+.unit-exam-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
+}
+@media (max-width: 768px) {
+    .test-cta-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    .topic-test-link {
+        font-size: 0.7rem;
+        padding: 0.25rem 0.6rem;
+    }
+    .unit-exam-link {
+        margin-left: 0;
+        margin-top: 0.5rem;
+    }
+}
+    </style>
+    <script>
+    (function() {
+        function addShareButtons() {
+            document.querySelectorAll('.topic-inner').forEach(function(inner) {
+                if (inner.querySelector('.topic-share-bar')) return;
+                var section = inner.closest('.topic-section');
+                var titleEl = section ? section.querySelector('.topic-title') : null;
+                var numEl = section ? section.querySelector('.topic-num-badge') : null;
+                var topicName = titleEl ? titleEl.textContent.trim() : 'this topic';
+                var topicNum = numEl ? numEl.textContent.trim() : '';
+                var sectionId = section ? section.id : '';
+
+                var shareUrl = window.location.origin + window.location.pathname + (sectionId ? '#' + sectionId : '');
+                var shareText = 'Check out these ' + (topicNum ? topicNum + ' ' : '') + topicName + ' notes on MyBizStudies';
+                var waUrl = 'https://wa.me/?text=' + encodeURIComponent(shareText + ' ' + shareUrl);
+
+                var bar = document.createElement('div');
+                bar.className = 'topic-share-bar';
+                bar.innerHTML = '<span>Share this topic:</span>' +
+                    '<a class="topic-share-btn whatsapp" href="' + waUrl + '" target="_blank" rel="noopener noreferrer">' +
+                        '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>' +
+                        '<span>WhatsApp</span>' +
+                    '</a>' +
+                    '<button class="topic-share-btn copy-link" onclick="copyTopicLink(this, \x27' + shareUrl + '\x27)">' +
+                        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>' +
+                        '<span class="default-msg">Copy Link</span>' +
+                        '<span class="copied-msg">Copied!</span>' +
+                    '</button>';
+
+                inner.appendChild(bar);
+            });
+        }
+
+        window.copyTopicLink = function(btn, url) {
+            navigator.clipboard.writeText(url).then(function() {
+                btn.classList.add('copied');
+                setTimeout(function() { btn.classList.remove('copied'); }, 2000);
+            });
+        };
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', addShareButtons);
+        } else {
+            addShareButtons();
+        }
+    })();
+    </script>
+
 </body>
 </html>

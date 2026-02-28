@@ -2051,7 +2051,8 @@
                 <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
             </a>
             <div class="unit-header-info">
-                <div class="unit-header-label">Unit 1</div>
+                <div class="unit-header-label">Unit 1
+            <a href="test.html?type=unit&unit=1" class="unit-exam-link" onclick="event.stopPropagation()">Take Unit Exam</a></div>
                 <h1 class="unit-header-title">Marketing and People</h1>
             </div>
             <div class="search-container" id="searchContainer">
@@ -2461,106 +2462,16 @@
                         </div>
 
                         <!-- Knowledge Check Quiz -->
-                        <div class="quiz-section">
-                            <div class="quiz-title">Knowledge Check: Topic 1.1</div>
-                            <div class="quiz-subtitle">Test your understanding with these quick questions</div>
-
-                            <div class="quiz-question" id="q1-1-1">
-                                <div class="quiz-q-text">1. Which of the following best describes a niche market?</div>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q1-1-1', this, false)">
-                                        <span class="quiz-option-letter">A</span>
-                                        <span>A market with the highest number of customers</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-1-1', this, true)">
-                                        <span class="quiz-option-letter">B</span>
-                                        <span>A small, specialised segment targeting specific customer needs</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-1-1', this, false)">
-                                        <span class="quiz-option-letter">C</span>
-                                        <span>A market where prices are always higher than average</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-1-1', this, false)">
-                                        <span class="quiz-option-letter">D</span>
-                                        <span>A market that only operates online</span>
-                                    </div>
-                                </div>
-                                <div class="quiz-feedback correct-fb" id="q1-1-1-correct">Correct! A niche market is a small, specialised segment of a larger market where products are tailored to meet the specific needs of a particular group of customers.</div>
-                                <div class="quiz-feedback incorrect-fb" id="q1-1-1-incorrect">Not quite. A niche market is specifically a small, specialised segment of a larger market. It targets customers with particular needs that are not being fully met by mass market products.</div>
-                            </div>
-
-                            <div class="quiz-question" id="q1-1-2">
-                                <div class="quiz-q-text">2. What does "adding value" mean in a business context?</div>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q1-1-2', this, false)">
-                                        <span class="quiz-option-letter">A</span>
-                                        <span>Increasing the quantity of products sold</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-1-2', this, false)">
-                                        <span class="quiz-option-letter">B</span>
-                                        <span>Reducing the cost of production as much as possible</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-1-2', this, true)">
-                                        <span class="quiz-option-letter">C</span>
-                                        <span>Increasing the worth of a product so customers pay more than the cost of inputs</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-1-2', this, false)">
-                                        <span class="quiz-option-letter">D</span>
-                                        <span>Copying a competitor's product features</span>
-                                    </div>
-                                </div>
-                                <div class="quiz-feedback correct-fb" id="q1-1-2-correct">Correct! Adding value is the process of increasing the worth of resources by modifying them so that customers are willing to pay more than the cost of the inputs. This can be done through branding, quality, design, convenience, or service.</div>
-                                <div class="quiz-feedback incorrect-fb" id="q1-1-2-incorrect">Not quite. Adding value specifically means increasing the worth of a product beyond the cost of its inputs, so customers are willing to pay a higher price. It is about making the product more desirable, not just cheaper or more abundant.</div>
-                            </div>
-
-                            <div class="quiz-question" id="q1-1-3">
-                                <div class="quiz-q-text">3. Which of these is NOT a type of market segmentation?</div>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q1-1-3', this, false)">
-                                        <span class="quiz-option-letter">A</span>
-                                        <span>Demographic</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-1-3', this, false)">
-                                        <span class="quiz-option-letter">B</span>
-                                        <span>Geographic</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-1-3', this, true)">
-                                        <span class="quiz-option-letter">C</span>
-                                        <span>Technological</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-1-3', this, false)">
-                                        <span class="quiz-option-letter">D</span>
-                                        <span>Psychographic</span>
-                                    </div>
-                                </div>
-                                <div class="quiz-feedback correct-fb" id="q1-1-3-correct">Correct! The four main types of market segmentation are demographic, geographic, psychographic, and behavioural. "Technological" is not a standard segmentation method.</div>
-                                <div class="quiz-feedback incorrect-fb" id="q1-1-3-incorrect">Not quite. The four main types are demographic, geographic, psychographic, and behavioural. "Technological" is not a recognised method of market segmentation.</div>
-                            </div>
-
-                            <div class="quiz-question" id="q1-1-4">
-                                <div class="quiz-q-text">4. A dynamic market is best described as one that:</div>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q1-1-4', this, false)">
-                                        <span class="quiz-option-letter">A</span>
-                                        <span>Has remained unchanged for many years</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-1-4', this, false)">
-                                        <span class="quiz-option-letter">B</span>
-                                        <span>Only has one dominant business</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-1-4', this, false)">
-                                        <span class="quiz-option-letter">C</span>
-                                        <span>Has very low levels of competition</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-1-4', this, true)">
-                                        <span class="quiz-option-letter">D</span>
-                                        <span>Is subject to rapid and continuous change</span>
-                                    </div>
-                                </div>
-                                <div class="quiz-feedback correct-fb" id="q1-1-4-correct">Correct! A dynamic market is one where conditions are rapidly and continuously changing due to factors like new technology, shifting consumer preferences, new competitors, or economic changes.</div>
-                                <div class="quiz-feedback incorrect-fb" id="q1-1-4-incorrect">Not quite. A dynamic market is specifically one that experiences rapid and continuous change. Businesses in dynamic markets must constantly innovate and adapt to survive.</div>
-                            </div>
-                        </div>
+                        <div class="test-cta-section">
+    <div class="test-cta-content">
+        <svg class="test-cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+        <div class="test-cta-text">
+            <div class="test-cta-title">Ready to test your knowledge?</div>
+            <div class="test-cta-sub">Take a timed test on this topic with AI marking and feedback</div>
+        </div>
+        <a href="test.html?type=topic&unit=1&topic=1-1" class="test-cta-btn" onclick="event.stopPropagation()">Take Topic Test</a>
+    </div>
+</div>
 
                         <!-- Key Takeaways -->
                         <div class="takeaways">
@@ -2586,7 +2497,7 @@
                     <div class="topic-header-text">
                         <div class="topic-title">Market Research</div>
                         <div class="topic-subtitle">Primary and secondary research, data types, and sampling methods</div>
-                    </div>
+                    </div><a href="test.html?type=topic&unit=1&topic=1.1" class="topic-test-link" onclick="event.stopPropagation()">Take Topic Test</a>
                     <div class="topic-toggle">
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                     </div>
@@ -2875,82 +2786,16 @@
                         </div>
 
                         <!-- Knowledge Check -->
-                        <div class="quiz-section">
-                            <div class="quiz-title">Knowledge Check: Topic 1.2</div>
-                            <div class="quiz-subtitle">Test your understanding with these quick questions</div>
-
-                            <div class="quiz-question" id="q1-2-1">
-                                <div class="quiz-q-text">1. Which of these is an example of primary research?</div>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q1-2-1', this, false)">
-                                        <span class="quiz-option-letter">A</span>
-                                        <span>Reading a government economic report</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-2-1', this, true)">
-                                        <span class="quiz-option-letter">B</span>
-                                        <span>Conducting a focus group with potential customers</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-2-1', this, false)">
-                                        <span class="quiz-option-letter">C</span>
-                                        <span>Analysing competitor websites</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-2-1', this, false)">
-                                        <span class="quiz-option-letter">D</span>
-                                        <span>Looking at industry statistics from Mintel</span>
-                                    </div>
-                                </div>
-                                <div class="quiz-feedback correct-fb" id="q1-2-1-correct">Correct! A focus group is primary research because the business is collecting new, original data first hand. The other options are all forms of secondary research (using existing data).</div>
-                                <div class="quiz-feedback incorrect-fb" id="q1-2-1-incorrect">Not quite. Primary research involves collecting new data first hand. A focus group is the only option here where the business gathers original data directly. All other options use data that already exists.</div>
-                            </div>
-
-                            <div class="quiz-question" id="q1-2-2">
-                                <div class="quiz-q-text">2. A company's sales are £2 million in a market worth £40 million. What is its market share?</div>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q1-2-2', this, true)">
-                                        <span class="quiz-option-letter">A</span>
-                                        <span>5%</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-2-2', this, false)">
-                                        <span class="quiz-option-letter">B</span>
-                                        <span>20%</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-2-2', this, false)">
-                                        <span class="quiz-option-letter">C</span>
-                                        <span>2%</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-2-2', this, false)">
-                                        <span class="quiz-option-letter">D</span>
-                                        <span>50%</span>
-                                    </div>
-                                </div>
-                                <div class="quiz-feedback correct-fb" id="q1-2-2-correct">Correct! Market Share = (£2m ÷ £40m) × 100 = 5%. The company controls 5% of the total market.</div>
-                                <div class="quiz-feedback incorrect-fb" id="q1-2-2-incorrect">Not quite. Use the formula: Market Share = (Company sales ÷ Total market sales) × 100 = (£2m ÷ £40m) × 100 = 5%.</div>
-                            </div>
-
-                            <div class="quiz-question" id="q1-2-3">
-                                <div class="quiz-q-text">3. What is the main advantage of qualitative data over quantitative data?</div>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q1-2-3', this, false)">
-                                        <span class="quiz-option-letter">A</span>
-                                        <span>It is easier to present in graphs and charts</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-2-3', this, false)">
-                                        <span class="quiz-option-letter">B</span>
-                                        <span>It provides larger sample sizes</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-2-3', this, true)">
-                                        <span class="quiz-option-letter">C</span>
-                                        <span>It provides deeper insight into customer motivations and feelings</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-2-3', this, false)">
-                                        <span class="quiz-option-letter">D</span>
-                                        <span>It is cheaper to collect</span>
-                                    </div>
-                                </div>
-                                <div class="quiz-feedback correct-fb" id="q1-2-3-correct">Correct! Qualitative data excels at providing rich, detailed insights into the "why" behind customer behaviour, including their motivations, feelings, and attitudes.</div>
-                                <div class="quiz-feedback incorrect-fb" id="q1-2-3-incorrect">Not quite. The main advantage of qualitative data is that it provides deeper insight into customer motivations and feelings, helping businesses understand why customers behave the way they do.</div>
-                            </div>
-                        </div>
+                        <div class="test-cta-section">
+    <div class="test-cta-content">
+        <svg class="test-cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+        <div class="test-cta-text">
+            <div class="test-cta-title">Ready to test your knowledge?</div>
+            <div class="test-cta-sub">Take a timed test on this topic with AI marking and feedback</div>
+        </div>
+        <a href="test.html?type=topic&unit=1&topic=1-2" class="test-cta-btn" onclick="event.stopPropagation()">Take Topic Test</a>
+    </div>
+</div>
 
                         <!-- Key Takeaways -->
                         <div class="takeaways">
@@ -2976,7 +2821,7 @@
                     <div class="topic-header-text">
                         <div class="topic-title">Market Positioning</div>
                         <div class="topic-subtitle">Competitive advantage, product and market orientation</div>
-                    </div>
+                    </div><a href="test.html?type=topic&unit=1&topic=1.1" class="topic-test-link" onclick="event.stopPropagation()">Take Topic Test</a>
                     <div class="topic-toggle">
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                     </div>
@@ -3130,82 +2975,16 @@
                         </div>
 
                         <!-- Knowledge Check -->
-                        <div class="quiz-section">
-                            <div class="quiz-title">Knowledge Check: Topic 1.3</div>
-                            <div class="quiz-subtitle">Test your understanding with these quick questions</div>
-
-                            <div class="quiz-question" id="q1-3-1">
-                                <div class="quiz-q-text">1. A business that develops products based on what customers say they want is described as:</div>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q1-3-1', this, false)">
-                                        <span class="quiz-option-letter">A</span>
-                                        <span>Product oriented</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-3-1', this, true)">
-                                        <span class="quiz-option-letter">B</span>
-                                        <span>Market oriented</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-3-1', this, false)">
-                                        <span class="quiz-option-letter">C</span>
-                                        <span>Sales oriented</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-3-1', this, false)">
-                                        <span class="quiz-option-letter">D</span>
-                                        <span>Production oriented</span>
-                                    </div>
-                                </div>
-                                <div class="quiz-feedback correct-fb" id="q1-3-1-correct">Correct! A market oriented business focuses on identifying and meeting customer needs first, designing products based on what the market demands.</div>
-                                <div class="quiz-feedback incorrect-fb" id="q1-3-1-incorrect">Not quite. A market oriented business designs products based on what customers want (discovered through market research), rather than leading with its own product vision.</div>
-                            </div>
-
-                            <div class="quiz-question" id="q1-3-2">
-                                <div class="quiz-q-text">2. What is the main purpose of a market map?</div>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q1-3-2', this, false)">
-                                        <span class="quiz-option-letter">A</span>
-                                        <span>To show the physical location of competitors</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-3-2', this, false)">
-                                        <span class="quiz-option-letter">B</span>
-                                        <span>To calculate market share percentages</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-3-2', this, true)">
-                                        <span class="quiz-option-letter">C</span>
-                                        <span>To show how brands are perceived relative to competitors on key dimensions</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-3-2', this, false)">
-                                        <span class="quiz-option-letter">D</span>
-                                        <span>To track sales performance over time</span>
-                                    </div>
-                                </div>
-                                <div class="quiz-feedback correct-fb" id="q1-3-2-correct">Correct! A market map (perceptual map) plots brands on two dimensions that matter to customers, showing how each brand is perceived relative to competitors and revealing potential gaps in the market.</div>
-                                <div class="quiz-feedback incorrect-fb" id="q1-3-2-incorrect">Not quite. A market map visually shows how different brands or products are perceived by customers on two key dimensions (like price and quality), helping identify gaps and competitive positions.</div>
-                            </div>
-
-                            <div class="quiz-question" id="q1-3-3">
-                                <div class="quiz-q-text">3. Which of these is the best example of a sustainable competitive advantage?</div>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q1-3-3', this, false)">
-                                        <span class="quiz-option-letter">A</span>
-                                        <span>A temporary price reduction</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-3-3', this, false)">
-                                        <span class="quiz-option-letter">B</span>
-                                        <span>Buying advertising space on a billboard</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-3-3', this, true)">
-                                        <span class="quiz-option-letter">C</span>
-                                        <span>A patented technology that competitors cannot copy</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-3-3', this, false)">
-                                        <span class="quiz-option-letter">D</span>
-                                        <span>Opening a new store location</span>
-                                    </div>
-                                </div>
-                                <div class="quiz-feedback correct-fb" id="q1-3-3-correct">Correct! A patented technology is difficult for competitors to copy, making it a sustainable competitive advantage. Temporary price cuts and advertising are easily matched by competitors.</div>
-                                <div class="quiz-feedback incorrect-fb" id="q1-3-3-incorrect">Not quite. For a competitive advantage to be sustainable, it must be difficult for competitors to replicate. Patents protect technology from being copied, making it a strong example of a lasting advantage.</div>
-                            </div>
-                        </div>
+                        <div class="test-cta-section">
+    <div class="test-cta-content">
+        <svg class="test-cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+        <div class="test-cta-text">
+            <div class="test-cta-title">Ready to test your knowledge?</div>
+            <div class="test-cta-sub">Take a timed test on this topic with AI marking and feedback</div>
+        </div>
+        <a href="test.html?type=topic&unit=1&topic=1-3" class="test-cta-btn" onclick="event.stopPropagation()">Take Topic Test</a>
+    </div>
+</div>
 
                         <!-- Key Takeaways -->
                         <div class="takeaways">
@@ -3230,7 +3009,7 @@
                     <div class="topic-header-text">
                         <div class="topic-title">Demand and Supply</div>
                         <div class="topic-subtitle">Demand and supply curves, equilibrium, PED, YED, and elasticity</div>
-                    </div>
+                    </div><a href="test.html?type=topic&unit=1&topic=1.3" class="topic-test-link" onclick="event.stopPropagation()">Take Topic Test</a>
                     <div class="topic-toggle">
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                     </div>
@@ -3537,130 +3316,16 @@
                         </div>
 
                         <!-- Knowledge Check -->
-                        <div class="quiz-section">
-                            <div class="quiz-title">Knowledge Check: Demand and Supply</div>
-                            <div class="quiz-subtitle">Test your understanding with these quick questions</div>
-
-                            <div class="quiz-question" id="q1-4-1">
-                                <div class="quiz-q-text">1. If PED = −0.4, demand is described as:</div>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q1-4-1', this, true)">
-                                        <span class="quiz-option-letter">A</span>
-                                        <span>Price inelastic</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-4-1', this, false)">
-                                        <span class="quiz-option-letter">B</span>
-                                        <span>Price elastic</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-4-1', this, false)">
-                                        <span class="quiz-option-letter">C</span>
-                                        <span>Unitary elastic</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-4-1', this, false)">
-                                        <span class="quiz-option-letter">D</span>
-                                        <span>Perfectly elastic</span>
-                                    </div>
-                                </div>
-                                <div class="quiz-feedback correct-fb" id="q1-4-1-correct">Correct! The absolute value of 0.4 is less than 1, so demand is price inelastic. This means a change in price causes a proportionally smaller change in quantity demanded.</div>
-                                <div class="quiz-feedback incorrect-fb" id="q1-4-1-incorrect">Not quite. Look at the absolute value: |−0.4| = 0.4. Since 0.4 < 1, demand is price inelastic, meaning demand does not change much when price changes.</div>
-                            </div>
-
-                            <div class="quiz-question" id="q1-4-2">
-                                <div class="quiz-q-text">2. If income rises and demand for a product falls, the product is:</div>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q1-4-2', this, false)">
-                                        <span class="quiz-option-letter">A</span>
-                                        <span>A luxury good</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-4-2', this, false)">
-                                        <span class="quiz-option-letter">B</span>
-                                        <span>A normal good</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-4-2', this, true)">
-                                        <span class="quiz-option-letter">C</span>
-                                        <span>An inferior good</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-4-2', this, false)">
-                                        <span class="quiz-option-letter">D</span>
-                                        <span>A complementary good</span>
-                                    </div>
-                                </div>
-                                <div class="quiz-feedback correct-fb" id="q1-4-2-correct">Correct! An inferior good has negative YED, meaning demand falls when income rises. Consumers switch to better alternatives as they can afford them.</div>
-                                <div class="quiz-feedback incorrect-fb" id="q1-4-2-incorrect">Not quite. When income rises but demand falls, the product has a negative YED, which makes it an inferior good. Consumers replace it with a better alternative when they have more money.</div>
-                            </div>
-
-                            <div class="quiz-question" id="q1-4-3">
-                                <div class="quiz-q-text">3. Which factor would cause the demand curve for umbrellas to shift to the RIGHT?</div>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q1-4-3', this, false)">
-                                        <span class="quiz-option-letter">A</span>
-                                        <span>The price of umbrellas decreases</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-4-3', this, true)">
-                                        <span class="quiz-option-letter">B</span>
-                                        <span>Weather forecasts predict a very rainy summer</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-4-3', this, false)">
-                                        <span class="quiz-option-letter">C</span>
-                                        <span>The cost of manufacturing umbrellas rises</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-4-3', this, false)">
-                                        <span class="quiz-option-letter">D</span>
-                                        <span>The government increases VAT on umbrellas</span>
-                                    </div>
-                                </div>
-                                <div class="quiz-feedback correct-fb" id="q1-4-3-correct">Correct! A rainy weather forecast increases consumer desire for umbrellas at every price level, shifting the demand curve to the right. A price decrease would cause a movement along the curve, not a shift.</div>
-                                <div class="quiz-feedback incorrect-fb" id="q1-4-3-incorrect">Remember: a change in the product's own price causes a movement ALONG the curve, not a shift. A shift happens when a non price factor changes. Weather forecasts predicting rain would increase demand at every price, shifting the curve right.</div>
-                            </div>
-
-                            <div class="quiz-question" id="q1-4-4">
-                                <div class="quiz-q-text">4. A rise in the cost of raw materials will cause the supply curve to:</div>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q1-4-4', this, false)">
-                                        <span class="quiz-option-letter">A</span>
-                                        <span>Shift to the right</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-4-4', this, true)">
-                                        <span class="quiz-option-letter">B</span>
-                                        <span>Shift to the left</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-4-4', this, false)">
-                                        <span class="quiz-option-letter">C</span>
-                                        <span>Stay the same but price rises</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-4-4', this, false)">
-                                        <span class="quiz-option-letter">D</span>
-                                        <span>Become more elastic</span>
-                                    </div>
-                                </div>
-                                <div class="quiz-feedback correct-fb" id="q1-4-4-correct">Correct! Higher raw material costs increase the cost of production, making it less profitable to supply at each price. This shifts the supply curve to the left, meaning less is supplied at every price level.</div>
-                                <div class="quiz-feedback incorrect-fb" id="q1-4-4-incorrect">Think about what happens when production becomes more expensive. Higher costs reduce profitability, so businesses supply less at each price. This is a shift of the supply curve to the left.</div>
-                            </div>
-
-                            <div class="quiz-question" id="q1-4-5">
-                                <div class="quiz-q-text">5. At a price above the equilibrium price, the market will experience:</div>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q1-4-5', this, false)">
-                                        <span class="quiz-option-letter">A</span>
-                                        <span>Excess demand (shortage)</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-4-5', this, true)">
-                                        <span class="quiz-option-letter">B</span>
-                                        <span>Excess supply (surplus)</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-4-5', this, false)">
-                                        <span class="quiz-option-letter">C</span>
-                                        <span>Equilibrium</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-4-5', this, false)">
-                                        <span class="quiz-option-letter">D</span>
-                                        <span>A shift in demand</span>
-                                    </div>
-                                </div>
-                                <div class="quiz-feedback correct-fb" id="q1-4-5-correct">Correct! Above equilibrium price, producers want to supply more than consumers want to buy, creating a surplus. This excess supply puts downward pressure on prices until the market returns to equilibrium.</div>
-                                <div class="quiz-feedback incorrect-fb" id="q1-4-5-incorrect">At a price above equilibrium, quantity supplied exceeds quantity demanded. Producers are offering more than consumers want to buy at that price, creating excess supply (a surplus). Prices will tend to fall back towards equilibrium.</div>
-                            </div>
-                        </div>
+                        <div class="test-cta-section">
+    <div class="test-cta-content">
+        <svg class="test-cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+        <div class="test-cta-text">
+            <div class="test-cta-title">Ready to test your knowledge?</div>
+            <div class="test-cta-sub">Take a timed test on this topic with AI marking and feedback</div>
+        </div>
+        <a href="test.html?type=topic&unit=1&topic=1-4" class="test-cta-btn" onclick="event.stopPropagation()">Take Topic Test</a>
+    </div>
+</div>
 
                         <!-- Key Takeaways -->
                         <div class="takeaways">
@@ -3687,7 +3352,7 @@
                     <div class="topic-header-text">
                         <div class="topic-title">Marketing Mix and Strategy</div>
                         <div class="topic-subtitle">4Ps, product life cycle, Boston Matrix, pricing and distribution</div>
-                    </div>
+                    </div><a href="test.html?type=topic&unit=1&topic=1.4" class="topic-test-link" onclick="event.stopPropagation()">Take Topic Test</a>
                     <div class="topic-toggle">
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                     </div>
@@ -4462,82 +4127,16 @@
                         </div>
 
                         <!-- Quiz -->
-                        <div class="quiz-section">
-                            <div class="quiz-title">Knowledge Check: Topic 1.5</div>
-                            <div class="quiz-subtitle">Test your understanding with these quick questions</div>
-
-                            <div class="quiz-question" id="q1-5-1">
-                                <div class="quiz-q-text">1. At which stage of the product life cycle are profits typically at their highest?</div>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q1-5-1', this, false)">
-                                        <span class="quiz-option-letter">A</span>
-                                        <span>Introduction</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-5-1', this, false)">
-                                        <span class="quiz-option-letter">B</span>
-                                        <span>Growth</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-5-1', this, true)">
-                                        <span class="quiz-option-letter">C</span>
-                                        <span>Maturity</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-5-1', this, false)">
-                                        <span class="quiz-option-letter">D</span>
-                                        <span>Decline</span>
-                                    </div>
-                                </div>
-                                <div class="quiz-feedback correct-fb" id="q1-5-1-correct">Correct! Profits are typically highest during the maturity stage because development costs have been recovered, sales are at their peak, and investment needs are lower than during the growth stage.</div>
-                                <div class="quiz-feedback incorrect-fb" id="q1-5-1-incorrect">Not quite. While sales are growing fast during the growth stage, the maturity stage is when profits are usually highest because the business has already recovered its development costs and sales are at peak levels.</div>
-                            </div>
-
-                            <div class="quiz-question" id="q1-5-2">
-                                <div class="quiz-q-text">2. In the Boston Matrix, a "Cash Cow" has:</div>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q1-5-2', this, false)">
-                                        <span class="quiz-option-letter">A</span>
-                                        <span>High market share and high market growth</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-5-2', this, true)">
-                                        <span class="quiz-option-letter">B</span>
-                                        <span>High market share and low market growth</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-5-2', this, false)">
-                                        <span class="quiz-option-letter">C</span>
-                                        <span>Low market share and high market growth</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-5-2', this, false)">
-                                        <span class="quiz-option-letter">D</span>
-                                        <span>Low market share and low market growth</span>
-                                    </div>
-                                </div>
-                                <div class="quiz-feedback correct-fb" id="q1-5-2-correct">Correct! Cash Cows have high market share in a low growth (mature) market. They generate strong, steady profits with minimal investment required.</div>
-                                <div class="quiz-feedback incorrect-fb" id="q1-5-2-incorrect">Not quite. Cash Cows dominate their market (high share) but that market is no longer growing much (low growth). This combination produces steady profits with little need for heavy investment.</div>
-                            </div>
-
-                            <div class="quiz-question" id="q1-5-3">
-                                <div class="quiz-q-text">3. A new tech startup charges a very low price to quickly build a customer base. This is called:</div>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q1-5-3', this, false)">
-                                        <span class="quiz-option-letter">A</span>
-                                        <span>Price skimming</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-5-3', this, true)">
-                                        <span class="quiz-option-letter">B</span>
-                                        <span>Penetration pricing</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-5-3', this, false)">
-                                        <span class="quiz-option-letter">C</span>
-                                        <span>Cost plus pricing</span>
-                                    </div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-5-3', this, false)">
-                                        <span class="quiz-option-letter">D</span>
-                                        <span>Psychological pricing</span>
-                                    </div>
-                                </div>
-                                <div class="quiz-feedback correct-fb" id="q1-5-3-correct">Correct! Penetration pricing sets a low initial price to attract customers quickly and gain market share, with the intention of raising prices once the customer base is established.</div>
-                                <div class="quiz-feedback incorrect-fb" id="q1-5-3-incorrect">Not quite. Setting a low price to quickly build a customer base is penetration pricing. Price skimming is the opposite: starting high and lowering prices over time.</div>
-                            </div>
-                        </div>
+                        <div class="test-cta-section">
+    <div class="test-cta-content">
+        <svg class="test-cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+        <div class="test-cta-text">
+            <div class="test-cta-title">Ready to test your knowledge?</div>
+            <div class="test-cta-sub">Take a timed test on this topic with AI marking and feedback</div>
+        </div>
+        <a href="test.html?type=topic&unit=1&topic=1-5" class="test-cta-btn" onclick="event.stopPropagation()">Take Topic Test</a>
+    </div>
+</div>
 
                         <div class="takeaways">
                             <h4>📋 Key Takeaways</h4>
@@ -4562,7 +4161,7 @@
                     <div class="topic-header-text">
                         <div class="topic-title">Managing People</div>
                         <div class="topic-subtitle">Organisational structure, motivation theories, and leadership styles</div>
-                    </div>
+                    </div><a href="test.html?type=topic&unit=1&topic=1.5" class="topic-test-link" onclick="event.stopPropagation()">Take Topic Test</a>
                     <div class="topic-toggle">
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                     </div>
@@ -5424,56 +5023,16 @@
                             </ul>
                         </div>
 
-                        <div class="quiz-section">
-                            <h4>Test Your Knowledge</h4>
-                            <div class="quiz-question" id="q1-6-1">
-                                <p><strong>1. Which of the following best describes a flat organisational structure?</strong></p>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q1-6-1', this, false)">Many levels of management with narrow spans of control</div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-6-1', this, true)">Few levels of management allowing faster decision making</div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-6-1', this, false)">A structure where authority is held at the very top</div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-6-1', this, false)">A structure used only by very small businesses</div>
-                                </div>
-                                <div id="q1-6-1-correct" class="quiz-feedback quiz-correct">Correct! Flat structures have fewer management levels, enabling faster decisions and better communication.</div>
-                                <div id="q1-6-1-incorrect" class="quiz-feedback quiz-incorrect">Not quite. Flat structures reduce management levels to speed up decision making and lower costs.</div>
-                            </div>
-
-                            <div class="quiz-question" id="q1-6-2">
-                                <p><strong>2. According to Herzberg, which of the following is a motivator rather than a hygiene factor?</strong></p>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q1-6-2', this, false)">Salary and benefits</div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-6-2', this, false)">Job security and safe working conditions</div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-6-2', this, true)">Achievement and recognition</div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-6-2', this, false)">Company policies and supervision</div>
-                                </div>
-                                <div id="q1-6-2-correct" class="quiz-feedback quiz-correct">Correct! Motivators like achievement, recognition, and responsibility create satisfaction, while hygiene factors prevent dissatisfaction.</div>
-                                <div id="q1-6-2-incorrect" class="quiz-feedback quiz-incorrect">Not quite. The other options are all hygiene factors. Motivators address higher level needs like achievement and recognition.</div>
-                            </div>
-
-                            <div class="quiz-question" id="q1-6-3">
-                                <p><strong>3. What is the main advantage of democratic leadership?</strong></p>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q1-6-3', this, false)">It is the fastest decision making style</div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-6-3', this, true)">It improves motivation and commitment because employees feel heard and valued</div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-6-3', this, false)">It requires the least training for new managers</div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-6-3', this, false)">It works best when employees are inexperienced</div>
-                                </div>
-                                <div id="q1-6-3-correct" class="quiz-feedback quiz-correct">Correct! Democratic leadership involves employees in decisions, which increases their motivation and commitment to goals.</div>
-                                <div id="q1-6-3-incorrect" class="quiz-feedback quiz-incorrect">Not quite. While democratic leadership takes longer than autocratic, its main benefit is improved motivation and commitment from employee involvement.</div>
-                            </div>
-
-                            <div class="quiz-question" id="q1-6-4">
-                                <p><strong>4. Which combination is most effective for long term employee motivation?</strong></p>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q1-6-4', this, false)">High salary alone</div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-6-4', this, false)">Autocratic leadership with piecework pay</div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-6-4', this, true)">Fair pay with delegation, responsibility, training opportunities, and recognition</div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-6-4', this, false)">Laissez faire leadership with profit sharing</div>
-                                </div>
-                                <div id="q1-6-4-correct" class="quiz-feedback quiz-correct">Correct! Sustained motivation comes from meeting multiple levels of need including pay, safety, responsibility, recognition, and growth opportunities.</div>
-                                <div id="q1-6-4-incorrect" class="quiz-feedback quiz-incorrect">Not quite. Long term motivation requires combining financial security with opportunities for responsibility, recognition, and development. Money alone does not sustain motivation.</div>
-                            </div>
-                        </div>
+                        <div class="test-cta-section">
+    <div class="test-cta-content">
+        <svg class="test-cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+        <div class="test-cta-text">
+            <div class="test-cta-title">Ready to test your knowledge?</div>
+            <div class="test-cta-sub">Take a timed test on this topic with AI marking and feedback</div>
+        </div>
+        <a href="test.html?type=topic&unit=1&topic=1-6" class="test-cta-btn" onclick="event.stopPropagation()">Take Topic Test</a>
+    </div>
+</div>
 
                     </div>
                 </div>
@@ -5486,7 +5045,7 @@
                     <div class="topic-header-text">
                         <div class="topic-title">Entrepreneurs and Leaders</div>
                         <div class="topic-subtitle">Role of entrepreneurs, motives, business objectives, and opportunity cost</div>
-                    </div>
+                    </div><a href="test.html?type=topic&unit=1&topic=1.6" class="topic-test-link" onclick="event.stopPropagation()">Take Topic Test</a>
                     <div class="topic-toggle">
                         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                     </div>
@@ -5723,56 +5282,16 @@
                             </ul>
                         </div>
 
-                        <div class="quiz-section">
-                            <h4>Test Your Knowledge</h4>
-                            <div class="quiz-question" id="q1-7-1">
-                                <p><strong>1. What is the key difference between risk and uncertainty?</strong></p>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q1-7-1', this, false)">Risk is always negative, uncertainty can be positive</div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-7-1', this, true)">Risk has a known probability of outcomes, uncertainty has unknown probabilities</div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-7-1', this, false)">Entrepreneurs face risk but not uncertainty</div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-7-1', this, false)">There is no meaningful difference between them</div>
-                                </div>
-                                <div id="q1-7-1-correct" class="quiz-feedback quiz-correct">Correct! Entrepreneurs can calculate and insure against known risks, but uncertainty about new markets or products cannot be predicted.</div>
-                                <div id="q1-7-1-incorrect" class="quiz-feedback quiz-incorrect">Not quite. Risk is about known probabilities (like a 50 percent chance), while uncertainty is about unknown probabilities, which entrepreneurs cannot predict or insure against.</div>
-                            </div>
-
-                            <div class="quiz-question" id="q1-7-2">
-                                <p><strong>2. Which statement about entrepreneurial motives is most accurate?</strong></p>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q1-7-2', this, false)">All entrepreneurs are primarily motivated by profit maximization</div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-7-2', this, true)">Entrepreneurs can be motivated by independence, social impact, or personal achievement alongside financial rewards</div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-7-2', this, false)">Financial motives are more important than non financial ones</div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-7-2', this, false)">Only young entrepreneurs are motivated by independence</div>
-                                </div>
-                                <div id="q1-7-2-correct" class="quiz-feedback quiz-correct">Correct! Successful entrepreneurs often have mixed motives including money, independence, solving problems, and making social impact.</div>
-                                <div id="q1-7-2-incorrect" class="quiz-feedback quiz-incorrect">Not quite. Entrepreneurial motives are diverse. Many entrepreneurs are driven as much by independence and meaningful work as by profit.</div>
-                            </div>
-
-                            <div class="quiz-question" id="q1-7-3">
-                                <p><strong>3. What is the opportunity cost of a business spending 5 million pounds on a new factory?</strong></p>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q1-7-3', this, false)">The money lost if the factory is unprofitable</div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-7-3', this, true)">The other uses of the 5 million pounds, such as expansion into new markets or paying down debt</div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-7-3', this, false)">The salary of the factory manager</div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-7-3', this, false)">The cost of operating and maintaining the factory</div>
-                                </div>
-                                <div id="q1-7-3-correct" class="quiz-feedback quiz-correct">Correct! Opportunity cost is about what is given up. The 5 million could have been used for research, acquisitions, dividends, or many other things.</div>
-                                <div id="q1-7-3-incorrect" class="quiz-feedback quiz-incorrect">Not quite. Opportunity cost is the value of the next best alternative. It is about what else could be done with the resources, not the cost of the chosen option.</div>
-                            </div>
-
-                            <div class="quiz-question" id="q1-7-4">
-                                <p><strong>4. Which combination of objectives would most directly conflict?</strong></p>
-                                <div class="quiz-options">
-                                    <div class="quiz-option" onclick="checkQuiz('q1-7-4', this, false)">Profit maximization and market share growth</div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-7-4', this, true)">Profit maximization and high employee welfare with high wages</div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-7-4', this, false)">Sales growth and cost efficiency</div>
-                                    <div class="quiz-option" onclick="checkQuiz('q1-7-4', this, false)">Customer satisfaction and quick growth</div>
-                                </div>
-                                <div id="q1-7-4-correct" class="quiz-feedback quiz-correct">Correct! High wages and benefits for employees directly reduce profits available for the business and owners, so these objectives conflict.</div>
-                                <div id="q1-7-4-incorrect" class="quiz-feedback quiz-incorrect">Not quite. While many objectives involve trade offs, profit maximization directly conflicts with spending heavily on employee wages and benefits.</div>
-                            </div>
-                        </div>
+                        <div class="test-cta-section">
+    <div class="test-cta-content">
+        <svg class="test-cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+        <div class="test-cta-text">
+            <div class="test-cta-title">Ready to test your knowledge?</div>
+            <div class="test-cta-sub">Take a timed test on this topic with AI marking and feedback</div>
+        </div>
+        <a href="test.html?type=topic&unit=1&topic=1-7" class="test-cta-btn" onclick="event.stopPropagation()">Take Topic Test</a>
+    </div>
+</div>
 
                     </div>
                 </div>
@@ -6528,32 +6047,6 @@
 
 
         // Quiz functionality
-        function checkQuiz(questionId, optionEl, isCorrect) {
-            var question = document.getElementById(questionId);
-            var options = question.querySelectorAll('.quiz-option');
-            var correctFb = document.getElementById(questionId + '-correct');
-            var incorrectFb = document.getElementById(questionId + '-incorrect');
-
-            // Disable all options
-            options.forEach(function(opt) {
-                opt.classList.add('disabled');
-            });
-
-            if (isCorrect) {
-                optionEl.classList.add('correct');
-                correctFb.classList.add('show');
-            } else {
-                optionEl.classList.add('incorrect');
-                incorrectFb.classList.add('show');
-                // Highlight correct answer
-                options.forEach(function(opt) {
-                    if (opt.getAttribute('onclick') && opt.getAttribute('onclick').indexOf('true') !== -1) {
-                        opt.classList.add('correct');
-                    }
-                });
-            }
-        }
-
         // ==================== INTERACTIVE DEMAND/SUPPLY DIAGRAM ====================
         var demandShift = 0;
         var supplyShift = 0;
@@ -8335,6 +7828,201 @@
     }
 })();
 
+    </script>
+
+    <!-- Share Button for Study Notes Topics -->
+    <style>
+    .topic-share-bar {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e5e7eb;
+    }
+    .topic-share-bar span {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #1a3c5e;
+    }
+    .topic-share-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.5rem 1rem;
+        border: 1.5px solid #1a3c5e;
+        background: white;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: #1a3c5e;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-decoration: none;
+    }
+    .topic-share-btn:hover {
+        background: #1a3c5e;
+        color: white;
+        transform: translateY(-1px);
+    }
+    .topic-share-btn.whatsapp:hover {
+        background: #25D366;
+        border-color: #25D366;
+    }
+    .topic-share-btn.copy-link:hover {
+        background: #1a3c5e;
+        border-color: #1a3c5e;
+    }
+    .topic-share-btn svg { width: 16px; height: 16px; }
+    .topic-share-btn .copied-msg { display: none; }
+    .topic-share-btn.copied .copied-msg { display: inline; }
+    .topic-share-btn.copied .default-msg { display: none; }
+    
+/* Test CTA Section */
+.test-cta-section {
+    margin: 2rem 0;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(230, 126, 34, 0.05), rgba(243, 156, 18, 0.08));
+    border: 2px solid rgba(230, 126, 34, 0.2);
+    padding: 1.5rem;
+}
+.test-cta-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.test-cta-icon {
+    width: 40px;
+    height: 40px;
+    color: #e67e22;
+    flex-shrink: 0;
+}
+.test-cta-text {
+    flex: 1;
+}
+.test-cta-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1e3a5f;
+    margin-bottom: 0.25rem;
+}
+.test-cta-sub {
+    font-size: 0.85rem;
+    color: #64748b;
+}
+.test-cta-btn {
+    display: inline-block;
+    padding: 0.6rem 1.2rem;
+    background: linear-gradient(135deg, #e67e22, #f39c12);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    transition: all 0.2s;
+}
+.test-cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
+}
+.topic-test-link {
+    display: inline-block;
+    padding: 0.35rem 0.8rem;
+    background: rgba(255, 255, 255, 0.9);
+    color: #e67e22;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.75rem;
+    border: 1.5px solid rgba(230, 126, 34, 0.3);
+    white-space: nowrap;
+    transition: all 0.2s;
+    margin-right: 0.5rem;
+}
+.topic-test-link:hover {
+    background: #e67e22;
+    color: white;
+    border-color: #e67e22;
+}
+.unit-exam-link {
+    display: inline-block;
+    padding: 0.45rem 1rem;
+    background: linear-gradient(135deg, #e67e22, #f39c12);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    transition: all 0.2s;
+    margin-left: 1rem;
+}
+.unit-exam-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
+}
+@media (max-width: 768px) {
+    .test-cta-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    .topic-test-link {
+        font-size: 0.7rem;
+        padding: 0.25rem 0.6rem;
+    }
+    .unit-exam-link {
+        margin-left: 0;
+        margin-top: 0.5rem;
+    }
+}
+    </style>
+    <script>
+    (function() {
+        function addShareButtons() {
+            document.querySelectorAll('.topic-inner').forEach(function(inner) {
+                if (inner.querySelector('.topic-share-bar')) return;
+                var section = inner.closest('.topic-section');
+                var titleEl = section ? section.querySelector('.topic-title') : null;
+                var numEl = section ? section.querySelector('.topic-num-badge') : null;
+                var topicName = titleEl ? titleEl.textContent.trim() : 'this topic';
+                var topicNum = numEl ? numEl.textContent.trim() : '';
+                var sectionId = section ? section.id : '';
+
+                var shareUrl = window.location.origin + window.location.pathname + (sectionId ? '#' + sectionId : '');
+                var shareText = 'Check out these ' + (topicNum ? topicNum + ' ' : '') + topicName + ' notes on MyBizStudies';
+                var waUrl = 'https://wa.me/?text=' + encodeURIComponent(shareText + ' ' + shareUrl);
+
+                var bar = document.createElement('div');
+                bar.className = 'topic-share-bar';
+                bar.innerHTML = '<span>Share this topic:</span>' +
+                    '<a class="topic-share-btn whatsapp" href="' + waUrl + '" target="_blank" rel="noopener noreferrer">' +
+                        '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>' +
+                        '<span>WhatsApp</span>' +
+                    '</a>' +
+                    '<button class="topic-share-btn copy-link" onclick="copyTopicLink(this, \'' + shareUrl + '\')">' +
+                        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>' +
+                        '<span class="default-msg">Copy Link</span>' +
+                        '<span class="copied-msg">Copied!</span>' +
+                    '</button>';
+
+                inner.appendChild(bar);
+            });
+        }
+
+        window.copyTopicLink = function(btn, url) {
+            navigator.clipboard.writeText(url).then(function() {
+                btn.classList.add('copied');
+                setTimeout(function() { btn.classList.remove('copied'); }, 2000);
+            });
+        };
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', addShareButtons);
+        } else {
+            addShareButtons();
+        }
+    })();
     </script>
 </body>
 </html>
