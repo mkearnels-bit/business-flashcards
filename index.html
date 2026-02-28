@@ -6,12 +6,12 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-    <title>MyBizStudies | Ace Your A-Level Business Studies Exams</title>
-<meta name="description" content="Interactive A-Level Business Studies revision platform. Study notes, 400+ flashcards, exam technique training, and practice questions for Edexcel IAL students.">
+    <title>MyBizStudies | Ace Your GCSE &amp; A-Level Business Studies Exams</title>
+<meta name="description" content="Interactive GCSE and A-Level Business Studies revision platform. Study notes, 400+ flashcards, exam technique training, and AI exam practice for Edexcel, CIE, and AQA students.">
 <meta name="keywords" content="A-Level Business Studies, Edexcel IAL, revision notes, flashcards, exam technique, GCSE Business">
 <link rel="canonical" href="https://mybizstudies.com/index.html">
 <meta property="og:title" content="MyBizStudies | Ace Your A-Level Business Studies Exams">
-<meta property="og:description" content="Interactive A-Level Business Studies revision platform. Study notes, 400+ flashcards, exam technique training, and practice questions for Edexcel IAL students.">
+<meta property="og:description" content="Interactive GCSE and A-Level Business Studies revision platform. Study notes, 400+ flashcards, exam technique training, and AI exam practice for Edexcel, CIE, and AQA students.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://mybizstudies.com/index.html">
 <meta property="og:site_name" content="MyBizStudies">
@@ -2307,74 +2307,6 @@
         }
 
 
-        /* ==================== HOW IT WORKS ==================== */
-        .how-it-works {
-            padding: 6rem 2rem;
-            background: white;
-        }
-
-        .steps-container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .step {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-            margin-bottom: 4rem;
-        }
-
-        .step:nth-child(even) {
-            direction: rtl;
-        }
-
-        .step:nth-child(even) > * {
-            direction: ltr;
-        }
-
-        .step-content {
-            position: relative;
-        }
-
-        .step-number {
-            font-size: 6rem;
-            font-weight: 900;
-            color: var(--gray-100);
-            line-height: 1;
-            margin-bottom: -2rem;
-            position: relative;
-            z-index: 0;
-        }
-
-        .step-text {
-            position: relative;
-            z-index: 1;
-        }
-
-        .step-text h3 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-
-        .step-text p {
-            color: var(--gray-600);
-            line-height: 1.7;
-        }
-
-        .step-image {
-            background: var(--gray-100);
-            border-radius: 20px;
-            height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-        }
-
         /* ==================== PARENTS SECTION ==================== */
         .parents-section {
             padding: 5rem 2rem;
@@ -2586,6 +2518,85 @@
             pointer-events: none;
         }
 
+        /* ==================== TESTIMONIALS SECTION ==================== */
+        .testimonials-section {
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, #f8fafc 0%, #eef2f7 100%);
+        }
+        .testimonials-container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+        }
+        .testimonial-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.75rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+        .testimonial-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .testimonial-stars {
+            display: flex;
+            gap: 0.2rem;
+            margin-bottom: 0.75rem;
+        }
+        .testimonial-stars svg {
+            width: 18px;
+            height: 18px;
+            fill: #f59e0b;
+        }
+        .testimonial-comment {
+            font-size: 0.95rem;
+            color: #334155;
+            line-height: 1.65;
+            margin-bottom: 1.25rem;
+        }
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .testimonial-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1a3c5e, #2d5a8e);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        .testimonial-name {
+            font-weight: 600;
+            color: #1a3c5e;
+            font-size: 0.9rem;
+        }
+        .testimonial-qual {
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+        .testimonial-quote-icon {
+            position: absolute;
+            top: 1.25rem;
+            right: 1.5rem;
+            font-size: 2rem;
+            color: rgba(230, 126, 34, 0.15);
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+
         /* ==================== FAQ SECTION ==================== */
         .faq-section {
             padding: 6rem 2rem;
@@ -2691,6 +2702,407 @@
             margin-top: 1.5rem;
             font-size: 0.9rem;
             opacity: 0.7;
+        }
+
+        /* ==================== HOW IT WORKS SECTION ==================== */
+        .hiw-section {
+            padding: 6rem 2rem;
+            background: white;
+            position: relative;
+        }
+        .hiw-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .hiw-timeline {
+            margin-top: 3rem;
+            position: relative;
+        }
+
+        /* Steps */
+        .hiw-step {
+            display: flex;
+            gap: 1.75rem;
+            margin-bottom: 0;
+            padding-bottom: 3rem;
+        }
+        .hiw-step:last-child { padding-bottom: 0; }
+
+        .hiw-step-marker {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .hiw-step-num {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+            font-weight: 800;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 4px 15px rgba(30, 58, 95, 0.25);
+        }
+        .hiw-step-line {
+            width: 3px;
+            flex: 1;
+            background: linear-gradient(to bottom, var(--primary-light), #e2e8f0);
+            border-radius: 3px;
+            margin-top: 0.5rem;
+        }
+
+        .hiw-step-content {
+            flex: 1;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            grid-template-rows: auto auto;
+            gap: 0 1.25rem;
+            align-items: start;
+        }
+        .hiw-step-icon {
+            grid-row: 1 / 3;
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .hiw-step-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+        .hiw-icon-choose { background: rgba(30, 58, 95, 0.08); color: var(--primary); }
+        .hiw-icon-write { background: rgba(230, 126, 34, 0.08); color: var(--accent); }
+        .hiw-icon-feedback { background: rgba(39, 174, 96, 0.08); color: var(--success); }
+        .hiw-icon-upload { background: rgba(155, 89, 182, 0.08); color: #9b59b6; }
+        .hiw-icon-improve { background: rgba(52, 152, 219, 0.08); color: #3498db; }
+
+        .hiw-step-text {
+            grid-column: 2;
+        }
+        .hiw-step-text h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+        .hiw-step-text p {
+            font-size: 0.95rem;
+            color: #64748b;
+            line-height: 1.65;
+        }
+
+        /* Mini visual cards */
+        .hiw-step-visual {
+            grid-column: 1 / -1;
+            margin-top: 1.25rem;
+        }
+        .hiw-mini-card {
+            background: #f8fafc;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 1.25rem;
+        }
+
+        .hiw-mini-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.35rem;
+        }
+
+        /* Step 1 pills */
+        .hiw-mini-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+        .hiw-pill {
+            padding: 0.35rem 0.85rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            background: white;
+            border: 1.5px solid #e2e8f0;
+            color: #64748b;
+        }
+        .hiw-pill-active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .hiw-pill-orange {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        .hiw-mini-btn {
+            margin-top: 0.75rem;
+            padding: 0.5rem 1.25rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-align: center;
+            display: inline-block;
+        }
+
+        /* Step 2 answer options */
+        .hiw-answer-options {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+        .hiw-answer-opt {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.65rem 1rem;
+            border-radius: 10px;
+            background: white;
+            border: 1.5px solid #e2e8f0;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #64748b;
+        }
+        .hiw-answer-opt-active {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(230, 126, 34, 0.04);
+        }
+        .hiw-typing-preview {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+        .hiw-typing-line {
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #e2e8f0 0%, #cbd5e1 50%, #e2e8f0 100%);
+            background-size: 200% 100%;
+            animation: hiwShimmer 2s ease infinite;
+        }
+        .hiw-typing-line-short { width: 65%; }
+        @keyframes hiwShimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Step 3 score */
+        .hiw-score-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+        .hiw-mini-ring {
+            position: relative;
+            width: 44px;
+            height: 44px;
+            flex-shrink: 0;
+        }
+        .hiw-mini-ring svg { width: 100%; height: 100%; }
+        .hiw-ring-text {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        .hiw-score-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .hiw-score-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--success);
+            background: rgba(39, 174, 96, 0.1);
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            display: inline-block;
+            width: fit-content;
+            margin-bottom: 0.2rem;
+        }
+        .hiw-score-desc {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        .hiw-ao-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+        .hiw-ao-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .hiw-ao-row span {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #94a3b8;
+            width: 28px;
+        }
+        .hiw-ao-track {
+            flex: 1;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .hiw-ao-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.6s ease;
+        }
+
+        /* Step 3 feedback cards */
+        .hiw-feedback-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+        .hiw-fb-card {
+            padding: 0.65rem 0.85rem;
+            border-radius: 10px;
+            border-left: 3px solid;
+        }
+        .hiw-fb-www { background: rgba(39, 174, 96, 0.04); border-left-color: #27ae60; }
+        .hiw-fb-ebi { background: rgba(230, 126, 34, 0.04); border-left-color: #e67e22; }
+        .hiw-fb-model { background: rgba(52, 152, 219, 0.04); border-left-color: #3498db; }
+        .hiw-fb-header {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+        .hiw-fb-text {
+            font-size: 0.8rem;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        /* Step 4 upload zone */
+        .hiw-mini-card-upload { background: white; }
+        .hiw-upload-zone {
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .hiw-upload-text {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #64748b;
+        }
+        .hiw-upload-sub {
+            font-size: 0.78rem;
+            color: #94a3b8;
+            margin-top: 0.25rem;
+        }
+        .hiw-coming-soon-tag {
+            display: inline-block;
+            margin-top: 0.65rem;
+            padding: 0.3rem 0.85rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #9b59b6;
+            background: rgba(155, 89, 182, 0.08);
+            border-radius: 50px;
+        }
+
+        /* Step 5 progress chart */
+        .hiw-progress-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .hiw-chart-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 0.5rem;
+            height: 100px;
+        }
+        .hiw-chart-bar {
+            flex: 1;
+            background: linear-gradient(to top, var(--primary), var(--primary-light));
+            border-radius: 6px 6px 0 0;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 0.35rem;
+            min-height: 25px;
+        }
+        .hiw-chart-bar span {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: white;
+        }
+        .hiw-chart-bar-latest {
+            background: linear-gradient(to top, var(--success), #2ecc71);
+        }
+        .hiw-chart-labels {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .hiw-chart-labels span {
+            flex: 1;
+            font-size: 0.65rem;
+            color: #94a3b8;
+            text-align: center;
+        }
+
+        /* CTA */
+        .hiw-cta {
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .hiw-section { padding: 3.5rem 1rem; }
+            .hiw-step { gap: 1rem; }
+            .hiw-step-num { width: 40px; height: 40px; font-size: 1rem; }
+            .hiw-step-content {
+                grid-template-columns: 1fr;
+            }
+            .hiw-step-icon {
+                grid-row: auto;
+                width: 44px;
+                height: 44px;
+                margin-bottom: 0.5rem;
+            }
+            .hiw-step-icon svg { width: 20px; height: 20px; }
+            .hiw-step-text { grid-column: 1; }
+            .hiw-step-text h3 { font-size: 1.05rem; }
+            .hiw-step-text p { font-size: 0.88rem; }
+            .hiw-answer-options { flex-direction: column; gap: 0.5rem; }
         }
 
         /* ==================== INTERACTIVE NOTES SHOWCASE ==================== */
@@ -3720,6 +4132,13 @@
                 letter-spacing: 1px;
             }
 
+            .testimonials-section {
+                padding: 3rem 1rem;
+            }
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
             .final-cta h2 {
                 font-size: 1.75rem;
             }
@@ -4052,6 +4471,54 @@
   "sameAs": []
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why is MyBizStudies different from other revision and AI marking sites?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Most revision sites offer generic content and most AI tools give vague, unreliable feedback. MyBizStudies is built by an experienced Business Studies teacher and trained specifically on exam board mark schemes and level descriptors. That means every question, model answer, and piece of feedback is aligned to what your examiner actually looks for. You get colour coded skill breakdowns, structured model answers using the PBLI framework, and targeted feedback that shows you exactly how to move up the mark bands."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which exam boards do you cover?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Our study notes content is broad and covers the key topics, theories, and concepts relevant across a variety of Business Studies exam boards. The question generation and AI marking feature is currently aligned to Edexcel A Levels, with support for additional exam boards being actively developed and updated."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does the AI marking and feedback work?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "When you submit an answer, our AI analyses it against the official mark scheme and level descriptors for that question type. It identifies which skills you have demonstrated (Knowledge, Application, Analysis, Evaluation), highlights where marks were earned, and provides specific suggestions on how to strengthen your response. It is like having a knowledgeable teacher available 24/7 to give you detailed, exam focused feedback."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is MyBizStudies suitable for all ability levels?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Absolutely. Whether you are aiming to move from a D to a B or pushing for an A*, the platform adapts to where you are. The weak and model answer comparisons help you see the difference between grade levels, and the skill breakdowns show you exactly what is needed to reach the next band. The study notes and flashcards also provide a strong foundation for students at any stage of their revision."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Who created MyBizStudies?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "MyBizStudies was created by an experienced A Level Business Studies teacher who saw students consistently struggle to get quality, exam focused feedback outside the classroom. The platform was built to solve that problem by combining real teaching expertise with technology to give every student access to the kind of precise, mark scheme aligned guidance that was previously only available from a great teacher."
+      }
+    }
+  ]
+}
+</script>
 </head>
 <body>
     <!-- Navigation -->
@@ -4155,7 +4622,7 @@
                     <span class="free-badge-text">Free for a Limited Time</span>
                 </div>
                 <div class="hero-cta">
-                    <a href="#notes-preview" class="btn btn-ghost btn-large">See How It Works</a>
+                    <a href="#how-it-works" class="btn btn-ghost btn-large">See How It Works</a>
                 </div>
             </div>
 
@@ -4308,6 +4775,212 @@
             </div>
         </div>
 
+    </section>
+
+    <!-- ===== HOW IT WORKS SECTION ===== -->
+    <section class="hiw-section" id="how-it-works">
+        <div class="hiw-container">
+            <div class="section-header">
+                <span class="section-label">How It Works</span>
+                <h2 class="section-title">From Question to Grade Boost in Minutes</h2>
+                <p class="section-subtitle">Our AI exam coach walks you through the exact process your examiner uses, so you learn how to pick up every mark.</p>
+            </div>
+
+            <div class="hiw-timeline">
+
+                <!-- Step 1: Choose Board, Topic, Question Type -->
+                <div class="hiw-step">
+                    <div class="hiw-step-marker">
+                        <div class="hiw-step-num">1</div>
+                        <div class="hiw-step-line"></div>
+                    </div>
+                    <div class="hiw-step-content">
+                        <div class="hiw-step-icon hiw-icon-choose">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        </div>
+                        <div class="hiw-step-text">
+                            <h3>Pick Your Exam Board, Topic, and Question Type</h3>
+                            <p>Start by selecting your exam board. Then choose the unit, topic, and question type you want to practise. The AI generates a unique exam style question with a realistic case study every single time, so you never run out of fresh practice material.</p>
+                        </div>
+                        <div class="hiw-step-visual">
+                            <div class="hiw-mini-card">
+                                <div class="hiw-mini-label">Exam Board</div>
+                                <div class="hiw-mini-pills">
+                                    <span class="hiw-pill hiw-pill-active">Edexcel IAL</span>
+                                    <span class="hiw-pill">CIE A Level</span>
+                                    <span class="hiw-pill">AQA</span>
+                                    <span class="hiw-pill">Edexcel UK</span>
+                                </div>
+                                <div class="hiw-mini-label" style="margin-top:0.75rem;">Topic</div>
+                                <div class="hiw-mini-pills">
+                                    <span class="hiw-pill hiw-pill-active">Market Research</span>
+                                    <span class="hiw-pill">Segmentation</span>
+                                    <span class="hiw-pill">Cash Flow</span>
+                                    <span class="hiw-pill">SWOT</span>
+                                </div>
+                                <div class="hiw-mini-label" style="margin-top:0.75rem;">Question Type</div>
+                                <div class="hiw-mini-pills">
+                                    <span class="hiw-pill">Analyse (6)</span>
+                                    <span class="hiw-pill hiw-pill-orange">Assess (8)</span>
+                                    <span class="hiw-pill">Evaluate (10)</span>
+                                    <span class="hiw-pill">Discuss (12)</span>
+                                    <span class="hiw-pill">Essay (20)</span>
+                                </div>
+                                <div class="hiw-mini-btn">Generate Question</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Write Your Answer -->
+                <div class="hiw-step">
+                    <div class="hiw-step-marker">
+                        <div class="hiw-step-num">2</div>
+                        <div class="hiw-step-line"></div>
+                    </div>
+                    <div class="hiw-step-content">
+                        <div class="hiw-step-icon hiw-icon-write">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                        </div>
+                        <div class="hiw-step-text">
+                            <h3>Write Your Answer Your Way</h3>
+                            <p>Type your answer directly on screen, or if you prefer writing by hand, snap a photo or upload an image of your handwritten work. However you like to revise, we have got you covered.</p>
+                        </div>
+                        <div class="hiw-step-visual">
+                            <div class="hiw-mini-card">
+                                <div class="hiw-answer-options">
+                                    <div class="hiw-answer-opt hiw-answer-opt-active">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+                                        <span>Type It</span>
+                                    </div>
+                                    <div class="hiw-answer-opt">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                                        <span>Snap a Photo</span>
+                                    </div>
+                                    <div class="hiw-answer-opt">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                        <span>Upload File</span>
+                                    </div>
+                                </div>
+                                <div class="hiw-typing-preview">
+                                    <span class="hiw-typing-line"></span>
+                                    <span class="hiw-typing-line hiw-typing-line-short"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Get Feedback -->
+                <div class="hiw-step">
+                    <div class="hiw-step-marker">
+                        <div class="hiw-step-num">3</div>
+                        <div class="hiw-step-line"></div>
+                    </div>
+                    <div class="hiw-step-content">
+                        <div class="hiw-step-icon hiw-icon-feedback">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        </div>
+                        <div class="hiw-step-text">
+                            <h3>Get Detailed Examiner Level Feedback</h3>
+                            <p>Your answer is marked against the official mark scheme and level descriptors. But it does not stop at a score. You get detailed written feedback explaining what went well, exactly where you dropped marks, and a model paragraph showing you how to strengthen your weakest area.</p>
+                        </div>
+                        <div class="hiw-step-visual">
+                            <div class="hiw-mini-card">
+                                <div class="hiw-score-row">
+                                    <div class="hiw-mini-ring">
+                                        <svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="18" fill="none" stroke="#e2e8f0" stroke-width="4"/><circle cx="22" cy="22" r="18" fill="none" stroke="#27ae60" stroke-width="4" stroke-dasharray="101" stroke-dashoffset="13" stroke-linecap="round" transform="rotate(-90 22 22)"/></svg>
+                                        <span class="hiw-ring-text">7/8</span>
+                                    </div>
+                                    <div class="hiw-score-info">
+                                        <span class="hiw-score-label">Level 4</span>
+                                        <span class="hiw-score-desc">Excellent Work!</span>
+                                    </div>
+                                </div>
+                                <div class="hiw-feedback-cards">
+                                    <div class="hiw-fb-card hiw-fb-www">
+                                        <div class="hiw-fb-header"><svg viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><polyline points="20 6 9 17 4 12"/></svg> What Went Well</div>
+                                        <div class="hiw-fb-text">Strong application to FreshBite with clear use of context. Good chain of analysis linking digital marketing to increased reach.</div>
+                                    </div>
+                                    <div class="hiw-fb-card hiw-fb-ebi">
+                                        <div class="hiw-fb-header"><svg viewBox="0 0 24 24" fill="none" stroke="#e67e22" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> To Improve</div>
+                                        <div class="hiw-fb-text">Develop your evaluation by weighing short term costs against long term competitive advantages before reaching your judgement.</div>
+                                    </div>
+                                    <div class="hiw-fb-card hiw-fb-model">
+                                        <div class="hiw-fb-header"><svg viewBox="0 0 24 24" fill="none" stroke="#3498db" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4z"/></svg> Example Improved Paragraph</div>
+                                        <div class="hiw-fb-text">See a rewritten version of your weakest paragraph showing exactly how to pick up extra marks...</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Upload Your Own Work -->
+                <div class="hiw-step">
+                    <div class="hiw-step-marker">
+                        <div class="hiw-step-num">4</div>
+                        <div class="hiw-step-line"></div>
+                    </div>
+                    <div class="hiw-step-content">
+                        <div class="hiw-step-icon hiw-icon-upload">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/></svg>
+                        </div>
+                        <div class="hiw-step-text">
+                            <h3>Upload Your Own Past Paper Answers</h3>
+                            <p>Already answered a question from a textbook or past paper? Upload a photo of the question and your answer and let our AI mark it against the real mark scheme. Get the same detailed feedback without having to wait for your teacher. Perfect for independent revision at home.</p>
+                            <span class="hiw-coming-soon-tag">Coming Soon</span>
+                        </div>
+                        <div class="hiw-step-visual">
+                            <div class="hiw-mini-card hiw-mini-card-upload">
+                                <div class="hiw-upload-zone">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:32px;height:32px;margin-bottom:0.5rem;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                    <div class="hiw-upload-text">Drop your question and answer here</div>
+                                    <div class="hiw-upload-sub">Photo, scan, or PDF of your past paper work</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5: Track Progress -->
+                <div class="hiw-step">
+                    <div class="hiw-step-marker">
+                        <div class="hiw-step-num">5</div>
+                    </div>
+                    <div class="hiw-step-content">
+                        <div class="hiw-step-icon hiw-icon-improve">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                        </div>
+                        <div class="hiw-step-text">
+                            <h3>Watch Your Grades Climb</h3>
+                            <p>Your progress is tracked over time so you can see exactly how you are improving. Every question you practise builds the exam skills that lead to higher grades on the real thing.</p>
+                        </div>
+                        <div class="hiw-step-visual">
+                            <div class="hiw-mini-card">
+                                <div class="hiw-progress-chart">
+                                    <div class="hiw-chart-bars">
+                                        <div class="hiw-chart-bar" style="height:35%"><span>52%</span></div>
+                                        <div class="hiw-chart-bar" style="height:50%"><span>64%</span></div>
+                                        <div class="hiw-chart-bar" style="height:60%"><span>71%</span></div>
+                                        <div class="hiw-chart-bar" style="height:72%"><span>78%</span></div>
+                                        <div class="hiw-chart-bar hiw-chart-bar-latest" style="height:88%"><span>88%</span></div>
+                                    </div>
+                                    <div class="hiw-chart-labels">
+                                        <span>Week 1</span><span>Week 2</span><span>Week 3</span><span>Week 4</span><span>Week 5</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="hiw-cta">
+                <a href="signup.html" class="btn btn-primary btn-large">Start Practising for Free</a>
+            </div>
+        </div>
     </section>
 
     <!-- Feature Highlights Section -->
@@ -4716,6 +5389,17 @@
         </div>
     </section>
 
+    <!-- ===== TESTIMONIALS SECTION (only renders with 3+ approved reviews) ===== -->
+    <section class="testimonials-section" id="testimonialsSection" style="display:none;">
+        <div class="testimonials-container">
+            <div class="section-header">
+                <span class="section-label">Student Reviews</span>
+                <h2 class="section-title">What Our Students Say</h2>
+                <p class="section-subtitle">Real feedback from students using MyBizStudies to prepare for their exams.</p>
+            </div>
+            <div class="testimonials-grid" id="testimonialsGrid"></div>
+        </div>
+    </section>
 
     <section class="faq-section">
         <div class="faq-container">
@@ -4775,7 +5459,7 @@
         <div class="footer-content">
             <div class="footer-brand">
                 <img src="logo.png" alt="MyBizStudies">
-                <p>The smart way to revise A-Level Business Studies. Interactive flashcards and progress tracking to help you achieve your best grades.</p>
+                <p>The smart way to revise GCSE and A-Level Business Studies. Study notes, exam practice, and AI feedback to help you achieve your best grades.</p>
                 <div class="footer-social">
                     <a href="https://www.tiktok.com/@mybizstudies" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.34-6.34V8.73a8.19 8.19 0 004.76 1.52V6.81a4.84 4.84 0 01-1-.12z"/></svg>
@@ -5399,5 +6083,72 @@
 
 
     </script>
+
+    <!-- Testimonials Loader -->
+    <script>
+    (function() {
+        var sbUrl = 'https://zyaywzzmjpctpodpxhge.supabase.co';
+        var sbKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
+
+        async function loadTestimonials() {
+            try {
+                var reviewClient = window.supabase.createClient(sbUrl, sbKey);
+                var { data: reviews, error } = await reviewClient
+                    .from('reviews')
+                    .select('display_name, rating, comment, qualification, created_at')
+                    .eq('status', 'approved')
+                    .order('created_at', { ascending: false })
+                    .limit(6);
+
+                if (error) throw error;
+                if (!reviews || reviews.length < 3) return;
+
+                var grid = document.getElementById('testimonialsGrid');
+                var html = '';
+
+                reviews.forEach(function(r) {
+                    var stars = '';
+                    for (var i = 0; i < 5; i++) {
+                        if (i < r.rating) {
+                            stars += '<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+                        } else {
+                            stars += '<svg viewBox="0 0 24 24" style="fill:#e2e8f0;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+                        }
+                    }
+                    var initial = r.display_name ? r.display_name.charAt(0).toUpperCase() : '?';
+                    var qual = r.qualification || 'A-Level';
+
+                    html += '<div class="testimonial-card">';
+                    html += '<div class="testimonial-quote-icon">"</div>';
+                    html += '<div class="testimonial-stars">' + stars + '</div>';
+                    html += '<div class="testimonial-comment">' + escapeHtml(r.comment) + '</div>';
+                    html += '<div class="testimonial-author">';
+                    html += '<div class="testimonial-avatar">' + initial + '</div>';
+                    html += '<div><div class="testimonial-name">' + escapeHtml(r.display_name) + '</div>';
+                    html += '<div class="testimonial-qual">' + qual + ' Student</div></div>';
+                    html += '</div></div>';
+                });
+
+                grid.innerHTML = html;
+                document.getElementById('testimonialsSection').style.display = 'block';
+            } catch (err) {
+                console.error('Failed to load testimonials:', err);
+            }
+        }
+
+        function escapeHtml(str) {
+            var div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadTestimonials);
+        } else {
+            loadTestimonials();
+        }
+    })();
+    </script>
+
 </body>
 </html>
