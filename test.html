@@ -8,7 +8,7 @@
     <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
     <title>Test | MyBizStudies</title>
     <meta name="description" content="Take timed tests and exams with AI marking. Get detailed feedback on your Business Studies answers with AO breakdowns.">
-    <meta name="keywords" content="A-Level Business Studies, exam practice, AI marking, timed test, mock exam, revision, Edexcel IAL, AQA GCSE, CIE IGCSE">
+    <meta name="keywords" content="A-Level Business Studies, exam practice, AI marking, timed test, mock exam, revision, Edexcel IAL, Edexcel UK, AQA UK, CIE IAL">
     <link rel="canonical" href="https://mybizstudies.com/test.html">
     <meta property="og:title" content="Test | MyBizStudies">
     <meta property="og:description" content="Take timed tests and exams with AI marking and detailed feedback.">
@@ -1660,13 +1660,13 @@ body {
                     <div class="board-name">Edexcel UK</div>
                     <div class="board-description">UK A-Level</div>
                 </div>
-                <div class="board-card" data-board="aqa_gcse">
-                    <div class="board-name">AQA GCSE</div>
-                    <div class="board-description">GCSE Business</div>
+                <div class="board-card" data-board="aqa_uk">
+                    <div class="board-name">AQA UK</div>
+                    <div class="board-description">UK A-Level</div>
                 </div>
-                <div class="board-card" data-board="cie_igcse">
-                    <div class="board-name">CIE IGCSE</div>
-                    <div class="board-description">International GCSE</div>
+                <div class="board-card" data-board="cie_ial">
+                    <div class="board-name">CIE IAL</div>
+                    <div class="board-description">International A-Level</div>
                 </div>
             </div>
 
@@ -1882,18 +1882,21 @@ var BOARD_DATA = {
             { id: 'paper3', code: '9BS0/03', name: 'Investigating Business in a Competitive Environment', color: '#27ae60' }
         ]
     },
-    aqa_gcse: {
-        name: 'AQA GCSE',
+    aqa_uk: {
+        name: 'AQA UK A-Level',
         units: [
-            { id: 'paper1', code: '8132/1', name: 'Influences of Operations and HRM', color: '#e74c3c' },
-            { id: 'paper2', code: '8132/2', name: 'Influences of Marketing and Finance', color: '#3498db' }
+            { id: 'paper1', code: '7132/1', name: 'Business 1', color: '#e74c3c' },
+            { id: 'paper2', code: '7132/2', name: 'Business 2', color: '#3498db' },
+            { id: 'paper3', code: '7132/3', name: 'Business 3', color: '#27ae60' }
         ]
     },
-    cie_igcse: {
-        name: 'CIE IGCSE',
+    cie_ial: {
+        name: 'CIE International A-Level',
         units: [
-            { id: 'paper1', code: '0450/11', name: 'Short Answer and Data Response', color: '#e74c3c' },
-            { id: 'paper2', code: '0450/21', name: 'Case Study', color: '#3498db' }
+            { id: 'paper1', code: '9609/11', name: 'Business Behaviour', color: '#e74c3c' },
+            { id: 'paper2', code: '9609/21', name: 'Business Concepts 1', color: '#3498db' },
+            { id: 'paper3', code: '9609/31', name: 'Business Decision Making', color: '#27ae60' },
+            { id: 'paper4', code: '9609/41', name: 'Business Strategy', color: '#f39c12' }
         ]
     }
 };
@@ -1980,7 +1983,7 @@ function init() {
     // Update hero title and subtitle based on test type
     var heroTitle = document.querySelector('.hero-title');
     var heroSubtitle = document.querySelector('.hero-subtitle');
-    var setupTitle = document.querySelector('[data-setup-title]');
+    var setupTitle = document.getElementById('setupTitle');
 
     if (testType === 'unit') {
         var unitName = UNIT_NAMES[unitNum] || 'Unit ' + unitNum;
@@ -2008,7 +2011,7 @@ function init() {
                 card.classList.remove('selected');
             });
             boardCard.classList.add('selected');
-            document.querySelector('[data-start-button]').disabled = false;
+            document.getElementById('startTestBtn').disabled = false;
         }
     }
 
@@ -2020,7 +2023,7 @@ function init() {
 }
 
 function updateTestInfo(minutes, marks, questions_count) {
-    var infoBar = document.querySelector('[data-test-info-bar]');
+    var infoBar = document.getElementById('setupInfoBar');
     if (infoBar) {
         infoBar.innerHTML = '<span>' + minutes + ' min</span> <span>' + marks + ' marks</span> <span>' + questions_count + ' questions</span>';
     }
@@ -2049,7 +2052,7 @@ async function checkAuth() {
         }
 
         // Pre-fill student name input
-        var nameInput = document.querySelector('[data-student-name-input]');
+        var nameInput = document.getElementById('studentNameInput');
         if (nameInput && studentFirstName) {
             nameInput.value = studentFirstName;
         }
@@ -2063,7 +2066,7 @@ async function checkAuth() {
         });
 
         // Set profile avatar initials
-        var avatar = document.querySelector('[data-profile-avatar]');
+        var avatar = document.getElementById('profileAvatar');
         if (avatar && session.user.email) {
             var initials = getProfileInitials(session.user.email);
             avatar.textContent = initials;
@@ -2092,7 +2095,7 @@ function setupBoardSelection() {
             });
             this.classList.add('selected');
             selectedBoard = this.dataset.board;
-            document.querySelector('[data-start-button]').disabled = false;
+            document.getElementById('startTestBtn').disabled = false;
         });
     });
 }
@@ -2102,7 +2105,7 @@ function setupBoardSelection() {
 // ============================================================================
 
 async function startTest() {
-    var nameInput = document.querySelector('[data-student-name-input]');
+    var nameInput = document.getElementById('studentNameInput');
     studentName = nameInput.value.trim();
 
     if (!studentName) {
@@ -2161,7 +2164,7 @@ async function startTest() {
 
         // Show "I'm Ready!" button
         stopTipsCarousel();
-        var readyButton = document.querySelector('[data-ready-button]');
+        var readyButton = document.getElementById('readyBtn');
         if (readyButton) {
             readyButton.style.display = 'block';
         }
@@ -2230,7 +2233,7 @@ function onReady() {
     showPhase('phaseTest');
 
     // Show top bar with timer
-    var topBar = document.querySelector('[data-test-top-bar]');
+    var topBar = document.getElementById('testTopBar');
     if (topBar) {
         topBar.style.display = 'flex';
     }
@@ -2269,7 +2272,7 @@ function startTimer(minutes) {
 }
 
 function updateTimerDisplay() {
-    var timerElement = document.querySelector('[data-timer]');
+    var timerElement = document.getElementById('testTimer');
     if (!timerElement) return;
 
     var displaySeconds;
@@ -2335,13 +2338,13 @@ function showQuestion(index) {
 
     // Update progress bar
     var progress = ((index + 1) / questions.length) * 100;
-    var progressBar = document.querySelector('[data-progress-bar]');
+    var progressBar = document.getElementById('progressFill');
     if (progressBar) {
         progressBar.style.width = progress + '%';
     }
 
     // Update question counter
-    var counter = document.querySelector('[data-question-counter]');
+    var counter = document.getElementById('questionCounter');
     if (counter) {
         counter.textContent = 'Question ' + (index + 1) + ' of ' + questions.length;
     }
@@ -2352,7 +2355,7 @@ function showQuestion(index) {
             return s.questions.some(function(q) { return q.id === question.id; });
         });
         if (section) {
-            var sectionName = document.querySelector('[data-section-name]');
+            var sectionName = document.getElementById('sectionName');
             if (sectionName) {
                 sectionName.textContent = section.name;
             }
@@ -2360,7 +2363,7 @@ function showQuestion(index) {
     }
 
     // Show/hide case study card
-    var caseStudy = document.querySelector('[data-case-study]');
+    var caseStudy = document.getElementById('caseStudyCard');
     if (caseStudy && question.case_study) {
         caseStudy.innerHTML = '<h4>Case Study</h4><p>' + escapeHtml(question.case_study) + '</p>';
         caseStudy.style.display = 'block';
@@ -2370,14 +2373,14 @@ function showQuestion(index) {
 
     // Render chart if present
     if (question.chart_data) {
-        var chartContainer = document.querySelector('[data-chart-container]');
+        var chartContainer = document.getElementById('chartContainer');
         if (chartContainer) {
             chartContainer.innerHTML = '<canvas id="questionChart"></canvas>';
             chartContainer.style.display = 'block';
             renderChart(question.chart_data, 'questionChart');
         }
     } else {
-        var chartContainer = document.querySelector('[data-chart-container]');
+        var chartContainer = document.getElementById('chartContainer');
         if (chartContainer) {
             chartContainer.style.display = 'none';
         }
@@ -2385,34 +2388,34 @@ function showQuestion(index) {
 
     // Render data table if present
     if (question.table_data) {
-        var tableContainer = document.querySelector('[data-table-container]');
+        var tableContainer = document.getElementById('dataTableContainer');
         if (tableContainer) {
             tableContainer.innerHTML = renderDataTable(question.table_data);
             tableContainer.style.display = 'block';
         }
     } else {
-        var tableContainer = document.querySelector('[data-table-container]');
+        var tableContainer = document.getElementById('dataTableContainer');
         if (tableContainer) {
             tableContainer.style.display = 'none';
         }
     }
 
     // Update marks badge
-    var marksBadge = document.querySelector('[data-marks-badge]');
+    var marksBadge = document.getElementById('marksBadge');
     if (marksBadge && question.marks) {
         marksBadge.textContent = question.marks + ' mark' + (question.marks !== 1 ? 's' : '');
     }
 
     // Update recommended time badge
     if (question.recommended_time_minutes) {
-        var timeBadge = document.querySelector('[data-time-badge]');
+        var timeBadge = document.getElementById('recommendedTime');
         if (timeBadge) {
-            timeBadge.textContent = question.recommended_time_minutes + ' min';
+            timeBadge.textContent = 'Recommended: ' + question.recommended_time_minutes + ' minutes';
         }
     }
 
     // Update question text
-    var questionText = document.querySelector('[data-question-text]');
+    var questionText = document.getElementById('questionText');
     if (questionText) {
         questionText.innerHTML = '<p>' + escapeHtml(question.text) + '</p>';
         if (question.sub_questions && question.sub_questions.length > 0) {
@@ -2423,16 +2426,16 @@ function showQuestion(index) {
     }
 
     // Restore saved answer
-    var answerTextarea = document.querySelector('[data-answer-textarea]');
+    var answerTextarea = document.getElementById('answerTextarea');
     if (answerTextarea) {
         answerTextarea.value = answers[index] || '';
         updateWordCount();
     }
 
     // Update prev/next/submit buttons
-    var prevBtn = document.querySelector('[data-prev-button]');
-    var nextBtn = document.querySelector('[data-next-button]');
-    var submitBtn = document.querySelector('[data-submit-button]');
+    var prevBtn = document.getElementById('prevQuestionBtn');
+    var nextBtn = document.getElementById('nextQuestionBtn');
+    var submitBtn = document.getElementById('submitTestBtn');
 
     if (prevBtn) {
         prevBtn.disabled = (index === 0);
@@ -2448,7 +2451,7 @@ function showQuestion(index) {
 }
 
 function saveCurrentAnswer() {
-    var answerTextarea = document.querySelector('[data-answer-textarea]');
+    var answerTextarea = document.getElementById('answerTextarea');
     if (answerTextarea && currentQuestionIndex >= 0 && currentQuestionIndex < answers.length) {
         answers[currentQuestionIndex] = answerTextarea.value;
     }
@@ -2693,27 +2696,27 @@ function showFeedback(results) {
     showPhase('phaseFeedback');
 
     // Hide top bar
-    var topBar = document.querySelector('[data-test-top-bar]');
+    var topBar = document.getElementById('testTopBar');
     if (topBar) {
         topBar.style.display = 'none';
     }
 
     // Animate score ring
     var scorePercentage = results.test_summary.percentage_score;
-    var ringCircle = document.querySelector('[data-score-ring-circle]');
+    var ringCircle = document.getElementById('scoreRingFill');
     if (ringCircle) {
         var circumference = 2 * Math.PI * 45;
         var offset = circumference - (scorePercentage / 100) * circumference;
         ringCircle.style.strokeDashoffset = offset;
     }
 
-    var scoreText = document.querySelector('[data-score-text]');
+    var scoreText = document.getElementById('scoreValue');
     if (scoreText) {
         scoreText.textContent = Math.round(scorePercentage) + '%';
     }
 
     // Set grade band
-    var gradeBand = document.querySelector('[data-grade-band]');
+    var gradeBand = document.getElementById('gradeBand');
     if (gradeBand) {
         var grade = results.test_summary.grade_band || 'B';
         gradeBand.textContent = 'Grade: ' + grade;
@@ -2722,19 +2725,19 @@ function showFeedback(results) {
     }
 
     // Set marks text
-    var marksText = document.querySelector('[data-marks-text]');
+    var marksText = document.getElementById('scoreMax');
     if (marksText) {
         var marksEarned = results.test_summary.total_marks_awarded || 0;
         var marksTotal = results.test_summary.total_marks_available || 80;
-        marksText.textContent = marksEarned + '/' + marksTotal + ' marks';
+        marksText.textContent = marksEarned + '/' + marksTotal;
     }
 
     // Set time info
-    var timeInfo = document.querySelector('[data-time-info]');
+    var timeInfo = document.getElementById('timeInfo');
     if (timeInfo) {
         var totalSeconds = results.test_summary.total_time_seconds || 0;
         var timeStr = formatTime(totalSeconds);
-        timeInfo.textContent = 'Time: ' + timeStr;
+        timeInfo.textContent = 'Completed in ' + timeStr;
     }
 
     // AO overview bars
@@ -2748,14 +2751,14 @@ function showFeedback(results) {
     }
 
     // Overall feedback
-    var overallFeedback = document.querySelector('[data-overall-feedback]');
+    var overallFeedback = document.getElementById('overallFeedbackText');
     if (overallFeedback && results.overall_feedback) {
         overallFeedback.textContent = results.overall_feedback;
     }
 
     // Strengths
     if (results.strengths && results.strengths.length > 0) {
-        var strengthsList = document.querySelector('[data-strengths-list]');
+        var strengthsList = document.getElementById('strengthsList');
         if (strengthsList) {
             strengthsList.innerHTML = results.strengths.map(function(strength) {
                 return '<li>' + escapeHtml(strength) + '</li>';
@@ -2765,7 +2768,7 @@ function showFeedback(results) {
 
     // Development areas
     if (results.development_areas && results.development_areas.length > 0) {
-        var devList = document.querySelector('[data-development-list]');
+        var devList = document.getElementById('developmentList');
         if (devList) {
             devList.innerHTML = results.development_areas.map(function(area) {
                 return '<li>' + escapeHtml(area) + '</li>';
@@ -2775,7 +2778,7 @@ function showFeedback(results) {
 
     // Time management feedback
     if (results.time_management_feedback) {
-        var timeManagement = document.querySelector('[data-time-management]');
+        var timeManagement = document.getElementById('timeFeedbackText');
         if (timeManagement) {
             timeManagement.textContent = results.time_management_feedback;
         }
@@ -2783,7 +2786,7 @@ function showFeedback(results) {
 
     // Recommended topics
     if (results.recommended_topics && results.recommended_topics.length > 0) {
-        var topicsList = document.querySelector('[data-recommended-topics]');
+        var topicsList = document.getElementById('topicsToRevise');
         if (topicsList) {
             topicsList.innerHTML = results.recommended_topics.map(function(topic) {
                 return '<li><a href="notes.html?topic=' + encodeURIComponent(topic) + '">' + escapeHtml(topic) + '</a></li>';
@@ -2793,7 +2796,7 @@ function showFeedback(results) {
 }
 
 function updateAOBars(aoTotals, aoMaxTotals) {
-    var aoContainer = document.querySelector('[data-ao-container]');
+    var aoContainer = document.getElementById('aoOverview');
     if (!aoContainer) return;
 
     var colors = {
@@ -2825,7 +2828,7 @@ function updateAOBars(aoTotals, aoMaxTotals) {
 }
 
 function buildQuestionResults(questionFeedback) {
-    var container = document.querySelector('[data-question-results]');
+    var container = document.getElementById('questionResults');
     if (!container) return;
 
     container.innerHTML = '';
@@ -2938,8 +2941,8 @@ function formatTime(seconds) {
 }
 
 function updateWordCount() {
-    var textarea = document.querySelector('[data-answer-textarea]');
-    var counter = document.querySelector('[data-word-count]');
+    var textarea = document.getElementById('answerTextarea');
+    var counter = document.getElementById('wordCount');
 
     if (textarea && counter) {
         var text = textarea.value.trim();
@@ -2953,21 +2956,21 @@ function updateWordCount() {
 // ============================================================================
 
 function toggleProfileDropdown() {
-    var dropdown = document.querySelector('[data-profile-dropdown]');
+    var dropdown = document.getElementById('profileDropdown');
     if (dropdown) {
         dropdown.classList.toggle('show');
     }
 }
 
 function toggleHamburger() {
-    var menu = document.querySelector('[data-mobile-menu]');
+    var menu = document.getElementById('siteMobileMenu');
     if (menu) {
         menu.classList.toggle('show');
     }
 }
 
 function closeMobileMenu() {
-    var menu = document.querySelector('[data-mobile-menu]');
+    var menu = document.getElementById('siteMobileMenu');
     if (menu) {
         menu.classList.remove('show');
     }
@@ -3000,75 +3003,80 @@ function setupEventListeners() {
     setupBoardSelection();
 
     // Start test button
-    var startBtn = document.querySelector('[data-start-button]');
+    var startBtn = document.getElementById('startTestBtn');
     if (startBtn) {
         startBtn.addEventListener('click', startTest);
     }
 
     // Ready button
-    var readyBtn = document.querySelector('[data-ready-button]');
+    var readyBtn = document.getElementById('readyBtn');
     if (readyBtn) {
         readyBtn.addEventListener('click', onReady);
     }
 
     // Navigation buttons
-    var prevBtn = document.querySelector('[data-prev-button]');
+    var prevBtn = document.getElementById('prevQuestionBtn');
     if (prevBtn) {
         prevBtn.addEventListener('click', prevQuestion);
     }
 
-    var nextBtn = document.querySelector('[data-next-button]');
+    var nextBtn = document.getElementById('nextQuestionBtn');
     if (nextBtn) {
         nextBtn.addEventListener('click', nextQuestion);
     }
 
-    var submitBtn = document.querySelector('[data-submit-button]');
+    var submitBtn = document.getElementById('submitTestBtn');
     if (submitBtn) {
         submitBtn.addEventListener('click', submitTest);
     }
 
     // Textarea word count
-    var textarea = document.querySelector('[data-answer-textarea]');
+    var textarea = document.getElementById('answerTextarea');
     if (textarea) {
         textarea.addEventListener('input', updateWordCount);
     }
 
     // Profile avatar
-    var avatar = document.querySelector('[data-profile-avatar]');
+    var avatar = document.getElementById('profileAvatar');
     if (avatar) {
         avatar.addEventListener('click', toggleProfileDropdown);
     }
 
     // Hamburger menu
-    var hamburger = document.querySelector('[data-hamburger]');
+    var hamburger = document.getElementById('siteHamburger');
     if (hamburger) {
         hamburger.addEventListener('click', toggleHamburger);
     }
 
-    var mobileOverlay = document.querySelector('[data-mobile-overlay]');
+    var mobileOverlay = document.getElementById('siteMobileOverlay');
     if (mobileOverlay) {
         mobileOverlay.addEventListener('click', closeMobileMenu);
     }
 
     // Logout buttons
-    document.querySelectorAll('[data-logout-btn]').forEach(function(btn) {
-        btn.addEventListener('click', logout);
-    });
+    var logoutBtn1 = document.getElementById('navLogoutBtn');
+    var logoutBtn2 = document.getElementById('mobileLogoutBtn');
+    if (logoutBtn1) {
+        logoutBtn1.addEventListener('click', logout);
+    }
+    if (logoutBtn2) {
+        logoutBtn2.addEventListener('click', logout);
+    }
 
     // Download PDF
-    var downloadBtn = document.querySelector('[data-download-pdf-btn]');
+    var downloadBtn = document.getElementById('downloadPdfBtn');
     if (downloadBtn) {
         downloadBtn.addEventListener('click', downloadTestPDF);
     }
 
     // Return to notes
-    var returnBtn = document.querySelector('[data-return-notes-btn]');
+    var returnBtn = document.getElementById('returnToNotesBtn');
     if (returnBtn) {
         returnBtn.addEventListener('click', returnToNotes);
     }
 
     // Try again
-    var tryAgainBtn = document.querySelector('[data-try-again-btn]');
+    var tryAgainBtn = document.getElementById('tryAgainBtn');
     if (tryAgainBtn) {
         tryAgainBtn.addEventListener('click', tryAgain);
     }
@@ -3084,8 +3092,8 @@ function setupEventListeners() {
 
     // Close profile dropdown on click outside
     document.addEventListener('click', function(e) {
-        var avatar = document.querySelector('[data-profile-avatar]');
-        var dropdown = document.querySelector('[data-profile-dropdown]');
+        var avatar = document.getElementById('profileAvatar');
+        var dropdown = document.getElementById('profileDropdown');
         if (avatar && dropdown && !avatar.contains(e.target) && !dropdown.contains(e.target)) {
             dropdown.classList.remove('show');
         }
