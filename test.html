@@ -1971,7 +1971,7 @@ var currentTipIndex = 0;
 // INITIALIZATION & URL PARSING
 // ============================================================================
 
-function init() {
+async function init() {
     // Parse URL parameters
     var params = new URLSearchParams(window.location.search);
     testType = params.get('type') || 'unit';
@@ -2018,8 +2018,8 @@ function init() {
     // Setup event listeners
     setupEventListeners();
 
-    // Check authentication
-    checkAuth();
+    // Check authentication (await to ensure session is ready)
+    await checkAuth();
 }
 
 function updateTestInfo(minutes, marks, questionsCount) {
@@ -2125,6 +2125,16 @@ async function startTest() {
         showPhase('phaseLoading');
         startTipsCarousel('tipsCarousel', EXAM_TIPS);
 
+        // Get fresh session token to avoid expired JWT issues
+        var freshSession = await supabaseClient.auth.getSession();
+        var session = freshSession.data.session;
+        if (!session) {
+            alert('Your session has expired. Please log in again.');
+            window.location.href = 'login.html';
+            return;
+        }
+        currentSession = session;
+
         // Determine test_type for API
         var apiTestType = testType + (testType === 'unit' ? '_exam' : '_test');
 
@@ -2132,7 +2142,7 @@ async function startTest() {
         var response = await fetch(SUPABASE_URL + '/functions/v1/generate-test', {
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer ' + currentSession.access_token,
+                'Authorization': 'Bearer ' + session.access_token,
                 'Content-Type': 'application/json',
                 'apikey': SUPABASE_ANON_KEY
             },
@@ -2150,17 +2160,14 @@ async function startTest() {
         }
 
         var data = await response.json();
-        paper = data;
+        if (!data.success || !data.paper) {
+            throw new Error(data.error || 'Failed to generate test paper');
+        }
+        paper = data.paper;
 
         // Extract questions from paper
         questions = [];
-        if (paper.sections && paper.sections.length > 0) {
-            paper.sections.forEach(function(section) {
-                if (section.questions && section.questions.length > 0) {
-                    questions = questions.concat(section.questions);
-                }
-            });
-        } else if (paper.questions && paper.questions.length > 0) {
+        if (paper.questions && paper.questions.length > 0) {
             questions = paper.questions;
         }
 
@@ -2654,11 +2661,21 @@ async function submitTest() {
             });
         }
 
+        // Get fresh session token for marking
+        var freshMarkSession = await supabaseClient.auth.getSession();
+        var markSession = freshMarkSession.data.session;
+        if (!markSession) {
+            alert('Your session has expired. Please log in again.');
+            window.location.href = 'login.html';
+            return;
+        }
+        currentSession = markSession;
+
         // Call mark-test edge function
         var response = await fetch(SUPABASE_URL + '/functions/v1/mark-test', {
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer ' + currentSession.access_token,
+                'Authorization': 'Bearer ' + markSession.access_token,
                 'Content-Type': 'application/json',
                 'apikey': SUPABASE_ANON_KEY
             },
