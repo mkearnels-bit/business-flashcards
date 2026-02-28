@@ -1981,26 +1981,26 @@ function init() {
     var boardParam = params.get('board');
 
     // Update hero title and subtitle based on test type
-    var heroTitle = document.querySelector('.hero-title');
-    var heroSubtitle = document.querySelector('.hero-subtitle');
+    var heroTitle = document.getElementById('heroTitle');
+    var heroSubtitle = document.getElementById('heroSubtitle');
     var setupTitle = document.getElementById('setupTitle');
 
     if (testType === 'unit') {
         var unitName = UNIT_NAMES[unitNum] || 'Unit ' + unitNum;
-        heroTitle.textContent = 'Unit ' + unitNum + ' Exam: ' + unitName;
-        setupTitle.textContent = 'Unit ' + unitNum + ' Exam';
+        if (heroTitle) heroTitle.textContent = 'Unit ' + unitNum + ' Exam: ' + unitName;
+        if (setupTitle) setupTitle.textContent = 'Unit ' + unitNum + ' Exam';
         updateTestInfo(120, 80, 11);
     } else if (testType === 'topic') {
-        heroTitle.textContent = 'Topic ' + topicId + ' Test';
-        setupTitle.textContent = 'Topic ' + topicId + ' Test';
+        if (heroTitle) heroTitle.textContent = 'Topic ' + topicId + ' Test';
+        if (setupTitle) setupTitle.textContent = 'Topic ' + topicId + ' Test';
         updateTestInfo(60, 25, 6);
     } else if (testType === 'section') {
-        heroTitle.textContent = 'Section Test';
-        setupTitle.textContent = 'Section Test';
+        if (heroTitle) heroTitle.textContent = 'Section Test';
+        if (setupTitle) setupTitle.textContent = 'Section Test';
         updateTestInfo(30, 15, 4);
     }
 
-    heroSubtitle.textContent = 'Test your knowledge and get personalized feedback';
+    if (heroSubtitle) heroSubtitle.textContent = 'Test your knowledge and get personalised feedback';
 
     // Pre-select board if provided
     if (boardParam) {
@@ -2022,11 +2022,13 @@ function init() {
     checkAuth();
 }
 
-function updateTestInfo(minutes, marks, questions_count) {
-    var infoBar = document.getElementById('setupInfoBar');
-    if (infoBar) {
-        infoBar.innerHTML = '<span>' + minutes + ' min</span> <span>' + marks + ' marks</span> <span>' + questions_count + ' questions</span>';
-    }
+function updateTestInfo(minutes, marks, questionsCount) {
+    var durEl = document.getElementById('infoDuration');
+    var marksEl = document.getElementById('infoMarks');
+    var qEl = document.getElementById('infoQuestions');
+    if (durEl) durEl.textContent = minutes;
+    if (marksEl) marksEl.textContent = marks;
+    if (qEl) qEl.textContent = questionsCount;
 }
 
 // ============================================================================
