@@ -477,6 +477,30 @@
             font-weight: 600;
         }
 
+        .progress-bar-container {
+            background: var(--gray-200);
+            padding: 3px;
+            border-radius: 20px;
+            margin: 20px auto;
+            max-width: 400px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 8px;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            border-radius: 20px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-percentage {
+            font-size: 1.1em;
+            color: var(--primary);
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
         .tips-carousel {
             background: var(--gray-100);
             padding: 20px;
@@ -485,10 +509,35 @@
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
-            min-height: 80px;
+            min-height: auto;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            align-items: flex-start;
+            justify-content: flex-start;
+            flex-direction: column;
+        }
+
+        .tips-checklist {
+            text-align: left;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .tips-checklist li {
+            padding: 10px 0 10px 30px;
+            position: relative;
+            color: var(--gray-700);
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        .tips-checklist li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: bold;
+            font-size: 1.2em;
         }
 
         .tip-text {
@@ -955,52 +1004,93 @@
         }
 
         .ao-breakdown {
-            background: var(--white);
-            padding: 20px;
-            border-radius: 8px;
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
             margin-bottom: 40px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            box-shadow: none;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
         }
 
         .ao-breakdown-title {
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 20px;
+            display: none;
         }
 
         .ao-bar {
-            margin-bottom: 15px;
+            margin-bottom: 0;
+            background: var(--white);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border-top: 4px solid var(--skill-knowledge);
+        }
+
+        .ao-bar:nth-child(2) {
+            border-top-color: var(--skill-application);
+        }
+
+        .ao-bar:nth-child(3) {
+            border-top-color: var(--skill-analysis);
+        }
+
+        .ao-bar:nth-child(4) {
+            border-top-color: var(--skill-evaluation);
+        }
+
+        .ao-bar:nth-child(5) {
+            border-top-color: var(--skill-knowledge);
         }
 
         .ao-label {
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
+            flex-direction: column;
+            justify-content: flex-start;
+            margin-bottom: 0;
             font-weight: 600;
             font-size: 0.9em;
+            gap: 10px;
+        }
+
+        .ao-label span:first-child {
+            color: var(--gray-700);
+            font-size: 0.85em;
+        }
+
+        .ao-label span:last-child {
+            color: var(--primary);
+            font-size: 1.5em;
+            font-weight: 700;
         }
 
         .ao-bar-container {
-            width: 100%;
-            height: 20px;
-            background: var(--gray-200);
-            border-radius: 10px;
-            overflow: hidden;
+            display: none;
         }
 
         .ao-bar-fill {
-            height: 100%;
-            transition: width 0.5s ease;
-            background: var(--skill-knowledge);
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .ao-breakdown {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ao-breakdown {
+                grid-template-columns: 1fr;
+            }
         }
 
         .question-result-card {
-            background: var(--white);
-            border-left: 4px solid var(--primary);
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            background: transparent;
+            border-left: none;
+            padding: 0;
+            border-radius: 0;
+            margin-bottom: 30px;
+            box-shadow: none;
         }
 
         .question-result-header {
@@ -1008,33 +1098,58 @@
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
-            margin-bottom: 15px;
+            margin-bottom: 0;
             user-select: none;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            padding: 20px;
+            border-radius: 16px 16px 0 0;
+            color: var(--white);
         }
 
         .question-result-number {
             font-weight: 700;
-            color: var(--primary);
+            color: var(--white);
+            font-size: 1.05em;
         }
 
         .question-result-marks {
-            background: var(--accent);
-            color: var(--white);
-            padding: 4px 10px;
-            border-radius: 3px;
+            background: var(--white);
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 20px;
             font-size: 0.85em;
-            font-weight: 600;
+            font-weight: 700;
+        }
+
+        .question-result-marks.excellent {
+            color: var(--success);
+        }
+
+        .question-result-marks.good {
+            color: var(--skill-application);
+        }
+
+        .question-result-marks.satisfactory {
+            color: var(--accent);
+        }
+
+        .question-result-marks.below {
+            color: var(--error);
         }
 
         .result-toggle-icon {
             transition: transform 0.3s ease;
+            color: var(--white);
         }
 
         .result-content {
             display: none;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid var(--gray-200);
+            margin-top: 0;
+            padding: 20px;
+            border-top: none;
+            background: var(--white);
+            border-radius: 0 0 16px 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
         .result-content.active {
@@ -1042,14 +1157,45 @@
         }
 
         .result-section {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: var(--gray-50);
+            border-radius: 8px;
+            border-left: 4px solid var(--gray-300);
+        }
+
+        .result-section.what-went-well {
+            border-left-color: var(--success);
+            background: rgba(39, 174, 96, 0.05);
+        }
+
+        .result-section.areas-for-improvement {
+            border-left-color: var(--accent);
+            background: rgba(230, 126, 34, 0.05);
+        }
+
+        .result-section.feedback {
+            border-left-color: var(--primary);
+            background: rgba(30, 58, 95, 0.03);
         }
 
         .result-label {
             font-weight: 700;
-            color: var(--gray-700);
-            margin-bottom: 5px;
-            font-size: 0.9em;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 0.95em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .result-label:before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--primary);
         }
 
         .result-text {
@@ -1064,22 +1210,39 @@
         .development-card,
         .overall-card {
             background: var(--white);
-            padding: 20px;
-            border-radius: 8px;
+            padding: 1.75rem;
+            border-radius: 16px;
             margin-bottom: 20px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid;
+            animation: fadeSlideUp 0.6s ease forwards;
+            opacity: 0;
         }
 
         .strengths-card {
-            border-left: 4px solid var(--success);
+            border-left-color: var(--success);
+            animation-delay: 0.1s;
         }
 
         .development-card {
-            border-left: 4px solid var(--accent);
+            border-left-color: var(--accent);
+            animation-delay: 0.2s;
         }
 
         .overall-card {
-            border-left: 4px solid var(--primary);
+            border-left-color: var(--primary);
+            animation-delay: 0.3s;
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .card-title {
@@ -1087,6 +1250,18 @@
             color: var(--primary);
             margin-bottom: 15px;
             font-size: 1.05em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title:before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--primary);
         }
 
         .card-list {
@@ -1475,10 +1650,19 @@
         <!-- Phase 2: Loading -->
         <div class="phase" id="phaseLoading">
             <div class="loading-container">
-                <div class="spinner"></div>
                 <div class="loading-text">Generating Your Test...</div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="progressBarFill"></div>
+                </div>
+                <div class="progress-percentage" id="progressPercentage">0%</div>
                 <div class="tips-carousel">
-                    <div class="tip-text" id="tipText"></div>
+                    <ul class="tips-checklist" id="testGenerationChecklist">
+                        <li>Have you got your calculator?</li>
+                        <li>Remember to read through the questions before reading the extracts</li>
+                        <li>Remember to apply your knowledge to the case study</li>
+                        <li>Plan your answers for higher mark questions</li>
+                        <li>Good Luck!</li>
+                    </ul>
                 </div>
                 <div class="button-group" style="margin-top: 30px;">
                     <button class="btn-primary" id="readyBtn" onclick="onReady()" style="display: none;">I'm Ready!</button>
@@ -1501,10 +1685,18 @@
         <!-- Phase 4: Marking -->
         <div class="phase" id="phaseMarking">
             <div class="loading-container">
-                <div class="spinner"></div>
                 <div class="loading-text">Marking Your Test...</div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="markingProgressBarFill"></div>
+                </div>
+                <div class="progress-percentage" id="markingProgressPercentage">0%</div>
                 <div class="tips-carousel">
-                    <div class="tip-text" id="markingTipText"></div>
+                    <ul class="tips-checklist" id="markingTipsChecklist">
+                        <li>Read the examiner feedback carefully for each question</li>
+                        <li>Focus on the areas for improvement to boost your marks</li>
+                        <li>Compare your answer with the model answer suggestions</li>
+                        <li>Note which assessment objectives you are strongest and weakest at</li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -1647,6 +1839,21 @@
             "For AO4 marks, make a supported judgement, do not sit on the fence."
         ];
 
+        var TEST_GENERATION_TIPS = [
+            "Have you got your calculator?",
+            "Remember to read through the questions before reading the extracts",
+            "Remember to apply your knowledge to the case study",
+            "Plan your answers for higher mark questions",
+            "Good Luck!"
+        ];
+
+        var MARKING_TIPS = [
+            "Read the examiner feedback carefully for each question",
+            "Focus on the areas for improvement to boost your marks",
+            "Compare your answer with the model answer suggestions",
+            "Note which assessment objectives you are strongest and weakest at"
+        ];
+
         var currentPhase = 'setup';
         var selectedBoard = null;
         var studentName = '';
@@ -1671,7 +1878,6 @@
             if (boardParam) {
                 selectBoard(boardParam);
             }
-            rotateTips();
         }
 
         function updateHeroTitle() {
@@ -1761,6 +1967,48 @@
             document.getElementById('generateBtn').disabled = false;
         }
 
+        function startProgressBar(duration) {
+            var progressBarFill = document.getElementById('progressBarFill');
+            var progressPercentage = document.getElementById('progressPercentage');
+            var startTime = Date.now();
+            var maxDuration = duration * 1000;
+
+            var progressInterval = setInterval(function() {
+                var elapsed = Date.now() - startTime;
+                var percentage = Math.min((elapsed / maxDuration) * 100, 90);
+
+                progressBarFill.style.width = percentage + '%';
+                progressPercentage.textContent = Math.round(percentage) + '%';
+
+                if (elapsed >= maxDuration) {
+                    clearInterval(progressInterval);
+                }
+            }, 100);
+
+            return progressInterval;
+        }
+
+        function startMarkingProgressBar(duration) {
+            var progressBarFill = document.getElementById('markingProgressBarFill');
+            var progressPercentage = document.getElementById('markingProgressPercentage');
+            var startTime = Date.now();
+            var maxDuration = duration * 1000;
+
+            var progressInterval = setInterval(function() {
+                var elapsed = Date.now() - startTime;
+                var percentage = Math.min((elapsed / maxDuration) * 100, 90);
+
+                progressBarFill.style.width = percentage + '%';
+                progressPercentage.textContent = Math.round(percentage) + '%';
+
+                if (elapsed >= maxDuration) {
+                    clearInterval(progressInterval);
+                }
+            }, 100);
+
+            return progressInterval;
+        }
+
         function startTest() {
             if (!selectedBoard) {
                 showError('Please select an exam board');
@@ -1768,7 +2016,7 @@
             }
 
             showPhase('loading');
-            rotateTips();
+            startProgressBar(90);
 
             var type = getUrlParam('type') || 'unit';
             var unit = getUrlParam('unit');
@@ -2128,10 +2376,7 @@
 
                 clearInterval(timerInterval);
                 showPhase('marking');
-                rotateTips();
-
-                var markingTipEl = document.getElementById('markingTipText');
-                markingTipEl.textContent = EXAM_TIPS[Math.floor(Math.random() * EXAM_TIPS.length)];
+                startMarkingProgressBar(60);
 
                 supabaseClient.auth.getSession().then(function(result) {
                     var token = result.data.session ? result.data.session.access_token : '';
@@ -2240,13 +2485,15 @@
             var resultsContainer = document.getElementById('questionResultsContainer');
             resultsContainer.innerHTML = '';
 
-            var resultsTitle = document.createElement('div');
-            resultsTitle.style.fontSize = '1.2em';
-            resultsTitle.style.fontWeight = '700';
-            resultsTitle.style.color = 'var(--primary)';
-            resultsTitle.style.marginBottom = '20px';
-            resultsTitle.textContent = 'Question Feedback';
-            resultsContainer.appendChild(resultsTitle);
+            var endOfExamTitle = document.createElement('div');
+            endOfExamTitle.style.fontSize = '1.4em';
+            endOfExamTitle.style.fontWeight = '800';
+            endOfExamTitle.style.color = 'var(--primary)';
+            endOfExamTitle.style.margin = '2rem 0 1.25rem';
+            endOfExamTitle.style.paddingBottom = '0.75rem';
+            endOfExamTitle.style.borderBottom = '3px solid var(--accent)';
+            endOfExamTitle.textContent = 'End of Exam Feedback';
+            resultsContainer.appendChild(endOfExamTitle);
 
             results.question_results.forEach(function(qResult) {
                 var card = document.createElement('div');
@@ -2261,51 +2508,73 @@
                     icon.style.transform = content.classList.contains('active') ? 'rotate(180deg)' : '';
                 };
 
-                header.innerHTML = '<div>' +
-                    '<div class="question-result-number">Question ' + qResult.question_display + '</div>' +
-                    '</div>' +
-                    '<div class="question-result-marks">' + qResult.marks_awarded + ' / ' + qResult.total_marks + '</div>' +
-                    '<div class="result-toggle-icon" style="margin-left: 10px;">▼</div>';
+                var percentage = (qResult.marks_awarded / qResult.total_marks) * 100;
+                var markBadgeClass = 'question-result-marks';
+                if (percentage >= 80) {
+                    markBadgeClass += ' excellent';
+                } else if (percentage >= 50) {
+                    markBadgeClass += ' good';
+                } else {
+                    markBadgeClass += ' below';
+                }
 
+                var marksDiv = document.createElement('div');
+                marksDiv.className = markBadgeClass;
+                marksDiv.textContent = qResult.marks_awarded + ' / ' + qResult.total_marks;
+
+                var headerContent = document.createElement('div');
+                headerContent.style.display = 'flex';
+                headerContent.style.justifyContent = 'space-between';
+                headerContent.style.alignItems = 'center';
+                headerContent.style.width = '100%';
+
+                var questionNum = document.createElement('div');
+                questionNum.className = 'question-result-number';
+                questionNum.textContent = 'Question ' + qResult.question_display;
+
+                var toggleIcon = document.createElement('div');
+                toggleIcon.className = 'result-toggle-icon';
+                toggleIcon.textContent = '▼';
+
+                headerContent.appendChild(questionNum);
+                headerContent.appendChild(marksDiv);
+                headerContent.appendChild(toggleIcon);
+
+                header.appendChild(headerContent);
                 card.appendChild(header);
 
                 var content = document.createElement('div');
                 content.className = 'result-content';
 
-                var studentAnswer = document.createElement('div');
-                studentAnswer.className = 'result-section';
-                studentAnswer.innerHTML = '<div class="result-label">Your Answer:</div>' +
-                    '<div class="result-text">' + (qResult.student_answer || '(No answer provided)') + '</div>';
-                content.appendChild(studentAnswer);
-
-                if (qResult.feedback) {
-                    var feedback = document.createElement('div');
-                    feedback.className = 'result-section';
-                    feedback.innerHTML = '<div class="result-label">Feedback:</div>' +
-                        '<div class="result-text">' + qResult.feedback + '</div>';
-                    content.appendChild(feedback);
-                }
-
                 if (qResult.what_went_well) {
                     var well = document.createElement('div');
-                    well.className = 'result-section';
-                    well.innerHTML = '<div class="result-label">What Went Well:</div>' +
+                    well.className = 'result-section what-went-well';
+                    well.innerHTML = '<div class="result-label">What Went Well</div>' +
                         '<div class="result-text">' + qResult.what_went_well + '</div>';
                     content.appendChild(well);
                 }
 
                 if (qResult.areas_for_improvement) {
                     var improve = document.createElement('div');
-                    improve.className = 'result-section';
-                    improve.innerHTML = '<div class="result-label">Areas for Improvement:</div>' +
+                    improve.className = 'result-section areas-for-improvement';
+                    improve.innerHTML = '<div class="result-label">Areas for Improvement</div>' +
                         '<div class="result-text">' + qResult.areas_for_improvement + '</div>';
                     content.appendChild(improve);
+                }
+
+                if (qResult.feedback) {
+                    var feedback = document.createElement('div');
+                    feedback.className = 'result-section feedback';
+                    feedback.innerHTML = '<div class="result-label">Examiner Feedback</div>' +
+                        '<div class="result-text">' + qResult.feedback + '</div>';
+                    content.appendChild(feedback);
                 }
 
                 if (qResult.improved_paragraph) {
                     var improved = document.createElement('div');
                     improved.className = 'result-section';
-                    improved.innerHTML = '<div class="result-label">Model Answer:</div>' +
+                    improved.style.borderLeftColor = 'var(--primary)';
+                    improved.innerHTML = '<div class="result-label">Model Answer</div>' +
                         '<div class="result-text">' + qResult.improved_paragraph + '</div>';
                     content.appendChild(improved);
                 }
@@ -2338,6 +2607,7 @@
             var pageHeight = doc.internal.pageSize.height;
             var pageWidth = doc.internal.pageSize.width;
             var margin = 15;
+            var lineHeight = 6;
             var yPos = margin;
 
             doc.setFillColor(30, 58, 95);
@@ -2354,60 +2624,150 @@
             doc.text('Test Results', margin, yPos);
 
             yPos += 12;
-            doc.setFontSize(11);
+            doc.setFontSize(10);
             doc.setTextColor(70, 70, 70);
             doc.text('Student: ' + (studentName || 'Anonymous'), margin, yPos);
-            yPos += 8;
+            yPos += 6;
             doc.text('Board: ' + (paper.board_name || ''), margin, yPos);
-            yPos += 8;
+            yPos += 6;
+            doc.text('Unit: ' + (paper.unit || '1'), margin, yPos);
+            yPos += 6;
             doc.text('Date: ' + new Date().toLocaleDateString(), margin, yPos);
             yPos += 12;
 
             var scoreText = document.getElementById('scorePercentage').textContent;
             var marksText = document.getElementById('scoreMarks').textContent;
-            doc.setFontSize(14);
+            doc.setFontSize(13);
             doc.setTextColor(230, 126, 34);
             doc.text('Overall Score: ' + scoreText + ' (' + marksText + ')', margin, yPos);
 
-            yPos += 20;
-            if (yPos > pageHeight - margin - 30) {
+            yPos += 15;
+            if (yPos > pageHeight - margin - 40) {
                 doc.addPage();
                 yPos = margin;
             }
 
             doc.setFontSize(12);
             doc.setTextColor(30, 58, 95);
-            doc.text('Question Results', margin, yPos);
+            doc.text('End of Exam Feedback', margin, yPos);
             yPos += 10;
 
-            document.querySelectorAll('.question-result-card').forEach(function(card) {
-                if (yPos > pageHeight - margin - 20) {
-                    doc.addPage();
-                    yPos = margin;
-                }
+            var feedbackText = document.getElementById('overallFeedback').textContent;
+            doc.setFontSize(9);
+            doc.setTextColor(70, 70, 70);
+            var splitFeedback = doc.splitTextToSize(feedbackText, pageWidth - 2 * margin);
+            doc.text(splitFeedback, margin, yPos);
+            yPos += (splitFeedback.length * 4) + 8;
 
-                var qNum = card.querySelector('.question-result-number').textContent;
-                var marks = card.querySelector('.question-result-marks').textContent;
-                doc.setFontSize(10);
-                doc.setTextColor(30, 58, 95);
-                doc.text(qNum + ' - ' + marks, margin, yPos);
-                yPos += 5;
-            });
-
-            yPos += 10;
-            if (yPos > pageHeight - margin - 30) {
+            if (yPos > pageHeight - margin - 50) {
                 doc.addPage();
                 yPos = margin;
             }
 
             doc.setFontSize(11);
-            doc.setTextColor(70, 70, 70);
-            var feedback = document.getElementById('overallFeedback').textContent;
-            doc.text('Overall Feedback:', margin, yPos);
+            doc.setTextColor(30, 58, 95);
+            doc.text('Question Feedback', margin, yPos);
             yPos += 8;
-            doc.setFontSize(9);
-            var splitFeedback = doc.splitTextToSize(feedback, pageWidth - 2 * margin);
-            doc.text(splitFeedback, margin, yPos);
+
+            document.querySelectorAll('.question-result-card').forEach(function(card) {
+                if (yPos > pageHeight - margin - 30) {
+                    doc.addPage();
+                    yPos = margin;
+                }
+
+                var qNumEl = card.querySelector('.question-result-number');
+                var marksEl = card.querySelector('.question-result-marks');
+                var qNum = qNumEl ? qNumEl.textContent : '';
+                var marks = marksEl ? marksEl.textContent : '';
+
+                doc.setFontSize(10);
+                doc.setTextColor(30, 58, 95);
+                doc.text(qNum + ' - ' + marks, margin, yPos);
+                yPos += 6;
+
+                var contentEl = card.querySelector('.result-content');
+                if (contentEl) {
+                    var sections = contentEl.querySelectorAll('.result-section');
+                    sections.forEach(function(section) {
+                        if (yPos > pageHeight - margin - 20) {
+                            doc.addPage();
+                            yPos = margin;
+                        }
+
+                        var labelEl = section.querySelector('.result-label');
+                        var textEl = section.querySelector('.result-text');
+                        if (labelEl) {
+                            doc.setFontSize(9);
+                            doc.setTextColor(30, 58, 95);
+                            doc.text(labelEl.textContent + ':', margin, yPos);
+                            yPos += 4;
+                        }
+
+                        if (textEl) {
+                            doc.setFontSize(8);
+                            doc.setTextColor(70, 70, 70);
+                            var splitText = doc.splitTextToSize(textEl.textContent, pageWidth - 2 * margin - 5);
+                            doc.text(splitText, margin + 5, yPos);
+                            yPos += (splitText.length * 3) + 3;
+                        }
+                    });
+                }
+
+                yPos += 4;
+            });
+
+            if (yPos > pageHeight - margin - 50) {
+                doc.addPage();
+                yPos = margin;
+            }
+
+            doc.setFontSize(11);
+            doc.setTextColor(30, 58, 95);
+            doc.text('Strengths', margin, yPos);
+            yPos += 8;
+
+            var strengthsList = document.getElementById('strengthsList');
+            if (strengthsList) {
+                var items = strengthsList.querySelectorAll('li');
+                items.forEach(function(item) {
+                    if (yPos > pageHeight - margin - 20) {
+                        doc.addPage();
+                        yPos = margin;
+                    }
+                    doc.setFontSize(9);
+                    doc.setTextColor(70, 70, 70);
+                    var splitItem = doc.splitTextToSize('• ' + item.textContent, pageWidth - 2 * margin - 5);
+                    doc.text(splitItem, margin + 5, yPos);
+                    yPos += (splitItem.length * 3) + 2;
+                });
+            }
+
+            yPos += 6;
+            if (yPos > pageHeight - margin - 50) {
+                doc.addPage();
+                yPos = margin;
+            }
+
+            doc.setFontSize(11);
+            doc.setTextColor(30, 58, 95);
+            doc.text('Areas for Development', margin, yPos);
+            yPos += 8;
+
+            var developmentList = document.getElementById('developmentList');
+            if (developmentList) {
+                var items = developmentList.querySelectorAll('li');
+                items.forEach(function(item) {
+                    if (yPos > pageHeight - margin - 20) {
+                        doc.addPage();
+                        yPos = margin;
+                    }
+                    doc.setFontSize(9);
+                    doc.setTextColor(70, 70, 70);
+                    var splitItem = doc.splitTextToSize('• ' + item.textContent, pageWidth - 2 * margin - 5);
+                    doc.text(splitItem, margin + 5, yPos);
+                    yPos += (splitItem.length * 3) + 2;
+                });
+            }
 
             doc.save('mybizstudies-exam-report.pdf');
         }
