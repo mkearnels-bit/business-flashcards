@@ -1790,7 +1790,8 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + token
+                        'Authorization': 'Bearer ' + token,
+                        'apikey': SUPABASE_ANON_KEY
                     },
                     body: JSON.stringify(body)
                 })
@@ -2148,7 +2149,8 @@
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': 'Bearer ' + token
+                            'Authorization': 'Bearer ' + token,
+                            'apikey': SUPABASE_ANON_KEY
                         },
                         body: JSON.stringify(body)
                     })
