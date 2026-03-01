@@ -84,6 +84,50 @@
 
         .site-navbar-logo { height: 65px; width: auto; }
 
+        .level-toggle {
+            display: flex;
+            align-items: center;
+            background: #f1f5f9;
+            border-radius: 8px;
+            padding: 3px;
+            gap: 0;
+            flex-shrink: 0;
+        }
+        .level-toggle-btn {
+            padding: 5px 14px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: inherit;
+            color: #64748b;
+            background: transparent;
+            white-space: nowrap;
+        }
+        .level-toggle-btn.active {
+            background: #1e3a5f;
+            color: #ffffff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+        }
+        .level-toggle-btn:hover:not(.active) {
+            color: #1e3a5f;
+            background: rgba(30, 58, 95, 0.08);
+        }
+        .mobile-level-toggle {
+            display: flex;
+            gap: 0;
+            background: #f1f5f9;
+            border-radius: 8px;
+            padding: 3px;
+            margin-bottom: 1rem;
+        }
+        .mobile-level-toggle .level-toggle-btn {
+            flex: 1;
+            text-align: center;
+        }
+
         .site-nav-buttons {
             display: flex;
             align-items: center;
@@ -1321,6 +1365,7 @@
         @media (max-width: 768px) {
             .site-nav-buttons { display: none; }
             .site-hamburger { display: flex; }
+            .level-toggle { display: none; }
             .site-mobile-overlay { display: block; }
             .site-mobile-menu { display: block; }
 
@@ -1464,6 +1509,10 @@
 <nav class="site-navbar" id="siteNavbar">
     <div class="site-navbar-content">
         <a href="index.html"><img src="logo.png" alt="MyBizStudies" class="site-navbar-logo"></a>
+        <div class="level-toggle" id="desktopLevelToggle">
+            <button class="level-toggle-btn active" data-level="alevel">A-Level</button>
+            <button class="level-toggle-btn" data-level="gcse">GCSE</button>
+        </div>
         <div class="site-nav-buttons" id="siteNavButtons">
             <a href="app.html" class="site-nav-link auth-only" style="display:none;">Flash Cards</a>
             <a href="exam-skills-v2.html" class="site-nav-link auth-only" style="display:none;">Exam Skills</a>
@@ -1512,6 +1561,10 @@
 <div class="site-mobile-overlay" id="siteMobileOverlay"></div>
 <div class="site-mobile-menu" id="siteMobileMenu">
     <div class="site-mobile-links">
+        <div class="mobile-level-toggle">
+            <button class="level-toggle-btn active" data-level="alevel">A-Level</button>
+            <button class="level-toggle-btn" data-level="gcse">GCSE</button>
+        </div>
         <a href="app.html" class="auth-only" style="display:none;">Flash Cards</a>
         <a href="exam-skills-v2.html" class="auth-only" style="display:none;">Exam Skills</a>
         <a href="exam-practice.html" class="active auth-only" style="display:none;">Exam Practice</a>
@@ -1551,7 +1604,8 @@
         <div class="section-subtitle">Select the exam board and qualification you are studying</div>
 
         <div class="board-grid" id="boardGrid">
-            <div class="board-card" data-board="edexcel_ial" onclick="selectBoard(this)">
+            <!-- A-LEVEL BOARDS -->
+            <div class="board-card" data-board="edexcel_ial" data-level="alevel" onclick="selectBoard(this)">
                 <div class="board-card-header">
                     <div class="board-card-icon" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">IAL</div>
                     <div class="board-card-check"></div>
@@ -1559,7 +1613,7 @@
                 <div class="board-card-title">Edexcel International A Level</div>
                 <div class="board-card-desc">Pearson Edexcel IAL Business Studies (WBS11 to WBS14)</div>
             </div>
-            <div class="board-card coming-soon" data-board="edexcel_uk">
+            <div class="board-card coming-soon" data-board="edexcel_uk" data-level="alevel">
                 <div class="board-card-header">
                     <div class="board-card-icon" style="background: linear-gradient(135deg, #3498db, #2980b9);">A2</div>
                     <div class="board-card-check"></div>
@@ -1568,18 +1622,56 @@
                 <div class="board-card-desc">Pearson Edexcel A Level Business (9BS0)</div>
                 <span class="coming-soon-badge">Coming Soon</span>
             </div>
-            <div class="board-card coming-soon" data-board="aqa_gcse">
+            <div class="board-card coming-soon" data-board="aqa_uk" data-level="alevel">
                 <div class="board-card-header">
-                    <div class="board-card-icon" style="background: linear-gradient(135deg, #27ae60, #229954);">GC</div>
+                    <div class="board-card-icon" style="background: linear-gradient(135deg, #27ae60, #229954);">AQ</div>
+                    <div class="board-card-check"></div>
+                </div>
+                <div class="board-card-title">AQA A Level</div>
+                <div class="board-card-desc">AQA A Level Business (7132)</div>
+                <span class="coming-soon-badge">Coming Soon</span>
+            </div>
+            <div class="board-card coming-soon" data-board="cie_ial" data-level="alevel">
+                <div class="board-card-header">
+                    <div class="board-card-icon" style="background: linear-gradient(135deg, #f39c12, #e67e22);">CI</div>
+                    <div class="board-card-check"></div>
+                </div>
+                <div class="board-card-title">CIE International A Level</div>
+                <div class="board-card-desc">Cambridge International AS & A Level Business (9609)</div>
+                <span class="coming-soon-badge">Coming Soon</span>
+            </div>
+
+            <!-- GCSE BOARDS -->
+            <div class="board-card coming-soon" data-board="edexcel_gcse" data-level="gcse">
+                <div class="board-card-header">
+                    <div class="board-card-icon" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">EX</div>
+                    <div class="board-card-check"></div>
+                </div>
+                <div class="board-card-title">Edexcel GCSE</div>
+                <div class="board-card-desc">Pearson Edexcel GCSE Business (1BS0)</div>
+                <span class="coming-soon-badge">Coming Soon</span>
+            </div>
+            <div class="board-card coming-soon" data-board="edexcel_igcse" data-level="gcse">
+                <div class="board-card-header">
+                    <div class="board-card-icon" style="background: linear-gradient(135deg, #3498db, #2980b9);">IG</div>
+                    <div class="board-card-check"></div>
+                </div>
+                <div class="board-card-title">Edexcel IGCSE</div>
+                <div class="board-card-desc">Pearson Edexcel International GCSE Business (4BS1)</div>
+                <span class="coming-soon-badge">Coming Soon</span>
+            </div>
+            <div class="board-card coming-soon" data-board="aqa_gcse" data-level="gcse">
+                <div class="board-card-header">
+                    <div class="board-card-icon" style="background: linear-gradient(135deg, #27ae60, #229954);">AQ</div>
                     <div class="board-card-check"></div>
                 </div>
                 <div class="board-card-title">AQA GCSE</div>
-                <div class="board-card-desc">AQA GCSE Business Studies (8132)</div>
+                <div class="board-card-desc">AQA GCSE Business (8132)</div>
                 <span class="coming-soon-badge">Coming Soon</span>
             </div>
-            <div class="board-card coming-soon" data-board="cie_igcse">
+            <div class="board-card coming-soon" data-board="cie_igcse" data-level="gcse">
                 <div class="board-card-header">
-                    <div class="board-card-icon" style="background: linear-gradient(135deg, #f39c12, #e67e22);">IG</div>
+                    <div class="board-card-icon" style="background: linear-gradient(135deg, #f39c12, #e67e22);">CI</div>
                     <div class="board-card-check"></div>
                 </div>
                 <div class="board-card-title">CIE IGCSE</div>
@@ -1837,6 +1929,38 @@ function resetToSelection() {
     document.getElementById('submitBtn').innerHTML = 'Submit for Marking';
     showPhase('selection');
 }
+
+// ===== LEVEL TOGGLE =====
+var currentLevel = localStorage.getItem('mybiz_level') || 'alevel';
+
+function setLevel(level) {
+    currentLevel = level;
+    localStorage.setItem('mybiz_level', level);
+    document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
+        btn.classList.toggle('active', btn.dataset.level === level);
+    });
+    filterBoardsByLevel();
+}
+
+function filterBoardsByLevel() {
+    document.querySelectorAll('.board-card').forEach(function(card) {
+        card.style.display = card.dataset.level === currentLevel ? '' : 'none';
+        if (card.dataset.level !== currentLevel && card.classList.contains('selected')) {
+            card.classList.remove('selected');
+            currentBoard = null;
+            document.getElementById('unitSection').style.display = 'none';
+            document.getElementById('qtypeSection').style.display = 'none';
+            document.getElementById('generateSection').style.display = 'none';
+        }
+    });
+}
+
+// Initialise level toggle
+document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.dataset.level === currentLevel);
+    btn.addEventListener('click', function() { setLevel(this.dataset.level); });
+});
+filterBoardsByLevel();
 
 // ===== PHASE 1: SELECTION =====
 function selectBoard(el) {
