@@ -1179,6 +1179,59 @@
             background: rgba(30, 58, 95, 0.03);
         }
 
+        /* Per-question AO grid (for 2-6 mark questions) */
+        .ao-grid {
+            display: grid;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .ao-card {
+            background: white;
+            border-radius: 14px;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border-top: 4px solid;
+            opacity: 0;
+            transform: translateY(15px);
+            animation: fadeSlideUp 0.4s ease-out forwards;
+        }
+
+        .ao-card .ao-label-text {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.4rem;
+        }
+
+        .ao-card .ao-value {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--gray-900);
+        }
+
+        .ao-card .ao-name {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            font-weight: 500;
+        }
+
+        /* Level badge for 8+ mark questions */
+        .question-level-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 20px;
+            padding: 5px 16px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-left: 10px;
+            backdrop-filter: blur(5px);
+        }
+
         .result-label {
             font-weight: 700;
             color: var(--primary);
@@ -1730,45 +1783,7 @@
                     </div>
                 </div>
 
-                <div class="ao-breakdown">
-                    <div class="ao-breakdown-title">Assessment Objective Breakdown</div>
-                    <div class="ao-bar">
-                        <div class="ao-label">
-                            <span>AO1: Knowledge</span>
-                            <span id="ao1Marks">0</span>
-                        </div>
-                        <div class="ao-bar-container">
-                            <div class="ao-bar-fill" id="ao1Fill" style="width: 0%; background: var(--skill-knowledge);"></div>
-                        </div>
-                    </div>
-                    <div class="ao-bar">
-                        <div class="ao-label">
-                            <span>AO2: Application</span>
-                            <span id="ao2Marks">0</span>
-                        </div>
-                        <div class="ao-bar-container">
-                            <div class="ao-bar-fill" id="ao2Fill" style="width: 0%; background: var(--skill-application);"></div>
-                        </div>
-                    </div>
-                    <div class="ao-bar">
-                        <div class="ao-label">
-                            <span>AO3: Analysis</span>
-                            <span id="ao3Marks">0</span>
-                        </div>
-                        <div class="ao-bar-container">
-                            <div class="ao-bar-fill" id="ao3Fill" style="width: 0%; background: var(--skill-analysis);"></div>
-                        </div>
-                    </div>
-                    <div class="ao-bar">
-                        <div class="ao-label">
-                            <span>AO4: Evaluation</span>
-                            <span id="ao4Marks">0</span>
-                        </div>
-                        <div class="ao-bar-container">
-                            <div class="ao-bar-fill" id="ao4Fill" style="width: 0%; background: var(--skill-evaluation);"></div>
-                        </div>
-                    </div>
-                </div>
+                <!-- AO breakdown removed: shown per-question instead -->
 
                 <div id="questionResultsContainer"></div>
 
@@ -2047,6 +2062,11 @@
                 .then(function(data) {
                     if (data.success && data.paper) {
                         paper = data.paper;
+                        // Jump progress bar to 100%
+                        var progressBarFill = document.getElementById('progressBarFill');
+                        var progressPercentage = document.getElementById('progressPercentage');
+                        progressBarFill.style.width = '100%';
+                        progressPercentage.textContent = '100%';
                         document.getElementById('readyBtn').style.display = 'block';
                     } else {
                         showError('Failed to generate test. Please try again.');
@@ -2177,7 +2197,9 @@
                             '<div class="question-number">Q' + question.display + '</div>' +
                             '<div class="question-marks">' + question.marks + ' marks</div>' +
                             (question.extract_refs && question.extract_refs.length > 0 ?
-                                '<button class="view-extract-btn" onclick="showExtract(\'' + question.extract_refs[0] + '\')">View Extract ' + question.extract_refs.join(', ') + '</button>' : '') +
+                                question.extract_refs.map(function(ref) {
+                                    return '<button class="view-extract-btn" onclick="showExtract(\'' + ref + '\')">View Extract ' + ref + '</button>';
+                                }).join('') : '') +
                             '<div class="question-time">' + question.recommended_time_minutes + ' min</div>' +
                             '</div>' +
                             '<div class="question-text">' + question.text + '</div>' +
@@ -2362,7 +2384,25 @@
         }
 
         function submitTest() {
-            showDialog('Submit Test', 'Are you sure you want to submit your test? You cannot make changes after submission.', function() {
+            // Check for blank answers first
+            var blankQuestions = [];
+            document.querySelectorAll('.answer-textarea').forEach(function(textarea, idx) {
+                var text = textarea.value.trim();
+                var qId = textarea.dataset.questionId;
+                var question = paper.questions.find(function(q) { return q.id === qId; });
+                // Don't flag as blank if it contains a number (likely a calculation answer like "25%" or "$1,200")
+                var hasNumber = /\d/.test(text);
+                if (!text || (text.split(/\s+/).length < 3 && !hasNumber)) {
+                    blankQuestions.push(question ? question.display : (idx + 1));
+                }
+            });
+
+            var dialogMsg = 'Are you sure you want to submit your test? You cannot make changes after submission.';
+            if (blankQuestions.length > 0) {
+                dialogMsg = 'You have left ' + blankQuestions.length + ' question' + (blankQuestions.length > 1 ? 's' : '') + ' blank or with very short answers (Q' + blankQuestions.join(', Q') + '). These will receive 0 marks.\n\nAre you sure you want to submit?';
+            }
+
+            showDialog('Submit Test', dialogMsg, function() {
                 var answers = [];
                 var studentAnswerTexts = [];
                 document.querySelectorAll('.answer-textarea').forEach(function(textarea) {
@@ -2417,7 +2457,10 @@
                                         what_went_well: qr.what_went_well || '',
                                         areas_for_improvement: qr.areas_for_improvement || '',
                                         improved_paragraph: qr.improved_paragraph || '',
-                                        student_answer: studentAnswerTexts[idx] || ''
+                                        example_answer: qr.example_answer || '',
+                                        student_answer: studentAnswerTexts[idx] || '',
+                                        ao_breakdown: qr.ao_breakdown || null,
+                                        level: qr.level || null
                                     };
                                 }),
                                 strengths: data.strengths || [],
@@ -2440,7 +2483,10 @@
             });
         }
 
+        var lastResults = null;
+
         function showFeedback(results) {
+            lastResults = results;
             showPhase('feedback');
 
             var scorePercentage = Math.round((results.total_marks / results.total_possible) * 100);
@@ -2471,16 +2517,6 @@
 
             document.getElementById('timeTaken').textContent = Math.floor(totalSeconds / 60) + ' min';
             document.getElementById('boardInfo').textContent = paper.board_name;
-
-            var aoTotal = (results.ao_breakdown.AO1 || 0) + (results.ao_breakdown.AO2 || 0) +
-                         (results.ao_breakdown.AO3 || 0) + (results.ao_breakdown.AO4 || 0);
-
-            ['AO1', 'AO2', 'AO3', 'AO4'].forEach(function(ao) {
-                var marks = results.ao_breakdown[ao] || 0;
-                document.getElementById(ao.toLowerCase() + 'Marks').textContent = marks;
-                var percentage = aoTotal > 0 ? (marks / aoTotal) * 100 : 0;
-                document.getElementById(ao.toLowerCase() + 'Fill').style.width = percentage + '%';
-            });
 
             var resultsContainer = document.getElementById('questionResultsContainer');
             resultsContainer.innerHTML = '';
@@ -2538,6 +2574,13 @@
 
                 headerContent.appendChild(questionNum);
                 headerContent.appendChild(marksDiv);
+                // Level badge for 8+ mark questions
+                if (qResult.total_marks >= 8 && qResult.level) {
+                    var levelBadge = document.createElement('div');
+                    levelBadge.className = 'question-level-badge';
+                    levelBadge.textContent = 'Level ' + qResult.level;
+                    headerContent.appendChild(levelBadge);
+                }
                 headerContent.appendChild(toggleIcon);
 
                 header.appendChild(headerContent);
@@ -2545,6 +2588,45 @@
 
                 var content = document.createElement('div');
                 content.className = 'result-content';
+
+                // AO breakdown grid for 2-6 mark questions
+                if (qResult.total_marks >= 2 && qResult.total_marks <= 6 && qResult.ao_breakdown) {
+                    var aoLabels = ['AO1', 'AO2', 'AO3', 'AO4'];
+                    var aoNames = ['Knowledge', 'Application', 'Analysis', 'Evaluation'];
+                    var aoColors = ['var(--skill-knowledge)', 'var(--skill-application)', 'var(--skill-analysis)', 'var(--skill-evaluation)'];
+                    var visibleAOs = aoLabels.filter(function(label) {
+                        return qResult.ao_breakdown[label] !== null && qResult.ao_breakdown[label] !== undefined;
+                    });
+                    if (visibleAOs.length > 0) {
+                        var aoGrid = document.createElement('div');
+                        aoGrid.className = 'ao-grid';
+                        aoGrid.style.gridTemplateColumns = 'repeat(' + Math.min(visibleAOs.length, 4) + ', 1fr)';
+                        visibleAOs.forEach(function(label, i) {
+                            var idx = aoLabels.indexOf(label);
+                            var aoCard = document.createElement('div');
+                            aoCard.className = 'ao-card';
+                            aoCard.style.borderColor = aoColors[idx];
+                            aoCard.style.animationDelay = (0.1 + i * 0.07) + 's';
+                            aoCard.innerHTML = '<div class="ao-label-text" style="color: ' + aoColors[idx] + ';">' + label + '</div>' +
+                                '<div class="ao-value">' + (qResult.ao_breakdown[label] || 0) + '</div>' +
+                                '<div class="ao-name">' + aoNames[idx] + '</div>';
+                            aoGrid.appendChild(aoCard);
+                        });
+                        content.appendChild(aoGrid);
+                    }
+                }
+
+                // Show student answer (or "Not answered" for blank)
+                var answerText = qResult.student_answer ? qResult.student_answer.trim() : '';
+                var hasNumericAnswer = /\d/.test(answerText);
+                var isBlank = !answerText || (answerText.split(/\s+/).length < 3 && !hasNumericAnswer);
+                var answerSection = document.createElement('div');
+                answerSection.className = 'result-section';
+                answerSection.style.borderLeftColor = isBlank ? 'var(--error)' : 'var(--gray-400)';
+                answerSection.innerHTML = '<div class="result-label">Your Answer</div>' +
+                    '<div class="result-text" style="' + (isBlank ? 'color: var(--error); font-style: italic;' : '') + '">' +
+                    (isBlank ? '<em>Not answered</em>' : answerText) + '</div>';
+                content.appendChild(answerSection);
 
                 if (qResult.what_went_well) {
                     var well = document.createElement('div');
@@ -2579,6 +2661,15 @@
                     content.appendChild(improved);
                 }
 
+                if (qResult.example_answer) {
+                    var example = document.createElement('div');
+                    example.className = 'result-section';
+                    example.style.borderLeftColor = 'var(--skill-knowledge)';
+                    example.innerHTML = '<div class="result-label">Example Answer</div>' +
+                        '<div class="result-text">' + qResult.example_answer + '</div>';
+                    content.appendChild(example);
+                }
+
                 card.appendChild(content);
                 resultsContainer.appendChild(card);
             });
@@ -2603,172 +2694,381 @@
         }
 
         function downloadTestPDF() {
+            if (!lastResults) return;
+            var results = lastResults;
+            var jsPDF = window.jspdf.jsPDF;
             var doc = new jsPDF();
-            var pageHeight = doc.internal.pageSize.height;
-            var pageWidth = doc.internal.pageSize.width;
-            var margin = 15;
-            var lineHeight = 6;
-            var yPos = margin;
+            var pH = doc.internal.pageSize.height;
+            var pW = doc.internal.pageSize.width;
+            var m = 15;
+            var contentW = pW - 2 * m;
+            var y = 0;
+            var navy = [30, 58, 95];
+            var orange = [230, 126, 34];
+            var darkGray = [55, 55, 55];
+            var midGray = [100, 100, 100];
+            var lightBg = [245, 247, 250];
+            var greenAccent = [39, 174, 96];
+            var redAccent = [192, 57, 43];
+            var blueAccent = [41, 128, 185];
+            var pageNum = 1;
 
-            doc.setFillColor(30, 58, 95);
-            doc.rect(0, 0, pageWidth, 30, 'F');
-            doc.setTextColor(255, 255, 255);
-            doc.setFontSize(20);
-            doc.text('MyBizStudies', margin, 15);
-            doc.setFontSize(12);
-            doc.text('A-Level Exam Report', margin, 25);
-
-            yPos = 45;
-            doc.setTextColor(30, 58, 95);
-            doc.setFontSize(16);
-            doc.text('Test Results', margin, yPos);
-
-            yPos += 12;
-            doc.setFontSize(10);
-            doc.setTextColor(70, 70, 70);
-            doc.text('Student: ' + (studentName || 'Anonymous'), margin, yPos);
-            yPos += 6;
-            doc.text('Board: ' + (paper.board_name || ''), margin, yPos);
-            yPos += 6;
-            doc.text('Unit: ' + (paper.unit || '1'), margin, yPos);
-            yPos += 6;
-            doc.text('Date: ' + new Date().toLocaleDateString(), margin, yPos);
-            yPos += 12;
-
-            var scoreText = document.getElementById('scorePercentage').textContent;
-            var marksText = document.getElementById('scoreMarks').textContent;
-            doc.setFontSize(13);
-            doc.setTextColor(230, 126, 34);
-            doc.text('Overall Score: ' + scoreText + ' (' + marksText + ')', margin, yPos);
-
-            yPos += 15;
-            if (yPos > pageHeight - margin - 40) {
-                doc.addPage();
-                yPos = margin;
+            function addFooter() {
+                doc.setDrawColor(230, 126, 34);
+                doc.setLineWidth(0.5);
+                doc.line(m, pH - 12, pW - m, pH - 12);
+                doc.setFontSize(7);
+                doc.setTextColor(150, 150, 150);
+                doc.setFont('helvetica', 'normal');
+                doc.text('MyBizStudies.com', m, pH - 7);
+                doc.text('A-Level Business Studies Revision', pW / 2, pH - 7, { align: 'center' });
+                doc.text('Page ' + pageNum, pW - m, pH - 7, { align: 'right' });
             }
 
-            doc.setFontSize(12);
-            doc.setTextColor(30, 58, 95);
-            doc.text('End of Exam Feedback', margin, yPos);
-            yPos += 10;
-
-            var feedbackText = document.getElementById('overallFeedback').textContent;
-            doc.setFontSize(9);
-            doc.setTextColor(70, 70, 70);
-            var splitFeedback = doc.splitTextToSize(feedbackText, pageWidth - 2 * margin);
-            doc.text(splitFeedback, margin, yPos);
-            yPos += (splitFeedback.length * 4) + 8;
-
-            if (yPos > pageHeight - margin - 50) {
-                doc.addPage();
-                yPos = margin;
-            }
-
-            doc.setFontSize(11);
-            doc.setTextColor(30, 58, 95);
-            doc.text('Question Feedback', margin, yPos);
-            yPos += 8;
-
-            document.querySelectorAll('.question-result-card').forEach(function(card) {
-                if (yPos > pageHeight - margin - 30) {
+            function checkSpace(needed) {
+                if (y + needed > pH - 20) {
+                    addFooter();
                     doc.addPage();
-                    yPos = margin;
+                    pageNum++;
+                    y = m + 5;
+                    return true;
                 }
+                return false;
+            }
 
-                var qNumEl = card.querySelector('.question-result-number');
-                var marksEl = card.querySelector('.question-result-marks');
-                var qNum = qNumEl ? qNumEl.textContent : '';
-                var marks = marksEl ? marksEl.textContent : '';
+            function writeWrapped(text, x, startY, maxW, fontSize, color, lineH) {
+                if (!text) return startY;
+                lineH = lineH || (fontSize * 0.5);
+                doc.setFontSize(fontSize);
+                doc.setTextColor(color[0], color[1], color[2]);
+                var lines = doc.splitTextToSize(String(text), maxW);
+                for (var i = 0; i < lines.length; i++) {
+                    if (startY > pH - 20) {
+                        addFooter();
+                        doc.addPage();
+                        pageNum++;
+                        startY = m + 5;
+                    }
+                    doc.text(lines[i], x, startY);
+                    startY += lineH;
+                }
+                return startY;
+            }
 
+            function measureText(text, maxW, fontSize, lineH) {
+                if (!text) return 0;
+                lineH = lineH || (fontSize * 0.5);
+                doc.setFontSize(fontSize);
+                var lines = doc.splitTextToSize(String(text), maxW);
+                return lines.length * lineH;
+            }
+
+            // === PAGE 1: HEADER ===
+            doc.setFillColor(navy[0], navy[1], navy[2]);
+            doc.rect(0, 0, pW, 40, 'F');
+            doc.setFillColor(orange[0], orange[1], orange[2]);
+            doc.rect(0, 40, pW, 3, 'F');
+
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(24);
+            doc.setFont('helvetica', 'bold');
+            doc.text('MyBizStudies', m, 18);
+            doc.setFontSize(11);
+            doc.setFont('helvetica', 'normal');
+            doc.text('A-Level Business Studies', m, 27);
+            doc.setFontSize(9);
+            doc.text('Exam Feedback Report', m, 35);
+
+            y = 52;
+
+            // === STUDENT INFO BAR ===
+            doc.setFillColor(lightBg[0], lightBg[1], lightBg[2]);
+            doc.roundedRect(m, y, contentW, 22, 3, 3, 'F');
+            doc.setFontSize(9);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(navy[0], navy[1], navy[2]);
+            doc.text('Student:', m + 5, y + 8);
+            doc.text('Board:', m + 75, y + 8);
+            doc.text('Date:', m + 135, y + 8);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
+            doc.text(studentName || 'Anonymous', m + 24, y + 8);
+            doc.text(paper.board_name || '', m + 92, y + 8);
+            doc.text(new Date().toLocaleDateString('en-GB'), m + 148, y + 8);
+
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(navy[0], navy[1], navy[2]);
+            doc.text('Unit:', m + 5, y + 16);
+            doc.text('Time:', m + 75, y + 16);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
+            doc.text(String(paper.unit || '1'), m + 18, y + 16);
+            doc.text(Math.floor(totalSeconds / 60) + ' minutes', m + 90, y + 16);
+
+            y += 30;
+
+            // === SCORE SUMMARY BOX ===
+            var scorePercentage = Math.round((results.total_marks / results.total_possible) * 100);
+            var gradeText = scorePercentage >= 80 ? 'Excellent' : (scorePercentage >= 65 ? 'Good' : (scorePercentage >= 50 ? 'Satisfactory' : 'Below Target'));
+            var gradeColor = scorePercentage >= 80 ? greenAccent : (scorePercentage >= 65 ? blueAccent : (scorePercentage >= 50 ? orange : redAccent));
+
+            doc.setDrawColor(navy[0], navy[1], navy[2]);
+            doc.setLineWidth(0.5);
+            doc.roundedRect(m, y, contentW, 35, 4, 4, 'S');
+            doc.setFillColor(navy[0], navy[1], navy[2]);
+            doc.roundedRect(m, y, 55, 35, 4, 4, 'F');
+            doc.rect(m + 50, y, 5, 35, 'F');
+
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(28);
+            doc.setFont('helvetica', 'bold');
+            doc.text(scorePercentage + '%', m + 27.5, y + 18, { align: 'center' });
+            doc.setFontSize(8);
+            doc.setFont('helvetica', 'normal');
+            doc.text('OVERALL SCORE', m + 27.5, y + 26, { align: 'center' });
+
+            doc.setTextColor(navy[0], navy[1], navy[2]);
+            doc.setFontSize(14);
+            doc.setFont('helvetica', 'bold');
+            doc.text(results.total_marks + ' / ' + results.total_possible + ' marks', m + 62, y + 14);
+            doc.setFontSize(11);
+            doc.setTextColor(gradeColor[0], gradeColor[1], gradeColor[2]);
+            doc.text(gradeText, m + 62, y + 24);
+
+            var barX = m + 62;
+            var barY = y + 28;
+            var barW = contentW - 62 - 7;
+            doc.setFillColor(230, 230, 230);
+            doc.roundedRect(barX, barY, barW, 3, 1.5, 1.5, 'F');
+            var fillW = barW * (scorePercentage / 100);
+            if (fillW > 3) {
+                doc.setFillColor(gradeColor[0], gradeColor[1], gradeColor[2]);
+                doc.roundedRect(barX, barY, fillW, 3, 1.5, 1.5, 'F');
+            }
+
+            y += 43;
+
+            // === OVERALL FEEDBACK ===
+            if (results.overall_feedback) {
+                checkSpace(30);
+                doc.setFontSize(13);
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(navy[0], navy[1], navy[2]);
+                doc.text('Overall Feedback', m, y);
+                doc.setFillColor(orange[0], orange[1], orange[2]);
+                doc.rect(m, y + 2, 30, 1, 'F');
+                y += 8;
+
+                var fbH = measureText(results.overall_feedback, contentW - 12, 9, 4.5) + 8;
+                checkSpace(fbH);
+                doc.setFillColor(250, 251, 253);
+                doc.roundedRect(m, y, contentW, fbH, 3, 3, 'F');
+                doc.setFillColor(navy[0], navy[1], navy[2]);
+                doc.rect(m, y + 2, 1.5, fbH - 4, 'F');
+                doc.setFont('helvetica', 'normal');
+                y = writeWrapped(results.overall_feedback, m + 6, y + 5, contentW - 12, 9, darkGray, 4.5);
+                y += 6;
+            }
+
+            // === QUESTION FEEDBACK ===
+            checkSpace(15);
+            doc.setFontSize(13);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(navy[0], navy[1], navy[2]);
+            doc.text('Question by Question Feedback', m, y);
+            doc.setFillColor(orange[0], orange[1], orange[2]);
+            doc.rect(m, y + 2, 50, 1, 'F');
+            y += 10;
+
+            results.question_results.forEach(function(qr) {
+                checkSpace(35);
+
+                var qPerc = Math.round((qr.marks_awarded / qr.total_marks) * 100);
+                var qColor = qPerc >= 80 ? greenAccent : (qPerc >= 50 ? orange : redAccent);
+
+                // Question header bar
+                doc.setFillColor(navy[0], navy[1], navy[2]);
+                doc.roundedRect(m, y, contentW, 10, 2, 2, 'F');
+                doc.setTextColor(255, 255, 255);
                 doc.setFontSize(10);
-                doc.setTextColor(30, 58, 95);
-                doc.text(qNum + ' - ' + marks, margin, yPos);
-                yPos += 6;
+                doc.setFont('helvetica', 'bold');
+                doc.text('Question ' + qr.question_display, m + 4, y + 7);
 
-                var contentEl = card.querySelector('.result-content');
-                if (contentEl) {
-                    var sections = contentEl.querySelectorAll('.result-section');
-                    sections.forEach(function(section) {
-                        if (yPos > pageHeight - margin - 20) {
-                            doc.addPage();
-                            yPos = margin;
-                        }
+                var marksStr = qr.marks_awarded + ' / ' + qr.total_marks;
+                var marksW = doc.getTextWidth(marksStr) + 10;
+                doc.setFillColor(qColor[0], qColor[1], qColor[2]);
+                doc.roundedRect(pW - m - marksW - 3, y + 1.5, marksW, 7, 2, 2, 'F');
+                doc.setFontSize(8);
+                doc.text(marksStr, pW - m - marksW / 2 - 3, y + 6.5, { align: 'center' });
 
-                        var labelEl = section.querySelector('.result-label');
-                        var textEl = section.querySelector('.result-text');
-                        if (labelEl) {
-                            doc.setFontSize(9);
-                            doc.setTextColor(30, 58, 95);
-                            doc.text(labelEl.textContent + ':', margin, yPos);
-                            yPos += 4;
-                        }
-
-                        if (textEl) {
-                            doc.setFontSize(8);
-                            doc.setTextColor(70, 70, 70);
-                            var splitText = doc.splitTextToSize(textEl.textContent, pageWidth - 2 * margin - 5);
-                            doc.text(splitText, margin + 5, yPos);
-                            yPos += (splitText.length * 3) + 3;
-                        }
-                    });
+                if (qr.total_marks >= 8 && qr.level) {
+                    var levelStr = 'Level ' + qr.level;
+                    var levelW = doc.getTextWidth(levelStr) + 8;
+                    doc.setFillColor(60, 85, 120);
+                    doc.roundedRect(pW - m - marksW - levelW - 8, y + 1.5, levelW, 7, 2, 2, 'F');
+                    doc.setTextColor(255, 255, 255);
+                    doc.setFontSize(7.5);
+                    doc.text(levelStr, pW - m - marksW - levelW / 2 - 8, y + 6.3, { align: 'center' });
                 }
 
-                yPos += 4;
+                y += 14;
+
+                // AO breakdown for 2-6 mark questions
+                if (qr.total_marks >= 2 && qr.total_marks <= 6 && qr.ao_breakdown) {
+                    var aoLabels = ['AO1', 'AO2', 'AO3', 'AO4'];
+                    var aoNames = ['Knowledge', 'Application', 'Analysis', 'Evaluation'];
+                    var aoColorMap = [[52, 152, 219], [230, 126, 34], [155, 89, 182], [231, 76, 60]];
+                    var visAOs = aoLabels.filter(function(l) { return qr.ao_breakdown[l] !== null && qr.ao_breakdown[l] !== undefined; });
+                    if (visAOs.length > 0) {
+                        checkSpace(18);
+                        var aoCardW = (contentW - (visAOs.length - 1) * 3) / visAOs.length;
+                        visAOs.forEach(function(label, i) {
+                            var idx = aoLabels.indexOf(label);
+                            var cx = m + i * (aoCardW + 3);
+                            doc.setFillColor(255, 255, 255);
+                            doc.setDrawColor(aoColorMap[idx][0], aoColorMap[idx][1], aoColorMap[idx][2]);
+                            doc.setLineWidth(0.3);
+                            doc.roundedRect(cx, y, aoCardW, 14, 2, 2, 'FD');
+                            doc.setFillColor(aoColorMap[idx][0], aoColorMap[idx][1], aoColorMap[idx][2]);
+                            doc.rect(cx + 0.5, y + 0.5, aoCardW - 1, 2.5, 'F');
+                            doc.setFontSize(7);
+                            doc.setFont('helvetica', 'bold');
+                            doc.setTextColor(aoColorMap[idx][0], aoColorMap[idx][1], aoColorMap[idx][2]);
+                            doc.text(label + ' - ' + aoNames[idx], cx + aoCardW / 2, y + 7, { align: 'center' });
+                            doc.setFontSize(10);
+                            doc.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
+                            doc.text(String(qr.ao_breakdown[label] || 0), cx + aoCardW / 2, y + 12.5, { align: 'center' });
+                        });
+                        y += 18;
+                    }
+                }
+
+                // Student answer
+                var ansText = qr.student_answer ? qr.student_answer.trim() : '';
+                var hasNum = /\d/.test(ansText);
+                var isBlank = !ansText || (ansText.split(/\s+/).length < 3 && !hasNum);
+
+                var ansH = isBlank ? 14 : (measureText(ansText, contentW - 12, 8.5, 4) + 12);
+                checkSpace(ansH);
+                doc.setFillColor(lightBg[0], lightBg[1], lightBg[2]);
+                doc.roundedRect(m, y, contentW, ansH, 2, 2, 'F');
+                doc.setFillColor(isBlank ? redAccent[0] : 180, isBlank ? redAccent[1] : 180, isBlank ? redAccent[2] : 180);
+                doc.rect(m, y + 1, 1.5, ansH - 2, 'F');
+                doc.setFontSize(7.5);
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(midGray[0], midGray[1], midGray[2]);
+                doc.text('YOUR ANSWER', m + 5, y + 5);
+                if (isBlank) {
+                    doc.setFont('helvetica', 'italic');
+                    doc.setTextColor(redAccent[0], redAccent[1], redAccent[2]);
+                    doc.setFontSize(8.5);
+                    doc.text('Not answered', m + 5, y + 11);
+                } else {
+                    doc.setFont('helvetica', 'normal');
+                    writeWrapped(ansText, m + 5, y + 10, contentW - 12, 8.5, darkGray, 4);
+                }
+                y += ansH + 2;
+
+                // Feedback sections
+                var sections = [
+                    { label: 'WHAT WENT WELL', text: qr.what_went_well, color: greenAccent, bg: [240, 255, 245] },
+                    { label: 'AREAS FOR IMPROVEMENT', text: qr.areas_for_improvement, color: orange, bg: [255, 248, 240] },
+                    { label: 'EXAMINER FEEDBACK', text: qr.feedback, color: navy, bg: [240, 244, 250] },
+                    { label: 'MODEL ANSWER', text: qr.improved_paragraph, color: blueAccent, bg: [235, 245, 255] },
+                    { label: 'EXAMPLE ANSWER', text: qr.example_answer, color: blueAccent, bg: [235, 245, 255] }
+                ];
+
+                sections.forEach(function(sec) {
+                    if (!sec.text) return;
+                    var secTextH = measureText(sec.text, contentW - 12, 8.5, 4);
+                    var secH = secTextH + 12;
+                    checkSpace(secH);
+
+                    doc.setFillColor(sec.bg[0], sec.bg[1], sec.bg[2]);
+                    doc.roundedRect(m, y, contentW, secH, 2, 2, 'F');
+                    doc.setFillColor(sec.color[0], sec.color[1], sec.color[2]);
+                    doc.rect(m, y + 1, 1.5, secH - 2, 'F');
+
+                    doc.setFontSize(7.5);
+                    doc.setFont('helvetica', 'bold');
+                    doc.setTextColor(sec.color[0], sec.color[1], sec.color[2]);
+                    doc.text(sec.label, m + 5, y + 5);
+
+                    doc.setFont('helvetica', 'normal');
+                    writeWrapped(sec.text, m + 5, y + 10, contentW - 12, 8.5, darkGray, 4);
+
+                    y += secH + 2;
+                });
+
+                // Divider between questions
+                y += 2;
+                doc.setDrawColor(220, 220, 220);
+                doc.setLineWidth(0.3);
+                doc.line(m + 10, y, pW - m - 10, y);
+                y += 6;
             });
 
-            if (yPos > pageHeight - margin - 50) {
-                doc.addPage();
-                yPos = margin;
-            }
+            // === STRENGTHS ===
+            checkSpace(25);
+            doc.setFontSize(13);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(navy[0], navy[1], navy[2]);
+            doc.text('Strengths', m, y);
+            doc.setFillColor(greenAccent[0], greenAccent[1], greenAccent[2]);
+            doc.rect(m, y + 2, 20, 1, 'F');
+            y += 8;
 
-            doc.setFontSize(11);
-            doc.setTextColor(30, 58, 95);
-            doc.text('Strengths', margin, yPos);
-            yPos += 8;
+            (results.strengths || []).forEach(function(strength) {
+                var sLines = doc.splitTextToSize(String(strength), contentW - 16);
+                var sH = sLines.length * 4.5 + 4;
+                checkSpace(sH + 2);
+                doc.setFillColor(240, 255, 245);
+                doc.roundedRect(m, y, contentW, sH, 2, 2, 'F');
+                doc.setFillColor(greenAccent[0], greenAccent[1], greenAccent[2]);
+                doc.circle(m + 5, y + sH / 2, 1.2, 'F');
+                doc.setFontSize(8.5);
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
+                var sLineY = y + 4;
+                for (var si = 0; si < sLines.length; si++) {
+                    doc.text(sLines[si], m + 10, sLineY);
+                    sLineY += 4.5;
+                }
+                y += sH + 2;
+            });
 
-            var strengthsList = document.getElementById('strengthsList');
-            if (strengthsList) {
-                var items = strengthsList.querySelectorAll('li');
-                items.forEach(function(item) {
-                    if (yPos > pageHeight - margin - 20) {
-                        doc.addPage();
-                        yPos = margin;
-                    }
-                    doc.setFontSize(9);
-                    doc.setTextColor(70, 70, 70);
-                    var splitItem = doc.splitTextToSize('• ' + item.textContent, pageWidth - 2 * margin - 5);
-                    doc.text(splitItem, margin + 5, yPos);
-                    yPos += (splitItem.length * 3) + 2;
-                });
-            }
+            y += 4;
 
-            yPos += 6;
-            if (yPos > pageHeight - margin - 50) {
-                doc.addPage();
-                yPos = margin;
-            }
+            // === AREAS FOR DEVELOPMENT ===
+            checkSpace(25);
+            doc.setFontSize(13);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(navy[0], navy[1], navy[2]);
+            doc.text('Areas for Development', m, y);
+            doc.setFillColor(orange[0], orange[1], orange[2]);
+            doc.rect(m, y + 2, 38, 1, 'F');
+            y += 8;
 
-            doc.setFontSize(11);
-            doc.setTextColor(30, 58, 95);
-            doc.text('Areas for Development', margin, yPos);
-            yPos += 8;
+            (results.areas_for_development || []).forEach(function(area) {
+                var aLines = doc.splitTextToSize(String(area), contentW - 16);
+                var aH = aLines.length * 4.5 + 4;
+                checkSpace(aH + 2);
+                doc.setFillColor(255, 248, 240);
+                doc.roundedRect(m, y, contentW, aH, 2, 2, 'F');
+                doc.setFillColor(orange[0], orange[1], orange[2]);
+                doc.circle(m + 5, y + aH / 2, 1.2, 'F');
+                doc.setFontSize(8.5);
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
+                var aLineY = y + 4;
+                for (var ai = 0; ai < aLines.length; ai++) {
+                    doc.text(aLines[ai], m + 10, aLineY);
+                    aLineY += 4.5;
+                }
+                y += aH + 2;
+            });
 
-            var developmentList = document.getElementById('developmentList');
-            if (developmentList) {
-                var items = developmentList.querySelectorAll('li');
-                items.forEach(function(item) {
-                    if (yPos > pageHeight - margin - 20) {
-                        doc.addPage();
-                        yPos = margin;
-                    }
-                    doc.setFontSize(9);
-                    doc.setTextColor(70, 70, 70);
-                    var splitItem = doc.splitTextToSize('• ' + item.textContent, pageWidth - 2 * margin - 5);
-                    doc.text(splitItem, margin + 5, yPos);
-                    yPos += (splitItem.length * 3) + 2;
-                });
-            }
-
+            addFooter();
             doc.save('mybizstudies-exam-report.pdf');
         }
 
