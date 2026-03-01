@@ -1895,6 +1895,18 @@
             }
         }
 
+        var TOPIC_NAMES = {
+            '1.1': 'Meeting Customer Needs', '1.2': 'The Market', '1.3': 'Marketing Mix and Strategy',
+            '1.4': 'Managing People', '1.5': 'Entrepreneurs and Leaders',
+            '2.1': 'Raising Finance', '2.2': 'Financial Planning', '2.3': 'Managing Finance',
+            '2.4': 'Resource Management', '2.5': 'External Influences',
+            '3.1': 'Business Objectives and Strategy', '3.2': 'Business Growth',
+            '3.3': 'Decision Making Techniques', '3.4': 'Influences on Business Decisions',
+            '3.5': 'Assessing Competitiveness', '3.6': 'Managing Change',
+            '4.1': 'Globalisation', '4.2': 'Global Markets and Business Expansion',
+            '4.3': 'Global Marketing', '4.4': 'Global Industries and Companies'
+        };
+
         function updateHeroTitle() {
             var type = getUrlParam('type') || 'unit';
             var unit = getUrlParam('unit') || '1';
@@ -1908,11 +1920,18 @@
                 hero.textContent = 'Unit ' + unit + ' A-Level Exam';
                 subtitle.textContent = 'Full unit exam paper with all extracts and questions';
             } else if (type === 'topic') {
-                hero.textContent = 'Topic ' + topic + ' Practice Test';
-                subtitle.textContent = 'Focused practice on this topic area';
+                var topicName = TOPIC_NAMES[topic] || ('Topic ' + topic);
+                hero.textContent = 'Topic Test';
+                subtitle.textContent = topicName;
+                document.getElementById('testMarks').textContent = '40';
+                document.getElementById('testDuration').textContent = '60';
+                document.getElementById('testQuestions').textContent = '7';
             } else if (type === 'section') {
                 hero.textContent = 'Section ' + section + ' Practice';
                 subtitle.textContent = 'Quick check on this section';
+                document.getElementById('testMarks').textContent = '15';
+                document.getElementById('testDuration').textContent = '25';
+                document.getElementById('testQuestions').textContent = '3';
             }
         }
 
