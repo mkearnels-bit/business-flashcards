@@ -60,30 +60,224 @@
             overflow-x: hidden;
         }
 
-        /* ===== NAVBAR ===== */
+        /* ==================== SITE NAVBAR ==================== */
         .site-navbar {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #f1f5f9;
+            padding: 0.75rem 2rem;
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
             z-index: 1000;
-            padding: 0.75rem 2rem;
-            border-bottom: 1px solid var(--gray-100);
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
-
         .site-navbar-content {
             max-width: 1200px;
             margin: 0 auto;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+        }
+        .site-navbar-logo {
+            height: 55px;
+            width: auto;
+        }
+        .site-nav-buttons {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .site-nav-link {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #334155;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .site-nav-link:hover {
+            color: #1e3a5f;
+            background: #f1f5f9;
+        }
+        .site-nav-link.active {
+            color: #e67e22;
+            font-weight: 600;
+        }
+        .site-nav-btn {
+            padding: 0.5rem 1.25rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 8px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-family: inherit;
+        }
+        .site-nav-btn-ghost {
+            color: #1e3a5f;
+            background: transparent;
+            border: 1px solid #cbd5e1;
+        }
+        .site-nav-btn-ghost:hover {
+            background: #f1f5f9;
+            border-color: #1e3a5f;
+        }
+        .site-nav-btn-primary {
+            background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+        }
+        .site-nav-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(230, 126, 34, 0.4);
+        }
+        .site-hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 44px;
+            height: 44px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1100;
+            position: relative;
+        }
+        .site-hamburger span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: #1e3a5f;
+            border-radius: 2px;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: absolute;
+        }
+        .site-hamburger span:nth-child(1) { transform: translateY(-7px); }
+        .site-hamburger span:nth-child(2) { opacity: 1; }
+        .site-hamburger span:nth-child(3) { transform: translateY(7px); }
+        .site-hamburger.active span:nth-child(1) { transform: rotate(45deg); }
+        .site-hamburger.active span:nth-child(2) { opacity: 0; }
+        .site-hamburger.active span:nth-child(3) { transform: rotate(-45deg); }
+
+        /* Mobile overlay */
+        .site-mobile-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 1040;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .site-mobile-overlay.active { opacity: 1; pointer-events: auto; }
+
+        .site-mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 280px;
+            height: 100%;
+            background: white;
+            z-index: 1050;
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
+            padding: 5.5rem 1.5rem 2rem;
+        }
+        .site-mobile-menu.active { transform: translateX(0); }
+
+        .site-mobile-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        .site-mobile-links a {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            padding: 0.875rem 1rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #334155;
+            transition: all 0.2s ease;
+        }
+        .site-mobile-links a:hover {
+            background: #f1f5f9;
+            color: #1e3a5f;
+        }
+        .site-menu-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background: #f1f5f9;
+            flex-shrink: 0;
+        }
+        .site-menu-icon svg {
+            width: 18px;
+            height: 18px;
+            stroke: #64748b;
+        }
+        .site-mobile-divider {
+            height: 1px;
+            background: #f1f5f9;
+            margin: 0.5rem 0;
+        }
+        .site-mobile-cta {
+            margin-top: 0.5rem;
+            background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+            color: white !important;
+            justify-content: center;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+        }
+        .site-mobile-cta:hover {
+            color: white !important;
+            transform: translateY(-1px);
+        }
+        .site-mobile-cta .site-menu-icon {
+            display: none;
+        }
+        .site-mobile-logout {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            padding: 0.875rem 1rem;
+            border-radius: 12px;
+            border: none;
+            background: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #e74c3c;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+        .site-mobile-logout:hover {
+            background: rgba(231, 76, 60, 0.06);
+        }
+        .site-mobile-logout .site-menu-icon {
+            background: rgba(231, 76, 60, 0.08);
+        }
+        .site-mobile-logout .site-menu-icon svg {
+            stroke: #e74c3c;
         }
 
-        .site-navbar-logo { height: 65px; width: auto; }
-
+        /* ===== LEVEL TOGGLE ===== */
         .level-toggle {
             display: flex;
             align-items: center;
@@ -117,128 +311,19 @@
         }
         .mobile-level-toggle {
             display: flex;
-            gap: 0;
+            align-items: center;
             background: #f1f5f9;
-            border-radius: 8px;
-            padding: 3px;
+            border-radius: 10px;
+            padding: 4px;
             margin-bottom: 1rem;
+            gap: 0;
         }
         .mobile-level-toggle .level-toggle-btn {
             flex: 1;
+            padding: 8px 0;
+            font-size: 0.85rem;
+            border-radius: 8px;
             text-align: center;
-        }
-
-        .site-nav-buttons {
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-            background: var(--gray-100);
-            border-radius: 10px;
-            padding: 0.25rem;
-        }
-
-        .site-nav-link {
-            padding: 0.5rem 1.25rem;
-            border-radius: 8px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            text-decoration: none;
-            color: var(--gray-500);
-            transition: all 0.2s ease;
-        }
-
-        .site-nav-link:hover { color: var(--primary); background: rgba(255,255,255,0.5); }
-        .site-nav-link.active { background: white; color: var(--primary); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-
-        .site-nav-btn {
-            padding: 0.5rem 1.25rem;
-            border-radius: 8px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            text-decoration: none;
-            cursor: pointer;
-            border: none;
-            transition: all 0.2s ease;
-        }
-
-        .site-nav-btn-ghost { background: transparent; color: var(--gray-500); }
-        .site-nav-btn-ghost:hover { color: var(--primary); background: rgba(255,255,255,0.5); }
-        .site-nav-btn-primary { background: var(--accent); color: white; }
-        .site-nav-btn-primary:hover { background: #d35400; }
-
-        .site-hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 8px;
-        }
-
-        .site-hamburger span {
-            display: block;
-            width: 24px;
-            height: 2px;
-            background: var(--gray-700);
-            border-radius: 2px;
-            transition: all 0.3s ease;
-        }
-
-        .site-hamburger.open span:nth-child(1) { transform: rotate(45deg) translateY(7px); }
-        .site-hamburger.open span:nth-child(2) { opacity: 0; }
-        .site-hamburger.open span:nth-child(3) { transform: rotate(-45deg) translateY(-7px); }
-
-        .site-mobile-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 998;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .site-mobile-overlay.show { opacity: 1; }
-
-        .site-mobile-menu {
-            display: none;
-            position: fixed;
-            top: 0; right: -280px;
-            width: 280px; height: 100vh;
-            background: white;
-            z-index: 999;
-            padding: 80px 1.5rem 2rem;
-            transition: right 0.3s ease;
-            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
-        }
-
-        .site-mobile-menu.show { right: 0; }
-
-        .site-mobile-links { display: flex; flex-direction: column; gap: 0.5rem; }
-
-        .site-mobile-links a, .site-mobile-links button {
-            padding: 0.75rem 1rem;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            text-decoration: none;
-            color: var(--gray-700);
-            background: none;
-            border: none;
-            text-align: left;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .site-mobile-links a:hover, .site-mobile-links button:hover {
-            background: var(--gray-100);
-            color: var(--primary);
-        }
-
-        .site-mobile-links a.active {
-            background: var(--primary);
-            color: white;
         }
 
         /* ===== HERO SECTION ===== */
@@ -1365,9 +1450,10 @@
         @media (max-width: 768px) {
             .site-nav-buttons { display: none; }
             .site-hamburger { display: flex; }
-            .level-toggle { display: none; }
             .site-mobile-overlay { display: block; }
             .site-mobile-menu { display: block; }
+            .site-navbar { padding: 0.5rem 1rem; }
+            .site-navbar-logo { height: 45px; }
 
             .hero { padding: 100px 1.5rem 40px; min-height: 220px; }
             .hero h1 { font-size: 1.8rem; }
@@ -1522,32 +1608,7 @@
             <a href="contact.html" class="site-nav-link">Contact Us</a>
             <a href="login.html" class="site-nav-btn site-nav-btn-ghost guest-only">Log In</a>
             <a href="signup.html" class="site-nav-btn site-nav-btn-primary guest-only">Get Started</a>
-            <!-- USER PROFILE DROPDOWN -->
-            <div class="profile-dropdown-wrapper auth-only" style="display:none;">
-                <button class="profile-avatar" id="profileAvatar" onclick="toggleProfileDropdown()">
-                    <span id="profileInitials">?</span>
-                </button>
-                <div class="profile-dropdown" id="profileDropdown">
-                    <div class="profile-dropdown-header">
-                        <div class="profile-dropdown-name" id="profileName">Student</div>
-                        <div class="profile-dropdown-email" id="profileEmail">Loading...</div>
-                    </div>
-                    <div class="profile-dropdown-divider"></div>
-                    <a href="student-progress.html" class="profile-dropdown-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
-                        Student Progress
-                    </a>
-                    <a href="#" class="profile-dropdown-item" onclick="event.preventDefault();">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-                        Manage Account
-                    </a>
-                    <div class="profile-dropdown-divider"></div>
-                    <button class="profile-dropdown-item logout-item" onclick="handleLogout()">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                        Log Out
-                    </button>
-                </div>
-            </div>
+            <button class="site-nav-btn site-nav-btn-ghost auth-only" id="navLogoutBtn" style="display:none;">Logout</button>
         </div>
         <button class="site-hamburger" id="siteHamburger" aria-label="Menu">
             <span></span>
@@ -1557,7 +1618,7 @@
     </div>
 </nav>
 
-<!-- Mobile Menu -->
+<!-- Unified Site Mobile Menu -->
 <div class="site-mobile-overlay" id="siteMobileOverlay"></div>
 <div class="site-mobile-menu" id="siteMobileMenu">
     <div class="site-mobile-links">
@@ -1565,16 +1626,45 @@
             <button class="level-toggle-btn active" data-level="alevel">A-Level</button>
             <button class="level-toggle-btn" data-level="gcse">GCSE</button>
         </div>
-        <a href="app.html" class="auth-only" style="display:none;">Flash Cards</a>
-        <a href="exam-skills-v2.html" class="auth-only" style="display:none;">Exam Skills</a>
-        <a href="exam-practice.html" class="active auth-only" style="display:none;">Exam Practice</a>
-        <a href="notes.html" class="auth-only" style="display:none;">Study Notes</a>
-        <a href="student-progress.html" class="auth-only" style="display:none;">Student Progress</a>
-        <a href="blog.html">Blog</a>
-        <a href="contact.html">Contact Us</a>
-        <a href="login.html" class="guest-only">Log In</a>
-        <a href="signup.html" class="guest-only">Get Started</a>
-        <button class="auth-only" id="mobileLogoutBtn" style="display:none;">Logout</button>
+        <a href="app.html" class="auth-only" style="display:none;">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
+            Flash Cards
+        </a>
+        <a href="exam-skills-v2.html" class="auth-only" style="display:none;">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg></span>
+            Exam Skills
+        </a>
+        <a href="exam-practice.html" class="active auth-only" style="display:none;">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z"/></svg></span>
+            Exam Practice
+        </a>
+        <a href="notes.html" class="auth-only" style="display:none;">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></span>
+            Study Notes
+        </a>
+        <div class="site-mobile-divider auth-only" style="display:none;"></div>
+        <a href="blog.html">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"/></svg></span>
+            Blog
+        </a>
+        <div class="site-mobile-divider"></div>
+        <a href="contact.html">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></span>
+            Contact Us
+        </a>
+        <div class="site-mobile-divider guest-only"></div>
+        <a href="login.html" class="guest-only">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"/></svg></span>
+            Log In
+        </a>
+        <a href="signup.html" class="site-mobile-cta guest-only">
+            Get Started
+        </a>
+        <div class="site-mobile-divider auth-only" style="display:none;"></div>
+        <button class="site-mobile-logout auth-only" id="mobileLogoutBtn" style="display:none;">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l3-3m0 0l-3-3m3 3H3"/></svg></span>
+            Logout
+        </button>
     </div>
 </div>
 
@@ -2671,9 +2761,9 @@ function setupMobileMenu() {
     var menu = document.getElementById('siteMobileMenu');
 
     function toggleMenu() {
-        hamburger.classList.toggle('open');
-        overlay.classList.toggle('show');
-        menu.classList.toggle('show');
+        hamburger.classList.toggle('active');
+        overlay.classList.toggle('active');
+        menu.classList.toggle('active');
     }
 
     hamburger.addEventListener('click', toggleMenu);
@@ -2699,9 +2789,11 @@ document.addEventListener('DOMContentLoaded', function() {
     checkAuth();
     setupMobileMenu();
 
-    // Mobile logout
+    // Logout buttons
     var mobileLogout = document.getElementById('mobileLogoutBtn');
     if (mobileLogout) mobileLogout.addEventListener('click', handleLogout);
+    var navLogout = document.getElementById('navLogoutBtn');
+    if (navLogout) navLogout.addEventListener('click', handleLogout);
 });
 </script>
 
