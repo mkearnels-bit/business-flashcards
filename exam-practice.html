@@ -1827,9 +1827,9 @@
         </div>
 
         <!-- Topic Selection (shown for topic test mode) -->
-        <div id="topicSelectionSection" style="display:none;">
+        <div id="topicSelectionSection" style="display:none; margin-top:2rem;">
             <div class="section-title" style="font-size:1.3rem; font-weight:800; color:#1e3a5f; margin-bottom:0.5rem;">Select a Topic</div>
-            <div class="section-subtitle" style="color:#64748b; margin-bottom:0;">Choose which topic you want to test yourself on</div>
+            <div class="section-subtitle" style="color:#64748b;">Choose which topic you want to test yourself on</div>
             <div class="topic-grid" id="topicGrid"></div>
         </div>
 
@@ -2009,6 +2009,27 @@ let currentAttemptId = null;
 let timerInterval = null;
 let timerSeconds = 0;
 let chartInstance = null;
+var currentMode = null;
+
+// ===== TOPIC DATA =====
+var TOPIC_NAMES = {
+    '1.1': 'Meeting Customer Needs', '1.2': 'The Market', '1.3': 'Marketing Mix and Strategy',
+    '1.4': 'Managing People', '1.5': 'Entrepreneurs and Leaders',
+    '2.1': 'Raising Finance', '2.2': 'Financial Planning', '2.3': 'Managing Finance',
+    '2.4': 'Resource Management', '2.5': 'External Influences',
+    '3.1': 'Business Objectives and Strategy', '3.2': 'Business Growth',
+    '3.3': 'Decision Making Techniques', '3.4': 'Influences on Business Decisions',
+    '3.5': 'Assessing Competitiveness', '3.6': 'Managing Change',
+    '4.1': 'Globalisation', '4.2': 'Global Markets and Business Expansion',
+    '4.3': 'Global Marketing', '4.4': 'Global Industries and Companies'
+};
+
+var UNIT_TOPICS = {
+    'unit1': ['1.1','1.2','1.3','1.4','1.5'],
+    'unit2': ['2.1','2.2','2.3','2.4','2.5'],
+    'unit3': ['3.1','3.2','3.3','3.4','3.5','3.6'],
+    'unit4': ['4.1','4.2','4.3','4.4']
+};
 
 // ===== MODE SELECTION =====
 function showModeSelection() {
