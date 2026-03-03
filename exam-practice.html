@@ -3297,7 +3297,7 @@ function renderTestExam(paperData) {
                     '<div class="question-marks">' + question.marks + ' marks</div>' +
                     (question.extract_refs && question.extract_refs.length > 0 ?
                         question.extract_refs.map(function(ref) {
-                            return '<button class="view-extract-btn" onclick="showTestExtractTab('' + ref + '')">View Extract ' + ref + '</button>';
+                            return '<button class="view-extract-btn" onclick="showTestExtractTab(\'' + ref + '\')">View Extract ' + ref + '</button>';
                         }).join('') : '') +
                     '<div class="question-time">' + (question.recommended_time_minutes || 5) + ' min</div>' +
                     '</div>' +
