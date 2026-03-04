@@ -905,23 +905,23 @@
     display: flex;
     gap: 1rem;
     margin-top: 2rem;
+    justify-content: center;
     animation: fadeSlideUp 0.4s ease-out;
     animation-delay: 1s;
     animation-fill-mode: both;
 }
 
 .btn-download {
-    flex: 1;
-    padding: 14px 24px;
-    border-radius: 12px;
+    padding: 14px 28px;
+    border-radius: 10px;
     font-size: 0.95rem;
-    font-weight: 700;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
     text-align: center;
     border: none;
     text-decoration: none;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
@@ -929,6 +929,12 @@
     background: linear-gradient(135deg, var(--accent), #d35400);
     color: white;
     box-shadow: 0 4px 15px var(--accent-glow);
+}
+
+.btn-download svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
 }
 
 .btn-download:hover {
@@ -2247,8 +2253,9 @@ function toggleTestResultCard(headerEl) {
 
 // ===== PDF DOWNLOAD =====
         function downloadTestPDF() {
-            if (!lastResults) return;
-            var results = lastResults;
+            if (!lastTestResults) return;
+            var results = lastTestResults;
+            var paper = currentTest;
             var jsPDF = window.jspdf.jsPDF;
             var doc = new jsPDF('p', 'mm', 'a4');
             
