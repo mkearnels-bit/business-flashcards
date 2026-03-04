@@ -433,6 +433,7 @@
     margin-top: 2rem;
     padding-top: 2rem;
     border-top: 1px solid var(--gray-200);
+    text-align: center;
 }
 
 .test-submit-message {
@@ -1346,16 +1347,35 @@ async function generateTest() {
         var data = await response.json();
         currentTest = data.paper;
 
-        // Animate to 100%
+        // Stop the fake progress bar
+        if (window.testProgressInterval) {
+            clearInterval(window.testProgressInterval);
+            window.testProgressInterval = null;
+        }
+
+        // Animate smoothly from current position to 100%
         var progressFill = document.getElementById('testProgressFill');
         var progressPct = document.getElementById('testProgressPercentage');
-        progressFill.style.transition = 'width 0.8s ease-out';
-        progressFill.style.width = '100%';
-        progressPct.textContent = '100%';
+        var currentWidth = parseFloat(progressFill.style.width) || 0;
+        var startTime = Date.now();
+        var animDuration = Math.max(400, (100 - currentWidth) * 15); // faster if already near 100
 
-        setTimeout(function() {
-            document.getElementById('testReadyBtn').classList.add('show');
-        }, 1000);
+        var finishInterval = setInterval(function() {
+            var elapsed = Date.now() - startTime;
+            var progress = Math.min(elapsed / animDuration, 1);
+            var currentPct = currentWidth + (100 - currentWidth) * progress;
+            progressFill.style.width = currentPct + '%';
+            progressPct.textContent = Math.round(currentPct) + '%';
+
+            if (progress >= 1) {
+                clearInterval(finishInterval);
+                progressFill.style.width = '100%';
+                progressPct.textContent = '100%';
+                setTimeout(function() {
+                    document.getElementById('testReadyBtn').classList.add('show');
+                }, 300);
+            }
+        }, 30);
 
     } catch (error) {
         console.error('Test generation error:', error);
@@ -1370,7 +1390,7 @@ function startTestProgressBar(duration) {
     var startTime = Date.now();
     var maxDuration = duration * 1000;
 
-    var progressInterval = setInterval(function() {
+    window.testProgressInterval = setInterval(function() {
         var elapsed = Date.now() - startTime;
         var percentage = Math.min((elapsed / maxDuration) * 100, 90);
 
@@ -1378,7 +1398,8 @@ function startTestProgressBar(duration) {
         progressPct.textContent = Math.round(percentage) + '%';
 
         if (elapsed >= maxDuration) {
-            clearInterval(progressInterval);
+            clearInterval(window.testProgressInterval);
+            window.testProgressInterval = null;
         }
     }, 100);
 }
