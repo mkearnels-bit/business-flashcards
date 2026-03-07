@@ -1451,83 +1451,52 @@ async function checkAuth() {
 }
 
 // ===== FREE TRIAL CHECK =====
-var FREE_TRIAL_LIMIT = 5;
-
+// Uses server-side PostgreSQL function — no RLS/permission issues
 async function checkFreeTrialAndGenerate() {
     try {
-        var sessionResult = await supabaseClient.auth.getSession();
-        var session = sessionResult.data.session;
-        if (!session) {
-            showError('Session expired. Please log in again.');
+        // Call the server-side function that checks plan AND increments counter atomically
+        var { data, error } = await supabaseClient.rpc('use_free_trial');
+
+        console.log('Free trial RPC result:', data, 'Error:', error);
+
+        if (error) {
+            console.error('Free trial RPC error:', error.message);
+            // On error, show a message rather than giving free access
+            showError('Unable to verify your subscription. Please refresh and try again.');
             return;
         }
 
-        // Check subscription status (must be active AND a paid plan, not 'free')
-        var subResult = await supabaseClient
-            .from('subscriptions')
-            .select('status, plan, expires_at')
-            .eq('user_id', session.user.id)
-            .eq('status', 'active')
-            .maybeSingle();
+        if (!data || !data.allowed) {
+            var reason = data ? data.reason : 'unknown';
+            console.log('Access denied. Reason:', reason);
 
-        var hasActiveSubscription = false;
-        console.log('Subscription check result:', subResult.data);
-        if (subResult.data && subResult.data.plan !== 'free') {
-            // Check if subscription hasn't expired
-            if (!subResult.data.expires_at || new Date(subResult.data.expires_at) > new Date()) {
-                hasActiveSubscription = true;
-            }
-        }
-        console.log('Has active subscription:', hasActiveSubscription);
-
-        if (!hasActiveSubscription) {
-            // Count test generations
-            var countResult = await supabaseClient
-                .from('test_generations')
-                .select('id', { count: 'exact', head: true })
-                .eq('user_id', session.user.id);
-
-            var testsUsed = countResult.count || 0;
-            console.log('Free trial tests used:', testsUsed, '/ Limit:', FREE_TRIAL_LIMIT);
-
-            if (testsUsed >= FREE_TRIAL_LIMIT) {
+            if (reason === 'limit_reached') {
                 showPhase('paywall');
-                return;
+            } else if (reason === 'not_authenticated') {
+                showError('Please log in to take a test.');
+            } else if (reason === 'no_subscription') {
+                showError('Account setup incomplete. Please log out and log back in.');
+            } else {
+                showError('Unable to start test. Please try again.');
             }
+            return;
         }
 
-        // Allowed — generate the test
+        // Access granted
+        if (data.unlimited) {
+            console.log('Paid subscriber (' + data.plan + ') — unlimited access');
+        } else {
+            console.log('Free trial: ' + data.tests_used + ' used, ' + data.tests_remaining + ' remaining');
+        }
+
         generateTest();
     } catch (error) {
         console.error('Free trial check error:', error);
-        // If check fails, allow the test anyway (don't block on errors)
-        generateTest();
+        showError('Something went wrong. Please refresh and try again.');
     }
 }
 
-// ===== TRACK TEST GENERATION =====
-async function trackTestGeneration() {
-    try {
-        var sessionResult = await supabaseClient.auth.getSession();
-        var session = sessionResult.data.session;
-        if (!session) { console.error('Track test: no session'); return; }
-
-        var result = await supabaseClient.from('test_generations').insert({
-            user_id: session.user.id,
-            board: currentBoard,
-            unit: currentUnit,
-            test_type: currentMode
-        });
-
-        if (result.error) {
-            console.error('Track test insert error:', result.error.message, result.error);
-        } else {
-            console.log('Test generation tracked successfully');
-        }
-    } catch (error) {
-        console.error('Failed to track test generation:', error);
-    }
-}
+// trackTestGeneration is no longer needed — the RPC function handles incrementing
 
 // ===== TEST GENERATION =====
 async function generateTest() {
@@ -1593,8 +1562,7 @@ async function generateTest() {
         var data = await response.json();
         currentTest = data.paper;
 
-        // Track this test generation for free trial counting
-        trackTestGeneration();
+        // Counter already incremented by the use_free_trial() RPC before we got here
 
         // Stop the fake progress bar
         if (window.testProgressInterval) {
