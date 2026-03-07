@@ -1471,12 +1471,14 @@ async function checkFreeTrialAndGenerate() {
             .maybeSingle();
 
         var hasActiveSubscription = false;
+        console.log('Subscription check result:', subResult.data);
         if (subResult.data && subResult.data.plan !== 'free') {
             // Check if subscription hasn't expired
             if (!subResult.data.expires_at || new Date(subResult.data.expires_at) > new Date()) {
                 hasActiveSubscription = true;
             }
         }
+        console.log('Has active subscription:', hasActiveSubscription);
 
         if (!hasActiveSubscription) {
             // Count test generations
@@ -1486,6 +1488,7 @@ async function checkFreeTrialAndGenerate() {
                 .eq('user_id', session.user.id);
 
             var testsUsed = countResult.count || 0;
+            console.log('Free trial tests used:', testsUsed, '/ Limit:', FREE_TRIAL_LIMIT);
 
             if (testsUsed >= FREE_TRIAL_LIMIT) {
                 showPhase('paywall');
@@ -1507,14 +1510,20 @@ async function trackTestGeneration() {
     try {
         var sessionResult = await supabaseClient.auth.getSession();
         var session = sessionResult.data.session;
-        if (!session) return;
+        if (!session) { console.error('Track test: no session'); return; }
 
-        await supabaseClient.from('test_generations').insert({
+        var result = await supabaseClient.from('test_generations').insert({
             user_id: session.user.id,
             board: currentBoard,
             unit: currentUnit,
             test_type: currentMode
         });
+
+        if (result.error) {
+            console.error('Track test insert error:', result.error.message, result.error);
+        } else {
+            console.log('Test generation tracked successfully');
+        }
     } catch (error) {
         console.error('Failed to track test generation:', error);
     }
