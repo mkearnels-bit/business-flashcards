@@ -1462,16 +1462,16 @@ async function checkFreeTrialAndGenerate() {
             return;
         }
 
-        // Check subscription status
+        // Check subscription status (must be active AND a paid plan, not 'free')
         var subResult = await supabaseClient
             .from('subscriptions')
-            .select('status, expires_at')
+            .select('status, plan, expires_at')
             .eq('user_id', session.user.id)
             .eq('status', 'active')
             .maybeSingle();
 
         var hasActiveSubscription = false;
-        if (subResult.data) {
+        if (subResult.data && subResult.data.plan !== 'free') {
             // Check if subscription hasn't expired
             if (!subResult.data.expires_at || new Date(subResult.data.expires_at) > new Date()) {
                 hasActiveSubscription = true;

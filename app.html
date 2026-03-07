@@ -2843,5 +2843,87 @@
             }
         })();
     </script>
+
+    <!-- FREE PLAN WELCOME POPUP -->
+    <div id="welcomePopupOverlay" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:10000; justify-content:center; align-items:center; animation: fadeIn 0.3s ease;">
+        <div style="background:white; border-radius:20px; max-width:480px; width:90%; margin:auto; overflow:hidden; box-shadow:0 25px 60px rgba(0,0,0,0.3); animation: slideUp 0.4s ease;">
+            <!-- Header -->
+            <div style="background:linear-gradient(135deg, #1e3a5f, #2d5a8a); padding:2rem 2rem 1.5rem; text-align:center; color:white;">
+                <div style="font-size:2.5rem; margin-bottom:0.5rem;">🎉</div>
+                <h2 style="font-size:1.4rem; font-weight:800; margin-bottom:0.25rem;" id="welcomePopupTitle">Welcome to MyBizStudies!</h2>
+                <p style="font-size:0.9rem; opacity:0.85;">Your exam practice journey starts here</p>
+            </div>
+            <!-- Body -->
+            <div style="padding:1.5rem 2rem;">
+                <div style="background:#f0f7ff; border-radius:12px; padding:1rem 1.25rem; margin-bottom:1.25rem; border-left:4px solid #e67e22;">
+                    <div style="font-weight:700; color:#1e3a5f; margin-bottom:0.25rem; font-size:0.95rem;">🎯 You're on the Free Plan</div>
+                    <div style="color:#475569; font-size:0.85rem; line-height:1.5;">You have <strong style="color:#e67e22;">5 free exam practices</strong> to try out our AI-powered exam marking. Use them wisely!</div>
+                </div>
+                <div style="margin-bottom:1.25rem;">
+                    <div style="font-weight:600; color:#1e3a5f; margin-bottom:0.75rem; font-size:0.9rem;">What you can do:</div>
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:0.5rem; color:#475569; font-size:0.85rem;">
+                        <span style="color:#27ae60; font-weight:bold;">✓</span> Generate AI exam papers for any unit or topic
+                    </div>
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:0.5rem; color:#475569; font-size:0.85rem;">
+                        <span style="color:#27ae60; font-weight:bold;">✓</span> Get instant AI marking with examiner-style feedback
+                    </div>
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:0.5rem; color:#475569; font-size:0.85rem;">
+                        <span style="color:#27ae60; font-weight:bold;">✓</span> Access 400+ revision flashcards
+                    </div>
+                    <div style="display:flex; align-items:center; gap:8px; color:#475569; font-size:0.85rem;">
+                        <span style="color:#27ae60; font-weight:bold;">✓</span> Track your progress on the dashboard
+                    </div>
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <button onclick="document.getElementById('welcomePopupOverlay').style.display='none'" style="flex:1; padding:12px; border:2px solid #e2e8f0; border-radius:10px; background:white; color:#475569; font-weight:600; font-size:0.9rem; cursor:pointer; font-family:inherit; transition:all 0.2s;">Start Exploring</button>
+                    <a href="pricing.html" style="flex:1; padding:12px; border:none; border-radius:10px; background:linear-gradient(135deg, #e67e22, #f39c12); color:white; font-weight:600; font-size:0.9rem; cursor:pointer; font-family:inherit; text-decoration:none; text-align:center; transition:all 0.2s; box-shadow:0 4px 12px rgba(230,126,34,0.3);">Upgrade Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+        @keyframes slideUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
+    </style>
+    <script>
+    // Show welcome popup for free plan users (once per account)
+    (async function() {
+        try {
+            // Reuse the existing supabaseClient from app.html
+            var result = await supabaseClient.auth.getSession();
+            var session = result.data.session;
+            if (!session) return;
+
+            var userId = session.user.id;
+            var popupKey = 'mbs_welcome_shown_' + userId;
+
+            // Only show once per user
+            if (localStorage.getItem(popupKey)) return;
+
+            // Check if user is on free plan
+            var subResult = await supabaseClient
+                .from('subscriptions')
+                .select('plan')
+                .eq('user_id', userId)
+                .maybeSingle();
+
+            if (subResult.data && subResult.data.plan === 'free') {
+                // Personalise with first name
+                var firstName = session.user.user_metadata?.full_name?.split(' ')[0] || session.user.user_metadata?.name?.split(' ')[0] || '';
+                if (firstName) {
+                    document.getElementById('welcomePopupTitle').textContent = 'Welcome, ' + firstName + '! 👋';
+                }
+
+                // Show popup after a short delay so page loads first
+                setTimeout(function() {
+                    document.getElementById('welcomePopupOverlay').style.display = 'flex';
+                    localStorage.setItem(popupKey, 'true');
+                }, 800);
+            }
+        } catch (e) {
+            console.error('Welcome popup error:', e);
+        }
+    })();
+    </script>
 </body>
 </html>
