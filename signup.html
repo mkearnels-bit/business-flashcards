@@ -194,8 +194,8 @@
             display: flex;
             align-items: flex-start;
             gap: 0.6rem;
-            margin-top: 1rem;
-            margin-bottom: 0.25rem;
+            margin-top: 0.5rem;
+            margin-bottom: 1.25rem;
         }
 
         .terms-checkbox input[type="checkbox"] {
@@ -389,16 +389,16 @@
                     <div class="password-requirements">Must be at least 8 characters</div>
                 </div>
 
-                <button type="submit" class="btn btn-primary" id="submitBtn">
-                    <span class="loading-spinner"></span>
-                    <span class="btn-text">Create Account</span>
-                </button>
-
                 <div class="terms-checkbox">
                     <input type="checkbox" id="agreeTerms">
                     <label for="agreeTerms">I agree to the <a href="terms.html" target="_blank">Terms of Service</a> and <a href="privacy.html" target="_blank">Privacy Policy</a></label>
                 </div>
                 <p class="terms-error" id="termsError">You must agree to the Terms of Service and Privacy Policy</p>
+
+                <button type="submit" class="btn btn-primary" id="submitBtn">
+                    <span class="loading-spinner"></span>
+                    <span class="btn-text">Create Account</span>
+                </button>
             </form>
 
             <div class="auth-footer">
