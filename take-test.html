@@ -2675,7 +2675,7 @@ async function saveTestResult(results, elapsed) {
             body: JSON.stringify({
                 test_type: currentMode === 'topic_test' ? 'topic_test' : 'unit_exam',
                 board: currentBoard,
-                unit: unitNumber || null,
+                unit: currentUnit || null,
                 topic: currentTopic || null,
                 test_title: currentTest.title,
                 duration_minutes: currentTest.duration_minutes,
