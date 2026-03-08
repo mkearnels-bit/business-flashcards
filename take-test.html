@@ -2660,6 +2660,52 @@ function closeTestModal() {
 
 
 // ===== FEEDBACK DISPLAY =====
+async function saveTestResult(results, elapsed) {
+    try {
+        var sessionResult = await supabaseClient.auth.getSession();
+        var session = sessionResult.data.session;
+        if (!session) return;
+
+        fetch('https://zyaywzzmjpctpodpxhge.supabase.co/functions/v1/save-test-result', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + session.access_token
+            },
+            body: JSON.stringify({
+                test_type: currentMode === 'topic_test' ? 'topic_test' : 'unit_exam',
+                board: currentBoard,
+                unit: unitNumber || null,
+                topic: currentTopic || null,
+                test_title: currentTest.title,
+                duration_minutes: currentTest.duration_minutes,
+                elapsed_seconds: elapsed,
+                paper_data: currentTest,
+                marking_results: results
+            })
+        }).then(function(resp) {
+            return resp.json();
+        }).then(function(data) {
+            console.log('Test result saved:', data);
+            if (data.coaching_triggered) {
+                // Fire and forget coaching generation
+                fetch('https://zyaywzzmjpctpodpxhge.supabase.co/functions/v1/generate-coaching', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + session.access_token
+                    },
+                    body: JSON.stringify({ force: true })
+                }).catch(function(e) { console.log('Coaching generation queued'); });
+            }
+        }).catch(function(err) {
+            console.error('Failed to save test result:', err);
+        });
+    } catch (e) {
+        console.error('Save test result error:', e);
+    }
+}
+
 function showTestFeedback(results) {
     lastTestResults = results;
     currentTestResults = results;
@@ -2724,6 +2770,9 @@ function showTestFeedback(results) {
     });
 
     document.getElementById('testOverallFeedback').textContent = overall;
+
+    // Save test result to database
+    saveTestResult(results, results.elapsed_seconds || 0);
 }
 
 // ===== QUESTION RESULTS =====
@@ -2816,10 +2865,10 @@ function toggleTestResultCard(headerEl) {
 
 
 // ===== PDF DOWNLOAD =====
-        function downloadTestPDF() {
-            if (!lastTestResults) return;
-            var results = lastTestResults;
-            var paper = currentTest;
+        function downloadTestPDF(resultsParam, paperParam) {
+            var results = resultsParam || lastTestResults;
+            var paper = paperParam || currentTest;
+            if (!results) { alert('No test results to download.'); return; }
             var jsPDF = window.jspdf.jsPDF;
             var doc = new jsPDF('p', 'mm', 'a4');
             
