@@ -2710,6 +2710,10 @@ function showTestFeedback(results) {
     lastTestResults = results;
     currentTestResults = results;
     stopTestTimer();
+
+    // Save test result to database FIRST (before DOM work that could error)
+    saveTestResult(results, results.elapsed_seconds || 0);
+
     showPhase('test-feedback');
 
     var totalPossible = results.total_possible || 0;
@@ -2770,9 +2774,6 @@ function showTestFeedback(results) {
     });
 
     document.getElementById('testOverallFeedback').textContent = overall;
-
-    // Save test result to database
-    saveTestResult(results, results.elapsed_seconds || 0);
 }
 
 // ===== QUESTION RESULTS =====
