@@ -1633,7 +1633,23 @@
             <a href="contact.html" class="site-nav-link">Contact Us</a>
             <a href="login.html" class="site-nav-btn site-nav-btn-ghost guest-only">Log In</a>
             <a href="signup.html" class="site-nav-btn site-nav-btn-primary guest-only">Get Started</a>
-            <button class="site-nav-btn site-nav-btn-ghost auth-only" id="navLogoutBtn" style="display:none;">Logout</button>
+            <div class="profile-dropdown-wrapper auth-only" style="display:none;">
+                <div class="profile-avatar" id="profileAvatar">--</div>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <a href="student-progress.html">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+                        Student Progress
+                    </a>
+                    <a href="account.html">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                        My Account
+                    </a>
+                    <button class="logout-item" id="navLogoutBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                        Log Out
+                    </button>
+                </div>
+            </div>
         </div>
         <button class="site-hamburger" id="siteHamburger" aria-label="Menu">
             <span></span>
@@ -2154,6 +2170,12 @@ async function checkAuth() {
     // Show auth elements
     document.querySelectorAll('.auth-only').forEach(function(el) { el.style.display = ''; });
     document.querySelectorAll('.guest-only').forEach(function(el) { el.style.display = 'none'; });
+
+    // Populate profile avatar
+    var profileAvatarEl = document.getElementById('profileAvatar');
+    if (profileAvatarEl && session.user && session.user.email) {
+        profileAvatarEl.textContent = getProfileInitials(session.user.email);
+    }
 
     // Populate profile dropdown
     var fullName = session.user.user_metadata && (session.user.user_metadata.full_name || session.user.user_metadata.name) || '';
@@ -3015,6 +3037,28 @@ document.addEventListener('click', function(e) {
         dropdown.classList.remove('open');
     }
 });
+
+// Profile dropdown
+function getProfileInitials(email) {
+    if (!email) return '--';
+    var parts = email.split('@')[0].split('.');
+    if (parts.length >= 2) return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
+    return email.substring(0, 2).toUpperCase();
+}
+
+var profileAvatar = document.getElementById('profileAvatar');
+var profileDropdown = document.getElementById('profileDropdown');
+if (profileAvatar && profileDropdown) {
+    profileAvatar.addEventListener('click', function(e) {
+        e.stopPropagation();
+        profileDropdown.classList.toggle('active');
+    });
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.profile-avatar') && !e.target.closest('.profile-dropdown')) {
+            profileDropdown.classList.remove('active');
+        }
+    });
+}
 
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded', function() {

@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <title>My Account | MyBizStudies</title>
+    <meta name="robots" content="noindex">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --primary: #1e3a5f;
+            --primary-dark: #152a45;
+            --primary-light: #2d5a8a;
+            --accent: #e67e22;
+            --accent-light: #f39c12;
+            --accent-glow: rgba(230, 126, 34, 0.3);
+            --white: #ffffff;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-900: #1e293b;
+            --success: #27ae60;
+            --error: #e74c3c;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-700);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ===== SITE NAVBAR ===== */
+        .site-navbar {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #f1f5f9;
+            padding: 0.75rem 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .site-navbar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .site-navbar-logo { height: 55px; width: auto; }
+        .site-nav-buttons {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .site-nav-link {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #334155;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .site-nav-link:hover { color: #1e3a5f; background: #f1f5f9; }
+        .site-nav-link.active { color: #e67e22; font-weight: 600; }
+        .site-nav-btn {
+            padding: 0.5rem 1.25rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 8px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-family: inherit;
+        }
+        .site-nav-btn-ghost {
+            color: #1e3a5f;
+            background: transparent;
+            border: 1px solid #cbd5e1;
+        }
+        .site-nav-btn-ghost:hover { background: #f1f5f9; border-color: #1e3a5f; }
+        .site-nav-btn-primary {
+            background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+        }
+        .site-nav-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(230, 126, 34, 0.4);
+        }
+        .site-hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 44px;
+            height: 44px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1100;
+            position: relative;
+        }
+        .site-hamburger span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: #1e3a5f;
+            border-radius: 2px;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: absolute;
+        }
+        .site-hamburger span:nth-child(1) { transform: translateY(-7px); }
+        .site-hamburger span:nth-child(2) { opacity: 1; }
+        .site-hamburger span:nth-child(3) { transform: translateY(7px); }
+        .site-hamburger.active span:nth-child(1) { transform: rotate(45deg); }
+        .site-hamburger.active span:nth-child(2) { opacity: 0; }
+        .site-hamburger.active span:nth-child(3) { transform: rotate(-45deg); }
+
+        .site-mobile-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 1040;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .site-mobile-overlay.active { opacity: 1; pointer-events: auto; }
+        .site-mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 280px;
+            height: 100%;
+            background: white;
+            z-index: 1050;
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
+            padding: 5.5rem 1.5rem 2rem;
+        }
+        .site-mobile-menu.active { transform: translateX(0); }
+        .site-mobile-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        .site-mobile-links a {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            padding: 0.875rem 1rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #334155;
+            transition: all 0.2s ease;
+        }
+        .site-mobile-links a:hover { background: #f1f5f9; color: #1e3a5f; }
+        .site-menu-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background: #f1f5f9;
+            flex-shrink: 0;
+        }
+        .site-menu-icon svg { width: 18px; height: 18px; stroke: #64748b; }
+        .site-mobile-divider { height: 1px; background: #f1f5f9; margin: 0.5rem 0; }
+        .site-mobile-cta {
+            margin-top: 0.5rem;
+            background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+            color: white !important;
+            justify-content: center;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+        }
+        .site-mobile-cta:hover { color: white !important; transform: translateY(-1px); }
+        .site-mobile-cta .site-menu-icon { display: none; }
+        .site-mobile-logout {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            padding: 0.875rem 1rem;
+            border-radius: 12px;
+            border: none;
+            background: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #e74c3c;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+        .site-mobile-logout:hover { background: rgba(231, 76, 60, 0.06); }
+        .site-mobile-logout .site-menu-icon { background: rgba(231, 76, 60, 0.08); }
+        .site-mobile-logout .site-menu-icon svg { stroke: #e74c3c; }
+
+        /* Profile Dropdown */
+        .profile-dropdown-wrapper {
+            position: relative;
+        }
+        .profile-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid #f1f5f9;
+            font-family: 'Inter', sans-serif;
+        }
+        .profile-avatar:hover {
+            box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
+            transform: scale(1.05);
+        }
+        .profile-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: rgba(255,255,255,0.98);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            border: 1px solid #e9ecef;
+            min-width: 200px;
+            display: none;
+            z-index: 2000;
+            overflow: hidden;
+        }
+        .profile-dropdown.active { display: block; }
+        .profile-dropdown a,
+        .profile-dropdown button {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            width: 100%;
+            padding: 0.7rem 1rem;
+            text-align: left;
+            border: none;
+            background: none;
+            color: #334155;
+            font-size: 0.88rem;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .profile-dropdown a:hover,
+        .profile-dropdown button:hover {
+            background: #f1f5f9;
+            color: #1e3a5f;
+        }
+        .profile-dropdown button.logout-item {
+            color: #e74c3c;
+            border-top: 1px solid #f1f5f9;
+        }
+        .profile-dropdown button.logout-item:hover {
+            background: #fef2f2;
+        }
+        .profile-dropdown svg {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+
+        .level-toggle {
+            display: flex;
+            align-items: center;
+            background: #f1f5f9;
+            border-radius: 8px;
+            padding: 3px;
+            gap: 0;
+            flex-shrink: 0;
+        }
+        .level-toggle-btn {
+            padding: 5px 14px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: inherit;
+            color: #64748b;
+            background: transparent;
+            white-space: nowrap;
+        }
+        .level-toggle-btn.active { background: #1e3a5f; color: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
+        .level-toggle-btn:hover:not(.active) { color: #1e3a5f; background: rgba(30, 58, 95, 0.08); }
+        .mobile-level-toggle {
+            display: flex;
+            align-items: center;
+            background: #f1f5f9;
+            border-radius: 10px;
+            padding: 4px;
+            margin-bottom: 1rem;
+            gap: 0;
+        }
+        .mobile-level-toggle .level-toggle-btn {
+            flex: 1;
+            padding: 8px 0;
+            font-size: 0.85rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        /* ===== PAGE CONTENT ===== */
+        .page-content {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 100px 1.5rem 4rem;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+        .page-subtitle {
+            color: var(--gray-500);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+        }
+
+        /* ===== CARDS ===== */
+        .account-card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid var(--gray-200);
+            padding: 1.75rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+        .card-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .card-icon svg {
+            width: 22px;
+            height: 22px;
+        }
+        .card-icon-blue { background: rgba(30, 58, 95, 0.08); }
+        .card-icon-blue svg { stroke: var(--primary); fill: none; }
+        .card-icon-orange { background: rgba(230, 126, 34, 0.1); }
+        .card-icon-orange svg { stroke: var(--accent); fill: none; }
+        .card-icon-red { background: rgba(231, 76, 60, 0.08); }
+        .card-icon-red svg { stroke: var(--error); fill: none; }
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* ===== FORM ELEMENTS ===== */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        .form-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            margin-bottom: 0.4rem;
+        }
+        .form-input {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            font-size: 0.95rem;
+            font-family: inherit;
+            border: 1.5px solid var(--gray-200);
+            border-radius: 10px;
+            background: var(--gray-50);
+            color: var(--gray-700);
+            transition: all 0.2s;
+            outline: none;
+        }
+        .form-input:focus {
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.08);
+        }
+        .form-input:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .form-hint {
+            font-size: 0.8rem;
+            color: var(--gray-400);
+            margin-top: 0.3rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.65rem 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            font-family: inherit;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(30, 58, 95, 0.2);
+        }
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(30, 58, 95, 0.3);
+        }
+        .btn-accent {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(230, 126, 34, 0.2);
+        }
+        .btn-accent:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(230, 126, 34, 0.3);
+        }
+        .btn-danger {
+            background: white;
+            color: var(--error);
+            border: 1.5px solid rgba(231, 76, 60, 0.3);
+        }
+        .btn-danger:hover:not(:disabled) {
+            background: rgba(231, 76, 60, 0.04);
+            border-color: var(--error);
+        }
+        .btn-ghost {
+            background: white;
+            color: var(--gray-600);
+            border: 1.5px solid var(--gray-200);
+        }
+        .btn-ghost:hover:not(:disabled) {
+            background: var(--gray-50);
+            border-color: var(--gray-300);
+        }
+
+        /* ===== PLAN BADGE ===== */
+        .plan-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            background: var(--gray-50);
+            border-radius: 12px;
+            margin-bottom: 1.25rem;
+        }
+        .plan-badge {
+            padding: 0.3rem 0.9rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .plan-badge-free {
+            background: var(--gray-100);
+            color: var(--gray-600);
+        }
+        .plan-badge-paid {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            color: white;
+        }
+        .plan-details {
+            flex: 1;
+        }
+        .plan-name {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1rem;
+        }
+        .plan-meta {
+            font-size: 0.82rem;
+            color: var(--gray-500);
+        }
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            top: 90px;
+            right: 1.5rem;
+            padding: 0.85rem 1.25rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            z-index: 2000;
+            transform: translateX(120%);
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            max-width: 380px;
+        }
+        .toast.show { transform: translateX(0); }
+        .toast-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .toast-error { background: #fce4ec; color: #c62828; border: 1px solid #f8bbd0; }
+
+        /* ===== DELETE MODAL ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 440px;
+            width: 90%;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+        .modal-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(231, 76, 60, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+        .modal-icon svg { width: 28px; height: 28px; stroke: var(--error); fill: none; }
+        .modal h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        .modal p {
+            color: var(--gray-500);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+        }
+        .modal-actions .btn { flex: 1; justify-content: center; }
+
+        .confirm-input {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            font-size: 0.95rem;
+            font-family: inherit;
+            border: 1.5px solid rgba(231, 76, 60, 0.3);
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .confirm-input:focus {
+            border-color: var(--error);
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.08);
+        }
+
+        /* ===== PASSWORD SECTION ===== */
+        .password-section {
+            display: none;
+            padding-top: 1.25rem;
+            border-top: 1px solid var(--gray-100);
+            margin-top: 0.25rem;
+        }
+        .password-section.active { display: block; }
+        .password-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--primary);
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+            padding: 0;
+            transition: color 0.2s;
+        }
+        .password-toggle:hover { color: var(--accent); }
+        .password-toggle svg { width: 16px; height: 16px; stroke: currentColor; fill: none; }
+
+        /* ===== GOOGLE BADGE ===== */
+        .google-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.25rem 0.7rem;
+            background: #f1f5f9;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--gray-500);
+        }
+        .google-badge img { width: 14px; height: 14px; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .site-nav-buttons { display: none; }
+            .site-hamburger { display: flex; }
+            .site-mobile-overlay { display: block; }
+            .site-mobile-menu { display: block; }
+            .site-navbar { padding: 0.5rem 1rem; }
+            .site-navbar-logo { height: 45px; }
+
+            .page-content { padding: 90px 1rem 3rem; }
+            .page-title { font-size: 1.5rem; }
+            .account-card { padding: 1.25rem; }
+            .plan-info { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+            .modal-actions { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="site-navbar" id="siteNavbar">
+    <div class="site-navbar-content">
+        <a href="index.html"><img src="logo.png" alt="MyBizStudies" class="site-navbar-logo"></a>
+        <div class="level-toggle" id="desktopLevelToggle">
+            <button class="level-toggle-btn active" data-level="alevel">A-Level</button>
+            <button class="level-toggle-btn" data-level="gcse">GCSE</button>
+        </div>
+        <div class="site-nav-buttons" id="siteNavButtons">
+            <a href="app.html" class="site-nav-link auth-only" style="display:none;">Flash Cards</a>
+            <a href="exam-skills-v2.html" class="site-nav-link auth-only" style="display:none;">Exam Skills</a>
+            <a href="exam-practice.html" class="site-nav-link auth-only" style="display:none;">Exam Practice</a>
+            <a href="notes.html" class="site-nav-link auth-only" style="display:none;">Study Notes</a>
+            <a href="blog.html" class="site-nav-link">Blog</a>
+            <a href="contact.html" class="site-nav-link">Contact Us</a>
+            <a href="login.html" class="site-nav-btn site-nav-btn-ghost guest-only">Log In</a>
+            <a href="signup.html" class="site-nav-btn site-nav-btn-primary guest-only">Get Started</a>
+            <div class="profile-dropdown-wrapper auth-only" style="display:none;">
+                <div class="profile-avatar" id="profileAvatar">--</div>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <a href="student-progress.html">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+                        Student Progress
+                    </a>
+                    <a href="account.html">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                        My Account
+                    </a>
+                    <button class="logout-item" id="navLogoutBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                        Log Out
+                    </button>
+                </div>
+            </div>
+        </div>
+        <button class="site-hamburger" id="siteHamburger" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="site-mobile-overlay" id="siteMobileOverlay"></div>
+<div class="site-mobile-menu" id="siteMobileMenu">
+    <div class="site-mobile-links">
+        <div class="mobile-level-toggle">
+            <button class="level-toggle-btn active" data-level="alevel">A-Level</button>
+            <button class="level-toggle-btn" data-level="gcse">GCSE</button>
+        </div>
+        <a href="app.html" class="auth-only" style="display:none;">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
+            Flash Cards
+        </a>
+        <a href="exam-skills-v2.html" class="auth-only" style="display:none;">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg></span>
+            Exam Skills
+        </a>
+        <a href="exam-practice.html" class="auth-only" style="display:none;">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z"/></svg></span>
+            Exam Practice
+        </a>
+        <a href="notes.html" class="auth-only" style="display:none;">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></span>
+            Study Notes
+        </a>
+        <div class="site-mobile-divider auth-only" style="display:none;"></div>
+        <a href="blog.html">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"/></svg></span>
+            Blog
+        </a>
+        <div class="site-mobile-divider"></div>
+        <a href="contact.html">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></span>
+            Contact Us
+        </a>
+        <div class="site-mobile-divider guest-only"></div>
+        <a href="login.html" class="guest-only">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"/></svg></span>
+            Log In
+        </a>
+        <a href="signup.html" class="site-mobile-cta guest-only">
+            Get Started
+        </a>
+        <div class="site-mobile-divider auth-only" style="display:none;"></div>
+        <button class="site-mobile-logout auth-only" id="mobileLogoutBtn" style="display:none;">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l3-3m0 0l-3-3m3 3H3"/></svg></span>
+            Logout
+        </button>
+    </div>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div class="toast toast-success" id="toastSuccess"></div>
+<div class="toast toast-error" id="toastError"></div>
+
+<!-- ===== PAGE CONTENT ===== -->
+<div class="page-content">
+
+    <h1 class="page-title">My Account</h1>
+    <p class="page-subtitle">Manage your profile, subscription, and preferences.</p>
+
+    <!-- ===== PROFILE SETTINGS ===== -->
+    <div class="account-card">
+        <div class="card-header">
+            <div class="card-icon card-icon-blue">
+                <svg viewBox="0 0 24 24" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div class="card-title">Profile Settings</div>
+        </div>
+
+        <form id="profileForm">
+            <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <input type="text" class="form-input" id="inputName" placeholder="Your full name">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" class="form-input" id="inputEmail" placeholder="your@email.com">
+                <div class="form-hint" id="emailHint"></div>
+            </div>
+
+            <div class="form-group" id="authProviderInfo" style="display:none;">
+                <div class="google-badge">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                    Signed in with Google
+                </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                <button type="submit" class="btn btn-primary" id="saveProfileBtn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+                    Save Changes
+                </button>
+                <button type="button" class="password-toggle" id="changePasswordToggle" onclick="togglePasswordSection()">
+                    <svg viewBox="0 0 24 24" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                    Change Password
+                </button>
+            </div>
+        </form>
+
+        <div class="password-section" id="passwordSection">
+            <form id="passwordForm">
+                <div class="form-group">
+                    <label class="form-label">New Password</label>
+                    <input type="password" class="form-input" id="inputNewPassword" placeholder="Enter new password" minlength="6">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Confirm New Password</label>
+                    <input type="password" class="form-input" id="inputConfirmPassword" placeholder="Confirm new password" minlength="6">
+                </div>
+                <div style="display: flex; gap: 0.75rem;">
+                    <button type="submit" class="btn btn-primary" id="savePasswordBtn">Update Password</button>
+                    <button type="button" class="btn btn-ghost" onclick="togglePasswordSection()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===== SUBSCRIPTION & PLAN ===== -->
+    <div class="account-card">
+        <div class="card-header">
+            <div class="card-icon card-icon-orange">
+                <svg viewBox="0 0 24 24" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            </div>
+            <div class="card-title">Subscription & Plan</div>
+        </div>
+
+        <div class="plan-info" id="planInfo">
+            <span class="plan-badge plan-badge-free" id="planBadge">FREE</span>
+            <div class="plan-details">
+                <div class="plan-name" id="planName">Free Plan</div>
+                <div class="plan-meta" id="planMeta">5 free exam practices included</div>
+            </div>
+        </div>
+
+        <div id="planActions">
+            <!-- Populated by JS based on plan -->
+        </div>
+    </div>
+
+    <!-- ===== DANGER ZONE ===== -->
+    <div class="account-card" style="border-color: rgba(231, 76, 60, 0.2);">
+        <div class="card-header">
+            <div class="card-icon card-icon-red">
+                <svg viewBox="0 0 24 24" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <div class="card-title" style="color: var(--error);">Danger Zone</div>
+        </div>
+        <p style="font-size: 0.9rem; color: var(--gray-500); margin-bottom: 1rem; line-height: 1.5;">
+            Permanently delete your account and all associated data. This action cannot be undone.
+        </p>
+        <button class="btn btn-danger" onclick="showDeleteModal()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+            Delete My Account
+        </button>
+    </div>
+
+</div>
+
+<!-- ===== DELETE CONFIRMATION MODAL ===== -->
+<div class="modal-overlay" id="deleteModal">
+    <div class="modal">
+        <div class="modal-icon">
+            <svg viewBox="0 0 24 24" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <h3>Delete Your Account?</h3>
+        <p>This will permanently delete your account, progress, and subscription data. Type <strong>DELETE</strong> to confirm.</p>
+        <input type="text" class="confirm-input" id="deleteConfirmInput" placeholder='Type "DELETE" to confirm' autocomplete="off">
+        <div class="modal-actions">
+            <button class="btn btn-ghost" onclick="hideDeleteModal()">Cancel</button>
+            <button class="btn btn-danger" id="confirmDeleteBtn" onclick="deleteAccount()" disabled>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                Delete Forever
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ===== SUPABASE INIT =====
+var supabaseUrl = 'https://zyaywzzmjpctpodpxhge.supabase.co';
+var supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
+var supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+var currentUser = null;
+var currentSubscription = null;
+var isGoogleUser = false;
+
+// ===== AUTH CHECK =====
+async function checkAuth() {
+    try {
+        var result = await supabaseClient.auth.getSession();
+        var session = result.data.session;
+        if (!session) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        currentUser = session.user;
+
+        // Show auth elements
+        document.querySelectorAll('.auth-only').forEach(function(el) { el.style.display = ''; });
+        document.querySelectorAll('.guest-only').forEach(function(el) { el.style.display = 'none'; });
+
+        // Populate profile avatar
+        if (profileAvatar && session.user && session.user.email) {
+            profileAvatar.textContent = getProfileInitials(session.user.email);
+        }
+
+        // Populate profile form
+        var meta = currentUser.user_metadata || {};
+        document.getElementById('inputName').value = meta.full_name || meta.name || '';
+        document.getElementById('inputEmail').value = currentUser.email || '';
+
+        // Check if Google user
+        var provider = currentUser.app_metadata && currentUser.app_metadata.provider;
+        isGoogleUser = (provider === 'google');
+        if (isGoogleUser) {
+            document.getElementById('authProviderInfo').style.display = '';
+            document.getElementById('changePasswordToggle').style.display = 'none';
+            document.getElementById('emailHint').textContent = 'Email is managed by Google and cannot be changed here.';
+            document.getElementById('inputEmail').disabled = true;
+        }
+
+        // Load subscription data
+        loadSubscription();
+
+    } catch (error) {
+        console.error('Auth error:', error);
+        window.location.href = 'login.html';
+    }
+}
+
+// ===== LOAD SUBSCRIPTION =====
+async function loadSubscription() {
+    try {
+        var { data, error } = await supabaseClient
+            .from('subscriptions')
+            .select('*')
+            .eq('user_id', currentUser.id)
+            .limit(1)
+            .single();
+
+        if (error || !data) {
+            currentSubscription = { plan: 'free', status: 'active', free_tests_used: 0 };
+        } else {
+            currentSubscription = data;
+        }
+
+        renderPlanInfo();
+    } catch (err) {
+        console.error('Subscription load error:', err);
+        currentSubscription = { plan: 'free', status: 'active', free_tests_used: 0 };
+        renderPlanInfo();
+    }
+}
+
+// ===== RENDER PLAN INFO =====
+function renderPlanInfo() {
+    var badge = document.getElementById('planBadge');
+    var name = document.getElementById('planName');
+    var meta = document.getElementById('planMeta');
+    var actions = document.getElementById('planActions');
+
+    var plan = currentSubscription.plan || 'free';
+    var status = currentSubscription.status || 'active';
+
+    if (plan === 'free') {
+        badge.className = 'plan-badge plan-badge-free';
+        badge.textContent = 'FREE';
+        name.textContent = 'Free Plan';
+        var used = currentSubscription.free_tests_used || 0;
+        var remaining = Math.max(0, 5 - used);
+        meta.textContent = remaining + ' of 5 free practices remaining';
+        actions.innerHTML =
+            '<a href="pricing.html" class="btn btn-accent" style="text-decoration:none;">' +
+                '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>' +
+                'Upgrade to Premium' +
+            '</a>';
+    } else {
+        badge.className = 'plan-badge plan-badge-paid';
+        badge.textContent = plan.toUpperCase();
+        name.textContent = plan.charAt(0).toUpperCase() + plan.slice(1) + ' Plan';
+
+        var metaText = 'Status: ' + (status === 'active' ? 'Active' : status);
+        if (currentSubscription.expires_at) {
+            var expDate = new Date(currentSubscription.expires_at);
+            var now = new Date();
+            if (expDate > now) {
+                metaText += ' \u00b7 Renews ' + expDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+            } else {
+                metaText += ' \u00b7 Expired ' + expDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+            }
+        }
+        meta.textContent = metaText;
+
+        actions.innerHTML =
+            '<p style="font-size:0.88rem; color:var(--gray-500); line-height:1.5;">To manage your subscription, billing, or request a cancellation, please <a href="contact.html" style="color:var(--accent); font-weight:600;">contact us</a>.</p>';
+    }
+}
+
+// ===== SAVE PROFILE =====
+document.getElementById('profileForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    var nameVal = document.getElementById('inputName').value.trim();
+    var emailVal = document.getElementById('inputEmail').value.trim();
+
+    if (!nameVal) {
+        showToast('Please enter your name.', 'error');
+        return;
+    }
+
+    var btn = document.getElementById('saveProfileBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><circle cx="12" cy="12" r="10"/></svg> Saving...';
+
+    try {
+        var updateData = { data: { full_name: nameVal } };
+
+        // Only update email if it changed and user is not Google
+        if (!isGoogleUser && emailVal !== currentUser.email) {
+            updateData.email = emailVal;
+        }
+
+        var { data, error } = await supabaseClient.auth.updateUser(updateData);
+
+        if (error) throw error;
+
+        // Also update name in subscriptions table
+        await supabaseClient
+            .from('subscriptions')
+            .update({ name: nameVal, email: emailVal })
+            .eq('user_id', currentUser.id);
+
+        if (updateData.email) {
+            showToast('Profile updated! Check your new email for a confirmation link.', 'success');
+        } else {
+            showToast('Profile updated successfully!', 'success');
+        }
+
+        // Refresh user
+        var refreshResult = await supabaseClient.auth.getUser();
+        if (refreshResult.data.user) currentUser = refreshResult.data.user;
+
+    } catch (err) {
+        console.error('Profile update error:', err);
+        showToast(err.message || 'Failed to update profile.', 'error');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Save Changes';
+    }
+});
+
+// ===== CHANGE PASSWORD =====
+function togglePasswordSection() {
+    var section = document.getElementById('passwordSection');
+    section.classList.toggle('active');
+    if (section.classList.contains('active')) {
+        document.getElementById('inputNewPassword').focus();
+    }
+}
+
+document.getElementById('passwordForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    var newPw = document.getElementById('inputNewPassword').value;
+    var confirmPw = document.getElementById('inputConfirmPassword').value;
+
+    if (newPw.length < 6) {
+        showToast('Password must be at least 6 characters.', 'error');
+        return;
+    }
+    if (newPw !== confirmPw) {
+        showToast('Passwords do not match.', 'error');
+        return;
+    }
+
+    var btn = document.getElementById('savePasswordBtn');
+    btn.disabled = true;
+    btn.textContent = 'Updating...';
+
+    try {
+        var { data, error } = await supabaseClient.auth.updateUser({ password: newPw });
+        if (error) throw error;
+
+        showToast('Password updated successfully!', 'success');
+        document.getElementById('inputNewPassword').value = '';
+        document.getElementById('inputConfirmPassword').value = '';
+        togglePasswordSection();
+
+    } catch (err) {
+        console.error('Password update error:', err);
+        showToast(err.message || 'Failed to update password.', 'error');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'Update Password';
+    }
+});
+
+// ===== DELETE ACCOUNT =====
+function showDeleteModal() {
+    document.getElementById('deleteModal').classList.add('active');
+    document.getElementById('deleteConfirmInput').value = '';
+    document.getElementById('confirmDeleteBtn').disabled = true;
+    document.getElementById('deleteConfirmInput').focus();
+}
+
+function hideDeleteModal() {
+    document.getElementById('deleteModal').classList.remove('active');
+}
+
+document.getElementById('deleteConfirmInput').addEventListener('input', function() {
+    document.getElementById('confirmDeleteBtn').disabled = (this.value.trim() !== 'DELETE');
+});
+
+async function deleteAccount() {
+    var input = document.getElementById('deleteConfirmInput');
+    if (input.value.trim() !== 'DELETE') return;
+
+    var btn = document.getElementById('confirmDeleteBtn');
+    btn.disabled = true;
+    btn.innerHTML = 'Deleting...';
+
+    try {
+        // Server-side function deletes all user data + auth record
+        var { data, error } = await supabaseClient.rpc('delete_user_account');
+
+        if (error) throw error;
+
+        if (data && data.success) {
+            await supabaseClient.auth.signOut();
+            showToast('Your account has been deleted. Redirecting...', 'success');
+            setTimeout(function() {
+                window.location.href = 'index.html';
+            }, 2000);
+        } else {
+            throw new Error((data && data.error) || 'Deletion failed');
+        }
+
+    } catch (err) {
+        console.error('Delete error:', err);
+        showToast('Something went wrong. Please contact support.', 'error');
+        btn.disabled = false;
+        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg> Delete Forever';
+    }
+}
+
+// ===== TOASTS =====
+function showToast(message, type) {
+    var toast = document.getElementById(type === 'success' ? 'toastSuccess' : 'toastError');
+    toast.textContent = message;
+    toast.classList.add('show');
+    setTimeout(function() {
+        toast.classList.remove('show');
+    }, 4000);
+}
+
+// ===== LOGOUT =====
+async function handleLogout() {
+    await supabaseClient.auth.signOut();
+    window.location.href = 'login.html';
+}
+
+// ===== MOBILE MENU =====
+function setupMobileMenu() {
+    var hamburger = document.getElementById('siteHamburger');
+    var overlay = document.getElementById('siteMobileOverlay');
+    var menu = document.getElementById('siteMobileMenu');
+
+    function toggleMenu() {
+        hamburger.classList.toggle('active');
+        overlay.classList.toggle('active');
+        menu.classList.toggle('active');
+    }
+
+    hamburger.addEventListener('click', toggleMenu);
+    overlay.addEventListener('click', toggleMenu);
+}
+
+// ===== SPINNER ANIMATION =====
+var styleSheet = document.createElement('style');
+styleSheet.textContent = '@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }';
+document.head.appendChild(styleSheet);
+
+// Profile dropdown
+function getProfileInitials(email) {
+    if (!email) return '--';
+    var parts = email.split('@')[0].split('.');
+    if (parts.length >= 2) return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
+    return email.substring(0, 2).toUpperCase();
+}
+
+var profileAvatar = document.getElementById('profileAvatar');
+var profileDropdown = document.getElementById('profileDropdown');
+if (profileAvatar && profileDropdown) {
+    profileAvatar.addEventListener('click', function(e) {
+        e.stopPropagation();
+        profileDropdown.classList.toggle('active');
+    });
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.profile-avatar') && !e.target.closest('.profile-dropdown')) {
+            profileDropdown.classList.remove('active');
+        }
+    });
+}
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', function() {
+    checkAuth();
+    setupMobileMenu();
+
+    var mobileLogout = document.getElementById('mobileLogoutBtn');
+    if (mobileLogout) mobileLogout.addEventListener('click', handleLogout);
+    var navLogout = document.getElementById('navLogoutBtn');
+    if (navLogout) navLogout.addEventListener('click', handleLogout);
+});
+</script>
+
+</body>
+</html>
