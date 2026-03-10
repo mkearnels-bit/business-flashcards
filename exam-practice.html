@@ -4041,10 +4041,15 @@ async function performTestSubmission(studentAnswers, studentAnswerTexts) {
                 var studentAns = studentAnswerMap[qr.question_id] !== undefined
                     ? studentAnswerMap[qr.question_id]
                     : (studentAnswerTexts[idx] || '');
-                // Look up question text from the paper data
-                var paperQuestion = currentTest && currentTest.questions
-                    ? currentTest.questions.find(function(q) { return q.id === qr.question_id; })
-                    : null;
+                // Look up question text from the paper data (try ID match first, then index fallback)
+                var paperQuestion = null;
+                if (currentTest && currentTest.questions) {
+                    paperQuestion = currentTest.questions.find(function(q) { return q.id === qr.question_id; });
+                    if (!paperQuestion && idx < currentTest.questions.length) {
+                        paperQuestion = currentTest.questions[idx];
+                    }
+                }
+                var qText = qr.question_text || (paperQuestion ? paperQuestion.text : '') || '';
                 return {
                     question_display: qr.question_display || ('Q' + (idx + 1)),
                     marks_awarded: qr.marks || 0,
@@ -4055,7 +4060,7 @@ async function performTestSubmission(studentAnswers, studentAnswerTexts) {
                     improved_paragraph: qr.improved_paragraph || '',
                     example_answer: qr.example_answer || '',
                     student_answer: studentAns,
-                    question_text: paperQuestion ? paperQuestion.text : '',
+                    question_text: qText,
                     question_type: qr.marking_method || qr.question_type || 'points_based',
                     question_id: qr.question_id || '',
                     ao_breakdown: qr.ao_breakdown || null,
