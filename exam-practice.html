@@ -1872,6 +1872,19 @@
     font-size: 0.95em;
 }
 
+/* ===== AI DISCLAIMER FOOTER ===== */
+.ai-disclaimer-footer {
+    margin-top: 24px;
+    padding: 14px 18px;
+    background: #f8f9fa;
+    border-left: 3px solid #bdc3c7;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    color: #7f8c8d;
+    line-height: 1.5;
+    text-align: left;
+}
+
 /* ===== MODAL ===== */
 .test-modal-overlay {
     display: none;
@@ -2881,6 +2894,7 @@
     <div class="phase" id="phase-test-exam">
         <div class="test-exam-header">
             <div class="test-exam-title" id="testExamTitle"></div>
+            <div class="test-exam-subtitle" style="font-size:0.8rem;color:#95a5a6;margin-top:2px;">AI-generated practice paper in the style of the relevant exam board</div>
             <div class="test-exam-timer" id="testExamTimer">00:00:00</div>
             <div class="test-exam-marks" id="testExamMarks"></div>
         </div>
@@ -3737,7 +3751,8 @@ function renderTestExam(paperData) {
     var submitSection = document.createElement('div');
     submitSection.className = 'test-submit-section';
     submitSection.innerHTML = '<div class="test-submit-message">Review your answers before submitting</div>' +
-        '<button class="action-btn action-btn-primary" onclick="submitTestAnswers()" style="padding: 14px 40px; font-size: 1.05em;">Submit Test</button>';
+        '<button class="action-btn action-btn-primary" onclick="submitTestAnswers()" style="padding: 14px 40px; font-size: 1.05em;">Submit Test</button>' +
+        '<div class="ai-disclaimer-footer">This is an AI-generated practice paper designed to reflect the style of the relevant exam board. It is not produced by, endorsed by, or affiliated with any exam board. Always refer to official specifications and past papers as your primary resource.</div>';
     examContent.appendChild(submitSection);
 }
 
@@ -4072,6 +4087,16 @@ function showTestFeedback(results) {
     });
 
     document.getElementById('testOverallFeedback').textContent = overall;
+
+    // Add disclaimer to results
+    var disclaimerEl = document.getElementById('testResultsDisclaimer');
+    if (!disclaimerEl) {
+        disclaimerEl = document.createElement('div');
+        disclaimerEl.id = 'testResultsDisclaimer';
+        disclaimerEl.className = 'ai-disclaimer-footer';
+        disclaimerEl.textContent = 'This practice paper and all feedback were AI-generated in the style of the relevant exam board. Not produced by, endorsed by, or affiliated with any exam board. Always use official specifications, mark schemes and past papers as your primary source of guidance.';
+        document.getElementById('testOverallFeedback').parentNode.appendChild(disclaimerEl);
+    }
 }
 
 function renderTestQuestionResults(questions) {
@@ -4489,6 +4514,13 @@ async function generateQuestion() {
 function renderQuestion(q) {
     var html = '';
 
+    // Board style label
+    var boardData = BOARD_DATA[currentBoard];
+    var boardLabel = boardData ? boardData.name + ' Style' : '';
+    if (boardLabel) {
+        html += '<div style="text-align:center;margin-bottom:12px;"><span style="display:inline-block;padding:4px 14px;background:#f0f0f0;border-radius:20px;font-size:0.8rem;color:#7f8c8d;font-weight:600;">' + escapeHtml(boardLabel) + ' Question</span></div>';
+    }
+
     // Case Study Card
     html += '<div class="case-study-card">';
     html += '<div class="case-study-header">';
@@ -4856,6 +4888,8 @@ function renderFeedback(marking, question) {
     html += 'View Progress</button>';
     html += '</div>';
 
+    html += '<div class="ai-disclaimer-footer">This question and feedback were AI-generated in the style of the relevant exam board. Not produced by or affiliated with any exam board. Always refer to official mark schemes and specifications.</div>';
+
     document.getElementById('feedbackDisplay').innerHTML = html;
 
     // Animate score counter
@@ -5081,6 +5115,19 @@ document.addEventListener('click', function(e) {
 });
 
 // ===== INIT =====
+// ===== DISCLAIMER POPUP =====
+function showDisclaimerIfNeeded() {
+    if (localStorage.getItem('mybizstudies_disclaimer_accepted')) return;
+    var overlay = document.getElementById('disclaimerOverlay');
+    if (overlay) overlay.classList.add('active');
+}
+
+function acceptDisclaimer() {
+    localStorage.setItem('mybizstudies_disclaimer_accepted', 'true');
+    var overlay = document.getElementById('disclaimerOverlay');
+    if (overlay) overlay.classList.remove('active');
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     checkAuth();
     setupMobileMenu();
@@ -5090,8 +5137,114 @@ document.addEventListener('DOMContentLoaded', function() {
     if (mobileLogout) mobileLogout.addEventListener('click', handleLogout);
     var navLogout = document.getElementById('navLogoutBtn');
     if (navLogout) navLogout.addEventListener('click', handleLogout);
+
+    // Show disclaimer on first visit
+    setTimeout(showDisclaimerIfNeeded, 500);
 });
 </script>
+
+<!-- ===== DISCLAIMER POPUP ===== -->
+<style>
+.disclaimer-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    z-index: 10001;
+    justify-content: center;
+    align-items: center;
+    animation: disclaimerOverlayIn 0.3s ease;
+}
+.disclaimer-overlay.active { display: flex; }
+@keyframes disclaimerOverlayIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes disclaimerPopIn { from { opacity: 0; transform: scale(0.9) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+
+.disclaimer-popup {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 560px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    animation: disclaimerPopIn 0.4s ease;
+    text-align: center;
+}
+.disclaimer-icon {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, #e67e22, #f39c12);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+}
+.disclaimer-icon svg {
+    width: 28px;
+    height: 28px;
+    stroke: white;
+    fill: none;
+}
+.disclaimer-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 16px;
+}
+.disclaimer-text {
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.65;
+    text-align: left;
+    margin-bottom: 24px;
+}
+.disclaimer-text p {
+    margin-bottom: 12px;
+}
+.disclaimer-text p:last-child {
+    margin-bottom: 0;
+}
+.disclaimer-accept-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 32px;
+    background: linear-gradient(135deg, #e67e22, #f39c12);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.disclaimer-accept-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(230, 126, 34, 0.4);
+}
+</style>
+
+<div class="disclaimer-overlay" id="disclaimerOverlay">
+    <div class="disclaimer-popup">
+        <div class="disclaimer-icon">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+            </svg>
+        </div>
+        <div class="disclaimer-title">Before You Begin</div>
+        <div class="disclaimer-text">
+            <p>Welcome to Exam Practice! Please note the following before you get started:</p>
+            <p>All questions, assessments and feedback on this platform are <strong>generated using AI</strong>. They are designed to reflect the style and structure used by specific exam boards, but they are <strong>not produced by, endorsed by, or affiliated with any exam board</strong>.</p>
+            <p>This tool is intended to <strong>support your learning and revision</strong>. It should be used alongside your exam board's official specification, mark schemes and past paper examples, which should always remain your primary source of guidance.</p>
+            <p>MyBizStudies is a revision aid and does not guarantee any specific exam outcomes. Your teacher and official exam board resources should always be your first point of reference.</p>
+        </div>
+        <button class="disclaimer-accept-btn" onclick="acceptDisclaimer()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><polyline points="20 6 9 17 4 12"/></svg>
+            I Understand, Let's Go
+        </button>
+    </div>
+</div>
 
 <!-- ===== REVIEW COLLECTION POPUP ===== -->
 <style>
