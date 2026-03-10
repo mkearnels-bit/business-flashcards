@@ -652,6 +652,27 @@
             background: rgba(230, 126, 34, 0.04);
         }
 
+        .custom-topic-input {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            color: var(--gray-700);
+            background: white;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            box-sizing: border-box;
+        }
+        .custom-topic-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.1);
+        }
+        .custom-topic-input::placeholder {
+            color: var(--gray-400);
+        }
+
         .qtype-marks {
             width: 44px; height: 44px;
             border-radius: 10px;
@@ -2840,7 +2861,7 @@
 
 
         <!-- Question Type Selection (shown after unit) -->
-        <div id="qtypeSection" style="display:none;"></div>
+        <div id="qtypeSection" style="display:none; margin-top:1.5rem;"></div>
 
         <!-- Generate Button -->
         <div id="generateSection" style="display:none;">
@@ -5042,6 +5063,15 @@ function renderQuestionTypes() {
         qtypes = boardData.questionTypesByPaper[currentUnit];
     }
     var html = '<div class="qtype-section">';
+
+    // Custom topic input
+    html += '<div class="section-title" style="font-size:1.2rem; margin-top:1.5rem;">What would you like a question on?</div>';
+    html += '<div class="section-subtitle">Describe the topic or leave blank for a random question</div>';
+    html += '<div style="margin-bottom:1.5rem;">';
+    html += '<input type="text" id="customTopicInput" class="custom-topic-input" placeholder="e.g. Price elasticity of demand, Cash flow forecasting, Motivation theories..." maxlength="200">';
+    html += '<div id="customTopicError" style="color:#e74c3c; font-size:0.8rem; margin-top:0.4rem; display:none;"></div>';
+    html += '</div>';
+
     html += '<div class="section-title" style="font-size:1.2rem;">Select Question Type</div>';
     html += '<div class="section-subtitle">Choose the type and mark allocation</div>';
     html += '<div class="qtype-grid">';
@@ -5061,6 +5091,79 @@ function renderQuestionTypes() {
     document.getElementById('generateSection').style.display = 'block';
 }
 
+// Validate custom topic input is business studies related
+function validateCustomTopic(topic) {
+    if (!topic || topic.trim() === '') return { valid: true, topic: '' }; // blank is fine
+
+    var trimmed = topic.trim();
+
+    // Too short to be meaningful
+    if (trimmed.length < 3) {
+        return { valid: false, error: 'Please enter a more specific topic or leave blank for a random question.' };
+    }
+
+    // Block obvious nonsense / non-business input
+    var nonsensePatterns = [
+        /^[^a-zA-Z]*$/, // no letters at all
+        /(.)\1{4,}/, // repeated characters like "aaaaa"
+        /^(hi|hello|hey|lol|test|asdf|qwerty|abc|xyz|help|please|thanks)/i,
+    ];
+    for (var i = 0; i < nonsensePatterns.length; i++) {
+        if (nonsensePatterns[i].test(trimmed)) {
+            return { valid: false, error: 'That doesn\'t look like a business studies topic. Try something like "supply and demand" or "marketing mix".' };
+        }
+    }
+
+    // Business studies keyword check - at least one relevant term should appear
+    var businessKeywords = [
+        'market', 'business', 'profit', 'revenue', 'cost', 'price', 'demand', 'supply',
+        'finance', 'cash', 'budget', 'invest', 'share', 'stakeholder', 'employee', 'staff',
+        'manage', 'leader', 'motivation', 'product', 'brand', 'advertis', 'promot', 'distribut',
+        'competi', 'strategy', 'growth', 'merger', 'takeover', 'globalisation', 'globalization',
+        'trade', 'export', 'import', 'tariff', 'exchange rate', 'entrepreneur', 'enterprise',
+        'break even', 'breakeven', 'balance sheet', 'income statement', 'ratio', 'liquidity',
+        'gearing', 'dividend', 'economy', 'inflation', 'interest rate', 'tax', 'gdp',
+        'recession', 'unemployment', 'regulation', 'ethic', 'csr', 'corporate social',
+        'operations', 'quality', 'lean', 'kaizen', 'capacity', 'productiv', 'efficienc',
+        'technolog', 'innovation', 'digital', 'e-commerce', 'human resource', 'recruit',
+        'training', 'organisation', 'organization', 'structure', 'hierarch', 'span of control',
+        'delegation', 'communic', 'objective', 'mission', 'vision', 'swot', 'pestle', 'pest',
+        'porter', 'ansoff', 'boston matrix', 'decision tree', 'critical path', 'network',
+        'variance', 'forecast', 'customer', 'consumer', 'segment', 'niche', 'mass market',
+        'sole trader', 'partnership', 'ltd', 'plc', 'limited', 'franchise', 'social enterprise',
+        'not-for-profit', 'charity', 'public sector', 'private sector', 'outsourc', 'offshor',
+        'labour', 'labor', 'wage', 'salary', 'bonus', 'fringe benefit', 'trade union',
+        'redundan', 'dismiss', 'contract', 'employment', 'legislation', 'law',
+        'satisf', 'loyalty', 'retention', 'turnover', 'absentee', 'culture',
+        'change', 'disrupt', 'sustainability', 'environment', 'carbon', 'waste',
+        'supply chain', 'inventory', 'stock', 'jit', 'just in time', 'buffer',
+        'sample', 'research', 'primary', 'secondary', 'data', 'survey', 'questionnaire',
+        'elasticity', 'ped', 'yed', 'xed', 'income elasticity', 'cross elasticity',
+        'oligopoly', 'monopoly', 'perfect competition', 'contestable',
+        'added value', 'unique selling', 'usp', 'differentiat', 'cost leader',
+        'return on', 'roi', 'margin', 'markup', 'gross', 'net', 'operating',
+        'working capital', 'debtor', 'creditor', 'receivable', 'payable',
+        'limited liability', 'unlimited liability', 'incorporation',
+        'maslow', 'herzberg', 'taylor', 'mayo', 'mcgregor', 'vroom',
+        'hackman', 'oldham', 'piece rate', 'commission', 'performance related',
+        'span', 'delayer', 'centralis', 'decentralis', 'matrix', 'functional',
+        'organic', 'mechani', 'contingency', 'situational', 'transformational',
+        'retrench', 'diversif', 'penetrat', 'development', 'skimming',
+        'loss leader', 'psycholog', 'predatory', 'destroyer'
+    ];
+
+    var lowerTrimmed = trimmed.toLowerCase();
+    var hasBusinessTerm = businessKeywords.some(function(kw) {
+        return lowerTrimmed.indexOf(kw) !== -1;
+    });
+
+    if (!hasBusinessTerm) {
+        return { valid: false, error: 'This doesn\'t appear to be a business studies topic. Please enter a topic from your course, e.g. "cash flow", "marketing mix", or "leadership styles".' };
+    }
+
+    return { valid: true, topic: trimmed };
+}
+
 function selectQType(el) {
     document.querySelectorAll('.qtype-card').forEach(function(c) { c.classList.remove('selected'); });
     el.classList.add('selected');
@@ -5076,8 +5179,25 @@ async function generateQuestion() {
     if (!currentBoard || !currentQType) return;
     if (!boardData.skipUnitSelection && !currentUnit) return;
 
+    // Validate custom topic if provided
+    var customTopicInput = document.getElementById('customTopicInput');
+    var customTopicError = document.getElementById('customTopicError');
+    var customTopic = '';
+    if (customTopicInput) {
+        var validation = validateCustomTopic(customTopicInput.value);
+        if (!validation.valid) {
+            customTopicError.textContent = validation.error;
+            customTopicError.style.display = 'block';
+            customTopicInput.style.borderColor = '#e74c3c';
+            return;
+        }
+        customTopicError.style.display = 'none';
+        customTopicInput.style.borderColor = '';
+        customTopic = validation.topic;
+    }
+
     showPhase('loading');
-    document.getElementById('loadingText').textContent = 'Generating your question...';
+    document.getElementById('loadingText').textContent = customTopic ? 'Generating a question on ' + customTopic + '...' : 'Generating your question...';
 
     // Fallback text after 8 seconds
     var fallbackTimer = setTimeout(function() {
@@ -5108,7 +5228,8 @@ async function generateQuestion() {
             body: JSON.stringify({
                 board: currentBoard,
                 unit: unitCode,
-                question_type: questionTypeStr
+                question_type: questionTypeStr,
+                topics: customTopic ? [customTopic] : undefined
             })
         });
 
