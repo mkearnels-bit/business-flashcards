@@ -5091,7 +5091,7 @@ function renderQuestionTypes() {
     document.getElementById('generateSection').style.display = 'block';
 }
 
-// Validate custom topic input is business studies related
+// Basic client-side validation (AI does the real business studies check server-side)
 function validateCustomTopic(topic) {
     if (!topic || topic.trim() === '') return { valid: true, topic: '' }; // blank is fine
 
@@ -5102,63 +5102,16 @@ function validateCustomTopic(topic) {
         return { valid: false, error: 'Please enter a more specific topic or leave blank for a random question.' };
     }
 
-    // Block obvious nonsense / non-business input
+    // Block obvious nonsense
     var nonsensePatterns = [
         /^[^a-zA-Z]*$/, // no letters at all
         /(.)\1{4,}/, // repeated characters like "aaaaa"
-        /^(hi|hello|hey|lol|test|asdf|qwerty|abc|xyz|help|please|thanks)/i,
+        /^(hi|hello|hey|lol|asdf|qwerty|abc|xyz|fuck|shit|damn|crap|dick|ass)\b/i,
     ];
     for (var i = 0; i < nonsensePatterns.length; i++) {
         if (nonsensePatterns[i].test(trimmed)) {
-            return { valid: false, error: 'That doesn\'t look like a business studies topic. Try something like "supply and demand" or "marketing mix".' };
+            return { valid: false, error: 'Please enter a valid business studies topic, e.g. "pricing strategies" or "motivation theories".' };
         }
-    }
-
-    // Business studies keyword check - at least one relevant term should appear
-    var businessKeywords = [
-        'market', 'business', 'profit', 'revenue', 'cost', 'price', 'demand', 'supply',
-        'finance', 'cash', 'budget', 'invest', 'share', 'stakeholder', 'employee', 'staff',
-        'manage', 'leader', 'motivation', 'product', 'brand', 'advertis', 'promot', 'distribut',
-        'competi', 'strategy', 'growth', 'merger', 'takeover', 'globalisation', 'globalization',
-        'trade', 'export', 'import', 'tariff', 'exchange rate', 'entrepreneur', 'enterprise',
-        'break even', 'breakeven', 'balance sheet', 'income statement', 'ratio', 'liquidity',
-        'gearing', 'dividend', 'economy', 'inflation', 'interest rate', 'tax', 'gdp',
-        'recession', 'unemployment', 'regulation', 'ethic', 'csr', 'corporate social',
-        'operations', 'quality', 'lean', 'kaizen', 'capacity', 'productiv', 'efficienc',
-        'technolog', 'innovation', 'digital', 'e-commerce', 'human resource', 'recruit',
-        'training', 'organisation', 'organization', 'structure', 'hierarch', 'span of control',
-        'delegation', 'communic', 'objective', 'mission', 'vision', 'swot', 'pestle', 'pest',
-        'porter', 'ansoff', 'boston matrix', 'decision tree', 'critical path', 'network',
-        'variance', 'forecast', 'customer', 'consumer', 'segment', 'niche', 'mass market',
-        'sole trader', 'partnership', 'ltd', 'plc', 'limited', 'franchise', 'social enterprise',
-        'not-for-profit', 'charity', 'public sector', 'private sector', 'outsourc', 'offshor',
-        'labour', 'labor', 'wage', 'salary', 'bonus', 'fringe benefit', 'trade union',
-        'redundan', 'dismiss', 'contract', 'employment', 'legislation', 'law',
-        'satisf', 'loyalty', 'retention', 'turnover', 'absentee', 'culture',
-        'change', 'disrupt', 'sustainability', 'environment', 'carbon', 'waste',
-        'supply chain', 'inventory', 'stock', 'jit', 'just in time', 'buffer',
-        'sample', 'research', 'primary', 'secondary', 'data', 'survey', 'questionnaire',
-        'elasticity', 'ped', 'yed', 'xed', 'income elasticity', 'cross elasticity',
-        'oligopoly', 'monopoly', 'perfect competition', 'contestable',
-        'added value', 'unique selling', 'usp', 'differentiat', 'cost leader',
-        'return on', 'roi', 'margin', 'markup', 'gross', 'net', 'operating',
-        'working capital', 'debtor', 'creditor', 'receivable', 'payable',
-        'limited liability', 'unlimited liability', 'incorporation',
-        'maslow', 'herzberg', 'taylor', 'mayo', 'mcgregor', 'vroom',
-        'hackman', 'oldham', 'piece rate', 'commission', 'performance related',
-        'span', 'delayer', 'centralis', 'decentralis', 'matrix', 'functional',
-        'organic', 'mechani', 'contingency', 'situational', 'transformational',
-        'retrench', 'diversif', 'penetrat', 'development', 'skimming',
-        'loss leader', 'psycholog', 'predatory', 'destroyer'
-    ];
-
-    var lowerTrimmed = trimmed.toLowerCase();
-    var hasBusinessTerm = businessKeywords.some(function(kw) {
-        return lowerTrimmed.indexOf(kw) !== -1;
-    });
-
-    if (!hasBusinessTerm) {
-        return { valid: false, error: 'This doesn\'t appear to be a business studies topic. Please enter a topic from your course, e.g. "cash flow", "marketing mix", or "leadership styles".' };
     }
 
     return { valid: true, topic: trimmed };
