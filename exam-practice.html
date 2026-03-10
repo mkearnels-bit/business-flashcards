@@ -1575,23 +1575,38 @@
     right: 0;
     background: white;
     border-bottom: 1px solid var(--gray-200);
-    padding: 15px 2rem;
+    padding: 12px 2rem;
     z-index: 999;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 1rem;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 1.5rem;
     align-items: center;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.test-exam-title-group {
+    min-width: 0;
 }
 
 .test-exam-title {
     font-size: 1.1rem;
     font-weight: 700;
     color: var(--primary);
+    line-height: 1.3;
+}
+
+.test-exam-subtitle {
+    font-size: 0.75rem;
+    color: #95a5a6;
+    margin-top: 2px;
+    line-height: 1.3;
+}
+
+.test-exam-center {
+    text-align: center;
 }
 
 .test-exam-timer {
-    text-align: center;
     font-size: 1.3rem;
     font-weight: 800;
     color: var(--primary);
@@ -1864,6 +1879,12 @@
     margin-top: 2rem;
     padding-top: 2rem;
     border-top: 1px solid var(--gray-200);
+    text-align: center;
+}
+.test-submit-section .action-btn {
+    display: inline-flex;
+    flex: none;
+    margin: 0 auto;
 }
 
 .test-submit-message {
@@ -2433,6 +2454,8 @@
             .mode-grid { grid-template-columns: 1fr; }
             .topic-grid { grid-template-columns: 1fr; }
             .test-exam-header { grid-template-columns: 1fr; text-align: center; gap: 8px; padding: 10px 15px; }
+            .test-exam-title-group { text-align: center; }
+            .test-exam-marks { text-align: center; }
             .test-exam-content { padding-top: 100px; }
             .test-feedback-grid { grid-template-columns: 1fr; }
 
@@ -2566,7 +2589,29 @@
             <a href="contact.html" class="site-nav-link">Contact Us</a>
             <a href="login.html" class="site-nav-btn site-nav-btn-ghost guest-only">Log In</a>
             <a href="signup.html" class="site-nav-btn site-nav-btn-primary guest-only">Get Started</a>
-            <button class="site-nav-btn site-nav-btn-ghost auth-only" id="navLogoutBtn" style="display:none;">Logout</button>
+            <div class="profile-dropdown-wrapper auth-only" style="display:none;">
+                <div class="profile-avatar" id="profileAvatar" onclick="toggleProfileDropdown()">--</div>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <div class="profile-dropdown-header">
+                        <div class="profile-dropdown-name" id="profileName">Student</div>
+                        <div class="profile-dropdown-email" id="profileEmail"></div>
+                    </div>
+                    <div class="profile-dropdown-divider"></div>
+                    <a href="student-progress.html" class="profile-dropdown-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+                        Student Progress
+                    </a>
+                    <a href="account.html" class="profile-dropdown-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                        My Account
+                    </a>
+                    <div class="profile-dropdown-divider"></div>
+                    <button class="profile-dropdown-item logout-item" id="navLogoutBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                        Log Out
+                    </button>
+                </div>
+            </div>
         </div>
         <button class="site-hamburger" id="siteHamburger" aria-label="Menu">
             <span></span>
@@ -2899,9 +2944,13 @@
     <!-- TEST EXAM PHASE -->
     <div class="phase" id="phase-test-exam">
         <div class="test-exam-header">
-            <div class="test-exam-title" id="testExamTitle"></div>
-            <div class="test-exam-subtitle" style="font-size:0.8rem;color:#95a5a6;margin-top:2px;">AI-generated practice paper in the style of the relevant exam board</div>
-            <div class="test-exam-timer" id="testExamTimer">00:00:00</div>
+            <div class="test-exam-title-group">
+                <div class="test-exam-title" id="testExamTitle"></div>
+                <div class="test-exam-subtitle">AI-generated practice paper in the style of the relevant exam board</div>
+            </div>
+            <div class="test-exam-center">
+                <div class="test-exam-timer" id="testExamTimer">00:00:00</div>
+            </div>
             <div class="test-exam-marks" id="testExamMarks"></div>
         </div>
         <div class="test-exam-content" id="testExamContentWrapper">
@@ -4827,7 +4876,7 @@ async function checkAuth() {
     } else if (email) {
         initials = email[0].toUpperCase();
     }
-    var initialsEl = document.getElementById('profileInitials');
+    var initialsEl = document.getElementById('profileAvatar');
     var nameEl = document.getElementById('profileName');
     var emailEl = document.getElementById('profileEmail');
     if (initialsEl) initialsEl.textContent = initials;
