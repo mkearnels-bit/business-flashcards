@@ -2250,13 +2250,7 @@
 }
 
 .card-title:before {
-    content: '';
-    display: inline-block;
-    width: 4px;
-    height: 4px;
-    background: currentColor;
-    border-radius: 50%;
-    margin-right: 0.5rem;
+    display: none;
 }
 
 .card-list {
@@ -2282,6 +2276,7 @@
 
 .test-feedback-button-group {
     display: flex;
+    justify-content: center;
     gap: 1rem;
     margin-top: 2rem;
     animation: fadeSlideUp 0.4s ease-out;
@@ -4097,6 +4092,58 @@ async function performTestSubmission(studentAnswers, studentAnswerTexts) {
         };
 
         showTestFeedback(mappedResults);
+
+        // Save results to test_results table for student progress tracking
+        try {
+            var boardData = BOARD_DATA[currentBoard];
+            var testTitle = '';
+            var unitValue = currentUnit || null;
+            var topicValue = currentTopic || null;
+
+            if (currentMode === 'exam') {
+                if (boardData.skipUnitSelection) {
+                    var aqaPaper = boardData.papers ? boardData.papers.find(function(p) { return p.id === currentUnit; }) : null;
+                    testTitle = aqaPaper ? aqaPaper.name : 'AQA Exam';
+                } else {
+                    var unitNum = currentUnit ? currentUnit.replace('paper', '').replace('unit', '') : '';
+                    testTitle = (boardData.isPaperBased ? 'Paper ' : 'Unit ') + unitNum + ' Exam';
+                }
+            } else if (currentMode === 'topic_test') {
+                var topicName = currentTopic ? (TOPIC_NAMES[currentTopic] || currentTopic) : '';
+                testTitle = 'Topic Test: ' + topicName;
+            }
+
+            var savePayload = {
+                user_id: session.user.id,
+                test_type: currentMode || 'exam',
+                board: currentBoard,
+                unit: unitValue,
+                topic: topicValue,
+                test_title: testTitle || 'Practice Test',
+                total_marks: mappedResults.total_marks || 0,
+                total_available: mappedResults.total_possible || 0,
+                percentage: mappedResults.total_possible > 0 ? Math.round((mappedResults.total_marks / mappedResults.total_possible) * 100) : 0,
+                grade_band: document.getElementById('testGradeBand') ? document.getElementById('testGradeBand').textContent : null,
+                duration_minutes: currentTest ? currentTest.duration_minutes : null,
+                elapsed_seconds: elapsed,
+                paper_data: currentTest || {},
+                marking_results: mappedResults.question_results || [],
+                ao_totals: mappedResults.ao_breakdown || null,
+                strengths: mappedResults.strengths || [],
+                development_areas: mappedResults.areas_for_development || [],
+                overall_feedback: mappedResults.overall_feedback || ''
+            };
+
+            var saveResp = await supabaseClient.from('test_results').insert(savePayload);
+            if (saveResp.error) {
+                console.error('Failed to save test results:', saveResp.error);
+            } else {
+                console.log('Test results saved successfully');
+            }
+        } catch (saveErr) {
+            console.error('Error saving test results:', saveErr);
+            // Don't show error to user - feedback is already displayed
+        }
 
     } catch (error) {
         console.error('Submission error:', error);
