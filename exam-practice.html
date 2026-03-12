@@ -2499,7 +2499,7 @@
             width: 38px;
             height: 38px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #1e3a5f, #3498db);
+            background: linear-gradient(135deg, #e67e22, #f39c12);
             border: 2px solid #e9ecef;
             color: white;
             font-weight: 700;
@@ -2513,8 +2513,7 @@
         }
         .profile-avatar:hover {
             transform: scale(1.05);
-            border-color: #e67e22;
-            box-shadow: 0 2px 8px rgba(30,58,95,0.3);
+            box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
         }
         .profile-dropdown {
             position: absolute;
@@ -2743,14 +2742,13 @@
                 <div class="board-card-title">AQA A Level</div>
                 <div class="board-card-desc">AQA A Level Business (7132)</div>
             </div>
-            <div class="board-card coming-soon" data-board="cie_ial" data-level="alevel">
+            <div class="board-card" data-board="cie_ial" data-level="alevel" onclick="selectBoard(this)">
                 <div class="board-card-header">
                     <div class="board-card-icon" style="background: linear-gradient(135deg, #f39c12, #e67e22);">CI</div>
                     <div class="board-card-check"></div>
                 </div>
                 <div class="board-card-title">CIE International A Level</div>
                 <div class="board-card-desc">Cambridge International AS & A Level Business (9609)</div>
-                <span class="coming-soon-badge">Coming Soon</span>
             </div>
 
             <!-- GCSE BOARDS -->
@@ -2854,6 +2852,52 @@
         </div>
 
 
+
+        <!-- CIE IAL Paper Selection (shown for CIE IAL exam mode) -->
+        <div id="ciePaperSelectionSection" style="display:none;">
+            <div class="section-title" style="font-size:1.3rem; font-weight:800; color:#1e3a5f; margin-bottom:0.5rem;">Choose Your Paper</div>
+            <div class="section-subtitle" style="color:#64748b; margin-bottom:0;">Select which Cambridge exam paper you want to sit</div>
+            <div class="unit-grid" style="margin-top:1.5rem;">
+                <div class="unit-card" data-paper="1" onclick="selectCiePaper(this)" style="cursor:pointer;">
+                    <div class="unit-card-label" style="color:#e74c3c;">9609/1</div>
+                    <div class="unit-card-name">Paper 1: Business Concepts 1</div>
+                    <div class="unit-card-themes" style="font-size:0.75rem;color:#7f8c8d;margin-top:4px;">Short Answer + Essay (AS) &bull; 40 marks &bull; 1hr 15min</div>
+                </div>
+                <div class="unit-card" data-paper="2" onclick="selectCiePaper(this)" style="cursor:pointer;">
+                    <div class="unit-card-label" style="color:#3498db;">9609/2</div>
+                    <div class="unit-card-name">Paper 2: Business Concepts 2</div>
+                    <div class="unit-card-themes" style="font-size:0.75rem;color:#7f8c8d;margin-top:4px;">Data Response (AS) &bull; 60 marks &bull; 1hr 30min</div>
+                </div>
+                <div class="unit-card" data-paper="3" onclick="selectCiePaper(this)" style="cursor:pointer;">
+                    <div class="unit-card-label" style="color:#27ae60;">9609/3</div>
+                    <div class="unit-card-name">Paper 3: Business Decision-Making</div>
+                    <div class="unit-card-themes" style="font-size:0.75rem;color:#7f8c8d;margin-top:4px;">Case Study (A Level) &bull; 60 marks &bull; 1hr 45min</div>
+                </div>
+                <div class="unit-card" data-paper="4" onclick="selectCiePaper(this)" style="cursor:pointer;">
+                    <div class="unit-card-label" style="color:#f39c12;">9609/4</div>
+                    <div class="unit-card-name">Paper 4: Business Strategy</div>
+                    <div class="unit-card-themes" style="font-size:0.75rem;color:#7f8c8d;margin-top:4px;">Case Study Essay (A Level) &bull; 40 marks &bull; 1hr 15min</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CIE IAL Level Selection (shown for CIE IAL topic test mode) -->
+        <div id="cieLevelSelectionSection" style="display:none;">
+            <div class="section-title" style="font-size:1.3rem; font-weight:800; color:#1e3a5f; margin-bottom:0.5rem;">Choose Your Level</div>
+            <div class="section-subtitle" style="color:#64748b; margin-bottom:0;">AS Level covers topics 1-5 only. A Level covers all topics 1-10.</div>
+            <div class="unit-grid" style="margin-top:1.5rem;">
+                <div class="unit-card" data-cie-level="as" onclick="selectCieTopicLevel(this)" style="cursor:pointer;">
+                    <div class="unit-card-label" style="color:#3498db;">AS</div>
+                    <div class="unit-card-name">AS Level Topics</div>
+                    <div class="unit-card-themes" style="font-size:0.75rem;color:#7f8c8d;margin-top:4px;">Topics 1.1 - 5.5 &bull; Papers 1 & 2</div>
+                </div>
+                <div class="unit-card" data-cie-level="alevel" onclick="selectCieTopicLevel(this)" style="cursor:pointer;">
+                    <div class="unit-card-label" style="color:#e74c3c;">A Level</div>
+                    <div class="unit-card-name">Full A Level Topics</div>
+                    <div class="unit-card-themes" style="font-size:0.75rem;color:#7f8c8d;margin-top:4px;">Topics 1.1 - 10.4 &bull; All Papers</div>
+                </div>
+            </div>
+        </div>
 
         <!-- Question Type Selection (shown after unit) -->
         <div id="qtypeSection" style="display:none; margin-top:1.5rem;"></div>
@@ -3194,12 +3238,30 @@ const BOARD_DATA = {
             { id: 'analyse_6', marks: 6, name: 'Analyse', desc: 'Causes and effects', command: 'analyse' },
             { id: 'evaluate_8', marks: 8, name: 'Evaluate', desc: 'Judgement + conclusion', command: 'evaluate' }
         ]
+    },
+    cie_ial: {
+        name: 'CIE International A Level',
+        skipUnitSelection: true,
+        questionTypes: [
+            { id: 'define_2', marks: 2, name: 'Define', desc: '', command: 'define' },
+            { id: 'explain_3', marks: 3, name: 'Explain (3)', desc: '', command: 'explain' },
+            { id: 'explain_5', marks: 5, name: 'Explain (5)', desc: '', command: 'explain' },
+            { id: 'analyse_8', marks: 8, name: 'Analyse', desc: '', command: 'analyse' },
+            { id: 'evaluate_12', marks: 12, name: 'Evaluate', desc: '', command: 'evaluate' },
+            { id: 'evaluate_20', marks: 20, name: 'Evaluate/Essay', desc: '', command: 'evaluate' }
+        ],
+        papers: [
+            { id: 'paper1', code: '9609/1', name: 'Paper 1: Business Concepts 1', color: '#e74c3c', desc: 'Short Answer + Essay (AS)', marks: 40, duration: 75 },
+            { id: 'paper2', code: '9609/2', name: 'Paper 2: Business Concepts 2', color: '#3498db', desc: 'Data Response (AS)', marks: 60, duration: 90 },
+            { id: 'paper3', code: '9609/3', name: 'Paper 3: Business Decision-Making', color: '#27ae60', desc: 'Case Study (A Level)', marks: 60, duration: 105 },
+            { id: 'paper4', code: '9609/4', name: 'Paper 4: Business Strategy', color: '#f39c12', desc: 'Case Study Essay (A Level)', marks: 40, duration: 75 }
+        ]
     }
 };
 
 // Timer mappings (minutes per mark)
 const TIMER_MINUTES = {
-    2: 2, 4: 5, 5: 6, 6: 8, 8: 12, 9: 14, 10: 15, 12: 18, 16: 24, 20: 30, 25: 40
+    2: 2, 3: 4, 4: 5, 5: 6, 6: 8, 8: 12, 9: 14, 10: 15, 12: 18, 16: 24, 20: 30, 25: 40
 };
 
 // ===== STATE =====
@@ -3288,7 +3350,33 @@ var TOPIC_NAMES = {
     'aqa_3.10.1': 'Managing change',
     'aqa_3.10.2': 'Managing organisational culture',
     'aqa_3.10.3': 'Managing strategic implementation',
-    'aqa_3.10.4': 'Problems with strategy and why strategies fail'
+    'aqa_3.10.4': 'Problems with strategy and why strategies fail',
+    // CIE IAL topics - AS Level (1-5)
+    'cie_1': 'Business and its Environment',
+    'cie_1.1': 'Enterprise', 'cie_1.2': 'Business Structure', 'cie_1.3': 'Size of Business',
+    'cie_1.4': 'Business Objectives', 'cie_1.5': 'Stakeholders in a Business',
+    'cie_2': 'Human Resource Management',
+    'cie_2.1': 'Human Resource Management (HRM)', 'cie_2.2': 'Motivation', 'cie_2.3': 'Management',
+    'cie_3': 'Marketing',
+    'cie_3.1': 'The Nature of Marketing', 'cie_3.2': 'Market Research', 'cie_3.3': 'The Marketing Mix',
+    'cie_4': 'Operations Management',
+    'cie_4.1': 'The Nature of Operations', 'cie_4.2': 'Inventory Management', 'cie_4.3': 'Capacity Utilisation and Outsourcing',
+    'cie_5': 'Finance and Accounting',
+    'cie_5.1': 'Business Finance', 'cie_5.2': 'Sources of Finance', 'cie_5.3': 'Forecasting and Managing Cash Flows',
+    'cie_5.4': 'Costs', 'cie_5.5': 'Budgets',
+    // CIE IAL topics - A Level (6-10)
+    'cie_6': 'Business and its Environment (A Level)',
+    'cie_6.1': 'External Influences on Business Activity', 'cie_6.2': 'Business Strategy',
+    'cie_7': 'Human Resource Management (A Level)',
+    'cie_7.1': 'Organisational Structure', 'cie_7.2': 'Business Communication',
+    'cie_7.3': 'Leadership', 'cie_7.4': 'HRM Strategy',
+    'cie_8': 'Marketing (A Level)',
+    'cie_8.1': 'Marketing Analysis', 'cie_8.2': 'Marketing Strategy',
+    'cie_9': 'Operations Management (A Level)',
+    'cie_9.1': 'Location and Scale', 'cie_9.2': 'Quality Management', 'cie_9.3': 'Operations Strategy',
+    'cie_10': 'Finance and Accounting (A Level)',
+    'cie_10.1': 'Financial Statements', 'cie_10.2': 'Analysis of Published Accounts',
+    'cie_10.3': 'Investment Appraisal', 'cie_10.4': 'Finance and Accounting Strategy'
 };
 
 // AQA main topic areas for topic selection UI
@@ -3304,6 +3392,37 @@ var AQA_TOPICS = [
     { code: 'aqa_3.9', name: 'Strategic Methods', color: '#c0392b', subtopics: ['aqa_3.9.1','aqa_3.9.2','aqa_3.9.3','aqa_3.9.4'], aLevelOnly: true },
     { code: 'aqa_3.10', name: 'Managing Strategic Change', color: '#8e44ad', subtopics: ['aqa_3.10.1','aqa_3.10.2','aqa_3.10.3','aqa_3.10.4'], aLevelOnly: true }
 ];
+
+// CIE IAL main topic areas for topic selection UI
+var CIE_IAL_TOPICS = [
+    {
+        code: 'cie_1', name: 'Business and its Environment', color: '#e74c3c',
+        asSubtopics: ['cie_1.1','cie_1.2','cie_1.3','cie_1.4','cie_1.5'],
+        aLevelSubtopics: ['cie_6.1','cie_6.2']
+    },
+    {
+        code: 'cie_2', name: 'Human Resource Management', color: '#3498db',
+        asSubtopics: ['cie_2.1','cie_2.2','cie_2.3'],
+        aLevelSubtopics: ['cie_7.1','cie_7.2','cie_7.3','cie_7.4']
+    },
+    {
+        code: 'cie_3', name: 'Marketing', color: '#27ae60',
+        asSubtopics: ['cie_3.1','cie_3.2','cie_3.3'],
+        aLevelSubtopics: ['cie_8.1','cie_8.2']
+    },
+    {
+        code: 'cie_4', name: 'Operations Management', color: '#f39c12',
+        asSubtopics: ['cie_4.1','cie_4.2','cie_4.3'],
+        aLevelSubtopics: ['cie_9.1','cie_9.2','cie_9.3']
+    },
+    {
+        code: 'cie_5', name: 'Finance and Accounting', color: '#9b59b6',
+        asSubtopics: ['cie_5.1','cie_5.2','cie_5.3','cie_5.4','cie_5.5'],
+        aLevelSubtopics: ['cie_10.1','cie_10.2','cie_10.3','cie_10.4']
+    }
+];
+
+var currentCieTopicLevel = null; // 'as' or 'alevel' for CIE IAL topic tests
 
 var UNIT_TOPICS = {
     'unit1': ['1.1','1.2','1.3','1.4','1.5'],
@@ -3330,6 +3449,8 @@ function showModeSelection() {
     document.getElementById('topicSelectionSection').style.display = 'none';
     document.getElementById('generateSection').style.display = 'none';
     document.getElementById('aqaPaperSelectionSection').style.display = 'none';
+    document.getElementById('ciePaperSelectionSection').style.display = 'none';
+    document.getElementById('cieLevelSelectionSection').style.display = 'none';
 }
 
 function selectMode(mode) {
@@ -3351,6 +3472,8 @@ function selectMode(mode) {
     document.getElementById('qtypeSection').style.display = 'none';
     document.getElementById('generateSection').style.display = 'none';
     document.getElementById('aqaPaperSelectionSection').style.display = 'none';
+    document.getElementById('ciePaperSelectionSection').style.display = 'none';
+    document.getElementById('cieLevelSelectionSection').style.display = 'none';
 
     var boardData = BOARD_DATA[currentBoard];
 
@@ -3359,11 +3482,18 @@ function selectMode(mode) {
         document.getElementById('qtypeSection').style.display = '';
         document.getElementById('generateSection').style.display = '';
     } else if (mode === 'topic_test') {
-        document.getElementById('topicSelectionSection').style.display = '';
-        renderTopics();
+        if (currentBoard === 'cie_ial') {
+            // CIE IAL: show AS/A Level selection first
+            document.getElementById('cieLevelSelectionSection').style.display = '';
+        } else {
+            document.getElementById('topicSelectionSection').style.display = '';
+            renderTopics();
+        }
     } else if (mode === 'exam') {
-        // For AQA: show paper selection before generating exam
-        if (boardData.skipUnitSelection) {
+        // For boards with skipUnitSelection: show paper selection before generating exam
+        if (currentBoard === 'cie_ial') {
+            document.getElementById('ciePaperSelectionSection').style.display = '';
+        } else if (boardData.skipUnitSelection) {
             document.getElementById('aqaPaperSelectionSection').style.display = '';
         } else {
             // For Edexcel: generate exam directly (unit already selected)
@@ -3388,6 +3518,33 @@ function selectAqaPaper(el) {
     }, 300);
 }
 
+// CIE IAL Paper selection for exam mode
+function selectCiePaper(el) {
+    var paperCards = document.querySelectorAll('#ciePaperSelectionSection .unit-card');
+    paperCards.forEach(function(c) { c.classList.remove('selected'); });
+    el.classList.add('selected');
+
+    var paperNum = el.getAttribute('data-paper');
+    currentUnit = 'paper' + paperNum;
+
+    setTimeout(function() {
+        generateTest();
+    }, 300);
+}
+
+// CIE IAL Level selection for topic test mode
+function selectCieTopicLevel(el) {
+    var levelCards = document.querySelectorAll('#cieLevelSelectionSection .unit-card');
+    levelCards.forEach(function(c) { c.classList.remove('selected'); });
+    el.classList.add('selected');
+
+    currentCieTopicLevel = el.getAttribute('data-cie-level');
+
+    // Now show topic selection
+    document.getElementById('topicSelectionSection').style.display = '';
+    renderTopics();
+}
+
 // ===== TOPIC RENDERING =====
 function renderTopics() {
     var topicGrid = document.getElementById('topicGrid');
@@ -3395,7 +3552,26 @@ function renderTopics() {
 
     var boardData = BOARD_DATA[currentBoard];
 
-    if (boardData.skipUnitSelection && typeof AQA_TOPICS !== 'undefined') {
+    if (currentBoard === 'cie_ial' && typeof CIE_IAL_TOPICS !== 'undefined') {
+        // CIE IAL: show 5 main topic areas with AS/A Level subtopics
+        CIE_IAL_TOPICS.forEach(function(topic) {
+            var displayCode = topic.code.replace('cie_', '');
+            var subtopicCount = topic.asSubtopics.length;
+            if (currentCieTopicLevel === 'alevel') {
+                subtopicCount += topic.aLevelSubtopics.length;
+            }
+            var levelBadge = currentCieTopicLevel === 'alevel'
+                ? '<span style="font-size:0.65rem;background:#fdebd0;color:#e67e22;padding:2px 6px;border-radius:4px;margin-left:6px;">AS + A Level</span>'
+                : '<span style="font-size:0.65rem;background:#d4efdf;color:#27ae60;padding:2px 6px;border-radius:4px;margin-left:6px;">AS Only</span>';
+            var card = document.createElement('div');
+            card.className = 'topic-card';
+            card.style.borderLeft = '4px solid ' + topic.color;
+            card.setAttribute('onclick', "selectTopic('" + topic.code + "')");
+            card.innerHTML = '<div class="topic-code">' + displayCode + '</div>' +
+                '<div class="topic-name">' + topic.name + levelBadge + '</div>';
+            topicGrid.appendChild(card);
+        });
+    } else if (boardData.skipUnitSelection && typeof AQA_TOPICS !== 'undefined') {
         // AQA: show all 10 main topic areas
         AQA_TOPICS.forEach(function(topic) {
             var displayCode = topic.code.replace('aqa_3.', '');
@@ -3444,11 +3620,11 @@ async function generateTest() {
     var unitNumber = currentUnit ? currentUnit.replace('paper', '').replace('unit', '') : '';
 
     if (currentMode === 'exam') {
-        if (board.skipUnitSelection) {
-            // AQA exam
-            var aqaPaper = board.papers ? board.papers.find(function(p) { return p.id === currentUnit; }) : null;
-            var examTitle = aqaPaper ? aqaPaper.name : 'AQA Paper ' + unitNumber;
-            var examSubtitle = aqaPaper ? aqaPaper.desc + ' \u2022 ' + aqaPaper.marks + ' marks \u2022 ' + aqaPaper.duration + ' minutes' : 'Full AQA exam paper';
+        if (board.skipUnitSelection && board.papers) {
+            // AQA or CIE IAL exam - uses paper selection
+            var selectedPaper = board.papers.find(function(p) { return p.id === currentUnit; });
+            var examTitle = selectedPaper ? selectedPaper.name : board.name + ' Paper ' + unitNumber;
+            var examSubtitle = selectedPaper ? selectedPaper.desc + ' \u2022 ' + selectedPaper.marks + ' marks \u2022 ' + selectedPaper.duration + ' minutes' : 'Full exam paper';
             document.getElementById('testLoadingTitle').textContent = examTitle;
             document.getElementById('testLoadingSubtitle').textContent = examSubtitle;
         } else {
@@ -3485,6 +3661,12 @@ async function generateTest() {
             unit: effectiveUnit,
             topic: currentTopic || null
         };
+
+        // For CIE IAL topic tests, include the selected level so the edge function
+        // knows whether to test AS-only subtopics or all (AS + A Level)
+        if (currentBoard === 'cie_ial' && currentCieTopicLevel) {
+            payload.cie_level = currentCieTopicLevel;
+        }
 
         var response = await fetch(SUPABASE_URL + '/functions/v1/generate-test', {
             method: 'POST',
@@ -5054,6 +5236,7 @@ function selectBoard(el) {
     currentQType = null;
     currentMode = null;
     currentTopic = null;
+    currentCieTopicLevel = null;
 
     // Hide downstream sections
     document.getElementById('qtypeSection').style.display = 'none';
@@ -5062,6 +5245,8 @@ function selectBoard(el) {
     document.getElementById('modeSelectionSection').style.display = 'none';
     document.getElementById('topicSelectionSection').style.display = 'none';
     document.getElementById('aqaPaperSelectionSection').style.display = 'none';
+    document.getElementById('ciePaperSelectionSection').style.display = 'none';
+    document.getElementById('cieLevelSelectionSection').style.display = 'none';
     document.getElementById('unitSection').style.display = 'none';
     document.getElementById('unitSection').innerHTML = '';
 
