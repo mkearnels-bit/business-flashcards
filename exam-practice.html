@@ -3880,6 +3880,13 @@ function renderTestSourceBooklet(sourceBooklet) {
                 } else if (['bar', 'horizontal_bar', 'line', 'pie', 'stacked_bar'].indexOf(dataItem.type) !== -1) {
                     var chartContainer = document.createElement('div');
                     chartContainer.className = 'test-chart-container';
+                    if (dataItem.title) {
+                        var chartTitle = document.createElement('p');
+                        chartTitle.style.fontWeight = '600';
+                        chartTitle.style.margin = '12px 0 6px 0';
+                        chartTitle.textContent = dataItem.title;
+                        chartContainer.appendChild(chartTitle);
+                    }
                     var canvas = document.createElement('canvas');
                     canvas.id = 'test-chart-' + extract.id + '-' + dataIndex;
                     chartContainer.appendChild(canvas);
@@ -4869,13 +4876,14 @@ const LOGO_BASE64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAACFCAYAA
                                     y += 5;
                                 }
 
-                                var colCount = dataItem.headers.length;
+                                var pdfCols = dataItem.columns || dataItem.headers || [];
+                                var colCount = pdfCols.length;
                                 var colWidth = (contentWidth - 6) / colCount;
                                 var tableX = margin + 3;
 
                                 // Headers
-                                for (var hi = 0; hi < dataItem.headers.length; hi++) {
-                                    doc.text(dataItem.headers[hi], tableX + hi * colWidth + 1, y);
+                                for (var hi = 0; hi < pdfCols.length; hi++) {
+                                    doc.text(pdfCols[hi], tableX + hi * colWidth + 1, y);
                                 }
                                 y += 5;
 
@@ -5529,10 +5537,15 @@ function renderQuestion(q) {
 }
 
 function renderDataTable(chartData) {
-    var html = '<table class="data-table">';
-    if (chartData.columns) {
+    var html = '';
+    if (chartData.title) {
+        html += '<p style="font-weight:600; margin:12px 0 6px 0;">' + escapeHtml(chartData.title) + '</p>';
+    }
+    html += '<table class="data-table">';
+    if (chartData.columns || chartData.headers) {
+        var cols = chartData.columns || chartData.headers;
         html += '<thead><tr>';
-        chartData.columns.forEach(function(col) {
+        cols.forEach(function(col) {
             html += '<th>' + escapeHtml(col) + '</th>';
         });
         html += '</tr></thead>';
