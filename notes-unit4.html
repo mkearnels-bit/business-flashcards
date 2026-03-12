@@ -277,16 +277,14 @@
 .profile-dropdown.active { display: block; }
 .profile-dropdown a,
 .profile-dropdown button {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
+    display: block;
     width: 100%;
-    padding: 0.7rem 1rem;
+    padding: 0.75rem 1rem;
     text-align: left;
     border: none;
     background: none;
     color: #334155;
-    font-size: 0.88rem;
+    font-size: 0.9rem;
     font-weight: 500;
     cursor: pointer;
     font-family: inherit;
@@ -298,18 +296,11 @@
     background: #f1f5f9;
     color: #1e3a5f;
 }
-.profile-dropdown button.logout-item {
-    color: #e74c3c;
+.profile-dropdown button:last-child {
+    color: #dc2626;
     border-top: 1px solid #f1f5f9;
 }
-.profile-dropdown button.logout-item:hover {
-    background: #fef2f2;
-}
-.profile-dropdown svg {
-    width: 16px;
-    height: 16px;
-    flex-shrink: 0;
-}
+.profile-dropdown button:last-child:hover { background: #fef2f2; }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -1983,21 +1974,12 @@
             <a href="notes.html" class="site-nav-link active">Study Notes</a>
             <a href="blog.html" class="site-nav-link">Blog</a>
             <a href="contact.html" class="site-nav-link">Contact Us</a>
-            <div class="profile-dropdown-wrapper auth-only" style="display:none;">
+            <div class="profile-wrapper" style="position: relative;">
                 <div class="profile-avatar" id="profileAvatar">--</div>
                 <div class="profile-dropdown" id="profileDropdown">
-                    <a href="student-progress.html">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
-                        Student Progress
-                    </a>
-                    <a href="account.html">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-                        My Account
-                    </a>
-                    <button class="logout-item" id="navLogoutBtn">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                        Log Out
-                    </button>
+                    <a href="student-progress.html">Student Progress</a>
+                    <a href="#manage-account">My Account</a>
+                    <button id="navLogoutBtn">Log Out</button>
                 </div>
             </div>
         </div>
@@ -2043,7 +2025,7 @@
             <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg></span>
             Student Progress
         </a>
-        <a href="account.html">
+        <a href="#manage-account">
             <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"/></svg></span>
             My Account
         </a>

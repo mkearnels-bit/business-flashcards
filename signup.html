@@ -190,58 +190,12 @@
             transform: none;
         }
 
-        .btn-google {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            padding: 1rem;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            font-family: inherit;
-            background: white;
-            color: var(--gray-700);
-            border: 2px solid var(--gray-100);
-            margin-bottom: 1.5rem;
-            transition: all 0.2s;
-        }
-
-        .btn-google:hover {
-            background: var(--gray-100);
-        }
-
-        .btn-google svg {
-            margin-right: 0.75rem;
-        }
-
-        .divider {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin: 1.5rem 0;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: var(--gray-300);
-        }
-
-        .divider span {
-            color: var(--gray-500);
-            font-size: 0.875rem;
-        }
-
         .terms-checkbox {
             display: flex;
             align-items: flex-start;
             gap: 0.6rem;
-            margin-top: 0.5rem;
-            margin-bottom: 1.25rem;
+            margin-top: 1rem;
+            margin-bottom: 0.25rem;
         }
 
         .terms-checkbox input[type="checkbox"] {
@@ -384,13 +338,6 @@
 
             <div id="message" class="message"></div>
 
-            <button class="btn-google" id="googleBtn" onclick="signUpWithGoogle()">
-                <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9.003 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9.003 18z"/><path fill="#FBBC05" d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957C.347 6.173 0 7.548 0 9s.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9.003 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.464.891 11.428 0 9.002 0 5.48 0 2.438 2.017.956 4.958L3.964 7.29c.708-2.127 2.692-3.71 5.036-3.71z"/></svg>
-                Sign up with Google
-            </button>
-
-            <div class="divider"><span>or sign up with email</span></div>
-
             <form id="signupForm">
                 <div class="form-row">
                     <div class="form-group">
@@ -442,16 +389,16 @@
                     <div class="password-requirements">Must be at least 8 characters</div>
                 </div>
 
+                <button type="submit" class="btn btn-primary" id="submitBtn">
+                    <span class="loading-spinner"></span>
+                    <span class="btn-text">Create Account</span>
+                </button>
+
                 <div class="terms-checkbox">
                     <input type="checkbox" id="agreeTerms">
                     <label for="agreeTerms">I agree to the <a href="terms.html" target="_blank">Terms of Service</a> and <a href="privacy.html" target="_blank">Privacy Policy</a></label>
                 </div>
                 <p class="terms-error" id="termsError">You must agree to the Terms of Service and Privacy Policy</p>
-
-                <button type="submit" class="btn btn-primary" id="submitBtn">
-                    <span class="loading-spinner"></span>
-                    <span class="btn-text">Create Account</span>
-                </button>
             </form>
 
             <div class="auth-footer">
@@ -500,19 +447,6 @@
         function togglePassword() {
             const type = passwordInput.type === 'password' ? 'text' : 'password';
             passwordInput.type = type;
-        }
-
-        // Google sign-up
-        async function signUpWithGoogle() {
-            const { data, error } = await supabaseClient.auth.signInWithOAuth({
-                provider: 'google',
-                options: {
-                    redirectTo: window.location.origin + '/app.html'
-                }
-            });
-            if (error) {
-                showMessage(error.message, 'error');
-            }
         }
 
         // Handle form submission

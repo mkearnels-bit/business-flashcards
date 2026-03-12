@@ -3,24 +3,326 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Read the latest insights on A-Level Business Studies">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HFSYK32ZFT"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-HFSYK32ZFT');
+    </script>
+    <meta name="description" content="Expert A Level Business Studies blog with revision tips, exam technique guides, and study advice for Edexcel IAL and AQA students. Written by experienced teachers.">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
     <link rel="canonical" href="https://mybizstudies.com/blog-post.html">
     <meta property="og:type" content="article">
-    <meta property="og:title" content="MyBizStudies Blog">
-    <meta property="og:description" content="Read the latest insights on A-Level Business Studies">
-    <meta property="og:image" content="">
+    <meta property="og:title" content="A Level Business Studies Blog | Tips, Revision Guides and Exam Advice | MyBizStudies">
+    <meta property="og:description" content="Expert A Level Business Studies blog with revision tips, exam technique guides, and study advice for Edexcel IAL and AQA students. Written by experienced teachers.">
+    <meta property="og:image" content="https://mybizstudies.com/og-image.png">
     <meta property="og:url" content="https://mybizstudies.com/blog-post.html">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="MyBizStudies Blog">
-    <meta name="twitter:description" content="Read the latest insights on A-Level Business Studies">
-    <meta name="twitter:image" content="">
-    <title>MyBizStudies Blog</title>
+    <meta name="twitter:title" content="A Level Business Studies Blog | Tips, Revision Guides and Exam Advice | MyBizStudies">
+    <meta name="twitter:description" content="Expert A Level Business Studies blog with revision tips, exam technique guides, and study advice for Edexcel IAL and AQA students. Written by experienced teachers.">
+    <meta name="twitter:image" content="https://mybizstudies.com/og-image.png">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Blog",
+        "name": "MyBizStudies Blog",
+        "description": "Expert A Level Business Studies blog with revision tips, exam technique guides, and study advice for Edexcel IAL and AQA students.",
+        "url": "https://mybizstudies.com/blog-post.html",
+        "publisher": {
+            "@type": "Organization",
+            "name": "MyBizStudies",
+            "url": "https://mybizstudies.com"
+        }
+    }
+    </script>
+    <title>A Level Business Studies Blog | Tips, Revision Guides and Exam Advice | MyBizStudies</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
+/* ==================== SITE NAVBAR ==================== */
+.site-navbar {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #f1f5f9;
+    padding: 0.75rem 2rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.site-navbar-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.site-navbar-logo {
+    height: 55px;
+    width: auto;
+}
+.site-nav-buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.site-nav-link {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #334155;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+.site-nav-link:hover {
+    color: #1e3a5f;
+    background: #f1f5f9;
+}
+.site-nav-link.active {
+    color: #e67e22;
+    font-weight: 600;
+}
+.site-nav-btn {
+    padding: 0.5rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    font-family: inherit;
+}
+.site-nav-btn-ghost {
+    color: #1e3a5f;
+    background: transparent;
+    border: 1px solid #cbd5e1;
+}
+.site-nav-btn-ghost:hover {
+    background: #f1f5f9;
+    border-color: #1e3a5f;
+}
+.site-hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1100;
+    position: relative;
+}
+.site-hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: #1e3a5f;
+    border-radius: 2px;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    position: absolute;
+}
+.site-hamburger span:nth-child(1) { transform: translateY(-7px); }
+.site-hamburger span:nth-child(2) { opacity: 1; }
+.site-hamburger span:nth-child(3) { transform: translateY(7px); }
+.site-hamburger.active span:nth-child(1) { transform: rotate(45deg); }
+.site-hamburger.active span:nth-child(2) { opacity: 0; }
+.site-hamburger.active span:nth-child(3) { transform: rotate(-45deg); }
+
+/* Mobile overlay */
+.site-mobile-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 1040;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+.site-mobile-overlay.active {
+    display: block;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Mobile slide-out menu */
+.site-mobile-menu {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 280px;
+    height: 100%;
+    background: #ffffff;
+    z-index: 1050;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
+    padding: 5.5rem 1.5rem 2rem;
+}
+.site-mobile-menu.active {
+    display: block;
+    transform: translateX(0);
+}
+.site-mobile-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+.site-mobile-menu a,
+.site-mobile-menu button {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.875rem 1rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #334155;
+    transition: all 0.2s ease;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: inherit;
+    width: 100%;
+}
+.site-mobile-menu a:hover,
+.site-mobile-menu button:hover {
+    background: #f1f5f9;
+    color: #1e3a5f;
+}
+.site-mobile-menu a.active {
+    background: #f1f5f9;
+    color: #1e3a5f;
+}
+.site-menu-icon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #f1f5f9;
+    flex-shrink: 0;
+}
+.site-menu-icon svg {
+    width: 18px;
+    height: 18px;
+    stroke: #64748b;
+}
+.site-mobile-menu a.active .site-menu-icon {
+    background: #1e3a5f;
+}
+.site-mobile-menu a.active .site-menu-icon svg {
+    stroke: white;
+}
+.site-mobile-divider {
+    height: 1px;
+    background: #f1f5f9;
+    margin: 0.5rem 0;
+}
+.site-mobile-logout {
+    color: #e74c3c !important;
+}
+.site-mobile-logout .site-menu-icon {
+    background: rgba(231, 76, 60, 0.08);
+}
+.site-mobile-logout .site-menu-icon svg {
+    stroke: #e74c3c;
+}
+
+@media (max-width: 768px) {
+    .site-hamburger {
+        display: flex;
+    }
+    .site-nav-buttons {
+        display: none;
+    }
+    .site-navbar {
+        padding: 0.5rem 1rem;
+    }
+    .site-navbar-content {
+        padding: 0;
+    }
+    .site-navbar-logo {
+        height: 45px;
+    }
+}
+
+/* Profile Avatar Dropdown */
+.profile-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e67e22, #f39c12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid #f1f5f9;
+}
+.profile-avatar:hover {
+    box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
+    transform: scale(1.05);
+}
+.profile-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    z-index: 1100;
+    min-width: 200px;
+    display: none;
+    margin-top: 0.5rem;
+    overflow: hidden;
+}
+.profile-dropdown.active { display: block; }
+.profile-dropdown a,
+.profile-dropdown button {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border: none;
+    background: none;
+    color: #334155;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+.profile-dropdown a:hover,
+.profile-dropdown button:hover {
+    background: #f1f5f9;
+    color: #1e3a5f;
+}
+.profile-dropdown button:last-child {
+    color: #dc2626;
+    border-top: 1px solid #f1f5f9;
+}
+.profile-dropdown button:last-child:hover { background: #fef2f2; }
+
         * {
             margin: 0;
             padding: 0;
@@ -197,6 +499,8 @@
 
         .article-cover {
             width: 100%;
+            max-height: 400px;
+            object-fit: cover;
             border-radius: 0.75rem;
             margin: 2rem 0;
         }
@@ -250,7 +554,7 @@
             line-height: 1.8;
             color: var(--gray-dark);
             margin-bottom: 1.5rem;
-            text-align: justify;
+            text-align: left;
         }
 
         .article-content h2 {
@@ -275,105 +579,6 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             margin: 2rem auto;
             display: block;
-        }
-
-        .article-content table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1.5rem 0 2rem;
-            font-size: 0.95rem;
-            border-radius: 0.5rem;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        }
-
-        .article-content table th {
-            background-color: var(--navy);
-            color: var(--white);
-            padding: 0.85rem 1rem;
-            text-align: left;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        .article-content table td {
-            padding: 0.75rem 1rem;
-            border-bottom: 1px solid #e5e7eb;
-            vertical-align: top;
-            line-height: 1.6;
-        }
-
-        .article-content table tr:nth-child(even) {
-            background-color: #f8fafc;
-        }
-
-        .article-content table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .article-content .tip-box {
-            background-color: #f0f9ff;
-            border-left: 4px solid var(--orange);
-            padding: 1.25rem 1.5rem;
-            border-radius: 0 0.5rem 0.5rem 0;
-            margin: 1.5rem 0;
-        }
-
-        .article-content .warning-box {
-            background-color: #fef3c7;
-            border-left: 4px solid #f59e0b;
-            padding: 1.25rem 1.5rem;
-            border-radius: 0 0.5rem 0.5rem 0;
-            margin: 1.5rem 0;
-        }
-
-        .article-content .example-box {
-            background-color: #f0f4f8;
-            border-left: 4px solid var(--navy);
-            padding: 1.25rem 1.5rem;
-            border-radius: 0 0.5rem 0.5rem 0;
-            margin: 1.5rem 0;
-        }
-
-        .article-content .paragraph-structure {
-            background-color: #f8fafc;
-            border: 2px solid var(--navy);
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            margin: 1.5rem 0;
-            line-height: 2;
-        }
-
-        .article-content .code-example {
-            background-color: #fafbfc;
-            border: 1px solid #e5e7eb;
-            border-left: 4px solid var(--orange);
-            padding: 1.5rem;
-            border-radius: 0 0.5rem 0.5rem 0;
-            margin: 2rem 0;
-            line-height: 1.9;
-            white-space: pre-wrap;
-        }
-
-        .article-content .checklist {
-            background-color: #f0f9ff;
-            border: 2px solid var(--navy);
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            margin: 1.5rem 0;
-        }
-
-        .article-content .highlighted {
-            background-color: #fef3c7;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-weight: 700;
-            color: var(--navy);
-        }
-
-        .article-content .image-container {
-            margin: 2rem 0;
-            text-align: center;
         }
 
         .article-content blockquote {
@@ -476,6 +681,16 @@
             background-color: var(--navy);
             color: var(--white);
             transform: translateY(-2px);
+        }
+
+        .share-whatsapp:hover {
+            background-color: #25D366;
+            border-color: #25D366;
+        }
+
+        .share-facebook:hover {
+            background-color: #1877F2;
+            border-color: #1877F2;
         }
 
         /* CTA Banner */
@@ -689,6 +904,31 @@
             color: var(--orange);
         }
 
+        
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .footer-social a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+        }
+
+        .footer-social a:hover {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+        }
+
         .footer-bottom {
             border-top: 1px solid #374151;
             padding: 2rem 1.5rem;
@@ -737,199 +977,59 @@
             }
         }
 
-/* ==================== SITE NAVBAR ==================== */
-        .site-navbar {
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid #f1f5f9;
-            padding: 0.75rem 2rem;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        .site-navbar-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .site-navbar-logo {
-            height: 55px;
-            width: auto;
-        }
-        .site-nav-buttons {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .site-nav-link {
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: #334155;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.2s;
-        }
-        .site-nav-link:hover {
-            color: #1e3a5f;
-            background: #f1f5f9;
-        }
-        .site-nav-link.active {
-            color: #e67e22;
-            font-weight: 600;
-        }
-        .site-nav-btn {
-            padding: 0.5rem 1.25rem;
-            font-size: 0.9rem;
-            font-weight: 600;
-            border-radius: 8px;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: none;
-            font-family: inherit;
-        }
-        .site-nav-btn-ghost {
-            color: #1e3a5f;
-            background: transparent;
-            border: 1px solid #cbd5e1;
-        }
-        .site-nav-btn-ghost:hover {
-            background: #f1f5f9;
-            border-color: #1e3a5f;
-        }
+/* ==================== UNIFIED NAVBAR ==================== */
+        
 
-        /* ===== LEVEL TOGGLE ===== */
-        .level-toggle { display: flex; align-items: center; background: #f1f5f9; border-radius: 8px; padding: 3px; gap: 0; flex-shrink: 0; }
-        .level-toggle-btn { padding: 5px 14px; font-size: 0.8rem; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; transition: all 0.25s ease; font-family: inherit; color: #64748b; background: transparent; white-space: nowrap; }
-        .level-toggle-btn.active { background: #1e3a5f; color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
-        .level-toggle-btn:hover:not(.active) { color: #1e3a5f; background: rgba(30, 58, 95, 0.08); }
-        .mobile-level-toggle { display: flex; align-items: center; background: #f1f5f9; border-radius: 10px; padding: 4px; margin-bottom: 1rem; gap: 0; }
-        .mobile-level-toggle .level-toggle-btn { flex: 1; padding: 8px 0; font-size: 0.85rem; border-radius: 8px; text-align: center; }
+        
 
-        .site-hamburger {
-            display: none;
-            flex-direction: column;
-            background: none;
-            border: none;
-            cursor: pointer;
-            gap: 5px;
-            z-index: 101;
-            position: relative;
-        }
+        
 
-        .site-hamburger span {
-            width: 25px;
-            height: 3px;
-            background-color: #1e3a5f;
-            border-radius: 2px;
-            transition: all 0.3s ease;
-        }
+        
 
-        .site-hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(8px, 8px);
-        }
+        
 
-        .site-hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
+        
 
-        .site-hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
-        }
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
 
         /* Mobile Menu */
-        .site-mobile-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 99;
-            transition: opacity 0.3s ease;
-        }
+        
 
-        .site-mobile-overlay.active {
-            display: block;
-        }
+        
 
-        .site-mobile-menu {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 280px;
-            height: 100vh;
-            background-color: white;
-            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
-            z-index: 102;
-            overflow-y: auto;
-            transform: translateX(-100%);
-            transition: transform 0.3s ease;
-        }
+        
 
-        .site-mobile-menu.active {
-            display: flex;
-            transform: translateX(0);
-        }
+        
 
-        .site-mobile-links {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            padding: 2rem 1.5rem;
-            gap: 0;
-        }
+        
 
-        .site-mobile-menu a,
-        .site-mobile-menu button {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 0.75rem 1rem;
-            color: #1e3a5f;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.95rem;
-            border: none;
-            background: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+        
 
-        .site-mobile-menu a:hover,
-        .site-mobile-menu button:hover {
-            color: #e67e22;
-            background-color: #f5f5f5;
-        }
+        
 
-        .site-menu-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 20px;
-            height: 20px;
-            color: currentColor;
-        }
+        
 
-        .site-menu-icon svg {
-            width: 100%;
-            height: 100%;
-            stroke: currentColor;
-        }
+        
 
-        .site-mobile-divider {
-            height: 1px;
-            background-color: #e5e7eb;
-            margin: 1rem 0;
-        }
+        
 
         .site-mobile-cta {
             background-color: #e67e22;
@@ -942,198 +1042,174 @@
             background-color: #d4651f;
         }
 
-        .site-mobile-logout {
-            color: #d32f2f !important;
-        }
+        
 
         .site-mobile-logout:hover {
             background-color: #ffebee;
         }
 
-        /* Profile Dropdown */
-        .profile-dropdown-wrapper {
-            position: relative;
-        }
-        .profile-avatar {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #e67e22, #f39c12);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 2px solid #f1f5f9;
-            font-family: 'Inter', sans-serif;
-        }
-        .profile-avatar:hover {
-            box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
-            transform: scale(1.05);
-        }
-        .profile-dropdown {
-            position: absolute;
-            top: calc(100% + 8px);
-            right: 0;
-            background: rgba(255,255,255,0.98);
-            backdrop-filter: blur(10px);
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-            border: 1px solid #e9ecef;
-            min-width: 200px;
-            display: none;
-            z-index: 2000;
-            overflow: hidden;
-        }
-        .profile-dropdown.active { display: block; }
-        .profile-dropdown a,
-        .profile-dropdown button {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            width: 100%;
-            padding: 0.7rem 1rem;
-            text-align: left;
-            border: none;
-            background: none;
-            color: #334155;
-            font-size: 0.88rem;
-            font-weight: 500;
-            cursor: pointer;
-            font-family: inherit;
-            transition: all 0.2s;
-            text-decoration: none;
-        }
-        .profile-dropdown a:hover,
-        .profile-dropdown button:hover {
-            background: #f1f5f9;
-            color: #1e3a5f;
-        }
-        .profile-dropdown button.logout-item {
-            color: #e74c3c;
-            border-top: 1px solid #f1f5f9;
-        }
-        .profile-dropdown button.logout-item:hover {
-            background: #fef2f2;
-        }
-        .profile-dropdown svg {
-            width: 16px;
-            height: 16px;
-            flex-shrink: 0;
-        }
-
         /* Responsive */
         @media (max-width: 768px) {
-            .site-hamburger {
-                display: flex;
-            }
+            
 
-            .site-nav-buttons {
-                display: none;
-            }
+            
 
-            .site-navbar {
-                padding: 1rem;
-            }
+            
 
-            .site-navbar-content {
-                padding: 0;
-            }
+            
         }
-    </style>
+    
+/* ==================== LEVEL TOGGLE ==================== */
+.level-toggle {
+    display: flex;
+    align-items: center;
+    background: #f1f5f9;
+    border-radius: 8px;
+    padding: 3px;
+    gap: 0;
+    flex-shrink: 0;
+}
+.level-toggle-btn {
+    padding: 5px 14px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: inherit;
+    color: #64748b;
+    background: transparent;
+    white-space: nowrap;
+}
+.level-toggle-btn.active {
+    background: #1e3a5f;
+    color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+.level-toggle-btn:hover:not(.active) {
+    color: #1e3a5f;
+    background: rgba(30, 58, 95, 0.08);
+}
+/* Mobile level toggle in slide-out menu */
+.mobile-level-toggle {
+    display: flex;
+    align-items: center;
+    background: #f1f5f9;
+    border-radius: 10px;
+    padding: 4px;
+    margin-bottom: 1rem;
+    gap: 0;
+}
+.mobile-level-toggle .level-toggle-btn {
+    flex: 1;
+    padding: 8px 0;
+    font-size: 0.85rem;
+    border-radius: 8px;
+    text-align: center;
+}
+/* Coming soon toast */
+.coming-soon-toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: #1e293b;
+    color: #ffffff;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    z-index: 9999;
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+.coming-soon-toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+</style>
 </head>
 <body>
     <!-- Navigation -->
     <nav class="site-navbar" id="siteNavbar">
-        <div class="site-navbar-content">
-            <a href="index.html"><img src="logo.png" alt="MyBizStudies" class="site-navbar-logo"></a>
-            <div class="level-toggle" id="desktopLevelToggle">
-                <button class="level-toggle-btn active" data-level="alevel">A-Level</button>
-                <button class="level-toggle-btn" data-level="gcse">GCSE</button>
-            </div>
-            <div class="site-nav-buttons" id="siteNavButtons">
-                <a href="app.html" class="site-nav-link auth-only" style="display:none;">Flash Cards</a>
-                <a href="exam-skills-v2.html" class="site-nav-link auth-only" style="display:none;">Exam Skills</a>
-                <a href="exam-practice.html" class="site-nav-link auth-only" style="display:none;">Exam Practice</a>
-                <a href="notes.html" class="site-nav-link auth-only" style="display:none;">Study Notes</a>
-                <a href="blog.html" class="active site-nav-link" style="color: #e67e22;">Blog</a>
-                <a href="contact.html" class="site-nav-link">Contact Us</a>
-                <a href="login.html" class="site-nav-btn site-nav-btn-ghost guest-only">Log In</a>
-                <a href="signup.html" class="site-nav-btn site-nav-btn-primary guest-only">Get Started</a>
-                <div class="profile-dropdown-wrapper auth-only" style="display:none;">
-                    <div class="profile-avatar" id="profileAvatar">--</div>
-                    <div class="profile-dropdown" id="profileDropdown">
-                        <a href="student-progress.html">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
-                            Student Progress
-                        </a>
-                        <a href="account.html">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-                            My Account
-                        </a>
-                        <button class="logout-item" id="navLogoutBtn">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                            Log Out
-                        </button>
-                    </div>
+    <div class="site-navbar-content">
+        <a href="index.html"><img src="logo.png" alt="MyBizStudies" class="site-navbar-logo"></a>
+        <div class="level-toggle" id="desktopLevelToggle">
+            <button class="level-toggle-btn active" data-level="alevel">A-Level</button>
+            <button class="level-toggle-btn" data-level="gcse">GCSE</button>
+        </div>
+        <div class="site-nav-buttons" id="siteNavButtons">
+            <a href="app.html" class="site-nav-link">Flash Cards</a>
+            <a href="exam-skills-v2.html" class="site-nav-link">Exam Skills</a>
+            <a href="exam-practice.html" class="site-nav-link auth-only" style="display:none;">Exam Practice</a>
+            <a href="notes.html" class="site-nav-link">Study Notes</a>
+            <a href="blog.html" class="site-nav-link active">Blog</a>
+            <a href="contact.html" class="site-nav-link">Contact Us</a>
+            <div class="profile-wrapper" style="position: relative;">
+                <div class="profile-avatar" id="profileAvatar">--</div>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <a href="student-progress.html">Student Progress</a>
+                    <a href="#manage-account">My Account</a>
+                    <button id="navLogoutBtn">Log Out</button>
                 </div>
             </div>
-            <button class="site-hamburger" id="siteHamburger" aria-label="Menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
         </div>
-    </nav>
+        <button class="site-hamburger" id="siteHamburger" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</nav>
 
         <div class="site-mobile-overlay" id="siteMobileOverlay"></div>
-    <div class="site-mobile-menu" id="siteMobileMenu">
-        <div class="site-mobile-links">
-            <div class="mobile-level-toggle">
-                <button class="level-toggle-btn active" data-level="alevel">A-Level</button>
-                <button class="level-toggle-btn" data-level="gcse">GCSE</button>
-            </div>
-            <a href="app.html" class="auth-only" style="display:none;">
-                <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
-                Flash Cards
-            </a>
-            <a href="exam-skills-v2.html" class="auth-only" style="display:none;">
-                <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg></span>
-                Exam Skills
-            </a>
-            <a href="exam-practice.html" class="auth-only" style="display:none;">Exam Practice</a>
-            <a href="notes.html" class="auth-only" style="display:none;">
-                <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></span>
-                Study Notes
-            </a>
-            <div class="site-mobile-divider auth-only" style="display:none;"></div>
-            <a href="blog.html" class="active">
-                <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"/></svg></span>
-                Blog
-            </a>
-            <div class="site-mobile-divider"></div>
-            <a href="contact.html">
-                <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></span>
-                Contact Us
-            </a>
-            <div class="site-mobile-divider guest-only"></div>
-            <a href="login.html" class="guest-only">
-                <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"/></svg></span>
-                Log In
-            </a>
-            <a href="signup.html" class="site-mobile-cta guest-only">
-                Get Started
-            </a>
-            <div class="site-mobile-divider auth-only" style="display:none;"></div>
-            <button class="site-mobile-logout auth-only" id="mobileLogoutBtn" style="display:none;">
-                <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l3-3m0 0l-3-3m3 3H3"/></svg></span>
-                Logout
-            </button>
-        </div>
+<div class="site-mobile-menu" id="siteMobileMenu">
+    <div class="site-mobile-links">
+        <a href="app.html">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
+            Flash Cards
+        </a>
+        <a href="exam-skills-v2.html">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg></span>
+            Exam Skills
+        </a>
+        <a href="exam-practice.html" class="auth-only" style="display:none;">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5"/></svg></span>
+            Exam Practice
+        </a>
+        <a href="notes.html">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></span>
+            Study Notes
+        </a>
+        <a href="blog.html" class="active">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"/></svg></span>
+            Blog
+        </a>
+        <div class="site-mobile-divider"></div>
+        <a href="contact.html">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></span>
+            Contact Us
+        </a>
+        <a href="student-progress.html">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg></span>
+            Student Progress
+        </a>
+        <a href="#manage-account">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"/></svg></span>
+            My Account
+        </a>
+        <div class="site-mobile-divider"></div>
+        <button class="site-mobile-logout" id="mobileLogoutBtn">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l3-3m0 0l-3-3m3 3H3"/></svg></span>
+            Logout
+        </button>
     </div>
+</div>
 
     <!-- Main Content -->
     <div class="container" id="mainContent">
@@ -1150,6 +1226,17 @@
             <div class="footer-brand">
                 <img src="logo.png" alt="MyBizStudies">
                 <p>The smart way to revise GCSE and A-Level Business Studies. Study notes, exam practice, and AI feedback to help you achieve your best grades.</p>
+                <div class="footer-social">
+                    <a href="https://www.tiktok.com/@mybizstudies" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.34-6.34V8.73a8.19 8.19 0 004.76 1.52V6.81a4.84 4.84 0 01-1-.12z"/></svg>
+                    </a>
+                    <a href="https://www.instagram.com/mybizstudies" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                    </a>
+                    <a href="https://www.facebook.com/mybizstudies" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                    </a>
+                </div>
             </div>
             <div class="footer-links">
                 <h4>Platform</h4>
@@ -1303,12 +1390,18 @@
                 <div class="share-section">
                     <h3 class="share-title">Share this article</h3>
                     <div class="share-buttons">
+                        <a class="share-btn share-whatsapp" id="whatsappShareBtn" target="_blank" rel="noopener noreferrer">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                            <span>WhatsApp</span>
+                        </a>
+                        <a class="share-btn share-facebook" id="facebookShareBtn" target="_blank" rel="noopener noreferrer">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                            <span>Facebook</span>
+                        </a>
                         <button class="share-btn" id="copyLinkBtn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
                             <span>Copy Link</span>
                         </button>
-                        <a class="share-btn" id="twitterShareBtn" target="_blank" rel="noopener noreferrer">
-                            <span>Share on X</span>
-                        </a>
                     </div>
                 </div>
 
@@ -1335,8 +1428,11 @@
                 });
             });
 
-            const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(window.location.href)}&via=MyBizStudies`;
-            document.getElementById('twitterShareBtn').href = twitterShareUrl;
+            const whatsappShareUrl = `https://wa.me/?text=${encodeURIComponent(post.title + ' - ' + window.location.href)}`;
+            document.getElementById('whatsappShareBtn').href = whatsappShareUrl;
+
+            const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`;
+            document.getElementById('facebookShareBtn').href = facebookShareUrl;
         }
 
         // Update meta tags
@@ -1448,23 +1544,34 @@
             const mob = document.getElementById('siteMobileMenu');
             const ovl = document.getElementById('siteMobileOverlay');
             function toggleSiteMenu() {
+                var _isOpening = mob && !mob.classList.contains('active');
+                if (_isOpening) {
+                    if (mob) mob.style.display = 'block';
+                    if (ovl) ovl.style.display = 'block';
+                    void (mob && mob.offsetHeight);
+                }
                 if (ham) ham.classList.toggle('active');
                 if (mob) mob.classList.toggle('active');
                 if (ovl) ovl.classList.toggle('active');
                 document.body.style.overflow = mob && mob.classList.contains('active') ? 'hidden' : '';
+                if (!_isOpening) {
+                    setTimeout(function() {
+                        if (mob) mob.style.display = 'none';
+                        if (ovl) ovl.style.display = 'none';
+                    }, 400);
+                }
             }
             if (ham) ham.addEventListener('click', toggleSiteMenu);
             if (ovl) ovl.addEventListener('click', toggleSiteMenu);
             if (mob) mob.querySelectorAll('a').forEach(link => link.addEventListener('click', () => { if (mob.classList.contains('active')) toggleSiteMenu(); }));
 
-            // Profile dropdown
-            function getProfileInitials(email) {
-                if (!email) return '--';
-                var parts = email.split('@')[0].split('.');
-                if (parts.length >= 2) return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
-                return email.substring(0, 2).toUpperCase();
-            }
+            const navLogout = document.getElementById('navLogoutBtn');
+            const mobileLogout = document.getElementById('mobileLogoutBtn');
+            async function handleNavLogout() { await client.auth.signOut(); window.location.href = 'login.html'; }
+            if (navLogout) navLogout.addEventListener('click', handleNavLogout);
+            if (mobileLogout) mobileLogout.addEventListener('click', handleNavLogout);
 
+            // Profile avatar dropdown
             var profileAvatar = document.getElementById('profileAvatar');
             var profileDropdown = document.getElementById('profileDropdown');
             if (profileAvatar && profileDropdown) {
@@ -1478,61 +1585,155 @@
                     }
                 });
             }
+            // Populate profile initials
+            function getProfileInitials(email) {
+                if (!email) return '--';
+                var parts = email.split('@')[0].split('.');
+                if (parts.length >= 2) return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
+                return email.substring(0, 2).toUpperCase();
+            }
 
-            // Check auth and populate profile avatar
-            (async () => {
-                const { data: { session } } = await client.auth.getSession();
-                if (session && profileAvatar && session.user && session.user.email) {
-                    profileAvatar.textContent = getProfileInitials(session.user.email);
-                }
-            })();
-
-            const navLogout = document.getElementById('navLogoutBtn');
-            const mobileLogout = document.getElementById('mobileLogoutBtn');
-            async function handleNavLogout() { await client.auth.signOut(); window.location.href = 'login.html'; }
-            if (navLogout) navLogout.addEventListener('click', handleNavLogout);
-            if (mobileLogout) mobileLogout.addEventListener('click', handleNavLogout);
-        })();
-
-        // ===== LEVEL TOGGLE =====
-        (function() {
-            var LEVEL_KEY = 'mybiz_study_level';
-            var currentLevel = localStorage.getItem(LEVEL_KEY) || 'alevel';
-            var alevelPages = { 'app.html': 'gcse-app.html', 'glossary.html': 'gcse-glossary.html', 'exam-skills-v2.html': null, 'exam-practice.html': null, 'notes.html': null, 'notes-unit1.html': null, 'notes-unit2.html': null, 'notes-unit3.html': null, 'notes-unit4.html': null };
-            var gcsePages = { 'gcse-app.html': 'app.html', 'gcse-glossary.html': 'glossary.html' };
-            var comingSoon = ['exam-skills-v2.html', 'exam-practice.html', 'notes.html', 'notes-unit1.html', 'notes-unit2.html', 'notes-unit3.html', 'notes-unit4.html'];
-            function getCurrentPage() { var path = window.location.pathname; return path.substring(path.lastIndexOf('/') + 1) || 'index.html'; }
-            function showComingSoonToast() {
-                var toast = document.getElementById('comingSoonToast');
-                if (!toast) { toast = document.createElement('div'); toast.id = 'comingSoonToast'; toast.style.cssText = 'position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:#1e3a5f;color:#fff;padding:0.75rem 1.5rem;border-radius:10px;font-size:0.9rem;font-weight:600;opacity:0;transition:all 0.3s ease;z-index:10000;pointer-events:none;'; toast.textContent = 'GCSE version coming soon!'; document.body.appendChild(toast); }
-                toast.style.opacity = '1'; toast.style.transform = 'translateX(-50%) translateY(0)';
-                setTimeout(function() { toast.style.opacity = '0'; toast.style.transform = 'translateX(-50%) translateY(20px)'; }, 2500);
+            async function setupProfileAvatar() {
+                try {
+                    const { data: { user } } = await client.auth.getUser();
+                    if (profileAvatar && user && user.email) {
+                        profileAvatar.textContent = getProfileInitials(user.email);
+                    }
+                } catch (e) { console.log('Profile avatar setup skipped:', e.message); }
             }
-            function updateNavLinks(level) {
-                document.querySelectorAll('.site-nav-link, a[href]').forEach(function(link) {
-                    var href = link.getAttribute('href'); if (!href) return;
-                    if (level === 'gcse') { if (href === 'app.html') link.setAttribute('href', 'gcse-app.html'); if (comingSoon.indexOf(href) !== -1) { link.setAttribute('data-coming-soon', 'true'); link.addEventListener('click', comingSoonHandler); } }
-                    else { if (href === 'gcse-app.html') link.setAttribute('href', 'app.html'); link.removeAttribute('data-coming-soon'); link.removeEventListener('click', comingSoonHandler); }
-                });
-            }
-            function comingSoonHandler(e) { if (this.getAttribute('data-coming-soon') === 'true') { e.preventDefault(); showComingSoonToast(); } }
-            function setLevel(level) {
-                localStorage.setItem(LEVEL_KEY, level); currentLevel = level;
-                document.querySelectorAll('.level-toggle-btn').forEach(function(btn) { btn.classList.toggle('active', btn.dataset.level === level); });
-                updateNavLinks(level);
-                var page = getCurrentPage();
-                if (level === 'gcse') { if (alevelPages[page] === null) { showComingSoonToast(); localStorage.setItem(LEVEL_KEY, 'alevel'); currentLevel = 'alevel'; document.querySelectorAll('.level-toggle-btn').forEach(function(btn) { btn.classList.toggle('active', btn.dataset.level === 'alevel'); }); updateNavLinks('alevel'); return; } if (alevelPages[page]) { window.location.href = alevelPages[page]; return; } }
-                else { if (gcsePages[page]) { window.location.href = gcsePages[page]; return; } }
-            }
-            function initToggles() {
-                document.querySelectorAll('.level-toggle-btn').forEach(function(btn) { btn.classList.toggle('active', btn.dataset.level === currentLevel); btn.addEventListener('click', function() { setLevel(this.dataset.level); }); });
-                updateNavLinks(currentLevel);
-            }
-            if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initToggles); } else { initToggles(); }
+            setupProfileAvatar();
         })();
 
         // Initialize
         document.addEventListener('DOMContentLoaded', loadBlogPost);
+    
+
+// ==================== LEVEL TOGGLE ====================
+(function() {
+    var LEVEL_KEY = 'mybiz_study_level';
+    var currentLevel = localStorage.getItem(LEVEL_KEY) || 'alevel';
+
+    // Page routing map
+    var alevelPages = {
+        'app.html': 'gcse-app.html',
+        'glossary.html': 'gcse-glossary.html',
+        'exam-skills-v2.html': null,
+        'notes.html': null,
+        'notes-unit1.html': null,
+        'notes-unit2.html': null,
+        'notes-unit3.html': null,
+        'notes-unit4.html': null
+    };
+    var gcsePages = {
+        'gcse-app.html': 'app.html',
+        'gcse-glossary.html': 'glossary.html'
+    };
+
+    // Coming soon GCSE pages
+    var comingSoon = ['exam-skills-v2.html', 'notes.html', 'notes-unit1.html', 'notes-unit2.html', 'notes-unit3.html', 'notes-unit4.html'];
+
+    function getCurrentPage() {
+        var path = window.location.pathname;
+        var page = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
+        return page;
+    }
+
+    function showComingSoonToast() {
+        var toast = document.getElementById('comingSoonToast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'comingSoonToast';
+            toast.className = 'coming-soon-toast';
+            toast.textContent = 'GCSE version coming soon!';
+            document.body.appendChild(toast);
+        }
+        toast.classList.add('show');
+        setTimeout(function() { toast.classList.remove('show'); }, 2500);
+    }
+
+    function updateNavLinks(level) {
+        var navLinks = document.querySelectorAll('.site-nav-link, .nav-link, a[href]');
+        navLinks.forEach(function(link) {
+            var href = link.getAttribute('href');
+            if (!href) return;
+
+            if (level === 'gcse') {
+                if (href === 'app.html') link.setAttribute('href', 'gcse-app.html');
+                if (comingSoon.indexOf(href) !== -1) {
+                    link.setAttribute('data-coming-soon', 'true');
+                    link.addEventListener('click', comingSoonHandler);
+                }
+            } else {
+                if (href === 'gcse-app.html') link.setAttribute('href', 'app.html');
+                link.removeAttribute('data-coming-soon');
+                link.removeEventListener('click', comingSoonHandler);
+            }
+        });
+    }
+
+    function comingSoonHandler(e) {
+        if (this.getAttribute('data-coming-soon') === 'true') {
+            e.preventDefault();
+            showComingSoonToast();
+        }
+    }
+
+    function setLevel(level) {
+        localStorage.setItem(LEVEL_KEY, level);
+        currentLevel = level;
+
+        // Update all toggle buttons
+        document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
+            btn.classList.toggle('active', btn.dataset.level === level);
+        });
+
+        // Update nav links
+        updateNavLinks(level);
+
+        // Check if we need to redirect
+        var page = getCurrentPage();
+        if (level === 'gcse') {
+            if (alevelPages[page] === null) {
+                showComingSoonToast();
+                // Revert toggle visually
+                localStorage.setItem(LEVEL_KEY, 'alevel');
+                currentLevel = 'alevel';
+                document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
+                    btn.classList.toggle('active', btn.dataset.level === 'alevel');
+                });
+                updateNavLinks('alevel');
+                return;
+            }
+            if (alevelPages[page]) {
+                window.location.href = alevelPages[page];
+                return;
+            }
+        } else {
+            if (gcsePages[page]) {
+                window.location.href = gcsePages[page];
+                return;
+            }
+        }
+    }
+
+    // Initialize toggles on page load
+    function initToggles() {
+        document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
+            btn.classList.toggle('active', btn.dataset.level === currentLevel);
+            btn.addEventListener('click', function() {
+                setLevel(this.dataset.level);
+            });
+        });
+        updateNavLinks(currentLevel);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initToggles);
+    } else {
+        initToggles();
+    }
+})();
+
     </script>
 </body>
 </html>
