@@ -515,14 +515,17 @@
         }
 
         .board-card-icon {
-            width: 48px; height: 48px;
-            border-radius: 12px;
+            min-width: 64px; height: 40px;
+            padding: 0 12px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.4rem;
+            font-size: 0.95rem;
             font-weight: 800;
             color: white;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
         }
 
         .board-card-check {
@@ -2725,7 +2728,7 @@
             <!-- A-LEVEL BOARDS -->
             <div class="board-card" data-board="edexcel_ial" data-level="alevel" onclick="selectBoard(this)">
                 <div class="board-card-header">
-                    <div class="board-card-icon" style="background: linear-gradient(135deg, #e74c3c, #c0392b); font-size: 1rem;">A2/AS</div>
+                    <div class="board-card-icon" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">A2/AS</div>
                     <div class="board-card-check"></div>
                 </div>
                 <div class="board-card-title">Edexcel International A Level</div>
@@ -2749,7 +2752,7 @@
             </div>
             <div class="board-card" data-board="cie_ial" data-level="alevel" onclick="selectBoard(this)">
                 <div class="board-card-header">
-                    <div class="board-card-icon" style="background: linear-gradient(135deg, #f39c12, #e67e22); font-size: 1rem;">A2/AS</div>
+                    <div class="board-card-icon" style="background: linear-gradient(135deg, #f39c12, #e67e22);">A2/AS</div>
                     <div class="board-card-check"></div>
                 </div>
                 <div class="board-card-title">CIE International A Level</div>
