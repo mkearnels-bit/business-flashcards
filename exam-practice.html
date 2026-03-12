@@ -2912,7 +2912,7 @@
 
         <!-- Generate Button -->
         <div id="generateSection" style="display:none;">
-            <button class="generate-btn" id="generateBtn" onclick="generateQuestion()" disabled>
+            <button class="generate-btn" id="generateBtn" onclick="checkFreeTrialAndRun(generateQuestion)" disabled>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
                 Generate Question
             </button>
@@ -2991,6 +2991,42 @@
 
 
     <!-- TEST LOADING PHASE -->
+    <!-- FREE TRIAL PAYWALL PHASE -->
+    <div class="phase" id="phase-paywall">
+        <div style="max-width: 520px; margin: 80px auto; text-align: center; padding: 2rem;">
+            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--accent), var(--accent-light)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+                <svg width="40" height="40" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            </div>
+            <h2 style="font-size: 1.6rem; font-weight: 800; color: var(--primary); margin-bottom: 0.75rem;">You've Used Your Free Practices</h2>
+            <p style="color: var(--gray-500); font-size: 1rem; line-height: 1.6; margin-bottom: 1.5rem;">
+                You've completed your <strong>5 free exam practices</strong>. Subscribe to get unlimited access to AI-generated exam papers, instant marking, and detailed feedback.
+            </p>
+            <div style="background: var(--gray-50); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem; text-align: left;">
+                <div style="font-weight: 700; color: var(--primary); margin-bottom: 0.75rem;">What you'll get:</div>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem; color: var(--gray-600); font-size: 0.9rem;">
+                    <svg width="16" height="16" fill="var(--success)" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+                    Unlimited AI-generated exam papers
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem; color: var(--gray-600); font-size: 0.9rem;">
+                    <svg width="16" height="16" fill="var(--success)" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+                    Instant AI marking with examiner feedback
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem; color: var(--gray-600); font-size: 0.9rem;">
+                    <svg width="16" height="16" fill="var(--success)" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+                    Progress tracking & performance dashboard
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; color: var(--gray-600); font-size: 0.9rem;">
+                    <svg width="16" height="16" fill="var(--success)" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+                    All exam boards covered
+                </div>
+            </div>
+            <a href="pricing.html" class="action-btn action-btn-primary" style="display: inline-block; text-decoration: none; padding: 14px 32px; font-size: 1rem;">
+                View Plans & Subscribe
+            </a>
+            <p style="color: var(--gray-400); font-size: 0.8rem; margin-top: 1rem;">Starting from just $18/month</p>
+        </div>
+    </div>
+
     <div class="phase" id="phase-test-loading">
         <div class="test-loading-container">
             <div class="test-loading-title" id="testLoadingTitle">Generating Your Test...</div>
@@ -3505,7 +3541,7 @@ function selectMode(mode) {
             document.getElementById('aqaPaperSelectionSection').style.display = '';
         } else {
             // For Edexcel: generate exam directly (unit already selected)
-            generateTest();
+            checkFreeTrialAndGenerate();
         }
     }
 }
@@ -3522,7 +3558,7 @@ function selectAqaPaper(el) {
 
     // Small delay for visual feedback then generate
     setTimeout(function() {
-        generateTest();
+        checkFreeTrialAndGenerate();
     }, 300);
 }
 
@@ -3536,7 +3572,7 @@ function selectCiePaper(el) {
     currentUnit = 'paper' + paperNum;
 
     setTimeout(function() {
-        generateTest();
+        checkFreeTrialAndGenerate();
     }, 300);
 }
 
@@ -3609,7 +3645,51 @@ function renderTopics() {
 
 function selectTopic(topicCode) {
     currentTopic = topicCode;
-    generateTest();
+    checkFreeTrialAndGenerate();
+}
+
+// ===== FREE TRIAL CHECK =====
+async function checkFreeTrialAndRun(callback) {
+    try {
+        var { data, error } = await supabaseClient.rpc('use_free_trial');
+
+        if (error) {
+            console.error('Free trial RPC error:', error.message);
+            showError('Unable to verify your subscription. Please refresh and try again.');
+            return;
+        }
+
+        if (!data || !data.allowed) {
+            var reason = data ? data.reason : 'unknown';
+
+            if (reason === 'limit_reached') {
+                showPhase('paywall');
+            } else if (reason === 'not_authenticated') {
+                showError('Please log in to take a test.');
+            } else if (reason === 'no_subscription') {
+                showError('Account setup incomplete. Please log out and log back in.');
+            } else {
+                showError('Unable to start test. Please try again.');
+            }
+            return;
+        }
+
+        // Access granted
+        if (data.unlimited) {
+            console.log('Paid subscriber (' + data.plan + ') — unlimited access');
+        } else {
+            console.log('Free trial: ' + data.tests_used + ' used, ' + data.tests_remaining + ' remaining');
+        }
+
+        callback();
+    } catch (error) {
+        console.error('Free trial check error:', error);
+        showError('Something went wrong. Please refresh and try again.');
+    }
+}
+
+function checkFreeTrialAndGenerate() {
+    checkFreeTrialAndRun(generateTest);
 }
 
 // ===== TEST GENERATION =====
