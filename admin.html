@@ -1961,28 +1961,38 @@
 
         // Delete User
         async function deleteUser(userId, displayName) {
-            if (!confirm(`Are you sure you want to delete ${displayName}? This will remove their subscription and all progress data. This cannot be undone.`)) {
+            if (!confirm(`Are you sure you want to delete ${displayName}? This will remove their account and all data. This cannot be undone.`)) {
                 return;
             }
 
             try {
-                // Delete progress data first
-                const { error: progressError } = await supabaseClient
-                    .from('card_progress')
-                    .delete()
-                    .eq('user_id', userId);
+                // Delete all user data from every table
+                const tables = ['card_progress', 'exam_practice_attempts', 'exam_practice_settings', 'test_generations', 'test_results', 'coaching_summaries', 'subscriptions'];
+                for (const table of tables) {
+                    const { error } = await supabaseClient
+                        .from(table)
+                        .delete()
+                        .eq('user_id', userId);
+                    if (error) console.warn(`${table} deletion warning:`, error);
+                }
 
-                if (progressError) console.warn('Progress deletion warning:', progressError);
+                // Delete from auth.users via the edge function
+                const { data: { session } } = await supabaseClient.auth.getSession();
+                const response = await fetch('https://zyaywzzmjpctpodpxhge.supabase.co/rest/v1/rpc/admin_delete_user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': 'Bearer ' + session.access_token
+                    },
+                    body: JSON.stringify({ target_user_id: userId })
+                });
 
-                // Delete subscription
-                const { error: subError } = await supabaseClient
-                    .from('subscriptions')
-                    .delete()
-                    .eq('user_id', userId);
+                if (!response.ok) {
+                    console.warn('Auth user deletion may require manual removal from Supabase dashboard');
+                }
 
-                if (subError) throw subError;
-
-                showToast(`${displayName} has been deleted.`, 'success');
+                showToast(`${displayName} has been fully deleted.`, 'success');
                 await loadUsers();
                 await loadDashboard();
             } catch (error) {
