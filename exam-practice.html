@@ -2721,6 +2721,22 @@
     <!-- PHASE 1: Selection -->
     <div class="phase active" id="phase-selection">
 
+        <!-- Free trial banner - hidden for paid users -->
+        <div id="freeTrialBanner" style="display:none; max-width: 680px; margin: 0 auto 1.5rem; padding: 14px 20px; background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border: 1px solid #bae6fd; border-radius: 12px; display: none;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 32px; height: 32px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <svg width="16" height="16" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                    </div>
+                    <div>
+                        <div style="font-weight: 700; font-size: 0.9rem; color: var(--primary);">Free Plan</div>
+                        <div style="font-size: 0.8rem; color: var(--gray-500);" id="freeTrialText">5 of 5 practices remaining</div>
+                    </div>
+                </div>
+                <a href="pricing.html" style="font-size: 0.8rem; font-weight: 600; color: var(--accent); text-decoration: none;">Upgrade</a>
+            </div>
+        </div>
+
         <div class="section-title">Choose Your Exam Board</div>
         <div class="section-subtitle">Select the exam board and qualification you are studying</div>
 
@@ -5262,6 +5278,44 @@ async function checkAuth() {
     if (initialsEl) initialsEl.textContent = initials;
     if (nameEl) nameEl.textContent = fullName || 'Student';
     if (emailEl) emailEl.textContent = email;
+
+    // Load free trial status
+    loadTrialStatus();
+}
+
+async function loadTrialStatus() {
+    try {
+        var { data, error } = await supabaseClient
+            .from('subscriptions')
+            .select('plan, free_tests_used')
+            .eq('user_id', currentSession.user.id)
+            .single();
+
+        if (error || !data) return;
+
+        var banner = document.getElementById('freeTrialBanner');
+        var text = document.getElementById('freeTrialText');
+        if (!banner || !text) return;
+
+        if (data.plan === 'free') {
+            var used = data.free_tests_used || 0;
+            var remaining = Math.max(0, 5 - used);
+            text.textContent = remaining + ' of 5 practices remaining';
+            banner.style.display = 'block';
+
+            if (remaining <= 2 && remaining > 0) {
+                banner.style.background = 'linear-gradient(135deg, #fffbeb, #fef3c7)';
+                banner.style.borderColor = '#fcd34d';
+            } else if (remaining === 0) {
+                banner.style.background = 'linear-gradient(135deg, #fef2f2, #fee2e2)';
+                banner.style.borderColor = '#fca5a5';
+            }
+        } else {
+            banner.style.display = 'none';
+        }
+    } catch (e) {
+        console.error('Failed to load trial status:', e);
+    }
 }
 
 async function handleLogout() {
