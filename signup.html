@@ -442,6 +442,12 @@
                     <div class="password-requirements">Must be at least 8 characters</div>
                 </div>
 
+                <!-- Honeypot - hidden from humans, bots auto-fill -->
+                <div style="position:absolute;left:-9999px;top:-9999px;" aria-hidden="true">
+                    <label for="website">Website</label>
+                    <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+                </div>
+
                 <div class="terms-checkbox">
                     <input type="checkbox" id="agreeTerms">
                     <label for="agreeTerms">I agree to the <a href="terms.html" target="_blank">Terms of Service</a> and <a href="privacy.html" target="_blank">Privacy Policy</a></label>
@@ -471,6 +477,9 @@
 
         // Initialize Supabase client
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Anti-bot: record page load time
+        const pageLoadedAt = Date.now();
 
         // DOM Elements
         const signupForm = document.getElementById('signupForm');
@@ -518,6 +527,37 @@
         // Handle form submission
         signupForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+
+            // Anti-bot: honeypot check (hidden field filled = bot)
+            const honeypot = document.getElementById('website');
+            if (honeypot && honeypot.value) {
+                // Fake success to fool the bot
+                document.getElementById('signupForm').style.display = 'none';
+                document.querySelector('.auth-header').style.display = 'none';
+                document.querySelector('.auth-footer').style.display = 'none';
+                document.querySelector('.terms-checkbox').style.display = 'none';
+                messageDiv.innerHTML = '<div style="text-align:center;"><h2 style="color:var(--primary);margin-bottom:1rem;">Check Your Email!</h2><p style="color:var(--gray-600);">We\'ve sent a confirmation link to your email.</p></div>';
+                messageDiv.className = 'message success show';
+                messageDiv.style.background = '#f0fdf4';
+                messageDiv.style.padding = '2rem';
+                messageDiv.style.border = 'none';
+                return;
+            }
+
+            // Anti-bot: time check (form submitted in under 3 seconds = bot)
+            const elapsed = Date.now() - pageLoadedAt;
+            if (elapsed < 3000) {
+                document.getElementById('signupForm').style.display = 'none';
+                document.querySelector('.auth-header').style.display = 'none';
+                document.querySelector('.auth-footer').style.display = 'none';
+                document.querySelector('.terms-checkbox').style.display = 'none';
+                messageDiv.innerHTML = '<div style="text-align:center;"><h2 style="color:var(--primary);margin-bottom:1rem;">Check Your Email!</h2><p style="color:var(--gray-600);">We\'ve sent a confirmation link to your email.</p></div>';
+                messageDiv.className = 'message success show';
+                messageDiv.style.background = '#f0fdf4';
+                messageDiv.style.padding = '2rem';
+                messageDiv.style.border = 'none';
+                return;
+            }
 
             const firstName = firstNameInput.value.trim();
             const lastName = lastNameInput.value.trim();
