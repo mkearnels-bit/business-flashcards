@@ -2720,7 +2720,7 @@
             <!-- A-LEVEL BOARDS -->
             <div class="board-card" data-board="edexcel_ial" data-level="alevel" onclick="selectBoard(this)">
                 <div class="board-card-header">
-                    <div class="board-card-icon" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">IAL</div>
+                    <div class="board-card-icon" style="background: linear-gradient(135deg, #e74c3c, #c0392b); font-size: 1rem;">A2/AS</div>
                     <div class="board-card-check"></div>
                 </div>
                 <div class="board-card-title">Edexcel International A Level</div>
@@ -2736,7 +2736,7 @@
             </div>
             <div class="board-card" data-board="aqa_uk" data-level="alevel" onclick="selectBoard(this)">
                 <div class="board-card-header">
-                    <div class="board-card-icon" style="background: linear-gradient(135deg, #27ae60, #229954);">AQ</div>
+                    <div class="board-card-icon" style="background: linear-gradient(135deg, #27ae60, #229954);">A2</div>
                     <div class="board-card-check"></div>
                 </div>
                 <div class="board-card-title">AQA A Level</div>
@@ -2744,7 +2744,7 @@
             </div>
             <div class="board-card" data-board="cie_ial" data-level="alevel" onclick="selectBoard(this)">
                 <div class="board-card-header">
-                    <div class="board-card-icon" style="background: linear-gradient(135deg, #f39c12, #e67e22);">CI</div>
+                    <div class="board-card-icon" style="background: linear-gradient(135deg, #f39c12, #e67e22); font-size: 1rem;">A2/AS</div>
                     <div class="board-card-check"></div>
                 </div>
                 <div class="board-card-title">CIE International A Level</div>
@@ -3871,21 +3871,24 @@ function renderTestSourceBooklet(sourceBooklet) {
         extractContent.appendChild(text);
 
         if (extract.data) {
-            if (extract.data.type === 'table') {
-                var tableWrapper = document.createElement('div');
-                tableWrapper.innerHTML = renderDataTable(extract.data);
-                extractContent.appendChild(tableWrapper);
-            } else if (['bar', 'horizontal_bar', 'line', 'pie', 'stacked_bar'].indexOf(extract.data.type) !== -1) {
-                var chartContainer = document.createElement('div');
-                chartContainer.className = 'test-chart-container';
-                var canvas = document.createElement('canvas');
-                canvas.id = 'test-chart-' + extract.id;
-                chartContainer.appendChild(canvas);
-                extractContent.appendChild(chartContainer);
-                setTimeout(function(cd, cv) {
-                    return function() { renderTestChart(cd, cv); };
-                }(extract.data, canvas), 100);
-            }
+            var dataItems = Array.isArray(extract.data) ? extract.data : [extract.data];
+            dataItems.forEach(function(dataItem, dataIndex) {
+                if (dataItem.type === 'table') {
+                    var tableWrapper = document.createElement('div');
+                    tableWrapper.innerHTML = renderDataTable(dataItem);
+                    extractContent.appendChild(tableWrapper);
+                } else if (['bar', 'horizontal_bar', 'line', 'pie', 'stacked_bar'].indexOf(dataItem.type) !== -1) {
+                    var chartContainer = document.createElement('div');
+                    chartContainer.className = 'test-chart-container';
+                    var canvas = document.createElement('canvas');
+                    canvas.id = 'test-chart-' + extract.id + '-' + dataIndex;
+                    chartContainer.appendChild(canvas);
+                    extractContent.appendChild(chartContainer);
+                    setTimeout(function(cd, cv) {
+                        return function() { renderTestChart(cd, cv); };
+                    }(dataItem, canvas), 100 + dataIndex * 50);
+                }
+            });
         }
 
         content.appendChild(extractContent);
@@ -4851,33 +4854,43 @@ const LOGO_BASE64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAACFCAYAA
                         y = contentY + 2;
                     }
                     
-                    // Extract data (table) if exists
-                    if (extract.data && extract.data.type === 'table') {
-                        checkSpace(8 + extract.data.rows.length * 5);
-                        doc.setFontSize(8);
-                        doc.setFont('helvetica', 'bold');
-                        doc.setTextColor(primaryDark[0], primaryDark[1], primaryDark[2]);
-                        
-                        var colCount = extract.data.headers.length;
-                        var colWidth = (contentWidth - 6) / colCount;
-                        var tableX = margin + 3;
-                        
-                        // Headers
-                        for (var hi = 0; hi < extract.data.headers.length; hi++) {
-                            doc.text(extract.data.headers[hi], tableX + hi * colWidth + 1, y);
-                        }
-                        y += 5;
-                        
-                        // Rows
-                        doc.setFont('helvetica', 'normal');
-                        doc.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
-                        extract.data.rows.forEach(function(row) {
-                            for (var ri = 0; ri < row.length; ri++) {
-                                doc.text(String(row[ri]), tableX + ri * colWidth + 1, y);
+                    // Extract data (table/chart) if exists - supports single object or array
+                    if (extract.data) {
+                        var pdfDataItems = Array.isArray(extract.data) ? extract.data : [extract.data];
+                        pdfDataItems.forEach(function(dataItem) {
+                            if (dataItem.type === 'table') {
+                                checkSpace(8 + dataItem.rows.length * 5);
+                                doc.setFontSize(8);
+                                doc.setFont('helvetica', 'bold');
+                                doc.setTextColor(primaryDark[0], primaryDark[1], primaryDark[2]);
+
+                                if (dataItem.title) {
+                                    doc.text(dataItem.title, margin + 3, y);
+                                    y += 5;
+                                }
+
+                                var colCount = dataItem.headers.length;
+                                var colWidth = (contentWidth - 6) / colCount;
+                                var tableX = margin + 3;
+
+                                // Headers
+                                for (var hi = 0; hi < dataItem.headers.length; hi++) {
+                                    doc.text(dataItem.headers[hi], tableX + hi * colWidth + 1, y);
+                                }
+                                y += 5;
+
+                                // Rows
+                                doc.setFont('helvetica', 'normal');
+                                doc.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
+                                dataItem.rows.forEach(function(row) {
+                                    for (var ri = 0; ri < row.length; ri++) {
+                                        doc.text(String(row[ri]), tableX + ri * colWidth + 1, y);
+                                    }
+                                    y += 5;
+                                });
+                                y += 2;
                             }
-                            y += 5;
                         });
-                        y += 2;
                     }
                     
                     y += 4;
