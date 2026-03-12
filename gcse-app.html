@@ -227,9 +227,9 @@
 @media (max-width: 768px) {
     .site-hamburger {
         display: flex;
-    
-            .site-mobile-overlay { display: block; }
-            .site-mobile-menu { display: block; }}
+    }
+    .site-mobile-overlay { display: block; }
+    .site-mobile-menu { display: block; }
     .site-nav-buttons {
         display: none;
     }
@@ -422,6 +422,7 @@
             text-decoration: none;
             color: var(--gray-500);
             transition: all 0.2s ease;
+            margin-top: auto;
         }
 
         .header-nav a:hover {
@@ -539,6 +540,7 @@
             display: flex;
             flex-direction: column;
             gap: 0.25rem;
+            min-height: 100%;
         }
 
         .mobile-menu-links a {
@@ -1759,8 +1761,20 @@
             <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></span>
             Contact Us
         </a>
-
-</div>
+        <div class="site-mobile-divider guest-only"></div>
+        <a href="login.html" class="guest-only">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"/></svg></span>
+            Log In
+        </a>
+        <a href="signup.html" class="site-mobile-cta guest-only">
+            Get Started
+        </a>
+        <div class="site-mobile-divider auth-only" style="display:none;"></div>
+        <button class="site-mobile-logout auth-only" style="display:none;" id="mobileLogoutBtn">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l3-3m0 0l-3-3m3 3H3"/></svg></span>
+            Logout
+        </button>
+    </div>
 </div>
 
 

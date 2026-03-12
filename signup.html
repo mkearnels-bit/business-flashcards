@@ -485,7 +485,7 @@
         async function checkAuth() {
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (session) {
-                window.location.href = '/app.html';
+                window.location.href = '/exam-practice.html';
             }
         }
         checkAuth();
@@ -507,7 +507,7 @@
             const { data, error } = await supabaseClient.auth.signInWithOAuth({
                 provider: 'google',
                 options: {
-                    redirectTo: window.location.origin + '/app.html'
+                    redirectTo: window.location.origin + '/exam-practice.html'
                 }
             });
             if (error) {
@@ -554,7 +554,7 @@
                             last_name: lastName,
                             full_name: `${firstName} ${lastName}`
                         },
-                        emailRedirectTo: window.location.origin + '/app.html'
+                        emailRedirectTo: window.location.origin + '/exam-practice.html'
                     }
                 });
 
@@ -600,7 +600,7 @@
                 // If session exists (email confirmation not required), redirect to app
                 showMessage('Account created! Redirecting...', 'success');
                 setTimeout(() => {
-                    window.location.href = '/app.html';
+                    window.location.href = '/exam-practice.html';
                 }, 1500);
 
             } catch (error) {

@@ -405,7 +405,7 @@
         async function checkAuth() {
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (session) {
-                window.location.href = '/app.html';
+                window.location.href = '/exam-practice.html';
             }
         }
         checkAuth();
@@ -427,7 +427,7 @@
             const { data, error } = await supabaseClient.auth.signInWithOAuth({
                 provider: 'google',
                 options: {
-                    redirectTo: window.location.origin + '/app.html'
+                    redirectTo: window.location.origin + '/exam-practice.html'
                 }
             });
             if (error) {
@@ -457,7 +457,7 @@
                 // Success - redirect to app
                 showMessage('Login successful! Redirecting...', 'success');
                 setTimeout(() => {
-                    window.location.href = '/app.html';
+                    window.location.href = '/exam-practice.html';
                 }, 1000);
 
             } catch (error) {
