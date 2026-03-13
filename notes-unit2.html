@@ -6245,7 +6245,7 @@
                 }
 
                 // Pro and grandfathered users get full access to notes
-                if (plan === 'pro' || plan === 'grandfathered') return;
+                if (plan === 'annual' || plan === 'quarterly' || plan === 'monthly' || plan === 'grandfathered') return;
 
                 // Free users: lock all topics except the first one
                 var allTopics = document.querySelectorAll('.topic-section');

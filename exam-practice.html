@@ -2928,7 +2928,7 @@
 
         <!-- Generate Button -->
         <div id="generateSection" style="display:none;">
-            <button class="generate-btn" id="generateBtn" onclick="checkFreeTrialAndRun(generateQuestion)" disabled>
+            <button class="generate-btn" id="generateBtn" onclick="checkFreeTrialAndRun(generateQuestion, 'question')" disabled>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
                 Generate Question
             </button>
@@ -3039,7 +3039,7 @@
             <a href="pricing.html" class="action-btn action-btn-primary" style="display: inline-block; text-decoration: none; padding: 14px 32px; font-size: 1rem;">
                 View Plans & Subscribe
             </a>
-            <p style="color: var(--gray-400); font-size: 0.8rem; margin-top: 1rem;">Starting from just $18/month</p>
+            <p style="color: var(--gray-400); font-size: 0.8rem; margin-top: 1rem;">Starting from just $9/month</p>
         </div>
     </div>
 
@@ -3665,9 +3665,10 @@ function selectTopic(topicCode) {
 }
 
 // ===== FREE TRIAL CHECK =====
-async function checkFreeTrialAndRun(callback) {
+async function checkFreeTrialAndRun(callback, genType) {
     try {
-        var { data, error } = await supabaseClient.rpc('use_free_trial');
+        var type = genType || 'test';
+        var { data, error } = await supabaseClient.rpc('use_free_trial', { generation_type: type });
 
         if (error) {
             console.error('Free trial RPC error:', error.message);
@@ -3680,6 +3681,9 @@ async function checkFreeTrialAndRun(callback) {
 
             if (reason === 'limit_reached') {
                 showPhase('paywall');
+            } else if (reason === 'monthly_limit_reached') {
+                var limitType = data.limit_type === 'questions' ? 'single questions' : 'tests and exams';
+                showError('You\'ve been working hard this month! You\'ve reached the monthly limit for ' + limitType + '. Your limit resets on the 1st of next month.');
             } else if (reason === 'not_authenticated') {
                 showError('Please log in to take a test.');
             } else if (reason === 'no_subscription') {
@@ -3692,7 +3696,7 @@ async function checkFreeTrialAndRun(callback) {
 
         // Access granted
         if (data.unlimited) {
-            console.log('Paid subscriber (' + data.plan + ') — unlimited access');
+            console.log('Paid subscriber (' + data.plan + ') — access granted');
         } else {
             console.log('Free trial: ' + data.tests_used + ' used, ' + data.tests_remaining + ' remaining');
         }
@@ -3705,7 +3709,7 @@ async function checkFreeTrialAndRun(callback) {
 }
 
 function checkFreeTrialAndGenerate() {
-    checkFreeTrialAndRun(generateTest);
+    checkFreeTrialAndRun(generateTest, 'test');
 }
 
 // ===== TEST GENERATION =====
@@ -5297,6 +5301,8 @@ async function loadTrialStatus() {
         var text = document.getElementById('freeTrialText');
         if (!banner || !text) return;
 
+        var paidPlans = ['annual', 'quarterly', 'monthly', 'grandfathered'];
+
         if (data.plan === 'free') {
             var used = data.free_tests_used || 0;
             var remaining = Math.max(0, 5 - used);
@@ -5310,6 +5316,8 @@ async function loadTrialStatus() {
                 banner.style.background = 'linear-gradient(135deg, #fef2f2, #fee2e2)';
                 banner.style.borderColor = '#fca5a5';
             }
+        } else if (paidPlans.indexOf(data.plan) !== -1) {
+            banner.style.display = 'none';
         } else {
             banner.style.display = 'none';
         }

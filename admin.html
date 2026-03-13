@@ -1676,7 +1676,7 @@
                 const displayName = user.name || (user.email ? user.email.split('@')[0] : 'User');
                 const initial = (user.name || user.email || 'U')[0].toUpperCase();
                 const planBadge = user.plan === 'free' ? 'badge-gray' :
-                                  user.plan === 'pro' ? 'badge-success' :
+                                  ['annual','quarterly','monthly'].includes(user.plan) ? 'badge-success' :
                                   user.plan === 'grandfathered' ? 'badge-info' :
                                   user.plan === 'yearly' ? 'badge-success' : 'badge-info';
                 const statusBadge = user.status === 'active' ? 'badge-success' :
@@ -1976,20 +1976,13 @@
                     if (error) console.warn(`${table} deletion warning:`, error);
                 }
 
-                // Delete from auth.users via the edge function
-                const { data: { session } } = await supabaseClient.auth.getSession();
-                const response = await fetch('https://zyaywzzmjpctpodpxhge.supabase.co/rest/v1/rpc/admin_delete_user', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': 'Bearer ' + session.access_token
-                    },
-                    body: JSON.stringify({ target_user_id: userId })
-                });
+                // Delete from auth.users via RPC
+                const { error: authDeleteError } = await supabaseClient
+                    .rpc('admin_delete_user', { target_user_id: userId });
 
-                if (!response.ok) {
-                    console.warn('Auth user deletion may require manual removal from Supabase dashboard');
+                if (authDeleteError) {
+                    console.warn('Auth user deletion warning:', authDeleteError.message);
+                    showToast('User data deleted but auth entry may remain. Remove from Supabase dashboard if needed.', 'warning');
                 }
 
                 showToast(`${displayName} has been fully deleted.`, 'success');
@@ -2227,7 +2220,7 @@
             const mastered = progress ? progress.filter(p => p.status === 'mastered').length : 0;
 
             const planBadge = user.plan === 'free' ? 'badge-gray' :
-                              user.plan === 'pro' ? 'badge-success' :
+                              ['annual','quarterly','monthly'].includes(user.plan) ? 'badge-success' :
                               user.plan === 'grandfathered' ? 'badge-info' :
                               user.plan === 'yearly' ? 'badge-success' : 'badge-info';
             const statusBadge = user.status === 'active' ? 'badge-success' :
@@ -2254,7 +2247,9 @@
                     <div style="display: flex; align-items: center; gap: 0.75rem;">
                         <select id="userPlanSelect" style="flex: 1; padding: 0.6rem 0.75rem; border: 2px solid var(--gray-200); border-radius: 8px; font-size: 0.9rem; font-weight: 600; background: white; cursor: pointer;">
                             <option value="free" ${currentPlan === 'free' ? 'selected' : ''}>Free</option>
-                            <option value="pro" ${currentPlan === 'pro' ? 'selected' : ''}>Pro</option>
+                            <option value="annual" ${currentPlan === 'annual' ? 'selected' : ''}>Annual</option>
+                            <option value="quarterly" ${currentPlan === 'quarterly' ? 'selected' : ''}>Quarterly</option>
+                            <option value="monthly" ${currentPlan === 'monthly' ? 'selected' : ''}>Monthly</option>
                             <option value="grandfathered" ${currentPlan === 'grandfathered' ? 'selected' : ''}>Grandfathered</option>
                         </select>
                         <button class="btn btn-primary btn-sm" onclick="changePlan('${user.user_id}', '${user.email}')" style="white-space: nowrap;">Update Plan</button>

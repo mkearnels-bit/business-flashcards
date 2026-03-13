@@ -1223,6 +1223,14 @@
         }
 
         /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 1024px) {
+            .pricing-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                max-width: 560px !important;
+                margin: 0 auto;
+            }
+        }
+
         @media (max-width: 768px) {
             .header-nav { display: none; }
             .header-right { display: none; }
@@ -1245,8 +1253,8 @@
             }
 
             .pricing-grid {
-                grid-template-columns: 1fr;
-                max-width: 420px;
+                grid-template-columns: 1fr 1fr !important;
+                max-width: 500px !important;
                 margin: 0 auto;
             }
 
@@ -1275,6 +1283,11 @@
         @media (max-width: 480px) {
             .pricing-hero h1 {
                 font-size: 1.7rem;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr !important;
+                max-width: 380px !important;
             }
 
             .pricing-card {
@@ -1397,76 +1410,104 @@
         <div class="hero-content">
             <div class="hero-badge">
                 <svg viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
-                Premium Access
+                Choose Your Plan
             </div>
-            <h1>Unlock Your <span>Full Potential</span></h1>
-            <p>One payment. Lifetime access. Get every flashcard, exam technique, model answer, and study tool designed to help you ace your Edexcel A-Level Business Studies exams.</p>
+            <h1>Ace Your <span>Business Studies</span> Exams</h1>
+            <p>AI-powered exam practice with instant feedback. Choose the plan that fits your revision schedule.</p>
         </div>
     </section>
 
-    <!-- Pricing Card -->
-    <section class="pricing-section">
-        <div class="pricing-grid" style="grid-template-columns: 1fr; max-width: 480px; margin: 0 auto;">
-            <!-- Lifetime Access -->
+    <!-- Pricing Cards -->
+    <section class="pricing-section" style="max-width: 1100px;">
+        <div class="pricing-grid" style="grid-template-columns: repeat(4, 1fr); max-width: 1100px; margin: 0 auto;">
+
+            <!-- Free Plan -->
+            <div class="pricing-card">
+                <div class="plan-name">Free</div>
+                <div class="plan-desc">Try it out</div>
+                <div class="price-row">
+                    <span class="price-currency">$</span>
+                    <span class="price-amount">0</span>
+                </div>
+                <div class="price-yearly-total">&nbsp;</div>
+                <button class="subscribe-btn secondary" onclick="window.location.href='signup.html'">Get Started</button>
+                <ul class="feature-list">
+                    <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> 5 exam practices</li>
+                    <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> All exam boards</li>
+                    <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> AI-powered feedback</li>
+                    <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> Flashcards &amp; study notes</li>
+                </ul>
+            </div>
+
+            <!-- Annual Plan -->
             <div class="pricing-card featured">
-                <div class="featured-banner">Lifetime Access</div>
+                <div class="featured-banner">Best Value</div>
                 <div class="card-inner">
-                    <div class="plan-icon yearly">
-                        <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                    </div>
-                    <div class="plan-name">One Payment. Forever Yours.</div>
-                    <div class="plan-desc">Pay once and get lifetime access to everything</div>
+                    <div class="plan-name">Annual</div>
+                    <div class="plan-desc">For serious students</div>
                     <div class="price-row">
                         <span class="price-currency">$</span>
-                        <span class="price-amount">15</span>
-                        <span class="price-period">one time</span>
+                        <span class="price-amount">9</span>
+                        <span class="price-period">/month</span>
                     </div>
-                    <div class="savings-badge">
-                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-                        No subscriptions. No recurring charges.
-                    </div>
-                    <button class="subscribe-btn primary" onclick="subscribe('lifetime')">Get Lifetime Access</button>
+                    <div class="price-yearly-total">Billed annually at $108/year</div>
+                    <button class="subscribe-btn primary" onclick="subscribe('annual')">Subscribe</button>
                     <ul class="feature-list">
-                        <li>
-                            <svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg>
-                            <strong>400+ Interactive Flashcards</strong> covering all topics across Units 1, 2, 3, and 4
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg>
-                            <strong>Exam Skills Training</strong> with the PBLI framework for writing answers that score full marks
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg>
-                            <strong>Weak vs Model Answers</strong> for every question type (2, 4, 8, 12, and 20 mark questions)
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg>
-                            <strong>Colour Coded Mark Breakdowns</strong> showing exactly where Knowledge, Application, Analysis, and Evaluation marks are earned
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg>
-                            <strong>Case Study Practice Questions</strong> with realistic business scenarios and full sample answers
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg>
-                            <strong>Progress Tracking</strong> so you can see what you have mastered and what needs work
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg>
-                            <strong>All Future Content Updates</strong> including new flashcards, case studies, and revision notes as they are added
-                        </li>
+                        <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> Unlimited exam practice</li>
+                        <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> AI-generated tests &amp; marking</li>
+                        <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> All exam boards</li>
+                        <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> Full access to all features</li>
                     </ul>
                 </div>
             </div>
+
+            <!-- Quarterly Plan -->
+            <div class="pricing-card">
+                <div class="plan-name">Quarterly</div>
+                <div class="plan-desc">Flexible revision</div>
+                <div class="price-row">
+                    <span class="price-currency">$</span>
+                    <span class="price-amount">18</span>
+                    <span class="price-period">/month</span>
+                </div>
+                <div class="price-yearly-total">Billed quarterly at $54</div>
+                <button class="subscribe-btn secondary" onclick="subscribe('quarterly')">Subscribe</button>
+                <ul class="feature-list">
+                    <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> Unlimited exam practice</li>
+                    <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> AI-generated tests &amp; marking</li>
+                    <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> All exam boards</li>
+                    <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> Full access to all features</li>
+                </ul>
+            </div>
+
+            <!-- Monthly Plan -->
+            <div class="pricing-card">
+                <div class="plan-name">Monthly</div>
+                <div class="plan-desc">Exam season crammer</div>
+                <div class="price-row">
+                    <span class="price-currency">$</span>
+                    <span class="price-amount">45</span>
+                    <span class="price-period">/month</span>
+                </div>
+                <div class="price-yearly-total">Billed monthly. Cancel anytime.</div>
+                <button class="subscribe-btn secondary" onclick="subscribe('monthly')">Subscribe</button>
+                <ul class="feature-list">
+                    <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> Unlimited exam practice</li>
+                    <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> AI-generated tests &amp; marking</li>
+                    <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> All exam boards</li>
+                    <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> Full access to all features</li>
+                </ul>
+            </div>
+
         </div>
 
         <!-- Payment Methods -->
-        <div class="payment-label">Secure payments powered by Flutterwave</div>
+        <div class="payment-label">Secure payments powered by Creem</div>
         <div class="payment-methods">
             <svg width="38" height="24" viewBox="0 0 38 24"><rect width="38" height="24" rx="4" fill="#1A1F71"/><text x="19" y="15" font-size="8" fill="white" text-anchor="middle" font-weight="700" font-family="Inter,sans-serif">VISA</text></svg>
             <svg width="38" height="24" viewBox="0 0 38 24"><rect width="38" height="24" rx="4" fill="#252525"/><circle cx="15" cy="12" r="7" fill="#EB001B"/><circle cx="23" cy="12" r="7" fill="#F79E1B"/><path d="M19 6.7a7 7 0 0 1 0 10.6 7 7 0 0 1 0-10.6z" fill="#FF5F00"/></svg>
             <svg width="38" height="24" viewBox="0 0 38 24"><rect width="38" height="24" rx="4" fill="#000"/><text x="19" y="15" font-size="7" fill="white" text-anchor="middle" font-weight="600" font-family="Inter,sans-serif">Apple Pay</text></svg>
-            <svg width="38" height="24" viewBox="0 0 38 24"><rect width="38" height="24" rx="4" fill="#fff" stroke="#ddd"/><text x="19" y="15" font-size="6" fill="#333" text-anchor="middle" font-weight="600" font-family="Inter,sans-serif">EFT</text></svg>
+            <svg width="38" height="24" viewBox="0 0 38 24"><rect width="38" height="24" rx="4" fill="#fff" stroke="#ddd"/><text x="19" y="15" font-size="6" fill="#333" text-anchor="middle" font-weight="600" font-family="Inter,sans-serif">G Pay</text></svg>
         </div>
     </section>
 
@@ -1474,7 +1515,7 @@
     <section class="included-section">
         <div class="included-header">
             <h2>Everything You Need to Succeed</h2>
-            <p>Built specifically for Edexcel IAL Business Studies students</p>
+            <p>Built for A-Level Business Studies students across all major exam boards</p>
         </div>
         <div class="features-grid">
             <div class="feature-card">
@@ -1531,31 +1572,31 @@
 
         <div class="faq-item">
             <button class="faq-question" onclick="toggleFaq(this)">
-                Is this really a one time payment?
+                What do I get on the free plan?
                 <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
             <div class="faq-answer">
-                <div class="faq-answer-inner">Yes! You pay $15 once and you have lifetime access to everything on the platform. There are no recurring charges, no hidden fees, and no subscription to cancel. Your access never expires.</div>
+                <div class="faq-answer-inner">The free plan gives you 5 exam practices so you can try the platform before subscribing. You also get full access to flashcards, study notes, and exam skills training.</div>
             </div>
         </div>
 
         <div class="faq-item">
             <button class="faq-question" onclick="toggleFaq(this)">
-                What payment methods do you accept?
+                What's the difference between the paid plans?
                 <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
             <div class="faq-answer">
-                <div class="faq-answer-inner">We accept Visa, Mastercard, Apple Pay, Google Pay, and EFT bank transfers. All payments are securely processed through Flutterwave, a trusted payment provider.</div>
+                <div class="faq-answer-inner">All paid plans include the same features — unlimited exam practice with AI-generated questions and feedback. The only difference is how you pay: annually (best value at $9/mo), quarterly ($18/mo), or monthly ($45/mo). The annual plan saves you over 80% compared to monthly.</div>
             </div>
         </div>
 
         <div class="faq-item">
             <button class="faq-question" onclick="toggleFaq(this)">
-                Which exam board is this for?
+                Which exam boards are supported?
                 <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
             <div class="faq-answer">
-                <div class="faq-answer-inner">MyBizStudies is built specifically for Edexcel International A-Level (IAL) Business Studies. All content, flashcards, and exam techniques are aligned with the Edexcel specification and mark schemes.</div>
+                <div class="faq-answer-inner">MyBizStudies supports Edexcel IAL, AQA, and CIE IAL Business Studies exam boards. All exam practice questions and feedback are aligned with each board's specification and mark schemes.</div>
             </div>
         </div>
 
@@ -1565,17 +1606,17 @@
                 <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
             <div class="faq-answer">
-                <div class="faq-answer-inner">Your payment details are handled entirely by Flutterwave, which is PCI DSS compliant (the highest level of security for payment processing). We never see or store your card information on our servers.</div>
+                <div class="faq-answer-inner">Your payment details are handled entirely by our payment provider, which is PCI DSS compliant (the highest level of security for payment processing). We never see or store your card information on our servers.</div>
             </div>
         </div>
 
         <div class="faq-item">
             <button class="faq-question" onclick="toggleFaq(this)">
-                What if I need a refund?
+                Can I cancel anytime?
                 <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
             <div class="faq-answer">
-                <div class="faq-answer-inner">If you're not satisfied within the first 14 days, contact us and we'll issue a full refund. No questions asked.</div>
+                <div class="faq-answer-inner">Yes! You can cancel your subscription at any time. Your access continues until the end of your current billing period. If you're not satisfied within the first 14 days, contact us for a full refund.</div>
             </div>
         </div>
     </section>
@@ -1589,7 +1630,7 @@
             </div>
             <div class="trust-item">
                 <svg viewBox="0 0 24 24" stroke="var(--secondary)"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                One Time Payment
+                Cancel Anytime
             </div>
             <div class="trust-item">
                 <svg viewBox="0 0 24 24" stroke="var(--accent)"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
@@ -1601,8 +1642,8 @@
     <!-- Bottom CTA -->
     <section class="bottom-cta">
         <h2>Ready to Start Studying Smarter?</h2>
-        <p>Join students who are already using MyBizStudies to sharpen their exam technique. One payment, lifetime access.</p>
-        <button class="subscribe-btn primary" onclick="subscribe('lifetime')">Get Lifetime Access for $15</button>
+        <p>Join students who are already using MyBizStudies to sharpen their exam technique. Start free, upgrade when you're ready.</p>
+        <button class="subscribe-btn primary" onclick="window.location.href='signup.html'">Start Free</button>
     </section>
 
     <!-- Footer -->
@@ -1740,9 +1781,9 @@
             if (!wasOpen) item.classList.add('open');
         }
 
-        // Subscribe placeholder (will be replaced with Flutterwave integration)
+        // Subscribe placeholder (will be replaced with Creem integration)
         function subscribe(plan) {
-            alert('Payment integration coming soon! You selected the ' + plan + ' access plan.');
+            alert('Payment integration coming soon! You selected the ' + plan + ' plan.');
         }
     </script>
 </body>
