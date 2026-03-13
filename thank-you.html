@@ -337,13 +337,18 @@
         .thank-you-footer {
             position: fixed;
             bottom: 1.5rem;
-            left: 50%;
-            transform: translateX(-50%);
+            left: 0;
+            right: 0;
+            text-align: center;
             z-index: 10;
             font-size: 0.75rem;
             color: rgba(255, 255, 255, 0.5);
-            animation: textSlideUp 0.5s ease 1.5s forwards;
+            animation: footerFade 0.5s ease 1.5s forwards;
             opacity: 0;
+        }
+
+        @keyframes footerFade {
+            to { opacity: 1; }
         }
 
         .thank-you-footer a {
