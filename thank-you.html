@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <title>Thank You | MyBizStudies</title>
+    <meta name="description" content="Welcome to MyBizStudies! Your subscription is confirmed. Start practising now.">
+    <meta name="robots" content="noindex, nofollow">
+    <meta property="og:title" content="Thank You | MyBizStudies">
+    <meta property="og:site_name" content="MyBizStudies">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #1e3a5f;
+            --primary-dark: #152a45;
+            --primary-light: #2d5a8a;
+            --accent: #e67e22;
+            --accent-light: #f39c12;
+            --success: #27ae60;
+            --dark: #0f172a;
+            --gray-900: #1e293b;
+            --gray-700: #334155;
+            --gray-500: #64748b;
+            --gray-100: #f1f5f9;
+            --gray-50: #f8fafc;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated background gradient */
+        .bg-gradient {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 40%, var(--primary-light) 70%, #3b7dd8 100%);
+            z-index: 0;
+        }
+
+        .bg-gradient::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 30% 20%, rgba(230, 126, 34, 0.15) 0%, transparent 60%),
+                        radial-gradient(ellipse at 70% 80%, rgba(52, 152, 219, 0.12) 0%, transparent 50%);
+            animation: gradientShift 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes gradientShift {
+            0% { opacity: 0.6; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.05); }
+        }
+
+        /* Floating particles */
+        .particles {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0;
+            animation: floatUp linear forwards;
+        }
+
+        @keyframes floatUp {
+            0% { opacity: 0; transform: translateY(0) scale(0); }
+            10% { opacity: 0.6; transform: translateY(-10vh) scale(1); }
+            90% { opacity: 0.3; }
+            100% { opacity: 0; transform: translateY(-100vh) scale(0.5); }
+        }
+
+        /* Confetti burst */
+        .confetti-container {
+            position: fixed;
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+            animation: confettiFall linear forwards;
+        }
+
+        @keyframes confettiFall {
+            0% { opacity: 1; transform: translateY(-10px) rotate(0deg) scale(1); }
+            20% { opacity: 1; }
+            100% { opacity: 0; transform: translateY(100vh) rotate(720deg) scale(0.3); }
+        }
+
+        /* Main content card */
+        .thank-you-card {
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            padding: 3.5rem 3rem;
+            max-width: 520px;
+            width: 90%;
+            text-align: center;
+            animation: cardEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(40px) scale(0.95);
+        }
+
+        @keyframes cardEntrance {
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Logo */
+        .thank-you-logo {
+            margin-bottom: 2rem;
+            animation: logoFade 0.6s ease 0.3s forwards;
+            opacity: 0;
+        }
+
+        .thank-you-logo img {
+            height: 60px;
+            width: auto;
+        }
+
+        @keyframes logoFade {
+            to { opacity: 1; }
+        }
+
+        /* Checkmark animation */
+        .checkmark-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--success) 0%, #2ecc71 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.75rem;
+            box-shadow: 0 8px 30px rgba(39, 174, 96, 0.35);
+            animation: checkBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s forwards;
+            opacity: 0;
+            transform: scale(0);
+        }
+
+        @keyframes checkBounce {
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .checkmark-circle svg {
+            width: 40px;
+            height: 40px;
+            stroke: white;
+            stroke-width: 3;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .checkmark-path {
+            stroke-dasharray: 50;
+            stroke-dashoffset: 50;
+            animation: drawCheck 0.4s ease 0.9s forwards;
+        }
+
+        @keyframes drawCheck {
+            to { stroke-dashoffset: 0; }
+        }
+
+        /* Pulse ring */
+        .checkmark-circle::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid var(--success);
+            animation: pulseRing 1.5s ease-out 0.8s forwards;
+            opacity: 0;
+        }
+
+        @keyframes pulseRing {
+            0% { opacity: 0.6; transform: scale(1); }
+            100% { opacity: 0; transform: scale(1.8); }
+        }
+
+        /* Text animations */
+        .thank-you-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            animation: textSlideUp 0.5s ease 0.7s forwards;
+            opacity: 0;
+            transform: translateY(15px);
+        }
+
+        .thank-you-subtitle {
+            font-size: 1rem;
+            color: var(--gray-500);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            animation: textSlideUp 0.5s ease 0.85s forwards;
+            opacity: 0;
+            transform: translateY(15px);
+        }
+
+        @keyframes textSlideUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Feature pills */
+        .feature-pills {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            animation: textSlideUp 0.5s ease 1s forwards;
+            opacity: 0;
+            transform: translateY(15px);
+        }
+
+        .feature-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.4rem 0.85rem;
+            background: var(--gray-100);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        .feature-pill svg {
+            width: 14px;
+            height: 14px;
+            stroke: var(--success);
+            fill: none;
+            stroke-width: 2.5;
+        }
+
+        /* CTA Button */
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            color: white;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 8px 30px rgba(230, 126, 34, 0.35);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: ctaEntrance 0.5s ease 1.15s forwards;
+            opacity: 0;
+            transform: translateY(15px);
+            font-family: inherit;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(230, 126, 34, 0.45);
+        }
+
+        .cta-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .cta-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: white;
+            fill: none;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: transform 0.3s ease;
+        }
+
+        .cta-btn:hover svg {
+            transform: translateX(3px);
+        }
+
+        @keyframes ctaEntrance {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Secondary link */
+        .secondary-link {
+            display: block;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            text-decoration: none;
+            animation: textSlideUp 0.5s ease 1.3s forwards;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: color 0.2s;
+        }
+
+        .secondary-link:hover {
+            color: var(--primary);
+        }
+
+        /* Footer text */
+        .thank-you-footer {
+            position: fixed;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.5);
+            animation: textSlideUp 0.5s ease 1.5s forwards;
+            opacity: 0;
+        }
+
+        .thank-you-footer a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+        }
+
+        .thank-you-footer a:hover {
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .thank-you-card {
+                padding: 2.5rem 1.75rem;
+                border-radius: 20px;
+            }
+
+            .thank-you-title {
+                font-size: 1.4rem;
+            }
+
+            .thank-you-subtitle {
+                font-size: 0.9rem;
+            }
+
+            .cta-btn {
+                padding: 0.9rem 2rem;
+                font-size: 0.95rem;
+                width: 100%;
+            }
+
+            .checkmark-circle {
+                width: 65px;
+                height: 65px;
+            }
+
+            .checkmark-circle svg {
+                width: 32px;
+                height: 32px;
+            }
+
+            .checkmark-circle::after {
+                width: 65px;
+                height: 65px;
+            }
+
+            .thank-you-logo img {
+                height: 50px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            .thank-you-card { opacity: 1; transform: none; }
+            .thank-you-logo { opacity: 1; }
+            .checkmark-circle { opacity: 1; transform: none; }
+            .checkmark-path { stroke-dashoffset: 0; }
+            .thank-you-title, .thank-you-subtitle, .feature-pills, .secondary-link, .thank-you-footer { opacity: 1; transform: none; }
+            .cta-btn { opacity: 1; transform: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Animated background -->
+    <div class="bg-gradient"></div>
+
+    <!-- Floating particles (generated by JS) -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Confetti burst (generated by JS) -->
+    <div class="confetti-container" id="confetti"></div>
+
+    <!-- Main card -->
+    <div class="thank-you-card">
+        <div class="thank-you-logo">
+            <img src="logo.png" alt="MyBizStudies">
+        </div>
+
+        <div class="checkmark-circle">
+            <svg viewBox="0 0 24 24">
+                <polyline class="checkmark-path" points="6 12 10 16 18 8"/>
+            </svg>
+        </div>
+
+        <h1 class="thank-you-title">You're All Set!</h1>
+        <p class="thank-you-subtitle">Your subscription is now active. Time to start practising and ace your exams.</p>
+
+        <div class="feature-pills">
+            <span class="feature-pill">
+                <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                AI Exam Practice
+            </span>
+            <span class="feature-pill">
+                <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                Instant Marking
+            </span>
+            <span class="feature-pill">
+                <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                All Exam Boards
+            </span>
+            <span class="feature-pill">
+                <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                Study Notes
+            </span>
+        </div>
+
+        <a href="exam-practice.html" class="cta-btn">
+            Start Practising Now
+            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+
+        <a href="index.html" class="secondary-link">or return to homepage</a>
+    </div>
+
+    <div class="thank-you-footer">
+        &copy; 2026 <a href="index.html">MyBizStudies</a>. All rights reserved.
+    </div>
+
+    <script>
+        // Generate floating particles
+        (function() {
+            var container = document.getElementById('particles');
+            var colors = ['rgba(230, 126, 34, 0.4)', 'rgba(52, 152, 219, 0.3)', 'rgba(243, 156, 18, 0.35)', 'rgba(255, 255, 255, 0.15)'];
+            for (var i = 0; i < 20; i++) {
+                var p = document.createElement('div');
+                p.className = 'particle';
+                var size = Math.random() * 8 + 4;
+                p.style.width = size + 'px';
+                p.style.height = size + 'px';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.bottom = '-20px';
+                p.style.background = colors[Math.floor(Math.random() * colors.length)];
+                p.style.animationDuration = (Math.random() * 6 + 6) + 's';
+                p.style.animationDelay = (Math.random() * 4) + 's';
+                container.appendChild(p);
+            }
+        })();
+
+        // Confetti burst on load
+        (function() {
+            var container = document.getElementById('confetti');
+            var colors = ['#e67e22', '#f39c12', '#3498db', '#27ae60', '#1e3a5f', '#e74c3c', '#9b59b6'];
+            var shapes = ['square', 'circle'];
+
+            setTimeout(function() {
+                for (var i = 0; i < 50; i++) {
+                    var c = document.createElement('div');
+                    c.className = 'confetti';
+                    var size = Math.random() * 8 + 5;
+                    c.style.width = size + 'px';
+                    c.style.height = shapes[Math.floor(Math.random() * shapes.length)] === 'circle' ? size + 'px' : (size * 0.6) + 'px';
+                    c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                    c.style.left = (30 + Math.random() * 40) + '%';
+                    c.style.top = '30%';
+                    c.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    c.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    c.style.animationDelay = (Math.random() * 0.5) + 's';
+
+                    var spreadX = (Math.random() - 0.5) * 300;
+                    c.style.marginLeft = spreadX + 'px';
+
+                    container.appendChild(c);
+                }
+
+                // Clean up confetti after animations
+                setTimeout(function() {
+                    container.innerHTML = '';
+                }, 4000);
+            }, 800);
+        })();
+    </script>
+</body>
+</html>
