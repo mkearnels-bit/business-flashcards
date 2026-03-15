@@ -333,6 +333,167 @@
             color: var(--primary);
         }
 
+        /* Confirmation state styles */
+        .confirmation-view {
+            display: none;
+            text-align: center;
+            padding: 0.5rem 0;
+        }
+
+        .confirmation-view.show {
+            display: block;
+        }
+
+        .confirmation-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+        }
+
+        .confirmation-view h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.75rem;
+        }
+
+        .confirmation-view .confirm-subtitle {
+            color: var(--gray-700);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .confirmation-view .confirm-email-address {
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        .confirm-steps {
+            text-align: left;
+            margin-bottom: 1.5rem;
+        }
+
+        .confirm-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.625rem 0;
+        }
+
+        .confirm-step:not(:last-child) {
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .step-number {
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .step-text {
+            font-size: 0.875rem;
+            color: var(--gray-700);
+            line-height: 1.5;
+        }
+
+        .step-text strong {
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        .confirm-divider {
+            height: 1px;
+            background: var(--gray-100);
+            margin: 0.25rem 0 1.25rem;
+        }
+
+        .btn-resend {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            font-family: inherit;
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--gray-100);
+            transition: all 0.2s;
+            margin-bottom: 0.75rem;
+        }
+
+        .btn-resend:hover {
+            background: var(--gray-100);
+            border-color: var(--gray-300);
+        }
+
+        .btn-resend:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-resend .resend-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--gray-300);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 0.5rem;
+            display: none;
+        }
+
+        .btn-resend.loading .resend-spinner {
+            display: inline-block;
+        }
+
+        .resend-feedback {
+            font-size: 0.8rem;
+            margin-bottom: 0.75rem;
+            display: none;
+        }
+
+        .resend-feedback.success {
+            color: var(--success);
+        }
+
+        .resend-feedback.error {
+            color: var(--error);
+        }
+
+        .contact-link {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+        }
+
+        .contact-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .contact-link a:hover {
+            text-decoration: underline;
+        }
+
         .loading-spinner {
             width: 20px;
             height: 20px;
@@ -460,7 +621,42 @@
                 </button>
             </form>
 
-            <div class="auth-footer">
+            <!-- Confirmation view (hidden by default, shown after signup) -->
+            <div id="confirmationView" class="confirmation-view">
+                <div class="confirmation-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </div>
+                <h2>Thanks for signing up!</h2>
+                <p class="confirm-subtitle">We've sent a confirmation link to<br><span class="confirm-email-address" id="confirmEmail"></span></p>
+
+                <div class="confirm-steps">
+                    <div class="confirm-step">
+                        <span class="step-number">1</span>
+                        <span class="step-text"><strong>Open your inbox</strong> and look for an email from hello@mybizstudies.com</span>
+                    </div>
+                    <div class="confirm-step">
+                        <span class="step-number">2</span>
+                        <span class="step-text"><strong>Click the confirmation link</strong> in the email to activate your account</span>
+                    </div>
+                    <div class="confirm-step">
+                        <span class="step-number">3</span>
+                        <span class="step-text"><strong>Check your spam folder</strong> if you don't see the email within a few minutes</span>
+                    </div>
+                </div>
+
+                <div class="confirm-divider"></div>
+
+                <button class="btn-resend" id="resendBtn" onclick="resendConfirmation()">
+                    <span class="resend-spinner"></span>
+                    <span class="resend-text">Resend confirmation email</span>
+                </button>
+
+                <p id="resendFeedback" class="resend-feedback"></p>
+
+                <p class="contact-link">Need help? <a href="mailto:hello@mybizstudies.com">Contact us</a></p>
+            </div>
+
+            <div class="auth-footer" id="authFooter">
                 Already have an account? <a href="/login.html">Sign in</a>
             </div>
         </div>
@@ -532,30 +728,14 @@
             const honeypot = document.getElementById('website');
             if (honeypot && honeypot.value) {
                 // Fake success to fool the bot
-                document.getElementById('signupForm').style.display = 'none';
-                document.querySelector('.auth-header').style.display = 'none';
-                document.querySelector('.auth-footer').style.display = 'none';
-                document.querySelector('.terms-checkbox').style.display = 'none';
-                messageDiv.innerHTML = '<div style="text-align:center;"><h2 style="color:var(--primary);margin-bottom:1rem;">Check Your Email!</h2><p style="color:var(--gray-600);">We\'ve sent a confirmation link to your email.</p></div>';
-                messageDiv.className = 'message success show';
-                messageDiv.style.background = '#f0fdf4';
-                messageDiv.style.padding = '2rem';
-                messageDiv.style.border = 'none';
+                showConfirmationView('your email');
                 return;
             }
 
             // Anti-bot: time check (form submitted in under 3 seconds = bot)
             const elapsed = Date.now() - pageLoadedAt;
             if (elapsed < 3000) {
-                document.getElementById('signupForm').style.display = 'none';
-                document.querySelector('.auth-header').style.display = 'none';
-                document.querySelector('.auth-footer').style.display = 'none';
-                document.querySelector('.terms-checkbox').style.display = 'none';
-                messageDiv.innerHTML = '<div style="text-align:center;"><h2 style="color:var(--primary);margin-bottom:1rem;">Check Your Email!</h2><p style="color:var(--gray-600);">We\'ve sent a confirmation link to your email.</p></div>';
-                messageDiv.className = 'message success show';
-                messageDiv.style.background = '#f0fdf4';
-                messageDiv.style.padding = '2rem';
-                messageDiv.style.border = 'none';
+                showConfirmationView('your email');
                 return;
             }
 
@@ -616,24 +796,7 @@
 
                 // Check if email confirmation is needed (no session means confirmation required)
                 if (data.user && !data.session) {
-                    // Email confirmation required - show success message
-                    document.getElementById('signupForm').style.display = 'none';
-                    document.querySelector('.auth-header').style.display = 'none';
-                    document.querySelector('.auth-footer').style.display = 'none';
-                    document.querySelector('.terms-checkbox').style.display = 'none';
-                    document.getElementById('termsError').style.display = 'none';
-                    messageDiv.innerHTML = `
-                        <div style="text-align: center;">
-                            <h2 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.5rem;">Check Your Email!</h2>
-                            <p style="color: var(--gray-600);">
-                                We've sent a confirmation link to <strong>${email}</strong>
-                            </p>
-                        </div>
-                    `;
-                    messageDiv.className = 'message success show';
-                    messageDiv.style.background = '#f0fdf4';
-                    messageDiv.style.padding = '2rem';
-                    messageDiv.style.border = 'none';
+                    showConfirmationView(email);
                     return;
                 }
 
@@ -650,6 +813,76 @@
                 submitBtn.disabled = false;
             }
         });
+
+        // Store the email for resend functionality
+        let signupEmail = '';
+
+        // Show the confirmation view after signup
+        function showConfirmationView(email) {
+            signupEmail = email;
+            // Hide signup elements
+            document.getElementById('signupForm').style.display = 'none';
+            document.querySelector('.auth-header').style.display = 'none';
+            document.getElementById('authFooter').style.display = 'none';
+            document.getElementById('googleBtn').style.display = 'none';
+            document.querySelector('.divider').style.display = 'none';
+            messageDiv.style.display = 'none';
+            // Show confirmation view
+            document.getElementById('confirmEmail').textContent = email;
+            document.getElementById('confirmationView').classList.add('show');
+        }
+
+        // Resend the confirmation email
+        let resendCooldown = false;
+        async function resendConfirmation() {
+            if (resendCooldown || !signupEmail) return;
+
+            const resendBtn = document.getElementById('resendBtn');
+            const feedback = document.getElementById('resendFeedback');
+
+            resendBtn.classList.add('loading');
+            resendBtn.disabled = true;
+            feedback.style.display = 'none';
+
+            try {
+                const { error } = await supabaseClient.auth.resend({
+                    type: 'signup',
+                    email: signupEmail,
+                    options: {
+                        emailRedirectTo: window.location.origin + '/exam-practice.html'
+                    }
+                });
+
+                if (error) throw error;
+
+                feedback.textContent = 'Confirmation email sent. Please check your inbox and spam folder.';
+                feedback.className = 'resend-feedback success';
+                feedback.style.display = 'block';
+
+                // Start cooldown (60 seconds)
+                resendCooldown = true;
+                let seconds = 60;
+                const resendText = resendBtn.querySelector('.resend-text');
+                const interval = setInterval(() => {
+                    seconds--;
+                    resendText.textContent = `Resend again in ${seconds}s`;
+                    if (seconds <= 0) {
+                        clearInterval(interval);
+                        resendText.textContent = 'Resend confirmation email';
+                        resendBtn.disabled = false;
+                        resendCooldown = false;
+                    }
+                }, 1000);
+
+            } catch (error) {
+                feedback.textContent = error.message || 'Could not resend email. Please try again later.';
+                feedback.className = 'resend-feedback error';
+                feedback.style.display = 'block';
+                resendBtn.disabled = false;
+            } finally {
+                resendBtn.classList.remove('loading');
+            }
+        }
     </script>
 
 </body>
