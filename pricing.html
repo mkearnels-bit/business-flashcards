@@ -298,1046 +298,334 @@
     gap: 0.6rem;
     width: 100%;
     padding: 0.7rem 1rem;
-    text-align: left;
+    text-decoration: none;
+    font-size: 0.9rem;
+    color: #334155;
     border: none;
     background: none;
-    color: #334155;
-    font-size: 0.88rem;
-    font-weight: 500;
     cursor: pointer;
     font-family: inherit;
-    transition: all 0.2s;
-    text-decoration: none;
+    text-align: left;
+    transition: all 0.15s;
 }
 .profile-dropdown a:hover,
 .profile-dropdown button:hover {
     background: #f1f5f9;
     color: #1e3a5f;
 }
-.profile-dropdown button.logout-item {
-    color: #e74c3c;
-    border-top: 1px solid #f1f5f9;
-}
-.profile-dropdown button.logout-item:hover {
-    background: #fef2f2;
-}
 .profile-dropdown svg {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    fill: none;
     flex-shrink: 0;
 }
-
-@media (max-width: 768px) {
-    .site-hamburger {
-        display: flex;
-    }
-    .site-mobile-overlay { display: block; }
-    .site-mobile-menu { display: block; }
-    .site-nav-buttons {
-        display: none;
-    }
-    .site-navbar {
-        padding: 0.5rem 1rem;
-    }
-    .site-navbar-content {
-        padding: 0;
-    }
-    .site-navbar-logo {
-        height: 45px;
-    }
+.profile-dropdown .logout-item {
+    color: #e74c3c;
+    border-top: 1px solid #e2e8f0;
+}
+.profile-dropdown .logout-item:hover {
+    background: rgba(231, 76, 60, 0.06);
 }
 
-
-        html { scroll-behavior: smooth; }
+        /* ==================== NEW PRICING LAYOUT ==================== */
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            color: var(--gray-900);
-            line-height: 1.6;
-            overflow-x: hidden;
-            background: var(--gray-50);
-        }
-
-        /* ==================== HEADER ==================== */
-        .app-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            padding: 0.75rem 2rem;
-            border-bottom: 1px solid var(--gray-100);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .header-logo {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-        }
-
-        .header-logo img {
-            height: 65px;
-            width: auto;
-        }
-
-        .header-nav {
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-            background: var(--gray-100);
-            border-radius: 10px;
-            padding: 0.25rem;
-        }
-
-        .header-nav a {
-            padding: 0.5rem 1.25rem;
-            border-radius: 8px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            text-decoration: none;
-            color: var(--gray-500);
-            transition: all 0.2s ease;
-            margin-top: auto;
-        }
-
-        .header-nav a:hover {
-            color: var(--primary);
-            background: rgba(255,255,255,0.5);
-        }
-
-        .header-nav a.active {
-            background: white;
-            color: var(--primary);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .user-email {
-            font-size: 0.875rem;
-            color: var(--gray-500);
-        }
-
-        .logout-btn {
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 0.5rem 1.25rem;
-            border-radius: 8px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: inherit;
-        }
-
-        .logout-btn:hover {
-            background: #d35400;
-            transform: translateY(-1px);
-        }
-
-        /* Hamburger Menu */
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 44px;
-            height: 44px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            z-index: 1100;
-            position: relative;
-        }
-
-        .hamburger span {
-            display: block;
-            width: 22px;
-            height: 2px;
-            background: var(--primary);
-            border-radius: 2px;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            position: absolute;
-        }
-
-        .hamburger span:nth-child(1) { transform: translateY(-7px); }
-        .hamburger span:nth-child(2) { opacity: 1; }
-        .hamburger span:nth-child(3) { transform: translateY(7px); }
-
-        .hamburger.active span:nth-child(1) { transform: rotate(45deg); }
-        .hamburger.active span:nth-child(2) { opacity: 0; }
-        .hamburger.active span:nth-child(3) { transform: rotate(-45deg); }
-
-        .mobile-menu-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(15, 23, 42, 0.4);
-            backdrop-filter: blur(4px);
-            z-index: 1040;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-
-        .mobile-menu-overlay.active { opacity: 1; pointer-events: auto; }
-
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 280px;
-            height: 100%;
-            background: var(--white);
-            z-index: 1050;
-            transform: translateX(100%);
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
-            padding: 5.5rem 1.5rem 2rem;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .mobile-menu.active { transform: translateX(0); }
-
-        .mobile-menu-links {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-            min-height: 100%;
-        }
-
-        .mobile-menu-links a {
-            display: flex;
-            align-items: center;
-            gap: 0.875rem;
-            padding: 0.875rem 1rem;
-            border-radius: 12px;
-            text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 600;
+            background: #ffffff;
+            font-family: 'Inter', sans-serif;
             color: var(--gray-700);
-            transition: all 0.2s ease;
         }
 
-        .mobile-menu-links a .menu-icon {
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 10px;
-            background: var(--gray-100);
-            flex-shrink: 0;
-            transition: all 0.2s ease;
+        /* Spacing for fixed navbar */
+        .pricing-container {
+            padding-top: 80px;
         }
 
-        .mobile-menu-links a .menu-icon svg {
-            width: 18px;
-            height: 18px;
-            stroke: var(--gray-500);
-            transition: stroke 0.2s ease;
-        }
-
-        .mobile-menu-links a:hover,
-        .mobile-menu-links a.active {
-            background: var(--gray-100);
-            color: var(--primary);
-        }
-
-        .mobile-menu-links a.active .menu-icon {
-            background: var(--primary);
-        }
-
-        .mobile-menu-links a.active .menu-icon svg {
-            stroke: white;
-        }
-
-        .mobile-menu-divider {
-            height: 1px;
-            background: var(--gray-100);
-            margin: 0.5rem 0;
-        }
-
-        .mobile-menu-logout { margin-top: 1rem; }
-
-        .mobile-menu-logout button {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            gap: 0.875rem;
-            padding: 0.875rem 1rem;
-            border-radius: 12px;
-            border: none;
-            background: none;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--error);
-            cursor: pointer;
-            font-family: inherit;
-            transition: all 0.2s ease;
-        }
-
-        .mobile-menu-logout button .menu-icon {
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 10px;
-            background: rgba(231, 76, 60, 0.08);
-            flex-shrink: 0;
-        }
-
-        .mobile-menu-logout button .menu-icon svg {
-            width: 18px;
-            height: 18px;
-            stroke: var(--error);
-        }
-
-        .mobile-menu-logout button:hover {
-            background: rgba(231, 76, 60, 0.06);
-        }
-
-        /* ==================== HERO SECTION ==================== */
+        /* Hero/Header Section */
         .pricing-hero {
-            padding-top: 120px;
-            padding-bottom: 60px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 50%, #3a7bd5 100%);
-            position: relative;
-            overflow: hidden;
+            background: #ffffff;
+            padding: 60px 2rem 40px;
             text-align: center;
-        }
-
-        .pricing-hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.05) 0%, transparent 50%),
-                        radial-gradient(circle at 70% 80%, rgba(230, 126, 34, 0.08) 0%, transparent 40%);
-            animation: subtleFloat 20s ease-in-out infinite;
-        }
-
-        @keyframes subtleFloat {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(-2%, -1%); }
-        }
-
-        .pricing-hero::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 80px;
-            background: linear-gradient(to top, var(--gray-50), transparent);
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 700px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 8px 20px;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.95);
-            margin-bottom: 24px;
-            letter-spacing: 0.3px;
-        }
-
-        .hero-badge svg {
-            width: 16px;
-            height: 16px;
-            fill: var(--accent-light);
         }
 
         .pricing-hero h1 {
-            font-size: 3rem;
+            font-size: 2.5rem;
             font-weight: 800;
-            color: white;
-            line-height: 1.15;
-            margin-bottom: 16px;
-            letter-spacing: -0.5px;
-        }
-
-        .pricing-hero h1 span {
-            background: linear-gradient(135deg, var(--accent-light), #fbbf24);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--primary);
+            margin-bottom: 12px;
+            line-height: 1.2;
         }
 
         .pricing-hero p {
-            font-size: 1.15rem;
-            color: rgba(255, 255, 255, 0.8);
-            max-width: 520px;
+            font-size: 1.1rem;
+            color: var(--gray-500);
+            max-width: 500px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+
+        /* Main Two-Column Layout */
+        .pricing-main {
+            max-width: 960px;
             margin: 0 auto;
-            line-height: 1.7;
-        }
-
-        /* ==================== PRICING CARDS ==================== */
-        .pricing-section {
-            max-width: 880px;
-            margin: -40px auto 0;
-            padding: 0 1.5rem 80px;
-            position: relative;
-            z-index: 10;
-        }
-
-        .pricing-grid {
+            padding: 0 2rem 60px;
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-            align-items: start;
+            grid-template-columns: 1fr 380px;
+            gap: 40px;
+            align-items: flex-start;
         }
 
-        .pricing-card {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 40px 36px;
-            border: 2px solid var(--gray-200);
-            position: relative;
-            transition: all 0.3s ease;
-            overflow: hidden;
+        /* What's Included Section */
+        .whats-included {
+            padding: 0;
         }
 
-        .pricing-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
-        }
-
-        .pricing-card.featured {
-            border-color: var(--accent);
-            box-shadow: 0 20px 60px rgba(230, 126, 34, 0.15);
-        }
-
-        .pricing-card.featured:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 25px 70px rgba(230, 126, 34, 0.2);
-        }
-
-        .featured-banner {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(135deg, var(--accent), var(--accent-light));
-            color: white;
-            text-align: center;
-            padding: 8px;
-            font-size: 0.8rem;
+        .whats-included h2 {
+            font-size: 1.8rem;
             font-weight: 700;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .pricing-card.featured .card-inner {
-            padding-top: 12px;
-        }
-
-        .plan-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        .plan-icon.monthly {
-            background: linear-gradient(135deg, rgba(52, 152, 219, 0.12), rgba(52, 152, 219, 0.05));
-        }
-
-        .plan-icon.monthly svg {
-            stroke: var(--secondary);
-        }
-
-        .plan-icon.yearly {
-            background: linear-gradient(135deg, rgba(230, 126, 34, 0.15), rgba(230, 126, 34, 0.05));
-        }
-
-        .plan-icon.yearly svg {
-            stroke: var(--accent);
-        }
-
-        .plan-icon svg {
-            width: 28px;
-            height: 28px;
-            fill: none;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        .plan-name {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--gray-900);
-            margin-bottom: 4px;
-        }
-
-        .plan-desc {
-            font-size: 0.9rem;
-            color: var(--gray-500);
-            margin-bottom: 24px;
-        }
-
-        .price-row {
-            display: flex;
-            align-items: baseline;
-            gap: 4px;
-            margin-bottom: 6px;
-        }
-
-        .price-currency {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--gray-900);
-            align-self: flex-start;
-            margin-top: 8px;
-        }
-
-        .price-amount {
-            font-size: 3.5rem;
-            font-weight: 800;
-            color: var(--gray-900);
-            line-height: 1;
-            letter-spacing: -2px;
-        }
-
-        .price-period {
-            font-size: 1rem;
-            color: var(--gray-500);
-            font-weight: 500;
-        }
-
-        .price-yearly-total {
-            font-size: 0.85rem;
-            color: var(--gray-500);
-            margin-bottom: 24px;
-        }
-
-        .price-monthly-note {
-            margin-bottom: 24px;
-        }
-
-        .savings-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            background: rgba(39, 174, 96, 0.1);
-            color: var(--success);
-            font-size: 0.8rem;
-            font-weight: 700;
-            padding: 4px 12px;
-            border-radius: 50px;
-            margin-bottom: 24px;
-        }
-
-        .savings-badge svg {
-            width: 14px;
-            height: 14px;
-            fill: none;
-            stroke: var(--success);
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        .subscribe-btn {
-            display: block;
-            width: 100%;
-            padding: 16px 24px;
-            border: none;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 700;
-            font-family: inherit;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-            text-decoration: none;
-            letter-spacing: 0.3px;
-        }
-
-        .subscribe-btn.secondary {
-            background: var(--gray-100);
             color: var(--primary);
-            border: 2px solid var(--gray-200);
-        }
-
-        .subscribe-btn.secondary:hover {
-            background: var(--gray-200);
-            border-color: var(--gray-300);
-            transform: translateY(-2px);
-        }
-
-        .subscribe-btn.primary {
-            background: linear-gradient(135deg, var(--accent), #d35400);
-            color: white;
-            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.35);
-        }
-
-        .subscribe-btn.primary:hover {
-            box-shadow: 0 6px 25px rgba(230, 126, 34, 0.45);
-            transform: translateY(-2px);
+            margin-bottom: 30px;
         }
 
         .feature-list {
             list-style: none;
-            margin-top: 28px;
-            padding-top: 28px;
-            border-top: 1px solid var(--gray-100);
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
         }
 
         .feature-list li {
             display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 10px 0;
-            font-size: 0.92rem;
+            align-items: center;
+            gap: 14px;
+            font-size: 1rem;
             color: var(--gray-700);
             line-height: 1.5;
         }
 
-        .feature-list li svg {
-            width: 20px;
-            height: 20px;
-            flex-shrink: 0;
-            margin-top: 1px;
-        }
-
-        .check-icon {
-            fill: none;
-            stroke: var(--success);
-            stroke-width: 2.5;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        /* ==================== WHAT'S INCLUDED ==================== */
-        .included-section {
-            max-width: 880px;
-            margin: 0 auto;
-            padding: 0 1.5rem 80px;
-        }
-
-        .included-header {
-            text-align: center;
-            margin-bottom: 48px;
-        }
-
-        .included-header h2 {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--gray-900);
-            margin-bottom: 10px;
-        }
-
-        .included-header p {
-            font-size: 1.05rem;
-            color: var(--gray-500);
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-
-        .feature-card {
-            background: var(--white);
-            border-radius: 16px;
-            padding: 28px 24px;
-            border: 1px solid var(--gray-200);
-            transition: all 0.3s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-        }
-
-        .feature-card-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 16px;
-        }
-
-        .feature-card-icon svg {
+        .feature-list svg {
             width: 24px;
             height: 24px;
-            fill: none;
+            flex-shrink: 0;
+            color: var(--success);
             stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
         }
 
-        .feature-card-icon.blue { background: rgba(52, 152, 219, 0.1); }
-        .feature-card-icon.blue svg { stroke: var(--secondary); }
-        .feature-card-icon.orange { background: rgba(230, 126, 34, 0.1); }
-        .feature-card-icon.orange svg { stroke: var(--accent); }
-        .feature-card-icon.green { background: rgba(39, 174, 96, 0.1); }
-        .feature-card-icon.green svg { stroke: var(--success); }
-        .feature-card-icon.purple { background: rgba(155, 89, 182, 0.1); }
-        .feature-card-icon.purple svg { stroke: #9b59b6; }
-        .feature-card-icon.red { background: rgba(231, 76, 60, 0.1); }
-        .feature-card-icon.red svg { stroke: var(--error); }
-        .feature-card-icon.teal { background: rgba(23, 162, 184, 0.1); }
-        .feature-card-icon.teal svg { stroke: #17a2b8; }
-
-        .feature-card h3 {
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--gray-900);
-            margin-bottom: 6px;
-        }
-
-        .feature-card p {
-            font-size: 0.88rem;
-            color: var(--gray-500);
-            line-height: 1.6;
-        }
-
-        /* ==================== FAQ ==================== */
-        .faq-section {
-            max-width: 680px;
-            margin: 0 auto;
-            padding: 0 1.5rem 80px;
-        }
-
-        .faq-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .faq-header h2 {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--gray-900);
-            margin-bottom: 10px;
-        }
-
-        .faq-header p {
-            font-size: 1.05rem;
-            color: var(--gray-500);
-        }
-
-        .faq-item {
-            background: var(--white);
+        /* Pricing Panel */
+        .pricing-panel {
+            background: #ffffff;
             border: 1px solid var(--gray-200);
-            border-radius: 14px;
-            margin-bottom: 12px;
-            overflow: hidden;
-            transition: all 0.2s ease;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 100px;
         }
 
-        .faq-item:hover {
-            border-color: var(--gray-300);
-        }
-
-        .faq-question {
+        .pricing-options {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 24px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--gray-900);
-            background: none;
-            border: none;
-            width: 100%;
-            text-align: left;
-            font-family: inherit;
-            transition: color 0.2s;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 28px;
         }
 
-        .faq-question:hover {
+        .pricing-option {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+            background: #ffffff;
+        }
+
+        .pricing-option:hover {
+            border-color: var(--gray-300);
+            background: var(--gray-50);
+        }
+
+        .pricing-option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            margin-right: 14px;
+            flex-shrink: 0;
+            accent-color: var(--primary);
+        }
+
+        .pricing-option.selected {
+            border-color: transparent;
+            background: linear-gradient(#ffffff, #ffffff) padding-box,
+                        linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 50%, var(--accent) 100%) border-box;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 16px rgba(30, 58, 95, 0.15);
+        }
+
+        .pricing-option-content {
+            flex: 1;
+        }
+
+        .pricing-option-title {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .pricing-option-price {
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+        }
+
+        .pricing-option-amount {
+            font-size: 1.4rem;
+            font-weight: 700;
             color: var(--primary);
         }
 
-        .faq-question svg {
-            width: 20px;
-            height: 20px;
-            stroke: var(--gray-400);
-            fill: none;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            transition: transform 0.3s ease;
-            flex-shrink: 0;
-            margin-left: 16px;
-        }
-
-        .faq-item.open .faq-question svg {
-            transform: rotate(180deg);
-        }
-
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease, padding 0.3s ease;
-        }
-
-        .faq-item.open .faq-answer {
-            max-height: 300px;
-        }
-
-        .faq-answer-inner {
-            padding: 0 24px 20px;
+        .pricing-option-period {
             font-size: 0.9rem;
             color: var(--gray-500);
-            line-height: 1.7;
         }
 
-        /* ==================== TRUST BAR ==================== */
-        .trust-bar {
-            text-align: center;
-            padding: 40px 1.5rem 60px;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .trust-items {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            flex-wrap: wrap;
-        }
-
-        .trust-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.88rem;
+        .pricing-option-billing {
+            font-size: 0.85rem;
             color: var(--gray-500);
-            font-weight: 500;
+            margin-top: 2px;
         }
 
-        .trust-item svg {
-            width: 20px;
-            height: 20px;
-            fill: none;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        /* ==================== CTA BOTTOM ==================== */
-        .bottom-cta {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            padding: 60px 2rem;
-            text-align: center;
-        }
-
-        .bottom-cta h2 {
-            font-size: 1.8rem;
-            font-weight: 800;
+        .save-badge {
+            background: var(--accent);
             color: white;
-            margin-bottom: 10px;
-        }
-
-        .bottom-cta p {
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.75);
-            margin-bottom: 28px;
-            max-width: 460px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
             margin-left: auto;
-            margin-right: auto;
         }
 
-        .bottom-cta .subscribe-btn.primary {
+        .subscribe-btn {
+            width: 100%;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            text-decoration: none;
             display: inline-block;
-            width: auto;
-            padding: 16px 40px;
+            text-align: center;
+            margin-bottom: 14px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
         }
 
-        /* ==================== FOOTER ==================== */
-        .pricing-footer {
-            background: var(--dark);
-            padding: 32px 2rem;
+        .subscribe-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(230, 126, 34, 0.4);
+        }
+
+        .billing-note {
+            font-size: 0.85rem;
+            color: var(--gray-500);
             text-align: center;
+        }
+
+        /* Footer */
+        .pricing-footer {
+            background: var(--gray-50);
+            padding: 40px 2rem;
+            text-align: center;
+            border-top: 1px solid var(--gray-200);
+            margin-top: 60px;
         }
 
         .pricing-footer p {
-            color: rgba(255,255,255,0.4);
-            font-size: 0.82rem;
+            color: var(--gray-600);
+            font-size: 0.9rem;
+            line-height: 1.6;
         }
 
         .pricing-footer a {
-            color: rgba(255,255,255,0.5);
+            color: var(--primary);
             text-decoration: none;
-            transition: color 0.2s;
+            font-weight: 500;
         }
 
         .pricing-footer a:hover {
-            color: rgba(255,255,255,0.8);
+            text-decoration: underline;
         }
 
-        /* ==================== PAYMENT ICONS ==================== */
-        .payment-methods {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 16px;
-            margin-top: 20px;
-            padding-top: 20px;
-            opacity: 0.5;
-        }
+        /* Responsive Design */
+        @media (max-width: 860px) {
+            .pricing-main {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                max-width: 480px;
+            }
 
-        .payment-icon {
-            height: 24px;
-            width: auto;
-        }
-
-        .payment-label {
-            font-size: 0.78rem;
-            color: var(--gray-500);
-            text-align: center;
-            margin-top: 16px;
-        }
-
-        /* ==================== RESPONSIVE ==================== */
-        @media (max-width: 1024px) {
-            .pricing-grid {
-                grid-template-columns: repeat(2, 1fr) !important;
-                max-width: 560px !important;
-                margin: 0 auto;
+            .pricing-panel {
+                position: static;
             }
         }
 
         @media (max-width: 768px) {
-            .header-nav { display: none; }
-            .header-right { display: none; }
-            .header-logo img { height: 50px; }
-            .hamburger { display: flex; }
-            .mobile-menu-overlay { display: block; }
-            .mobile-menu { display: block; }
-
-            .pricing-hero {
-                padding-top: 100px;
-                padding-bottom: 50px;
-            }
-
             .pricing-hero h1 {
-                font-size: 2rem;
+                font-size: 1.8rem;
             }
 
             .pricing-hero p {
                 font-size: 1rem;
             }
 
-            .pricing-grid {
-                grid-template-columns: 1fr 1fr !important;
-                max-width: 500px !important;
-                margin: 0 auto;
+            .site-hamburger {
+                display: flex;
             }
 
-            .pricing-card.featured {
-                transform: none;
-                order: -1;
+            .site-nav-link {
+                display: none;
             }
 
-            .pricing-card.featured:hover {
-                transform: translateY(-4px);
+            .site-nav-btn {
+                display: none;
             }
 
-            .features-grid {
-                grid-template-columns: 1fr;
+            .profile-dropdown-wrapper {
+                display: none;
             }
 
-            .trust-items {
-                gap: 20px;
+            .site-mobile-menu {
+                display: block;
             }
 
-            .bottom-cta h2 {
+            .pricing-panel {
+                padding: 24px;
+            }
+
+            .whats-included h2 {
                 font-size: 1.4rem;
             }
-        }
 
-        @media (max-width: 480px) {
-            .pricing-hero h1 {
-                font-size: 1.7rem;
-            }
-
-            .pricing-grid {
-                grid-template-columns: 1fr !important;
-                max-width: 380px !important;
-            }
-
-            .pricing-card {
-                padding: 28px 24px;
-            }
-
-            .price-amount {
-                font-size: 2.8rem;
-            }
-
-            .trust-items {
-                flex-direction: column;
-                gap: 12px;
+            .feature-list li {
+                gap: 10px;
+                font-size: 0.95rem;
             }
         }
-    
-@media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-    }
-}
+    </style>
 
-/* ===== LEVEL TOGGLE ===== */
-.level-toggle { display: flex; align-items: center; background: #f1f5f9; border-radius: 8px; padding: 3px; gap: 0; flex-shrink: 0; }
-.level-toggle-btn { padding: 5px 14px; font-size: 0.8rem; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; transition: all 0.25s ease; font-family: inherit; color: #64748b; background: transparent; white-space: nowrap; }
-.level-toggle-btn.active { background: #1e3a5f; color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
-.level-toggle-btn:hover:not(.active) { color: #1e3a5f; background: rgba(30, 58, 95, 0.08); }
-.mobile-level-toggle { display: flex; align-items: center; background: #f1f5f9; border-radius: 10px; padding: 4px; margin-bottom: 1rem; gap: 0; }
-.mobile-level-toggle .level-toggle-btn { flex: 1; padding: 8px 0; font-size: 0.85rem; border-radius: 8px; text-align: center; }
-</style>
-<!-- Google Analytics - Replace GA_MEASUREMENT_ID with your actual ID -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'GA_MEASUREMENT_ID');
-</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXX');
+    </script>
 </head>
 <body>
     <!-- Header -->
@@ -1345,10 +633,6 @@
 <nav class="site-navbar" id="siteNavbar">
     <div class="site-navbar-content">
         <a href="index.html"><img src="logo.png" alt="MyBizStudies" class="site-navbar-logo"></a>
-        <div class="level-toggle" id="desktopLevelToggle">
-            <button class="level-toggle-btn active" data-level="alevel">A-Level</button>
-            <button class="level-toggle-btn" data-level="gcse">GCSE</button>
-        </div>
         <div class="site-nav-buttons" id="siteNavButtons">
             <a href="exam-practice.html" class="site-nav-link auth-only" style="display:none;">Exam Practice</a>
             <a href="app.html" class="site-nav-link auth-only" style="display:none;">Flash Cards</a>
@@ -1392,294 +676,141 @@
     <!-- MOBILE MENU -->
 <div class="site-mobile-overlay" id="siteMobileOverlay"></div>
 <div class="site-mobile-menu" id="siteMobileMenu">
-    <div class="site-mobile-links"><div class="mobile-level-toggle">
-            <button class="level-toggle-btn active" data-level="alevel">A-Level</button>
-            <button class="level-toggle-btn" data-level="gcse">GCSE</button>
-        </div>
+    <div class="site-mobile-links">
         <div class="site-mobile-divider auth-only" style="display:none;"></div>
         <a href="exam-practice.html" class="auth-only" style="display:none;">
-            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z"/></svg></span>
+            <div class="site-menu-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
             Exam Practice
         </a>
         <a href="app.html" class="auth-only" style="display:none;">
-            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
+            <div class="site-menu-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9h12"/><path d="M6 12h12"/><path d="M6 15h12"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+            </div>
             Flash Cards
         </a>
         <a href="exam-skills-v2.html" class="auth-only" style="display:none;">
-            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg></span>
+            <div class="site-menu-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            </div>
             Exam Skills
         </a>
         <a href="notes.html" class="auth-only" style="display:none;">
-            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></span>
+            <div class="site-menu-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
             Study Notes
         </a>
         <a href="blog.html">
-            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"/></svg></span>
+            <div class="site-menu-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
             Blog
         </a>
-
-        <div class="site-mobile-divider"></div>
         <a href="contact.html">
-            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></span>
+            <div class="site-menu-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
             Contact Us
         </a>
-        <div class="site-mobile-divider guest-only"></div>
-        <a href="login.html" class="guest-only">
-            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"/></svg></span>
+        <div class="site-mobile-divider"></div>
+        <a href="login.html" class="guest-only" style="display:none;">
+            <div class="site-menu-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+            </div>
             Log In
         </a>
-        <a href="signup.html" class="site-mobile-cta guest-only">
+        <a href="signup.html" class="guest-only" style="display:none;">
+            <div class="site-menu-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+            </div>
             Get Started
         </a>
-        <div class="site-mobile-divider auth-only" style="display:none;"></div>
-        <button class="site-mobile-logout auth-only" style="display:none;" id="mobileLogoutBtn">
-            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l3-3m0 0l-3-3m3 3H3"/></svg></span>
-            Logout
+        <button class="site-mobile-logout site-mobile-logout" id="mobileLogoutBtn" style="display:none;">
+            <div class="site-menu-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            </div>
+            Log Out
         </button>
     </div>
 </div>
 
+    <div class="pricing-container">
+        <!-- Hero Section -->
+        <section class="pricing-hero">
+            <h1>Get unlimited access</h1>
+            <p>All plans include every feature. Pick the billing that works for you.</p>
+        </section>
 
-    <!-- Hero Section -->
-    <section class="pricing-hero">
-        <div class="hero-content">
-            <div class="hero-badge">
-                <svg viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
-                Choose Your Plan
-            </div>
-            <h1>Ace Your <span>Business Studies</span> Exams</h1>
-            <p>AI-powered exam practice with instant feedback. Choose the plan that fits your revision schedule.</p>
-        </div>
-    </section>
-
-    <!-- Pricing Cards -->
-    <section class="pricing-section" style="max-width: 1100px;">
-        <div class="pricing-grid" style="grid-template-columns: repeat(4, 1fr); max-width: 1100px; margin: 0 auto;">
-
-            <!-- Free Plan -->
-            <div class="pricing-card">
-                <div class="plan-name">Free</div>
-                <div class="plan-desc">Try it out</div>
-                <div class="price-row">
-                    <span class="price-currency">$</span>
-                    <span class="price-amount">0</span>
-                </div>
-                <div class="price-yearly-total">&nbsp;</div>
-                <button class="subscribe-btn secondary" onclick="window.location.href='signup.html'">Get Started</button>
+        <!-- Main Pricing Content -->
+        <div class="pricing-main">
+            <!-- What's Included -->
+            <div class="whats-included">
+                <h2>What's included</h2>
                 <ul class="feature-list">
-                    <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> 5 exam practices</li>
-                    <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> All exam boards</li>
-                    <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> AI-powered feedback</li>
-                    <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> Flashcards &amp; study notes</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Unlimited AI exam practice</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> AI-generated tests & marking</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Exam board style questions & examiner feedback</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> 500+ interactive flashcards</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Comprehensive study notes</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Exam technique training</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Progress tracking & coaching</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Cancel anytime</li>
                 </ul>
             </div>
 
-            <!-- Annual Plan -->
-            <div class="pricing-card featured">
-                <div class="featured-banner">Best Value</div>
-                <div class="card-inner">
-                    <div class="plan-name">Annual</div>
-                    <div class="plan-desc">For serious students</div>
-                    <div class="price-row">
-                        <span class="price-currency">$</span>
-                        <span class="price-amount">9</span>
-                        <span class="price-period">/month</span>
-                    </div>
-                    <div class="price-yearly-total">Billed annually at $108/year</div>
-                    <div class="savings-badge"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Save 77%</div>
-                    <a href="https://www.creem.io/payment/prod_7jO7MJzPiDR0YNseZUAOlZ" class="subscribe-btn primary">Subscribe</a>
-                    <ul class="feature-list">
-                        <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> Unlimited exam practice</li>
-                        <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> AI-generated tests &amp; marking</li>
-                        <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> All exam boards</li>
-                        <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> Full access to all features</li>
-                    </ul>
+            <!-- Pricing Panel -->
+            <div class="pricing-panel">
+                <div class="pricing-options" id="pricingOptions">
+                    <!-- 12 Months Option (Pre-selected) -->
+                    <label class="pricing-option selected" data-plan="annual" data-url="https://www.creem.io/payment/prod_7jO7MJzPiDR0YNseZUAOlZ">
+                        <input type="radio" name="pricing-plan" value="annual" checked>
+                        <div class="pricing-option-content">
+                            <div class="pricing-option-title">12 months</div>
+                            <div class="pricing-option-price">
+                                <span class="pricing-option-amount">$9</span>
+                                <span class="pricing-option-period">/month</span>
+                            </div>
+                            <div class="pricing-option-billing">Billed at $108/year</div>
+                        </div>
+                        <div class="save-badge">Save 77%</div>
+                    </label>
+
+                    <!-- 3 Months Option -->
+                    <label class="pricing-option" data-plan="quarterly" data-url="https://www.creem.io/payment/prod_5ZrtSKRnnMMeM0EcPMHPQ6">
+                        <input type="radio" name="pricing-plan" value="quarterly">
+                        <div class="pricing-option-content">
+                            <div class="pricing-option-title">3 months</div>
+                            <div class="pricing-option-price">
+                                <span class="pricing-option-amount">$18</span>
+                                <span class="pricing-option-period">/month</span>
+                            </div>
+                            <div class="pricing-option-billing">Billed at $54/quarter</div>
+                        </div>
+                        <div class="save-badge">Save 54%</div>
+                    </label>
+
+                    <!-- 1 Month Option -->
+                    <label class="pricing-option" data-plan="monthly" data-url="https://www.creem.io/payment/prod_2CShKDsiBWCbJkoG1jOFkz">
+                        <input type="radio" name="pricing-plan" value="monthly">
+                        <div class="pricing-option-content">
+                            <div class="pricing-option-title">1 month</div>
+                            <div class="pricing-option-price">
+                                <span class="pricing-option-amount">$39</span>
+                                <span class="pricing-option-period">/month</span>
+                            </div>
+                            <div class="pricing-option-billing">Billed monthly</div>
+                        </div>
+                    </label>
                 </div>
-            </div>
 
-            <!-- Quarterly Plan -->
-            <div class="pricing-card">
-                <div class="plan-name">Quarterly</div>
-                <div class="plan-desc">Flexible revision</div>
-                <div class="price-row">
-                    <span class="price-currency">$</span>
-                    <span class="price-amount">18</span>
-                    <span class="price-period">/month</span>
-                </div>
-                <div class="price-yearly-total">Billed quarterly at $54</div>
-                <div class="savings-badge"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Save 54%</div>
-                <a href="https://www.creem.io/payment/prod_5ZrtSKRnnMMeM0EcPMHPQ6" class="subscribe-btn secondary">Subscribe</a>
-                <ul class="feature-list">
-                    <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> Unlimited exam practice</li>
-                    <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> AI-generated tests &amp; marking</li>
-                    <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> All exam boards</li>
-                    <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> Full access to all features</li>
-                </ul>
-            </div>
-
-            <!-- Monthly Plan -->
-            <div class="pricing-card">
-                <div class="plan-name">Monthly</div>
-                <div class="plan-desc">Exam season crammer</div>
-                <div class="price-row">
-                    <span class="price-currency">$</span>
-                    <span class="price-amount">39</span>
-                    <span class="price-period">/month</span>
-                </div>
-                <div class="price-yearly-total">Billed monthly. Cancel anytime.</div>
-                <a href="https://www.creem.io/payment/prod_2CShKDsiBWCbJkoG1jOFkz" class="subscribe-btn secondary">Subscribe</a>
-                <ul class="feature-list">
-                    <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> Unlimited exam practice</li>
-                    <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> AI-generated tests &amp; marking</li>
-                    <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> All exam boards</li>
-                    <li><svg viewBox="0 0 24 24" class="check-icon"><polyline points="20 6 9 17 4 12"/></svg> Full access to all features</li>
-                </ul>
-            </div>
-
-        </div>
-
-        <!-- Payment Methods -->
-        <div class="payment-label">Secure payments powered by Creem</div>
-        <div class="payment-methods">
-            <svg width="38" height="24" viewBox="0 0 38 24"><rect width="38" height="24" rx="4" fill="#1A1F71"/><text x="19" y="15" font-size="8" fill="white" text-anchor="middle" font-weight="700" font-family="Inter,sans-serif">VISA</text></svg>
-            <svg width="38" height="24" viewBox="0 0 38 24"><rect width="38" height="24" rx="4" fill="#252525"/><circle cx="15" cy="12" r="7" fill="#EB001B"/><circle cx="23" cy="12" r="7" fill="#F79E1B"/><path d="M19 6.7a7 7 0 0 1 0 10.6 7 7 0 0 1 0-10.6z" fill="#FF5F00"/></svg>
-        </div>
-    </section>
-
-    <!-- What's Included -->
-    <section class="included-section">
-        <div class="included-header">
-            <h2>Everything You Need to Succeed</h2>
-            <p>Built for A-Level Business Studies students across all major exam boards</p>
-        </div>
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-card-icon blue">
-                    <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-                </div>
-                <h3>500+ Flashcards</h3>
-                <p>Covering every topic across Units 1, 2, 3, and 4 of the Edexcel IAL specification.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-card-icon orange">
-                    <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-                </div>
-                <h3>Exam Techniques</h3>
-                <p>Learn exactly how Edexcel marks each type of question with real model answers and breakdowns.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-card-icon green">
-                    <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                </div>
-                <h3>Progress Tracking</h3>
-                <p>Track what you've mastered, what needs reviewing, and focus your study where it counts.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-card-icon purple">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-                </div>
-                <h3>Mark Scheme Insights</h3>
-                <p>Understand exactly where marks are awarded using the Knowledge, Application, Analysis framework.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-card-icon red">
-                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                </div>
-                <h3>Case Study Practice</h3>
-                <p>Apply your knowledge to realistic business scenarios, just like in the actual exam.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-card-icon teal">
-                    <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                </div>
-                <h3>Regular Updates</h3>
-                <p>New content added regularly to keep up with the latest exam trends and specification changes.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- FAQ -->
-    <section class="faq-section">
-        <div class="faq-header">
-            <h2>Common Questions</h2>
-            <p>Everything you need to know before subscribing</p>
-        </div>
-
-        <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-                What do I get on the free plan?
-                <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-answer">
-                <div class="faq-answer-inner">The free plan gives you 5 exam practices so you can try the platform before subscribing. You also get full access to flashcards, study notes, and exam skills training.</div>
+                <button class="subscribe-btn" id="subscribeBtn">Subscribe now</button>
+                <p class="billing-note">Recurring billing, cancel anytime</p>
             </div>
         </div>
 
-        <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-                What's the difference between the paid plans?
-                <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-answer">
-                <div class="faq-answer-inner">All paid plans include the same features — unlimited exam practice with AI-generated questions and feedback. The only difference is how you pay: annually (best value at $9/mo), quarterly ($18/mo), or monthly ($39/mo). The annual plan saves you over 75% compared to monthly.</div>
-            </div>
-        </div>
-
-        <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-                Which exam boards are supported?
-                <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-answer">
-                <div class="faq-answer-inner">MyBizStudies supports Edexcel IAL, AQA, and CIE IAL Business Studies exam boards. All exam practice questions and feedback are aligned with each board's specification and mark schemes.</div>
-            </div>
-        </div>
-
-        <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-                Is my payment information safe?
-                <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-answer">
-                <div class="faq-answer-inner">Your payment details are handled entirely by our payment provider, which is PCI DSS compliant (the highest level of security for payment processing). We never see or store your card information on our servers.</div>
-            </div>
-        </div>
-
-        <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">
-                Can I cancel anytime?
-                <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-answer">
-                <div class="faq-answer-inner">Yes! You can cancel your subscription at any time. Your access continues until the end of your current billing period. See our <a href="refund.html" style="color: var(--primary); font-weight: 600;">Refund Policy</a> for full details.</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Trust Bar -->
-    <div class="trust-bar">
-        <div class="trust-items">
-            <div class="trust-item">
-                <svg viewBox="0 0 24 24" stroke="var(--success)"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                Secure Payments
-            </div>
-            <div class="trust-item">
-                <svg viewBox="0 0 24 24" stroke="var(--secondary)"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                Cancel Anytime
-            </div>
-            <div class="trust-item">
-                <svg viewBox="0 0 24 24" stroke="var(--accent)"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 6v6l4 2"/></svg>
-                24/7 Access
-            </div>
-        </div>
     </div>
-
-    <!-- Bottom CTA -->
-    <section class="bottom-cta">
-        <h2>Ready to Start Studying Smarter?</h2>
-        <p>Join students who are already using MyBizStudies to sharpen their exam technique. Start free, upgrade when you're ready.</p>
-        <button class="subscribe-btn primary" onclick="window.location.href='signup.html'">Start Free</button>
-    </section>
 
     <!-- Footer -->
     <footer class="pricing-footer">
@@ -1747,7 +878,6 @@
         var siteHamburger = document.getElementById('siteHamburger');
         var siteMobileMenu = document.getElementById('siteMobileMenu');
         var siteMobileOverlay = document.getElementById('siteMobileOverlay');
-
         function toggleSiteMenu() {
             siteHamburger.classList.toggle('active');
             siteMobileMenu.classList.toggle('active');
@@ -1762,42 +892,25 @@
         if (document.getElementById('navLogoutBtn')) document.getElementById('navLogoutBtn').addEventListener('click', function() { handleLogout(); });
         if (document.getElementById('mobileLogoutBtn')) document.getElementById('mobileLogoutBtn').addEventListener('click', function() { handleLogout(); });
 
-        // ===== LEVEL TOGGLE =====
-        (function() {
-            var LEVEL_KEY = 'mybiz_study_level';
-            var currentLevel = localStorage.getItem(LEVEL_KEY) || 'alevel';
-            var alevelPages = { 'app.html': 'gcse-app.html', 'glossary.html': 'gcse-glossary.html', 'exam-skills-v2.html': null, 'exam-practice.html': null, 'notes.html': null, 'notes-unit1.html': null, 'notes-unit2.html': null, 'notes-unit3.html': null, 'notes-unit4.html': null };
-            var gcsePages = { 'gcse-app.html': 'app.html', 'gcse-glossary.html': 'glossary.html' };
-            var comingSoon = ['exam-skills-v2.html', 'exam-practice.html', 'notes.html', 'notes-unit1.html', 'notes-unit2.html', 'notes-unit3.html', 'notes-unit4.html'];
-            function getCurrentPage() { var path = window.location.pathname; return path.substring(path.lastIndexOf('/') + 1) || 'index.html'; }
-            function showComingSoonToast() {
-                var toast = document.getElementById('comingSoonToast');
-                if (!toast) { toast = document.createElement('div'); toast.id = 'comingSoonToast'; toast.style.cssText = 'position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:#1e3a5f;color:#fff;padding:0.75rem 1.5rem;border-radius:10px;font-size:0.9rem;font-weight:600;opacity:0;transition:all 0.3s ease;z-index:10000;pointer-events:none;'; toast.textContent = 'GCSE version coming soon!'; document.body.appendChild(toast); }
-                toast.style.opacity = '1'; toast.style.transform = 'translateX(-50%) translateY(0)';
-                setTimeout(function() { toast.style.opacity = '0'; toast.style.transform = 'translateX(-50%) translateY(20px)'; }, 2500);
-            }
-            function updateNavLinks(level) {
-                document.querySelectorAll('.site-nav-link, a[href]').forEach(function(link) {
-                    var href = link.getAttribute('href'); if (!href) return;
-                    if (level === 'gcse') { if (href === 'app.html') link.setAttribute('href', 'gcse-app.html'); if (comingSoon.indexOf(href) !== -1) { link.setAttribute('data-coming-soon', 'true'); link.addEventListener('click', comingSoonHandler); } }
-                    else { if (href === 'gcse-app.html') link.setAttribute('href', 'app.html'); link.removeAttribute('data-coming-soon'); link.removeEventListener('click', comingSoonHandler); }
+        // Pricing option selection
+        document.querySelectorAll('.pricing-option').forEach(function(option) {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.pricing-option').forEach(function(o) {
+                    o.classList.remove('selected');
                 });
+                this.classList.add('selected');
+                this.querySelector('input[type="radio"]').checked = true;
+            });
+        });
+
+        // Subscribe button handler
+        document.getElementById('subscribeBtn').addEventListener('click', function() {
+            var selectedOption = document.querySelector('.pricing-option.selected');
+            if (selectedOption) {
+                var url = selectedOption.getAttribute('data-url');
+                window.location.href = url;
             }
-            function comingSoonHandler(e) { if (this.getAttribute('data-coming-soon') === 'true') { e.preventDefault(); showComingSoonToast(); } }
-            function setLevel(level) {
-                localStorage.setItem(LEVEL_KEY, level); currentLevel = level;
-                document.querySelectorAll('.level-toggle-btn').forEach(function(btn) { btn.classList.toggle('active', btn.dataset.level === level); });
-                updateNavLinks(level);
-                var page = getCurrentPage();
-                if (level === 'gcse') { if (alevelPages[page] === null) { showComingSoonToast(); localStorage.setItem(LEVEL_KEY, 'alevel'); currentLevel = 'alevel'; document.querySelectorAll('.level-toggle-btn').forEach(function(btn) { btn.classList.toggle('active', btn.dataset.level === 'alevel'); }); updateNavLinks('alevel'); return; } if (alevelPages[page]) { window.location.href = alevelPages[page]; return; } }
-                else { if (gcsePages[page]) { window.location.href = gcsePages[page]; return; } }
-            }
-            function initToggles() {
-                document.querySelectorAll('.level-toggle-btn').forEach(function(btn) { btn.classList.toggle('active', btn.dataset.level === currentLevel); btn.addEventListener('click', function() { setLevel(this.dataset.level); }); });
-                updateNavLinks(currentLevel);
-            }
-            if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initToggles); } else { initToggles(); }
-        })();
+        });
 
         // Mobile menu (legacy)
         function toggleMobileMenu() {
@@ -1807,18 +920,6 @@
             document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('active') ? 'hidden' : '';
         }
 
-        // FAQ toggle
-        function toggleFaq(btn) {
-            const item = btn.parentElement;
-            const wasOpen = item.classList.contains('open');
-            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-            if (!wasOpen) item.classList.add('open');
-        }
-
-        // Subscribe placeholder (will be replaced with Creem integration)
-        function subscribe(plan) {
-            alert('Payment integration coming soon! You selected the ' + plan + ' plan.');
-        }
     </script>
 </body>
 </html>
