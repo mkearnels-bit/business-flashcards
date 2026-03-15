@@ -5942,11 +5942,11 @@
                 var r = await navClient.auth.getSession();
                 if (r.data.session) {
                     document.querySelectorAll('.auth-only').forEach(function(el) { el.style.display = ''; });
-                // Show admin link only for admin email
-                if (session.user.email === 'hello@mybizstudies.com') {
-                    document.querySelectorAll('.admin-only').forEach(function(el) { el.style.display = ''; });
-                }
                     document.querySelectorAll('.guest-only').forEach(function(el) { el.style.display = 'none'; });
+                    // Show admin link only for admin email
+                    if (r.data.session.user && r.data.session.user.email === 'hello@mybizstudies.com') {
+                        document.querySelectorAll('.admin-only').forEach(function(el) { el.style.display = ''; });
+                    }
                     if (profileAvatar && r.data.session.user && r.data.session.user.email) {
                         profileAvatar.textContent = getProfileInitials(r.data.session.user.email);
                     }
