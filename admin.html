@@ -795,6 +795,10 @@
                     <span class="nav-icon">&#9998;</span>
                     Blog
                 </div>
+                <div class="nav-item" data-page="onboarding">
+                    <span class="nav-icon">🎯</span>
+                    Onboarding Data
+                </div>
             </nav>
 
             <!-- Main Content -->
@@ -929,7 +933,7 @@
                             </thead>
                             <tbody id="usersTableBody">
                                 <tr>
-                                    <td colspan="7" class="loading"><div class="spinner"></div> Loading users...</td>
+                                    <td colspan="8" class="loading"><div class="spinner"></div> Loading users...</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -1378,6 +1382,159 @@
                         </div>
                     </div>
                 </section>
+
+                <!-- Onboarding Data Page -->
+                <section class="page-section" id="page-onboarding">
+                    <h1 class="page-title">Onboarding Data</h1>
+                    <p class="page-subtitle">User profile responses from the welcome questionnaire</p>
+
+                    <div class="stats-grid" id="onboardingStats">
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div>
+                                    <div class="stat-value" id="onb-total">--</div>
+                                    <div class="stat-label">Total Responses</div>
+                                </div>
+                                <div class="stat-icon blue">🎯</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div>
+                                    <div class="stat-value" id="onb-students">--</div>
+                                    <div class="stat-label">Students</div>
+                                </div>
+                                <div class="stat-icon green">🎓</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div>
+                                    <div class="stat-value" id="onb-teachers">--</div>
+                                    <div class="stat-label">Teachers</div>
+                                </div>
+                                <div class="stat-icon amber">👩‍🏫</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div>
+                                    <div class="stat-value" id="onb-parents">--</div>
+                                    <div class="stat-label">Parents</div>
+                                </div>
+                                <div class="stat-icon purple">👨‍👧</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Row -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                        <div class="panel">
+                            <div class="panel-header">
+                                <h3 class="panel-title">By Level</h3>
+                            </div>
+                            <div class="panel-body" style="height: 260px;">
+                                <canvas id="onbLevelChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="panel">
+                            <div class="panel-header">
+                                <h3 class="panel-title">By Exam Board</h3>
+                            </div>
+                            <div class="panel-body" style="height: 260px;">
+                                <canvas id="onbBoardChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                        <div class="panel">
+                            <div class="panel-header">
+                                <h3 class="panel-title">By Region</h3>
+                            </div>
+                            <div class="panel-body" style="height: 260px;">
+                                <canvas id="onbRegionChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="panel">
+                            <div class="panel-header">
+                                <h3 class="panel-title">By Role</h3>
+                            </div>
+                            <div class="panel-body" style="height: 260px;">
+                                <canvas id="onbRoleChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                        <div class="panel">
+                            <div class="panel-header">
+                                <h3 class="panel-title">How They Found Us</h3>
+                            </div>
+                            <div class="panel-body" style="height: 260px;">
+                                <canvas id="onbReferralChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h3 class="panel-title">All Responses</h3>
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                <select id="filterRole" class="btn btn-ghost" style="font-size: 0.8rem; padding: 0.4rem 0.75rem; cursor: pointer;">
+                                    <option value="">All Roles</option>
+                                    <option value="student">Student</option>
+                                    <option value="teacher">Teacher</option>
+                                    <option value="parent">Parent</option>
+                                </select>
+                                <select id="filterLevel" class="btn btn-ghost" style="font-size: 0.8rem; padding: 0.4rem 0.75rem; cursor: pointer;">
+                                    <option value="">All Levels</option>
+                                    <option value="gcse">GCSE</option>
+                                    <option value="alevel">A Level</option>
+                                    <option value="both">Both</option>
+                                </select>
+                                <select id="filterRegion" class="btn btn-ghost" style="font-size: 0.8rem; padding: 0.4rem 0.75rem; cursor: pointer;">
+                                    <option value="">All Regions</option>
+                                    <option value="uk">UK</option>
+                                    <option value="international">International</option>
+                                </select>
+                                <select id="filterBoard" class="btn btn-ghost" style="font-size: 0.8rem; padding: 0.4rem 0.75rem; cursor: pointer;">
+                                    <option value="">All Boards</option>
+                                    <option value="aqa">AQA</option>
+                                    <option value="edexcel">Edexcel</option>
+                                    <option value="cie">CIE</option>
+                                </select>
+                                <select id="filterReferral" class="btn btn-ghost" style="font-size: 0.8rem; padding: 0.4rem 0.75rem; cursor: pointer;">
+                                    <option value="">All Sources</option>
+                                    <option value="google">Google</option>
+                                    <option value="tiktok">TikTok</option>
+                                    <option value="friends">Friends</option>
+                                    <option value="teacher">Teacher</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="panel-body" style="overflow-x: auto;">
+                            <table class="data-table" id="onboardingTable">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Level</th>
+                                        <th>Region</th>
+                                        <th>Exam Board</th>
+                                        <th>Found Us</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="onboardingTableBody">
+                                    <tr><td colspan="8" style="text-align:center;color:var(--gray-400);padding:2rem;">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
             </main>
         </div>
     </div>
@@ -1555,6 +1712,7 @@
                     document.getElementById('blogEditorView').style.display = 'none';
                     document.getElementById('blogListView').style.display = 'block';
                 }
+                if (page === 'onboarding') loadOnboardingData();
             });
         });
 
@@ -1668,7 +1826,7 @@
             document.getElementById('userCount').textContent = `${users.length} users`;
 
             if (users.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" class="empty-state">No users found</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="8" class="empty-state">No users found</td></tr>';
                 return;
             }
 
@@ -2947,6 +3105,182 @@
 
         document.getElementById('closeBlogPreview').addEventListener('click', () => {
             document.getElementById('blogPreviewModal').classList.remove('active');
+        });
+
+        // =====================
+        // ONBOARDING DATA
+        // =====================
+        let onboardingData = [];
+        let onbLevelChart = null;
+        let onbBoardChart = null;
+        let onbRegionChart = null;
+        let onbRoleChart = null;
+        let onbReferralChart = null;
+
+        async function loadOnboardingData() {
+            const { data, error } = await supabaseClient
+                .from('user_profiles')
+                .select('*')
+                .order('completed_at', { ascending: false });
+
+            if (error) {
+                console.error('Error loading onboarding data:', error);
+                return;
+            }
+
+            onboardingData = data || [];
+            updateOnboardingStats();
+            updateOnboardingCharts();
+            renderOnboardingTable();
+        }
+
+        function updateOnboardingStats() {
+            const d = onboardingData;
+            document.getElementById('onb-total').textContent = d.length;
+            document.getElementById('onb-students').textContent = d.filter(r => r.role === 'student').length;
+            document.getElementById('onb-teachers').textContent = d.filter(r => r.role === 'teacher').length;
+            document.getElementById('onb-parents').textContent = d.filter(r => r.role === 'parent').length;
+        }
+
+        function countBy(arr, field) {
+            const counts = {};
+            arr.forEach(r => {
+                const val = r[field] || 'Unknown';
+                counts[val] = (counts[val] || 0) + 1;
+            });
+            return counts;
+        }
+
+        function makeDonutChart(canvasId, data, colors) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            return new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(data).map(k => k.charAt(0).toUpperCase() + k.slice(1)),
+                    datasets: [{
+                        data: Object.values(data),
+                        backgroundColor: colors,
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { padding: 16, font: { family: 'Inter', size: 12 } }
+                        }
+                    },
+                    cutout: '60%'
+                }
+            });
+        }
+
+        function makeBarChart(canvasId, data, colors) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            return new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(data).map(k => k.charAt(0).toUpperCase() + k.slice(1)),
+                    datasets: [{
+                        data: Object.values(data),
+                        backgroundColor: colors,
+                        borderRadius: 8,
+                        borderSkipped: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { stepSize: 1, font: { family: 'Inter' } } },
+                        x: { ticks: { font: { family: 'Inter', size: 12 } } }
+                    }
+                }
+            });
+        }
+
+        function updateOnboardingCharts() {
+            const d = onboardingData;
+
+            // Destroy existing charts
+            if (onbLevelChart) onbLevelChart.destroy();
+            if (onbBoardChart) onbBoardChart.destroy();
+            if (onbRegionChart) onbRegionChart.destroy();
+            if (onbRoleChart) onbRoleChart.destroy();
+            if (onbReferralChart) onbReferralChart.destroy();
+
+            const levelColors = ['#3b82f6', '#10b981', '#f59e0b'];
+            const boardColors = ['#3b82f6', '#8b5cf6', '#10b981'];
+            const regionColors = ['#1e3a5f', '#e67e22'];
+            const roleColors = ['#3b82f6', '#f59e0b', '#8b5cf6'];
+            const referralColors = ['#3b82f6', '#ef4444', '#10b981', '#f59e0b'];
+
+            onbLevelChart = makeDonutChart('onbLevelChart', countBy(d, 'level'), levelColors);
+            onbBoardChart = makeDonutChart('onbBoardChart', countBy(d, 'exam_board'), boardColors);
+            onbRegionChart = makeDonutChart('onbRegionChart', countBy(d, 'region'), regionColors);
+            onbRoleChart = makeDonutChart('onbRoleChart', countBy(d, 'role'), roleColors);
+            onbReferralChart = makeBarChart('onbReferralChart', countBy(d, 'referral_source'), referralColors);
+        }
+
+        function renderOnboardingTable() {
+            const roleFilter = document.getElementById('filterRole').value;
+            const levelFilter = document.getElementById('filterLevel').value;
+            const regionFilter = document.getElementById('filterRegion').value;
+            const boardFilter = document.getElementById('filterBoard').value;
+            const referralFilter = document.getElementById('filterReferral').value;
+
+            let filtered = onboardingData;
+            if (roleFilter) filtered = filtered.filter(r => r.role === roleFilter);
+            if (levelFilter) filtered = filtered.filter(r => r.level === levelFilter);
+            if (regionFilter) filtered = filtered.filter(r => r.region === regionFilter);
+            if (boardFilter) filtered = filtered.filter(r => r.exam_board === boardFilter);
+            if (referralFilter) filtered = filtered.filter(r => r.referral_source === referralFilter);
+
+            const tbody = document.getElementById('onboardingTableBody');
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--gray-400);padding:2rem;">No responses yet</td></tr>';
+                return;
+            }
+
+            const badgeMap = {
+                student: 'badge-info', teacher: 'badge-warning', parent: 'badge-success',
+                gcse: 'badge-info', alevel: 'badge-success', both: 'badge-warning',
+                uk: 'badge-info', international: 'badge-warning',
+                aqa: 'badge-info', edexcel: 'badge-success', cie: 'badge-warning',
+                google: 'badge-info', tiktok: 'badge-danger', friends: 'badge-success', teacher: 'badge-warning'
+            };
+
+            const labelMap = {
+                student: 'Student', teacher: 'Teacher', parent: 'Parent',
+                gcse: 'GCSE', alevel: 'A Level', both: 'Both',
+                uk: 'UK', international: 'International',
+                aqa: 'AQA', edexcel: 'Edexcel', cie: 'CIE',
+                google: 'Google', tiktok: 'TikTok', friends: 'Friends'
+            };
+
+            tbody.innerHTML = filtered.map(r => {
+                const date = r.completed_at ? new Date(r.completed_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+                return `<tr>
+                    <td style="font-weight:600;">${r.name || 'N/A'}</td>
+                    <td>${r.email || 'N/A'}</td>
+                    <td><span class="badge ${badgeMap[r.role] || 'badge-gray'}">${labelMap[r.role] || r.role || 'N/A'}</span></td>
+                    <td><span class="badge ${badgeMap[r.level] || 'badge-gray'}">${labelMap[r.level] || r.level || 'N/A'}</span></td>
+                    <td><span class="badge ${badgeMap[r.region] || 'badge-gray'}">${labelMap[r.region] || r.region || 'N/A'}</span></td>
+                    <td><span class="badge ${badgeMap[r.exam_board] || 'badge-gray'}">${labelMap[r.exam_board] || r.exam_board || 'N/A'}</span></td>
+                    <td><span class="badge ${badgeMap[r.referral_source] || 'badge-gray'}">${labelMap[r.referral_source] || r.referral_source || 'N/A'}</span></td>
+                    <td style="color:var(--gray-500);font-size:0.85rem;">${date}</td>
+                </tr>`;
+            }).join('');
+        }
+
+        // Filter event listeners
+        ['filterRole', 'filterLevel', 'filterRegion', 'filterBoard', 'filterReferral'].forEach(id => {
+            document.getElementById(id).addEventListener('change', renderOnboardingTable);
         });
 
         // Initialize

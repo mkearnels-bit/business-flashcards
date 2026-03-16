@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <title>Welcome | MyBizStudies</title>
+    <meta name="description" content="Welcome to MyBizStudies. Set up your profile to get a personalised experience.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #1e3a5f;
+            --primary-light: #2d5a8a;
+            --accent: #e67e22;
+            --accent-light: #f39c12;
+            --dark: #0f172a;
+            --gray-900: #1e293b;
+            --gray-700: #334155;
+            --gray-500: #64748b;
+            --gray-300: #cbd5e1;
+            --gray-200: #e2e8f0;
+            --gray-100: #f1f5f9;
+            --gray-50: #f8fafc;
+            --white: #ffffff;
+            --success: #10b981;
+            --error: #ef4444;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 50%, #f0f9ff 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .welcome-container {
+            width: 100%;
+            max-width: 520px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .logo img {
+            height: 90px;
+            width: auto;
+        }
+
+        .welcome-card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            height: 4px;
+            background: var(--gray-100);
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            border-radius: 0 4px 4px 0;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 0%;
+        }
+
+        /* Step indicators */
+        .step-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 24px 40px 0;
+        }
+
+        .step-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--gray-200);
+            transition: all 0.3s ease;
+        }
+
+        .step-dot.active {
+            background: var(--accent);
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        .step-dot.done {
+            background: var(--success);
+        }
+
+        /* Card content */
+        .card-body {
+            padding: 28px 40px 36px;
+            min-height: 380px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Step screens */
+        .step {
+            display: none;
+            flex-direction: column;
+            flex: 1;
+            animation: fadeSlideIn 0.4s ease;
+        }
+
+        .step.active {
+            display: flex;
+        }
+
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Welcome intro step */
+        .welcome-emoji {
+            font-size: 48px;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .step-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--dark);
+            text-align: center;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .step-subtitle {
+            font-size: 0.95rem;
+            color: var(--gray-500);
+            text-align: center;
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .time-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--gray-50);
+            border: 1.5px solid var(--gray-200);
+            border-radius: 50px;
+            padding: 6px 14px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--gray-500);
+            margin: 0 auto 24px;
+        }
+
+        /* Option cards */
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .option-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 20px;
+            border: 2px solid var(--gray-100);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: white;
+            user-select: none;
+        }
+
+        .option-card:hover {
+            border-color: var(--gray-300);
+            background: var(--gray-50);
+        }
+
+        .option-card.selected {
+            border-color: var(--accent);
+            background: rgba(230, 126, 34, 0.04);
+            box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1);
+        }
+
+        .option-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+            background: var(--gray-50);
+            transition: all 0.2s;
+        }
+
+        .option-card.selected .option-icon {
+            background: rgba(230, 126, 34, 0.1);
+        }
+
+        .option-text {
+            flex: 1;
+        }
+
+        .option-label {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 2px;
+        }
+
+        .option-desc {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            line-height: 1.4;
+        }
+
+        .option-check {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .option-card.selected .option-check {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .option-check svg {
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .option-card.selected .option-check svg {
+            opacity: 1;
+        }
+
+        /* Buttons */
+        .btn-row {
+            display: flex;
+            gap: 12px;
+            margin-top: auto;
+            padding-top: 24px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-family: inherit;
+            text-align: center;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), #d35400);
+            color: white;
+            box-shadow: 0 4px 14px rgba(230, 126, 34, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(230, 126, 34, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--gray-500);
+            border: 2px solid var(--gray-200);
+        }
+
+        .btn-ghost:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-300);
+        }
+
+        .btn-navy {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            box-shadow: 0 4px 14px rgba(30, 58, 95, 0.3);
+        }
+
+        .btn-navy:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(30, 58, 95, 0.4);
+        }
+
+        /* Final screen */
+        .final-emoji {
+            font-size: 56px;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .final-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .final-action {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 24px 16px;
+            border: 2px solid var(--gray-100);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-decoration: none;
+            background: white;
+        }
+
+        .final-action:hover {
+            border-color: var(--gray-300);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+        }
+
+        .final-action-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+        }
+
+        .final-action-icon.orange { background: rgba(230, 126, 34, 0.1); }
+        .final-action-icon.blue { background: rgba(30, 58, 95, 0.1); }
+
+        .final-action-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--dark);
+            text-align: center;
+        }
+
+        .final-action-desc {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .skip-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .skip-link:hover {
+            color: var(--primary);
+        }
+
+        /* Loading spinner */
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-right: 8px;
+            display: none;
+        }
+
+        .btn-primary.loading .spinner {
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Confetti burst */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 2px;
+            animation: confettiFall 2.5s ease-in forwards;
+        }
+
+        @keyframes confettiFall {
+            0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Responsive */
+        @media (max-width: 520px) {
+            .card-body { padding: 24px 24px 32px; min-height: 360px; }
+            .step-indicators { padding: 20px 24px 0; }
+            .step-title { font-size: 1.3rem; }
+            .option-card { padding: 14px 16px; }
+            .final-cards { grid-template-columns: 1fr; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HFSYK32ZFT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-HFSYK32ZFT');
+</script>
+</head>
+<body>
+    <div class="welcome-container">
+        <div class="logo">
+            <img src="logo.png" alt="MyBizStudies">
+        </div>
+
+        <div class="welcome-card">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <div class="step-indicators" id="stepIndicators">
+                <div class="step-dot active" data-step="0"></div>
+                <div class="step-dot" data-step="1"></div>
+                <div class="step-dot" data-step="2"></div>
+                <div class="step-dot" data-step="3"></div>
+                <div class="step-dot" data-step="4"></div>
+                <div class="step-dot" data-step="5"></div>
+                <div class="step-dot" data-step="6"></div>
+            </div>
+
+            <div class="card-body">
+
+                <!-- Step 0: Welcome -->
+                <div class="step active" id="step-0">
+                    <div class="welcome-emoji">👋</div>
+                    <h2 class="step-title" id="welcomeTitle">Welcome!</h2>
+                    <p class="step-subtitle">We're so glad you're here. Before you get started, could you answer 5 quick questions? It helps us understand who's using the platform so we can keep building the right content for you.</p>
+                    <div class="time-badge">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        Takes about 30 seconds
+                    </div>
+                    <div class="btn-row">
+                        <button class="btn btn-primary" onclick="nextStep()">Let's Go</button>
+                    </div>
+                </div>
+
+                <!-- Step 1: Role -->
+                <div class="step" id="step-1">
+                    <h2 class="step-title">I am a...</h2>
+                    <p class="step-subtitle">This helps us understand who we're building for</p>
+                    <div class="options-grid">
+                        <div class="option-card" data-value="student" onclick="selectOption(this, 'role')">
+                            <div class="option-icon">🎓</div>
+                            <div class="option-text">
+                                <div class="option-label">Student</div>
+                                <div class="option-desc">Studying for my exams</div>
+                            </div>
+                            <div class="option-check">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                        </div>
+                        <div class="option-card" data-value="teacher" onclick="selectOption(this, 'role')">
+                            <div class="option-icon">👩‍🏫</div>
+                            <div class="option-text">
+                                <div class="option-label">Teacher</div>
+                                <div class="option-desc">Supporting my students</div>
+                            </div>
+                            <div class="option-check">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                        </div>
+                        <div class="option-card" data-value="parent" onclick="selectOption(this, 'role')">
+                            <div class="option-icon">👨‍👧</div>
+                            <div class="option-text">
+                                <div class="option-label">Parent</div>
+                                <div class="option-desc">Helping my child succeed</div>
+                            </div>
+                            <div class="option-check">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="btn btn-ghost" onclick="prevStep()">Back</button>
+                        <button class="btn btn-primary" id="btn-1" disabled onclick="nextStep()">Continue</button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Level -->
+                <div class="step" id="step-2">
+                    <h2 class="step-title">What level?</h2>
+                    <p class="step-subtitle">So we know what content matters most to you</p>
+                    <div class="options-grid">
+                        <div class="option-card" data-value="gcse" onclick="selectOption(this, 'level')">
+                            <div class="option-icon">📘</div>
+                            <div class="option-text">
+                                <div class="option-label">GCSE</div>
+                                <div class="option-desc">GCSE or IGCSE Business</div>
+                            </div>
+                            <div class="option-check">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                        </div>
+                        <div class="option-card" data-value="alevel" onclick="selectOption(this, 'level')">
+                            <div class="option-icon">📗</div>
+                            <div class="option-text">
+                                <div class="option-label">A Level</div>
+                                <div class="option-desc">A Level or IAL Business</div>
+                            </div>
+                            <div class="option-check">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                        </div>
+                        <div class="option-card" data-value="both" onclick="selectOption(this, 'level')">
+                            <div class="option-icon">📚</div>
+                            <div class="option-text">
+                                <div class="option-label">Both</div>
+                                <div class="option-desc">Interested in GCSE and A Level</div>
+                            </div>
+                            <div class="option-check">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="btn btn-ghost" onclick="prevStep()">Back</button>
+                        <button class="btn btn-primary" id="btn-2" disabled onclick="nextStep()">Continue</button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Region -->
+                <div class="step" id="step-3">
+                    <h2 class="step-title">UK or International?</h2>
+                    <p class="step-subtitle">Helps us focus on the right specifications</p>
+                    <div class="options-grid">
+                        <div class="option-card" data-value="uk" onclick="selectOption(this, 'region')">
+                            <div class="option-icon">🇬🇧</div>
+                            <div class="option-text">
+                                <div class="option-label">UK</div>
+                                <div class="option-desc">Studying in the United Kingdom</div>
+                            </div>
+                            <div class="option-check">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                        </div>
+                        <div class="option-card" data-value="international" onclick="selectOption(this, 'region')">
+                            <div class="option-icon">🌍</div>
+                            <div class="option-text">
+                                <div class="option-label">International</div>
+                                <div class="option-desc">Studying outside the UK</div>
+                            </div>
+                            <div class="option-check">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="btn btn-ghost" onclick="prevStep()">Back</button>
+                        <button class="btn btn-primary" id="btn-3" disabled onclick="nextStep()">Continue</button>
+                    </div>
+                </div>
+
+                <!-- Step 4: Exam Board -->
+                <div class="step" id="step-4">
+                    <h2 class="step-title">Your exam board?</h2>
+                    <p class="step-subtitle">So we can prioritise the boards you need most</p>
+                    <div class="options-grid">
+                        <div class="option-card" data-value="aqa" onclick="selectOption(this, 'exam_board')">
+                            <div class="option-icon">🔵</div>
+                            <div class="option-text">
+                                <div class="option-label">AQA</div>
+                                <div class="option-desc">Assessment and Qualifications Alliance</div>
+                            </div>
+                            <div class="option-check">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                        </div>
+                        <div class="option-card" data-value="edexcel" onclick="selectOption(this, 'exam_board')">
+                            <div class="option-icon">🟣</div>
+                            <div class="option-text">
+                                <div class="option-label">Edexcel</div>
+                                <div class="option-desc">Pearson Edexcel (UK and International)</div>
+                            </div>
+                            <div class="option-check">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                        </div>
+                        <div class="option-card" data-value="cie" onclick="selectOption(this, 'exam_board')">
+                            <div class="option-icon">🟢</div>
+                            <div class="option-text">
+                                <div class="option-label">CIE (Cambridge)</div>
+                                <div class="option-desc">Cambridge International Examinations</div>
+                            </div>
+                            <div class="option-check">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="btn btn-ghost" onclick="prevStep()">Back</button>
+                        <button class="btn btn-primary" id="btn-4" disabled onclick="nextStep()">Continue</button>
+                    </div>
+                </div>
+
+                <!-- Step 5: How did you hear about us? -->
+                <div class="step" id="step-5">
+                    <h2 class="step-title">How did you find us?</h2>
+                    <p class="step-subtitle">Last one! This helps us know what's working</p>
+                    <div class="options-grid">
+                        <div class="option-card" data-value="google" onclick="selectOption(this, 'referral_source')">
+                            <div class="option-icon" style="background:transparent;">
+                                <svg width="24" height="24" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                            </div>
+                            <div class="option-text">
+                                <div class="option-label">Google</div>
+                                <div class="option-desc">Found us through a search</div>
+                            </div>
+                            <div class="option-check">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                        </div>
+                        <div class="option-card" data-value="tiktok" onclick="selectOption(this, 'referral_source')">
+                            <div class="option-icon" style="background:transparent;">
+                                <svg width="24" height="24" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.75a8.18 8.18 0 0 0 4.76 1.52V6.84a4.84 4.84 0 0 1-1-.15z" fill="#000"/><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.75a8.18 8.18 0 0 0 4.76 1.52V6.84a4.84 4.84 0 0 1-1-.15z" fill="#25F4EE" transform="translate(-1, -1)"/><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.75a8.18 8.18 0 0 0 4.76 1.52V6.84a4.84 4.84 0 0 1-1-.15z" fill="#FE2C55" transform="translate(1, 1)"/></svg>
+                            </div>
+                            <div class="option-text">
+                                <div class="option-label">TikTok</div>
+                                <div class="option-desc">Saw us on TikTok</div>
+                            </div>
+                            <div class="option-check">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                        </div>
+                        <div class="option-card" data-value="friends" onclick="selectOption(this, 'referral_source')">
+                            <div class="option-icon">👥</div>
+                            <div class="option-text">
+                                <div class="option-label">Friends</div>
+                                <div class="option-desc">A friend told me about it</div>
+                            </div>
+                            <div class="option-check">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                        </div>
+                        <div class="option-card" data-value="teacher" onclick="selectOption(this, 'referral_source')">
+                            <div class="option-icon">👩‍🏫</div>
+                            <div class="option-text">
+                                <div class="option-label">Teacher</div>
+                                <div class="option-desc">My teacher recommended it</div>
+                            </div>
+                            <div class="option-check">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="btn btn-ghost" onclick="prevStep()">Back</button>
+                        <button class="btn btn-primary" id="btn-5" disabled onclick="submitProfile()">
+                            <span class="spinner"></span>
+                            <span>Continue</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 6: Disclaimer -->
+                <div class="step" id="step-6">
+                    <h2 class="step-title">One last thing</h2>
+                    <p class="step-subtitle">Just a quick heads up before you dive in</p>
+                    <div style="background: var(--gray-50); border: 1.5px solid var(--gray-200); border-radius: 14px; padding: 20px; font-size: 0.88rem; color: var(--gray-700); line-height: 1.7; flex: 1; overflow-y: auto;">
+                        <p style="margin-bottom: 12px;"><strong style="color: var(--dark);">MyBizStudies is not affiliated with any exam board.</strong> All questions, mark schemes and feedback on this platform are generated using AI. While we've worked hard to align everything with the style and standards of each exam board, AI can make mistakes and we're always improving.</p>
+                        <p style="margin-bottom: 12px;">We make <strong style="color: var(--dark);">no guarantees about exam results</strong>. Your primary sources of learning should always be your exam board specification, textbook, teacher and official past papers. Think of MyBizStudies as an extra tool in your revision toolkit, not a replacement for the real thing.</p>
+                        <p style="margin-bottom: 12px;">There's no magic wand here. The students who get the most out of this platform are the ones who <strong style="color: var(--dark);">put in the work</strong>, use the feedback to improve, and combine it with their other study resources.</p>
+                        <p style="margin-bottom: 0;">If you ever spot something that doesn't look right, we'd genuinely love to hear about it. Your feedback helps us make this better for everyone.</p>
+                    </div>
+                    <label style="display: flex; align-items: center; gap: 10px; margin-top: 16px; cursor: pointer; font-size: 0.88rem; color: var(--gray-700);">
+                        <input type="checkbox" id="disclaimerCheck" onchange="toggleDisclaimerBtn()" style="width: 18px; height: 18px; accent-color: var(--accent); flex-shrink: 0; cursor: pointer;">
+                        <span>I've read and understand the above. Let's go!</span>
+                    </label>
+                    <div class="btn-row">
+                        <button class="btn btn-primary" id="disclaimerBtn" disabled onclick="acceptAndFinish()">Get Started</button>
+                    </div>
+                </div>
+
+                <!-- Step 7: All done! -->
+                <div class="step" id="step-7">
+                    <div class="final-emoji">🎉</div>
+                    <h2 class="step-title">You're all set!</h2>
+                    <p class="step-subtitle">Thanks for that! It really helps us build the right stuff. Now, what would you like to do first?</p>
+                    <div class="final-cards">
+                        <a class="final-action" href="/exam-practice.html">
+                            <div class="final-action-icon orange">📝</div>
+                            <div class="final-action-label">Start Practising</div>
+                            <div class="final-action-desc">Jump straight into exam questions</div>
+                        </a>
+                        <a class="final-action" href="/tour.html">
+                            <div class="final-action-icon blue">🗺️</div>
+                            <div class="final-action-label">Take a Tour</div>
+                            <div class="final-action-desc">See everything the platform offers</div>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="confetti-container" id="confettiContainer"></div>
+
+    <script>
+        // Supabase
+        const SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let currentStep = 0;
+        const totalSteps = 7;
+        const answers = {};
+        let currentUser = null;
+
+        // Check auth on load
+        async function init() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) {
+                // Not logged in, redirect to login
+                window.location.href = '/login.html';
+                return;
+            }
+            currentUser = session.user;
+
+            // Check if they've already completed onboarding
+            const { data: profile } = await supabaseClient
+                .from('user_profiles')
+                .select('id')
+                .eq('user_id', currentUser.id)
+                .single();
+
+            if (profile) {
+                // Already onboarded, go to app
+                window.location.href = '/exam-practice.html';
+                return;
+            }
+
+            // Personalise welcome with name
+            const name = currentUser.user_metadata?.first_name
+                || currentUser.user_metadata?.full_name?.split(' ')[0]
+                || currentUser.user_metadata?.name?.split(' ')[0]
+                || '';
+            if (name) {
+                document.getElementById('welcomeTitle').textContent = `Welcome, ${name}!`;
+            }
+        }
+        init();
+
+        // Select an option
+        function selectOption(el, field) {
+            // Deselect siblings
+            el.parentElement.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            answers[field] = el.dataset.value;
+
+            // Enable continue button
+            const stepNum = Object.keys(answers).length;
+            const btn = document.getElementById(`btn-${currentStep}`);
+            if (btn) btn.disabled = false;
+        }
+
+        // Navigation
+        function nextStep() {
+            if (currentStep >= totalSteps) return;
+            currentStep++;
+            updateUI();
+        }
+
+        function prevStep() {
+            if (currentStep <= 0) return;
+            currentStep--;
+            updateUI();
+        }
+
+        function updateUI() {
+            // Update steps visibility
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+            document.getElementById(`step-${currentStep}`).classList.add('active');
+
+            // Update progress bar
+            const progress = (currentStep / totalSteps) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+
+            // Update step dots
+            document.querySelectorAll('.step-dot').forEach((dot, i) => {
+                dot.classList.remove('active', 'done');
+                if (i === currentStep) dot.classList.add('active');
+                else if (i < currentStep) dot.classList.add('done');
+            });
+
+            // Hide indicators on final screen
+            document.getElementById('stepIndicators').style.display =
+                currentStep === totalSteps ? 'none' : 'flex';
+        }
+
+        // Submit profile
+        async function submitProfile() {
+            const btn = document.getElementById('btn-5');
+            btn.classList.add('loading');
+            btn.disabled = true;
+
+            try {
+                const { error } = await supabaseClient
+                    .from('user_profiles')
+                    .insert({
+                        user_id: currentUser.id,
+                        email: currentUser.email,
+                        name: currentUser.user_metadata?.full_name
+                            || currentUser.user_metadata?.name
+                            || `${currentUser.user_metadata?.first_name || ''} ${currentUser.user_metadata?.last_name || ''}`.trim()
+                            || '',
+                        role: answers.role,
+                        level: answers.level,
+                        region: answers.region,
+                        exam_board: answers.exam_board,
+                        referral_source: answers.referral_source
+                    });
+
+                if (error) throw error;
+
+                // Move to disclaimer screen
+                currentStep = 6;
+                updateUI();
+
+            } catch (err) {
+                console.error('Error saving profile:', err);
+                // Still show disclaimer even if save fails
+                currentStep = 6;
+                updateUI();
+            } finally {
+                btn.classList.remove('loading');
+            }
+        }
+
+        // Disclaimer checkbox toggle
+        function toggleDisclaimerBtn() {
+            const checked = document.getElementById('disclaimerCheck').checked;
+            document.getElementById('disclaimerBtn').disabled = !checked;
+        }
+
+        // Accept disclaimer and show final screen
+        function acceptAndFinish() {
+            // Save disclaimer acceptance to localStorage
+            localStorage.setItem('mybizstudies_disclaimer_accepted', 'true');
+
+            // Also save to Supabase if logged in
+            if (currentUser) {
+                supabaseClient.from('exam_practice_settings').upsert({
+                    user_id: currentUser.id,
+                    disclaimer_accepted_at: new Date().toISOString()
+                }, { onConflict: 'user_id' }).catch(e => console.error('Failed to save disclaimer:', e));
+            }
+
+            currentStep = 7;
+            updateUI();
+            launchConfetti();
+        }
+
+        // Confetti animation
+        function launchConfetti() {
+            const container = document.getElementById('confettiContainer');
+            const colors = ['#e67e22', '#f39c12', '#1e3a5f', '#2d5a8a', '#10b981', '#ef4444', '#8b5cf6'];
+
+            for (let i = 0; i < 60; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 0.8 + 's';
+                confetti.style.animationDuration = (2 + Math.random() * 1.5) + 's';
+                confetti.style.width = (6 + Math.random() * 6) + 'px';
+                confetti.style.height = (6 + Math.random() * 6) + 'px';
+                container.appendChild(confetti);
+            }
+
+            // Clean up after animation
+            setTimeout(() => { container.innerHTML = ''; }, 4000);
+        }
+    </script>
+</body>
+</html>
