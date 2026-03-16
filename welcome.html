@@ -913,14 +913,18 @@
         // Accept disclaimer and show final screen
         function acceptAndFinish() {
             // Save disclaimer acceptance to localStorage
-            localStorage.setItem('mybizstudies_disclaimer_accepted', 'true');
+            try { localStorage.setItem('mybizstudies_disclaimer_accepted', 'true'); } catch(e) {}
 
             // Also save to Supabase if logged in
-            if (currentUser) {
-                supabaseClient.from('exam_practice_settings').upsert({
-                    user_id: currentUser.id,
-                    disclaimer_accepted_at: new Date().toISOString()
-                }, { onConflict: 'user_id' }).catch(e => console.error('Failed to save disclaimer:', e));
+            try {
+                if (currentUser) {
+                    supabaseClient.from('exam_practice_settings').upsert({
+                        user_id: currentUser.id,
+                        disclaimer_accepted_at: new Date().toISOString()
+                    }, { onConflict: 'user_id' }).catch(e => console.error('Failed to save disclaimer:', e));
+                }
+            } catch(e) {
+                console.error('Failed to save disclaimer:', e);
             }
 
             currentStep = 7;
