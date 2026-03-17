@@ -2780,41 +2780,37 @@
             </div>
 
             <!-- GCSE BOARDS -->
-            <div class="board-card coming-soon" data-board="edexcel_gcse" data-level="gcse">
+            <div class="board-card" data-board="edexcel_gcse" data-level="gcse" onclick="selectBoard(this)">
                 <div class="board-card-header">
                     <div class="board-card-icon" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">EX</div>
                     <div class="board-card-check"></div>
                 </div>
                 <div class="board-card-title">Edexcel GCSE</div>
                 <div class="board-card-desc">Pearson Edexcel GCSE Business (1BS0)</div>
-                <span class="coming-soon-badge">Coming Soon</span>
             </div>
-            <div class="board-card coming-soon" data-board="edexcel_igcse" data-level="gcse">
+            <div class="board-card" data-board="edexcel_igcse" data-level="gcse" onclick="selectBoard(this)">
                 <div class="board-card-header">
                     <div class="board-card-icon" style="background: linear-gradient(135deg, #3498db, #2980b9);">IG</div>
                     <div class="board-card-check"></div>
                 </div>
                 <div class="board-card-title">Edexcel IGCSE</div>
                 <div class="board-card-desc">Pearson Edexcel International GCSE Business (4BS1)</div>
-                <span class="coming-soon-badge">Coming Soon</span>
             </div>
-            <div class="board-card coming-soon" data-board="aqa_gcse" data-level="gcse">
+            <div class="board-card" data-board="aqa_gcse" data-level="gcse" onclick="selectBoard(this)">
                 <div class="board-card-header">
                     <div class="board-card-icon" style="background: linear-gradient(135deg, #27ae60, #229954);">AQ</div>
                     <div class="board-card-check"></div>
                 </div>
                 <div class="board-card-title">AQA GCSE</div>
                 <div class="board-card-desc">AQA GCSE Business (8132)</div>
-                <span class="coming-soon-badge">Coming Soon</span>
             </div>
-            <div class="board-card coming-soon" data-board="cie_igcse" data-level="gcse">
+            <div class="board-card" data-board="cie_igcse" data-level="gcse" onclick="selectBoard(this)">
                 <div class="board-card-header">
                     <div class="board-card-icon" style="background: linear-gradient(135deg, #f39c12, #e67e22);">CI</div>
                     <div class="board-card-check"></div>
                 </div>
                 <div class="board-card-title">CIE IGCSE</div>
                 <div class="board-card-desc">Cambridge IGCSE Business Studies (0450)</div>
-                <span class="coming-soon-badge">Coming Soon</span>
             </div>
         </div>
 
@@ -2925,6 +2921,13 @@
                     <div class="unit-card-themes" style="font-size:0.75rem;color:#7f8c8d;margin-top:4px;">Topics 1.1 - 10.4 &bull; All Papers</div>
                 </div>
             </div>
+        </div>
+
+        <!-- GCSE Paper Selection (shown for GCSE exam mode) -->
+        <div id="gcsePaperSelectionSection" style="display:none;">
+            <div class="section-title" style="font-size:1.3rem; font-weight:800; color:#1e3a5f; margin-bottom:0.5rem;">Choose Your Paper</div>
+            <div class="section-subtitle" style="color:#64748b; margin-bottom:0;" id="gcsePaperSubtitle">Select which exam paper you want to sit</div>
+            <div class="unit-grid" style="margin-top:1.5rem;" id="gcsePaperGrid"></div>
         </div>
 
         <!-- Question Type Selection (shown after unit) -->
@@ -3274,33 +3277,89 @@ const BOARD_DATA = {
             { id: 'paper3', code: '7132/3', name: 'Paper 3: Business 3', color: '#27ae60', desc: 'Case Study Investigation', marks: 100, duration: 120 }
         ]
     },
-    aqa_gcse: {
-        name: 'AQA GCSE',
+    // ===== GCSE BOARDS =====
+    edexcel_gcse: {
+        name: 'Edexcel GCSE',
+        isGCSE: true,
+        isPaperBased: true,
         units: [
-            { id: 'paper1', code: '8132/1', name: 'Influences of Operations and HRM', color: '#e74c3c' },
-            { id: 'paper2', code: '8132/2', name: 'Influences of Marketing and Finance', color: '#3498db' }
+            { id: 'paper1', code: '1BS0/01', name: 'Investigating Small Business', color: '#e74c3c', themes: 'Theme 1' },
+            { id: 'paper2', code: '1BS0/02', name: 'Building a Business', color: '#3498db', themes: 'Theme 2' }
         ],
         questionTypes: [
-            { id: 'state_1', marks: 1, name: 'Multiple Choice', desc: 'Select correct answer', command: 'state' },
-            { id: 'give_2', marks: 2, name: 'Give/State', desc: 'Recall knowledge', command: 'state' },
-            { id: 'explain_3', marks: 3, name: 'Explain One', desc: 'Single explanation', command: 'explain' },
-            { id: 'explain_4', marks: 4, name: 'Explain Two', desc: 'Two explanations', command: 'explain' },
-            { id: 'analyse_6', marks: 6, name: 'Analyse', desc: 'No AO1 marks', command: 'analyse' },
+            { id: 'mcq_1', marks: 1, name: 'Multiple Choice', desc: 'Select correct answer', command: 'state' },
+            { id: 'define_1', marks: 1, name: 'Define', desc: 'State meaning of a term', command: 'define' },
+            { id: 'calculate_2', marks: 2, name: 'Calculate', desc: 'Show your working', command: 'calculate' },
+            { id: 'outline_2', marks: 2, name: 'Outline', desc: 'Brief explanation', command: 'outline' },
+            { id: 'explain_3', marks: 3, name: 'Explain', desc: 'Point, explanation, impact', command: 'explain' },
+            { id: 'discuss_6', marks: 6, name: 'Discuss', desc: 'Advantages vs disadvantages', command: 'discuss' },
+            { id: 'justify_9', marks: 9, name: 'Justify', desc: 'Make a decision with reasons', command: 'justify' }
+        ],
+        papers: [
+            { id: 'paper1', code: '1BS0/01', name: 'Paper 1: Investigating Small Business', color: '#e74c3c', desc: 'Theme 1 • Sections A, B, C', marks: 90, duration: 105 },
+            { id: 'paper2', code: '1BS0/02', name: 'Paper 2: Building a Business', color: '#3498db', desc: 'Theme 2 • Sections A, B, C', marks: 90, duration: 105 }
+        ]
+    },
+    edexcel_igcse: {
+        name: 'Edexcel IGCSE',
+        isGCSE: true,
+        isPaperBased: true,
+        units: [
+            { id: 'paper1', code: '4BS1/01', name: 'Investigating Small Business', color: '#e74c3c', themes: 'Business Activity & Marketing' },
+            { id: 'paper2', code: '4BS1/02', name: 'Building a Business', color: '#3498db', themes: 'Operations, Finance & HR' }
+        ],
+        questionTypes: [
+            { id: 'mcq_1', marks: 1, name: 'Multiple Choice', desc: 'Select correct answer', command: 'state' },
+            { id: 'define_1', marks: 1, name: 'Define', desc: 'State meaning of a term', command: 'define' },
+            { id: 'state_1', marks: 1, name: 'State', desc: 'Brief factual answer', command: 'state' },
+            { id: 'calculate_2', marks: 2, name: 'Calculate', desc: 'Show your working', command: 'calculate' },
+            { id: 'explain_3', marks: 3, name: 'Explain', desc: 'Point and development', command: 'explain' },
+            { id: 'analyse_6', marks: 6, name: 'Analyse', desc: 'Examine in detail', command: 'analyse' }
+        ],
+        papers: [
+            { id: 'paper1', code: '4BS1/01', name: 'Paper 1: Investigating Small Business', color: '#e74c3c', desc: 'Stimulus-based questions • Formulae sheet provided', marks: 80, duration: 90 },
+            { id: 'paper2', code: '4BS1/02', name: 'Paper 2: Building a Business', color: '#3498db', desc: 'Stimulus-based questions • Formulae sheet provided', marks: 80, duration: 90 }
+        ]
+    },
+    aqa_gcse: {
+        name: 'AQA GCSE',
+        isGCSE: true,
+        units: [
+            { id: 'paper1', code: '8132/1', name: 'Influences of Operations and HRM on Business Activity', color: '#e74c3c', themes: 'Units 1-4' },
+            { id: 'paper2', code: '8132/2', name: 'Influences of Marketing and Finance on Business Activity', color: '#3498db', themes: 'Units 1-2, 5-6' }
+        ],
+        questionTypes: [
+            { id: 'mcq_1', marks: 1, name: 'Multiple Choice', desc: 'Select correct answer', command: 'state' },
+            { id: 'identify_2', marks: 2, name: 'Identify', desc: 'Name or select two items', command: 'identify' },
+            { id: 'explain_2', marks: 2, name: 'Explain', desc: 'Brief explanation', command: 'explain' },
+            { id: 'describe_2', marks: 2, name: 'Describe', desc: 'Give an account of', command: 'describe' },
+            { id: 'calculate_5', marks: 5, name: 'Calculate', desc: 'Show your working', command: 'calculate' },
             { id: 'recommend_9', marks: 9, name: 'Recommend', desc: 'Two options, choose one', command: 'recommend' },
-            { id: 'evaluate_12', marks: 12, name: 'Evaluate', desc: 'Interdependent analysis', command: 'evaluate' }
+            { id: 'evaluate_12', marks: 12, name: 'Evaluate', desc: 'Weigh up and make a judgement', command: 'evaluate' }
+        ],
+        papers: [
+            { id: 'paper1', code: '8132/1', name: 'Paper 1: Influences of Operations and HRM', color: '#e74c3c', desc: 'Units 1-4 • Sections A, B, C', marks: 90, duration: 105 },
+            { id: 'paper2', code: '8132/2', name: 'Paper 2: Influences of Marketing and Finance', color: '#3498db', desc: 'Units 1-2, 5-6 • Sections A, B, C', marks: 90, duration: 105 }
         ]
     },
     cie_igcse: {
         name: 'CIE IGCSE',
+        isGCSE: true,
+        skipUnitSelection: true,
         units: [
             { id: 'paper1', code: '0450/11', name: 'Short Answer and Data Response', color: '#e74c3c' },
             { id: 'paper2', code: '0450/21', name: 'Case Study', color: '#3498db' }
         ],
         questionTypes: [
-            { id: 'define_2', marks: 2, name: 'Define', desc: 'Knowledge recall', command: 'define' },
-            { id: 'explain_4', marks: 4, name: 'Explain', desc: 'Knowledge + Application', command: 'explain' },
-            { id: 'analyse_6', marks: 6, name: 'Analyse', desc: 'Causes and effects', command: 'analyse' },
-            { id: 'evaluate_8', marks: 8, name: 'Evaluate', desc: 'Judgement + conclusion', command: 'evaluate' }
+            { id: 'define_2', marks: 2, name: 'Define', desc: 'State meaning of a term', command: 'define' },
+            { id: 'identify_2', marks: 2, name: 'Identify', desc: 'Name two items', command: 'identify' },
+            { id: 'outline_4', marks: 4, name: 'Outline', desc: 'Brief description with reasons', command: 'outline' },
+            { id: 'explain_6', marks: 6, name: 'Explain', desc: 'Two reasons with development', command: 'explain' },
+            { id: 'justify_6', marks: 6, name: 'Justify', desc: 'Recommend with reasons', command: 'justify' }
+        ],
+        papers: [
+            { id: 'paper1', code: '0450/11', name: 'Paper 1: Short Answer and Data Response', color: '#e74c3c', desc: '4 questions with stimulus material', marks: 80, duration: 90 },
+            { id: 'paper2', code: '0450/21', name: 'Paper 2: Case Study', color: '#3498db', desc: '4 questions on one case study', marks: 80, duration: 90 }
         ]
     },
     cie_ial: {
@@ -3440,7 +3499,80 @@ var TOPIC_NAMES = {
     'cie_9.1': 'Location and Scale', 'cie_9.2': 'Quality Management', 'cie_9.3': 'Operations Strategy',
     'cie_10': 'Finance and Accounting (A Level)',
     'cie_10.1': 'Financial Statements', 'cie_10.2': 'Analysis of Published Accounts',
-    'cie_10.3': 'Investment Appraisal', 'cie_10.4': 'Finance and Accounting Strategy'
+    'cie_10.3': 'Investment Appraisal', 'cie_10.4': 'Finance and Accounting Strategy',
+    // ===== GCSE TOPIC NAMES =====
+    // AQA GCSE Units (3.1-3.6)
+    'gcse_aqa_3.1': 'Business in the Real World',
+    'gcse_aqa_3.1.1': 'The purpose and nature of businesses',
+    'gcse_aqa_3.1.2': 'Business ownership',
+    'gcse_aqa_3.1.3': 'Setting business aims and objectives',
+    'gcse_aqa_3.1.4': 'Stakeholders',
+    'gcse_aqa_3.1.5': 'Business location',
+    'gcse_aqa_3.1.6': 'Business planning',
+    'gcse_aqa_3.2': 'Influences on Business',
+    'gcse_aqa_3.2.1': 'Technology',
+    'gcse_aqa_3.2.2': 'Ethical and environmental considerations',
+    'gcse_aqa_3.2.3': 'The economic climate on business',
+    'gcse_aqa_3.2.4': 'Globalisation',
+    'gcse_aqa_3.2.5': 'Legislation',
+    'gcse_aqa_3.2.6': 'Competitive environment',
+    'gcse_aqa_3.3': 'Business Operations',
+    'gcse_aqa_3.3.1': 'Production processes',
+    'gcse_aqa_3.3.2': 'Quality of goods and services',
+    'gcse_aqa_3.3.3': 'The sales process and customer service',
+    'gcse_aqa_3.3.4': 'Consumer law',
+    'gcse_aqa_3.3.5': 'Business location',
+    'gcse_aqa_3.3.6': 'Working with suppliers',
+    'gcse_aqa_3.4': 'Human Resources',
+    'gcse_aqa_3.4.1': 'Organisational structures',
+    'gcse_aqa_3.4.2': 'Recruitment and selection',
+    'gcse_aqa_3.4.3': 'Motivation and retention',
+    'gcse_aqa_3.4.4': 'Training',
+    'gcse_aqa_3.4.5': 'Employment law',
+    'gcse_aqa_3.5': 'Marketing',
+    'gcse_aqa_3.5.1': 'Identifying and understanding customers',
+    'gcse_aqa_3.5.2': 'Segmentation',
+    'gcse_aqa_3.5.3': 'The purpose and methods of market research',
+    'gcse_aqa_3.5.4': 'The marketing mix: Product',
+    'gcse_aqa_3.5.5': 'The marketing mix: Price',
+    'gcse_aqa_3.5.6': 'The marketing mix: Promotion',
+    'gcse_aqa_3.5.7': 'The marketing mix: Place',
+    'gcse_aqa_3.5.8': 'Using the marketing mix',
+    'gcse_aqa_3.6': 'Finance',
+    'gcse_aqa_3.6.1': 'Sources of finance',
+    'gcse_aqa_3.6.2': 'Cash flow',
+    'gcse_aqa_3.6.3': 'Financial terms and calculations',
+    'gcse_aqa_3.6.4': 'Analysing the financial performance of a business',
+    // Edexcel GCSE Theme 1 (Paper 1)
+    'gcse_edx_1.1': 'Enterprise and Entrepreneurship',
+    'gcse_edx_1.2': 'Spotting a Business Opportunity',
+    'gcse_edx_1.3': 'Putting a Business Idea into Practice',
+    'gcse_edx_1.4': 'Making the Business Effective',
+    'gcse_edx_1.5': 'Understanding External Influences on Business',
+    // Edexcel GCSE Theme 2 (Paper 2)
+    'gcse_edx_2.1': 'Growing the Business',
+    'gcse_edx_2.2': 'Making Marketing Decisions',
+    'gcse_edx_2.3': 'Making Operational Decisions',
+    'gcse_edx_2.4': 'Making Financial Decisions',
+    'gcse_edx_2.5': 'Making Human Resource Decisions',
+    // Edexcel IGCSE (mirrors UK themes)
+    'gcse_igcse_1.1': 'Enterprise and Entrepreneurship',
+    'gcse_igcse_1.2': 'Spotting a Business Opportunity',
+    'gcse_igcse_1.3': 'Putting a Business Idea into Practice',
+    'gcse_igcse_1.4': 'Making the Business Effective',
+    'gcse_igcse_1.5': 'Understanding External Influences on Business',
+    'gcse_igcse_2.1': 'Growing the Business',
+    'gcse_igcse_2.2': 'Making Marketing Decisions',
+    'gcse_igcse_2.3': 'Making Operational Decisions',
+    'gcse_igcse_2.4': 'Making Financial Decisions',
+    'gcse_igcse_2.5': 'Making Human Resource Decisions',
+    // CIE IGCSE Sections (1-6)
+    'gcse_cie_1': 'Understanding Business Activity',
+    'gcse_cie_2': 'People in Business',
+    'gcse_cie_3': 'Marketing',
+    'gcse_cie_4': 'Operations Management',
+    'gcse_cie_5': 'Financial Information and Decisions',
+    'gcse_cie_6': 'External Influences on Business Activity'
 };
 
 // AQA main topic areas for topic selection UI
@@ -3488,6 +3620,59 @@ var CIE_IAL_TOPICS = [
 
 var currentCieTopicLevel = null; // 'as' or 'alevel' for CIE IAL topic tests
 
+// ===== GCSE TOPIC ARRAYS FOR TOPIC SELECTION UI =====
+var AQA_GCSE_TOPICS = [
+    { code: 'gcse_aqa_3.1', name: 'Business in the Real World', color: '#e74c3c', subtopics: ['gcse_aqa_3.1.1','gcse_aqa_3.1.2','gcse_aqa_3.1.3','gcse_aqa_3.1.4','gcse_aqa_3.1.5','gcse_aqa_3.1.6'] },
+    { code: 'gcse_aqa_3.2', name: 'Influences on Business', color: '#3498db', subtopics: ['gcse_aqa_3.2.1','gcse_aqa_3.2.2','gcse_aqa_3.2.3','gcse_aqa_3.2.4','gcse_aqa_3.2.5','gcse_aqa_3.2.6'] },
+    { code: 'gcse_aqa_3.3', name: 'Business Operations', color: '#27ae60', subtopics: ['gcse_aqa_3.3.1','gcse_aqa_3.3.2','gcse_aqa_3.3.3','gcse_aqa_3.3.4','gcse_aqa_3.3.5','gcse_aqa_3.3.6'] },
+    { code: 'gcse_aqa_3.4', name: 'Human Resources', color: '#f39c12', subtopics: ['gcse_aqa_3.4.1','gcse_aqa_3.4.2','gcse_aqa_3.4.3','gcse_aqa_3.4.4','gcse_aqa_3.4.5'] },
+    { code: 'gcse_aqa_3.5', name: 'Marketing', color: '#9b59b6', subtopics: ['gcse_aqa_3.5.1','gcse_aqa_3.5.2','gcse_aqa_3.5.3','gcse_aqa_3.5.4','gcse_aqa_3.5.5','gcse_aqa_3.5.6','gcse_aqa_3.5.7','gcse_aqa_3.5.8'] },
+    { code: 'gcse_aqa_3.6', name: 'Finance', color: '#1abc9c', subtopics: ['gcse_aqa_3.6.1','gcse_aqa_3.6.2','gcse_aqa_3.6.3','gcse_aqa_3.6.4'] }
+];
+
+var EDEXCEL_GCSE_TOPICS = {
+    paper1: [
+        { code: 'gcse_edx_1.1', name: 'Enterprise and Entrepreneurship', color: '#e74c3c' },
+        { code: 'gcse_edx_1.2', name: 'Spotting a Business Opportunity', color: '#3498db' },
+        { code: 'gcse_edx_1.3', name: 'Putting a Business Idea into Practice', color: '#27ae60' },
+        { code: 'gcse_edx_1.4', name: 'Making the Business Effective', color: '#f39c12' },
+        { code: 'gcse_edx_1.5', name: 'Understanding External Influences', color: '#9b59b6' }
+    ],
+    paper2: [
+        { code: 'gcse_edx_2.1', name: 'Growing the Business', color: '#e74c3c' },
+        { code: 'gcse_edx_2.2', name: 'Making Marketing Decisions', color: '#3498db' },
+        { code: 'gcse_edx_2.3', name: 'Making Operational Decisions', color: '#27ae60' },
+        { code: 'gcse_edx_2.4', name: 'Making Financial Decisions', color: '#f39c12' },
+        { code: 'gcse_edx_2.5', name: 'Making Human Resource Decisions', color: '#9b59b6' }
+    ]
+};
+
+var EDEXCEL_IGCSE_TOPICS = {
+    paper1: [
+        { code: 'gcse_igcse_1.1', name: 'Enterprise and Entrepreneurship', color: '#e74c3c' },
+        { code: 'gcse_igcse_1.2', name: 'Spotting a Business Opportunity', color: '#3498db' },
+        { code: 'gcse_igcse_1.3', name: 'Putting a Business Idea into Practice', color: '#27ae60' },
+        { code: 'gcse_igcse_1.4', name: 'Making the Business Effective', color: '#f39c12' },
+        { code: 'gcse_igcse_1.5', name: 'Understanding External Influences', color: '#9b59b6' }
+    ],
+    paper2: [
+        { code: 'gcse_igcse_2.1', name: 'Growing the Business', color: '#e74c3c' },
+        { code: 'gcse_igcse_2.2', name: 'Making Marketing Decisions', color: '#3498db' },
+        { code: 'gcse_igcse_2.3', name: 'Making Operational Decisions', color: '#27ae60' },
+        { code: 'gcse_igcse_2.4', name: 'Making Financial Decisions', color: '#f39c12' },
+        { code: 'gcse_igcse_2.5', name: 'Making Human Resource Decisions', color: '#9b59b6' }
+    ]
+};
+
+var CIE_IGCSE_TOPICS = [
+    { code: 'gcse_cie_1', name: 'Understanding Business Activity', color: '#e74c3c' },
+    { code: 'gcse_cie_2', name: 'People in Business', color: '#3498db' },
+    { code: 'gcse_cie_3', name: 'Marketing', color: '#27ae60' },
+    { code: 'gcse_cie_4', name: 'Operations Management', color: '#f39c12' },
+    { code: 'gcse_cie_5', name: 'Financial Information and Decisions', color: '#9b59b6' },
+    { code: 'gcse_cie_6', name: 'External Influences on Business Activity', color: '#1abc9c' }
+];
+
 var UNIT_TOPICS = {
     'unit1': ['1.1','1.2','1.3','1.4','1.5'],
     'unit2': ['2.1','2.2','2.3','2.4','2.5'],
@@ -3515,6 +3700,7 @@ function showModeSelection() {
     document.getElementById('aqaPaperSelectionSection').style.display = 'none';
     document.getElementById('ciePaperSelectionSection').style.display = 'none';
     document.getElementById('cieLevelSelectionSection').style.display = 'none';
+    document.getElementById('gcsePaperSelectionSection').style.display = 'none';
 }
 
 function selectMode(mode) {
@@ -3538,29 +3724,40 @@ function selectMode(mode) {
     document.getElementById('aqaPaperSelectionSection').style.display = 'none';
     document.getElementById('ciePaperSelectionSection').style.display = 'none';
     document.getElementById('cieLevelSelectionSection').style.display = 'none';
+    document.getElementById('gcsePaperSelectionSection').style.display = 'none';
 
     var boardData = BOARD_DATA[currentBoard];
 
     if (mode === 'single') {
-        renderQuestionTypes();
-        document.getElementById('qtypeSection').style.display = '';
-        document.getElementById('generateSection').style.display = '';
+        // For GCSE boards, show paper selection first (to know which question types apply)
+        if (boardData.isGCSE && boardData.isPaperBased && !boardData.skipUnitSelection) {
+            renderGcsePaperSelection('single');
+        } else {
+            renderQuestionTypes();
+            document.getElementById('qtypeSection').style.display = '';
+            document.getElementById('generateSection').style.display = '';
+        }
     } else if (mode === 'topic_test') {
         if (currentBoard === 'cie_ial') {
             // CIE IAL: show AS/A Level selection first
             document.getElementById('cieLevelSelectionSection').style.display = '';
+        } else if (boardData.isGCSE) {
+            // GCSE boards: show paper selection first to determine topics
+            renderGcsePaperSelection('topic_test');
         } else {
             document.getElementById('topicSelectionSection').style.display = '';
             renderTopics();
         }
     } else if (mode === 'exam') {
-        // For boards with skipUnitSelection: show paper selection before generating exam
-        if (currentBoard === 'cie_ial') {
+        if (boardData.isGCSE) {
+            // All GCSE boards: show paper selection for exam mode
+            renderGcsePaperSelection('exam');
+        } else if (currentBoard === 'cie_ial') {
             document.getElementById('ciePaperSelectionSection').style.display = '';
         } else if (boardData.skipUnitSelection) {
             document.getElementById('aqaPaperSelectionSection').style.display = '';
         } else {
-            // For Edexcel: generate exam directly (unit already selected)
+            // For A Level Edexcel: generate exam directly (unit already selected)
             checkFreeTrialAndGenerate();
         }
     }
@@ -3609,6 +3806,53 @@ function selectCieTopicLevel(el) {
     renderTopics();
 }
 
+// ===== GCSE PAPER SELECTION =====
+var gcsePaperNextAction = null; // tracks what to do after paper is selected: 'single', 'topic_test', 'exam'
+
+function renderGcsePaperSelection(nextAction) {
+    gcsePaperNextAction = nextAction;
+    var boardData = BOARD_DATA[currentBoard];
+    var grid = document.getElementById('gcsePaperGrid');
+    grid.innerHTML = '';
+
+    var papers = boardData.papers || [];
+    papers.forEach(function(paper) {
+        var card = document.createElement('div');
+        card.className = 'unit-card';
+        card.style.cursor = 'pointer';
+        card.setAttribute('data-paper', paper.id.replace('paper', ''));
+        card.setAttribute('onclick', 'selectGcsePaper(this)');
+        card.innerHTML = '<div class="unit-card-label" style="color:' + paper.color + ';">' + paper.code + '</div>' +
+            '<div class="unit-card-name">' + paper.name + '</div>' +
+            '<div class="unit-card-themes" style="font-size:0.75rem;color:#7f8c8d;margin-top:4px;">' + paper.desc + ' &bull; ' + paper.marks + ' marks &bull; ' + Math.floor(paper.duration / 60) + 'hr ' + (paper.duration % 60 > 0 ? paper.duration % 60 + 'min' : '') + '</div>';
+        grid.appendChild(card);
+    });
+
+    document.getElementById('gcsePaperSelectionSection').style.display = '';
+}
+
+function selectGcsePaper(el) {
+    var paperCards = document.querySelectorAll('#gcsePaperGrid .unit-card');
+    paperCards.forEach(function(c) { c.classList.remove('selected'); });
+    el.classList.add('selected');
+
+    var paperNum = el.getAttribute('data-paper');
+    currentUnit = 'paper' + paperNum;
+
+    if (gcsePaperNextAction === 'exam') {
+        setTimeout(function() {
+            checkFreeTrialAndGenerate();
+        }, 300);
+    } else if (gcsePaperNextAction === 'topic_test') {
+        document.getElementById('topicSelectionSection').style.display = '';
+        renderTopics();
+    } else if (gcsePaperNextAction === 'single') {
+        renderQuestionTypes();
+        document.getElementById('qtypeSection').style.display = '';
+        document.getElementById('generateSection').style.display = '';
+    }
+}
+
 // ===== TOPIC RENDERING =====
 function renderTopics() {
     var topicGrid = document.getElementById('topicGrid');
@@ -3635,8 +3879,31 @@ function renderTopics() {
                 '<div class="topic-name">' + topic.name + levelBadge + '</div>';
             topicGrid.appendChild(card);
         });
+    } else if (boardData.isGCSE) {
+        // ===== GCSE TOPIC RENDERING =====
+        var gcseTopics = [];
+        if (currentBoard === 'aqa_gcse') {
+            gcseTopics = AQA_GCSE_TOPICS;
+        } else if (currentBoard === 'edexcel_gcse') {
+            gcseTopics = EDEXCEL_GCSE_TOPICS[currentUnit] || [];
+        } else if (currentBoard === 'edexcel_igcse') {
+            gcseTopics = EDEXCEL_IGCSE_TOPICS[currentUnit] || [];
+        } else if (currentBoard === 'cie_igcse') {
+            gcseTopics = CIE_IGCSE_TOPICS;
+        }
+
+        gcseTopics.forEach(function(topic) {
+            var displayCode = topic.code.replace('gcse_aqa_3.', '').replace('gcse_edx_', '').replace('gcse_igcse_', '').replace('gcse_cie_', '');
+            var card = document.createElement('div');
+            card.className = 'topic-card';
+            card.style.borderLeft = '4px solid ' + topic.color;
+            card.setAttribute('onclick', "selectTopic('" + topic.code + "')");
+            card.innerHTML = '<div class="topic-code">' + displayCode + '</div>' +
+                '<div class="topic-name">' + topic.name + '</div>';
+            topicGrid.appendChild(card);
+        });
     } else if (boardData.skipUnitSelection && typeof AQA_TOPICS !== 'undefined') {
-        // AQA: show all 10 main topic areas
+        // AQA A Level: show all 10 main topic areas
         AQA_TOPICS.forEach(function(topic) {
             var displayCode = topic.code.replace('aqa_3.', '');
             var badge = topic.aLevelOnly ? '<span style="font-size:0.65rem;background:#e8daef;color:#8e44ad;padding:2px 6px;border-radius:4px;margin-left:6px;">A-Level Only</span>' : '';
@@ -3649,7 +3916,7 @@ function renderTopics() {
             topicGrid.appendChild(card);
         });
     } else {
-        // Edexcel: use unit-based topic lookup
+        // A Level Edexcel: use unit-based topic lookup
         var unitTopics = UNIT_TOPICS[currentUnit] || [];
         unitTopics.forEach(function(topicCode) {
             var topicName = TOPIC_NAMES[topicCode] || topicCode;
@@ -3732,15 +3999,17 @@ async function generateTest() {
     var unitNumber = currentUnit ? currentUnit.replace('paper', '').replace('unit', '') : '';
 
     if (currentMode === 'exam') {
-        if (board.skipUnitSelection && board.papers) {
-            // AQA or CIE IAL exam - uses paper selection
+        if (board.papers) {
+            // Board with paper selection (AQA, CIE IAL, all GCSE boards)
             var selectedPaper = board.papers.find(function(p) { return p.id === currentUnit; });
+            var levelLabel = board.isGCSE ? 'GCSE' : 'A-Level';
             var examTitle = selectedPaper ? selectedPaper.name : board.name + ' Paper ' + unitNumber;
             var examSubtitle = selectedPaper ? selectedPaper.desc + ' \u2022 ' + selectedPaper.marks + ' marks \u2022 ' + selectedPaper.duration + ' minutes' : 'Full exam paper';
             document.getElementById('testLoadingTitle').textContent = examTitle;
             document.getElementById('testLoadingSubtitle').textContent = examSubtitle;
         } else {
-            var examTitle = isPaper ? 'Paper ' + unitNumber + ' A-Level Exam' : 'Unit ' + unitNumber + ' A-Level Exam';
+            var levelLabel = board.isGCSE ? 'GCSE' : 'A-Level';
+            var examTitle = isPaper ? 'Paper ' + unitNumber + ' ' + levelLabel + ' Exam' : 'Unit ' + unitNumber + ' ' + levelLabel + ' Exam';
             var examSubtitle = isPaper ? 'Full paper exam with all extracts and questions' : 'Full unit exam paper with all extracts and questions';
             document.getElementById('testLoadingTitle').textContent = examTitle;
             document.getElementById('testLoadingSubtitle').textContent = examSubtitle;
@@ -5361,6 +5630,7 @@ function resetToSelection() {
     currentTest = null;
     currentTestResults = null;
     lastTestResults = null;
+    gcsePaperNextAction = null;
     if (chartInstance) { chartInstance.destroy(); chartInstance = null; }
     document.getElementById('answerTextarea').value = '';
     document.getElementById('answerTextarea').readOnly = false;
@@ -5392,6 +5662,9 @@ function filterBoardsByLevel() {
             document.getElementById('unitSection').style.display = 'none';
             document.getElementById('qtypeSection').style.display = 'none';
             document.getElementById('generateSection').style.display = 'none';
+            document.getElementById('modeSelectionSection').style.display = 'none';
+            document.getElementById('topicSelectionSection').style.display = 'none';
+            document.getElementById('gcsePaperSelectionSection').style.display = 'none';
         }
     });
 }
@@ -5427,16 +5700,20 @@ function selectBoard(el) {
     document.getElementById('aqaPaperSelectionSection').style.display = 'none';
     document.getElementById('ciePaperSelectionSection').style.display = 'none';
     document.getElementById('cieLevelSelectionSection').style.display = 'none';
+    document.getElementById('gcsePaperSelectionSection').style.display = 'none';
     document.getElementById('unitSection').style.display = 'none';
     document.getElementById('unitSection').innerHTML = '';
 
     var boardData = BOARD_DATA[currentBoard];
 
-    if (boardData.skipUnitSelection) {
-        // For AQA: skip unit selection, go straight to mode selection
+    if (boardData.isGCSE) {
+        // GCSE boards: go straight to mode selection (paper selected later for exam mode)
+        showModeSelection();
+    } else if (boardData.skipUnitSelection) {
+        // For A Level AQA/CIE: skip unit selection, go straight to mode selection
         showModeSelection();
     } else {
-        // For Edexcel and others: show unit/paper selection first
+        // For A Level Edexcel and others: show unit/paper selection first
         renderUnits();
     }
 }
@@ -5551,9 +5828,9 @@ function selectQType(el) {
 // ===== PHASE 2: GENERATE QUESTION =====
 async function generateQuestion() {
     var boardData = BOARD_DATA[currentBoard];
-    // For AQA, no unit is needed; for others, unit is required
+    // For AQA/CIE IGCSE, no unit is needed; for others, unit is required
     if (!currentBoard || !currentQType) return;
-    if (!boardData.skipUnitSelection && !currentUnit) return;
+    if (!boardData.skipUnitSelection && !boardData.isGCSE && !currentUnit) return;
 
     // Validate custom topic if provided
     var customTopicInput = document.getElementById('customTopicInput');
@@ -6253,45 +6530,7 @@ document.addEventListener('click', function(e) {
 });
 
 // ===== INIT =====
-// ===== DISCLAIMER =====
-async function showDisclaimerIfNeeded() {
-    // Check localStorage first (fast path)
-    if (localStorage.getItem('mybizstudies_disclaimer_accepted')) return;
-
-    // Check Supabase if logged in (maybe accepted on another device)
-    if (currentSession) {
-        try {
-            var { data } = await supabaseClient
-                .from('exam_practice_settings')
-                .select('disclaimer_accepted_at')
-                .eq('user_id', currentSession.user.id)
-                .maybeSingle();
-            if (data && data.disclaimer_accepted_at) {
-                localStorage.setItem('mybizstudies_disclaimer_accepted', 'true');
-                return;
-            }
-        } catch (e) { /* continue to show disclaimer */ }
-    }
-
-    var page = document.getElementById('disclaimerPage');
-    if (page) page.classList.add('active');
-}
-
-async function acceptDisclaimer() {
-    localStorage.setItem('mybizstudies_disclaimer_accepted', 'true');
-    var page = document.getElementById('disclaimerPage');
-    if (page) page.classList.remove('active');
-
-    // Save to Supabase
-    if (currentSession) {
-        try {
-            await supabaseClient.from('exam_practice_settings').upsert({
-                user_id: currentSession.user.id,
-                disclaimer_accepted_at: new Date().toISOString()
-            }, { onConflict: 'user_id' });
-        } catch (e) { console.error('Failed to save disclaimer acceptance:', e); }
-    }
-}
+// ===== DISCLAIMER (moved to welcome.html onboarding) =====
 
 document.addEventListener('DOMContentLoaded', function() {
     checkAuth();
@@ -6303,191 +6542,11 @@ document.addEventListener('DOMContentLoaded', function() {
     var navLogout = document.getElementById('navLogoutBtn');
     if (navLogout) navLogout.addEventListener('click', handleLogout);
 
-    // Show disclaimer on first visit
-    setTimeout(showDisclaimerIfNeeded, 500);
+    // Disclaimer now handled in welcome.html onboarding flow
 });
 </script>
 
-<!-- ===== DISCLAIMER PAGE ===== -->
-<style>
-.disclaimer-page {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: linear-gradient(135deg, #f8f4f0 0%, #fdf6ee 100%);
-    z-index: 10001;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-}
-.disclaimer-page.active { display: block; }
-
-.disclaimer-page-inner {
-    min-height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 40px 24px;
-    box-sizing: border-box;
-}
-.disclaimer-card {
-    background: white;
-    border-radius: 16px;
-    padding: 40px 36px;
-    max-width: 560px;
-    width: 100%;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-    animation: disclaimerFadeIn 0.5s ease;
-}
-@keyframes disclaimerFadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-
-.disclaimer-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: #fef3e2;
-    color: #b45309;
-    font-size: 0.8rem;
-    font-weight: 600;
-    padding: 6px 14px;
-    border-radius: 20px;
-    margin-bottom: 20px;
-    letter-spacing: 0.02em;
-}
-.disclaimer-badge svg {
-    width: 16px;
-    height: 16px;
-    stroke: #b45309;
-    fill: none;
-}
-.disclaimer-card h1 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #1e293b;
-    margin: 0 0 8px 0;
-}
-.disclaimer-card .disclaimer-subtitle {
-    font-size: 0.95rem;
-    color: #64748b;
-    margin-bottom: 28px;
-}
-.disclaimer-points {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 28px 0;
-}
-.disclaimer-points li {
-    display: flex;
-    gap: 14px;
-    align-items: flex-start;
-    padding: 14px 0;
-    border-bottom: 1px solid #f1f5f9;
-    font-size: 0.92rem;
-    color: #334155;
-    line-height: 1.55;
-}
-.disclaimer-points li:last-child { border-bottom: none; }
-.disclaimer-points .dp-icon {
-    width: 32px;
-    height: 32px;
-    min-width: 32px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 1px;
-}
-.disclaimer-points .dp-icon svg {
-    width: 16px;
-    height: 16px;
-    fill: none;
-    stroke-width: 2;
-}
-.dp-ai { background: #ede9fe; }
-.dp-ai svg { stroke: #7c3aed; }
-.dp-book { background: #dbeafe; }
-.dp-book svg { stroke: #2563eb; }
-.dp-shield { background: #fce7f3; }
-.dp-shield svg { stroke: #db2777; }
-.dp-star { background: #d1fae5; }
-.dp-star svg { stroke: #059669; }
-
-.disclaimer-accept-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    width: 100%;
-    padding: 14px 24px;
-    background: linear-gradient(135deg, #e67e22, #f39c12);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-.disclaimer-accept-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 16px rgba(230, 126, 34, 0.35);
-}
-.disclaimer-accept-btn svg {
-    width: 18px;
-    height: 18px;
-}
-
-@media (max-width: 768px) {
-    .disclaimer-page-inner {
-        padding: 24px 16px;
-        justify-content: flex-start;
-        padding-top: 48px;
-    }
-    .disclaimer-card {
-        padding: 28px 20px;
-        border-radius: 12px;
-    }
-    .disclaimer-card h1 { font-size: 1.3rem; }
-    .disclaimer-points li { font-size: 0.88rem; padding: 12px 0; }
-    .disclaimer-points .dp-icon { width: 28px; height: 28px; min-width: 28px; }
-    .disclaimer-points .dp-icon svg { width: 14px; height: 14px; }
-}
-</style>
-
-<div class="disclaimer-page" id="disclaimerPage">
-    <div class="disclaimer-page-inner">
-        <div class="disclaimer-card">
-            <div class="disclaimer-badge">
-                <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                IMPORTANT NOTICE
-            </div>
-            <h1>Before You Begin</h1>
-            <p class="disclaimer-subtitle">Please read and acknowledge the following</p>
-            <ul class="disclaimer-points">
-                <li>
-                    <div class="dp-icon dp-ai"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4v2a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4z"/><path d="M16 14H8a4 4 0 0 0-4 4v2h16v-2a4 4 0 0 0-4-4z"/></svg></div>
-                    <span>All questions, assessments and feedback are <strong>generated using AI</strong>. They reflect the style of specific exam boards but are <strong>not produced by or affiliated with any exam board</strong>.</span>
-                </li>
-                <li>
-                    <div class="dp-icon dp-book"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg></div>
-                    <span>Use this alongside your exam board's <strong>official specification, mark schemes and past papers</strong>, which should remain your primary source of guidance.</span>
-                </li>
-                <li>
-                    <div class="dp-icon dp-shield"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-                    <span>MyBizStudies is a <strong>revision aid</strong> and does not guarantee any specific exam outcomes.</span>
-                </li>
-                <li>
-                    <div class="dp-icon dp-star"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
-                    <span>Your teacher and official exam board resources should always be your <strong>first point of reference</strong>.</span>
-                </li>
-            </ul>
-            <button class="disclaimer-accept-btn" onclick="acceptDisclaimer()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                I Understand, Let's Go
-            </button>
-        </div>
-    </div>
-</div>
+<!-- Disclaimer removed - now handled in welcome.html onboarding flow -->
 
 <!-- ===== REVIEW COLLECTION POPUP ===== -->
 <style>
