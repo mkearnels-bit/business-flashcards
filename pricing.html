@@ -904,12 +904,25 @@
         });
 
         // Subscribe button handler
-        document.getElementById('subscribeBtn').addEventListener('click', function() {
+        document.getElementById('subscribeBtn').addEventListener('click', async function() {
             var selectedOption = document.querySelector('.pricing-option.selected');
-            if (selectedOption) {
-                var url = selectedOption.getAttribute('data-url');
-                window.location.href = url;
+            if (!selectedOption) return;
+
+            var url = selectedOption.getAttribute('data-url');
+
+            // Append user metadata so Creem webhook can identify the user
+            try {
+                var { data: { session } } = await supabaseClient.auth.getSession();
+                if (session && session.user) {
+                    var separator = url.indexOf('?') === -1 ? '?' : '&';
+                    url += separator + 'metadata[user_id]=' + encodeURIComponent(session.user.id);
+                    url += '&metadata[email]=' + encodeURIComponent(session.user.email || '');
+                }
+            } catch (e) {
+                console.warn('Could not attach user metadata to checkout URL:', e);
             }
+
+            window.location.href = url;
         });
 
         // Mobile menu (legacy)
