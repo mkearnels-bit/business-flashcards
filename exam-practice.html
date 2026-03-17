@@ -3292,8 +3292,10 @@ const BOARD_DATA = {
             { id: 'calculate_2', marks: 2, name: 'Calculate', desc: 'Show your working', command: 'calculate' },
             { id: 'outline_2', marks: 2, name: 'Outline', desc: 'Brief explanation', command: 'outline' },
             { id: 'explain_3', marks: 3, name: 'Explain', desc: 'Point, explanation, impact', command: 'explain' },
-            { id: 'discuss_6', marks: 6, name: 'Discuss', desc: 'Advantages vs disadvantages', command: 'discuss' },
-            { id: 'justify_9', marks: 9, name: 'Justify', desc: 'Make a decision with reasons', command: 'justify' }
+            { id: 'discuss_6', marks: 6, name: 'Discuss', desc: 'Balanced argument both sides', command: 'discuss' },
+            { id: 'analyse_6', marks: 6, name: 'Analyse', desc: 'Examine impact with reasoning', command: 'analyse' },
+            { id: 'justify_9', marks: 9, name: 'Justify', desc: 'Two options, choose one', command: 'justify' },
+            { id: 'evaluate_12', marks: 12, name: 'Evaluate', desc: 'Weigh up and make a judgement', command: 'evaluate' }
         ],
         papers: [
             { id: 'paper1', code: '1BS0/01', name: 'Paper 1: Investigating Small Business', color: '#e74c3c', desc: 'Theme 1 • Sections A, B, C', marks: 90, duration: 105 },
@@ -3313,12 +3315,15 @@ const BOARD_DATA = {
             { id: 'define_1', marks: 1, name: 'Define', desc: 'State meaning of a term', command: 'define' },
             { id: 'state_1', marks: 1, name: 'State', desc: 'Brief factual answer', command: 'state' },
             { id: 'calculate_2', marks: 2, name: 'Calculate', desc: 'Show your working', command: 'calculate' },
+            { id: 'outline_2', marks: 2, name: 'Outline', desc: 'Identify and briefly develop', command: 'outline' },
             { id: 'explain_3', marks: 3, name: 'Explain', desc: 'Point and development', command: 'explain' },
-            { id: 'analyse_6', marks: 6, name: 'Analyse', desc: 'Examine in detail', command: 'analyse' }
+            { id: 'analyse_6', marks: 6, name: 'Analyse', desc: 'Examine in detail', command: 'analyse' },
+            { id: 'justify_9', marks: 9, name: 'Justify', desc: 'Choose between two options', command: 'justify' },
+            { id: 'evaluate_12', marks: 12, name: 'Evaluate', desc: 'Weigh up and make a judgement', command: 'evaluate' }
         ],
         papers: [
-            { id: 'paper1', code: '4BS1/01', name: 'Paper 1: Investigating Small Business', color: '#e74c3c', desc: 'Stimulus-based questions • Formulae sheet provided', marks: 80, duration: 90 },
-            { id: 'paper2', code: '4BS1/02', name: 'Paper 2: Building a Business', color: '#3498db', desc: 'Stimulus-based questions • Formulae sheet provided', marks: 80, duration: 90 }
+            { id: 'paper1', code: '4BS1/01', name: 'Paper 1: Investigating Small Business', color: '#e74c3c', desc: '4 × 20-mark questions • Formulae sheet provided', marks: 80, duration: 90 },
+            { id: 'paper2', code: '4BS1/02', name: 'Paper 2: Building a Business', color: '#3498db', desc: '4 × 20-mark questions • Formulae sheet provided', marks: 80, duration: 90 }
         ]
     },
     aqa_gcse: {
@@ -3330,12 +3335,16 @@ const BOARD_DATA = {
         ],
         questionTypes: [
             { id: 'mcq_1', marks: 1, name: 'Multiple Choice', desc: 'Select correct answer', command: 'state' },
-            { id: 'identify_2', marks: 2, name: 'Identify', desc: 'Name or select two items', command: 'identify' },
-            { id: 'explain_2', marks: 2, name: 'Explain', desc: 'Brief explanation', command: 'explain' },
-            { id: 'describe_2', marks: 2, name: 'Describe', desc: 'Give an account of', command: 'describe' },
-            { id: 'calculate_5', marks: 5, name: 'Calculate', desc: 'Show your working', command: 'calculate' },
+            { id: 'identify_2', marks: 2, name: 'Identify/Give', desc: 'Two brief factual points', command: 'identify' },
+            { id: 'describe_2', marks: 2, name: 'Describe', desc: 'What something is or how it works', command: 'describe' },
+            { id: 'explain_2', marks: 2, name: 'Explain (2m)', desc: 'One reason with development', command: 'explain' },
+            { id: 'calculate_2', marks: 2, name: 'Calculate (2m)', desc: 'Simple calculation', command: 'calculate' },
+            { id: 'state_explain_4', marks: 4, name: 'State and Explain', desc: 'State and explain two points', command: 'state_and_explain' },
+            { id: 'explain_4', marks: 4, name: 'Explain (4m)', desc: 'Detailed with data/context', command: 'explain' },
+            { id: 'calculate_5', marks: 5, name: 'Calculate (5m)', desc: 'Multi-step calculation', command: 'calculate' },
+            { id: 'analyse_6', marks: 6, name: 'Analyse', desc: 'Examine in detail with application', command: 'analyse' },
             { id: 'recommend_9', marks: 9, name: 'Recommend', desc: 'Two options, choose one', command: 'recommend' },
-            { id: 'evaluate_12', marks: 12, name: 'Evaluate', desc: 'Weigh up and make a judgement', command: 'evaluate' }
+            { id: 'evaluate_12', marks: 12, name: 'Evaluate', desc: 'Two options, weigh up and judge', command: 'evaluate' }
         ],
         papers: [
             { id: 'paper1', code: '8132/1', name: 'Paper 1: Influences of Operations and HRM', color: '#e74c3c', desc: 'Units 1-4 • Sections A, B, C', marks: 90, duration: 105 },
@@ -3353,13 +3362,15 @@ const BOARD_DATA = {
         questionTypes: [
             { id: 'define_2', marks: 2, name: 'Define', desc: 'State meaning of a term', command: 'define' },
             { id: 'identify_2', marks: 2, name: 'Identify', desc: 'Name two items', command: 'identify' },
-            { id: 'outline_4', marks: 4, name: 'Outline', desc: 'Brief description with reasons', command: 'outline' },
-            { id: 'explain_6', marks: 6, name: 'Explain', desc: 'Two reasons with development', command: 'explain' },
-            { id: 'justify_6', marks: 6, name: 'Justify', desc: 'Recommend with reasons', command: 'justify' }
+            { id: 'outline_4', marks: 4, name: 'Outline', desc: 'Identify and briefly develop', command: 'outline' },
+            { id: 'explain_6', marks: 6, name: 'Explain (6m)', desc: 'Paper 1: Two reasons with analysis', command: 'explain' },
+            { id: 'justify_6', marks: 6, name: 'Justify (6m)', desc: 'Paper 1: Recommend with reasons', command: 'justify' },
+            { id: 'explain_8', marks: 8, name: 'Explain (8m)', desc: 'Paper 2: Four points with development', command: 'explain' },
+            { id: 'justify_12', marks: 12, name: 'Justify (12m)', desc: 'Paper 2: Two options, choose one', command: 'justify' }
         ],
         papers: [
-            { id: 'paper1', code: '0450/11', name: 'Paper 1: Short Answer and Data Response', color: '#e74c3c', desc: '4 questions with stimulus material', marks: 80, duration: 90 },
-            { id: 'paper2', code: '0450/21', name: 'Paper 2: Case Study', color: '#3498db', desc: '4 questions on one case study', marks: 80, duration: 90 }
+            { id: 'paper1', code: '0450/11', name: 'Paper 1: Short Answer and Data Response', color: '#e74c3c', desc: '4 questions with stimulus material', marks: 80, duration: 105 },
+            { id: 'paper2', code: '0450/21', name: 'Paper 2: Case Study', color: '#3498db', desc: '4 questions on one case study', marks: 80, duration: 105 }
         ]
     },
     cie_ial: {
