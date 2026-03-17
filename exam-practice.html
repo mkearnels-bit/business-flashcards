@@ -511,20 +511,20 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 0.75rem;
+            margin-bottom: 1rem;
         }
 
         .board-card-icon {
             min-width: 64px; height: 40px;
-            padding: 0 12px;
+            padding: 0 16px;
             border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             font-weight: 800;
             color: white;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
             white-space: nowrap;
         }
 
@@ -553,15 +553,11 @@
         }
 
         .board-card-title {
-            font-size: 1.15rem;
+            font-size: 1.05rem;
             font-weight: 700;
             color: var(--gray-900);
-            margin-bottom: 0.25rem;
-        }
-
-        .board-card-desc {
-            font-size: 0.85rem;
-            color: var(--gray-500);
+            margin-bottom: 0;
+            line-height: 1.4;
         }
 
         .coming-soon-badge {
@@ -2847,69 +2843,61 @@
             <!-- A-LEVEL BOARDS -->
             <div class="board-card" data-board="edexcel_ial" data-level="alevel" onclick="selectBoard(this)">
                 <div class="board-card-header">
-                    <div class="board-card-icon" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">A2/AS</div>
+                    <div class="board-card-icon" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">Edexcel A2/AS</div>
                     <div class="board-card-check"></div>
                 </div>
-                <div class="board-card-title">Edexcel International A Level</div>
-                <div class="board-card-desc">Pearson Edexcel IAL Business Studies (WBS11 to WBS14)</div>
+                <div class="board-card-title">Pearson Edexcel IAL Business Studies (WBS11 to WBS14)</div>
             </div>
             <div class="board-card" data-board="edexcel_uk" data-level="alevel" onclick="selectBoard(this)">
                 <div class="board-card-header">
-                    <div class="board-card-icon" style="background: linear-gradient(135deg, #3498db, #2980b9);">A2</div>
+                    <div class="board-card-icon" style="background: linear-gradient(135deg, #3498db, #2980b9);">Edexcel A2</div>
                     <div class="board-card-check"></div>
                 </div>
-                <div class="board-card-title">Edexcel UK A Level</div>
-                <div class="board-card-desc">Pearson Edexcel A Level Business (9BS0)</div>
+                <div class="board-card-title">Pearson Edexcel A Level Business (9BS0)</div>
             </div>
             <div class="board-card" data-board="aqa_uk" data-level="alevel" onclick="selectBoard(this)">
                 <div class="board-card-header">
-                    <div class="board-card-icon" style="background: linear-gradient(135deg, #27ae60, #229954);">A2</div>
+                    <div class="board-card-icon" style="background: linear-gradient(135deg, #27ae60, #229954);">AQA A2</div>
                     <div class="board-card-check"></div>
                 </div>
-                <div class="board-card-title">AQA A Level</div>
-                <div class="board-card-desc">AQA A Level Business (7132)</div>
+                <div class="board-card-title">AQA A Level Business (7132)</div>
             </div>
             <div class="board-card" data-board="cie_ial" data-level="alevel" onclick="selectBoard(this)">
                 <div class="board-card-header">
-                    <div class="board-card-icon" style="background: linear-gradient(135deg, #f39c12, #e67e22);">A2/AS</div>
+                    <div class="board-card-icon" style="background: linear-gradient(135deg, #f39c12, #e67e22);">CIE A2/AS</div>
                     <div class="board-card-check"></div>
                 </div>
-                <div class="board-card-title">CIE International A Level</div>
-                <div class="board-card-desc">Cambridge International AS & A Level Business (9609)</div>
+                <div class="board-card-title">Cambridge International AS &amp; A Level Business (9609)</div>
             </div>
 
             <!-- GCSE BOARDS -->
             <div class="board-card" data-board="edexcel_gcse" data-level="gcse" onclick="selectBoard(this)">
                 <div class="board-card-header">
-                    <div class="board-card-icon" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">EX</div>
+                    <div class="board-card-icon" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">Edexcel</div>
                     <div class="board-card-check"></div>
                 </div>
-                <div class="board-card-title">Edexcel GCSE</div>
-                <div class="board-card-desc">Pearson Edexcel GCSE Business (1BS0)</div>
+                <div class="board-card-title">Pearson Edexcel GCSE Business (1BS0)</div>
             </div>
             <div class="board-card" data-board="edexcel_igcse" data-level="gcse" onclick="selectBoard(this)">
                 <div class="board-card-header">
-                    <div class="board-card-icon" style="background: linear-gradient(135deg, #3498db, #2980b9);">IG</div>
+                    <div class="board-card-icon" style="background: linear-gradient(135deg, #3498db, #2980b9);">Edexcel</div>
                     <div class="board-card-check"></div>
                 </div>
-                <div class="board-card-title">Edexcel IGCSE</div>
-                <div class="board-card-desc">Pearson Edexcel International GCSE Business (4BS1)</div>
+                <div class="board-card-title">Pearson Edexcel International GCSE Business (4BS1)</div>
             </div>
             <div class="board-card" data-board="aqa_gcse" data-level="gcse" onclick="selectBoard(this)">
                 <div class="board-card-header">
-                    <div class="board-card-icon" style="background: linear-gradient(135deg, #27ae60, #229954);">AQ</div>
+                    <div class="board-card-icon" style="background: linear-gradient(135deg, #27ae60, #229954);">AQA</div>
                     <div class="board-card-check"></div>
                 </div>
-                <div class="board-card-title">AQA GCSE</div>
-                <div class="board-card-desc">AQA GCSE Business (8132)</div>
+                <div class="board-card-title">AQA GCSE Business (8132)</div>
             </div>
             <div class="board-card" data-board="cie_igcse" data-level="gcse" onclick="selectBoard(this)">
                 <div class="board-card-header">
-                    <div class="board-card-icon" style="background: linear-gradient(135deg, #f39c12, #e67e22);">CI</div>
+                    <div class="board-card-icon" style="background: linear-gradient(135deg, #f39c12, #e67e22);">CIE</div>
                     <div class="board-card-check"></div>
                 </div>
-                <div class="board-card-title">CIE IGCSE</div>
-                <div class="board-card-desc">Cambridge IGCSE Business Studies (0450)</div>
+                <div class="board-card-title">Cambridge IGCSE Business Studies (0450)</div>
             </div>
         </div>
 
@@ -3407,7 +3395,7 @@ const BOARD_DATA = {
         isPaperBased: true,
         units: [
             { id: 'paper1', code: '4BS1/01', name: 'Investigating Small Business', color: '#e74c3c', themes: 'Business Activity & Marketing' },
-            { id: 'paper2', code: '4BS1/02', name: 'Building a Business', color: '#3498db', themes: 'Operations, Finance & HR' }
+            { id: 'paper2', code: '4BS1/02', name: 'Investigating Large Businesses', color: '#3498db', themes: 'Operations, Finance & HR' }
         ],
         questionTypes: [
             { id: 'mcq_1', marks: 1, name: 'Multiple Choice', desc: 'Select correct answer', command: 'state' },
@@ -3422,7 +3410,7 @@ const BOARD_DATA = {
         ],
         papers: [
             { id: 'paper1', code: '4BS1/01', name: 'Paper 1: Investigating Small Business', color: '#e74c3c', desc: '4 × 20-mark questions • Formulae sheet provided', marks: 80, duration: 90 },
-            { id: 'paper2', code: '4BS1/02', name: 'Paper 2: Building a Business', color: '#3498db', desc: '4 × 20-mark questions • Formulae sheet provided', marks: 80, duration: 90 }
+            { id: 'paper2', code: '4BS1/02', name: 'Paper 2: Investigating Large Businesses', color: '#3498db', desc: '4 × 20-mark questions • Formulae sheet provided', marks: 80, duration: 90 }
         ]
     },
     aqa_gcse: {
