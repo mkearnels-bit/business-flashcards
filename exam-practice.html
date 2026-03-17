@@ -2595,6 +2595,105 @@
             background: #fdf2f2;
             color: #c0392b;
         }
+
+        /* Extract Popup Modal */
+        .extract-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .extract-modal-overlay.active {
+            display: flex;
+        }
+        .extract-modal {
+            background: white;
+            border-radius: 12px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: modalSlideIn 0.25s ease-out;
+        }
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .extract-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--gray-200);
+            flex-shrink: 0;
+        }
+        .extract-modal-header h3 {
+            margin: 0;
+            font-size: 1.1em;
+            color: var(--gray-800);
+            font-weight: 600;
+        }
+        .extract-modal-close {
+            background: transparent;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: var(--gray-500);
+            padding: 4px 8px;
+            border-radius: 6px;
+            line-height: 1;
+            transition: all 0.2s;
+        }
+        .extract-modal-close:hover {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+        .extract-modal-body {
+            padding: 24px;
+            overflow-y: auto;
+            flex: 1;
+            color: var(--gray-700);
+            line-height: 1.7;
+            font-size: 0.95em;
+        }
+        .extract-modal-body .extract-title {
+            font-weight: 600;
+            color: var(--gray-800);
+            margin-bottom: 12px;
+            font-size: 1.05em;
+        }
+        .extract-modal-body .extract-text {
+            white-space: pre-wrap;
+        }
+        .extract-modal-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+        }
+        .extract-modal-body th,
+        .extract-modal-body td {
+            border: 1px solid var(--gray-300);
+            padding: 8px 12px;
+            text-align: left;
+            font-size: 0.9em;
+        }
+        .extract-modal-body th {
+            background: var(--gray-100);
+            font-weight: 600;
+        }
+        .extract-modal-body canvas {
+            max-width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -3337,11 +3436,11 @@ const BOARD_DATA = {
             { id: 'mcq_1', marks: 1, name: 'Multiple Choice', desc: 'Select correct answer', command: 'state' },
             { id: 'identify_2', marks: 2, name: 'Identify/Give', desc: 'Two brief factual points', command: 'identify' },
             { id: 'describe_2', marks: 2, name: 'Describe', desc: 'What something is or how it works', command: 'describe' },
-            { id: 'explain_2', marks: 2, name: 'Explain (2m)', desc: 'One reason with development', command: 'explain' },
-            { id: 'calculate_2', marks: 2, name: 'Calculate (2m)', desc: 'Simple calculation', command: 'calculate' },
+            { id: 'explain_2', marks: 2, name: 'Explain', desc: 'One reason with development', command: 'explain' },
+            { id: 'calculate_2', marks: 2, name: 'Calculate', desc: 'Simple calculation', command: 'calculate' },
             { id: 'state_explain_4', marks: 4, name: 'State and Explain', desc: 'State and explain two points', command: 'state_and_explain' },
-            { id: 'explain_4', marks: 4, name: 'Explain (4m)', desc: 'Detailed with data/context', command: 'explain' },
-            { id: 'calculate_5', marks: 5, name: 'Calculate (5m)', desc: 'Multi-step calculation', command: 'calculate' },
+            { id: 'explain_4', marks: 4, name: 'Explain', desc: 'Detailed with data/context', command: 'explain' },
+            { id: 'calculate_5', marks: 5, name: 'Calculate', desc: 'Multi-step calculation', command: 'calculate' },
             { id: 'analyse_6', marks: 6, name: 'Analyse', desc: 'Examine in detail with application', command: 'analyse' },
             { id: 'recommend_9', marks: 9, name: 'Recommend', desc: 'Two options, choose one', command: 'recommend' },
             { id: 'evaluate_12', marks: 12, name: 'Evaluate', desc: 'Two options, weigh up and judge', command: 'evaluate' }
@@ -3363,10 +3462,10 @@ const BOARD_DATA = {
             { id: 'define_2', marks: 2, name: 'Define', desc: 'State meaning of a term', command: 'define' },
             { id: 'identify_2', marks: 2, name: 'Identify', desc: 'Name two items', command: 'identify' },
             { id: 'outline_4', marks: 4, name: 'Outline', desc: 'Identify and briefly develop', command: 'outline' },
-            { id: 'explain_6', marks: 6, name: 'Explain (6m)', desc: 'Paper 1: Two reasons with analysis', command: 'explain' },
-            { id: 'justify_6', marks: 6, name: 'Justify (6m)', desc: 'Paper 1: Recommend with reasons', command: 'justify' },
-            { id: 'explain_8', marks: 8, name: 'Explain (8m)', desc: 'Paper 2: Four points with development', command: 'explain' },
-            { id: 'justify_12', marks: 12, name: 'Justify (12m)', desc: 'Paper 2: Two options, choose one', command: 'justify' }
+            { id: 'explain_6', marks: 6, name: 'Explain', desc: 'Paper 1: Two reasons with analysis', command: 'explain' },
+            { id: 'justify_6', marks: 6, name: 'Justify', desc: 'Paper 1: Recommend with reasons', command: 'justify' },
+            { id: 'explain_8', marks: 8, name: 'Explain', desc: 'Paper 2: Four points with development', command: 'explain' },
+            { id: 'justify_12', marks: 12, name: 'Justify', desc: 'Paper 2: Two options, choose one', command: 'justify' }
         ],
         papers: [
             { id: 'paper1', code: '0450/11', name: 'Paper 1: Short Answer and Data Response', color: '#e74c3c', desc: '4 questions with stimulus material', marks: 80, duration: 105 },
@@ -4309,7 +4408,7 @@ function showTestExtractTab(extractId) {
     if (targetExtract) targetExtract.classList.add('active');
 
     document.querySelectorAll('#testSourceBooklet .extract-tab').forEach(function(tab) {
-        if (tab.textContent.indexOf(extractId) !== -1) {
+        if (tab.textContent.trim() === 'Extract ' + extractId) {
             tab.classList.add('active');
         }
     });
@@ -4364,7 +4463,7 @@ function renderTestExam(paperData) {
                     (question.extract_refs && question.extract_refs.length > 0 &&
                      !(question.extract_refs.length === 1 && question.extract_refs[0] === 'Insert') ?
                         question.extract_refs.map(function(ref) {
-                            return '<button class="view-extract-btn" onclick="showTestExtractTab(\'' + ref + '\')">View Extract ' + ref + '</button>';
+                            return '<button class="view-extract-btn" onclick="openExtractPopup(\'' + ref + '\')">View Extract ' + ref + '</button>';
                         }).join('') : '') +
                     (isMcq ? '' : '<div class="question-time">' + (question.recommended_time_minutes || 5) + ' min</div>') +
                     choiceBtnHtml +
@@ -4525,49 +4624,43 @@ function stopTestTimer() {
 
 // ===== SUBMISSION =====
 function submitTestAnswers() {
-    // Collect answers in the format the API expects
+    // Collect answers in QUESTION ORDER (matching paper order) to ensure correct matching
     var answers = [];
     var studentAnswerTexts = [];
     var hasBlankAnswers = false;
     var elapsed = Math.floor((Date.now() - testExamStartTime) / 1000);
     var totalAnswerElements = document.querySelectorAll('.test-answer-textarea, .mcq-container').length;
 
-    // Collect written answers (skip disabled textareas from unchosen essay questions)
-    document.querySelectorAll('.test-answer-textarea').forEach(function(textarea) {
-        if (textarea.disabled) return; // Skip unchosen choice questions
+    // Iterate through questions in paper order to collect all answers (MCQ + written) in sequence
+    if (currentTest && currentTest.questions) {
+        currentTest.questions.forEach(function(question) {
+            var questionId = question.id;
+            var answerText = '';
 
-        var questionId = textarea.dataset.questionId;
-        var answerText = textarea.value.trim();
+            if (question.question_type === 'mcq') {
+                // MCQ answer
+                var selectedRadio = document.querySelector('.mcq-radio[data-question-id="' + questionId + '"]:checked');
+                answerText = selectedRadio ? selectedRadio.value : '';
+            } else {
+                // Written answer - find the textarea
+                var textarea = document.querySelector('.test-answer-textarea[data-question-id="' + questionId + '"]');
+                if (textarea && !textarea.disabled) {
+                    answerText = textarea.value.trim();
+                } else if (textarea && textarea.disabled) {
+                    return; // Skip unchosen choice questions
+                }
+            }
 
-        if (!answerText) hasBlankAnswers = true;
+            if (!answerText) hasBlankAnswers = true;
 
-        studentAnswerTexts.push(answerText);
-        answers.push({
-            question_id: questionId,
-            student_answer: answerText,
-            time_taken_seconds: Math.round(elapsed / totalAnswerElements)
+            studentAnswerTexts.push(answerText);
+            answers.push({
+                question_id: questionId,
+                student_answer: answerText,
+                time_taken_seconds: Math.round(elapsed / totalAnswerElements)
+            });
         });
-    });
-
-    // Collect MCQ answers
-    var mcqQuestionIds = [];
-    document.querySelectorAll('.mcq-radio').forEach(function(radio) {
-        var qId = radio.dataset.questionId;
-        if (mcqQuestionIds.indexOf(qId) === -1) mcqQuestionIds.push(qId);
-    });
-    mcqQuestionIds.forEach(function(qId) {
-        var selectedRadio = document.querySelector('.mcq-radio[data-question-id="' + qId + '"]:checked');
-        var answerText = selectedRadio ? selectedRadio.value : '';
-
-        if (!answerText) hasBlankAnswers = true;
-
-        studentAnswerTexts.push(answerText);
-        answers.push({
-            question_id: qId,
-            student_answer: answerText,
-            time_taken_seconds: Math.round(elapsed / totalAnswerElements)
-        });
-    });
+    }
 
     if (hasBlankAnswers) {
         showTestDialog(
@@ -4711,7 +4804,7 @@ async function performTestSubmission(studentAnswers, studentAnswerTexts) {
 
             var savePayload = {
                 user_id: session.user.id,
-                test_type: currentMode || 'exam',
+                test_type: currentMode === 'topic_test' ? 'topic_test' : 'unit_exam',
                 board: currentBoard,
                 unit: unitValue,
                 topic: topicValue,
@@ -6921,6 +7014,60 @@ function showReviewError(msg) {
     el.textContent = msg;
     el.style.display = 'block';
 }
+
+function openExtractPopup(extractId) {
+    var extractEl = document.getElementById('test-extract-' + extractId);
+    if (!extractEl) return;
+
+    var overlay = document.getElementById('extractModalOverlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'extractModalOverlay';
+        overlay.className = 'extract-modal-overlay';
+        overlay.innerHTML = '<div class="extract-modal">' +
+            '<div class="extract-modal-header">' +
+            '<h3 id="extractModalTitle"></h3>' +
+            '<button class="extract-modal-close" onclick="closeExtractPopup()">&times;</button>' +
+            '</div>' +
+            '<div class="extract-modal-body" id="extractModalBody"></div>' +
+            '</div>';
+        document.body.appendChild(overlay);
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) closeExtractPopup();
+        });
+    }
+
+    document.getElementById('extractModalTitle').textContent = 'Extract ' + extractId;
+    var modalBody = document.getElementById('extractModalBody');
+    modalBody.innerHTML = extractEl.innerHTML;
+
+    // Re-render any charts in the modal
+    var canvases = modalBody.querySelectorAll('canvas');
+    canvases.forEach(function(canvas) {
+        var origCanvas = extractEl.querySelector('canvas#' + canvas.id);
+        if (origCanvas && origCanvas._chartData) {
+            var newCanvas = document.createElement('canvas');
+            newCanvas.id = 'modal-' + canvas.id;
+            canvas.parentNode.replaceChild(newCanvas, canvas);
+            setTimeout(function() { renderTestChart(origCanvas._chartData, newCanvas); }, 100);
+        }
+    });
+
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeExtractPopup() {
+    var overlay = document.getElementById('extractModalOverlay');
+    if (overlay) {
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeExtractPopup();
+});
 </script>
 
 </body>
