@@ -7455,13 +7455,21 @@ function saveTestForLater() {
 
 async function showSaveTestModal() {
     try {
+        if (!currentSession || !currentSession.user) {
+            showError('You must be logged in to save tests. Please refresh the page.');
+            return;
+        }
+
         var { data: existingSaved, error: fetchError } = await supabaseClient
             .from('saved_tests')
             .select('id, test_title, board, unit, created_at')
             .eq('user_id', currentSession.user.id)
-            .order('updated_at', { ascending: false });
+            .order('created_at', { ascending: false });
 
-        if (fetchError) throw fetchError;
+        if (fetchError) {
+            console.error('Supabase saved_tests query error:', fetchError);
+            throw fetchError;
+        }
 
         var overlay = document.getElementById('saveTestModalOverlay');
         var title = document.getElementById('saveTestModalTitle');
@@ -7568,6 +7576,14 @@ function closeSaveTestModal() {
         overlay.classList.remove('active');
         document.body.style.overflow = '';
     }
+    // Hide the extra stay button if it was added by promptSaveBeforeLeaving
+    var stayBtn = document.getElementById('saveTestModalStayBtn');
+    if (stayBtn) stayBtn.style.display = 'none';
+    // Reset button text to defaults
+    var cancel = document.getElementById('saveTestModalCancel');
+    var confirm = document.getElementById('saveTestModalConfirm');
+    if (cancel) { cancel.textContent = 'Cancel'; cancel.onclick = closeSaveTestModal; }
+    if (confirm) { confirm.textContent = 'Confirm'; confirm.onclick = null; }
 }
 
 function promptSaveBeforeLeaving() {
@@ -7581,23 +7597,88 @@ function promptSaveBeforeLeaving() {
     var message = document.getElementById('saveTestModalMessage');
     var list = document.getElementById('saveTestModalList');
     var empty = document.getElementById('saveTestModalEmpty');
-    var buttons = document.querySelector('.save-test-modal-buttons');
+    var cancel = document.getElementById('saveTestModalCancel');
+    var confirm = document.getElementById('saveTestModalConfirm');
 
     title.textContent = 'Save Before Leaving?';
     message.textContent = 'You have an active test. Would you like to save it before leaving?';
     list.style.display = 'none';
     empty.style.display = 'none';
 
-    // Clear old buttons and create new ones
-    var newButtons = document.createElement('div');
-    newButtons.className = 'save-test-modal-buttons';
-    newButtons.innerHTML = '<button class="save-test-modal-btn save-test-modal-btn-cancel" onclick="closeSaveTestModal(); resetTestMode();">Leave Without Saving</button>' +
-        '<button class="save-test-modal-btn" onclick="closeSaveTestModal();">Cancel</button>' +
-        '<button class="save-test-modal-btn save-test-modal-btn-confirm" onclick="saveTestForLater(); closeSaveTestModal();">Save and Leave</button>';
+    // Reconfigure existing buttons for the leave prompt
+    cancel.textContent = 'Leave Without Saving';
+    cancel.onclick = function() { closeSaveTestModal(); resetTestMode(); };
 
-    buttons.parentNode.replaceChild(newButtons, buttons);
+    confirm.textContent = 'Save and Leave';
+    confirm.onclick = function() { saveAndLeaveTest(); };
+
+    // Add a Cancel (stay) button if not already present
+    var stayBtn = document.getElementById('saveTestModalStayBtn');
+    if (!stayBtn) {
+        stayBtn = document.createElement('button');
+        stayBtn.id = 'saveTestModalStayBtn';
+        stayBtn.className = 'save-test-modal-btn';
+        stayBtn.textContent = 'Cancel';
+        stayBtn.onclick = closeSaveTestModal;
+        cancel.parentNode.insertBefore(stayBtn, confirm);
+    } else {
+        stayBtn.style.display = '';
+    }
+
     overlay.classList.add('active');
     document.body.style.overflow = 'hidden';
+}
+
+async function saveAndLeaveTest() {
+    closeSaveTestModal();
+
+    if (!currentSession || !currentTest) {
+        showError('No active test to save');
+        resetTestMode();
+        return;
+    }
+
+    // Collect answers directly (same as saveTestForLater but skips the modal)
+    var studentAnswers = {};
+    if (currentTest.questions) {
+        currentTest.questions.forEach(function(question) {
+            var questionId = question.id;
+            var answerText = '';
+            if (question.question_type === 'mcq') {
+                var selectedRadio = document.querySelector('.mcq-radio[data-question-id="' + questionId + '"]:checked');
+                answerText = selectedRadio ? selectedRadio.value : '';
+            } else {
+                var textarea = document.querySelector('.test-answer-textarea[data-question-id="' + questionId + '"]');
+                if (textarea && !textarea.disabled) {
+                    answerText = textarea.value.trim();
+                }
+            }
+            studentAnswers[questionId] = answerText;
+        });
+    }
+
+    var elapsed = testExamStartTime ? Math.floor((Date.now() - testExamStartTime) / 1000) : 0;
+    pendingSaveData = { studentAnswers: studentAnswers, elapsed: elapsed };
+
+    // Check saved count first
+    try {
+        var { data: existingSaved, error: countError } = await supabaseClient
+            .from('saved_tests')
+            .select('id', { count: 'exact', head: true })
+            .eq('user_id', currentSession.user.id);
+
+        if (!countError) {
+            var count = existingSaved ? existingSaved.length : 0;
+            if (count >= 5) {
+                showError('You have 5 saved tests already. Go to Saved Tests to delete one first.');
+                return;
+            }
+        }
+    } catch (e) {
+        // Continue with save attempt even if count check fails
+    }
+
+    await performSaveTest();
 }
 
 async function loadSavedTests() {
