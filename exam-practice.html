@@ -4986,8 +4986,27 @@ function renderTestQuestionResults(questions) {
                 '</div>';
         }
 
-        // AO breakdown grid
-        if (question.ao_breakdown) {
+        // Assessment display: AO grid for points-based, Level descriptor for levels-based
+        var isLevelsBased = question.question_type === 'levels_based' || (question.level && question.total_marks >= 6);
+
+        if (isLevelsBased && question.level !== null && question.level !== undefined) {
+            // Levels-based: show level achieved with descriptor
+            var levelDescriptors = getLevelDescriptors(question.total_marks, currentTest ? currentTest.board : null);
+            var levelNum = parseInt(question.level) || 0;
+            var descriptor = levelDescriptors[levelNum] || '';
+            var maxLevel = Object.keys(levelDescriptors).length;
+
+            var levelColor = levelNum === 0 ? '#e74c3c' : levelNum <= 1 ? '#e67e22' : levelNum <= 2 ? '#f39c12' : levelNum <= 3 ? '#27ae60' : '#1e8449';
+
+            resultHTML += '<div style="margin-top: 0.75rem; padding: 1rem; border-radius: 12px; background: linear-gradient(135deg, ' + levelColor + '15, ' + levelColor + '08); border: 1px solid ' + levelColor + '30;">' +
+                '<div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">' +
+                '<span style="background: ' + levelColor + '; color: white; padding: 0.35rem 1rem; border-radius: 20px; font-weight: 700; font-size: 0.9rem;">Level ' + levelNum + (maxLevel > 0 ? ' / ' + maxLevel : '') + '</span>' +
+                '<span style="font-size: 0.85rem; color: var(--gray-600); font-weight: 600;">' + question.marks_awarded + ' / ' + question.total_marks + ' marks</span>' +
+                '</div>' +
+                (descriptor ? '<div style="font-size: 0.85rem; color: var(--gray-600); line-height: 1.5;">' + descriptor + '</div>' : '') +
+                '</div>';
+        } else if (question.ao_breakdown) {
+            // Points-based: show AO grid
             resultHTML += '<div class="ao-grid">';
             var aoLabels = { ao1: 'Knowledge', ao2: 'Application', ao3: 'Analysis', ao4: 'Evaluation' };
             ['ao1', 'ao2', 'ao3', 'ao4'].forEach(function(ao) {
@@ -5000,11 +5019,6 @@ function renderTestQuestionResults(questions) {
                 }
             });
             resultHTML += '</div>';
-        }
-
-        // Level badge for 8+ mark questions
-        if (question.level) {
-            resultHTML += '<div style="margin-top: 0.5rem;"><span class="question-level-badge">Level ' + question.level + '</span></div>';
         }
 
         resultHTML += '</div>';
@@ -5383,7 +5397,8 @@ const LOGO_BASE64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAACFCAYAA
             results.question_results.forEach(function(qr, qIdx) {
                 // Estimate total height for this question to try keeping it on one page
                 var estH = 14; // header bar
-                if (qr.total_marks >= 2 && qr.total_marks <= 6 && qr.ao_breakdown) estH += 18;
+                var qrIsLevels = (qr.marking_method === 'levels_based' || qr.question_type === 'levels_based') || (qr.level && qr.total_marks >= 6);
+                if (!qrIsLevels && qr.total_marks >= 2 && qr.ao_breakdown) estH += 18;
                 if (paper.questions && paper.questions[qIdx] && paper.questions[qIdx].text) {
                     estH += measureText(paper.questions[qIdx].text, contentWidth - 12, 8.5, 4) + 16;
                 }
@@ -5431,7 +5446,7 @@ const LOGO_BASE64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAACFCAYAA
                 doc.setFontSize(8);
                 doc.text(marksStr, pageWidth - margin - marksW / 2 - 3, y + 6.5, { align: 'center' });
                 
-                if (qr.total_marks >= 8 && qr.level) {
+                if (qrIsLevels && qr.level) {
                     var levelStr = 'Level ' + qr.level;
                     var levelW = doc.getTextWidth(levelStr) + 8;
                     doc.setFillColor(60, 85, 120);
@@ -5443,8 +5458,8 @@ const LOGO_BASE64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAACFCAYAA
                 
                 y += 14;
                 
-                // AO breakdown for 2-6 mark questions
-                if (qr.total_marks >= 2 && qr.total_marks <= 6 && qr.ao_breakdown) {
+                // AO breakdown for points-based questions only (skip for levels-based)
+                if (!qrIsLevels && qr.ao_breakdown) {
                     var aoLabels = ['AO1', 'AO2', 'AO3', 'AO4'];
                     var aoNames = ['Knowledge', 'Application', 'Analysis', 'Evaluation'];
                     var aoColorMap = [[52, 152, 219], [230, 126, 34], [155, 89, 182], [231, 76, 60]];
@@ -6321,28 +6336,49 @@ function renderFeedback(marking, question) {
 
     html += '</div></div>';
 
-    // AO Breakdown
-    var ao = marking.ao_breakdown || {};
-    var aoLabels = ['AO1', 'AO2', 'AO3', 'AO4'];
-    var aoNames = ['Knowledge', 'Application', 'Analysis', 'Evaluation'];
-    var hasAO4 = currentBoard === 'edexcel_ial' || currentBoard === 'edexcel_uk';
+    // Assessment display: AOs for points-based, Level descriptor for levels-based
+    var fbIsLevels = marking.marking_method === 'levels_based' || (marking.level && totalMarks >= 6);
 
-    var visibleAOs = aoLabels.filter(function(label, i) {
-        if (label === 'AO4' && !hasAO4) return false;
-        return ao[label] !== null && ao[label] !== undefined;
-    });
+    if (fbIsLevels && marking.level !== null && marking.level !== undefined) {
+        // Levels-based: show level with descriptor
+        var fbDescriptors = getLevelDescriptors(totalMarks, currentBoard);
+        var fbLevelNum = parseInt(marking.level) || 0;
+        var fbDescriptor = fbDescriptors[fbLevelNum] || '';
+        var fbMaxLevel = Object.keys(fbDescriptors).length;
+        var fbLevelColor = fbLevelNum === 0 ? '#e74c3c' : fbLevelNum <= 1 ? '#e67e22' : fbLevelNum <= 2 ? '#f39c12' : fbLevelNum <= 3 ? '#27ae60' : '#1e8449';
 
-    if (visibleAOs.length > 0) {
-        html += '<div class="ao-grid" style="grid-template-columns: repeat(' + Math.min(visibleAOs.length, 4) + ', 1fr);">';
-        visibleAOs.forEach(function(label, i) {
-            var idx = aoLabels.indexOf(label);
-            html += '<div class="ao-card" style="border-color: var(--skill-' + aoNames[idx].toLowerCase() + '); animation-delay: ' + (0.1 + i * 0.07) + 's;">';
-            html += '<div class="ao-label" style="color: var(--skill-' + aoNames[idx].toLowerCase() + ');">' + label + '</div>';
-            html += '<div class="ao-value">' + (ao[label] || 0) + '</div>';
-            html += '<div class="ao-name">' + aoNames[idx] + '</div>';
-            html += '</div>';
-        });
+        html += '<div style="margin: 1rem 0; padding: 1.25rem; border-radius: 16px; background: linear-gradient(135deg, ' + fbLevelColor + '12, ' + fbLevelColor + '06); border: 2px solid ' + fbLevelColor + '30; animation: fadeInUp 0.5s ease forwards; animation-delay: 0.15s; opacity: 0;">';
+        html += '<div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">';
+        html += '<span style="background: ' + fbLevelColor + '; color: white; padding: 0.4rem 1.25rem; border-radius: 20px; font-weight: 700; font-size: 1rem;">Level ' + fbLevelNum + (fbMaxLevel > 0 ? ' / ' + fbMaxLevel : '') + '</span>';
         html += '</div>';
+        if (fbDescriptor) {
+            html += '<div style="font-size: 0.9rem; color: var(--gray-600); line-height: 1.6;">' + fbDescriptor + '</div>';
+        }
+        html += '</div>';
+    } else {
+        // Points-based: show AO grid
+        var ao = marking.ao_breakdown || {};
+        var aoLabels = ['AO1', 'AO2', 'AO3', 'AO4'];
+        var aoNames = ['Knowledge', 'Application', 'Analysis', 'Evaluation'];
+        var hasAO4 = currentBoard === 'edexcel_ial' || currentBoard === 'edexcel_uk';
+
+        var visibleAOs = aoLabels.filter(function(label, i) {
+            if (label === 'AO4' && !hasAO4) return false;
+            return ao[label] !== null && ao[label] !== undefined;
+        });
+
+        if (visibleAOs.length > 0) {
+            html += '<div class="ao-grid" style="grid-template-columns: repeat(' + Math.min(visibleAOs.length, 4) + ', 1fr);">';
+            visibleAOs.forEach(function(label, i) {
+                var idx = aoLabels.indexOf(label);
+                html += '<div class="ao-card" style="border-color: var(--skill-' + aoNames[idx].toLowerCase() + '); animation-delay: ' + (0.1 + i * 0.07) + 's;">';
+                html += '<div class="ao-label" style="color: var(--skill-' + aoNames[idx].toLowerCase() + ');">' + label + '</div>';
+                html += '<div class="ao-value">' + (ao[label] || 0) + '</div>';
+                html += '<div class="ao-name">' + aoNames[idx] + '</div>';
+                html += '</div>';
+            });
+            html += '</div>';
+        }
     }
 
     // Detailed Feedback
@@ -6565,6 +6601,132 @@ async function showDashboard() {
         console.error('Dashboard error:', error);
         content.innerHTML = '<div class="error-card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><div class="error-text">Could not load your progress. Please try again later.</div></div>';
     }
+}
+
+// ===== LEVEL DESCRIPTORS BY BOARD AND MARK VALUE =====
+function getLevelDescriptors(totalMarks, board) {
+    // Returns an object: { 0: 'desc', 1: 'desc', 2: 'desc', ... }
+    // Level 0 means no creditable content
+
+    // EDEXCEL GCSE (1BS0)
+    if (board === 'edexcel_gcse') {
+        if (totalMarks === 6) {
+            return {
+                0: 'No creditable content.',
+                1: 'Limited response. One sided or generic with little development.',
+                2: 'Some balance or analysis, but may lack depth or context.',
+                3: 'Balanced and developed response with clear analysis and application.'
+            };
+        }
+        if (totalMarks === 9) {
+            return {
+                0: 'No creditable content.',
+                1: 'Limited justification with weak reasoning.',
+                2: 'Sound justification with some analysis and evaluation.',
+                3: 'Detailed justification with thorough analysis and well supported judgement.'
+            };
+        }
+        if (totalMarks === 12) {
+            return {
+                0: 'No creditable content.',
+                1: 'Limited knowledge with a generic response.',
+                2: 'Some relevant knowledge and application.',
+                3: 'Good knowledge, applied analysis with some evaluation.',
+                4: 'Detailed knowledge, strong application, thorough analysis with well supported judgement and conclusion.'
+            };
+        }
+    }
+
+    // EDEXCEL IGCSE (4BS1)
+    if (board === 'edexcel_igcse') {
+        if (totalMarks === 6) {
+            return {
+                0: 'No creditable content.',
+                1: 'Limited analysis with generic context.',
+                2: 'Some analysis with application to the business.',
+                3: 'Developed analysis with strong contextual application and cause/effect chains.'
+            };
+        }
+        if (totalMarks === 9) {
+            return {
+                0: 'No creditable content.',
+                1: 'Limited justification with weak reasoning.',
+                2: 'Sound justification with some analysis and evaluation.',
+                3: 'Detailed justification with thorough analysis and well supported judgement.'
+            };
+        }
+        if (totalMarks === 12) {
+            return {
+                0: 'No creditable content.',
+                1: 'Limited response with generic content.',
+                2: 'Some relevant analysis with application.',
+                3: 'Good analysis, applied with some evaluation.',
+                4: 'Thorough analysis, strong application, well supported judgement with conclusion.'
+            };
+        }
+    }
+
+    // AQA GCSE (8132)
+    if (board === 'aqa_gcse') {
+        if (totalMarks === 6) {
+            return {
+                0: 'No creditable content.',
+                1: 'Limited analysis with generic context.',
+                2: 'Sound analysis with some inconsistencies. Uses business context.',
+                3: 'Detailed analysis throughout. Specific contextual reference with clear cause and effect.'
+            };
+        }
+        if (totalMarks === 9) {
+            return {
+                0: 'No creditable content.',
+                1: 'Limited recommendation with weak justification.',
+                2: 'Sound recommendation with analysis but may lack depth.',
+                3: 'Detailed recommendation with thorough analysis and evaluation. Clear judgement supported by evidence.'
+            };
+        }
+        if (totalMarks === 12) {
+            return {
+                0: 'No creditable content.',
+                1: 'Limited knowledge and generic response.',
+                2: 'Some relevant knowledge with limited analysis.',
+                3: 'Good knowledge, applied analysis with some evaluation.',
+                4: 'Detailed knowledge, strong application, thorough analysis with well supported judgement.'
+            };
+        }
+    }
+
+    // CIE IGCSE (0450) - only the 12m Justify in Paper 2 is levels-based
+    if (board === 'cie_igcse') {
+        if (totalMarks === 12) {
+            return {
+                0: 'No creditable content.',
+                1: 'Limited knowledge and analysis. One sided argument.',
+                2: 'Sound knowledge with some analysis. Some balance in arguments.',
+                3: 'Detailed knowledge, strong analysis, well supported evaluative judgement with clear recommendation.'
+            };
+        }
+    }
+
+    // Generic fallback for any board/marks not specifically mapped
+    if (totalMarks >= 9) {
+        return {
+            0: 'No creditable content.',
+            1: 'Limited response.',
+            2: 'Some relevant content with partial development.',
+            3: 'Good response with analysis and some evaluation.',
+            4: 'Excellent response with thorough analysis and well supported judgement.'
+        };
+    }
+    if (totalMarks >= 6) {
+        return {
+            0: 'No creditable content.',
+            1: 'Limited response with little development.',
+            2: 'Some relevant analysis with application.',
+            3: 'Developed response with clear analysis and context.'
+        };
+    }
+
+    return {};
 }
 
 // ===== UTILITIES =====
