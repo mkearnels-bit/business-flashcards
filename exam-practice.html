@@ -1906,9 +1906,7 @@
     text-align: center;
 }
 .test-submit-section .action-btn {
-    display: inline-flex;
     flex: none;
-    margin: 0 auto;
 }
 
 .test-submit-message {
@@ -7734,8 +7732,8 @@ async function showSavedTestsView() {
                 '</div>' +
                 '</div>' +
                 '<div style="display: flex; gap: 0.75rem; margin-top: auto;">' +
-                '<button onclick="resumeSavedTest(' + saved.id + ')" style="flex: 1; padding: 10px 16px; background: linear-gradient(135deg, var(--accent), var(--accent-light)); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Resume</button>' +
-                '<button onclick="deleteAndRefreshSavedTests(' + saved.id + ')" style="padding: 10px 16px; background: var(--error-light); color: var(--error); border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Delete</button>' +
+                '<button onclick="resumeSavedTest(\'' + saved.id + '\')" style="flex: 1; padding: 10px 16px; background: linear-gradient(135deg, var(--accent), var(--accent-light)); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Resume</button>' +
+                '<button onclick="deleteAndRefreshSavedTests(\'' + saved.id + '\')" style="padding: 10px 16px; background: var(--error-light); color: var(--error); border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Delete</button>' +
                 '</div>';
 
             container.appendChild(card);
