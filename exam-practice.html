@@ -3039,6 +3039,12 @@
                 <div class="loading-orb"></div>
             </div>
             <div class="loading-text" id="loadingText">Generating your question...</div>
+            <div style="margin-top: 1.25rem; padding: 0.75rem 1.5rem; background: rgba(255,255,255,0.08); border-radius: 12px; max-width: 420px;">
+                <div style="font-size: 0.85rem; color: var(--gray-400); line-height: 1.6; text-align: center;">
+                    This can take up to a minute. Please do not refresh or click back.
+                    <br>If you get an error, please <a href="contact.html" style="color: var(--accent); text-decoration: underline;">report the bug to us</a>.
+                </div>
+            </div>
         </div>
     </div>
 
@@ -3145,6 +3151,12 @@
                 <div class="test-progress-fill" id="testProgressFill"></div>
             </div>
             <div class="test-progress-percentage" id="testProgressPercentage">0%</div>
+            <div style="margin: 1.25rem auto 0; padding: 0.75rem 1.5rem; background: rgba(30, 58, 95, 0.06); border: 1px solid rgba(30, 58, 95, 0.1); border-radius: 12px; max-width: 480px;">
+                <div style="font-size: 0.85rem; color: var(--gray-500); line-height: 1.6; text-align: center;">
+                    Tests and exams can take a few minutes to produce. Please do not refresh or click back. Wait for the "I'm Ready" button to appear below.
+                    <br>If you get an error, please <a href="contact.html" style="color: var(--accent); text-decoration: underline;">report the bug to us</a>.
+                </div>
+            </div>
             <div class="test-tips-carousel">
                 <ul class="test-tips-checklist" id="testTipsChecklist">
                     <li>Have you got your calculator?</li>
@@ -3374,10 +3386,6 @@ const BOARD_DATA = {
             { id: 'paper2', code: '1BS0/02', name: 'Building a Business', color: '#3498db', themes: 'Theme 2' }
         ],
         questionTypes: [
-            { id: 'mcq_1', marks: 1, name: 'Multiple Choice', desc: 'Select correct answer', command: 'state' },
-            { id: 'define_1', marks: 1, name: 'Define', desc: 'State meaning of a term', command: 'define' },
-            { id: 'calculate_2', marks: 2, name: 'Calculate', desc: 'Show your working', command: 'calculate' },
-            { id: 'outline_2', marks: 2, name: 'Outline', desc: 'Brief explanation', command: 'outline' },
             { id: 'explain_3', marks: 3, name: 'Explain', desc: 'Point, explanation, impact', command: 'explain' },
             { id: 'discuss_6', marks: 6, name: 'Discuss', desc: 'Balanced argument both sides', command: 'discuss' },
             { id: 'analyse_6', marks: 6, name: 'Analyse', desc: 'Examine impact with reasoning', command: 'analyse' },
@@ -3398,11 +3406,6 @@ const BOARD_DATA = {
             { id: 'paper2', code: '4BS1/02', name: 'Investigating Large Businesses', color: '#3498db', themes: 'Operations, Finance & HR' }
         ],
         questionTypes: [
-            { id: 'mcq_1', marks: 1, name: 'Multiple Choice', desc: 'Select correct answer', command: 'state' },
-            { id: 'define_1', marks: 1, name: 'Define', desc: 'State meaning of a term', command: 'define' },
-            { id: 'state_1', marks: 1, name: 'State', desc: 'Brief factual answer', command: 'state' },
-            { id: 'calculate_2', marks: 2, name: 'Calculate', desc: 'Show your working', command: 'calculate' },
-            { id: 'outline_2', marks: 2, name: 'Outline', desc: 'Identify and briefly develop', command: 'outline' },
             { id: 'explain_3', marks: 3, name: 'Explain', desc: 'Point and development', command: 'explain' },
             { id: 'analyse_6', marks: 6, name: 'Analyse', desc: 'Examine in detail', command: 'analyse' },
             { id: 'justify_9', marks: 9, name: 'Justify', desc: 'Choose between two options', command: 'justify' },
@@ -3421,12 +3424,7 @@ const BOARD_DATA = {
             { id: 'paper2', code: '8132/2', name: 'Influences of Marketing and Finance on Business Activity', color: '#3498db', themes: 'Units 1-2, 5-6' }
         ],
         questionTypes: [
-            { id: 'mcq_1', marks: 1, name: 'Multiple Choice', desc: 'Select correct answer', command: 'state' },
-            { id: 'identify_2', marks: 2, name: 'Identify/Give', desc: 'Two brief factual points', command: 'identify' },
-            { id: 'describe_2', marks: 2, name: 'Describe', desc: 'What something is or how it works', command: 'describe' },
-            { id: 'explain_2', marks: 2, name: 'Explain', desc: 'One reason with development', command: 'explain' },
-            { id: 'calculate_2', marks: 2, name: 'Calculate', desc: 'Simple calculation', command: 'calculate' },
-            { id: 'state_explain_4', marks: 4, name: 'State and Explain', desc: 'State and explain two points', command: 'state_and_explain' },
+            { id: 'explain_3', marks: 3, name: 'Explain', desc: 'One reason with full development', command: 'explain' },
             { id: 'explain_4', marks: 4, name: 'Explain', desc: 'Detailed with data/context', command: 'explain' },
             { id: 'calculate_5', marks: 5, name: 'Calculate', desc: 'Multi-step calculation', command: 'calculate' },
             { id: 'analyse_6', marks: 6, name: 'Analyse', desc: 'Examine in detail with application', command: 'analyse' },
@@ -3447,8 +3445,6 @@ const BOARD_DATA = {
             { id: 'paper2', code: '0450/21', name: 'Case Study', color: '#3498db' }
         ],
         questionTypes: [
-            { id: 'define_2', marks: 2, name: 'Define', desc: 'State meaning of a term', command: 'define' },
-            { id: 'identify_2', marks: 2, name: 'Identify', desc: 'Name two items', command: 'identify' },
             { id: 'outline_4', marks: 4, name: 'Outline', desc: 'Identify and briefly develop', command: 'outline' },
             { id: 'explain_6', marks: 6, name: 'Explain', desc: 'Paper 1: Two reasons with analysis', command: 'explain' },
             { id: 'justify_6', marks: 6, name: 'Justify', desc: 'Paper 1: Recommend with reasons', command: 'justify' },
