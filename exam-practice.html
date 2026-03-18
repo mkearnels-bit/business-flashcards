@@ -1966,6 +1966,11 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(100px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
 .test-modal-title {
     font-size: 1.2rem;
     font-weight: 700;
@@ -2014,6 +2019,150 @@
 .test-modal-btn-confirm:hover {
     transform: translateY(-1px);
     box-shadow: 0 4px 15px rgba(230,126,34,0.3);
+}
+
+/* ===== SAVE TEST MODAL ===== */
+.save-test-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.save-test-modal-overlay.active {
+    display: flex;
+}
+
+.save-test-modal {
+    background: white;
+    border-radius: 12px;
+    max-width: 600px;
+    width: 100%;
+    padding: 30px;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    animation: testModalSlideUp 0.3s ease;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.save-test-modal-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.save-test-modal-message {
+    color: var(--gray-600);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.save-test-modal-list {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.save-test-modal-list li {
+    padding: 1rem;
+    border-bottom: 1px solid var(--gray-100);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.save-test-modal-list li:last-child {
+    border-bottom: none;
+}
+
+.save-test-modal-list-item-info {
+    flex: 1;
+}
+
+.save-test-modal-list-item-title {
+    font-weight: 600;
+    color: var(--gray-900);
+    margin-bottom: 0.25rem;
+}
+
+.save-test-modal-list-item-meta {
+    font-size: 0.85rem;
+    color: var(--gray-500);
+}
+
+.save-test-modal-list-btn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    margin-left: 1rem;
+}
+
+.save-test-modal-list-btn-delete {
+    background: var(--error-light);
+    color: var(--error);
+}
+
+.save-test-modal-list-btn-delete:hover {
+    background: #f8b4b0;
+}
+
+.save-test-modal-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+}
+
+.save-test-modal-btn {
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.save-test-modal-btn-cancel {
+    background: var(--gray-100);
+    color: var(--gray-600);
+}
+
+.save-test-modal-btn-cancel:hover {
+    background: var(--gray-200);
+}
+
+.save-test-modal-btn-confirm {
+    background: linear-gradient(135deg, var(--accent), var(--accent-light));
+    color: white;
+}
+
+.save-test-modal-btn-confirm:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(230,126,34,0.3);
+}
+
+.save-test-modal-empty {
+    padding: 2rem;
+    text-align: center;
+    color: var(--gray-500);
 }
 
 /* ===== TEST FEEDBACK ===== */
@@ -2731,6 +2880,10 @@
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                         Admin
                     </a>
+                    <button class="profile-dropdown-item" onclick="showSavedTestsView()" style="background: none; padding: 0.75rem 1rem; width: 100%; text-align: left;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        Saved Tests
+                    </button>
                     <div class="profile-dropdown-divider"></div>
                     <button class="profile-dropdown-item logout-item" id="navLogoutBtn">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
@@ -3153,7 +3306,7 @@
             <div class="test-progress-percentage" id="testProgressPercentage">0%</div>
             <div style="margin: 1.25rem auto 0; padding: 0.75rem 1.5rem; background: rgba(30, 58, 95, 0.06); border: 1px solid rgba(30, 58, 95, 0.1); border-radius: 12px; max-width: 480px;">
                 <div style="font-size: 0.85rem; color: var(--gray-500); line-height: 1.6; text-align: center;">
-                    Tests and exams can take a few minutes to produce. Please do not refresh or click back. Wait for the "I'm Ready" button to appear below.
+                    Tests and exams can take a few minutes to produce. Please do not refresh or click back. Wait for the "I'm Ready" button to appear.
                     <br>If you get an error, please <a href="contact.html" style="color: var(--accent); text-decoration: underline;">report the bug to us</a>.
                 </div>
             </div>
@@ -3174,6 +3327,10 @@
 
     <!-- TEST EXAM PHASE -->
     <div class="phase" id="phase-test-exam">
+        <button class="back-btn" onclick="promptSaveBeforeLeaving()" style="position: absolute; top: 1rem; left: 1rem; z-index: 100;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+            Exit
+        </button>
         <div class="test-exam-header">
             <div class="test-exam-title-group">
                 <div class="test-exam-title" id="testExamTitle"></div>
@@ -3274,6 +3431,29 @@
         </div>
     </div>
 
+    <!-- SAVED TESTS PHASE -->
+    <div class="phase" id="phase-saved-tests">
+        <button class="back-btn" onclick="resetTestMode()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+            Back to Selection
+        </button>
+
+        <div style="max-width: 900px; margin: 2rem auto; padding: 0 1rem;">
+            <h1 style="font-size: 2rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem;">Saved Tests</h1>
+            <p style="color: var(--gray-500); font-size: 1rem; margin-bottom: 2rem;">Resume your practice tests or delete to make space for new ones. You can save up to 5 tests.</p>
+
+            <div id="savedTestsContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
+                <!-- Saved test cards will be populated here -->
+            </div>
+
+            <div id="savedTestsEmpty" style="text-align: center; padding: 3rem 1rem; color: var(--gray-500);">
+                <svg style="width: 64px; height: 64px; margin: 0 auto 1rem; opacity: 0.3;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                <p style="font-size: 1.1rem; font-weight: 600;">No saved tests yet</p>
+                <p style="font-size: 0.95rem; margin-top: 0.5rem;">Start a test and click "Save for Later" to save your progress.</p>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <!-- Test Confirmation Dialog Modal -->
@@ -3290,6 +3470,20 @@
 
 <!-- Confetti Container -->
 <div class="confetti-container" id="confettiContainer"></div>
+
+<!-- Save Test Modal -->
+<div class="save-test-modal-overlay" id="saveTestModalOverlay">
+    <div class="save-test-modal" id="saveTestModalContent">
+        <div class="save-test-modal-title" id="saveTestModalTitle">Save Test</div>
+        <div class="save-test-modal-message" id="saveTestModalMessage"></div>
+        <ul class="save-test-modal-list" id="saveTestModalList" style="display: none;"></ul>
+        <div class="save-test-modal-empty" id="saveTestModalEmpty" style="display: none;"></div>
+        <div class="save-test-modal-buttons">
+            <button class="save-test-modal-btn save-test-modal-btn-cancel" id="saveTestModalCancel">Cancel</button>
+            <button class="save-test-modal-btn save-test-modal-btn-confirm" id="saveTestModalConfirm">Confirm</button>
+        </div>
+    </div>
+</div>
 
 <script>
 // ===== CONFIG =====
@@ -4506,7 +4700,10 @@ function renderTestExam(paperData) {
     var submitSection = document.createElement('div');
     submitSection.className = 'test-submit-section';
     submitSection.innerHTML = '<div class="test-submit-message">Review your answers before submitting</div>' +
+        '<div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">' +
         '<button class="action-btn action-btn-primary" onclick="submitTestAnswers()" style="padding: 14px 40px; font-size: 1.05em;">Submit Test</button>' +
+        '<button class="action-btn" onclick="saveTestForLater()" style="padding: 14px 40px; font-size: 1.05em; background: white; color: var(--primary); border: 2px solid var(--primary);">Save for Later</button>' +
+        '</div>' +
         '<div class="ai-disclaimer-footer">This is an AI-generated practice paper designed to reflect the style of the relevant exam board. It is not produced by, endorsed by, or affiliated with any exam board. Always refer to official specifications and past papers as your primary resource.</div>';
     examContent.appendChild(submitSection);
 }
@@ -5721,6 +5918,13 @@ function showPhase(phase) {
     document.querySelectorAll('.phase').forEach(function(el) { el.classList.remove('active'); });
     document.getElementById('phase-' + phase).classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Push a history state when entering a test so browser back stays on this page
+    if (phase === 'test-exam') {
+        history.pushState({ phase: 'test-exam' }, '', window.location.pathname);
+    } else if (phase === 'selection') {
+        history.replaceState({ phase: 'selection' }, '', window.location.pathname);
+    }
 }
 
 function resetToSelection() {
@@ -7210,6 +7414,394 @@ function closeExtractPopup() {
         document.body.style.overflow = '';
     }
 }
+
+// ===== SAVE TEST FOR LATER =====
+var pendingSaveData = null;
+
+function saveTestForLater() {
+    if (!currentSession) {
+        showError('You must be logged in to save tests');
+        return;
+    }
+
+    if (!currentTest) {
+        showError('No active test to save');
+        return;
+    }
+
+    // Collect student answers
+    var studentAnswers = {};
+    if (currentTest && currentTest.questions) {
+        currentTest.questions.forEach(function(question) {
+            var questionId = question.id;
+            var answerText = '';
+
+            if (question.question_type === 'mcq') {
+                var selectedRadio = document.querySelector('.mcq-radio[data-question-id="' + questionId + '"]:checked');
+                answerText = selectedRadio ? selectedRadio.value : '';
+            } else {
+                var textarea = document.querySelector('.test-answer-textarea[data-question-id="' + questionId + '"]');
+                if (textarea && !textarea.disabled) {
+                    answerText = textarea.value.trim();
+                }
+            }
+            studentAnswers[questionId] = answerText;
+        });
+    }
+
+    var elapsed = testExamStartTime ? Math.floor((Date.now() - testExamStartTime) / 1000) : 0;
+
+    pendingSaveData = { studentAnswers: studentAnswers, elapsed: elapsed };
+    showSaveTestModal();
+}
+
+async function showSaveTestModal() {
+    try {
+        var { data: existingSaved, error: fetchError } = await supabaseClient
+            .from('saved_tests')
+            .select('id, test_title, board, unit, created_at')
+            .eq('user_id', currentSession.user.id)
+            .order('updated_at', { ascending: false });
+
+        if (fetchError) throw fetchError;
+
+        var overlay = document.getElementById('saveTestModalOverlay');
+        var title = document.getElementById('saveTestModalTitle');
+        var message = document.getElementById('saveTestModalMessage');
+        var list = document.getElementById('saveTestModalList');
+        var empty = document.getElementById('saveTestModalEmpty');
+        var confirm = document.getElementById('saveTestModalConfirm');
+        var cancel = document.getElementById('saveTestModalCancel');
+
+        if (existingSaved && existingSaved.length >= 5) {
+            title.textContent = 'Save Limit Reached';
+            message.textContent = 'You have reached the maximum of 5 saved tests. Delete one to save this test.';
+            list.style.display = 'block';
+            empty.style.display = 'none';
+            list.innerHTML = '';
+
+            existingSaved.forEach(function(saved) {
+                var date = new Date(saved.created_at);
+                var dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                var li = document.createElement('li');
+                li.innerHTML = '<div class="save-test-modal-list-item-info">' +
+                    '<div class="save-test-modal-list-item-title">' + (saved.test_title || 'Untitled') + '</div>' +
+                    '<div class="save-test-modal-list-item-meta">' + (saved.board || 'Unknown Board') + ' - Saved ' + dateStr + '</div>' +
+                    '</div>' +
+                    '<button class="save-test-modal-list-btn save-test-modal-list-btn-delete" data-saved-id="' + saved.id + '" onclick="retryDeleteAndSave(this)">Delete</button>';
+                list.appendChild(li);
+            });
+
+            confirm.textContent = 'Retry Save';
+            confirm.onclick = function() {
+                closeSaveTestModal();
+                showSaveTestModal();
+            };
+        } else {
+            title.textContent = 'Save Test for Later?';
+            message.textContent = 'Your test progress will be saved. You can resume it later.';
+            list.style.display = 'none';
+            empty.style.display = 'none';
+
+            confirm.textContent = 'Save';
+            confirm.onclick = function() {
+                performSaveTest();
+            };
+        }
+
+        cancel.onclick = closeSaveTestModal;
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+    } catch (err) {
+        console.error('Error showing save modal:', err);
+        showError('Failed to check saved tests');
+    }
+}
+
+async function retryDeleteAndSave(btn) {
+    var savedId = btn.getAttribute('data-saved-id');
+    await deleteSavedTest(savedId);
+    await showSaveTestModal();
+}
+
+async function performSaveTest() {
+    try {
+        closeSaveTestModal();
+
+        if (!pendingSaveData) {
+            showError('No test data to save');
+            return;
+        }
+
+        var testTitle = (currentTest.title || '') + (currentUnit ? ' - ' + currentUnit : '');
+
+        var { error } = await supabaseClient
+            .from('saved_tests')
+            .insert({
+                user_id: currentSession.user.id,
+                test_title: testTitle,
+                board: currentBoard || '',
+                unit: currentUnit || '',
+                test_type: currentMode || '',
+                paper_data: currentTest,
+                student_answers: pendingSaveData.studentAnswers,
+                elapsed_seconds: pendingSaveData.elapsed,
+                duration_minutes: currentTest.duration_minutes || 0,
+                total_marks: currentTest.total_marks || 0,
+                question_count: (currentTest.questions || []).length
+            });
+
+        if (error) throw error;
+
+        pendingSaveData = null;
+        showSuccess('Test saved successfully! You can resume it later from your Saved Tests.');
+        setTimeout(resetTestMode, 2000);
+
+    } catch (err) {
+        console.error('Error saving test:', err);
+        showError('Failed to save test. Please try again.');
+    }
+}
+
+function closeSaveTestModal() {
+    var overlay = document.getElementById('saveTestModalOverlay');
+    if (overlay) {
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+function promptSaveBeforeLeaving() {
+    if (!currentTest || !testExamStartTime) {
+        resetTestMode();
+        return;
+    }
+
+    var overlay = document.getElementById('saveTestModalOverlay');
+    var title = document.getElementById('saveTestModalTitle');
+    var message = document.getElementById('saveTestModalMessage');
+    var list = document.getElementById('saveTestModalList');
+    var empty = document.getElementById('saveTestModalEmpty');
+    var buttons = document.querySelector('.save-test-modal-buttons');
+
+    title.textContent = 'Save Before Leaving?';
+    message.textContent = 'You have an active test. Would you like to save it before leaving?';
+    list.style.display = 'none';
+    empty.style.display = 'none';
+
+    // Clear old buttons and create new ones
+    var newButtons = document.createElement('div');
+    newButtons.className = 'save-test-modal-buttons';
+    newButtons.innerHTML = '<button class="save-test-modal-btn save-test-modal-btn-cancel" onclick="closeSaveTestModal(); resetTestMode();">Leave Without Saving</button>' +
+        '<button class="save-test-modal-btn" onclick="closeSaveTestModal();">Cancel</button>' +
+        '<button class="save-test-modal-btn save-test-modal-btn-confirm" onclick="saveTestForLater(); closeSaveTestModal();">Save and Leave</button>';
+
+    buttons.parentNode.replaceChild(newButtons, buttons);
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+async function loadSavedTests() {
+    try {
+        if (!currentSession) return null;
+
+        var { data, error } = await supabaseClient
+            .from('saved_tests')
+            .select('*')
+            .eq('user_id', currentSession.user.id)
+            .order('updated_at', { ascending: false });
+
+        if (error) throw error;
+        return data || [];
+
+    } catch (err) {
+        console.error('Error loading saved tests:', err);
+        return [];
+    }
+}
+
+async function resumeSavedTest(savedTestId) {
+    try {
+        var { data: savedTest, error } = await supabaseClient
+            .from('saved_tests')
+            .select('*')
+            .eq('id', savedTestId)
+            .eq('user_id', currentSession.user.id)
+            .single();
+
+        if (error || !savedTest) throw new Error('Test not found');
+
+        currentTest = savedTest.paper_data;
+        currentMode = savedTest.test_type || 'unit_exam';
+        currentUnit = savedTest.unit;
+        currentBoard = savedTest.board;
+
+        // Render the test
+        renderTestExam(currentTest);
+
+        // Restore student answers
+        if (savedTest.student_answers) {
+            Object.keys(savedTest.student_answers).forEach(function(qId) {
+                var answer = savedTest.student_answers[qId];
+                var textarea = document.querySelector('.test-answer-textarea[data-question-id="' + qId + '"]');
+                var radio = document.querySelector('.mcq-radio[data-question-id="' + qId + '"]:checked');
+
+                if (textarea) {
+                    textarea.value = answer;
+                } else if (answer) {
+                    var correctRadio = document.querySelector('.mcq-radio[data-question-id="' + qId + '"][value="' + answer + '"]');
+                    if (correctRadio) correctRadio.checked = true;
+                }
+            });
+        }
+
+        // Restore timer
+        if (savedTest.elapsed_seconds && savedTest.duration_minutes) {
+            testExamStartTime = Date.now() - (savedTest.elapsed_seconds * 1000);
+            startTestTimer(savedTest.duration_minutes);
+        }
+
+        // Delete the saved test record
+        await supabaseClient
+            .from('saved_tests')
+            .delete()
+            .eq('id', savedTestId)
+            .eq('user_id', currentSession.user.id);
+
+        showPhase('test-exam');
+        showSuccess('Test resumed!');
+
+    } catch (err) {
+        console.error('Error resuming test:', err);
+        showError('Failed to resume test');
+    }
+}
+
+async function deleteSavedTest(savedTestId) {
+    try {
+        var { error } = await supabaseClient
+            .from('saved_tests')
+            .delete()
+            .eq('id', savedTestId)
+            .eq('user_id', currentSession.user.id);
+
+        if (error) throw error;
+
+        showSuccess('Test deleted');
+
+    } catch (err) {
+        console.error('Error deleting test:', err);
+        showError('Failed to delete test');
+    }
+}
+
+async function showSavedTestsView() {
+    try {
+        var savedTests = await loadSavedTests();
+
+        var container = document.getElementById('savedTestsContainer');
+        var empty = document.getElementById('savedTestsEmpty');
+
+        if (!savedTests || savedTests.length === 0) {
+            container.style.display = 'none';
+            empty.style.display = 'block';
+            showPhase('saved-tests');
+            return;
+        }
+
+        container.style.display = 'grid';
+        empty.style.display = 'none';
+        container.innerHTML = '';
+
+        savedTests.forEach(function(saved) {
+            var date = new Date(saved.created_at);
+            var dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+            var elapsedMins = Math.floor((saved.elapsed_seconds || 0) / 60);
+            var totalMins = saved.duration_minutes || 60;
+            var progressStr = elapsedMins + ' / ' + totalMins + ' mins';
+
+            var card = document.createElement('div');
+            card.style.cssText = 'background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; flex-direction: column;';
+            card.innerHTML = '<div style="margin-bottom: 1rem;">' +
+                '<h3 style="font-size: 1.1rem; font-weight: 700; color: var(--primary); margin-bottom: 0.5rem;">' + (saved.test_title || 'Untitled Test') + '</h3>' +
+                '<p style="color: var(--gray-500); font-size: 0.9rem; margin-bottom: 0.5rem;">' + (saved.board || 'Unknown Board') + '</p>' +
+                '<div style="display: flex; gap: 1.5rem; font-size: 0.85rem; color: var(--gray-600); margin-bottom: 1rem;">' +
+                '<div>Saved ' + dateStr + '</div>' +
+                '<div>' + progressStr + '</div>' +
+                '<div>' + (saved.question_count || 0) + ' questions</div>' +
+                '</div>' +
+                '</div>' +
+                '<div style="display: flex; gap: 0.75rem; margin-top: auto;">' +
+                '<button onclick="resumeSavedTest(' + saved.id + ')" style="flex: 1; padding: 10px 16px; background: linear-gradient(135deg, var(--accent), var(--accent-light)); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Resume</button>' +
+                '<button onclick="deleteAndRefreshSavedTests(' + saved.id + ')" style="padding: 10px 16px; background: var(--error-light); color: var(--error); border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Delete</button>' +
+                '</div>';
+
+            container.appendChild(card);
+        });
+
+        showPhase('saved-tests');
+
+    } catch (err) {
+        console.error('Error showing saved tests:', err);
+        showError('Failed to load saved tests');
+    }
+}
+
+async function deleteAndRefreshSavedTests(savedTestId) {
+    await deleteSavedTest(savedTestId);
+    await showSavedTestsView();
+}
+
+function showSuccess(msg) {
+    var el = document.createElement('div');
+    el.style.cssText = 'position: fixed; top: 2rem; right: 2rem; background: linear-gradient(135deg, var(--success), #2ecc71); color: white; padding: 1rem 1.5rem; border-radius: 8px; z-index: 5000; box-shadow: 0 4px 15px rgba(0,0,0,0.2); animation: slideInRight 0.3s ease;';
+    el.textContent = msg;
+    document.body.appendChild(el);
+    setTimeout(function() { el.remove(); }, 3000);
+}
+
+function showError(msg) {
+    var el = document.createElement('div');
+    el.style.cssText = 'position: fixed; top: 2rem; right: 2rem; background: linear-gradient(135deg, var(--error), #c0392b); color: white; padding: 1rem 1.5rem; border-radius: 8px; z-index: 5000; box-shadow: 0 4px 15px rgba(0,0,0,0.2); animation: slideInRight 0.3s ease;';
+    el.textContent = msg;
+    document.body.appendChild(el);
+    setTimeout(function() { el.remove(); }, 3000);
+}
+
+// Add beforeunload handler for save warning
+window.addEventListener('beforeunload', function(e) {
+    if (currentTest && testExamStartTime) {
+        e.preventDefault();
+        e.returnValue = '';
+    }
+});
+
+// Handle browser back button — stay on exam practice page, show save prompt if in a test
+window.addEventListener('popstate', function(e) {
+    var testPhase = document.getElementById('phase-test-exam');
+    var isInTest = testPhase && testPhase.classList.contains('active') && currentTest && testExamStartTime;
+
+    if (isInTest) {
+        // Push state again so back doesn't leave the page
+        history.pushState({ phase: 'test-exam' }, '', window.location.pathname);
+        // Show the save prompt
+        if (typeof promptSaveBeforeLeaving === 'function') {
+            promptSaveBeforeLeaving();
+        } else {
+            // Fallback if save feature not loaded: just go to selection
+            resetTestMode();
+        }
+    } else {
+        // Not in an active test — go to selection phase if not already there
+        var selectionPhase = document.getElementById('phase-selection');
+        if (selectionPhase && !selectionPhase.classList.contains('active')) {
+            history.pushState({ phase: 'selection' }, '', window.location.pathname);
+            showPhase('selection');
+        }
+    }
+});
 
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeExtractPopup();
