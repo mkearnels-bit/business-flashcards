@@ -905,13 +905,23 @@ var LOGO_BASE64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAACFCAYAAAB
             try {
                 var response = await supabaseClient
                     .from('test_results')
-                    .select('paper_data, marking_results')
+                    .select('paper_data, marking_results, percentage, total_marks, total_available, overall_feedback, strengths, development_areas')
                     .eq('id', testId)
                     .eq('user_id', currentSession.user.id)
                     .single();
 
                 if (response.error) throw response.error;
-                downloadTestPDF(response.data.marking_results, response.data.paper_data);
+                var data = response.data;
+                // Build a full results object that the PDF function expects
+                var fullResults = {
+                    question_results: Array.isArray(data.marking_results) ? data.marking_results : (data.marking_results ? data.marking_results.question_results || [] : []),
+                    total_marks: data.total_marks || 0,
+                    total_possible: data.total_available || 0,
+                    overall_feedback: data.overall_feedback || '',
+                    strengths: data.strengths || [],
+                    development_areas: data.development_areas || []
+                };
+                downloadTestPDF(fullResults, data.paper_data);
             } catch (error) {
                 console.error('Error downloading PDF:', error);
                 alert('Unable to download this report. Please try again.');
