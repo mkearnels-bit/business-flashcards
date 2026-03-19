@@ -1008,6 +1008,41 @@
                         </div>
                     </div>
 
+                    <!-- Tests & Exams Stats -->
+                    <h3 style="margin: 2rem 0 1rem; font-weight: 700;">Tests & Exams</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div>
+                                    <div class="stat-label">Topic Tests</div>
+                                    <div class="stat-value" id="epTopicTests">—</div>
+                                </div>
+                                <div class="stat-icon blue">📋</div>
+                            </div>
+                            <div class="stat-change neutral" id="epTopicTestsMarked">Loading...</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div>
+                                    <div class="stat-label">Full Exams</div>
+                                    <div class="stat-value" id="epUnitExams">—</div>
+                                </div>
+                                <div class="stat-icon green">📝</div>
+                            </div>
+                            <div class="stat-change neutral" id="epUnitExamsMarked">Loading...</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div>
+                                    <div class="stat-label">Avg Test Score</div>
+                                    <div class="stat-value" id="epAvgTestScore">—</div>
+                                </div>
+                                <div class="stat-icon amber">🎯</div>
+                            </div>
+                            <div class="stat-change neutral" id="epTestStudents">Loading...</div>
+                        </div>
+                    </div>
+
                     <!-- Usage Chart -->
                     <div class="panel" style="margin-bottom: 1.5rem;">
                         <div class="panel-header">
@@ -1047,6 +1082,8 @@
                                     <th>User</th>
                                     <th>Total</th>
                                     <th>Marked</th>
+                                    <th>Tests</th>
+                                    <th>Exams</th>
                                     <th>Avg Daily</th>
                                     <th>Avg Score</th>
                                     <th>Last 7d</th>
@@ -1057,7 +1094,7 @@
                             </thead>
                             <tbody id="epUsersTableBody">
                                 <tr>
-                                    <td colspan="9" class="loading"><div class="spinner"></div> Loading usage data...</td>
+                                    <td colspan="11" class="loading"><div class="spinner"></div> Loading usage data...</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -1995,6 +2032,7 @@
         async function loadExamPracticePage() {
             await Promise.all([
                 loadExamPracticeOverview(),
+                loadTestExamStats(),
                 loadExamPracticeChart(30),
                 loadExamPracticeUsers()
             ]);
@@ -2032,6 +2070,57 @@
                 }
             } catch (err) {
                 console.error('Error loading exam practice overview:', err);
+            }
+        }
+
+        // Load test/exam stats
+        async function loadTestExamStats() {
+            try {
+                var { data: tests } = await supabaseClient
+                    .from('test_results')
+                    .select('test_type, percentage, user_id, marking_results');
+
+                if (tests) {
+                    var topicTests = tests.filter(function(t) { return t.test_type === 'topic_test'; });
+                    var unitExams = tests.filter(function(t) { return t.test_type === 'unit_exam'; });
+                    var markedTests = tests.filter(function(t) { return t.marking_results !== null; });
+                    var markedTopicTests = topicTests.filter(function(t) { return t.marking_results !== null; });
+                    var markedUnitExams = unitExams.filter(function(t) { return t.marking_results !== null; });
+                    var avgPct = tests.length > 0 ? Math.round(tests.reduce(function(sum, t) { return sum + (t.percentage || 0); }, 0) / tests.length) : 0;
+                    var uniqueStudents = [...new Set(tests.map(function(t) { return t.user_id; }))].length;
+
+                    document.getElementById('epTopicTests').textContent = topicTests.length;
+                    document.getElementById('epTopicTestsMarked').textContent = markedTopicTests.length + ' marked';
+                    document.getElementById('epUnitExams').textContent = unitExams.length;
+                    document.getElementById('epUnitExamsMarked').textContent = markedUnitExams.length + ' marked';
+                    document.getElementById('epAvgTestScore').textContent = avgPct + '%';
+                    document.getElementById('epTestStudents').textContent = uniqueStudents + ' students';
+                }
+            } catch (err) {
+                console.error('Error loading test/exam stats:', err);
+            }
+        }
+
+        // Load test/exam counts per user
+        var epTestExamPerUser = {};
+        async function loadTestExamPerUser() {
+            try {
+                var { data: tests } = await supabaseClient
+                    .from('test_results')
+                    .select('user_id, test_type');
+
+                epTestExamPerUser = {};
+                if (tests) {
+                    tests.forEach(function(t) {
+                        if (!epTestExamPerUser[t.user_id]) epTestExamPerUser[t.user_id] = { topicTests: 0, unitExams: 0 };
+                        if (t.test_type === 'topic_test') epTestExamPerUser[t.user_id].topicTests++;
+                        else if (t.test_type === 'unit_exam') epTestExamPerUser[t.user_id].unitExams++;
+                    });
+                }
+                return epTestExamPerUser;
+            } catch (err) {
+                console.error('Error loading per-user test/exam data:', err);
+                return {};
             }
         }
 
@@ -2126,6 +2215,7 @@
                 }
 
                 epAllUserStats = data || [];
+                await loadTestExamPerUser();
                 renderExamPracticeUsers(epAllUserStats);
             } catch (err) {
                 console.error('Error loading per-user exam stats:', err);
@@ -2160,7 +2250,7 @@
             }
 
             if (users.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="9" class="empty-state">No exam practice data yet</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="11" class="empty-state">No exam practice data yet</td></tr>';
                 return;
             }
 
@@ -2171,6 +2261,7 @@
                 const isHighUsage = parseFloat(avgDaily) >= 10;
                 const displayName = u.user_name || (u.user_email ? u.user_email.split('@')[0] : 'User');
                 const initial = (u.user_name || u.user_email || 'U')[0].toUpperCase();
+                const testData = epTestExamPerUser[u.user_id] || { topicTests: 0, unitExams: 0 };
 
                 return `
                 <tr${isHighUsage ? ' style="background: #fff5f5;"' : ''}>
@@ -2185,6 +2276,8 @@
                     </td>
                     <td><strong>${u.total_attempts || 0}</strong></td>
                     <td>${u.total_marked || 0}</td>
+                    <td>${testData.topicTests}</td>
+                    <td>${testData.unitExams}</td>
                     <td${isHighUsage ? ' style="color: #dc2626; font-weight: 700;"' : ''}>${avgDaily}</td>
                     <td>${avgScore}</td>
                     <td>${u.last_7_days || 0}</td>
@@ -2584,6 +2677,45 @@
             // Load exam practice stats for this user asynchronously
             const examStats = await loadUserExamStats(userId);
             const container = document.getElementById('userExamStatsContainer');
+
+            // Load test/exam data for this user
+            var { data: userTests } = await supabaseClient
+                .from('test_results')
+                .select('test_type, percentage, total_marks, total_available, board, unit, marking_results, created_at')
+                .eq('user_id', userId)
+                .order('created_at', { ascending: false });
+
+            var topicTestCount = 0, unitExamCount = 0, topicTestAvg = 0, unitExamAvg = 0;
+            var recentTestsHtml = '';
+
+            if (userTests && userTests.length > 0) {
+                var topicTests = userTests.filter(function(t) { return t.test_type === 'topic_test'; });
+                var unitExams = userTests.filter(function(t) { return t.test_type === 'unit_exam'; });
+
+                topicTestCount = topicTests.length;
+                unitExamCount = unitExams.length;
+
+                if (topicTests.length > 0) {
+                    topicTestAvg = Math.round(topicTests.reduce(function(sum, t) { return sum + (t.percentage || 0); }, 0) / topicTests.length);
+                }
+                if (unitExams.length > 0) {
+                    unitExamAvg = Math.round(unitExams.reduce(function(sum, t) { return sum + (t.percentage || 0); }, 0) / unitExams.length);
+                }
+
+                var recentTests = userTests.slice(0, 5);
+                recentTestsHtml = '<div style="margin-top: 1rem; border-top: 1px solid var(--gray-200); padding-top: 1rem;">' +
+                    '<div style="font-size: 0.8rem; color: var(--gray-500); font-weight: 600; margin-bottom: 0.75rem;">Recent Tests & Exams</div>' +
+                    recentTests.map(function(t) {
+                        var testLabel = t.test_type === 'topic_test' ? '📋 Topic Test' : '📝 Unit Exam';
+                        var markedStatus = t.marking_results !== null ? '<span style="color: #059669; font-size: 0.75rem; margin-left: 0.5rem;">✓ Marked</span>' : '';
+                        return '<div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; font-size: 0.85rem; border-bottom: 1px solid var(--gray-100);">' +
+                            '<div>' + testLabel + ' - Unit ' + t.unit + ', ' + t.board + '</div>' +
+                            '<div style="text-align: right;">' + Math.round(t.percentage || 0) + '%' + markedStatus + '</div>' +
+                            '</div>';
+                    }).join('') +
+                    '</div>';
+            }
+
             if (examStats && examStats.total_attempts > 0) {
                 const avgScoreDisplay = examStats.avg_score ? parseFloat(examStats.avg_score).toFixed(0) + '%' : '—';
                 const avgDailyDisplay = examStats.avg_daily ? parseFloat(examStats.avg_daily).toFixed(1) : '0.0';
@@ -2591,26 +2723,55 @@
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
                         <div style="text-align: center; padding: 0.75rem; background: #ede9fe; border-radius: 8px;">
                             <div style="font-size: 1.25rem; font-weight: 800; color: #5b21b6;">${examStats.total_attempts}</div>
-                            <div style="font-size: 0.75rem; color: #7c3aed;">Total Attempts</div>
+                            <div style="font-size: 0.75rem; color: #7c3aed;">Questions</div>
                         </div>
                         <div style="text-align: center; padding: 0.75rem; background: #dbeafe; border-radius: 8px;">
                             <div style="font-size: 1.25rem; font-weight: 800; color: #1e40af;">${avgScoreDisplay}</div>
-                            <div style="font-size: 0.75rem; color: #2563eb;">Avg Score</div>
+                            <div style="font-size: 0.75rem; color: #2563eb;">Avg Q Score</div>
                         </div>
                         <div style="text-align: center; padding: 0.75rem; background: #fef3c7; border-radius: 8px;">
-                            <div style="font-size: 1.25rem; font-weight: 800; color: #92400e;">${avgDailyDisplay}</div>
-                            <div style="font-size: 0.75rem; color: #d97706;">Daily Avg</div>
+                            <div style="font-size: 1.25rem; font-weight: 800; color: #92400e;">${topicTestCount}</div>
+                            <div style="font-size: 0.75rem; color: #d97706;">Topic Tests ${topicTestCount > 0 ? '(' + topicTestAvg + '%)' : ''}</div>
                         </div>
                         <div style="text-align: center; padding: 0.75rem; background: #d1fae5; border-radius: 8px;">
-                            <div style="font-size: 1.25rem; font-weight: 800; color: #065f46;">${examStats.total_marked || 0}</div>
-                            <div style="font-size: 0.75rem; color: #059669;">Marked</div>
+                            <div style="font-size: 1.25rem; font-weight: 800; color: #065f46;">${unitExamCount}</div>
+                            <div style="font-size: 0.75rem; color: #059669;">Full Exams ${unitExamCount > 0 ? '(' + unitExamAvg + '%)' : ''}</div>
                         </div>
                     </div>
+                    ${recentTestsHtml}
+                `;
+            } else if (examStats && (topicTestCount > 0 || unitExamCount > 0)) {
+                container.innerHTML = `
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                        <div style="text-align: center; padding: 0.75rem; background: #fef3c7; border-radius: 8px;">
+                            <div style="font-size: 1.25rem; font-weight: 800; color: #92400e;">${topicTestCount}</div>
+                            <div style="font-size: 0.75rem; color: #d97706;">Topic Tests ${topicTestCount > 0 ? '(' + topicTestAvg + '%)' : ''}</div>
+                        </div>
+                        <div style="text-align: center; padding: 0.75rem; background: #d1fae5; border-radius: 8px;">
+                            <div style="font-size: 1.25rem; font-weight: 800; color: #065f46;">${unitExamCount}</div>
+                            <div style="font-size: 0.75rem; color: #059669;">Full Exams ${unitExamCount > 0 ? '(' + unitExamAvg + '%)' : ''}</div>
+                        </div>
+                    </div>
+                    ${recentTestsHtml}
                 `;
             } else if (examStats) {
                 container.innerHTML = '<div style="color: var(--gray-400); font-size: 0.85rem; text-align: center;">No exam practice attempts yet</div>';
+            } else if (topicTestCount > 0 || unitExamCount > 0) {
+                container.innerHTML = `
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                        <div style="text-align: center; padding: 0.75rem; background: #fef3c7; border-radius: 8px;">
+                            <div style="font-size: 1.25rem; font-weight: 800; color: #92400e;">${topicTestCount}</div>
+                            <div style="font-size: 0.75rem; color: #d97706;">Topic Tests ${topicTestCount > 0 ? '(' + topicTestAvg + '%)' : ''}</div>
+                        </div>
+                        <div style="text-align: center; padding: 0.75rem; background: #d1fae5; border-radius: 8px;">
+                            <div style="font-size: 1.25rem; font-weight: 800; color: #065f46;">${unitExamCount}</div>
+                            <div style="font-size: 0.75rem; color: #059669;">Full Exams ${unitExamCount > 0 ? '(' + unitExamAvg + '%)' : ''}</div>
+                        </div>
+                    </div>
+                    ${recentTestsHtml}
+                `;
             } else {
-                container.innerHTML = '<div style="color: var(--gray-400); font-size: 0.85rem; text-align: center;">Exam stats unavailable (RPC not set up)</div>';
+                container.innerHTML = '<div style="color: var(--gray-400); font-size: 0.85rem; text-align: center;">No test/exam data available</div>';
             }
         }
 
