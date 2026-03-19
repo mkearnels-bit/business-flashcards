@@ -3942,7 +3942,7 @@
             // Populate profile avatar
             const profileAvatarEl = document.getElementById('profileAvatar');
             if (profileAvatarEl && session.user && session.user.email) {
-                profileAvatarEl.textContent = getProfileInitials(session.user.email);
+                profileAvatarEl.textContent = getProfileInitials(session.user);
             }
 
             // Get user's name from Google OAuth metadata
@@ -4002,11 +4002,15 @@
         }
 
         // Profile dropdown
-        function getProfileInitials(email) {
+        function getProfileInitials(session) {
+            var fullName = session.user_metadata && (session.user_metadata.full_name || session.user_metadata.name) || '';
+            var email = session.email || '';
+            if (fullName) {
+                var parts = fullName.trim().split(' ');
+                return parts.length >= 2 ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase() : parts[0][0].toUpperCase();
+            }
             if (!email) return '--';
-            var parts = email.split('@')[0].split('.');
-            if (parts.length >= 2) return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
-            return email.substring(0, 2).toUpperCase();
+            return email[0].toUpperCase();
         }
 
         var profileAvatar = document.getElementById('profileAvatar');
