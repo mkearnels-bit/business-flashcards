@@ -868,7 +868,7 @@ var LOGO_BASE64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAACFCAYAAAB
                     '<td>' + dateStr + '</td>' +
                     '<td><span class="score-bold ' + scoreClass + '">' + r.percentage + '%</span></td>' +
                     '<td>' + timeStr + '</td>' +
-                    '<td><button class="download-btn" onclick="downloadFromHistory(\'' + r.id + '\')">' +
+                    '<td><button class="download-btn" onclick="downloadFromHistory(\'' + r.id + '\', this)">' +
                     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>' +
                     'PDF</button></td></tr>';
 
@@ -879,7 +879,7 @@ var LOGO_BASE64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAACFCAYAAAB
                     '<div class="history-card-meta"><span>' + dateStr + '</span><span>' + timeStr + '</span></div>' +
                     '<div class="history-card-bottom">' +
                     '<span class="score-bold ' + scoreClass + '">' + r.percentage + '%</span>' +
-                    '<button class="download-btn" onclick="downloadFromHistory(\'' + r.id + '\')">' +
+                    '<button class="download-btn" onclick="downloadFromHistory(\'' + r.id + '\', this)">' +
                     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>' +
                     'PDF</button></div></div>';
             });
@@ -895,8 +895,8 @@ var LOGO_BASE64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAACFCAYAAAB
         }
 
         // ===== PDF DOWNLOAD FROM HISTORY =====
-        async function downloadFromHistory(testId) {
-            var btn = event.target.closest('.download-btn');
+        async function downloadFromHistory(testId, btnEl) {
+            var btn = btnEl || null;
             if (btn) {
                 btn.disabled = true;
                 btn.innerHTML = '<div class="spinner" style="width:14px;height:14px;border-width:2px;margin:0;"></div> Loading...';

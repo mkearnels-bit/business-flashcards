@@ -7968,9 +7968,11 @@ function showError(msg) {
     setTimeout(function() { el.remove(); }, 3000);
 }
 
-// Add beforeunload handler for save warning
+// Add beforeunload handler for save warning (only during active test, not on feedback)
 window.addEventListener('beforeunload', function(e) {
-    if (currentTest && testExamStartTime) {
+    var testPhase = document.getElementById('phase-test-exam');
+    var isInActiveTest = testPhase && testPhase.classList.contains('active') && currentTest && testExamStartTime;
+    if (isInActiveTest) {
         e.preventDefault();
         e.returnValue = '';
     }
