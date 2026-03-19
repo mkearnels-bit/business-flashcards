@@ -7618,10 +7618,44 @@ function updateNavForLevel(level) {
 }
 
 function setLevel(level) {
-    currentLevel = level;
-    localStorage.setItem(LEVEL_KEY, level);
-    updateNavForLevel(level);
-}
+            currentLevel = level;
+            localStorage.setItem(LEVEL_KEY, level);
+            updateNavForLevel(level);
+            
+            // Navigate to the counterpart page for the new level
+            var currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            var pageMap = {
+                'app.html': { alevel: 'app.html', gcse: 'gcse-app.html' },
+                'gcse-app.html': { alevel: 'app.html', gcse: 'gcse-app.html' },
+                'notes.html': { alevel: 'notes.html', gcse: 'gcse-notes.html' },
+                'gcse-notes.html': { alevel: 'notes.html', gcse: 'gcse-notes.html' },
+                'glossary.html': { alevel: 'glossary.html', gcse: 'gcse-glossary.html' },
+                'gcse-glossary.html': { alevel: 'glossary.html', gcse: 'gcse-glossary.html' },
+                'notes-unit1.html': { alevel: 'notes-unit1.html', gcse: 'gcse-notes.html' },
+                'notes-unit2.html': { alevel: 'notes-unit2.html', gcse: 'gcse-notes.html' },
+                'notes-unit3.html': { alevel: 'notes-unit3.html', gcse: 'gcse-notes.html' },
+                'notes-unit4.html': { alevel: 'notes-unit4.html', gcse: 'gcse-notes.html' },
+                'gcse-notes-unit1.html': { alevel: 'notes.html', gcse: 'gcse-notes-unit1.html' },
+                'gcse-notes-unit2.html': { alevel: 'notes.html', gcse: 'gcse-notes-unit2.html' },
+                'gcse-notes-unit3.html': { alevel: 'notes.html', gcse: 'gcse-notes-unit3.html' },
+                'gcse-notes-unit4.html': { alevel: 'notes.html', gcse: 'gcse-notes-unit4.html' },
+                'gcse-notes-unit5.html': { alevel: 'notes.html', gcse: 'gcse-notes-unit5.html' },
+                'gcse-notes-unit6.html': { alevel: 'notes.html', gcse: 'gcse-notes-unit6.html' },
+                'exam-skills-v2.html': { alevel: 'exam-skills-v2.html', gcse: null }
+            };
+            var mapping = pageMap[currentPage];
+            if (mapping) {
+                var target = mapping[level];
+                if (target === null) {
+                    // Coming soon — don't navigate, show toast
+                    return;
+                }
+                if (target && target !== currentPage) {
+                    window.location.href = target;
+                    return;
+                }
+            }
+        }
 
 document.addEventListener('click', function(e) {
     var link = e.target.closest('[data-coming-soon]');
