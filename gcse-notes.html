@@ -1479,16 +1479,13 @@ body { padding-top: 70px; }
             // Check if onboarding is completed
             var onboardingDone = sessionStorage.getItem('onboarding_done');
             if (!onboardingDone) {
-                var profileCheck = await supabaseClient
-                    .from('user_profiles')
-                    .select('id')
-                    .eq('user_id', session.user.id)
-                    .single();
-                if (!profileCheck.data) {
-                    window.location.href = 'welcome.html';
-                    return;
-                }
-                sessionStorage.setItem('onboarding_done', 'true');
+                supabaseClient.from('user_profiles').select('id').eq('user_id', session.user.id).single().then(function(profileResult) {
+                    if (!profileResult.data) {
+                        window.location.href = 'welcome.html';
+                    } else {
+                        sessionStorage.setItem('onboarding_done', 'true');
+                    }
+                });
             }
                     authOnlyElements.forEach(function(el) {
                         el.style.display = '';
