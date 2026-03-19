@@ -881,6 +881,9 @@
 
                 if (error) throw error;
 
+                // Mark onboarding as complete so product pages don't redirect back
+                sessionStorage.setItem('onboarding_done', 'true');
+
                 // Move to disclaimer screen
                 currentStep = 6;
                 updateUI();

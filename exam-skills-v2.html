@@ -3930,6 +3930,21 @@
                 window.location.href = 'login.html';
                 return;
             }
+            // Check if onboarding is completed
+            var onboardingDone = sessionStorage.getItem('onboarding_done');
+            if (!onboardingDone) {
+                var profileCheck = await supabaseClient
+                    .from('user_profiles')
+                    .select('id')
+                    .eq('user_id', session.user.id)
+                    .single();
+                if (!profileCheck.data) {
+                    window.location.href = 'welcome.html';
+                    return;
+                }
+                sessionStorage.setItem('onboarding_done', 'true');
+            }
+
 
             // Show logged-in nav links
             document.querySelectorAll('.auth-only').forEach(function(el) { el.style.display = ''; });

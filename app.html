@@ -1851,6 +1851,21 @@
                     window.location.href = 'login.html';
                     return;
                 }
+            // Check if onboarding is completed
+            var onboardingDone = sessionStorage.getItem('onboarding_done');
+            if (!onboardingDone) {
+                var profileCheck = await supabaseClient
+                    .from('user_profiles')
+                    .select('id')
+                    .eq('user_id', session.user.id)
+                    .single();
+                if (!profileCheck.data) {
+                    window.location.href = 'welcome.html';
+                    return;
+                }
+                sessionStorage.setItem('onboarding_done', 'true');
+            }
+
 
                 console.log('Session found, user:', session.user.id);
 
