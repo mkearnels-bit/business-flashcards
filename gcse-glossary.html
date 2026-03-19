@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-HFSYK32ZFT"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -14,12 +13,12 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-    <title>GCSE Business Studies Key Terms Glossary | AQA Definitions | MyBizStudies</title>
-    <meta name="description" content="Complete glossary of GCSE Business Studies key terms and definitions for AQA. Over 90 essential terms covering all topics with clear, exam ready definitions.">
-    <meta name="keywords" content="GCSE Business Studies, key terms, glossary, definitions, AQA, revision, business vocabulary">
+    <title>GCSE Business Studies Key Terms Glossary | MyBizStudies</title>
+    <meta name="description" content="Complete glossary of GCSE Business Studies key terms and definitions. Over 150 essential terms covering all 6 units with clear, exam-ready definitions.">
+    <meta name="keywords" content="GCSE Business Studies, key terms, glossary, definitions, revision, business vocabulary">
     <link rel="canonical" href="https://mybizstudies.com/gcse-glossary.html">
-    <meta property="og:title" content="GCSE Business Studies Key Terms Glossary | AQA Definitions | MyBizStudies">
-    <meta property="og:description" content="Complete glossary of GCSE Business Studies key terms and definitions for AQA. Over 90 essential terms covering all topics with clear, exam ready definitions.">
+    <meta property="og:title" content="GCSE Business Studies Key Terms Glossary | MyBizStudies">
+    <meta property="og:description" content="Complete glossary of GCSE Business Studies key terms and definitions. Over 150 essential terms covering all 6 units with clear, exam-ready definitions.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://mybizstudies.com/gcse-glossary.html">
     <meta property="og:site_name" content="MyBizStudies">
@@ -31,7 +30,7 @@
         "@context": "https://schema.org",
         "@type": "DefinedTermSet",
         "name": "GCSE Business Studies Key Terms Glossary",
-        "description": "Complete glossary of key terms and definitions for AQA GCSE Business Studies.",
+        "description": "Complete glossary of key terms and definitions for GCSE Business Studies.",
         "url": "https://mybizstudies.com/gcse-glossary.html",
         "publisher": {
             "@type": "Organization",
@@ -44,481 +43,135 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-/* ==================== SITE NAVBAR ==================== */
-.site-navbar {
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid #f1f5f9;
-    padding: 0.75rem 2rem;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+    --primary: #1e3a5f;
+    --primary-dark: #152a45;
+    --primary-light: #2d5a8a;
+    --accent: #e67e22;
+    --accent-light: #f39c12;
+    --accent-glow: rgba(230, 126, 34, 0.3);
+    --secondary: #3498db;
+    --success: #27ae60;
+    --error: #e74c3c;
+    --dark: #0f172a;
+    --gray-900: #1e293b;
+    --gray-700: #334155;
+    --gray-500: #64748b;
+    --gray-300: #cbd5e1;
+    --gray-200: #e2e8f0;
+    --gray-100: #f1f5f9;
+    --gray-50: #f8fafc;
+    --white: #ffffff;
+    --unit1: #e74c3c;
+    --unit2: #3498db;
+    --unit3: #27ae60;
+    --unit4: #f39c12;
+    --unit5: #9b59b6;
+    --unit6: #e84393;
 }
-.site-navbar-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-.site-navbar-logo {
-    height: 55px;
-    width: auto;
-}
-.site-nav-buttons {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-.site-nav-link {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #334155;
-    text-decoration: none;
-    border-radius: 8px;
-    transition: all 0.2s;
-}
-.site-nav-link:hover {
-    color: #1e3a5f;
-    background: #f1f5f9;
-}
-.site-nav-link.active {
-    color: #e67e22;
-    font-weight: 600;
-}
-.site-nav-btn {
-    padding: 0.5rem 1.25rem;
-    font-size: 0.9rem;
-    font-weight: 600;
-    border-radius: 8px;
-    text-decoration: none;
-    cursor: pointer;
-    transition: all 0.2s;
-    border: none;
-    font-family: inherit;
-}
-.site-nav-btn-ghost {
-    color: #1e3a5f;
-    background: transparent;
-    border: 1px solid #cbd5e1;
-}
-.site-nav-btn-ghost:hover {
-    background: #f1f5f9;
-    border-color: #1e3a5f;
-}
-.site-hamburger {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 44px;
-    height: 44px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    z-index: 1100;
-    position: relative;
-}
-.site-hamburger span {
-    display: block;
-    width: 22px;
-    height: 2px;
-    background: #1e3a5f;
-    border-radius: 2px;
-    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    position: absolute;
-}
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; color: var(--gray-900); line-height: 1.6; overflow-x: hidden; background: var(--gray-50); }
+.site-navbar { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); border-bottom: 1px solid #f1f5f9; padding: 0.75rem 2rem; position: fixed; top: 0; left: 0; right: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+.site-navbar-content { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+.site-navbar-logo { height: 55px; width: auto; }
+.site-nav-buttons { display: flex; align-items: center; gap: 0.5rem; }
+.site-nav-link { padding: 0.5rem 1rem; font-size: 0.9rem; font-weight: 500; color: #334155; text-decoration: none; border-radius: 8px; transition: all 0.2s; }
+.site-nav-link:hover { color: #1e3a5f; background: #f1f5f9; }
+.site-nav-link.active { color: #e67e22; font-weight: 600; }
+.site-nav-btn { padding: 0.5rem 1.25rem; font-size: 0.9rem; font-weight: 600; border-radius: 8px; text-decoration: none; cursor: pointer; transition: all 0.2s; border: none; font-family: inherit; }
+.site-nav-btn-ghost { color: #1e3a5f; background: transparent; border: 1px solid #cbd5e1; }
+.site-nav-btn-ghost:hover { background: #f1f5f9; border-color: #1e3a5f; }
+.site-hamburger { display: none; flex-direction: column; justify-content: center; align-items: center; width: 44px; height: 44px; background: none; border: none; cursor: pointer; padding: 0; z-index: 1100; position: relative; }
+.site-hamburger span { display: block; width: 22px; height: 2px; background: #1e3a5f; border-radius: 2px; transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); position: absolute; }
 .site-hamburger span:nth-child(1) { transform: translateY(-7px); }
 .site-hamburger span:nth-child(2) { opacity: 1; }
 .site-hamburger span:nth-child(3) { transform: translateY(7px); }
 .site-hamburger.active span:nth-child(1) { transform: rotate(45deg); }
 .site-hamburger.active span:nth-child(2) { opacity: 0; }
 .site-hamburger.active span:nth-child(3) { transform: rotate(-45deg); }
-
-/* Mobile overlay */
-.site-mobile-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(15, 23, 42, 0.4);
-    backdrop-filter: blur(4px);
-    z-index: 1040;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-}
-.site-mobile-overlay.active {
-    display: block;
-    opacity: 1;
-    pointer-events: auto;
-}
-
-/* Mobile slide-out menu */
-.site-mobile-menu {
-    display: none;
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 280px;
-    height: 100%;
-    background: #ffffff;
-    z-index: 1050;
-    transform: translateX(100%);
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
-    padding: 5.5rem 1.5rem 2rem;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-}
-.site-mobile-menu.active {
-    display: block;
-    transform: translateX(0);
-}
-.site-mobile-links {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    min-height: 100%;
-}
-.site-mobile-menu a,
-.site-mobile-menu button {
-    display: flex;
-    align-items: center;
-    gap: 0.875rem;
-    padding: 0.875rem 1rem;
-    border-radius: 12px;
-    text-decoration: none;
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: #334155;
-    transition: all 0.2s ease;
-    border: none;
-    background: none;
-    cursor: pointer;
-    font-family: inherit;
-    width: 100%;
-}
-.site-mobile-menu a:hover,
-.site-mobile-menu button:hover {
-    background: #f1f5f9;
-    color: #1e3a5f;
-}
-.site-mobile-menu a.active {
-    background: #f1f5f9;
-    color: #1e3a5f;
-}
-.site-menu-icon {
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 10px;
-    background: #f1f5f9;
-    flex-shrink: 0;
-}
-.site-menu-icon svg {
-    width: 18px;
-    height: 18px;
-    stroke: #64748b;
-}
-.site-mobile-menu a.active .site-menu-icon {
-    background: #1e3a5f;
-}
-.site-mobile-menu a.active .site-menu-icon svg {
-    stroke: white;
-}
-.site-mobile-divider {
-    height: 1px;
-    background: #f1f5f9;
-    margin: 0.5rem 0;
-}
-.site-mobile-logout {
-    color: #e74c3c !important;
-}
-.site-mobile-logout .site-menu-icon {
-    background: rgba(231, 76, 60, 0.08);
-}
-.site-mobile-logout .site-menu-icon svg {
-    stroke: #e74c3c;
-}
-
-@media (max-width: 768px) {
-    .site-hamburger {
-        display: flex;
-    }
-    .site-mobile-overlay { display: block; }
-    .site-mobile-menu { display: block; }
-    .site-nav-buttons {
-        display: none;
-    }
-    .site-navbar {
-        padding: 0.5rem 1rem;
-    }
-    .site-navbar-content {
-        padding: 0;
-    }
-    .site-navbar-logo {
-        height: 45px;
-    }
-}
-
-/* Profile Avatar Dropdown */
-.profile-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #e67e22, #f39c12);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: 700;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    border: 2px solid #f1f5f9;
-}
-.profile-avatar:hover {
-    box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
-    transform: scale(1.05);
-}
-.profile-dropdown {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-    z-index: 1100;
-    min-width: 200px;
-    display: none;
-    margin-top: 0.5rem;
-    overflow: hidden;
-}
+.site-mobile-overlay { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px); z-index: 1040; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+.site-mobile-overlay.active { display: block; opacity: 1; pointer-events: auto; }
+.site-mobile-menu { display: none; position: fixed; top: 0; right: 0; width: 280px; height: 100%; background: #ffffff; z-index: 1050; transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1); padding: 5.5rem 1.5rem 2rem; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.site-mobile-menu.active { display: block; transform: translateX(0); }
+.site-mobile-links { display: flex; flex-direction: column; gap: 0.25rem; min-height: 100%; }
+.site-mobile-menu a, .site-mobile-menu button { display: flex; align-items: center; gap: 0.875rem; padding: 0.875rem 1rem; border-radius: 12px; text-decoration: none; font-size: 0.95rem; font-weight: 600; color: #334155; transition: all 0.2s ease; border: none; background: none; cursor: pointer; font-family: inherit; width: 100%; }
+.site-mobile-menu a:hover, .site-mobile-menu button:hover { background: #f1f5f9; color: #1e3a5f; }
+.site-mobile-menu a.active { background: #f1f5f9; color: #1e3a5f; }
+.site-menu-icon { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 10px; background: #f1f5f9; flex-shrink: 0; }
+.site-menu-icon svg { width: 18px; height: 18px; stroke: #64748b; }
+.site-mobile-menu a.active .site-menu-icon { background: #1e3a5f; }
+.site-mobile-menu a.active .site-menu-icon svg { stroke: white; }
+.site-mobile-divider { height: 1px; background: #f1f5f9; margin: 0.5rem 0; }
+.site-mobile-logout { color: #e74c3c !important; }
+.site-mobile-logout .site-menu-icon { background: rgba(231, 76, 60, 0.08); }
+.site-mobile-logout .site-menu-icon svg { stroke: #e74c3c; }
+@media (max-width: 768px) { .site-hamburger { display: flex; } .site-mobile-overlay { display: block; } .site-mobile-menu { display: block; } .site-nav-buttons { display: none; } .site-navbar { padding: 0.5rem 1rem; } .site-navbar-content { padding: 0; } .site-navbar-logo { height: 45px; } }
+.profile-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #e67e22, #f39c12); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; border: 2px solid #f1f5f9; }
+.profile-avatar:hover { box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3); transform: scale(1.05); }
+.profile-dropdown { position: absolute; top: 100%; right: 0; background: white; border-radius: 12px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); z-index: 1100; min-width: 200px; display: none; margin-top: 0.5rem; overflow: hidden; }
 .profile-dropdown.active { display: block; }
-.profile-dropdown a,
-.profile-dropdown button {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    width: 100%;
-    padding: 0.7rem 1rem;
-    text-align: left;
-    border: none;
-    background: none;
-    color: #334155;
-    font-size: 0.88rem;
-    font-weight: 500;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.2s;
-    text-decoration: none;
-}
-.profile-dropdown a:hover,
-.profile-dropdown button:hover {
-    background: #f1f5f9;
-    color: #1e3a5f;
-}
-.profile-dropdown button.logout-item {
-    color: #e74c3c;
-    border-top: 1px solid #f1f5f9;
-}
-.profile-dropdown button.logout-item:hover {
-    background: #fef2f2;
-}
-.profile-dropdown svg {
-    width: 16px;
-    height: 16px;
-    flex-shrink: 0;
-}
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --primary: #1e3a5f;
-            --primary-dark: #152a45;
-            --primary-light: #2d5a8a;
-            --accent: #e67e22;
-            --accent-light: #f39c12;
-            --accent-glow: rgba(230, 126, 34, 0.3);
-            --secondary: #3498db;
-            --success: #27ae60;
-            --error: #e74c3c;
-            --dark: #0f172a;
-            --gray-900: #1e293b;
-            --gray-700: #334155;
-            --gray-500: #64748b;
-            --gray-300: #cbd5e1;
-            --gray-200: #e2e8f0;
-            --gray-100: #f1f5f9;
-            --gray-50: #f8fafc;
-            --white: #ffffff;
-            --unit1: #e74c3c;
-            --unit2: #3498db;
-            --unit3: #27ae60;
-            --unit4: #f39c12;
-            --unit5: #9b59b6;
-        }
-        html { scroll-behavior: smooth; }
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            color: var(--gray-900);
-            line-height: 1.6;
-            overflow-x: hidden;
-            background: var(--gray-50);
-        }
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        .site-mobile-links a { display: flex; align-items: center; gap: 0.875rem; padding: 0.875rem 1rem; border-radius: 12px; text-decoration: none; font-size: 0.95rem; font-weight: 600; color: #334155; transition: all 0.2s ease; }
-        .site-mobile-links a:hover { background: #f1f5f9; color: #1e3a5f; }
-        
-        
-        
-        .site-mobile-cta { margin-top: 0.5rem; background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%); color: white !important; justify-content: center; font-weight: 700; box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3); }
-        .site-mobile-cta:hover { color: white !important; transform: translateY(-1px); }
-        .site-mobile-cta 
-        
-        .site-mobile-logout:hover { background: rgba(231, 76, 60, 0.06); }
-        .site-mobile-logout 
-        .site-mobile-logout 
-        .level-toggle { display: flex; align-items: center; background: #f1f5f9; border-radius: 8px; padding: 3px; gap: 0; flex-shrink: 0; }
-        .level-toggle-btn { padding: 5px 14px; font-size: 0.8rem; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; transition: all 0.25s ease; font-family: inherit; color: #64748b; background: transparent; white-space: nowrap; }
-        .level-toggle-btn.active { background: #1e3a5f; color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
-        .level-toggle-btn:hover:not(.active) { color: #1e3a5f; background: rgba(30, 58, 95, 0.08); }
-        .mobile-level-toggle { display: flex; align-items: center; background: #f1f5f9; border-radius: 10px; padding: 4px; margin-bottom: 1rem; gap: 0; }
-        .mobile-level-toggle .level-toggle-btn { flex: 1; padding: 8px 0; font-size: 0.85rem; border-radius: 8px; text-align: center; }
-        .coming-soon-toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: #1e293b; color: #ffffff; padding: 12px 24px; border-radius: 10px; font-size: 0.9rem; font-weight: 500; font-family: 'Inter', sans-serif; box-shadow: 0 8px 30px rgba(0,0,0,0.2); z-index: 9999; opacity: 0; transition: all 0.3s ease; pointer-events: none; }
-        .coming-soon-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-        @media (max-width: 768px) {
-            
-            
-            
-            
-            
-            
-        }
-        .glossary-hero {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            padding: 3rem 2rem 2.5rem;
-            text-align: center;
-        }
-        .glossary-hero h1 { font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; }
-        .glossary-hero p { font-size: 1.05rem; opacity: 0.85; max-width: 600px; margin: 0 auto 1.5rem; }
-        .glossary-search { max-width: 500px; margin: 0 auto; position: relative; }
-        .glossary-search input { width: 100%; padding: 0.875rem 1.25rem 0.875rem 3rem; border-radius: 12px; border: 2px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.12); color: white; font-size: 1rem; font-family: inherit; outline: none; transition: all 0.3s ease; }
-        .glossary-search input::placeholder { color: rgba(255,255,255,0.5); }
-        .glossary-search input:focus { border-color: var(--accent); background: rgba(255,255,255,0.18); }
-        .glossary-search svg { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; stroke: rgba(255,255,255,0.5); }
-        .glossary-filters { max-width: 1000px; margin: 0 auto; padding: 1.25rem 2rem 0; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
-        .filter-btn { padding: 0.5rem 1.1rem; border-radius: 8px; border: 1.5px solid var(--gray-200); background: white; color: var(--gray-700); font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; font-family: inherit; }
-        .filter-btn:hover { border-color: var(--primary); color: var(--primary); }
-        .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
-        .filter-btn[data-unit="1"].active { background: var(--unit1); border-color: var(--unit1); }
-        .filter-btn[data-unit="2"].active { background: var(--unit2); border-color: var(--unit2); }
-        .filter-btn[data-unit="3"].active { background: var(--unit3); border-color: var(--unit3); }
-        .filter-btn[data-unit="4"].active { background: var(--unit4); border-color: var(--unit4); }
-        .filter-btn[data-unit="5"].active { background: var(--unit5); border-color: var(--unit5); }
-        .term-count { margin-left: auto; font-size: 0.85rem; color: var(--gray-500); font-weight: 500; }
-        .alpha-bar { max-width: 1000px; margin: 0.75rem auto 0; padding: 0 2rem; display: flex; flex-wrap: wrap; gap: 0.25rem; }
-        .alpha-link { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 6px; text-decoration: none; font-weight: 700; font-size: 0.8rem; color: var(--gray-500); transition: all 0.2s ease; }
-        .alpha-link:hover { background: var(--gray-100); color: var(--primary); }
-        .alpha-link.has-terms { color: var(--primary); }
-        .glossary-content { max-width: 1000px; margin: 1.5rem auto 3rem; padding: 0 2rem; }
-        .letter-group { margin-bottom: 2rem; }
-        .letter-heading { font-size: 1.5rem; font-weight: 800; color: var(--primary); padding-bottom: 0.5rem; border-bottom: 2px solid var(--gray-200); margin-bottom: 1rem; }
-        .term-card { border-left: 4px solid var(--secondary); background: rgba(52, 152, 219, 0.04); padding: 1rem 1.25rem; border-radius: 0 12px 12px 0; margin-bottom: 0.75rem; transition: all 0.2s ease; }
-        .term-card:hover { box-shadow: 0 2px 10px rgba(0,0,0,0.06); transform: translateX(2px); }
-        .term-card[data-unit="1"] { border-left-color: var(--unit1); background: rgba(231, 76, 60, 0.04); }
-        .term-card[data-unit="2"] { border-left-color: var(--unit2); background: rgba(52, 152, 219, 0.04); }
-        .term-card[data-unit="3"] { border-left-color: var(--unit3); background: rgba(39, 174, 96, 0.04); }
-        .term-card[data-unit="4"] { border-left-color: var(--unit4); background: rgba(243, 156, 18, 0.04); }
-        .term-card[data-unit="5"] { border-left-color: var(--unit5); background: rgba(155, 89, 182, 0.04); }
-        .term-name { font-weight: 700; font-size: 1rem; color: var(--gray-900); margin-bottom: 0.25rem; }
-        .term-def { font-size: 0.92rem; color: var(--gray-700); line-height: 1.6; }
-        .term-tag { display: inline-block; margin-top: 0.5rem; padding: 0.15rem 0.6rem; border-radius: 4px; font-size: 0.72rem; font-weight: 600; color: white; }
-        .term-tag[data-unit="1"] { background: var(--unit1); }
-        .term-tag[data-unit="2"] { background: var(--unit2); }
-        .term-tag[data-unit="3"] { background: var(--unit3); }
-        .term-tag[data-unit="4"] { background: var(--unit4); }
-        .term-tag[data-unit="5"] { background: var(--unit5); }
-        .no-results { text-align: center; padding: 3rem 1rem; color: var(--gray-500); font-size: 1rem; display: none; }
-        .notes-footer { text-align: center; padding: 2rem; border-top: 1px solid var(--gray-200); font-size: 0.85rem; color: var(--gray-500); }
-        .notes-footer a { color: var(--gray-500); text-decoration: none; transition: color 0.2s; }
-        .notes-footer a:hover { color: var(--primary); }
-        @media (max-width: 768px) {
-            
-            
-            .glossary-hero { padding: 2rem 1rem 1.5rem; }
-            .glossary-hero h1 { font-size: 1.5rem; }
-            .glossary-filters { padding: 1rem 1rem 0; }
-            .alpha-bar { padding: 0.5rem 1rem 0; }
-            .glossary-content { padding: 0 1rem; }
-            .term-count { width: 100%; margin-left: 0; margin-top: 0.5rem; }
-        }
-    
-        .footer-social {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .footer-social a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: #f1f5f9;
-            color: #64748b;
-            transition: all 0.3s ease;
-        }
-
-        .footer-social a:hover {
-            background: #e67e22;
-            color: white;
-            transform: translateY(-2px);
-        }
-
-</style>
+.profile-dropdown a, .profile-dropdown button { display: flex; align-items: center; gap: 0.6rem; width: 100%; padding: 0.7rem 1rem; text-align: left; border: none; background: none; color: #334155; font-size: 0.88rem; font-weight: 500; cursor: pointer; font-family: inherit; transition: all 0.2s; text-decoration: none; }
+.profile-dropdown a:hover, .profile-dropdown button:hover { background: #f1f5f9; color: #1e3a5f; }
+.profile-dropdown button.logout-item { color: #e74c3c; border-top: 1px solid #f1f5f9; }
+.profile-dropdown button.logout-item:hover { background: #fef2f2; }
+.profile-dropdown svg { width: 16px; height: 16px; flex-shrink: 0; }
+.level-toggle { display: flex; align-items: center; background: #f1f5f9; border-radius: 8px; padding: 3px; gap: 0; flex-shrink: 0; }
+.level-toggle-btn { padding: 5px 14px; font-size: 0.8rem; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; transition: all 0.25s ease; font-family: inherit; color: #64748b; background: transparent; white-space: nowrap; }
+.level-toggle-btn.active { background: #1e3a5f; color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
+.level-toggle-btn:hover:not(.active) { color: #1e3a5f; background: rgba(30, 58, 95, 0.08); }
+.glossary-hero { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; padding: 3rem 2rem 2.5rem; text-align: center; }
+.glossary-hero h1 { font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; }
+.glossary-hero p { font-size: 1.05rem; opacity: 0.85; max-width: 600px; margin: 0 auto 1.5rem; }
+.glossary-search { max-width: 500px; margin: 0 auto; position: relative; }
+.glossary-search input { width: 100%; padding: 0.875rem 1.25rem 0.875rem 3rem; border-radius: 12px; border: 2px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.12); color: white; font-size: 1rem; font-family: inherit; outline: none; transition: all 0.3s ease; }
+.glossary-search input::placeholder { color: rgba(255,255,255,0.5); }
+.glossary-search input:focus { border-color: var(--accent); background: rgba(255,255,255,0.18); }
+.glossary-search svg { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; stroke: rgba(255,255,255,0.5); }
+.glossary-filters { max-width: 1000px; margin: 0 auto; padding: 1.25rem 2rem 0; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+.filter-btn { padding: 0.5rem 1.1rem; border-radius: 8px; border: 1.5px solid var(--gray-200); background: white; color: var(--gray-700); font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; font-family: inherit; }
+.filter-btn:hover { border-color: var(--primary); color: var(--primary); }
+.filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+.filter-btn[data-unit="1"].active { background: var(--unit1); border-color: var(--unit1); }
+.filter-btn[data-unit="2"].active { background: var(--unit2); border-color: var(--unit2); }
+.filter-btn[data-unit="3"].active { background: var(--unit3); border-color: var(--unit3); }
+.filter-btn[data-unit="4"].active { background: var(--unit4); border-color: var(--unit4); }
+.filter-btn[data-unit="5"].active { background: var(--unit5); border-color: var(--unit5); }
+.filter-btn[data-unit="6"].active { background: var(--unit6); border-color: var(--unit6); }
+.term-count { margin-left: auto; font-size: 0.85rem; color: var(--gray-500); font-weight: 500; }
+.alpha-bar { max-width: 1000px; margin: 0.75rem auto 0; padding: 0 2rem; display: flex; flex-wrap: wrap; gap: 0.25rem; }
+.alpha-link { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 6px; text-decoration: none; font-weight: 700; font-size: 0.8rem; color: var(--gray-500); transition: all 0.2s ease; }
+.alpha-link:hover { background: var(--gray-100); color: var(--primary); }
+.alpha-link.has-terms { color: var(--primary); }
+.glossary-content { max-width: 1000px; margin: 1.5rem auto 3rem; padding: 0 2rem; }
+.letter-group { margin-bottom: 2rem; }
+.letter-heading { font-size: 1.5rem; font-weight: 800; color: var(--primary); padding-bottom: 0.5rem; border-bottom: 2px solid var(--gray-200); margin-bottom: 1rem; }
+.term-card { border-left: 4px solid var(--secondary); background: rgba(52, 152, 219, 0.04); padding: 1rem 1.25rem; border-radius: 0 12px 12px 0; margin-bottom: 0.75rem; transition: all 0.2s ease; }
+.term-card:hover { box-shadow: 0 2px 10px rgba(0,0,0,0.06); transform: translateX(2px); }
+.term-card[data-unit="1"] { border-left-color: var(--unit1); background: rgba(231, 76, 60, 0.04); }
+.term-card[data-unit="2"] { border-left-color: var(--unit2); background: rgba(52, 152, 219, 0.04); }
+.term-card[data-unit="3"] { border-left-color: var(--unit3); background: rgba(39, 174, 96, 0.04); }
+.term-card[data-unit="4"] { border-left-color: var(--unit4); background: rgba(243, 156, 18, 0.04); }
+.term-card[data-unit="5"] { border-left-color: var(--unit5); background: rgba(155, 89, 182, 0.04); }
+.term-card[data-unit="6"] { border-left-color: var(--unit6); background: rgba(232, 67, 147, 0.04); }
+.term-name { font-weight: 700; font-size: 1rem; color: var(--gray-900); margin-bottom: 0.25rem; }
+.term-def { font-size: 0.92rem; color: var(--gray-700); line-height: 1.6; }
+.term-tag { display: inline-block; margin-top: 0.5rem; padding: 0.15rem 0.6rem; border-radius: 4px; font-size: 0.72rem; font-weight: 600; color: white; }
+.term-tag[data-unit="1"] { background: var(--unit1); }
+.term-tag[data-unit="2"] { background: var(--unit2); }
+.term-tag[data-unit="3"] { background: var(--unit3); }
+.term-tag[data-unit="4"] { background: var(--unit4); }
+.term-tag[data-unit="5"] { background: var(--unit5); }
+.term-tag[data-unit="6"] { background: var(--unit6); }
+.no-results { text-align: center; padding: 3rem 1rem; color: var(--gray-500); font-size: 1rem; display: none; }
+.notes-footer { text-align: center; padding: 2rem; border-top: 1px solid var(--gray-200); font-size: 0.85rem; color: var(--gray-500); }
+.notes-footer a { color: var(--gray-500); text-decoration: none; transition: color 0.2s; }
+.notes-footer a:hover { color: var(--primary); }
+.footer-social { display: flex; justify-content: center; gap: 1rem; margin-top: 1rem; }
+.footer-social a { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: #f1f5f9; color: #64748b; transition: all 0.3s ease; }
+.footer-social a:hover { background: #e67e22; color: white; transform: translateY(-2px); }
+@media (max-width: 768px) { .glossary-hero { padding: 2rem 1rem 1.5rem; } .glossary-hero h1 { font-size: 1.5rem; } .glossary-filters { padding: 1rem 1rem 0; } .alpha-bar { padding: 0.5rem 1rem 0; } .glossary-content { padding: 0 1rem; } .term-count { width: 100%; margin-left: 0; margin-top: 0.5rem; } }
+    </style>
 </head>
 <body>
     <nav class="site-navbar" id="siteNavbar">
@@ -529,93 +182,47 @@
             <button class="level-toggle-btn" data-level="gcse">GCSE</button>
         </div>
         <div class="site-nav-buttons" id="siteNavButtons">
-            <a href="exam-practice.html" class="site-nav-link auth-only" style="display:none;">Exam Practice</a>
-            <a href="app.html" class="site-nav-link">Flash Cards</a>
-            <a href="exam-skills-v2.html" class="site-nav-link">Exam Skills</a>
-            <a href="notes.html" class="site-nav-link">Study Notes</a>
+            <a href="exam-practice.html" class="site-nav-link auth-only" style="display:none;" data-nav-key="exam-practice">Exam Practice</a>
+            <a href="app.html" class="site-nav-link" data-nav-key="flashcards">Flash Cards</a>
+            <a href="exam-skills-v2.html" class="site-nav-link" data-nav-key="exam-skills">Exam Skills</a>
+            <a href="notes.html" class="site-nav-link" data-nav-key="study-notes">Study Notes</a>
             <a href="blog.html" class="site-nav-link">Blog</a>
             <a href="contact.html" class="site-nav-link">Contact Us</a>
             <div class="profile-dropdown-wrapper auth-only" style="display:none;">
-                <div class="profile-avatar" id="profileAvatar">--
-        </div>
+                <div class="profile-avatar" id="profileAvatar">--</div>
                 <div class="profile-dropdown" id="profileDropdown">
-                    <a href="student-progress.html">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
-                        Student Progress
-                    </a>
-                    <a href="account.html">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-                        My Account
-                    </a>
-                    <a href="admin.html" class="profile-dropdown-item admin-only" style="display:none;">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                        Admin
-                    </a>
-                    <button class="logout-item" id="navLogoutBtn">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                        Log Out
-                    </button>
+                    <a href="student-progress.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>Student Progress</a>
+                    <a href="account.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>My Account</a>
+                    <a href="admin.html" class="profile-dropdown-item admin-only" style="display:none;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>Admin</a>
+                    <button class="logout-item" id="navLogoutBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Log Out</button>
                 </div>
             </div>
         </div>
-        <button class="site-hamburger" id="siteHamburger" aria-label="Menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
+        <button class="site-hamburger" id="siteHamburger" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
 </nav>
 
-    <!-- Unified Site Mobile Menu -->
     <div class="site-mobile-overlay" id="siteMobileOverlay"></div>
 <div class="site-mobile-menu" id="siteMobileMenu">
-    <div class="site-mobile-links">        <a href="exam-practice.html" class="auth-only" style="display:none;">
-            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5"/></svg></span>
-            Exam Practice
-        </a>
-        <a href="app.html">
-            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
-            Flash Cards
-        </a>
-        <a href="exam-skills-v2.html">
-            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg></span>
-            Exam Skills
-        </a>
-        <a href="notes.html">
-            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></span>
-            Study Notes
-        </a>
-        <a href="blog.html">
-            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"/></svg></span>
-            Blog
-        </a>
-
-        <div class="site-mobile-divider">
-    </div>
-        <a href="contact.html">
-            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></span>
-            Contact Us
-        </a>
+    <div class="site-mobile-links">
+        <a href="exam-practice.html" class="auth-only" style="display:none;"><span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5"/></svg></span>Exam Practice</a>
+        <a href="app.html"><span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>Flash Cards</a>
+        <a href="exam-skills-v2.html"><span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg></span>Exam Skills</a>
+        <a href="notes.html"><span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></span>Study Notes</a>
+        <a href="blog.html"><span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"/></svg></span>Blog</a>
+        <div class="site-mobile-divider"></div>
+        <a href="contact.html"><span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></span>Contact Us</a>
         <div class="site-mobile-divider guest-only"></div>
-        <a href="login.html" class="guest-only">
-            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"/></svg></span>
-            Log In
-        </a>
-        <a href="signup.html" class="site-mobile-cta guest-only">
-            Get Started
-        </a>
+        <a href="login.html" class="guest-only"><span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"/></svg></span>Log In</a>
+        <a href="signup.html" class="site-mobile-cta guest-only">Get Started</a>
         <div class="site-mobile-divider auth-only" style="display:none;"></div>
-        <button class="site-mobile-logout auth-only" style="display:none;" id="mobileLogoutBtn">
-            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l3-3m0 0l-3-3m3 3H3"/></svg></span>
-            Logout
-        </button>
+        <button class="site-mobile-logout auth-only" style="display:none;" id="mobileLogoutBtn"><span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l3-3m0 0l-3-3m3 3H3"/></svg></span>Logout</button>
     </div>
 </div>
 
-
     <section class="glossary-hero">
         <h1>GCSE Business Studies Glossary</h1>
-        <p>Over 100 essential key terms and definitions for AQA GCSE Business, organised by unit and searchable instantly.</p>
+        <p>Over 150 essential key terms and definitions for GCSE Business, organised by 6 units and searchable instantly.</p>
         <div class="glossary-search">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
             <input type="text" id="glossarySearch" placeholder="Search key terms...">
@@ -624,11 +231,12 @@
 
     <div class="glossary-filters" id="glossaryFilters">
         <button class="filter-btn active" data-unit="all">All Units</button>
-        <button class="filter-btn" data-unit="1">Unit 1</button>
-        <button class="filter-btn" data-unit="2">Unit 2</button>
-        <button class="filter-btn" data-unit="3">Unit 3</button>
-        <button class="filter-btn" data-unit="4">Unit 4</button>
-        <button class="filter-btn" data-unit="5">Unit 5</button>
+        <button class="filter-btn" data-unit="1">Unit 1: Business Activity</button>
+        <button class="filter-btn" data-unit="2">Unit 2: People</button>
+        <button class="filter-btn" data-unit="3">Unit 3: Marketing</button>
+        <button class="filter-btn" data-unit="4">Unit 4: Operations</button>
+        <button class="filter-btn" data-unit="5">Unit 5: Finance</button>
+        <button class="filter-btn" data-unit="6">Unit 6: External Influences</button>
         <span class="term-count" id="termCount"></span>
     </div>
 
@@ -661,100 +269,195 @@
         <!-- A -->
         <div class="letter-group" id="letter-a">
             <div class="letter-heading">A</div>
-            <div class="term-card" data-unit="3" data-term="automation">
+            <div class="term-card" data-unit="1" data-term="adding-value">
+                <div class="term-name">Adding value</div>
+                <div class="term-def">The process of increasing the worth of a product so the selling price is higher than the cost of materials. Businesses add value through branding, quality, design, convenience, and unique features.</div>
+                <span class="term-tag" data-unit="1">Unit 1</span>
+            </div>
+            <div class="term-card" data-unit="5" data-term="assets">
+                <div class="term-name">Assets</div>
+                <div class="term-def">Items of value owned by a business. Current assets (cash, stock, debtors) can be converted to cash within a year. Non current assets (buildings, vehicles, equipment) are held for longer term use.</div>
+                <span class="term-tag" data-unit="5">Unit 5</span>
+            </div>
+            <div class="term-card" data-unit="4" data-term="automation">
                 <div class="term-name">Automation</div>
                 <div class="term-def">The use of machines and technology to carry out tasks previously done by humans. Automation can reduce costs, improve consistency, and increase productivity, but may reduce the need for manual labour in production.</div>
-                <span class="term-tag" data-unit="3">Unit 3</span>
+                <span class="term-tag" data-unit="4">Unit 4</span>
             </div>
         </div>
 
         <!-- B -->
         <div class="letter-group" id="letter-b">
             <div class="letter-heading">B</div>
-            <div class="term-card" data-unit="3" data-term="bar gate stock graph">
-                <div class="term-name">Bar Gate Stock Graph</div>
-                <div class="term-def">A visual representation of stock levels over time, showing minimum stock level, maximum stock level, reorder level, and lead time. It helps businesses manage inventory efficiently and avoid stockouts or excess stock.</div>
-                <span class="term-tag" data-unit="3">Unit 3</span>
+            <div class="term-card" data-unit="4" data-term="batch-production">
+                <div class="term-name">Batch production</div>
+                <div class="term-def">A method of production where a group of identical products is made together at each stage before moving to the next stage. Examples include bakeries producing batches of bread or clothing in different sizes.</div>
+                <span class="term-tag" data-unit="4">Unit 4</span>
             </div>
-            <div class="term-card" data-unit="1" data-term="business plan">
-                <div class="term-name">Business Plan</div>
-                <div class="term-def">A formal document that outlines a business idea, market analysis, financial projections, marketing strategy, and operational plans. It is used to secure funding and provide a roadmap for the business.</div>
-                <span class="term-tag" data-unit="1">Unit 1</span>
-            </div>
-            <div class="term-card" data-unit="5" data-term="boston matrix">
+            <div class="term-card" data-unit="3" data-term="boston-matrix">
                 <div class="term-name">Boston Matrix</div>
                 <div class="term-def">A portfolio analysis tool used to categorise products based on market growth rate and relative market share. It identifies products as stars, cash cows, problem children, or dogs to guide investment decisions.</div>
-                <span class="term-tag" data-unit="5">Unit 5</span>
+                <span class="term-tag" data-unit="3">Unit 3</span>
+            </div>
+            <div class="term-card" data-unit="3" data-term="brand">
+                <div class="term-name">Brand</div>
+                <div class="term-def">A name, symbol, design, or combination that identifies a business's products and distinguishes them from competitors. A strong brand builds customer loyalty and can allow premium pricing.</div>
+                <span class="term-tag" data-unit="3">Unit 3</span>
+            </div>
+            <div class="term-card" data-unit="4" data-term="break-even">
+                <div class="term-name">Break even</div>
+                <div class="term-def">The point at which a business's total revenue equals its total costs, meaning it is making neither a profit nor a loss. Any sales above break even generate profit.</div>
+                <span class="term-tag" data-unit="4">Unit 4</span>
+            </div>
+            <div class="term-card" data-unit="4" data-term="buffer-stock">
+                <div class="term-name">Buffer stock</div>
+                <div class="term-def">The minimum amount of stock a business keeps in reserve to ensure it does not run out if there is an unexpected increase in demand or a delay in deliveries.</div>
+                <span class="term-tag" data-unit="4">Unit 4</span>
+            </div>
+            <div class="term-card" data-unit="6" data-term="business-cycle">
+                <div class="term-name">Business cycle</div>
+                <div class="term-def">The pattern of economic growth and decline that an economy goes through over time. The four stages are boom (high growth), recession (declining growth), slump (low point), and recovery (growth returning).</div>
+                <span class="term-tag" data-unit="6">Unit 6</span>
+            </div>
+            <div class="term-card" data-unit="1" data-term="business-objectives">
+                <div class="term-name">Business objectives</div>
+                <div class="term-def">The specific, measurable targets a business sets to achieve its aims. Common objectives include survival, profit, growth, market share, and customer satisfaction.</div>
+                <span class="term-tag" data-unit="1">Unit 1</span>
+            </div>
+            <div class="term-card" data-unit="1" data-term="business-plan">
+                <div class="term-name">Business plan</div>
+                <div class="term-def">A formal document that outlines a business idea, market analysis, financial projections, marketing strategy, and operational plans. It is used to secure funding and provide a roadmap for the business.</div>
+                <span class="term-tag" data-unit="1">Unit 1</span>
             </div>
         </div>
 
         <!-- C -->
         <div class="letter-group" id="letter-c">
             <div class="letter-heading">C</div>
+            <div class="term-card" data-unit="5" data-term="cash-flow-forecast">
+                <div class="term-name">Cash flow forecast</div>
+                <div class="term-def">A prediction of the expected cash inflows and outflows over a future period, usually month by month. It helps businesses plan ahead and identify potential cash shortages.</div>
+                <span class="term-tag" data-unit="5">Unit 5</span>
+            </div>
+            <div class="term-card" data-unit="2" data-term="centralisation">
+                <div class="term-name">Centralisation</div>
+                <div class="term-def">When decision making is kept at the top of the organisation by senior managers. This gives greater control but can slow down decisions.</div>
+                <span class="term-tag" data-unit="2">Unit 2</span>
+            </div>
+            <div class="term-card" data-unit="2" data-term="chain-of-command">
+                <div class="term-name">Chain of command</div>
+                <div class="term-def">The line of authority within a business, showing who reports to whom. It runs from the most senior person at the top to the newest employee at the bottom.</div>
+                <span class="term-tag" data-unit="2">Unit 2</span>
+            </div>
+            <div class="term-card" data-unit="2" data-term="collective-bargaining">
+                <div class="term-name">Collective bargaining</div>
+                <div class="term-def">The process where trade union representatives negotiate with employers on behalf of a group of workers, rather than each worker negotiating individually.</div>
+                <span class="term-tag" data-unit="2">Unit 2</span>
+            </div>
+            <div class="term-card" data-unit="2" data-term="communication-barriers">
+                <div class="term-name">Communication barriers</div>
+                <div class="term-def">Factors that prevent effective communication in a business, such as jargon, noise, language differences, too many layers of hierarchy, and information overload.</div>
+                <span class="term-tag" data-unit="2">Unit 2</span>
+            </div>
+            <div class="term-card" data-unit="6" data-term="competition">
+                <div class="term-name">Competition</div>
+                <div class="term-def">Rivalry between businesses selling similar products or services. Competition can drive innovation, lower prices, and improve quality, but can also increase costs for businesses trying to remain competitive.</div>
+                <span class="term-tag" data-unit="6">Unit 6</span>
+            </div>
+            <div class="term-card" data-unit="3" data-term="competitive-pricing">
+                <div class="term-name">Competitive pricing</div>
+                <div class="term-def">A pricing strategy where a business sets prices based on competitor prices rather than costs or demand. The business aims to be priced similarly to competitors to remain competitive in the market.</div>
+                <span class="term-tag" data-unit="3">Unit 3</span>
+            </div>
+            <div class="term-card" data-unit="6" data-term="consumer-law">
+                <div class="term-name">Consumer law</div>
+                <div class="term-def">Legislation that protects consumers from unfair or unsafe business practices. It includes rules about product safety, labelling, returns, and protection against false advertising.</div>
+                <span class="term-tag" data-unit="6">Unit 6</span>
+            </div>
+            <div class="term-card" data-unit="6" data-term="corporate-social-responsibility-csr">
+                <div class="term-name">Corporate Social Responsibility (CSR)</div>
+                <div class="term-def">The idea that a business should consider the interests of society and the environment, not just its own profits. CSR includes ethical behaviour, environmental protection, and community support.</div>
+                <span class="term-tag" data-unit="6">Unit 6</span>
+            </div>
             <div class="term-card" data-unit="1" data-term="cost">
                 <div class="term-name">Cost</div>
                 <div class="term-def">The amount of money spent on producing goods or services. Costs include raw materials, labour, rent, and utilities, and are subtracted from revenue to calculate profit or loss.</div>
                 <span class="term-tag" data-unit="1">Unit 1</span>
             </div>
-            <div class="term-card" data-unit="3" data-term="customer service">
-                <div class="term-name">Customer Service</div>
-                <div class="term-def">The support provided to customers before, during, and after purchase. Good customer service aims to meet customer needs, solve problems quickly, and build long-term customer loyalty.</div>
-                <span class="term-tag" data-unit="3">Unit 3</span>
-            </div>
-            <div class="term-card" data-unit="2" data-term="competition">
-                <div class="term-name">Competition</div>
-                <div class="term-def">Rivalry between businesses selling similar products or services. Competition can drive innovation, lower prices, and improve quality, but can also increase costs for businesses trying to remain competitive.</div>
-                <span class="term-tag" data-unit="2">Unit 2</span>
-            </div>
-            <div class="term-card" data-unit="2" data-term="consumer law">
-                <div class="term-name">Consumer Law</div>
-                <div class="term-def">Legislation that protects consumers from unfair or unsafe business practices. It includes rules about product safety, labelling, returns, and protection against false advertising.</div>
-                <span class="term-tag" data-unit="2">Unit 2</span>
-            </div>
-            <div class="term-card" data-unit="5" data-term="competitive pricing">
-                <div class="term-name">Competitive Pricing</div>
-                <div class="term-def">A pricing strategy where a business sets prices based on competitor prices rather than costs or demand. The business aims to be priced similarly to competitors to remain competitive in the market.</div>
+            <div class="term-card" data-unit="5" data-term="crowdfunding">
+                <div class="term-name">Crowdfunding</div>
+                <div class="term-def">Raising finance by collecting small amounts of money from a large number of people, usually through an online platform. Backers may receive rewards, equity, or simply the satisfaction of supporting the project.</div>
                 <span class="term-tag" data-unit="5">Unit 5</span>
             </div>
-            <div class="term-card" data-unit="2" data-term="consumer law">
-                <div class="term-name">Consumer Law</div>
-                <div class="term-def">Legislation that protects consumers from unfair or unsafe business practices, including rules about product safety, accurate labelling, and protection against false advertising.</div>
-                <span class="term-tag" data-unit="2">Unit 2</span>
+            <div class="term-card" data-unit="5" data-term="current-ratio">
+                <div class="term-name">Current ratio</div>
+                <div class="term-def">A liquidity ratio that measures whether a business can pay its short term debts. Current ratio = Current assets / Current liabilities. A ratio of 1.5 to 2 is generally healthy.</div>
+                <span class="term-tag" data-unit="5">Unit 5</span>
+            </div>
+            <div class="term-card" data-unit="4" data-term="customer-service">
+                <div class="term-name">Customer service</div>
+                <div class="term-def">The support provided to customers before, during, and after purchase. Good customer service aims to meet customer needs, solve problems quickly, and build long-term customer loyalty.</div>
+                <span class="term-tag" data-unit="4">Unit 4</span>
             </div>
         </div>
 
         <!-- D -->
         <div class="letter-group" id="letter-d">
             <div class="letter-heading">D</div>
-            <div class="term-card" data-unit="2" data-term="demand">
-                <div class="term-name">Demand</div>
-                <div class="term-def">The quantity of a product or service that consumers are willing and able to buy at a given price. Demand changes based on factors such as price, income, tastes, and availability of substitutes.</div>
+            <div class="term-card" data-unit="2" data-term="decentralisation">
+                <div class="term-name">Decentralisation</div>
+                <div class="term-def">When decision making is spread out to lower levels and branches of the organisation. This can speed up decisions and motivate staff but may reduce consistency.</div>
                 <span class="term-tag" data-unit="2">Unit 2</span>
             </div>
-            <div class="term-card" data-unit="4" data-term="delegation">
+            <div class="term-card" data-unit="2" data-term="delegation">
                 <div class="term-name">Delegation</div>
                 <div class="term-def">The process of assigning tasks and responsibility to team members. Effective delegation allows managers to focus on important decisions while developing employee skills and motivation.</div>
-                <span class="term-tag" data-unit="4">Unit 4</span>
+                <span class="term-tag" data-unit="2">Unit 2</span>
             </div>
-            <div class="term-card" data-unit="5" data-term="distribution">
+            <div class="term-card" data-unit="1" data-term="demand">
+                <div class="term-name">Demand</div>
+                <div class="term-def">The quantity of a product or service that consumers are willing and able to buy at a given price. Demand changes based on factors such as price, income, tastes, and availability of substitutes.</div>
+                <span class="term-tag" data-unit="1">Unit 1</span>
+            </div>
+            <div class="term-card" data-unit="1" data-term="diseconomies-of-scale">
+                <div class="term-name">Diseconomies of scale</div>
+                <div class="term-def">The disadvantages that cause average costs to rise as a business grows too large. Problems include poor communication, slow decision making, low staff motivation, and coordination difficulties.</div>
+                <span class="term-tag" data-unit="1">Unit 1</span>
+            </div>
+            <div class="term-card" data-unit="3" data-term="distribution">
                 <div class="term-name">Distribution</div>
                 <div class="term-def">The process of making products available to consumers through various channels such as retail stores, online platforms, and wholesalers. Also known as the Place element of the marketing mix.</div>
-                <span class="term-tag" data-unit="5">Unit 5</span>
+                <span class="term-tag" data-unit="3">Unit 3</span>
             </div>
         </div>
 
         <!-- E -->
         <div class="letter-group" id="letter-e">
             <div class="letter-heading">E</div>
-            <div class="term-card" data-unit="2" data-term="e-commerce">
+            <div class="term-card" data-unit="3" data-term="e-commerce">
                 <div class="term-name">E-commerce</div>
                 <div class="term-def">The buying and selling of goods and services over the internet. E-commerce includes online shopping, digital payments, and electronic transactions conducted through websites or mobile applications.</div>
-                <span class="term-tag" data-unit="2">Unit 2</span>
+                <span class="term-tag" data-unit="3">Unit 3</span>
             </div>
-            <div class="term-card" data-unit="2" data-term="exchange rate">
-                <div class="term-name">Exchange Rate</div>
-                <div class="term-def">The value of one currency in relation to another. Exchange rates affect the cost of imports and exports, and can impact business profitability when trading internationally.</div>
-                <span class="term-tag" data-unit="2">Unit 2</span>
+            <div class="term-card" data-unit="6" data-term="economic-growth">
+                <div class="term-name">Economic growth</div>
+                <div class="term-def">An increase in the total output of goods and services in an economy over time, usually measured by Gross Domestic Product (GDP). Growth creates more jobs and higher incomes.</div>
+                <span class="term-tag" data-unit="6">Unit 6</span>
+            </div>
+            <div class="term-card" data-unit="1" data-term="economies-of-scale">
+                <div class="term-name">Economies of scale</div>
+                <div class="term-def">The cost advantages a business gains as it grows larger. Average costs per unit fall because fixed costs are spread over more units, and the business can negotiate bulk buying discounts.</div>
+                <span class="term-tag" data-unit="1">Unit 1</span>
+            </div>
+            <div class="term-card" data-unit="4" data-term="efficiency">
+                <div class="term-name">Efficiency</div>
+                <div class="term-def">The ability to produce maximum output with minimum input of resources such as labour, materials, and time. Efficient operations reduce costs and increase profitability.</div>
+                <span class="term-tag" data-unit="4">Unit 4</span>
+            </div>
+            <div class="term-card" data-unit="6" data-term="employment-law">
+                <div class="term-name">Employment law</div>
+                <div class="term-def">Legislation that protects the rights of workers and sets minimum standards for working conditions, pay, discrimination, dismissal, and health and safety in the workplace.</div>
+                <span class="term-tag" data-unit="6">Unit 6</span>
             </div>
             <div class="term-card" data-unit="1" data-term="enterprise">
                 <div class="term-name">Enterprise</div>
@@ -766,36 +469,51 @@
                 <div class="term-def">An individual who creates and runs their own business, taking on financial and personal risk. Entrepreneurs identify market opportunities, innovate, and drive business growth through their ideas and effort.</div>
                 <span class="term-tag" data-unit="1">Unit 1</span>
             </div>
-            <div class="term-card" data-unit="2" data-term="ethics">
+            <div class="term-card" data-unit="6" data-term="environmental-considerations">
+                <div class="term-name">Environmental considerations</div>
+                <div class="term-def">Factors that businesses must consider to minimise their environmental impact, including waste management, carbon emissions, energy use, and sustainable sourcing of materials.</div>
+                <span class="term-tag" data-unit="6">Unit 6</span>
+            </div>
+            <div class="term-card" data-unit="6" data-term="ethical-trading">
+                <div class="term-name">Ethical trading</div>
+                <div class="term-def">Business practices that ensure fair wages, safe working conditions, and environmental responsibility throughout the supply chain. Ethical trading aims to improve the wellbeing of workers and protect the environment.</div>
+                <span class="term-tag" data-unit="6">Unit 6</span>
+            </div>
+            <div class="term-card" data-unit="6" data-term="ethics">
                 <div class="term-name">Ethics</div>
                 <div class="term-def">Moral principles concerning what is right and wrong in business conduct. Ethical businesses consider the impact of their decisions on stakeholders, society, and the environment.</div>
-                <span class="term-tag" data-unit="2">Unit 2</span>
+                <span class="term-tag" data-unit="6">Unit 6</span>
             </div>
-            <div class="term-card" data-unit="2" data-term="ethical trading">
-                <div class="term-name">Ethical Trading</div>
-                <div class="term-def">Business practices that ensure fair wages, safe working conditions, and environmental responsibility throughout the supply chain. Ethical trading aims to improve the wellbeing of workers and protect the environment.</div>
-                <span class="term-tag" data-unit="2">Unit 2</span>
+            <div class="term-card" data-unit="6" data-term="exchange-rate">
+                <div class="term-name">Exchange rate</div>
+                <div class="term-def">The value of one currency in relation to another. Exchange rates affect the cost of imports and exports, and can impact business profitability when trading internationally.</div>
+                <span class="term-tag" data-unit="6">Unit 6</span>
             </div>
-            <div class="term-card" data-unit="3" data-term="efficiency">
-                <div class="term-name">Efficiency</div>
-                <div class="term-def">The ability to produce maximum output with minimum input of resources such as labour, materials, and time. Efficient operations reduce costs and increase profitability.</div>
-                <span class="term-tag" data-unit="3">Unit 3</span>
-            </div>
-            <div class="term-card" data-unit="2" data-term="environmental considerations">
-                <div class="term-name">Environmental Considerations</div>
-                <div class="term-def">Factors that businesses must consider to minimise their environmental impact, including waste management, carbon emissions, energy use, and sustainable sourcing of materials.</div>
-                <span class="term-tag" data-unit="2">Unit 2</span>
-            </div>
-            <div class="term-card" data-unit="5" data-term="extension strategy">
-                <div class="term-name">Extension Strategy</div>
+            <div class="term-card" data-unit="3" data-term="extension-strategy">
+                <div class="term-name">Extension strategy</div>
                 <div class="term-def">Marketing tactics used to extend the sales of a product in its mature stage of the product life cycle. Strategies include new packaging, new uses, or new target markets to revive sales.</div>
-                <span class="term-tag" data-unit="5">Unit 5</span>
+                <span class="term-tag" data-unit="3">Unit 3</span>
             </div>
         </div>
 
         <!-- F -->
         <div class="letter-group" id="letter-f">
             <div class="letter-heading">F</div>
+            <div class="term-card" data-unit="1" data-term="factors-of-production">
+                <div class="term-name">Factors of production</div>
+                <div class="term-def">The four resources needed to produce goods and services: land (natural resources), labour (workers), capital (equipment and money), and enterprise (the entrepreneur who takes the risk).</div>
+                <span class="term-tag" data-unit="1">Unit 1</span>
+            </div>
+            <div class="term-card" data-unit="4" data-term="fixed-costs">
+                <div class="term-name">Fixed costs</div>
+                <div class="term-def">Costs that stay the same regardless of how much a business produces, such as rent, insurance, and salaries. They must be paid even if the business produces nothing.</div>
+                <span class="term-tag" data-unit="4">Unit 4</span>
+            </div>
+            <div class="term-card" data-unit="4" data-term="flow-production">
+                <div class="term-name">Flow production</div>
+                <div class="term-def">A method of production where items move continuously along a production line, with each stage of production happening one after another without stopping. Used for mass produced items like cars and soft drinks.</div>
+                <span class="term-tag" data-unit="4">Unit 4</span>
+            </div>
             <div class="term-card" data-unit="1" data-term="franchise">
                 <div class="term-name">Franchise</div>
                 <div class="term-def">A business arrangement where a franchisee pays a franchisor for the right to operate a business using the franchisor's name, systems, and support. Franchises offer a way to expand without directly owning all outlets.</div>
@@ -811,79 +529,114 @@
                 <div class="term-def">The company or individual that owns the franchise business model and grants rights to franchisees. The franchisor provides the brand, systems, training, and ongoing support.</div>
                 <span class="term-tag" data-unit="1">Unit 1</span>
             </div>
+            <div class="term-card" data-unit="2" data-term="fringe-benefits">
+                <div class="term-name">Fringe benefits</div>
+                <div class="term-def">Non cash rewards given to employees in addition to their salary, such as company cars, health insurance, gym memberships, or extra holiday days.</div>
+                <span class="term-tag" data-unit="2">Unit 2</span>
+            </div>
         </div>
 
         <!-- G -->
         <div class="letter-group" id="letter-g">
             <div class="letter-heading">G</div>
-            <div class="term-card" data-unit="2" data-term="globalisation">
+            <div class="term-card" data-unit="6" data-term="globalisation">
                 <div class="term-name">Globalisation</div>
                 <div class="term-def">The increasing integration of economies, cultures, and societies across borders. Globalisation enables businesses to access new markets, but also increases competition and may create social and environmental challenges.</div>
-                <span class="term-tag" data-unit="2">Unit 2</span>
+                <span class="term-tag" data-unit="6">Unit 6</span>
             </div>
-            <div class="term-card" data-unit="2" data-term="government legislation">
-                <div class="term-name">Government Legislation</div>
+            <div class="term-card" data-unit="1" data-term="goods-and-services">
+                <div class="term-name">Goods and services</div>
+                <div class="term-def">Goods are physical, tangible products (such as phones or clothing). Services are non physical activities performed for customers (such as haircuts or banking).</div>
+                <span class="term-tag" data-unit="1">Unit 1</span>
+            </div>
+            <div class="term-card" data-unit="6" data-term="government-legislation">
+                <div class="term-name">Government legislation</div>
                 <div class="term-def">Laws created by government bodies that regulate business activity. Legislation covers areas such as employment, consumer protection, health and safety, and environmental protection.</div>
-                <span class="term-tag" data-unit="2">Unit 2</span>
+                <span class="term-tag" data-unit="6">Unit 6</span>
+            </div>
+            <div class="term-card" data-unit="5" data-term="gross-profit">
+                <div class="term-name">Gross profit</div>
+                <div class="term-def">The profit made after deducting the cost of sales (direct costs of making the product) from revenue. Gross profit = Revenue minus Cost of sales.</div>
+                <span class="term-tag" data-unit="5">Unit 5</span>
+            </div>
+            <div class="term-card" data-unit="5" data-term="gross-profit-margin">
+                <div class="term-name">Gross profit margin</div>
+                <div class="term-def">A ratio showing gross profit as a percentage of revenue. It measures how efficiently a business turns sales into profit before expenses. Gross profit margin = (Gross profit / Revenue) x 100.</div>
+                <span class="term-tag" data-unit="5">Unit 5</span>
             </div>
         </div>
 
         <!-- H -->
         <div class="letter-group" id="letter-h">
             <div class="letter-heading">H</div>
-            <div class="term-card" data-unit="2" data-term="health and safety legislation">
-                <div class="term-name">Health and Safety Legislation</div>
+            <div class="term-card" data-unit="6" data-term="health-and-safety-legislation">
+                <div class="term-name">Health and safety legislation</div>
                 <div class="term-def">Laws that protect the wellbeing of employees and the public. This includes regulations about workplace hazards, accident prevention, and emergency procedures.</div>
-                <span class="term-tag" data-unit="2">Unit 2</span>
+                <span class="term-tag" data-unit="6">Unit 6</span>
             </div>
-            <div class="term-card" data-unit="4" data-term="herzberg's two factor theory">
+            <div class="term-card" data-unit="2" data-term="herzbergs-two-factor-theory">
                 <div class="term-name">Herzberg's Two Factor Theory</div>
                 <div class="term-def">A motivation theory that identifies hygiene factors (preventing dissatisfaction) and motivators (creating satisfaction). Herzberg argues that good working conditions are necessary but are not enough to truly motivate employees.</div>
-                <span class="term-tag" data-unit="4">Unit 4</span>
+                <span class="term-tag" data-unit="2">Unit 2</span>
+            </div>
+            <div class="term-card" data-unit="2" data-term="hierarchy">
+                <div class="term-name">Hierarchy</div>
+                <div class="term-def">The levels of authority within a business, arranged from the most senior at the top to the most junior at the bottom. A tall hierarchy has many levels; a flat hierarchy has few.</div>
+                <span class="term-tag" data-unit="2">Unit 2</span>
             </div>
         </div>
 
         <!-- I -->
         <div class="letter-group" id="letter-i">
             <div class="letter-heading">I</div>
-            <div class="term-card" data-unit="2" data-term="inflation">
+            <div class="term-card" data-unit="5" data-term="income-statement">
+                <div class="term-name">Income statement</div>
+                <div class="term-def">A financial document showing a business's revenue, costs, and profit over a period of time (usually a year). Also known as a profit and loss account.</div>
+                <span class="term-tag" data-unit="5">Unit 5</span>
+            </div>
+            <div class="term-card" data-unit="2" data-term="induction-training">
+                <div class="term-name">Induction training</div>
+                <div class="term-def">Training provided to new employees to familiarise them with the organisation, its policies, safety procedures, and their role. Effective induction helps employees settle in and become productive quickly.</div>
+                <span class="term-tag" data-unit="2">Unit 2</span>
+            </div>
+            <div class="term-card" data-unit="6" data-term="inflation">
                 <div class="term-name">Inflation</div>
                 <div class="term-def">A sustained increase in the general price level of goods and services in an economy over time. Inflation reduces the purchasing power of money and affects business costs and pricing strategies.</div>
-                <span class="term-tag" data-unit="2">Unit 2</span>
+                <span class="term-tag" data-unit="6">Unit 6</span>
             </div>
-            <div class="term-card" data-unit="2" data-term="interest rate">
-                <div class="term-name">Interest Rate</div>
+            <div class="term-card" data-unit="6" data-term="interest-rate">
+                <div class="term-name">Interest rate</div>
                 <div class="term-def">The percentage charged by lenders for borrowed money or paid to savers for deposits. Interest rates affect the cost of borrowing for businesses and influence consumer spending and investment decisions.</div>
-                <span class="term-tag" data-unit="2">Unit 2</span>
+                <span class="term-tag" data-unit="6">Unit 6</span>
             </div>
-            <div class="term-card" data-unit="4" data-term="internal recruitment">
-                <div class="term-name">Internal Recruitment</div>
+            <div class="term-card" data-unit="2" data-term="internal-recruitment">
+                <div class="term-name">Internal recruitment</div>
                 <div class="term-def">The process of filling a job vacancy by promoting or transferring an existing employee. Internal recruitment is often cheaper and quicker than external recruitment, and maintains employee motivation.</div>
-                <span class="term-tag" data-unit="4">Unit 4</span>
-            </div>
-            <div class="term-card" data-unit="4" data-term="induction training">
-                <div class="term-name">Induction Training</div>
-                <div class="term-def">Training provided to new employees to familiarise them with the organisation, its policies, safety procedures, and their role. Effective induction helps employees settle in and become productive quickly.</div>
-                <span class="term-tag" data-unit="4">Unit 4</span>
+                <span class="term-tag" data-unit="2">Unit 2</span>
             </div>
         </div>
 
         <!-- J -->
         <div class="letter-group" id="letter-j">
             <div class="letter-heading">J</div>
-            <div class="term-card" data-unit="3" data-term="just in time (jit)">
-                <div class="term-name">Just in Time (JIT)</div>
-                <div class="term-def">An inventory management system where materials are ordered and received just when they are needed for production. JIT reduces storage costs and waste, but requires reliable suppliers and accurate forecasting.</div>
-                <span class="term-tag" data-unit="3">Unit 3</span>
-            </div>
-            <div class="term-card" data-unit="3" data-term="just in case (jic)">
-                <div class="term-name">Just in Case (JIC)</div>
-                <div class="term-def">An inventory management approach where businesses hold extra stock as a buffer against unexpected demand or supply disruptions. JIC ensures availability but increases storage and holding costs.</div>
-                <span class="term-tag" data-unit="3">Unit 3</span>
-            </div>
-            <div class="term-card" data-unit="4" data-term="job description">
-                <div class="term-name">Job Description</div>
+            <div class="term-card" data-unit="2" data-term="job-description">
+                <div class="term-name">Job description</div>
                 <div class="term-def">A formal document detailing the duties, responsibilities, reporting structure, and key requirements of a job position. Job descriptions help candidates understand expectations and assist in recruitment and performance management.</div>
+                <span class="term-tag" data-unit="2">Unit 2</span>
+            </div>
+            <div class="term-card" data-unit="4" data-term="job-production">
+                <div class="term-name">Job production</div>
+                <div class="term-def">A method of production where each product is made individually to meet specific customer requirements. Examples include wedding cakes, custom furniture, and tailored suits.</div>
+                <span class="term-tag" data-unit="4">Unit 4</span>
+            </div>
+            <div class="term-card" data-unit="4" data-term="just-in-case-jic">
+                <div class="term-name">Just in case (JIC)</div>
+                <div class="term-def">An inventory management approach where businesses hold extra stock as a buffer against unexpected demand or supply disruptions. JIC ensures availability but increases storage and holding costs.</div>
+                <span class="term-tag" data-unit="4">Unit 4</span>
+            </div>
+            <div class="term-card" data-unit="4" data-term="just-in-time-jit">
+                <div class="term-name">Just in time (JIT)</div>
+                <div class="term-def">An inventory management system where materials are ordered and received just when they are needed for production. JIT reduces storage costs and waste, but requires reliable suppliers and accurate forecasting.</div>
                 <span class="term-tag" data-unit="4">Unit 4</span>
             </div>
         </div>
@@ -891,83 +644,138 @@
         <!-- L -->
         <div class="letter-group" id="letter-l">
             <div class="letter-heading">L</div>
+            <div class="term-card" data-unit="2" data-term="leadership-styles">
+                <div class="term-name">Leadership styles</div>
+                <div class="term-def">The different approaches managers use to lead their teams. The three main styles are autocratic (leader decides alone), democratic (team involved in decisions), and laissez faire (team given freedom to decide).</div>
+                <span class="term-tag" data-unit="2">Unit 2</span>
+            </div>
+            <div class="term-card" data-unit="4" data-term="lean-production">
+                <div class="term-name">Lean production</div>
+                <div class="term-def">A production philosophy that aims to eliminate waste and maximise efficiency by improving processes and reducing unnecessary activities. Lean production often includes JIT and continuous improvement methods.</div>
+                <span class="term-tag" data-unit="4">Unit 4</span>
+            </div>
+            <div class="term-card" data-unit="5" data-term="liabilities">
+                <div class="term-name">Liabilities</div>
+                <div class="term-def">Amounts a business owes to others. Current liabilities (overdrafts, trade payables) must be paid within a year. Non current liabilities (long term loans, mortgages) are owed for more than a year.</div>
+                <span class="term-tag" data-unit="5">Unit 5</span>
+            </div>
+            <div class="term-card" data-unit="1" data-term="limited-liability">
+                <div class="term-name">Limited liability</div>
+                <div class="term-def">A legal arrangement where owners are responsible for business debts only up to the amount they invested. Limited liability protects personal assets if the business fails.</div>
+                <span class="term-tag" data-unit="1">Unit 1</span>
+            </div>
+            <div class="term-card" data-unit="1" data-term="limited-liability-company-ltd">
+                <div class="term-name">Limited liability company (Ltd)</div>
+                <div class="term-def">A private company where shares are owned by specific individuals or organisations. Limited liability companies have limited liability for shareholders and can raise capital by selling shares.</div>
+                <span class="term-tag" data-unit="1">Unit 1</span>
+            </div>
+            <div class="term-card" data-unit="5" data-term="loan">
+                <div class="term-name">Loan</div>
+                <div class="term-def">A fixed amount of money borrowed from a bank or other lender, repaid over an agreed period with interest. Loans are used for larger purchases and longer term needs.</div>
+                <span class="term-tag" data-unit="5">Unit 5</span>
+            </div>
             <div class="term-card" data-unit="1" data-term="loss">
                 <div class="term-name">Loss</div>
                 <div class="term-def">A financial situation where total costs exceed total revenue. A loss occurs when a business performs poorly or fails to generate sufficient sales.</div>
                 <span class="term-tag" data-unit="1">Unit 1</span>
-            </div>
-            <div class="term-card" data-unit="1" data-term="limited liability">
-                <div class="term-name">Limited Liability</div>
-                <div class="term-def">A legal arrangement where owners are responsible for business debts only up to the amount they invested. Limited liability protects personal assets if the business fails.</div>
-                <span class="term-tag" data-unit="1">Unit 1</span>
-            </div>
-            <div class="term-card" data-unit="1" data-term="limited liability company (ltd)">
-                <div class="term-name">Limited Liability Company (Ltd)</div>
-                <div class="term-def">A private company where shares are owned by specific individuals or organisations. Limited liability companies have limited liability for shareholders and can raise capital by selling shares.</div>
-                <span class="term-tag" data-unit="1">Unit 1</span>
-            </div>
-            <div class="term-card" data-unit="3" data-term="lead time">
-                <div class="term-name">Lead Time</div>
-                <div class="term-def">The time between placing an order for stock and receiving the goods. Lead time affects inventory planning and must be considered when setting reorder levels.</div>
-                <span class="term-tag" data-unit="3">Unit 3</span>
-            </div>
-            <div class="term-card" data-unit="3" data-term="lean production">
-                <div class="term-name">Lean Production</div>
-                <div class="term-def">A production philosophy that aims to eliminate waste and maximise efficiency by improving processes and reducing unnecessary activities. Lean production often includes JIT and continuous improvement methods.</div>
-                <span class="term-tag" data-unit="3">Unit 3</span>
             </div>
         </div>
 
         <!-- M -->
         <div class="letter-group" id="letter-m">
             <div class="letter-heading">M</div>
-            <div class="term-card" data-unit="5" data-term="market">
+            <div class="term-card" data-unit="4" data-term="margin-of-safety">
+                <div class="term-name">Margin of safety</div>
+                <div class="term-def">The difference between a business's actual (or expected) level of output and its break even point. It shows how much sales could fall before the business starts making a loss.</div>
+                <span class="term-tag" data-unit="4">Unit 4</span>
+            </div>
+            <div class="term-card" data-unit="3" data-term="market">
                 <div class="term-name">Market</div>
                 <div class="term-def">The demand for products or services from consumers. A market can be defined by geography, demographics, or product type, and represents potential customers for a business.</div>
-                <span class="term-tag" data-unit="5">Unit 5</span>
+                <span class="term-tag" data-unit="3">Unit 3</span>
             </div>
-            <div class="term-card" data-unit="5" data-term="market research">
-                <div class="term-name">Market Research</div>
+            <div class="term-card" data-unit="3" data-term="market-research">
+                <div class="term-name">Market research</div>
                 <div class="term-def">The systematic collection and analysis of data about a market, competitors, and consumers. Market research informs business decisions about products, pricing, and marketing strategies.</div>
-                <span class="term-tag" data-unit="5">Unit 5</span>
+                <span class="term-tag" data-unit="3">Unit 3</span>
             </div>
-            <div class="term-card" data-unit="5" data-term="market segmentation">
-                <div class="term-name">Market Segmentation</div>
+            <div class="term-card" data-unit="3" data-term="market-segmentation">
+                <div class="term-name">Market segmentation</div>
                 <div class="term-def">The division of a market into groups of consumers with similar characteristics or needs. Segmentation allows businesses to target specific groups with tailored marketing messages and products.</div>
-                <span class="term-tag" data-unit="5">Unit 5</span>
+                <span class="term-tag" data-unit="3">Unit 3</span>
             </div>
-            <div class="term-card" data-unit="5" data-term="marketing mix">
-                <div class="term-name">Marketing Mix</div>
+            <div class="term-card" data-unit="3" data-term="market-share">
+                <div class="term-name">Market share</div>
+                <div class="term-def">The percentage of total sales in a market that belongs to one business. It is calculated by dividing the business's sales by the total market sales and multiplying by 100.</div>
+                <span class="term-tag" data-unit="3">Unit 3</span>
+            </div>
+            <div class="term-card" data-unit="3" data-term="market-size">
+                <div class="term-name">Market size</div>
+                <div class="term-def">The total value or volume of sales in a market over a given period. It can be measured by the total revenue earned by all businesses in that market or by the total number of units sold.</div>
+                <span class="term-tag" data-unit="3">Unit 3</span>
+            </div>
+            <div class="term-card" data-unit="3" data-term="marketing-mix">
+                <div class="term-name">Marketing mix</div>
                 <div class="term-def">The combination of product, price, place, and promotion used to market a product. The marketing mix is a strategic tool for meeting customer needs and achieving business objectives.</div>
-                <span class="term-tag" data-unit="5">Unit 5</span>
+                <span class="term-tag" data-unit="3">Unit 3</span>
             </div>
-            <div class="term-card" data-unit="4" data-term="maslow's hierarchy of needs">
+            <div class="term-card" data-unit="2" data-term="maslows-hierarchy-of-needs">
                 <div class="term-name">Maslow's Hierarchy of Needs</div>
                 <div class="term-def">A motivation theory that ranks human needs in a hierarchy from basic physiological needs to self-actualisation. The theory suggests people are motivated to fulfil higher-level needs once lower needs are met.</div>
-                <span class="term-tag" data-unit="4">Unit 4</span>
+                <span class="term-tag" data-unit="2">Unit 2</span>
             </div>
-            <div class="term-card" data-unit="3" data-term="maximum stock level">
-                <div class="term-name">Maximum Stock Level</div>
-                <div class="term-def">The highest amount of stock a business should hold to avoid excessive storage costs. Maximum stock level is calculated based on reorder level, lead time, and maximum usage rate.</div>
-                <span class="term-tag" data-unit="3">Unit 3</span>
+            <div class="term-card" data-unit="1" data-term="merger">
+                <div class="term-name">Merger</div>
+                <div class="term-def">When two businesses of similar size agree to join together to form one new, larger business. Both companies stop existing separately.</div>
+                <span class="term-tag" data-unit="1">Unit 1</span>
             </div>
-            <div class="term-card" data-unit="3" data-term="minimum stock level">
-                <div class="term-name">Minimum Stock Level</div>
-                <div class="term-def">The lowest amount of stock that should be held to avoid running out of inventory. Minimum stock level acts as a safety buffer against unexpected demand or supply delays.</div>
-                <span class="term-tag" data-unit="3">Unit 3</span>
+            <div class="term-card" data-unit="6" data-term="minimum-wage">
+                <div class="term-name">Minimum wage</div>
+                <div class="term-def">The lowest hourly rate of pay that employers are legally required to pay their workers. The rate varies by age and is set by the government.</div>
+                <span class="term-tag" data-unit="6">Unit 6</span>
             </div>
-            <div class="term-card" data-unit="4" data-term="motivation">
+            <div class="term-card" data-unit="2" data-term="motivation">
                 <div class="term-name">Motivation</div>
                 <div class="term-def">The driving force that inspires employees to work effectively and achieve business objectives. Motivation can be influenced by factors such as pay, recognition, job satisfaction, and career development.</div>
-                <span class="term-tag" data-unit="4">Unit 4</span>
+                <span class="term-tag" data-unit="2">Unit 2</span>
+            </div>
+            <div class="term-card" data-unit="6" data-term="multinational-company-mnc">
+                <div class="term-name">Multinational company (MNC)</div>
+                <div class="term-def">A business that operates in more than one country. MNCs have their headquarters in one country and production or sales facilities in others.</div>
+                <span class="term-tag" data-unit="6">Unit 6</span>
             </div>
         </div>
 
         <!-- N -->
         <div class="letter-group" id="letter-n">
             <div class="letter-heading">N</div>
-            <div class="term-card" data-unit="1" data-term="not for profit organisation">
-                <div class="term-name">Not for Profit Organisation</div>
+            <div class="term-card" data-unit="1" data-term="needs-and-wants">
+                <div class="term-name">Needs and wants</div>
+                <div class="term-def">Needs are things essential for survival (food, water, shelter). Wants are things people would like but do not need to survive. Businesses exist to satisfy both needs and wants.</div>
+                <span class="term-tag" data-unit="1">Unit 1</span>
+            </div>
+            <div class="term-card" data-unit="5" data-term="net-cash-flow">
+                <div class="term-name">Net cash flow</div>
+                <div class="term-def">The difference between cash inflows and cash outflows over a given period. A positive net cash flow means more money is coming in than going out.</div>
+                <span class="term-tag" data-unit="5">Unit 5</span>
+            </div>
+            <div class="term-card" data-unit="5" data-term="net-profit">
+                <div class="term-name">Net profit</div>
+                <div class="term-def">The profit remaining after ALL costs (including overheads and expenses) have been deducted from revenue. Net profit = Gross profit minus Expenses.</div>
+                <span class="term-tag" data-unit="5">Unit 5</span>
+            </div>
+            <div class="term-card" data-unit="5" data-term="net-profit-margin">
+                <div class="term-name">Net profit margin</div>
+                <div class="term-def">A ratio showing net profit as a percentage of revenue. It measures overall profitability after all costs. Net profit margin = (Net profit / Revenue) x 100.</div>
+                <span class="term-tag" data-unit="5">Unit 5</span>
+            </div>
+            <div class="term-card" data-unit="3" data-term="niche-market">
+                <div class="term-name">Niche market</div>
+                <div class="term-def">A small, specialised segment of a larger market. Businesses targeting a niche focus on meeting the specific needs of a small group of customers, often with less competition but a smaller customer base.</div>
+                <span class="term-tag" data-unit="3">Unit 3</span>
+            </div>
+            <div class="term-card" data-unit="1" data-term="not-for-profit-organisation">
+                <div class="term-name">Not for profit organisation</div>
                 <div class="term-def">An organisation established to provide services or support to a cause rather than to make profit for owners. Any surplus revenue is reinvested into the organisation's mission.</div>
                 <span class="term-tag" data-unit="1">Unit 1</span>
             </div>
@@ -976,19 +784,24 @@
         <!-- O -->
         <div class="letter-group" id="letter-o">
             <div class="letter-heading">O</div>
-            <div class="term-card" data-unit="4" data-term="off the job training">
-                <div class="term-name">Off the Job Training</div>
-                <div class="term-def">Training conducted away from the workplace, such as in colleges, training centres, or online. Off the job training provides formal education but is more expensive than on the job training.</div>
-                <span class="term-tag" data-unit="4">Unit 4</span>
+            <div class="term-card" data-unit="1" data-term="opportunity-cost">
+                <div class="term-name">Opportunity cost</div>
+                <div class="term-def">The next best alternative that is given up when a decision is made. For example, if a business spends money on new equipment, the opportunity cost might be the marketing campaign it could not afford.</div>
+                <span class="term-tag" data-unit="1">Unit 1</span>
             </div>
-            <div class="term-card" data-unit="4" data-term="on the job training">
-                <div class="term-name">On the Job Training</div>
-                <div class="term-def">Training delivered while employees perform their actual job duties. On the job training is cost effective, practical, and allows immediate application of skills.</div>
-                <span class="term-tag" data-unit="4">Unit 4</span>
-            </div>
-            <div class="term-card" data-unit="4" data-term="organisational structure">
-                <div class="term-name">Organisational Structure</div>
+            <div class="term-card" data-unit="2" data-term="organisational-structure">
+                <div class="term-name">Organisational structure</div>
                 <div class="term-def">The way an organisation is arranged and how authority, responsibilities, and communication flow. Common structures include hierarchical, flat, matrix, and divisional structures.</div>
+                <span class="term-tag" data-unit="2">Unit 2</span>
+            </div>
+            <div class="term-card" data-unit="5" data-term="overdraft">
+                <div class="term-name">Overdraft</div>
+                <div class="term-def">A short term borrowing facility that allows a business to spend more money than it has in its bank account, up to an agreed limit. Interest is charged on the amount overdrawn.</div>
+                <span class="term-tag" data-unit="5">Unit 5</span>
+            </div>
+            <div class="term-card" data-unit="4" data-term="overhead-costs">
+                <div class="term-name">Overhead costs</div>
+                <div class="term-def">Indirect expenses that are not directly tied to production but are necessary to run a business, such as utilities, rent, and administration. Overhead costs must be covered before a business can make a profit.</div>
                 <span class="term-tag" data-unit="4">Unit 4</span>
             </div>
         </div>
@@ -1001,94 +814,114 @@
                 <div class="term-def">A business structure where two or more individuals jointly own and operate the business. Partners share profits, losses, and unlimited liability unless they are limited partners.</div>
                 <span class="term-tag" data-unit="1">Unit 1</span>
             </div>
-            <div class="term-card" data-unit="1" data-term="public limited company (plc)">
-                <div class="term-name">Public Limited Company (Plc)</div>
-                <div class="term-def">A company whose shares are traded on the stock exchange and available to the public. Plcs have limited liability, access to large amounts of capital, but face strict regulatory requirements.</div>
+            <div class="term-card" data-unit="3" data-term="penetration-pricing">
+                <div class="term-name">Penetration pricing</div>
+                <div class="term-def">A pricing strategy where a new product is launched at a low price to quickly gain market share. Penetration pricing can attract customers away from competitors but may reduce initial profit margins.</div>
+                <span class="term-tag" data-unit="3">Unit 3</span>
+            </div>
+            <div class="term-card" data-unit="2" data-term="person-specification">
+                <div class="term-name">Person specification</div>
+                <div class="term-def">A document outlining the skills, experience, qualifications, and personal qualities required for a job position. The person specification helps in selecting the most suitable candidates during recruitment.</div>
+                <span class="term-tag" data-unit="2">Unit 2</span>
+            </div>
+            <div class="term-card" data-unit="3" data-term="place">
+                <div class="term-name">Place</div>
+                <div class="term-def">The distribution channels through which a product reaches the customer. Place includes the choice between direct sales, retail stores, wholesalers, and online platforms.</div>
+                <span class="term-tag" data-unit="3">Unit 3</span>
+            </div>
+            <div class="term-card" data-unit="6" data-term="pressure-group">
+                <div class="term-name">Pressure group</div>
+                <div class="term-def">An organisation that represents the interests of a specific group and seeks to influence business and government policy. Pressure groups campaign on issues such as the environment, workers' rights, and consumer protection.</div>
+                <span class="term-tag" data-unit="6">Unit 6</span>
+            </div>
+            <div class="term-card" data-unit="3" data-term="price">
+                <div class="term-name">Price</div>
+                <div class="term-def">The amount of money charged for a product or service. Price is a key element of the marketing mix and must balance affordability for consumers with profit requirements for the business.</div>
+                <span class="term-tag" data-unit="3">Unit 3</span>
+            </div>
+            <div class="term-card" data-unit="3" data-term="primary-research">
+                <div class="term-name">Primary research</div>
+                <div class="term-def">The collection of new, original data directly from sources such as customers, through surveys, interviews, or experiments. Primary research is more expensive but provides current, specific information.</div>
+                <span class="term-tag" data-unit="3">Unit 3</span>
+            </div>
+            <div class="term-card" data-unit="1" data-term="primary-sector">
+                <div class="term-name">Primary sector</div>
+                <div class="term-def">The part of the economy that extracts raw materials from the earth, such as farming, mining, fishing, and forestry.</div>
                 <span class="term-tag" data-unit="1">Unit 1</span>
             </div>
-            <div class="term-card" data-unit="1" data-term="private limited company (ltd)">
-                <div class="term-name">Private Limited Company (Ltd)</div>
+            <div class="term-card" data-unit="1" data-term="private-limited-company-ltd">
+                <div class="term-name">Private limited company (Ltd)</div>
                 <div class="term-def">A private company where shares are owned by specific individuals or organisations. Limited liability companies have limited liability for shareholders and can raise capital by selling shares.</div>
                 <span class="term-tag" data-unit="1">Unit 1</span>
+            </div>
+            <div class="term-card" data-unit="1" data-term="private-sector">
+                <div class="term-name">Private sector</div>
+                <div class="term-def">Businesses owned and run by private individuals, funded by sales revenue and investment. The main aim is usually to make a profit.</div>
+                <span class="term-tag" data-unit="1">Unit 1</span>
+            </div>
+            <div class="term-card" data-unit="3" data-term="product">
+                <div class="term-name">Product</div>
+                <div class="term-def">A good or service offered for sale to satisfy customer needs. Product is one element of the marketing mix and includes features, quality, branding, and packaging.</div>
+                <span class="term-tag" data-unit="3">Unit 3</span>
+            </div>
+            <div class="term-card" data-unit="3" data-term="product-life-cycle">
+                <div class="term-name">Product life cycle</div>
+                <div class="term-def">The stages a product goes through from introduction to decline. The cycle includes introduction, growth, maturity, and decline stages, each requiring different marketing strategies.</div>
+                <span class="term-tag" data-unit="3">Unit 3</span>
+            </div>
+            <div class="term-card" data-unit="4" data-term="productivity">
+                <div class="term-name">Productivity</div>
+                <div class="term-def">A measure of how effectively resources such as labour and materials are used to produce output. Higher productivity means more output from the same amount of input, improving profitability.</div>
+                <span class="term-tag" data-unit="4">Unit 4</span>
             </div>
             <div class="term-card" data-unit="1" data-term="profit">
                 <div class="term-name">Profit</div>
                 <div class="term-def">The financial gain made when total revenue exceeds total costs. Profit is the primary objective for most businesses and is used to reward owners, reinvest in the business, or distribute to shareholders.</div>
                 <span class="term-tag" data-unit="1">Unit 1</span>
             </div>
-            <div class="term-card" data-unit="3" data-term="procurement">
-                <div class="term-name">Procurement</div>
-                <div class="term-def">The process of acquiring materials, supplies, and services needed for production. Procurement includes identifying suppliers, negotiating terms, and managing orders.</div>
-                <span class="term-tag" data-unit="3">Unit 3</span>
-            </div>
-            <div class="term-card" data-unit="3" data-term="productivity">
-                <div class="term-name">Productivity</div>
-                <div class="term-def">A measure of how effectively resources such as labour and materials are used to produce output. Higher productivity means more output from the same amount of input, improving profitability.</div>
-                <span class="term-tag" data-unit="3">Unit 3</span>
-            </div>
-            <div class="term-card" data-unit="5" data-term="product">
-                <div class="term-name">Product</div>
-                <div class="term-def">A good or service offered for sale to satisfy customer needs. Product is one element of the marketing mix and includes features, quality, branding, and packaging.</div>
-                <span class="term-tag" data-unit="5">Unit 5</span>
-            </div>
-            <div class="term-card" data-unit="5" data-term="product life cycle">
-                <div class="term-name">Product Life Cycle</div>
-                <div class="term-def">The stages a product goes through from introduction to decline. The cycle includes introduction, growth, maturity, and decline stages, each requiring different marketing strategies.</div>
-                <span class="term-tag" data-unit="5">Unit 5</span>
-            </div>
-            <div class="term-card" data-unit="2" data-term="pressure group">
-                <div class="term-name">Pressure Group</div>
-                <div class="term-def">An organisation that represents the interests of a specific group and seeks to influence business and government policy. Pressure groups campaign on issues such as the environment, workers' rights, and consumer protection.</div>
-                <span class="term-tag" data-unit="2">Unit 2</span>
-            </div>
-            <div class="term-card" data-unit="5" data-term="price">
-                <div class="term-name">Price</div>
-                <div class="term-def">The amount of money charged for a product or service. Price is a key element of the marketing mix and must balance affordability for consumers with profit requirements for the business.</div>
-                <span class="term-tag" data-unit="5">Unit 5</span>
-            </div>
-            <div class="term-card" data-unit="5" data-term="penetration pricing">
-                <div class="term-name">Penetration Pricing</div>
-                <div class="term-def">A pricing strategy where a new product is launched at a low price to quickly gain market share. Penetration pricing can attract customers away from competitors but may reduce initial profit margins.</div>
-                <span class="term-tag" data-unit="5">Unit 5</span>
-            </div>
-            <div class="term-card" data-unit="5" data-term="promotion">
+            <div class="term-card" data-unit="3" data-term="promotion">
                 <div class="term-name">Promotion</div>
                 <div class="term-def">Marketing activities designed to communicate a product's benefits to customers and encourage purchase. Promotion includes advertising, sales promotions, public relations, and personal selling.</div>
-                <span class="term-tag" data-unit="5">Unit 5</span>
+                <span class="term-tag" data-unit="3">Unit 3</span>
             </div>
-            <div class="term-card" data-unit="5" data-term="place">
-                <div class="term-name">Place</div>
-                <div class="term-def">The distribution channels through which a product reaches the customer. Place includes the choice between direct sales, retail stores, wholesalers, and online platforms.</div>
-                <span class="term-tag" data-unit="5">Unit 5</span>
+            <div class="term-card" data-unit="3" data-term="promotional-pricing">
+                <div class="term-name">Promotional pricing</div>
+                <div class="term-def">A temporary reduction in price to attract customers and boost sales in the short term. Examples include buy one get one free offers, seasonal sales, and limited time discounts.</div>
+                <span class="term-tag" data-unit="3">Unit 3</span>
             </div>
-            <div class="term-card" data-unit="4" data-term="person specification">
-                <div class="term-name">Person Specification</div>
-                <div class="term-def">A document outlining the skills, experience, qualifications, and personal qualities required for a job position. The person specification helps in selecting the most suitable candidates during recruitment.</div>
-                <span class="term-tag" data-unit="4">Unit 4</span>
+            <div class="term-card" data-unit="1" data-term="public-limited-company-plc">
+                <div class="term-name">Public limited company (Plc)</div>
+                <div class="term-def">A company whose shares are traded on the stock exchange and available to the public. Plcs have limited liability, access to large amounts of capital, but face strict regulatory requirements.</div>
+                <span class="term-tag" data-unit="1">Unit 1</span>
+            </div>
+            <div class="term-card" data-unit="1" data-term="public-sector">
+                <div class="term-name">Public sector</div>
+                <div class="term-def">Organisations owned and run by the government, funded by taxation. Examples include the NHS, state schools, and the police.</div>
+                <span class="term-tag" data-unit="1">Unit 1</span>
             </div>
         </div>
 
         <!-- Q -->
         <div class="letter-group" id="letter-q">
             <div class="letter-heading">Q</div>
-            <div class="term-card" data-unit="5" data-term="qualitative data">
-                <div class="term-name">Qualitative Data</div>
+            <div class="term-card" data-unit="3" data-term="qualitative-data">
+                <div class="term-name">Qualitative data</div>
                 <div class="term-def">Information that describes qualities, characteristics, or opinions rather than numbers. Qualitative data includes customer feedback, focus group discussions, and detailed descriptions of consumer behaviour.</div>
-                <span class="term-tag" data-unit="5">Unit 5</span>
-            </div>
-            <div class="term-card" data-unit="5" data-term="quantitative data">
-                <div class="term-name">Quantitative Data</div>
-                <div class="term-def">Information expressed in numerical form, such as sales figures, market size, or customer demographics. Quantitative data can be analysed statistically to identify trends and patterns.</div>
-                <span class="term-tag" data-unit="5">Unit 5</span>
-            </div>
-            <div class="term-card" data-unit="3" data-term="quality assurance">
-                <div class="term-name">Quality Assurance</div>
-                <div class="term-def">A systematic process to ensure that production methods meet set quality standards. Quality assurance focuses on preventing defects through careful planning and process control.</div>
                 <span class="term-tag" data-unit="3">Unit 3</span>
             </div>
-            <div class="term-card" data-unit="3" data-term="quality control">
-                <div class="term-name">Quality Control</div>
+            <div class="term-card" data-unit="4" data-term="quality-assurance">
+                <div class="term-name">Quality assurance</div>
+                <div class="term-def">A systematic process to ensure that production methods meet set quality standards. Quality assurance focuses on preventing defects through careful planning and process control.</div>
+                <span class="term-tag" data-unit="4">Unit 4</span>
+            </div>
+            <div class="term-card" data-unit="4" data-term="quality-control">
+                <div class="term-name">Quality control</div>
                 <div class="term-def">The inspection and testing of finished products to identify and remove defective items. Quality control is a final check to ensure products meet quality standards before sale.</div>
+                <span class="term-tag" data-unit="4">Unit 4</span>
+            </div>
+            <div class="term-card" data-unit="3" data-term="quantitative-data">
+                <div class="term-name">Quantitative data</div>
+                <div class="term-def">Information expressed in numerical form, such as sales figures, market size, or customer demographics. Quantitative data can be analysed statistically to identify trends and patterns.</div>
                 <span class="term-tag" data-unit="3">Unit 3</span>
             </div>
         </div>
@@ -1096,6 +929,16 @@
         <!-- R -->
         <div class="letter-group" id="letter-r">
             <div class="letter-heading">R</div>
+            <div class="term-card" data-unit="2" data-term="recruitment">
+                <div class="term-name">Recruitment</div>
+                <div class="term-def">The process of finding and hiring suitable candidates for job vacancies. Recruitment includes advertising, screening applications, interviewing candidates, and selecting the best match.</div>
+                <span class="term-tag" data-unit="2">Unit 2</span>
+            </div>
+            <div class="term-card" data-unit="5" data-term="retained-profit">
+                <div class="term-name">Retained profit</div>
+                <div class="term-def">Profit that is kept within the business rather than distributed to owners or shareholders. It is an internal source of finance that does not need to be repaid.</div>
+                <span class="term-tag" data-unit="5">Unit 5</span>
+            </div>
             <div class="term-card" data-unit="1" data-term="revenue">
                 <div class="term-name">Revenue</div>
                 <div class="term-def">The total money earned by a business from selling goods or services before deducting costs and expenses. Revenue is calculated by multiplying the price per unit by the quantity sold.</div>
@@ -1111,165 +954,209 @@
                 <div class="term-def">The possibility of loss or failure in a business venture. Business risks include market risk, financial risk, and operational risk, and must be managed to protect the business.</div>
                 <span class="term-tag" data-unit="1">Unit 1</span>
             </div>
-            <div class="term-card" data-unit="4" data-term="recruitment">
-                <div class="term-name">Recruitment</div>
-                <div class="term-def">The process of finding and hiring suitable candidates for job vacancies. Recruitment includes advertising, screening applications, interviewing candidates, and selecting the best match.</div>
-                <span class="term-tag" data-unit="4">Unit 4</span>
-            </div>
-            <div class="term-card" data-unit="3" data-term="reorder level">
-                <div class="term-name">Reorder Level</div>
-                <div class="term-def">The stock level at which a new order should be placed to ensure stock does not run out before the new delivery arrives. Reorder level is calculated based on lead time and daily usage.</div>
-                <span class="term-tag" data-unit="3">Unit 3</span>
-            </div>
-            <div class="term-card" data-unit="5" data-term="primary research">
-                <div class="term-name">Primary Research</div>
-                <div class="term-def">The collection of new, original data directly from sources such as customers, through surveys, interviews, or experiments. Primary research is more expensive but provides current, specific information.</div>
-                <span class="term-tag" data-unit="5">Unit 5</span>
-            </div>
         </div>
 
         <!-- S -->
         <div class="letter-group" id="letter-s">
             <div class="letter-heading">S</div>
-            <div class="term-card" data-unit="2" data-term="supply">
-                <div class="term-name">Supply</div>
-                <div class="term-def">The quantity of a product or service that producers are willing and able to supply at a given price. Supply is affected by production costs, technology, and the number of suppliers in the market.</div>
-                <span class="term-tag" data-unit="2">Unit 2</span>
+            <div class="term-card" data-unit="1" data-term="scarcity">
+                <div class="term-name">Scarcity</div>
+                <div class="term-def">The basic economic problem that there are unlimited wants but limited resources to satisfy them. This means choices must be made about how resources are used.</div>
+                <span class="term-tag" data-unit="1">Unit 1</span>
             </div>
-            <div class="term-card" data-unit="3" data-term="supply chain">
-                <div class="term-name">Supply Chain</div>
-                <div class="term-def">The sequence of activities and organisations involved in producing and delivering a product from raw materials to the final customer. The supply chain includes procurement, production, warehousing, and distribution.</div>
+            <div class="term-card" data-unit="3" data-term="secondary-research">
+                <div class="term-name">Secondary research</div>
+                <div class="term-def">The use of existing data previously collected for other purposes, such as industry reports, census data, or competitor information. Secondary research is cheaper and quicker than primary research.</div>
                 <span class="term-tag" data-unit="3">Unit 3</span>
             </div>
-            <div class="term-card" data-unit="1" data-term="sole trader">
-                <div class="term-name">Sole Trader</div>
+            <div class="term-card" data-unit="1" data-term="secondary-sector">
+                <div class="term-name">Secondary sector</div>
+                <div class="term-def">The part of the economy that manufactures and processes raw materials into finished goods, such as factories, construction, and food processing.</div>
+                <span class="term-tag" data-unit="1">Unit 1</span>
+            </div>
+            <div class="term-card" data-unit="2" data-term="selection">
+                <div class="term-name">Selection</div>
+                <div class="term-def">The process of choosing the most suitable candidate from applications received for a job vacancy. Selection involves interviews, tests, references, and assessment of candidates.</div>
+                <span class="term-tag" data-unit="2">Unit 2</span>
+            </div>
+            <div class="term-card" data-unit="1" data-term="shareholder">
+                <div class="term-name">Shareholder</div>
+                <div class="term-def">A person or organisation that owns shares (a portion of ownership) in a limited company. Shareholders receive a share of the profits (dividends) and can vote on major company decisions.</div>
+                <span class="term-tag" data-unit="1">Unit 1</span>
+            </div>
+            <div class="term-card" data-unit="3" data-term="social-media">
+                <div class="term-name">Social media</div>
+                <div class="term-def">Digital platforms and networks used for communication and sharing content. Businesses use social media for marketing, brand building, customer engagement, and market research.</div>
+                <span class="term-tag" data-unit="3">Unit 3</span>
+            </div>
+            <div class="term-card" data-unit="1" data-term="sole-trader">
+                <div class="term-name">Sole trader</div>
                 <div class="term-def">An individual who owns and operates a business alone, bearing all profits and losses personally. Sole traders have unlimited liability but retain full control and keep all profits.</div>
                 <span class="term-tag" data-unit="1">Unit 1</span>
+            </div>
+            <div class="term-card" data-unit="2" data-term="span-of-control">
+                <div class="term-name">Span of control</div>
+                <div class="term-def">The number of employees directly supervised by a manager. A narrow span of control means fewer subordinates per manager, allowing closer supervision.</div>
+                <span class="term-tag" data-unit="2">Unit 2</span>
             </div>
             <div class="term-card" data-unit="1" data-term="stakeholder">
                 <div class="term-name">Stakeholder</div>
                 <div class="term-def">Any person or group with an interest in or affected by the business, including employees, customers, suppliers, owners, and the local community. Different stakeholders have different priorities and interests.</div>
                 <span class="term-tag" data-unit="1">Unit 1</span>
             </div>
-            <div class="term-card" data-unit="2" data-term="social media">
-                <div class="term-name">Social Media</div>
-                <div class="term-def">Digital platforms and networks used for communication and sharing content. Businesses use social media for marketing, brand building, customer engagement, and market research.</div>
-                <span class="term-tag" data-unit="2">Unit 2</span>
+            <div class="term-card" data-unit="5" data-term="statement-of-financial-position">
+                <div class="term-name">Statement of financial position</div>
+                <div class="term-def">A financial document showing what a business owns (assets), what it owes (liabilities), and the value of the owner's investment (equity) at a specific point in time. Also known as a balance sheet.</div>
+                <span class="term-tag" data-unit="5">Unit 5</span>
             </div>
-            <div class="term-card" data-unit="2" data-term="sustainability">
+            <div class="term-card" data-unit="4" data-term="stock-control">
+                <div class="term-name">Stock control</div>
+                <div class="term-def">The process of managing the amount of stock (inventory) a business holds, ensuring there is enough to meet demand without holding too much (which ties up cash and storage space).</div>
+                <span class="term-tag" data-unit="4">Unit 4</span>
+            </div>
+            <div class="term-card" data-unit="1" data-term="supply">
+                <div class="term-name">Supply</div>
+                <div class="term-def">The quantity of a product or service that producers are willing and able to supply at a given price. Supply is affected by production costs, technology, and the number of suppliers in the market.</div>
+                <span class="term-tag" data-unit="1">Unit 1</span>
+            </div>
+            <div class="term-card" data-unit="4" data-term="supply-chain">
+                <div class="term-name">Supply chain</div>
+                <div class="term-def">The sequence of activities and organisations involved in producing and delivering a product from raw materials to the final customer. The supply chain includes procurement, production, warehousing, and distribution.</div>
+                <span class="term-tag" data-unit="4">Unit 4</span>
+            </div>
+            <div class="term-card" data-unit="6" data-term="sustainability">
                 <div class="term-name">Sustainability</div>
                 <div class="term-def">The ability to meet present needs without compromising the ability of future generations to meet theirs. Sustainability in business involves responsible use of resources and environmental protection.</div>
-                <span class="term-tag" data-unit="2">Unit 2</span>
-            </div>
-            <div class="term-card" data-unit="4" data-term="selection">
-                <div class="term-name">Selection</div>
-                <div class="term-def">The process of choosing the most suitable candidate from applications received for a job vacancy. Selection involves interviews, tests, references, and assessment of candidates.</div>
-                <span class="term-tag" data-unit="4">Unit 4</span>
-            </div>
-            <div class="term-card" data-unit="4" data-term="span of control">
-                <div class="term-name">Span of Control</div>
-                <div class="term-def">The number of employees directly supervised by a manager. A narrow span of control means fewer subordinates per manager, allowing closer supervision.</div>
-                <span class="term-tag" data-unit="4">Unit 4</span>
+                <span class="term-tag" data-unit="6">Unit 6</span>
             </div>
         </div>
 
         <!-- T -->
         <div class="letter-group" id="letter-t">
             <div class="letter-heading">T</div>
-            <div class="term-card" data-unit="2" data-term="technology">
-                <div class="term-name">Technology</div>
-                <div class="term-def">Tools, systems, and processes used to improve business operations and product quality. Technology enables automation, faster communication, better data analysis, and creation of new business models.</div>
-                <span class="term-tag" data-unit="2">Unit 2</span>
+            <div class="term-card" data-unit="1" data-term="takeover">
+                <div class="term-name">Takeover</div>
+                <div class="term-def">When one business buys enough shares in another business to take control of it. The bought business becomes part of the buying company.</div>
+                <span class="term-tag" data-unit="1">Unit 1</span>
             </div>
-            <div class="term-card" data-unit="5" data-term="target market">
-                <div class="term-name">Target Market</div>
+            <div class="term-card" data-unit="3" data-term="target-market">
+                <div class="term-name">Target market</div>
                 <div class="term-def">The specific group of consumers that a business aims to reach with its marketing efforts. The target market is identified through market segmentation and analysis of customer characteristics and needs.</div>
-                <span class="term-tag" data-unit="5">Unit 5</span>
-            </div>
-            <div class="term-card" data-unit="3" data-term="total quality management (tqm)">
-                <div class="term-name">Total Quality Management (TQM)</div>
-                <div class="term-def">A management philosophy focused on continuous improvement of quality throughout all business processes. TQM involves all employees working to meet and exceed customer expectations.</div>
                 <span class="term-tag" data-unit="3">Unit 3</span>
             </div>
-            <div class="term-card" data-unit="4" data-term="training">
-                <div class="term-name">Training</div>
-                <div class="term-def">The process of teaching employees new skills or knowledge required for their job. Training can be on the job or off the job, and is essential for employee development and productivity.</div>
-                <span class="term-tag" data-unit="4">Unit 4</span>
+            <div class="term-card" data-unit="6" data-term="tariff">
+                <div class="term-name">Tariff</div>
+                <div class="term-def">A tax placed on imported goods to make them more expensive, protecting domestic businesses from foreign competition. Tariffs increase the price consumers pay for imported products.</div>
+                <span class="term-tag" data-unit="6">Unit 6</span>
             </div>
-            <div class="term-card" data-unit="4" data-term="taylor's scientific management">
+            <div class="term-card" data-unit="2" data-term="taylors-scientific-management">
                 <div class="term-name">Taylor's Scientific Management</div>
                 <div class="term-def">An approach to management that seeks to improve efficiency through scientific analysis of work. Taylor's theory emphasises breaking work into tasks, training workers, and using financial incentives.</div>
+                <span class="term-tag" data-unit="2">Unit 2</span>
+            </div>
+            <div class="term-card" data-unit="4" data-term="technology">
+                <div class="term-name">Technology</div>
+                <div class="term-def">Tools, systems, and processes used to improve business operations and product quality. Technology enables automation, faster communication, better data analysis, and creation of new business models.</div>
                 <span class="term-tag" data-unit="4">Unit 4</span>
             </div>
-            <div class="term-card" data-unit="5" data-term="secondary research">
-                <div class="term-name">Secondary Research</div>
-                <div class="term-def">The use of existing data previously collected for other purposes, such as industry reports, census data, or competitor information. Secondary research is cheaper and quicker than primary research.</div>
+            <div class="term-card" data-unit="1" data-term="tertiary-sector">
+                <div class="term-name">Tertiary sector</div>
+                <div class="term-def">The part of the economy that provides services to consumers and businesses, such as retail, healthcare, education, banking, and transport.</div>
+                <span class="term-tag" data-unit="1">Unit 1</span>
+            </div>
+            <div class="term-card" data-unit="4" data-term="total-costs">
+                <div class="term-name">Total costs</div>
+                <div class="term-def">The sum of all fixed costs and variable costs at a given level of output. Total costs = Fixed costs + Variable costs.</div>
+                <span class="term-tag" data-unit="4">Unit 4</span>
+            </div>
+            <div class="term-card" data-unit="4" data-term="total-quality-management-tqm">
+                <div class="term-name">Total quality management (TQM)</div>
+                <div class="term-def">A management philosophy focused on continuous improvement of quality throughout all business processes. TQM involves all employees working to meet and exceed customer expectations.</div>
+                <span class="term-tag" data-unit="4">Unit 4</span>
+            </div>
+            <div class="term-card" data-unit="5" data-term="trade-credit">
+                <div class="term-name">Trade credit</div>
+                <div class="term-def">An agreement where a supplier allows a business to receive goods now and pay for them at a later date (typically 30, 60, or 90 days). This helps businesses manage their cash flow.</div>
                 <span class="term-tag" data-unit="5">Unit 5</span>
+            </div>
+            <div class="term-card" data-unit="2" data-term="trade-union">
+                <div class="term-name">Trade union</div>
+                <div class="term-def">An organisation that represents the interests of workers. Unions negotiate with employers on pay, working conditions, and other employment issues on behalf of their members.</div>
+                <span class="term-tag" data-unit="2">Unit 2</span>
+            </div>
+            <div class="term-card" data-unit="2" data-term="training">
+                <div class="term-name">Training</div>
+                <div class="term-def">The process of teaching employees new skills or knowledge required for their job. Training can be on the job or off the job, and is essential for employee development and productivity.</div>
+                <span class="term-tag" data-unit="2">Unit 2</span>
             </div>
         </div>
 
         <!-- U -->
         <div class="letter-group" id="letter-u">
             <div class="letter-heading">U</div>
-            <div class="term-card" data-unit="1" data-term="unlimited liability">
-                <div class="term-name">Unlimited Liability</div>
+            <div class="term-card" data-unit="6" data-term="unemployment">
+                <div class="term-name">Unemployment</div>
+                <div class="term-def">The situation where people of working age are willing to work but cannot find employment. High unemployment may reduce consumer spending and demand for products.</div>
+                <span class="term-tag" data-unit="6">Unit 6</span>
+            </div>
+            <div class="term-card" data-unit="1" data-term="unlimited-liability">
+                <div class="term-name">Unlimited liability</div>
                 <div class="term-def">A legal situation where owners are personally responsible for all business debts and liabilities. If the business fails, creditors can pursue owners' personal assets to settle outstanding debts.</div>
                 <span class="term-tag" data-unit="1">Unit 1</span>
             </div>
-            <div class="term-card" data-unit="2" data-term="unemployment">
-                <div class="term-name">Unemployment</div>
-                <div class="term-def">The situation where people of working age are willing to work but cannot find employment. High unemployment may reduce consumer spending and demand for products.</div>
-                <span class="term-tag" data-unit="2">Unit 2</span>
+        </div>
+
+        <!-- V -->
+        <div class="letter-group" id="letter-v">
+            <div class="letter-heading">V</div>
+            <div class="term-card" data-unit="4" data-term="variable-costs">
+                <div class="term-name">Variable costs</div>
+                <div class="term-def">Costs that change in direct proportion to the amount produced, such as raw materials, packaging, and delivery costs. The more a business produces, the higher its variable costs.</div>
+                <span class="term-tag" data-unit="4">Unit 4</span>
+            </div>
+            <div class="term-card" data-unit="5" data-term="venture-capital">
+                <div class="term-name">Venture capital</div>
+                <div class="term-def">Finance provided by specialist investors to businesses with high growth potential, usually in exchange for a share of ownership. Venture capitalists often also provide business expertise.</div>
+                <span class="term-tag" data-unit="5">Unit 5</span>
             </div>
         </div>
+
 
     </div>
 
     <footer class="notes-footer">
         <p>&copy; 2026 MyBizStudies. All rights reserved. &nbsp; <a href="about.html">About</a> &nbsp; | &nbsp; <a href="privacy.html">Privacy</a> &nbsp; | &nbsp; <a href="terms.html">Terms</a> &nbsp; | &nbsp; <a href="refund.html">Refund Policy</a> &nbsp; | &nbsp; <a href="contact.html">Contact</a></p>
-    
         <div class="footer-social">
-            <a href="https://www.tiktok.com/@mybizstudies" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.34-6.34V8.73a8.19 8.19 0 004.76 1.52V6.81a4.84 4.84 0 01-1-.12z"/></svg>
-            </a>
-            <a href="https://www.instagram.com/mybizstudies" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-            </a>
-            <a href="https://www.facebook.com/mybizstudies" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-            </a>
+            <a href="https://www.tiktok.com/@mybizstudies" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.34-6.34V8.73a8.19 8.19 0 004.76 1.52V6.81a4.84 4.84 0 01-1-.12z"/></svg></a>
+            <a href="https://www.instagram.com/mybizstudies" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+            <a href="https://www.facebook.com/mybizstudies" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-    // Supabase setup
     var SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
     var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
     var supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Check auth state and update nav
     async function checkAuth() {
         var sess = await supabaseClient.auth.getSession();
         var session = sess.data.session;
         if (session) {
             document.querySelectorAll('.auth-only').forEach(function(el) { el.style.display = ''; });
-                // Show admin link only for admin email
-                if (session.user.email === 'hello@mybizstudies.com') {
-                    document.querySelectorAll('.admin-only').forEach(function(el) { el.style.display = ''; });
-                }
+            if (session.user.email === 'hello@mybizstudies.com') {
+                document.querySelectorAll('.admin-only').forEach(function(el) { el.style.display = ''; });
+            }
             document.querySelectorAll('.guest-only').forEach(function(el) { el.style.display = 'none'; });
         }
     }
     checkAuth();
 
-    // Logout
     async function handleLogout() {
         await supabaseClient.auth.signOut();
         window.location.href = 'login.html';
     }
 
-    // Site navbar mobile menu
     var siteHam = document.getElementById('siteHamburger');
     var siteMob = document.getElementById('siteMobileMenu');
     var siteOvl = document.getElementById('siteMobileOverlay');
@@ -1304,13 +1191,11 @@
         });
     }
 
-    // Logout buttons
     var navLogout = document.getElementById('navLogoutBtn');
     var mobileLogout = document.getElementById('mobileLogoutBtn');
     if (navLogout) navLogout.addEventListener('click', function() { handleLogout(); });
     if (mobileLogout) mobileLogout.addEventListener('click', function() { handleLogout(); });
 
-    // Profile avatar dropdown
     var profileAvatar = document.getElementById('profileAvatar');
     var profileDropdown = document.getElementById('profileDropdown');
     if (profileAvatar && profileDropdown) {
@@ -1324,20 +1209,22 @@
             }
         });
     }
-    // Populate profile initials
+
     function getProfileInitials(session) {
-                var fullName = session.user_metadata && (session.user_metadata.full_name || session.user_metadata.name) || '';
-                var email = session.email || '';
-                if (fullName) {
-                    var parts = fullName.trim().split(' ');
-                    return parts.length >= 2 ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase() : parts[0][0].toUpperCase();
-                }
-                if (!email) return '--';
-                return email[0].toUpperCase();
-            }
+        var fullName = session.user_metadata && (session.user_metadata.full_name || session.user_metadata.name) || '';
+        var email = session.email || '';
+        if (fullName) {
+            var parts = fullName.trim().split(' ');
+            return parts.length >= 2 ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase() : parts[0][0].toUpperCase();
+        }
+        if (!email) return '--';
+        return email[0].toUpperCase();
+    }
+
     async function setupProfileAvatar() {
         try {
-            const { data: { user } } = await supabaseClient.auth.getUser();
+            var userData = await supabaseClient.auth.getUser();
+            var user = userData.data.user;
             if (profileAvatar && user && user.email) {
                 profileAvatar.textContent = getProfileInitials(user);
             }
@@ -1345,124 +1232,90 @@
     }
     setupProfileAvatar();
 
-    // ==================== LEVEL TOGGLE ====================
-    (function() {
-        var LEVEL_KEY = 'mybiz_study_level';
-        var currentLevel = localStorage.getItem(LEVEL_KEY) || 'alevel';
+    // ===== LEVEL TOGGLE =====
+    var LEVEL_KEY = 'mybiz_level';
+    var currentLevel = localStorage.getItem(LEVEL_KEY) || 'gcse';
 
-        var alevelPages = {
-            'app.html': 'gcse-app.html',
-            'glossary.html': 'gcse-glossary.html',
-            'exam-skills-v2.html': null,
-            'notes.html': null,
-            'notes-unit1.html': null,
-            'notes-unit2.html': null,
-            'notes-unit3.html': null,
-            'notes-unit4.html': null
-        };
-        var gcsePages = {
-            'gcse-app.html': 'app.html',
-            'gcse-glossary.html': 'glossary.html'
-        };
-
-        var comingSoon = ['exam-skills-v2.html', 'notes.html', 'notes-unit1.html', 'notes-unit2.html', 'notes-unit3.html', 'notes-unit4.html'];
-
-        function getCurrentPage() {
-            var path = window.location.pathname;
-            var page = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
-            return page;
+    var levelLinks = {
+        alevel: {
+            'exam-practice': 'exam-practice.html',
+            'flashcards': 'app.html',
+            'exam-skills': 'exam-skills-v2.html',
+            'study-notes': 'notes.html',
+            'glossary': 'glossary.html'
+        },
+        gcse: {
+            'exam-practice': 'exam-practice.html',
+            'flashcards': 'gcse-app.html',
+            'exam-skills': null,
+            'study-notes': 'gcse-notes.html',
+            'glossary': 'gcse-glossary.html'
         }
+    };
 
-        function showComingSoonToast() {
+    function updateNavForLevel(level) {
+        var links = levelLinks[level];
+        document.querySelectorAll('[data-nav-key]').forEach(function(link) {
+            var key = link.getAttribute('data-nav-key');
+            if (links[key]) {
+                link.href = links[key];
+                link.style.opacity = '1';
+                link.style.pointerEvents = '';
+                link.removeAttribute('data-coming-soon');
+            } else if (links[key] === null) {
+                link.href = '#';
+                link.setAttribute('data-coming-soon', 'true');
+            }
+        });
+        document.querySelectorAll('[data-mobile-nav-key]').forEach(function(link) {
+            var key = link.getAttribute('data-mobile-nav-key');
+            if (links[key]) {
+                link.href = links[key];
+                link.style.opacity = '1';
+                link.style.pointerEvents = '';
+                link.removeAttribute('data-coming-soon');
+            } else if (links[key] === null) {
+                link.href = '#';
+                link.setAttribute('data-coming-soon', 'true');
+            }
+        });
+        document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
+            btn.classList.toggle('active', btn.dataset.level === level);
+        });
+    }
+
+    function setLevel(level) {
+        currentLevel = level;
+        localStorage.setItem(LEVEL_KEY, level);
+        updateNavForLevel(level);
+    }
+
+    document.addEventListener('click', function(e) {
+        var link = e.target.closest('[data-coming-soon]');
+        if (link) {
+            e.preventDefault();
             var toast = document.getElementById('comingSoonToast');
             if (!toast) {
                 toast = document.createElement('div');
                 toast.id = 'comingSoonToast';
-                toast.className = 'coming-soon-toast';
-                toast.textContent = 'GCSE version coming soon!';
+                toast.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#1e3a5f;color:white;padding:12px 24px;border-radius:8px;font-size:0.9rem;font-weight:600;z-index:9999;opacity:0;transition:opacity 0.3s;font-family:Inter,sans-serif;';
+                toast.textContent = 'GCSE Exam Skills coming soon!';
                 document.body.appendChild(toast);
             }
-            toast.classList.add('show');
-            setTimeout(function() { toast.classList.remove('show'); }, 2500);
+            toast.style.opacity = '1';
+            setTimeout(function() { toast.style.opacity = '0'; }, 2500);
         }
+    });
 
-        function updateNavLinks(level) {
-            var navLinks = document.querySelectorAll('.site-nav-link, .nav-link, a[href]');
-            navLinks.forEach(function(link) {
-                var href = link.getAttribute('href');
-                if (!href) return;
-                if (level === 'gcse') {
-                    if (href === 'app.html') link.setAttribute('href', 'gcse-app.html');
-                    if (href === 'glossary.html') link.setAttribute('href', 'gcse-glossary.html');
-                    if (comingSoon.indexOf(href) !== -1) {
-                        link.setAttribute('data-coming-soon', 'true');
-                        link.addEventListener('click', comingSoonHandler);
-                    }
-                } else {
-                    if (href === 'gcse-app.html') link.setAttribute('href', 'app.html');
-                    if (href === 'gcse-glossary.html') link.setAttribute('href', 'glossary.html');
-                    link.removeAttribute('data-coming-soon');
-                    link.removeEventListener('click', comingSoonHandler);
-                }
+    document.addEventListener('DOMContentLoaded', function() {
+        updateNavForLevel(currentLevel);
+        document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                setLevel(this.dataset.level);
             });
-        }
+        });
+    });
 
-        function comingSoonHandler(e) {
-            if (this.getAttribute('data-coming-soon') === 'true') {
-                e.preventDefault();
-                showComingSoonToast();
-            }
-        }
-
-        function setLevel(level) {
-            localStorage.setItem(LEVEL_KEY, level);
-            currentLevel = level;
-            document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
-                btn.classList.toggle('active', btn.dataset.level === level);
-            });
-            updateNavLinks(level);
-            var page = getCurrentPage();
-            if (level === 'gcse') {
-                if (alevelPages[page] === null) {
-                    showComingSoonToast();
-                    localStorage.setItem(LEVEL_KEY, 'alevel');
-                    currentLevel = 'alevel';
-                    document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
-                        btn.classList.toggle('active', btn.dataset.level === 'alevel');
-                    });
-                    updateNavLinks('alevel');
-                    return;
-                }
-                if (alevelPages[page]) {
-                    window.location.href = alevelPages[page];
-                    return;
-                }
-            } else {
-                if (gcsePages[page]) {
-                    window.location.href = gcsePages[page];
-                    return;
-                }
-            }
-        }
-
-        function initToggles() {
-            document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
-                btn.classList.toggle('active', btn.dataset.level === currentLevel);
-                btn.addEventListener('click', function() {
-                    setLevel(this.dataset.level);
-                });
-            });
-            updateNavLinks(currentLevel);
-        }
-
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initToggles);
-        } else {
-            initToggles();
-        }
-    })();
-
-    // Glossary filtering and search
     (function() {
         var searchInput = document.getElementById('glossarySearch');
         var filterBtns = document.querySelectorAll('.filter-btn');

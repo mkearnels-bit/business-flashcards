@@ -634,10 +634,10 @@
     <div class="site-navbar-content">
         <a href="index.html"><img src="logo.png" alt="MyBizStudies" class="site-navbar-logo"></a>
         <div class="site-nav-buttons" id="siteNavButtons">
-            <a href="exam-practice.html" class="site-nav-link auth-only" style="display:none;">Exam Practice</a>
-            <a href="app.html" class="site-nav-link auth-only" style="display:none;">Flash Cards</a>
-            <a href="exam-skills-v2.html" class="site-nav-link auth-only" style="display:none;">Exam Skills</a>
-            <a href="notes.html" class="site-nav-link auth-only" style="display:none;">Study Notes</a>
+            <a href="exam-practice.html" class="site-nav-link auth-only" style="display:none;" data-nav-key="exam-practice">Exam Practice</a>
+            <a href="app.html" class="site-nav-link" data-nav-key="flashcards">Flash Cards</a>
+            <a href="exam-skills-v2.html" class="site-nav-link" data-nav-key="exam-skills">Exam Skills</a>
+            <a href="notes.html" class="site-nav-link" data-nav-key="study-notes">Study Notes</a>
             <a href="blog.html" class="site-nav-link">Blog</a>
             <a href="contact.html" class="site-nav-link">Contact Us</a>
             <a href="login.html" class="site-nav-btn site-nav-btn-ghost guest-only">Log In</a>
@@ -944,6 +944,90 @@
             document.getElementById('mobileOverlay').classList.toggle('active');
             document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('active') ? 'hidden' : '';
         }
+
+        // ===== LEVEL TOGGLE =====
+        var LEVEL_KEY = 'mybiz_level';
+        var currentLevel = localStorage.getItem(LEVEL_KEY) || 'alevel';
+
+        var levelLinks = {
+            alevel: {
+                'exam-practice': 'exam-practice.html',
+                'flashcards': 'app.html',
+                'exam-skills': 'exam-skills-v2.html',
+                'study-notes': 'notes.html',
+                'glossary': 'glossary.html'
+            },
+            gcse: {
+                'exam-practice': 'exam-practice.html',
+                'flashcards': 'gcse-app.html',
+                'exam-skills': null,
+                'study-notes': 'gcse-notes.html',
+                'glossary': 'gcse-glossary.html'
+            }
+        };
+
+        function updateNavForLevel(level) {
+            var links = levelLinks[level];
+            document.querySelectorAll('[data-nav-key]').forEach(function(link) {
+                var key = link.getAttribute('data-nav-key');
+                if (links[key]) {
+                    link.href = links[key];
+                    link.style.opacity = '1';
+                    link.style.pointerEvents = '';
+                    link.removeAttribute('data-coming-soon');
+                } else if (links[key] === null) {
+                    link.href = '#';
+                    link.setAttribute('data-coming-soon', 'true');
+                }
+            });
+            document.querySelectorAll('[data-mobile-nav-key]').forEach(function(link) {
+                var key = link.getAttribute('data-mobile-nav-key');
+                if (links[key]) {
+                    link.href = links[key];
+                    link.style.opacity = '1';
+                    link.style.pointerEvents = '';
+                    link.removeAttribute('data-coming-soon');
+                } else if (links[key] === null) {
+                    link.href = '#';
+                    link.setAttribute('data-coming-soon', 'true');
+                }
+            });
+            document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
+                btn.classList.toggle('active', btn.dataset.level === level);
+            });
+        }
+
+        function setLevel(level) {
+            currentLevel = level;
+            localStorage.setItem(LEVEL_KEY, level);
+            updateNavForLevel(level);
+        }
+
+        document.addEventListener('click', function(e) {
+            var link = e.target.closest('[data-coming-soon]');
+            if (link) {
+                e.preventDefault();
+                var toast = document.getElementById('comingSoonToast');
+                if (!toast) {
+                    toast = document.createElement('div');
+                    toast.id = 'comingSoonToast';
+                    toast.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#1e3a5f;color:white;padding:12px 24px;border-radius:8px;font-size:0.9rem;font-weight:600;z-index:9999;opacity:0;transition:opacity 0.3s;font-family:Inter,sans-serif;';
+                    toast.textContent = 'GCSE Exam Skills coming soon!';
+                    document.body.appendChild(toast);
+                }
+                toast.style.opacity = '1';
+                setTimeout(function() { toast.style.opacity = '0'; }, 2500);
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateNavForLevel(currentLevel);
+            document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    setLevel(this.dataset.level);
+                });
+            });
+        });
 
     </script>
 </body>

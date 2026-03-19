@@ -2850,10 +2850,10 @@
             <button class="level-toggle-btn" data-level="gcse">GCSE</button>
         </div>
         <div class="site-nav-buttons" id="siteNavButtons">
-            <a href="exam-practice.html" class="active site-nav-link auth-only" style="display:none;">Exam Practice</a>
-            <a href="app.html" class="site-nav-link auth-only" style="display:none;">Flash Cards</a>
-            <a href="exam-skills-v2.html" class="site-nav-link auth-only" style="display:none;">Exam Skills</a>
-            <a href="notes.html" class="site-nav-link auth-only" style="display:none;">Study Notes</a>
+            <a href="exam-practice.html" class="active site-nav-link auth-only" style="display:none;" data-nav-key="exam-practice">Exam Practice</a>
+            <a href="app.html" class="site-nav-link auth-only" style="display:none;" data-nav-key="flashcards">Flash Cards</a>
+            <a href="exam-skills-v2.html" class="site-nav-link auth-only" style="display:none;" data-nav-key="exam-skills">Exam Skills</a>
+            <a href="notes.html" class="site-nav-link auth-only" style="display:none;" data-nav-key="study-notes">Study Notes</a>
             <a href="blog.html" class="site-nav-link">Blog</a>
             <a href="contact.html" class="site-nav-link">Contact Us</a>
             <a href="login.html" class="site-nav-btn site-nav-btn-ghost guest-only">Log In</a>
@@ -2906,19 +2906,19 @@
             <button class="level-toggle-btn" data-level="gcse">GCSE</button>
         </div>
         <div class="site-mobile-divider auth-only" style="display:none;"></div>
-        <a href="exam-practice.html" class="active auth-only" style="display:none;">
+        <a href="exam-practice.html" class="active auth-only" style="display:none;" data-mobile-nav-key="exam-practice">
             <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z"/></svg></span>
             Exam Practice
         </a>
-        <a href="app.html" class="auth-only" style="display:none;">
+        <a href="app.html" class="auth-only" style="display:none;" data-mobile-nav-key="flashcards">
             <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
             Flash Cards
         </a>
-        <a href="exam-skills-v2.html" class="auth-only" style="display:none;">
+        <a href="exam-skills-v2.html" class="auth-only" style="display:none;" data-mobile-nav-key="exam-skills">
             <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg></span>
             Exam Skills
         </a>
-        <a href="notes.html" class="auth-only" style="display:none;">
+        <a href="notes.html" class="auth-only" style="display:none;" data-mobile-nav-key="study-notes">
             <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></span>
             Study Notes
         </a>
@@ -5947,15 +5947,66 @@ function resetToSelection() {
 }
 
 // ===== LEVEL TOGGLE =====
-var currentLevel = localStorage.getItem('mybiz_level') || 'alevel';
+var LEVEL_KEY = 'mybiz_level';
+var currentLevel = localStorage.getItem(LEVEL_KEY) || 'alevel';
 
-function setLevel(level) {
-    currentLevel = level;
-    localStorage.setItem('mybiz_level', level);
+var levelLinks = {
+    alevel: {
+        'exam-practice': 'exam-practice.html',
+        'flashcards': 'app.html',
+        'exam-skills': 'exam-skills-v2.html',
+        'study-notes': 'notes.html',
+        'glossary': 'glossary.html'
+    },
+    gcse: {
+        'exam-practice': 'exam-practice.html',
+        'flashcards': 'gcse-app.html',
+        'exam-skills': null,
+        'study-notes': 'gcse-notes.html',
+        'glossary': 'gcse-glossary.html'
+    }
+};
+
+function updateNavForLevel(level) {
+    var links = levelLinks[level];
+    // Update desktop nav links
+    document.querySelectorAll('[data-nav-key]').forEach(function(link) {
+        var key = link.getAttribute('data-nav-key');
+        if (links[key]) {
+            link.href = links[key];
+            link.style.opacity = '1';
+            link.style.pointerEvents = '';
+            link.removeAttribute('data-coming-soon');
+        } else if (links[key] === null) {
+            link.href = '#';
+            link.setAttribute('data-coming-soon', 'true');
+        }
+    });
+    // Update mobile nav links
+    document.querySelectorAll('[data-mobile-nav-key]').forEach(function(link) {
+        var key = link.getAttribute('data-mobile-nav-key');
+        if (links[key]) {
+            link.href = links[key];
+            link.style.opacity = '1';
+            link.style.pointerEvents = '';
+            link.removeAttribute('data-coming-soon');
+        } else if (links[key] === null) {
+            link.href = '#';
+            link.setAttribute('data-coming-soon', 'true');
+        }
+    });
+    // Update toggle buttons
     document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
         btn.classList.toggle('active', btn.dataset.level === level);
     });
+    // Filter boards by level (exam-practice specific)
     filterBoardsByLevel();
+}
+
+function setLevel(level) {
+    currentLevel = level;
+    localStorage.setItem(LEVEL_KEY, level);
+    updateNavForLevel(level);
 }
 
 function filterBoardsByLevel() {
@@ -5974,12 +6025,35 @@ function filterBoardsByLevel() {
     });
 }
 
-// Initialise level toggle
-document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
-    btn.classList.toggle('active', btn.dataset.level === currentLevel);
-    btn.addEventListener('click', function() { setLevel(this.dataset.level); });
+// Handle coming soon click
+document.addEventListener('click', function(e) {
+    var link = e.target.closest('[data-coming-soon]');
+    if (link) {
+        e.preventDefault();
+        // Show a simple toast
+        var toast = document.getElementById('comingSoonToast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'comingSoonToast';
+            toast.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#1e3a5f;color:white;padding:12px 24px;border-radius:8px;font-size:0.9rem;font-weight:600;z-index:9999;opacity:0;transition:opacity 0.3s;font-family:Inter,sans-serif;';
+            toast.textContent = 'GCSE Exam Skills coming soon!';
+            document.body.appendChild(toast);
+        }
+        toast.style.opacity = '1';
+        setTimeout(function() { toast.style.opacity = '0'; }, 2500);
+    }
 });
-filterBoardsByLevel();
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+    updateNavForLevel(currentLevel);
+
+    document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            setLevel(this.dataset.level);
+        });
+    });
+});
 
 // ===== PHASE 1: SELECTION =====
 function selectBoard(el) {

@@ -994,10 +994,10 @@ body { padding-top: 70px; }
                 <button class="level-toggle-btn active" data-level="gcse">GCSE</button>
             </div>
             <div class="site-nav-buttons" id="siteNavButtons">
-                <a href="exam-practice.html" class="site-nav-link auth-only" style="display:none;">Exam Practice</a>
-                <a href="app.html" class="site-nav-link auth-only" style="display:none;">Flash Cards</a>
-                <a href="exam-skills-v2.html" class="site-nav-link auth-only" style="display:none;">Exam Skills</a>
-                <a href="gcse-notes.html" class="active site-nav-link auth-only" style="display:none;">Study Notes</a>
+                <a href="exam-practice.html" class="site-nav-link auth-only" style="display:none;" data-nav-key="exam-practice">Exam Practice</a>
+                <a href="app.html" class="site-nav-link auth-only" style="display:none;" data-nav-key="flashcards">Flash Cards</a>
+                <a href="exam-skills-v2.html" class="site-nav-link auth-only" style="display:none;" data-nav-key="exam-skills">Exam Skills</a>
+                <a href="gcse-notes.html" class="active site-nav-link auth-only" style="display:none;" data-nav-key="study-notes">Study Notes</a>
                 <a href="blog.html" class="site-nav-link">Blog</a>
                 <a href="contact.html" class="site-nav-link">Contact Us</a>
                 <a href="login.html" class="site-nav-btn site-nav-btn-ghost guest-only">Log In</a>
@@ -1047,19 +1047,19 @@ body { padding-top: 70px; }
                 <button class="level-toggle-btn active" data-level="gcse">GCSE</button>
             </div>
             <div class="site-mobile-divider auth-only" style="display:none;"></div>
-            <a href="exam-practice.html" class="auth-only" style="display:none;">
+            <a href="exam-practice.html" class="auth-only" style="display:none;" data-mobile-nav-key="exam-practice">
                 <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0013.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12a9 9 0 109-9z"/></svg></span>
                 Exam Practice
             </a>
-            <a href="app.html" class="auth-only" style="display:none;">
+            <a href="app.html" class="auth-only" style="display:none;" data-mobile-nav-key="flashcards">
                 <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
                 Flash Cards
             </a>
-            <a href="exam-skills-v2.html" class="auth-only" style="display:none;">
+            <a href="exam-skills-v2.html" class="auth-only" style="display:none;" data-mobile-nav-key="exam-skills">
                 <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg></span>
                 Exam Skills
             </a>
-            <a href="gcse-notes.html" class="active auth-only" style="display:none;">
+            <a href="gcse-notes.html" class="active auth-only" style="display:none;" data-mobile-nav-key="study-notes">
                 <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></span>
                 Study Notes
             </a>
@@ -1322,23 +1322,100 @@ body { padding-top: 70px; }
                 }
             });
 
+            // ===== LEVEL TOGGLE =====
+            var LEVEL_KEY = 'mybiz_level';
+            var currentLevel = localStorage.getItem(LEVEL_KEY) || 'gcse';
+
+            var levelLinks = {
+                alevel: {
+                    'exam-practice': 'exam-practice.html',
+                    'flashcards': 'app.html',
+                    'exam-skills': 'exam-skills-v2.html',
+                    'study-notes': 'notes.html',
+                    'glossary': 'glossary.html'
+                },
+                gcse: {
+                    'exam-practice': 'exam-practice.html',
+                    'flashcards': 'gcse-app.html',
+                    'exam-skills': null,
+                    'study-notes': 'gcse-notes.html',
+                    'glossary': 'gcse-glossary.html'
+                }
+            };
+
+            function updateNavForLevel(level) {
+                var links = levelLinks[level];
+                // Update desktop nav links
+                document.querySelectorAll('[data-nav-key]').forEach(function(link) {
+                    var key = link.getAttribute('data-nav-key');
+                    if (links[key]) {
+                        link.href = links[key];
+                        link.style.opacity = '1';
+                        link.style.pointerEvents = '';
+                        link.removeAttribute('data-coming-soon');
+                    } else if (links[key] === null) {
+                        link.href = '#';
+                        link.setAttribute('data-coming-soon', 'true');
+                    }
+                });
+                // Update mobile nav links
+                document.querySelectorAll('[data-mobile-nav-key]').forEach(function(link) {
+                    var key = link.getAttribute('data-mobile-nav-key');
+                    if (links[key]) {
+                        link.href = links[key];
+                        link.style.opacity = '1';
+                        link.style.pointerEvents = '';
+                        link.removeAttribute('data-coming-soon');
+                    } else if (links[key] === null) {
+                        link.href = '#';
+                        link.setAttribute('data-coming-soon', 'true');
+                    }
+                });
+                // Update toggle buttons
+                document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
+                    btn.classList.toggle('active', btn.dataset.level === level);
+                });
+            }
+
+            function setLevel(level) {
+                currentLevel = level;
+                localStorage.setItem(LEVEL_KEY, level);
+                updateNavForLevel(level);
+            }
+
+            // Handle coming soon click
+            document.addEventListener('click', function(e) {
+                var link = e.target.closest('[data-coming-soon]');
+                if (link) {
+                    e.preventDefault();
+                    // Show a simple toast
+                    var toast = document.getElementById('comingSoonToast');
+                    if (!toast) {
+                        toast = document.createElement('div');
+                        toast.id = 'comingSoonToast';
+                        toast.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#1e3a5f;color:white;padding:12px 24px;border-radius:8px;font-size:0.9rem;font-weight:600;z-index:9999;opacity:0;transition:opacity 0.3s;font-family:Inter,sans-serif;';
+                        toast.textContent = 'GCSE Exam Skills coming soon!';
+                        document.body.appendChild(toast);
+                    }
+                    toast.style.opacity = '1';
+                    setTimeout(function() { toast.style.opacity = '0'; }, 2500);
+                }
+            });
+
             levelToggleBtns.forEach(function(btn) {
                 btn.addEventListener('click', function() {
-                    var level = this.dataset.level;
-                    if (level === 'alevel') {
-                        window.location.href = 'notes.html';
-                    }
+                    setLevel(this.dataset.level);
                 });
             });
 
             mobileToggleBtns.forEach(function(btn) {
                 btn.addEventListener('click', function() {
-                    var level = this.dataset.level;
-                    if (level === 'alevel') {
-                        window.location.href = 'notes.html';
-                    }
+                    setLevel(this.dataset.level);
                 });
             });
+
+            // Initialize level toggle display
+            updateNavForLevel(currentLevel);
 
             var navLogoutBtn = document.getElementById('navLogoutBtn');
             var mobileLogoutBtn = document.getElementById('mobileLogoutBtn');

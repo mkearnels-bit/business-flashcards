@@ -3155,7 +3155,7 @@
             <button class="level-toggle-btn" data-level="gcse">GCSE</button>
         </div>
         <div class="site-nav-buttons" id="siteNavButtons">
-            <a href="exam-practice.html" class="site-nav-link auth-only" style="display:none;">Exam Practice</a>
+            <a href="exam-practice.html" class="site-nav-link auth-only" style="display:none;" data-nav-key="exam-practice">Exam Practice</a>
             <a href="app.html" class="site-nav-link">Flash Cards</a>
             <a href="exam-skills-v2.html" class="site-nav-link">Exam Skills</a>
             <a href="notes.html" class="site-nav-link active">Study Notes</a>
@@ -7787,131 +7787,89 @@
 
     
 
-// ==================== LEVEL TOGGLE ====================
-(function() {
-    var LEVEL_KEY = 'mybiz_study_level';
-    var currentLevel = 'alevel'; localStorage.setItem(LEVEL_KEY, 'alevel');
+// ===== LEVEL TOGGLE =====
+var LEVEL_KEY = 'mybiz_level';
+var currentLevel = localStorage.getItem(LEVEL_KEY) || 'alevel';
 
-    // Page routing map
-    var alevelPages = {
-        'app.html': 'gcse-app.html',
-        'glossary.html': 'gcse-glossary.html',
-        'exam-skills-v2.html': null,
-        'notes.html': 'gcse-notes.html',
-        'notes-unit1.html': 'gcse-notes.html',
-        'notes-unit2.html': 'gcse-notes.html',
-        'notes-unit3.html': 'gcse-notes.html',
-        'notes-unit4.html': 'gcse-notes.html'
-    };
-    var gcsePages = {
-        'gcse-app.html': 'app.html',
-        'gcse-glossary.html': 'glossary.html'
-    };
-
-    // Coming soon GCSE pages
-    var comingSoon = ['exam-skills-v2.html'];
-
-    function getCurrentPage() {
-        var path = window.location.pathname;
-        var page = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
-        return page;
+var levelLinks = {
+    alevel: {
+        'exam-practice': 'exam-practice.html',
+        'flashcards': 'app.html',
+        'exam-skills': 'exam-skills-v2.html',
+        'study-notes': 'notes.html',
+        'glossary': 'glossary.html'
+    },
+    gcse: {
+        'exam-practice': 'exam-practice.html',
+        'flashcards': 'gcse-app.html',
+        'exam-skills': null,
+        'study-notes': 'gcse-notes.html',
+        'glossary': 'gcse-glossary.html'
     }
+};
 
-    function showComingSoonToast() {
+function updateNavForLevel(level) {
+    var links = levelLinks[level];
+    document.querySelectorAll('[data-nav-key]').forEach(function(link) {
+        var key = link.getAttribute('data-nav-key');
+        if (links[key]) {
+            link.href = links[key];
+            link.style.opacity = '1';
+            link.style.pointerEvents = '';
+            link.removeAttribute('data-coming-soon');
+        } else if (links[key] === null) {
+            link.href = '#';
+            link.setAttribute('data-coming-soon', 'true');
+        }
+    });
+    document.querySelectorAll('[data-mobile-nav-key]').forEach(function(link) {
+        var key = link.getAttribute('data-mobile-nav-key');
+        if (links[key]) {
+            link.href = links[key];
+            link.style.opacity = '1';
+            link.style.pointerEvents = '';
+            link.removeAttribute('data-coming-soon');
+        } else if (links[key] === null) {
+            link.href = '#';
+            link.setAttribute('data-coming-soon', 'true');
+        }
+    });
+    document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
+        btn.classList.toggle('active', btn.dataset.level === level);
+    });
+}
+
+function setLevel(level) {
+    currentLevel = level;
+    localStorage.setItem(LEVEL_KEY, level);
+    updateNavForLevel(level);
+}
+
+document.addEventListener('click', function(e) {
+    var link = e.target.closest('[data-coming-soon]');
+    if (link) {
+        e.preventDefault();
         var toast = document.getElementById('comingSoonToast');
         if (!toast) {
             toast = document.createElement('div');
             toast.id = 'comingSoonToast';
-            toast.className = 'coming-soon-toast';
-            toast.textContent = 'GCSE version coming soon!';
+            toast.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#1e3a5f;color:white;padding:12px 24px;border-radius:8px;font-size:0.9rem;font-weight:600;z-index:9999;opacity:0;transition:opacity 0.3s;font-family:Inter,sans-serif;';
+            toast.textContent = 'GCSE Exam Skills coming soon!';
             document.body.appendChild(toast);
         }
-        toast.classList.add('show');
-        setTimeout(function() { toast.classList.remove('show'); }, 2500);
+        toast.style.opacity = '1';
+        setTimeout(function() { toast.style.opacity = '0'; }, 2500);
     }
+});
 
-    function updateNavLinks(level) {
-        var navLinks = document.querySelectorAll('.site-nav-link, .nav-link, a[href]');
-        navLinks.forEach(function(link) {
-            var href = link.getAttribute('href');
-            if (!href) return;
-
-            if (level === 'gcse') {
-                if (href === 'app.html') link.setAttribute('href', 'gcse-app.html');
-                if (comingSoon.indexOf(href) !== -1) {
-                    link.setAttribute('data-coming-soon', 'true');
-                    link.addEventListener('click', comingSoonHandler);
-                }
-            } else {
-                if (href === 'gcse-app.html') link.setAttribute('href', 'app.html');
-                link.removeAttribute('data-coming-soon');
-                link.removeEventListener('click', comingSoonHandler);
-            }
+document.addEventListener('DOMContentLoaded', function() {
+    updateNavForLevel(currentLevel);
+    document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            setLevel(this.dataset.level);
         });
-    }
-
-    function comingSoonHandler(e) {
-        if (this.getAttribute('data-coming-soon') === 'true') {
-            e.preventDefault();
-            showComingSoonToast();
-        }
-    }
-
-    function setLevel(level) {
-        localStorage.setItem(LEVEL_KEY, level);
-        currentLevel = level;
-
-        // Update all toggle buttons
-        document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
-            btn.classList.toggle('active', btn.dataset.level === level);
-        });
-
-        // Update nav links
-        updateNavLinks(level);
-
-        // Check if we need to redirect
-        var page = getCurrentPage();
-        if (level === 'gcse') {
-            if (alevelPages[page] === null) {
-                showComingSoonToast();
-                // Revert toggle visually
-                localStorage.setItem(LEVEL_KEY, 'alevel');
-                currentLevel = 'alevel';
-                document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
-                    btn.classList.toggle('active', btn.dataset.level === 'alevel');
-                });
-                updateNavLinks('alevel');
-                return;
-            }
-            if (alevelPages[page]) {
-                window.location.href = alevelPages[page];
-                return;
-            }
-        } else {
-            if (gcsePages[page]) {
-                window.location.href = gcsePages[page];
-                return;
-            }
-        }
-    }
-
-    // Initialize toggles on page load
-    function initToggles() {
-        document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
-            btn.classList.toggle('active', btn.dataset.level === currentLevel);
-            btn.addEventListener('click', function() {
-                setLevel(this.dataset.level);
-            });
-        });
-        updateNavLinks(currentLevel);
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initToggles);
-    } else {
-        initToggles();
-    }
-})();
+    });
+});
 
     </script>
 
