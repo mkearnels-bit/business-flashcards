@@ -7786,7 +7786,7 @@
 // ==================== LEVEL TOGGLE ====================
 (function() {
     var LEVEL_KEY = 'mybiz_study_level';
-    var currentLevel = localStorage.getItem(LEVEL_KEY) || 'alevel';
+    var currentLevel = 'alevel'; localStorage.setItem(LEVEL_KEY, 'alevel');
 
     // Page routing map
     var alevelPages = {

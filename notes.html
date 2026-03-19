@@ -1705,7 +1705,8 @@
         // ===== LEVEL TOGGLE =====
         (function() {
             var LEVEL_KEY = 'mybiz_study_level';
-            var currentLevel = localStorage.getItem(LEVEL_KEY) || 'alevel';
+            var currentLevel = 'alevel';
+            localStorage.setItem(LEVEL_KEY, 'alevel');
             var alevelPages = {
                 'app.html': 'gcse-app.html', 'glossary.html': 'gcse-glossary.html',
                 'exam-skills-v2.html': null, 'exam-practice.html': 'exam-practice.html',
