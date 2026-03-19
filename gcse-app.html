@@ -1693,14 +1693,14 @@
     <div class="site-navbar-content">
         <a href="index.html"><img src="logo.png" alt="MyBizStudies" class="site-navbar-logo"></a>
         <div class="level-toggle" id="desktopLevelToggle">
-            <button class="level-toggle-btn active" data-level="alevel">A-Level</button>
-            <button class="level-toggle-btn" data-level="gcse">GCSE</button>
+            <button class="level-toggle-btn" data-level="alevel">A-Level</button>
+            <button class="level-toggle-btn active" data-level="gcse">GCSE</button>
         </div>
         <div class="site-nav-buttons" id="siteNavButtons">
-            <a href="exam-practice.html" class="site-nav-link auth-only" style="display:none;">Exam Practice</a>
-            <a href="app.html" class="site-nav-link active">Flash Cards</a>
-            <a href="exam-skills-v2.html" class="site-nav-link">Exam Skills</a>
-            <a href="notes.html" class="site-nav-link">Study Notes</a>
+            <a href="exam-practice.html" class="site-nav-link auth-only" style="display:none;" data-nav-key="exam-practice">Exam Practice</a>
+            <a href="app.html" class="site-nav-link active" data-nav-key="flashcards">Flash Cards</a>
+            <a href="exam-skills-v2.html" class="site-nav-link" data-nav-key="exam-skills">Exam Skills</a>
+            <a href="notes.html" class="site-nav-link" data-nav-key="study-notes">Study Notes</a>
             <a href="blog.html" class="site-nav-link">Blog</a>
             <a href="contact.html" class="site-nav-link">Contact Us</a>
             <div class="profile-dropdown-wrapper auth-only" style="display:none;">
@@ -1738,19 +1738,19 @@
     <!-- MOBILE MENU -->
 <div class="site-mobile-overlay" id="siteMobileOverlay"></div>
 <div class="site-mobile-menu" id="siteMobileMenu">
-    <div class="site-mobile-links">        <a href="exam-practice.html" class="auth-only" style="display:none;">
+    <div class="site-mobile-links">        <a href="exam-practice.html" class="auth-only" style="display:none;" data-mobile-nav-key="exam-practice">
             <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5"/></svg></span>
             Exam Practice
         </a>
-        <a href="app.html" class="active">
+        <a href="app.html" class="active" data-mobile-nav-key="flashcards">
             <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
             Flash Cards
         </a>
-        <a href="exam-skills-v2.html">
+        <a href="exam-skills-v2.html" data-mobile-nav-key="exam-skills">
             <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg></span>
             Exam Skills
         </a>
-        <a href="notes.html">
+        <a href="notes.html" data-mobile-nav-key="study-notes">
             <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></span>
             Study Notes
         </a>
@@ -2274,7 +2274,14 @@
                     document.querySelectorAll('.admin-only').forEach(function(el) { el.style.display = ''; });
                 }
                 document.querySelectorAll('.guest-only').forEach(function(el) { el.style.display = 'none'; });
+
+                // Update profile avatar with initials
+                if (profileAvatar && session) {
+                    profileAvatar.textContent = getProfileInitials(session.user);
+                }
+
                 initializeApp();
+                return session;
             } catch (error) {
                 console.error('Auth error:', error);
                 initializeApp(); // Try anyway for testing
@@ -2886,7 +2893,21 @@
             }
         }
 
-        checkAuth();
+        checkAuth().then(function(session) {
+            if (session) {
+                // Check if onboarding is completed
+                var onboardingDone = sessionStorage.getItem('onboarding_done');
+                if (!onboardingDone) {
+                    supabaseClient.from('user_profiles').select('id').eq('user_id', session.user.id).single().then(function(profileResult) {
+                        if (!profileResult.data) {
+                            window.location.href = 'welcome.html';
+                        } else {
+                            sessionStorage.setItem('onboarding_done', 'true');
+                        }
+                    });
+                }
+            }
+        });
 
         // Site navbar mobile menu
         var siteHamburger = document.getElementById('siteHamburger');
@@ -2934,148 +2955,156 @@
             });
         }
         // Populate profile initials
-        function getProfileInitials(email) {
+        function getProfileInitials(session) {
+            var fullName = session.user_metadata && (session.user_metadata.full_name || session.user_metadata.name) || '';
+            var email = session.email || '';
+            if (fullName) {
+                var parts = fullName.trim().split(' ');
+                return parts.length >= 2 ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase() : parts[0][0].toUpperCase();
+            }
             if (!email) return '--';
-            var parts = email.split('@')[0].split('.');
-            if (parts.length >= 2) return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
-            return email.substring(0, 2).toUpperCase();
+            return email[0].toUpperCase();
         }
-        async function setupProfileAvatar() {
-            try {
-                const { data: { user } } = await supabaseClient.auth.getUser();
-                if (profileAvatar && user && user.email) {
-                    profileAvatar.textContent = getProfileInitials(user.email);
+
+        var profileAvatar = document.getElementById('profileAvatar');
+        var profileDropdown = document.getElementById('profileDropdown');
+        if (profileAvatar && profileDropdown) {
+            profileAvatar.addEventListener('click', function(e) {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('active');
+            });
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.profile-avatar') && !e.target.closest('.profile-dropdown')) {
+                    profileDropdown.classList.remove('active');
                 }
-            } catch (e) { console.log('Profile avatar setup skipped:', e.message); }
+            });
         }
-        setupProfileAvatar();
 
 
-// ==================== LEVEL TOGGLE ====================
-(function() {
-    var LEVEL_KEY = 'mybiz_study_level';
-    var currentLevel = localStorage.getItem(LEVEL_KEY) || 'gcse'; localStorage.setItem(LEVEL_KEY, 'gcse');
+        // ===== LEVEL TOGGLE =====
+        var LEVEL_KEY = 'mybiz_level';
+        var currentLevel = localStorage.getItem(LEVEL_KEY) || 'gcse';
 
-    // Page routing map
-    var alevelPages = {
-        'app.html': 'gcse-app.html',
-        'glossary.html': 'gcse-glossary.html',
-        'exam-skills-v2.html': null,
-        'notes.html': null,
-        'notes-unit1.html': null,
-        'notes-unit2.html': null,
-        'notes-unit3.html': null,
-        'notes-unit4.html': null
-    };
-    var gcsePages = {
-        'gcse-app.html': 'app.html',
-        'gcse-glossary.html': 'glossary.html'
-    };
+        var levelLinks = {
+            alevel: {
+                'exam-practice': 'exam-practice.html',
+                'flashcards': 'app.html',
+                'exam-skills': 'exam-skills-v2.html',
+                'study-notes': 'notes.html',
+                'glossary': 'glossary.html'
+            },
+            gcse: {
+                'exam-practice': 'exam-practice.html',
+                'flashcards': 'gcse-app.html',
+                'exam-skills': null,
+                'study-notes': 'gcse-notes.html',
+                'glossary': 'gcse-glossary.html'
+            }
+        };
 
-    // Coming soon GCSE pages
-    var comingSoon = ['exam-skills-v2.html', 'notes.html', 'notes-unit1.html', 'notes-unit2.html', 'notes-unit3.html', 'notes-unit4.html'];
-
-    function getCurrentPage() {
-        var path = window.location.pathname;
-        var page = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
-        return page;
-    }
-
-    function showComingSoonToast() {
-        var toast = document.getElementById('comingSoonToast');
-        if (!toast) {
-            toast = document.createElement('div');
-            toast.id = 'comingSoonToast';
-            toast.className = 'coming-soon-toast';
-            toast.textContent = 'GCSE version coming soon!';
-            document.body.appendChild(toast);
-        }
-        toast.classList.add('show');
-        setTimeout(function() { toast.classList.remove('show'); }, 2500);
-    }
-
-    function updateNavLinks(level) {
-        var navLinks = document.querySelectorAll('.site-nav-link, .nav-link, a[href]');
-        navLinks.forEach(function(link) {
-            var href = link.getAttribute('href');
-            if (!href) return;
-
-            if (level === 'gcse') {
-                if (href === 'app.html') link.setAttribute('href', 'gcse-app.html');
-                if (comingSoon.indexOf(href) !== -1) {
+        function updateNavForLevel(level) {
+            var links = levelLinks[level];
+            // Update desktop nav links
+            document.querySelectorAll('[data-nav-key]').forEach(function(link) {
+                var key = link.getAttribute('data-nav-key');
+                if (links[key]) {
+                    link.href = links[key];
+                    link.style.opacity = '1';
+                    link.style.pointerEvents = '';
+                    link.removeAttribute('data-coming-soon');
+                } else if (links[key] === null) {
+                    link.href = '#';
                     link.setAttribute('data-coming-soon', 'true');
-                    link.addEventListener('click', comingSoonHandler);
                 }
-            } else {
-                if (href === 'gcse-app.html') link.setAttribute('href', 'app.html');
-                link.removeAttribute('data-coming-soon');
-                link.removeEventListener('click', comingSoonHandler);
+            });
+            // Update mobile nav links
+            document.querySelectorAll('[data-mobile-nav-key]').forEach(function(link) {
+                var key = link.getAttribute('data-mobile-nav-key');
+                if (links[key]) {
+                    link.href = links[key];
+                    link.style.opacity = '1';
+                    link.style.pointerEvents = '';
+                    link.removeAttribute('data-coming-soon');
+                } else if (links[key] === null) {
+                    link.href = '#';
+                    link.setAttribute('data-coming-soon', 'true');
+                }
+            });
+            // Update toggle buttons
+            document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
+                btn.classList.toggle('active', btn.dataset.level === level);
+            });
+        }
+
+        function setLevel(level) {
+            currentLevel = level;
+            localStorage.setItem(LEVEL_KEY, level);
+            updateNavForLevel(level);
+
+            // Navigate to the counterpart page for the new level
+            var currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            var pageMap = {
+                'app.html': { alevel: 'app.html', gcse: 'gcse-app.html' },
+                'gcse-app.html': { alevel: 'app.html', gcse: 'gcse-app.html' },
+                'notes.html': { alevel: 'notes.html', gcse: 'gcse-notes.html' },
+                'gcse-notes.html': { alevel: 'notes.html', gcse: 'gcse-notes.html' },
+                'glossary.html': { alevel: 'glossary.html', gcse: 'gcse-glossary.html' },
+                'gcse-glossary.html': { alevel: 'glossary.html', gcse: 'gcse-glossary.html' },
+                'notes-unit1.html': { alevel: 'notes-unit1.html', gcse: 'gcse-notes.html' },
+                'notes-unit2.html': { alevel: 'notes-unit2.html', gcse: 'gcse-notes.html' },
+                'notes-unit3.html': { alevel: 'notes-unit3.html', gcse: 'gcse-notes.html' },
+                'notes-unit4.html': { alevel: 'notes-unit4.html', gcse: 'gcse-notes.html' },
+                'gcse-notes-unit1.html': { alevel: 'notes.html', gcse: 'gcse-notes-unit1.html' },
+                'gcse-notes-unit2.html': { alevel: 'notes.html', gcse: 'gcse-notes-unit2.html' },
+                'gcse-notes-unit3.html': { alevel: 'notes.html', gcse: 'gcse-notes-unit3.html' },
+                'gcse-notes-unit4.html': { alevel: 'notes.html', gcse: 'gcse-notes-unit4.html' },
+                'gcse-notes-unit5.html': { alevel: 'notes.html', gcse: 'gcse-notes-unit5.html' },
+                'gcse-notes-unit6.html': { alevel: 'notes.html', gcse: 'gcse-notes-unit6.html' },
+                'exam-skills-v2.html': { alevel: 'exam-skills-v2.html', gcse: null }
+            };
+            var mapping = pageMap[currentPage];
+            if (mapping) {
+                var target = mapping[level];
+                if (target === null) {
+                    // Coming soon — don't navigate, show toast
+                    return;
+                }
+                if (target && target !== currentPage) {
+                    window.location.href = target;
+                    return;
+                }
+            }
+        }
+
+        // Handle coming soon click
+        document.addEventListener('click', function(e) {
+            var link = e.target.closest('[data-coming-soon]');
+            if (link) {
+                e.preventDefault();
+                // Show a simple toast
+                var toast = document.getElementById('comingSoonToast');
+                if (!toast) {
+                    toast = document.createElement('div');
+                    toast.id = 'comingSoonToast';
+                    toast.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#1e3a5f;color:white;padding:12px 24px;border-radius:8px;font-size:0.9rem;font-weight:600;z-index:9999;opacity:0;transition:opacity 0.3s;font-family:Inter,sans-serif;';
+                    toast.textContent = 'GCSE Exam Skills coming soon!';
+                    document.body.appendChild(toast);
+                }
+                toast.style.opacity = '1';
+                setTimeout(function() { toast.style.opacity = '0'; }, 2500);
             }
         });
-    }
 
-    function comingSoonHandler(e) {
-        if (this.getAttribute('data-coming-soon') === 'true') {
-            e.preventDefault();
-            showComingSoonToast();
-        }
-    }
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateNavForLevel(currentLevel);
 
-    function setLevel(level) {
-        localStorage.setItem(LEVEL_KEY, level);
-        currentLevel = level;
-
-        // Update all toggle buttons
-        document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
-            btn.classList.toggle('active', btn.dataset.level === level);
-        });
-
-        // Update nav links
-        updateNavLinks(level);
-
-        // Check if we need to redirect
-        var page = getCurrentPage();
-        if (level === 'gcse') {
-            if (alevelPages[page] === null) {
-                showComingSoonToast();
-                // Revert toggle visually
-                localStorage.setItem(LEVEL_KEY, 'alevel');
-                currentLevel = 'alevel';
-                document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
-                    btn.classList.toggle('active', btn.dataset.level === 'alevel');
+            document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    setLevel(this.dataset.level);
                 });
-                updateNavLinks('alevel');
-                return;
-            }
-            if (alevelPages[page]) {
-                window.location.href = alevelPages[page];
-                return;
-            }
-        } else {
-            if (gcsePages[page]) {
-                window.location.href = gcsePages[page];
-                return;
-            }
-        }
-    }
-
-    // Initialize toggles on page load
-    function initToggles() {
-        document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
-            btn.classList.toggle('active', btn.dataset.level === currentLevel);
-            btn.addEventListener('click', function() {
-                setLevel(this.dataset.level);
             });
         });
-        updateNavLinks(currentLevel);
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initToggles);
-    } else {
-        initToggles();
-    }
-})();
 
     </script>
 
