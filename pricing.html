@@ -838,9 +838,21 @@
 
                 // Populate profile avatar
                 const profileAvatarEl = document.getElementById('profileAvatar');
-                if (profileAvatarEl && session.user && session.user.email) {
-                    profileAvatarEl.textContent = getProfileInitials(session.user.email);
-                }
+                var fullName = session.user.user_metadata && (session.user.user_metadata.full_name || session.user.user_metadata.name) || '';
+                    var email = session.user.email || '';
+                    var initials = '?';
+                    if (fullName) {
+                        var parts = fullName.trim().split(' ');
+                        initials = parts.length >= 2 ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase() : parts[0][0].toUpperCase();
+                    } else if (email) {
+                        initials = email[0].toUpperCase();
+                    }
+                    var initialsEl = document.getElementById('profileAvatar');
+                    var nameEl = document.getElementById('profileName');
+                    var emailEl = document.getElementById('profileEmail');
+                    if (initialsEl) initialsEl.textContent = initials;
+                    if (nameEl) nameEl.textContent = fullName || 'Student';
+                    if (emailEl) emailEl.textContent = email;
             }
         }
 

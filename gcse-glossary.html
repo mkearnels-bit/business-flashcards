@@ -1325,17 +1325,21 @@
         });
     }
     // Populate profile initials
-    function getProfileInitials(email) {
-        if (!email) return '--';
-        var parts = email.split('@')[0].split('.');
-        if (parts.length >= 2) return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
-        return email.substring(0, 2).toUpperCase();
-    }
+    function getProfileInitials(session) {
+                var fullName = session.user_metadata && (session.user_metadata.full_name || session.user_metadata.name) || '';
+                var email = session.email || '';
+                if (fullName) {
+                    var parts = fullName.trim().split(' ');
+                    return parts.length >= 2 ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase() : parts[0][0].toUpperCase();
+                }
+                if (!email) return '--';
+                return email[0].toUpperCase();
+            }
     async function setupProfileAvatar() {
         try {
             const { data: { user } } = await supabaseClient.auth.getUser();
             if (profileAvatar && user && user.email) {
-                profileAvatar.textContent = getProfileInitials(user.email);
+                profileAvatar.textContent = getProfileInitials(user);
             }
         } catch (e) { console.log('Profile avatar setup skipped:', e.message); }
     }

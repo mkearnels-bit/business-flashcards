@@ -5930,12 +5930,16 @@
                 }
             });
         }
-        function getProfileInitials(email) {
-            if (!email) return '--';
-            var parts = email.split('@')[0].split('.');
-            if (parts.length >= 2) return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
-            return email.substring(0, 2).toUpperCase();
-        }
+        function getProfileInitials(session) {
+                    var fullName = session.user_metadata && (session.user_metadata.full_name || session.user_metadata.name) || '';
+                    var email = session.email || '';
+                    if (fullName) {
+                        var parts = fullName.trim().split(' ');
+                        return parts.length >= 2 ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase() : parts[0][0].toUpperCase();
+                    }
+                    if (!email) return '--';
+                    return email[0].toUpperCase();
+                }
 
         async function setupNav() {
             try {
@@ -5948,7 +5952,7 @@
                         document.querySelectorAll('.admin-only').forEach(function(el) { el.style.display = ''; });
                     }
                     if (profileAvatar && r.data.session.user && r.data.session.user.email) {
-                        profileAvatar.textContent = getProfileInitials(r.data.session.user.email);
+                        profileAvatar.textContent = getProfileInitials(r.data.session.user);
                     }
                 }
             } catch(e) {}
