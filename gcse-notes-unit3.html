@@ -1,0 +1,2314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <title>Unit 3: Marketing | GCSE Business Studies Notes</title>
+    <meta name="description" content="Complete Unit 3 Marketing study notes for GCSE Business Studies. Covers market research, segmentation, marketing mix, pricing, promotion, and strategy.">
+    <meta name="keywords" content="GCSE Business Studies, AQA, CIE, revision notes, exam technique, marketing, 4Ps">
+    <link rel="canonical" href="https://mybizstudies.com/gcse-notes-unit3.html">
+    <meta property="og:title" content="Unit 3: Marketing | GCSE Business Studies Notes">
+    <meta property="og:description" content="Complete Unit 3 Marketing study notes for GCSE Business Studies.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mybizstudies.com/gcse-notes-unit3.html">
+    <meta property="og:site_name" content="MyBizStudies">
+    <meta property="og:image" content="https://mybizstudies.com/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://mybizstudies.com/og-image.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+/* ==================== SITE NAVBAR ==================== */
+.site-navbar {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #f1f5f9;
+    padding: 0.75rem 2rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.site-navbar-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.site-navbar-logo {
+    height: 55px;
+    width: auto;
+}
+.site-nav-buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.site-nav-link {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #334155;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+.site-nav-link:hover {
+    color: #1e3a5f;
+    background: #f1f5f9;
+}
+.site-nav-link.active {
+    color: #e67e22;
+    font-weight: 600;
+}
+.site-nav-btn {
+    padding: 0.5rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    font-family: inherit;
+}
+.site-nav-btn-ghost {
+    color: #1e3a5f;
+    background: transparent;
+    border: 1px solid #cbd5e1;
+}
+.site-nav-btn-ghost:hover {
+    background: #f1f5f9;
+    border-color: #1e3a5f;
+}
+.site-hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1100;
+    position: relative;
+}
+.site-hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: #1e3a5f;
+    border-radius: 2px;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    position: absolute;
+}
+.site-hamburger span:nth-child(1) { transform: translateY(-7px); }
+.site-hamburger span:nth-child(2) { opacity: 1; }
+.site-hamburger span:nth-child(3) { transform: translateY(7px); }
+.site-hamburger.active span:nth-child(1) { transform: rotate(45deg); }
+.site-hamburger.active span:nth-child(2) { opacity: 0; }
+.site-hamburger.active span:nth-child(3) { transform: rotate(-45deg); }
+.site-mobile-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 1040;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+.site-mobile-overlay.active {
+    display: block;
+    opacity: 1;
+    pointer-events: auto;
+}
+.site-mobile-menu {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 280px;
+    height: 100%;
+    background: #ffffff;
+    z-index: 1050;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
+    padding: 5.5rem 1.5rem 2rem;
+}
+.site-mobile-menu.active {
+    display: block;
+    transform: translateX(0);
+}
+.site-mobile-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+.site-mobile-menu a,
+.site-mobile-menu button {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.875rem 1rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #334155;
+    transition: all 0.2s ease;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: inherit;
+    width: 100%;
+}
+.site-mobile-menu a:hover,
+.site-mobile-menu button:hover {
+    background: #f1f5f9;
+    color: #1e3a5f;
+}
+.site-mobile-menu a.active {
+    background: #f1f5f9;
+    color: #1e3a5f;
+}
+.site-menu-icon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #f1f5f9;
+    flex-shrink: 0;
+}
+.site-menu-icon svg {
+    width: 18px;
+    height: 18px;
+    stroke: #64748b;
+}
+.site-mobile-menu a.active .site-menu-icon {
+    background: #1e3a5f;
+}
+.site-mobile-menu a.active .site-menu-icon svg {
+    stroke: white;
+}
+.site-mobile-divider {
+    height: 1px;
+    background: #f1f5f9;
+    margin: 0.5rem 0;
+}
+.site-mobile-cta {
+    margin-top: 0.5rem;
+    background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+    color: white !important;
+    justify-content: center;
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+}
+.site-mobile-cta:hover {
+    color: white !important;
+    transform: translateY(-1px);
+}
+.site-mobile-cta .site-menu-icon {
+    display: none;
+}
+.site-mobile-logout {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.875rem 1rem;
+    border-radius: 12px;
+    border: none;
+    background: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #e74c3c;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    margin-top: auto;
+}
+.site-mobile-logout:hover {
+    background: rgba(231, 76, 60, 0.06);
+}
+.site-mobile-logout .site-menu-icon {
+    background: rgba(231, 76, 60, 0.08);
+}
+.site-mobile-logout .site-menu-icon svg {
+    stroke: #e74c3c;
+}
+/* ===== LEVEL TOGGLE ===== */
+.level-toggle {
+    display: flex;
+    align-items: center;
+    background: #f1f5f9;
+    border-radius: 8px;
+    padding: 3px;
+    gap: 0;
+    flex-shrink: 0;
+}
+.level-toggle-btn {
+    padding: 5px 14px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: inherit;
+    color: #64748b;
+    background: transparent;
+    white-space: nowrap;
+}
+.level-toggle-btn.active {
+    background: #1e3a5f;
+    color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+.level-toggle-btn:hover:not(.active) {
+    color: #1e3a5f;
+    background: rgba(30, 58, 95, 0.08);
+}
+.mobile-level-toggle {
+    display: flex;
+    align-items: center;
+    background: #f1f5f9;
+    border-radius: 10px;
+    padding: 4px;
+    margin-bottom: 1rem;
+    gap: 0;
+}
+.mobile-level-toggle .level-toggle-btn {
+    flex: 1;
+    padding: 8px 0;
+    font-size: 0.85rem;
+    border-radius: 8px;
+    text-align: center;
+}
+/* Profile Dropdown */
+.profile-dropdown-wrapper {
+    position: relative;
+}
+.profile-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e67e22, #f39c12);
+    border: 2px solid #e9ecef;
+    color: white;
+    font-weight: 700;
+    font-size: 0.8rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    font-family: 'Inter', sans-serif;
+}
+.profile-avatar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
+}
+.profile-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: rgba(255,255,255,0.98);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    border: 1px solid #e9ecef;
+    min-width: 220px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: all 0.2s ease;
+    z-index: 2000;
+    overflow: hidden;
+}
+.profile-dropdown.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+.profile-dropdown-header {
+    padding: 1rem;
+    border-bottom: none;
+}
+.profile-dropdown-name {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #343a40;
+}
+.profile-dropdown-email {
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-top: 2px;
+}
+.profile-dropdown-divider {
+    height: 1px;
+    background: #e9ecef;
+    margin: 0;
+}
+.profile-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    color: #495057;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    font-family: 'Inter', sans-serif;
+}
+.profile-dropdown-item:hover {
+    background: #f8f9fa;
+    color: #1e3a5f;
+}
+.profile-dropdown-item svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+.profile-dropdown-item.logout-item {
+    color: #e74c3c;
+}
+.profile-dropdown-item.logout-item:hover {
+    background: #fdf2f2;
+    color: #c0392b;
+}
+.site-nav-btn-primary {
+    background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+}
+.site-nav-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(230, 126, 34, 0.4);
+}
+@media (max-width: 768px) {
+    .site-hamburger { display: flex; }
+    .site-mobile-overlay { display: block; }
+    .site-mobile-menu { display: block; }
+    .site-nav-buttons { display: none; }
+    .site-navbar { padding: 0.5rem 1rem; }
+    .site-navbar-content { padding: 0; }
+    .site-navbar-logo { height: 45px; }
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+    --primary: #1e3a5f;
+    --primary-dark: #152a45;
+    --primary-light: #2d5a8a;
+    --accent: #e67e22;
+    --accent-light: #f39c12;
+    --accent-glow: rgba(230, 126, 34, 0.3);
+    --secondary: #3498db;
+    --success: #27ae60;
+    --error: #e74c3c;
+    --dark: #0f172a;
+    --gray-900: #1e293b;
+    --gray-700: #334155;
+    --gray-500: #64748b;
+    --gray-400: #94a3b8;
+    --gray-300: #cbd5e1;
+    --gray-200: #e2e8f0;
+    --gray-100: #f1f5f9;
+    --gray-50: #f8fafc;
+    --white: #ffffff;
+    --unit-color: #27ae60;
+}
+html { scroll-behavior: auto; }
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--gray-900);
+    line-height: 1.6;
+    overflow-x: hidden;
+    background: var(--gray-50);
+    padding-top: 70px;
+}
+/* Main layout */
+.notes-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+/* Sidebar */
+.sidebar {
+    position: sticky;
+    top: 90px;
+    height: fit-content;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+}
+.sidebar-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid var(--unit-color);
+}
+.sidebar-unit-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--unit-color), rgba(39, 174, 96, 0.8));
+    color: white;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+.sidebar-unit-name {
+    font-weight: 700;
+    color: var(--gray-900);
+    font-size: 0.95rem;
+}
+.sidebar-topics {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+.sidebar-topic-item {
+    border-radius: 8px;
+}
+.sidebar-topic-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 0.8rem;
+    color: var(--gray-700);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    background: none;
+    font-family: inherit;
+    text-align: left;
+    width: 100%;
+}
+.sidebar-topic-link:hover {
+    background: var(--gray-100);
+    color: var(--primary);
+}
+.sidebar-topic-link.active {
+    background: rgba(39, 174, 96, 0.08);
+    color: var(--unit-color);
+    font-weight: 600;
+}
+.sidebar-topic-num {
+    display: inline-block;
+    min-width: 24px;
+    font-weight: 700;
+    color: var(--unit-color);
+}
+/* Main content */
+.main-content {
+    min-height: calc(100vh - 140px);
+}
+.topic-section {
+    margin-bottom: 0;
+    border-bottom: 1px solid var(--gray-200);
+}
+.topic-section.open .topic-content {
+    display: block;
+    animation: slideDown 0.3s ease;
+}
+.topic-section .topic-content {
+    display: none;
+}
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.topic-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+}
+.topic-header:hover {
+    background: var(--gray-50);
+}
+.topic-section.open .topic-header {
+    background: linear-gradient(135deg, rgba(39, 174, 96, 0.04), white);
+    border-left: 4px solid var(--unit-color);
+}
+.topic-num-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, var(--unit-color), rgba(39, 174, 96, 0.8));
+    color: white;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+.topic-header-text {
+    flex: 1;
+}
+.topic-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 0.3rem;
+}
+.topic-subtitle {
+    font-size: 0.85rem;
+    color: var(--gray-500);
+    line-height: 1.4;
+}
+.topic-toggle {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray-500);
+    transition: transform 0.3s;
+    flex-shrink: 0;
+}
+.topic-toggle svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    stroke-width: 2;
+}
+.topic-section.open .topic-toggle {
+    transform: rotate(180deg);
+    color: var(--unit-color);
+}
+.topic-content {
+    background: white;
+    padding: 2rem;
+    border-top: 1px solid var(--gray-100);
+}
+.topic-inner {
+    max-width: 100%;
+}
+.topic-inner h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin: 1.5rem 0 0.8rem 0;
+    padding-bottom: 0.8rem;
+    border-bottom: 2px solid var(--unit-color);
+}
+.topic-inner h3:first-child {
+    margin-top: 0;
+}
+.topic-inner p {
+    color: var(--gray-700);
+    margin-bottom: 1rem;
+    line-height: 1.7;
+}
+.topic-inner strong {
+    color: var(--gray-900);
+    font-weight: 600;
+}
+.topic-inner ul, .topic-inner ol {
+    margin: 1rem 0 1rem 1.5rem;
+    color: var(--gray-700);
+    line-height: 1.7;
+}
+.topic-inner li {
+    margin-bottom: 0.5rem;
+}
+/* Callout boxes */
+.key-term {
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.08), rgba(52, 152, 219, 0.04));
+    border-left: 4px solid #3498db;
+    border-radius: 8px;
+    padding: 1.2rem;
+    margin: 1.5rem 0;
+}
+.key-term-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #3498db;
+    margin-bottom: 0.5rem;
+}
+.key-term h5 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 0.5rem;
+}
+.key-term p {
+    font-size: 0.95rem;
+    color: var(--gray-700);
+    margin: 0;
+    line-height: 1.6;
+}
+.exam-tip {
+    background: linear-gradient(135deg, rgba(243, 156, 18, 0.08), rgba(243, 156, 18, 0.04));
+    border-left: 4px solid #f39c12;
+    border-radius: 8px;
+    padding: 1.2rem;
+    margin: 1.5rem 0;
+}
+.exam-tip-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #f39c12;
+    margin-bottom: 0.5rem;
+}
+.exam-tip p {
+    font-size: 0.95rem;
+    color: var(--gray-700);
+    margin: 0;
+    line-height: 1.6;
+}
+.real-world {
+    background: linear-gradient(135deg, rgba(39, 174, 96, 0.08), rgba(39, 174, 96, 0.04));
+    border-left: 4px solid #27ae60;
+    border-radius: 8px;
+    padding: 1.2rem;
+    margin: 1.5rem 0;
+}
+.real-world-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #27ae60;
+    margin-bottom: 0.5rem;
+}
+.real-world h5 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 0.5rem;
+}
+.real-world p {
+    font-size: 0.95rem;
+    color: var(--gray-700);
+    margin: 0;
+    line-height: 1.6;
+}
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    border: 1px solid var(--gray-300);
+    border-radius: 8px;
+    overflow: hidden;
+}
+.comparison-table thead {
+    background: linear-gradient(135deg, var(--unit-color), rgba(39, 174, 96, 0.8));
+    color: white;
+}
+.comparison-table th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+.comparison-table td {
+    padding: 0.9rem 1rem;
+    border-top: 1px solid var(--gray-200);
+    color: var(--gray-700);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+.comparison-table tr:nth-child(even) {
+    background: var(--gray-50);
+}
+.comparison-table strong {
+    color: var(--gray-900);
+    font-weight: 600;
+}
+.adv-disadv-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+.adv-box, .disadv-box {
+    border-radius: 8px;
+    padding: 1.2rem;
+}
+.adv-box {
+    background: linear-gradient(135deg, rgba(39, 174, 96, 0.08), rgba(39, 174, 96, 0.04));
+    border-left: 4px solid #27ae60;
+}
+.disadv-box {
+    background: linear-gradient(135deg, rgba(39, 174, 96, 0.08), rgba(39, 174, 96, 0.04));
+    border-left: 4px solid var(--unit-color);
+}
+.adv-box-title, .disadv-box-title {
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 0.8rem;
+}
+.adv-box-title {
+    color: #27ae60;
+}
+.disadv-box-title {
+    color: var(--unit-color);
+}
+.adv-box ul, .disadv-box ul {
+    list-style: none;
+    padding: 0;
+}
+.adv-box li, .disadv-box li {
+    padding: 0.5rem 0;
+    color: var(--gray-700);
+    line-height: 1.6;
+    font-size: 0.9rem;
+}
+.adv-box li::before {
+    content: "\2713 ";
+    color: #27ae60;
+    font-weight: 700;
+    margin-right: 0.4rem;
+}
+.disadv-box li::before {
+    content: "\2717 ";
+    color: var(--unit-color);
+    font-weight: 700;
+    margin-right: 0.4rem;
+}
+.interactive-container {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border: 1px solid var(--gray-200);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.interactive-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.badge {
+    display: inline-block;
+    background: var(--unit-color);
+    color: white;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+.diagram-canvas-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 1.5rem 0;
+}
+.diagram-canvas-wrapper canvas {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    background: white;
+}
+.diagram-instruction {
+    font-size: 0.85rem;
+    color: var(--gray-500);
+    text-align: center;
+    margin-top: 0.8rem;
+    font-style: italic;
+}
+@media (max-width: 768px) {
+    .adv-disadv-grid { grid-template-columns: 1fr; }
+    .notes-layout { grid-template-columns: 1fr; padding: 1rem; }
+    .sidebar { position: relative; top: 0; max-height: none; }
+}
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="site-navbar" id="siteNavbar">
+    <div class="site-navbar-content">
+        <a href="index.html"><img src="logo.png" alt="MyBizStudies" class="site-navbar-logo"></a>
+        <div class="level-toggle" id="desktopLevelToggle">
+            <button class="level-toggle-btn" data-level="alevel">A-Level</button>
+            <button class="level-toggle-btn active" data-level="gcse">GCSE</button>
+        </div>
+        <div class="site-nav-buttons" id="siteNavButtons">
+            <a href="exam-practice.html" class="site-nav-link auth-only" style="display:none;">Exam Practice</a>
+            <a href="app.html" class="site-nav-link auth-only" style="display:none;">Flash Cards</a>
+            <a href="exam-skills-v2.html" class="site-nav-link auth-only" style="display:none;">Exam Skills</a>
+            <a href="gcse-notes.html" class="active site-nav-link auth-only" style="display:none;">Study Notes</a>
+            <a href="blog.html" class="site-nav-link">Blog</a>
+            <a href="contact.html" class="site-nav-link">Contact Us</a>
+            <a href="login.html" class="site-nav-btn site-nav-btn-ghost guest-only">Log In</a>
+            <a href="signup.html" class="site-nav-btn site-nav-btn-primary guest-only">Get Started</a>
+            <div class="profile-dropdown-wrapper auth-only" style="display:none;">
+                <div class="profile-avatar" id="profileAvatar" onclick="toggleProfileDropdown()">--</div>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <div class="profile-dropdown-header">
+                        <div class="profile-dropdown-name" id="profileName">Student</div>
+                        <div class="profile-dropdown-email" id="profileEmail"></div>
+                    </div>
+                    <div class="profile-dropdown-divider"></div>
+                    <a href="student-progress.html" class="profile-dropdown-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+                        Student Progress
+                    </a>
+                    <a href="account.html" class="profile-dropdown-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>
+                        My Account
+                    </a>
+                    <a href="admin.html" class="profile-dropdown-item admin-only" style="display:none;">Admin</a>
+                    <button class="profile-dropdown-item logout-item" id="navLogoutBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/></svg>
+                        Log Out
+                    </button>
+                </div>
+            </div>
+        </div>
+        <button class="site-hamburger" id="siteHamburger" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</nav>
+
+<div class="site-mobile-overlay" id="siteMobileOverlay"></div>
+<div class="site-mobile-menu" id="siteMobileMenu">
+    <div class="site-mobile-links">
+        <div class="mobile-level-toggle">
+            <button class="level-toggle-btn" data-level="alevel">A-Level</button>
+            <button class="level-toggle-btn active" data-level="gcse">GCSE</button>
+        </div>
+        <div class="site-mobile-divider auth-only" style="display:none;"></div>
+        <a href="exam-practice.html" class="auth-only" style="display:none;">Exam Practice</a>
+        <a href="app.html" class="auth-only" style="display:none;">Flash Cards</a>
+        <a href="gcse-notes.html" class="active auth-only" style="display:none;">Study Notes</a>
+        <a href="blog.html">Blog</a>
+        <div class="site-mobile-divider"></div>
+        <a href="contact.html">Contact Us</a>
+        <div class="site-mobile-divider guest-only"></div>
+        <a href="login.html" class="guest-only">Log In</a>
+        <a href="signup.html" class="site-mobile-cta guest-only">Get Started</a>
+        <div class="site-mobile-divider auth-only" style="display:none;"></div>
+        <button class="site-mobile-logout auth-only" style="display:none;" id="mobileLogoutBtn">Logout</button>
+    </div>
+</div>
+
+<div class="notes-layout">
+    <aside class="sidebar">
+        <div class="sidebar-card">
+            <div class="sidebar-header">
+                <div class="sidebar-unit-badge">U3</div>
+                <div class="sidebar-unit-name">Marketing</div>
+            </div>
+            <div class="sidebar-topics">
+                <div class="sidebar-topic-item">
+                    <button class="sidebar-topic-link" onclick="scrollToTopic('topic-3-1')">
+                        <span class="sidebar-topic-num">3.1</span> Role of Marketing
+                    </button>
+                </div>
+                <div class="sidebar-topic-item">
+                    <button class="sidebar-topic-link" onclick="scrollToTopic('topic-3-2')">
+                        <span class="sidebar-topic-num">3.2</span> Market Research
+                    </button>
+                </div>
+                <div class="sidebar-topic-item">
+                    <button class="sidebar-topic-link" onclick="scrollToTopic('topic-3-3')">
+                        <span class="sidebar-topic-num">3.3</span> Market Segmentation
+                    </button>
+                </div>
+                <div class="sidebar-topic-item">
+                    <button class="sidebar-topic-link" onclick="scrollToTopic('topic-3-4')">
+                        <span class="sidebar-topic-num">3.4</span> Product (4Ps)
+                    </button>
+                </div>
+                <div class="sidebar-topic-item">
+                    <button class="sidebar-topic-link" onclick="scrollToTopic('topic-3-5')">
+                        <span class="sidebar-topic-num">3.5</span> Price (4Ps)
+                    </button>
+                </div>
+                <div class="sidebar-topic-item">
+                    <button class="sidebar-topic-link" onclick="scrollToTopic('topic-3-6')">
+                        <span class="sidebar-topic-num">3.6</span> Place (4Ps)
+                    </button>
+                </div>
+                <div class="sidebar-topic-item">
+                    <button class="sidebar-topic-link" onclick="scrollToTopic('topic-3-7')">
+                        <span class="sidebar-topic-num">3.7</span> Promotion (4Ps)
+                    </button>
+                </div>
+                <div class="sidebar-topic-item">
+                    <button class="sidebar-topic-link" onclick="scrollToTopic('topic-3-8')">
+                        <span class="sidebar-topic-num">3.8</span> Marketing Strategy
+                    </button>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="topic-section open" id="topic-3-1">
+            <div class="topic-header" onclick="toggleSection(this)">
+                <div class="topic-num-badge">3.1</div>
+                <div class="topic-header-text">
+                    <div class="topic-title">The Role of Marketing</div>
+                    <div class="topic-subtitle">Understanding customer needs and market orientation</div>
+                </div>
+                <div class="topic-toggle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+            </div>
+            <div class="topic-content">
+                <div class="topic-inner">
+                    <h3>What is Marketing?</h3>
+                    <p>Marketing is about identifying what customers want and delivering products or services that satisfy those needs. Good marketing helps a business understand its customers, create the right products, set fair prices, and promote them effectively. Marketing is not just advertising; it is about understanding and serving customer needs.</p>
+
+                    <div class="key-term">
+                        <span class="key-term-label">KEY TERM</span>
+                        <h5>Marketing</h5>
+                        <p>The process of identifying customer needs, creating suitable products, and promoting them to achieve business objectives and customer satisfaction.</p>
+                    </div>
+
+                    <h3>Customer Needs and Wants</h3>
+                    <p><strong>Needs</strong> are things customers must have to survive or function, such as food, water, shelter, and clothing. <strong>Wants</strong> are things customers desire but do not need to survive, such as luxury items, entertainment, or specific brands. Marketing often turns needs into wants by creating desire for particular brands or products.</p>
+
+                    <h3>Market Oriented vs Product Oriented</h3>
+                    <p>Businesses can take two different approaches to what they produce and sell.</p>
+
+                    <h3>Market Oriented Approach</h3>
+                    <p>The business starts by researching what customers want. It identifies customer needs, then designs and produces products to meet those needs. The business asks the customer first.</p>
+                    <ul>
+                        <li>Research customer needs and wants</li>
+                        <li>Design products based on customer feedback</li>
+                        <li>Focus on customer satisfaction</li>
+                        <li>Often leads to new innovative products</li>
+                        <li>Higher cost as it requires market research</li>
+                        <li>Lower risk as the product is designed for a known market</li>
+                    </ul>
+
+                    <div class="real-world">
+                        <span class="real-world-label">REAL-WORLD EXAMPLE</span>
+                        <h5>Apple and Market Orientation</h5>
+                        <p>Apple researches what customers want in smartphones and technology. They gather feedback through focus groups and research. Products like the iPhone were designed based on what customers wanted in a mobile phone, not just what was technically possible.</p>
+                    </div>
+
+                    <h3>Product Oriented Approach</h3>
+                    <p>The business focuses on what it can produce well and efficiently. It produces the best product it can make, then tries to find customers who want it. The business asks itself first, not the customer.</p>
+                    <ul>
+                        <li>Focus on what the business does best</li>
+                        <li>Often produces high quality products</li>
+                        <li>Lower marketing and research costs</li>
+                        <li>Higher risk if customers do not want the product</li>
+                        <li>Can lead to products nobody wants</li>
+                        <li>Works well if the product is genuinely unique</li>
+                    </ul>
+
+                    <h3>Why Customer Needs Change</h3>
+                    <p>Customer needs and wants are not static. They change for several reasons:</p>
+                    <ul>
+                        <li><strong>Technology:</strong> New technology changes what is possible. Smartphones changed how people communicate.</li>
+                        <li><strong>Income:</strong> When people earn more, they want different products. Rising income often leads to demand for luxury goods.</li>
+                        <li><strong>Trends and Fashion:</strong> What is fashionable changes. Businesses must stay aware of trends.</li>
+                        <li><strong>Age and Life Stage:</strong> What people want changes as they age. A teenager wants different products than a pensioner.</li>
+                        <li><strong>Environment and Sustainability:</strong> More customers now want eco-friendly products.</li>
+                        <li><strong>Social Factors:</strong> Social attitudes change. Organic food is now more popular than it was 20 years ago.</li>
+                    </ul>
+
+                    <h3>How Businesses Respond to Changing Markets</h3>
+                    <ul>
+                        <li><strong>Market Research:</strong> Conduct regular research to understand changing customer preferences.</li>
+                        <li><strong>Innovation:</strong> Develop new products that meet emerging needs.</li>
+                        <li><strong>Adaptation:</strong> Modify existing products to remain relevant.</li>
+                        <li><strong>Marketing Communication:</strong> Use advertising and promotion to educate customers about new products.</li>
+                        <li><strong>Competitive Analysis:</strong> Watch what competitors are doing and respond appropriately.</li>
+                    </ul>
+
+                    <div class="exam-tip">
+                        <span class="exam-tip-label">EXAM TIP</span>
+                        <p>Questions often ask you to compare market oriented and product oriented approaches. Remember that market oriented is customer focused and less risky, while product oriented is focused on production efficiency but higher risk. Use examples to show you understand the difference.</p>
+                    </div>
+
+                    <h3>Key Takeaways</h3>
+                    <ul>
+                        <li>Marketing is about identifying and satisfying customer needs</li>
+                        <li>Needs are essentials; wants are desires</li>
+                        <li>Market oriented businesses research customer needs first</li>
+                        <li>Product oriented businesses produce what they do best then find customers</li>
+                        <li>Market oriented approach is less risky but more expensive</li>
+                        <li>Customer needs change due to technology, income, trends, age, environment, and social factors</li>
+                        <li>Businesses must respond to market changes through research, innovation, and adaptation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="topic-section" id="topic-3-2">
+            <div class="topic-header" onclick="toggleSection(this)">
+                <div class="topic-num-badge">3.2</div>
+                <div class="topic-header-text">
+                    <div class="topic-title">Market Research</div>
+                    <div class="topic-subtitle">Primary and secondary research methods</div>
+                </div>
+                <div class="topic-toggle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+            </div>
+            <div class="topic-content">
+                <div class="topic-inner">
+                    <h3>Why Market Research is Important</h3>
+                    <p>Market research helps a business understand its customers, competitors, and market. Businesses that do good research make better decisions and are more likely to succeed. Research helps reduce risk and identify opportunities.</p>
+
+                    <div class="key-term">
+                        <span class="key-term-label">KEY TERM</span>
+                        <h5>Market Research</h5>
+                        <p>The collection and analysis of information about customers, competitors, and markets to help businesses make informed decisions.</p>
+                    </div>
+
+                    <h3>Primary Research</h3>
+                    <p>Primary research is data collected directly from the source by the business itself. It is original data that did not exist before. Primary research takes time and costs money, but gives information specific to the business.</p>
+
+                    <p><strong>Surveys and Questionnaires:</strong> Written questions given to customers to understand their preferences. Can be done online, by post, or in person. Advantages: cheap, quick, can reach many people. Disadvantages: low response rate, people may not answer truthfully.</p>
+
+                    <p><strong>Interviews:</strong> Face to face or phone conversations where the researcher asks questions. Advantages: detailed answers, can follow up with more questions. Disadvantages: time consuming, expensive, only small sample.</p>
+
+                    <p><strong>Focus Groups:</strong> Small group discussions led by a trained moderator. 8-10 people discuss a product or idea. Advantages: rich discussion, understand why people have opinions. Disadvantages: expensive, hard to organise, time consuming.</p>
+
+                    <p><strong>Observations:</strong> Watching how customers behave in shops, online, or other settings. Advantages: unbiased, see real behaviour. Disadvantages: expensive, staff time needed, not clear why behaviour happens.</p>
+
+                    <h3>Secondary Research</h3>
+                    <p>Secondary research uses data that already exists. This data was collected by someone else, often for other purposes. Secondary research is quick and cheap but may not be exactly what the business needs.</p>
+
+                    <p><strong>Internet Research:</strong> Information available online through websites, forums, social media. Advantages: free, quick, vast amount of information. Disadvantages: quality varies, may be inaccurate, some information may be outdated.</p>
+
+                    <p><strong>Government Data:</strong> Governments collect lots of data about their populations through census, employment statistics. Advantages: reliable, free, detailed. Disadvantages: general information, not specific to one business, takes time to publish.</p>
+
+                    <p><strong>Competitor Data:</strong> Information about competitors from their websites, annual reports, advertising. Advantages: learn from competitors, understand the market. Disadvantages: competitors may not reveal true information.</p>
+
+                    <p><strong>Trade Magazines and Reports:</strong> Industry publications and research reports. Advantages: expert analysis, detailed trends. Disadvantages: can be expensive, may be too general.</p>
+
+                    <h3>Qualitative vs Quantitative Data</h3>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Qualitative Data</th>
+                                <th>Quantitative Data</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>What it is:</strong> Descriptive, open ended information about opinions, feelings, reasons</td>
+                                <td><strong>What it is:</strong> Numerical information that can be measured and analysed</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Examples:</strong> Focus group feedback, interview responses, customer comments</td>
+                                <td><strong>Examples:</strong> Survey scores, sales figures, percentage of customers satisfied</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Advantages:</strong> Detailed understanding, explains why behaviour happens</td>
+                                <td><strong>Advantages:</strong> Easy to compare, can spot trends, objective</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Disadvantages:</strong> Hard to compare, time consuming to analyse, small sample</td>
+                                <td><strong>Disadvantages:</strong> Doesn't explain why, can be misrepresented</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Sampling Methods</h3>
+                    <p>It is usually too expensive to survey everyone. Businesses use sampling to select a smaller representative group.</p>
+                    <ul>
+                        <li><strong>Random Sampling:</strong> Every person has equal chance of being selected. Fair but may not represent all groups.</li>
+                        <li><strong>Stratified Sampling:</strong> Population divided into groups, then samples taken from each group. More representative of different groups.</li>
+                        <li><strong>Quota Sampling:</strong> Researcher selects specific numbers of different types of people. Quick but may introduce bias.</li>
+                        <li><strong>Convenience Sampling:</strong> Select people who are easiest to reach. Quick and cheap but may be biased.</li>
+                    </ul>
+
+                    <div class="real-world">
+                        <span class="real-world-label">REAL-WORLD EXAMPLE</span>
+                        <h5>Netflix Uses Market Research</h5>
+                        <p>Netflix uses surveys, viewing data analysis, and focus groups to understand what shows and films customers want. They analyse viewing patterns (secondary research) and ask customers for feedback (primary research). This helps them decide which new shows to produce.</p>
+                    </div>
+
+                    <div class="exam-tip">
+                        <span class="exam-tip-label">EXAM TIP</span>
+                        <p>Exam questions often ask about advantages and disadvantages of different research methods. Always think about cost, time, and reliability. Primary research costs more but is specific; secondary research is cheap but may not be exactly what you need.</p>
+                    </div>
+
+                    <h3>Key Takeaways</h3>
+                    <ul>
+                        <li>Market research helps businesses understand customers and make better decisions</li>
+                        <li>Primary research is original data collected by the business; secondary is existing data</li>
+                        <li>Primary methods include surveys, interviews, focus groups, observations</li>
+                        <li>Secondary methods include internet, government data, competitor data, trade publications</li>
+                        <li>Qualitative data explains why; quantitative data measures and compares</li>
+                        <li>Sampling methods help when surveying everyone is too expensive</li>
+                        <li>Each research method has advantages and disadvantages in cost, time, and reliability</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="topic-section" id="topic-3-3">
+            <div class="topic-header" onclick="toggleSection(this)">
+                <div class="topic-num-badge">3.3</div>
+                <div class="topic-header-text">
+                    <div class="topic-title">Market Segmentation</div>
+                    <div class="topic-subtitle">Dividing markets and targeting customers</div>
+                </div>
+                <div class="topic-toggle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+            </div>
+            <div class="topic-content">
+                <div class="topic-inner">
+                    <h3>What is Market Segmentation?</h3>
+                    <p>Market segmentation is dividing a large market into smaller groups of people with similar characteristics, needs, or behaviour. Each segment has different needs and wants. By understanding segments, businesses can target their marketing more effectively.</p>
+
+                    <div class="key-term">
+                        <span class="key-term-label">KEY TERM</span>
+                        <h5>Market Segmentation</h5>
+                        <p>Dividing a large market into smaller groups of people with similar characteristics, needs, and behaviour.</p>
+                    </div>
+
+                    <h3>Segmentation Methods</h3>
+                    <p><strong>Age:</strong> Different age groups want different products. Teenagers want different fashion than pensioners. Age is easy to measure and relevant for many products.</p>
+
+                    <p><strong>Gender:</strong> Many products target male or female customers. Marketing messages, product design, and packaging can differ by gender.</p>
+
+                    <p><strong>Income:</strong> People with different income levels buy different products. High income customers buy luxury products; low income customers buy budget products.</p>
+
+                    <p><strong>Location:</strong> People in different areas have different needs. Urban customers use public transport; rural customers need cars. Location affects what products are sold.</p>
+
+                    <p><strong>Lifestyle:</strong> This includes values, interests, and behaviour. Health conscious people buy organic food. Environmentally aware people buy eco-friendly products. Lifestyle segmentation is complex but powerful.</p>
+
+                    <p><strong>Family Size and Stage:</strong> Families with young children need different products than single people or retirees.</p>
+
+                    <h3>Benefits of Segmentation</h3>
+                    <ul>
+                        <li>More accurate targeting; advertising reaches people who want the product</li>
+                        <li>Better product design; products can meet specific segment needs</li>
+                        <li>Efficient use of marketing budget; money not wasted on wrong audiences</li>
+                        <li>Higher sales as products better match customer needs</li>
+                        <li>Identify new market opportunities</li>
+                        <li>Competitive advantage; understand specific customer needs better than competitors</li>
+                    </ul>
+
+                    <h3>Mass Marketing vs Niche Marketing</h3>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Mass Marketing</th>
+                                <th>Niche Marketing</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>What it is:</strong> One product for all customers; same marketing message for everyone</td>
+                                <td><strong>What it is:</strong> Specialized products for specific market segments</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Examples:</strong> Coca Cola, basic utilities, mainstream products</td>
+                                <td><strong>Examples:</strong> Organic food for health conscious people, luxury cars</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Advantages:</strong> Lower costs, larger sales volume, economies of scale</td>
+                                <td><strong>Advantages:</strong> Less competition, can charge premium prices, loyal customers</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Disadvantages:</strong> High competition, harder to differentiate, may alienate some customers</td>
+                                <td><strong>Disadvantages:</strong> Small market size, higher costs per unit, less profit overall</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="real-world">
+                        <span class="real-world-label">REAL-WORLD EXAMPLE</span>
+                        <h5>Luxury Car Brands Target by Income</h5>
+                        <p>Brands like Porsche, Bentley, and Tesla target high income customers. They use different advertising, sell through exclusive dealerships, and create premium experiences. Meanwhile, brands like Ford and Vauxhall use mass marketing to reach budget conscious customers. Both approaches work in their respective market segments.</p>
+                    </div>
+
+                    <div class="exam-tip">
+                        <span class="exam-tip-label">EXAM TIP</span>
+                        <p>When asked about segmentation, explain which segments a business targets and why. For example, a university targets age 18-25 segment. Give advantages of focusing on that segment. Understand that mass marketing is cheaper but faces more competition, while niche marketing has less competition but smaller market size.</p>
+                    </div>
+
+                    <h3>Key Takeaways</h3>
+                    <ul>
+                        <li>Market segmentation divides a market into similar groups of customers</li>
+                        <li>Segmentation methods include age, gender, income, location, lifestyle, family stage</li>
+                        <li>Benefits include better targeting, efficient marketing spend, and higher sales</li>
+                        <li>Mass marketing sells one product to all customers; niche markets to specific segments</li>
+                        <li>Mass marketing has lower costs but more competition</li>
+                        <li>Niche marketing has less competition but smaller market and higher costs</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="topic-section" id="topic-3-4">
+            <div class="topic-header" onclick="toggleSection(this)">
+                <div class="topic-num-badge">3.4</div>
+                <div class="topic-header-text">
+                    <div class="topic-title">Product (The 4Ps)</div>
+                    <div class="topic-subtitle">Product design, lifecycle, extension, Boston Matrix, branding</div>
+                </div>
+                <div class="topic-toggle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+            </div>
+            <div class="topic-content">
+                <div class="topic-inner">
+                    <h3>What is a Product?</h3>
+                    <p>A product is anything offered to customers that can satisfy a need or want. It can be a physical good, a service, or a combination. Good product design is essential for business success.</p>
+
+                    <h3>Product Design and Development</h3>
+                    <p>Successful products are designed with customer needs in mind. Product development involves research, design, testing, and refinement. Good products have features customers want and solve problems.</p>
+
+                    <p>Businesses must consider:</p>
+                    <ul>
+                        <li>Quality; does it work well and last?</li>
+                        <li>Features; does it have the functions customers want?</li>
+                        <li>Design; is it attractive and easy to use?</li>
+                        <li>Durability; how long will it last?</li>
+                        <li>Reliability; will it work when needed?</li>
+                    </ul>
+
+                    <h3>The Product Life Cycle</h3>
+                    <p>Most products follow a predictable pattern of sales over time called the product life cycle. Understanding the cycle helps businesses plan marketing, production, and investment.</p>
+
+                    <div class="interactive-container">
+                        <div class="interactive-title">Product Life Cycle <span class="badge">Diagram</span></div>
+                        <div class="diagram-canvas-wrapper">
+                            <canvas id="plcCanvas" width="600" height="350"></canvas>
+                        </div>
+                    </div>
+
+                    <p><strong>Introduction:</strong> Product is new to market. Sales are low as few people know about it. High marketing costs. High development costs still being recovered. Price may be high. Companies invest to build brand awareness.</p>
+
+                    <p><strong>Growth:</strong> Product becomes known and popular. Sales rise rapidly. More competitors enter market. Prices begin to fall as production increases. Profit margins improve. Marketing focus shifts to competition and differentiation.</p>
+
+                    <p><strong>Maturity:</strong> Peak sales. Market is saturated; most potential customers already have the product. Intense competition. Prices are at lowest. Focus on retention and minor improvements. Profit margins may be squeezed.</p>
+
+                    <p><strong>Decline:</strong> Sales fall as new products replace the old one or customer interest wanes. Competitors exit market. Prices may fall further. Business must decide whether to discontinue, reposition, or modify the product.</p>
+
+                    <h3>Extension Strategies</h3>
+                    <p>When a product reaches maturity or decline, businesses can extend its life through:</p>
+                    <ul>
+                        <li><strong>Product Modification:</strong> Improve or change the existing product. Example: add new features to smartphone.</li>
+                        <li><strong>Market Development:</strong> Enter new geographic markets. Example: sell product in different countries.</li>
+                        <li><strong>Repositioning:</strong> Change how the product is marketed. Example: market an old product as trendy and retro.</li>
+                        <li><strong>New Uses:</strong> Find new applications for the product. Example: old fabric dye now marketed for hair colour.</li>
+                        <li><strong>Branding and Packaging:</strong> Update brand image or packaging to appeal to new customers.</li>
+                    </ul>
+
+                    <h3>The Boston Matrix</h3>
+                    <p>The Boston Matrix helps businesses analyse their product portfolio. It divides products into four categories based on market growth and market share.</p>
+
+                    <div class="interactive-container">
+                        <div class="interactive-title">Boston Matrix <span class="badge">Diagram</span></div>
+                        <div class="diagram-canvas-wrapper">
+                            <canvas id="bostonCanvas" width="550" height="500"></canvas>
+                        </div>
+                    </div>
+
+                    <p><strong>Stars:</strong> High market share; high market growth. These products are successful and growing. They generate good profit but may need investment to maintain growth. Example: iPhone when first introduced.</p>
+
+                    <p><strong>Cash Cows:</strong> High market share; low market growth. Mature products with steady sales and profit. Need little investment. Generate cash to invest in stars. Example: basic toaster.</p>
+
+                    <p><strong>Question Marks (Problem Children):</strong> Low market share; high market growth. New products with potential but low sales. Need investment to increase market share. High risk. Example: new tech startup product.</p>
+
+                    <p><strong>Dogs:</strong> Low market share; low market growth. Old products with weak sales. Generate little profit. Usually discontinued unless special reasons to keep. Example: VHS tapes.</p>
+
+                    <h3>Branding and Brand Image</h3>
+                    <p>A <strong>brand</strong> is the name, logo, design, and image associated with a product. Strong brands help businesses charge higher prices and build customer loyalty.</p>
+
+                    <div class="key-term">
+                        <span class="key-term-label">KEY TERM</span>
+                        <h5>Brand</h5>
+                        <p>The name, logo, design, and overall image that represents a product and makes it distinct from competitors.</p>
+                    </div>
+
+                    <p>Brand image is important because:</p>
+                    <ul>
+                        <li>Customers recognise and trust strong brands</li>
+                        <li>Strong brands command premium prices</li>
+                        <li>Brand loyalty means repeat purchases</li>
+                        <li>Easier to launch new products if brand is strong</li>
+                        <li>Brands become assets worth money</li>
+                    </ul>
+
+                    <h3>Packaging</h3>
+                    <p>Packaging serves multiple purposes: protects the product, displays information, and communicates brand image. Good packaging:</p>
+                    <ul>
+                        <li>Protects product during transport and storage</li>
+                        <li>Displays key information clearly</li>
+                        <li>Reflects brand image and values</li>
+                        <li>Attracts customers on shop shelves</li>
+                        <li>Provides customer instructions and safety information</li>
+                        <li>Is environmentally responsible (increasingly important)</li>
+                    </ul>
+
+                    <div class="real-world">
+                        <span class="real-world-label">REAL-WORLD EXAMPLE</span>
+                        <h5>Apple Product Lifecycle</h5>
+                        <p>iPhones follow the product lifecycle. Each year Apple introduces new models (introduction), sales grow (growth), eventually peak (maturity), then decline (decline) as new models arrive. Apple extends product life through updates and new colours. Old models often become their cash cows, providing steady revenue.</p>
+                    </div>
+
+                    <div class="exam-tip">
+                        <span class="exam-tip-label">EXAM TIP</span>
+                        <p>Understand the product life cycle stages and what business strategy suits each stage. For Boston Matrix, remember the names and characteristics of each quadrant. Explain why businesses need a mix of stars, cash cows, question marks, and occasionally manage dogs.</p>
+                    </div>
+
+                    <h3>Key Takeaways</h3>
+                    <ul>
+                        <li>Product design should meet customer needs and wants</li>
+                        <li>Product lifecycle has four stages; introduction, growth, maturity, decline</li>
+                        <li>Each stage requires different business strategies</li>
+                        <li>Extension strategies can prolong product life</li>
+                        <li>Boston Matrix analyses products by market share and growth</li>
+                        <li>Strong branding helps charge higher prices and build loyalty</li>
+                        <li>Good packaging protects, informs, and communicates brand image</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="topic-section" id="topic-3-5">
+            <div class="topic-header" onclick="toggleSection(this)">
+                <div class="topic-num-badge">3.5</div>
+                <div class="topic-header-text">
+                    <div class="topic-title">Price (The 4Ps)</div>
+                    <div class="topic-subtitle">Pricing strategies and elasticity of demand</div>
+                </div>
+                <div class="topic-toggle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+            </div>
+            <div class="topic-content">
+                <div class="topic-inner">
+                    <h3>Pricing Strategies</h3>
+                    <p>Pricing is one of the most important decisions a business makes. Price affects both how many customers buy and the profit the business makes. Different strategies suit different situations.</p>
+
+                    <h3>Cost Plus Pricing</h3>
+                    <p>Calculate the total cost to produce a product, then add a percentage markup for profit. Simple and commonly used.</p>
+                    <p>Example: Product costs 10 pounds to make. Add 50% markup. Sell for 15 pounds.</p>
+                    <p><strong>Advantages:</strong> Easy to calculate, ensures profit margin, simple to explain.</p>
+                    <p><strong>Disadvantages:</strong> Does not consider demand or competitors, may price too high or too low for market.</p>
+
+                    <h3>Competitive Pricing</h3>
+                    <p>Set prices similar to competitors. Charge roughly the same price as rival businesses.</p>
+                    <p><strong>Advantages:</strong> Easy to implement, stays in line with market, not undercut by competitors.</p>
+                    <p><strong>Disadvantages:</strong> No differentiation by price, may not reflect your product quality or cost structure.</p>
+
+                    <h3>Penetration Pricing</h3>
+                    <p>Set low prices initially to enter a market quickly and gain market share. Prices rise later when brand is established.</p>
+                    <p><strong>Advantages:</strong> Quickly gain customers, discourage competitors, build market share fast.</p>
+                    <p><strong>Disadvantages:</strong> Low initial profit, may be hard to raise prices later, suggests low quality to some customers.</p>
+
+                    <div class="real-world">
+                        <span class="real-world-label">REAL-WORLD EXAMPLE</span>
+                        <h5>Netflix Penetration Pricing</h5>
+                        <p>When Netflix entered the streaming market, it charged low prices to gain customers quickly. Now that it dominates the market, prices have risen significantly. Penetration pricing helped Netflix establish its market position.</p>
+                    </div>
+
+                    <h3>Price Skimming</h3>
+                    <p>Set high prices when a new product launches, targeting early adopters and customers with high willingness to pay. Lower prices over time as demand falls.</p>
+                    <p><strong>Advantages:</strong> High initial profit, maximise revenue from enthusiasts, create premium image.</p>
+                    <p><strong>Disadvantages:</strong> Attract competitors, alienate price sensitive customers, may limit market penetration.</p>
+
+                    <h3>Psychological Pricing</h3>
+                    <p>Set prices that seem lower than they actually are. Examples: 9.99 pounds instead of 10 pounds, 299 pounds instead of 300 pounds.</p>
+                    <p><strong>Advantages:</strong> Prices seem cheaper, encourages impulse purchases.</p>
+                    <p><strong>Disadvantages:</strong> Seen as a trick by sophisticated customers, only works for small price differences.</p>
+
+                    <h3>Promotional Pricing</h3>
+                    <p>Temporarily lower prices to encourage trial or clear stock. Example: 20% discount for one month only.</p>
+                    <p><strong>Advantages:</strong> Clear old stock, encourage trial of new product, attract deal seekers.</p>
+                    <p><strong>Disadvantages:</strong> Reduces profit margin, may train customers to wait for discounts, can cheapen brand image.</p>
+
+                    <h3>Factors Affecting Price</h3>
+                    <ul>
+                        <li><strong>Production costs:</strong> If costs rise, prices must rise to maintain profit</li>
+                        <li><strong>Competition:</strong> Intense competition limits how much you can charge</li>
+                        <li><strong>Demand:</strong> High demand allows higher prices; low demand requires lower prices</li>
+                        <li><strong>Product quality and brand:</strong> Premium brands charge higher prices</li>
+                        <li><strong>Life cycle stage:</strong> New products can often charge more than mature products</li>
+                        <li><strong>Customer segment:</strong> Some segments pay more than others</li>
+                        <li><strong>Perceived value:</strong> What customers think the product is worth matters more than actual cost</li>
+                    </ul>
+
+                    <h3>Price Elasticity of Demand</h3>
+                    <p>Price elasticity measures how much demand changes when price changes. This is not a formula you need to calculate at GCSE level, but understanding the concept is important.</p>
+
+                    <p><strong>Elastic Demand:</strong> When price rises, demand falls significantly. Products are price sensitive. Examples: most groceries, restaurant meals. A 10% price rise causes more than 10% drop in sales.</p>
+
+                    <p><strong>Inelastic Demand:</strong> When price rises, demand falls only slightly. Products are not price sensitive. Examples: petrol, prescription medicines, luxury items. A 10% price rise causes less than 10% drop in sales.</p>
+
+                    <p>Products tend to have elastic demand when: there are close substitutes, customers are price sensitive, the product is a small part of spending, customers can easily choose alternatives.</p>
+
+                    <p>Products tend to have inelastic demand when: no close substitutes exist, customers must have the product, the product is a small part of spending, customers are not price sensitive.</p>
+
+                    <div class="exam-tip">
+                        <span class="exam-tip-label">EXAM TIP</span>
+                        <p>Understand which pricing strategies suit different situations. For new products in growing markets, consider skimming or penetration pricing. For mature competitive markets, use competitive pricing. Always think about what customers will pay and how demand will respond to price changes.</p>
+                    </div>
+
+                    <h3>Key Takeaways</h3>
+                    <ul>
+                        <li>Cost plus pricing adds markup to costs; easy but ignores market demand</li>
+                        <li>Competitive pricing matches rivals; safe but no differentiation</li>
+                        <li>Penetration pricing is low initially to gain market share</li>
+                        <li>Price skimming is high initially to maximise revenue from early adopters</li>
+                        <li>Psychological pricing makes prices seem cheaper (9.99 instead of 10)</li>
+                        <li>Promotional pricing temporarily lowers prices to clear stock or encourage trial</li>
+                        <li>Elastic demand means demand changes significantly with price changes</li>
+                        <li>Inelastic demand means demand is not very sensitive to price changes</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="topic-section" id="topic-3-6">
+            <div class="topic-header" onclick="toggleSection(this)">
+                <div class="topic-num-badge">3.6</div>
+                <div class="topic-header-text">
+                    <div class="topic-title">Place (The 4Ps)</div>
+                    <div class="topic-subtitle">Distribution channels and ecommerce</div>
+                </div>
+                <div class="topic-toggle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+            </div>
+            <div class="topic-content">
+                <div class="topic-inner">
+                    <h3>What is Place in Marketing?</h3>
+                    <p>Place refers to how products get to customers. It involves distribution channels, where products are sold, and how they are delivered. Businesses must ensure products are available where customers want to buy them.</p>
+
+                    <div class="key-term">
+                        <span class="key-term-label">KEY TERM</span>
+                        <h5>Distribution Channel</h5>
+                        <p>The route a product takes from the manufacturer to the final customer.</p>
+                    </div>
+
+                    <h3>Distribution Channels</h3>
+                    <p><strong>Direct to Consumer:</strong> Manufacturer sells directly to customer. No intermediaries. Examples: farm shop selling own produce, website selling own products.</p>
+                    <p>Advantages: Keep all profit, control customer relationship, get customer feedback directly.</p>
+                    <p>Disadvantages: Expensive to set up retail outlets or website, need to handle logistics, high cost per customer.</p>
+
+                    <p><strong>Through Retailers:</strong> Manufacturer sells to retail shops, which sell to customers. Most common channel for consumer goods.</p>
+                    <p>Advantages: Reach many customers through existing shops, retailers handle customer service, lower distribution costs.</p>
+                    <p>Disadvantages: Lose profit margin to retailers, lose control of customer experience, retailers may not stock your product.</p>
+
+                    <p><strong>Through Wholesalers:</strong> Manufacturer sells to wholesaler, who sells to retailers, who sell to customers. Common for large manufacturers.</p>
+                    <p>Advantages: Wholesalers handle large quantities, reach many retailers, lower per unit distribution cost.</p>
+                    <p>Disadvantages: Lose more profit through multiple intermediaries, less control over retail experience, slow to respond to changes.</p>
+
+                    <h3>Choosing Distribution Channels</h3>
+                    <p>Businesses must consider:</p>
+                    <ul>
+                        <li>Where do customers shop? Online or in stores?</li>
+                        <li>What products? Perishable goods need fast distribution; non-perishable can use longer channels.</li>
+                        <li>Budget? Direct sales cost more but give more profit per sale.</li>
+                        <li>Competition? What channels do competitors use?</li>
+                        <li>Control? Direct channels give more control but cost more.</li>
+                        <li>Volume? Need volume to justify direct distribution; small volume better through intermediaries.</li>
+                    </ul>
+
+                    <h3>The Role of Ecommerce</h3>
+                    <p>Ecommerce, or buying and selling online, has transformed distribution. Customers can shop online and have products delivered.</p>
+
+                    <p><strong>Advantages of Ecommerce:</strong></p>
+                    <ul>
+                        <li>Reach customers globally without physical shops</li>
+                        <li>Lower costs than physical retail</li>
+                        <li>Available 24/7; customers shop when they want</li>
+                        <li>Easy to reach price sensitive customers</li>
+                        <li>Collect customer data through website</li>
+                        <li>Personalize offers based on customer behaviour</li>
+                    </ul>
+
+                    <p><strong>Disadvantages of Ecommerce:</strong></p>
+                    <ul>
+                        <li>Customers cannot touch or see product before buying</li>
+                        <li>Need to manage returns and refunds</li>
+                        <li>Delivery times may be long</li>
+                        <li>High competition; customers can easily compare prices</li>
+                        <li>Cybersecurity and fraud risk</li>
+                        <li>Website must be maintained and updated</li>
+                    </ul>
+
+                    <h3>How the Internet Has Changed Distribution</h3>
+                    <p><strong>Direct to Consumer:</strong> Small businesses now sell directly online. No need for physical shops. Example: Etsy sellers reaching global customers.</p>
+
+                    <p><strong>Price Transparency:</strong> Customers easily compare prices online. Prices must be competitive.</p>
+
+                    <p><strong>Speed and Convenience:</strong> Amazon Prime and similar services deliver next day. Speed is now expected.</p>
+
+                    <p><strong>Omnichannel:</strong> Many businesses now sell both online and in stores. Customers want to shop however they prefer.</p>
+
+                    <p><strong>Disintermediation:</strong> Some manufacturers sell directly online, bypassing retailers. Retailers losing power to direct sellers.</p>
+
+                    <div class="real-world">
+                        <span class="real-world-label">REAL-WORLD EXAMPLE</span>
+                        <h5>Clothing Brands Online vs Retail</h5>
+                        <p>Brands like Zara, H&M, and Nike sell through physical shops and online. They integrate both channels so customers can buy online and return in store, or vice versa. Online has grown rapidly, but physical shops remain important for trying on clothes and experiencing the brand.</p>
+                    </div>
+
+                    <div class="exam-tip">
+                        <span class="exam-tip-label">EXAM TIP</span>
+                        <p>Understand the three main distribution channels and their advantages and disadvantages. Consider why different businesses use different channels. Think about how ecommerce is changing the way products reach customers and disrupting traditional retail.</p>
+                    </div>
+
+                    <h3>Key Takeaways</h3>
+                    <ul>
+                        <li>Place refers to how products reach customers through distribution channels</li>
+                        <li>Three main channels: direct to consumer, through retailers, through wholesalers</li>
+                        <li>Each channel has different costs, control, and reach</li>
+                        <li>Channel choice depends on product, customer location, budget, and control needs</li>
+                        <li>Ecommerce has dramatically changed distribution and customer expectations</li>
+                        <li>Internet enables small businesses to reach global markets without physical shops</li>
+                        <li>Speed, convenience, and price transparency are now customer expectations</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="topic-section" id="topic-3-7">
+            <div class="topic-header" onclick="toggleSection(this)">
+                <div class="topic-num-badge">3.7</div>
+                <div class="topic-header-text">
+                    <div class="topic-title">Promotion (The 4Ps)</div>
+                    <div class="topic-subtitle">Advertising, sales promotions, and communications</div>
+                </div>
+                <div class="topic-toggle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+            </div>
+            <div class="topic-content">
+                <div class="topic-inner">
+                    <h3>What is Promotion?</h3>
+                    <p>Promotion is any form of communication a business uses to inform customers about its products and persuade them to buy. Promotion has several aims: inform customers about products, persuade customers to buy, remind customers of brands, create brand loyalty, differentiate from competitors.</p>
+
+                    <h3>Aims of Promotion</h3>
+                    <ul>
+                        <li><strong>Awareness:</strong> Let customers know the product exists</li>
+                        <li><strong>Information:</strong> Tell customers what the product does and its features</li>
+                        <li><strong>Persuasion:</strong> Convince customers to buy this product instead of competitors</li>
+                        <li><strong>Reminder:</strong> Keep the brand in customers' minds</li>
+                        <li><strong>Loyalty:</strong> Encourage repeat purchases</li>
+                        <li><strong>Differentiation:</strong> Show how this product differs from competitors</li>
+                    </ul>
+
+                    <h3>Advertising</h3>
+                    <p>Paid communication to large audiences. Businesses pay for space or time to promote products.</p>
+
+                    <p><strong>TV Advertising:</strong> Reaches millions but costs very high. Good for mass market products. Less effective with younger audiences who skip ads.</p>
+
+                    <p><strong>Online Advertising:</strong> Internet ads (banners, search engine ads, social media ads). Targeted to specific audiences. Relatively cheap. Performance can be measured easily.</p>
+
+                    <p><strong>Print Advertising:</strong> Newspapers, magazines, leaflets. Reaches specific audiences. Declining as people read less print.</p>
+
+                    <p><strong>Radio Advertising:</strong> Audio ads during radio broadcasts. Good for local businesses. Inexpensive compared to TV.</p>
+
+                    <p><strong>Social Media Advertising:</strong> Ads on Facebook, Instagram, TikTok. Very targeted, can reach specific demographics. Growing rapidly.</p>
+
+                    <h3>Sales Promotions</h3>
+                    <p>Direct incentives to encourage customers to buy in the short term. Temporary activities to boost sales.</p>
+
+                    <ul>
+                        <li><strong>Discounts and Coupons:</strong> Reduce price to encourage purchase. Quick results but may reduce profit margin.</li>
+                        <li><strong>Free Samples:</strong> Give customers free small amount to try product. Good for new products but expensive.</li>
+                        <li><strong>Bundle Offers:</strong> Combine several products at lower price. Encourages buying multiple items.</li>
+                        <li><strong>Buy One Get One Free:</strong> Classic promotion to clear stock and attract customers.</li>
+                        <li><strong>Loyalty Rewards:</strong> Frequent buyer gets rewards. Encourages repeat purchases.</li>
+                        <li><strong>Competitions and Prizes:</strong> Draw prizes or contests to generate excitement.</li>
+                        <li><strong>Gift with Purchase:</strong> Include free gift with purchase. Encourages trial of new products.</li>
+                    </ul>
+
+                    <h3>Other Promotional Methods</h3>
+
+                    <p><strong>Personal Selling:</strong> Direct contact between seller and customer. Used for high value products or business to business sales. Examples: car salesperson, insurance broker. Advantage: personal relationship. Disadvantage: expensive, cannot reach many people.</p>
+
+                    <p><strong>Public Relations:</strong> Managing communication between business and public. Includes press releases, events, sponsorships. Goal is positive media coverage without paying for advertising. Advantage: credible and free. Disadvantage: less control over message.</p>
+
+                    <p><strong>Sponsorship:</strong> Paying to associate with events, teams, or causes. Examples: football team sponsorship, charity event sponsorship. Good for brand building. Reaches specific audiences.</p>
+
+                    <p><strong>Direct Marketing:</strong> Communicate directly with individual customers. Includes email marketing, text messages, direct mail. Targeted and measurable. But can be seen as spam.</p>
+
+                    <h3>Choosing Promotional Methods</h3>
+                    <p>Different situations need different promotion:</p>
+
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Situation</th>
+                                <th>Best Promotion Methods</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>New product launch</td>
+                                <td>Advertising for awareness, free samples for trial, PR for credibility</td>
+                            </tr>
+                            <tr>
+                                <td>Clear old stock</td>
+                                <td>Discounts, buy one get one free, bundle offers</td>
+                            </tr>
+                            <tr>
+                                <td>Build brand loyalty</td>
+                                <td>Loyalty rewards, sponsorship, PR</td>
+                            </tr>
+                            <tr>
+                                <td>Reach young audience</td>
+                                <td>Social media advertising, influencer marketing, online ads</td>
+                            </tr>
+                            <tr>
+                                <td>Reach older audience</td>
+                                <td>TV advertising, print ads, radio</td>
+                            </tr>
+                            <tr>
+                                <td>High value products</td>
+                                <td>Personal selling, direct mail</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Marketing Budget</h3>
+                    <p>The marketing budget is the total money a business allocates for promotion and marketing activities. Budgeting decisions include:</p>
+                    <ul>
+                        <li>How much total to spend on marketing?</li>
+                        <li>How to split budget between advertising, PR, sales promotions, direct marketing?</li>
+                        <li>Which channels give best return on investment?</li>
+                        <li>Should budget increase or decrease?</li>
+                    </ul>
+
+                    <p>Larger businesses spend more on marketing as a percentage of sales. New products and new markets need higher promotional budgets. Mature products and established brands need lower budgets.</p>
+
+                    <div class="real-world">
+                        <span class="real-world-label">REAL-WORLD EXAMPLE</span>
+                        <h5>Nike Integrated Promotion</h5>
+                        <p>Nike uses multiple promotion methods together. TV advertising builds brand awareness. Social media and influencers reach younger customers. Sponsorship of athletes and events builds credibility. In-store displays and promotions drive immediate sales. Direct mail and email to loyal customers builds retention. This integrated approach maximises reach and impact.</p>
+                    </div>
+
+                    <div class="exam-tip">
+                        <span class="exam-tip-label">EXAM TIP</span>
+                        <p>Understand different promotional methods and their advantages and disadvantages. Know when to use each method. Think about integrated marketing where multiple methods work together. Be ready to explain why a business might choose certain methods for their target audience.</p>
+                    </div>
+
+                    <h3>Key Takeaways</h3>
+                    <ul>
+                        <li>Promotion aims to inform, persuade, remind, and build loyalty</li>
+                        <li>Advertising is paid communication to large audiences</li>
+                        <li>Different advertising channels suit different audiences and budgets</li>
+                        <li>Sales promotions provide short term incentives to boost sales</li>
+                        <li>Personal selling, PR, sponsorship, and direct marketing are other promotional methods</li>
+                        <li>Choose promotional mix based on product, audience, and business objectives</li>
+                        <li>Marketing budget allocates total spending and splits between methods</li>
+                        <li>Integrated marketing uses multiple methods together for maximum impact</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="topic-section" id="topic-3-8">
+            <div class="topic-header" onclick="toggleSection(this)">
+                <div class="topic-num-badge">3.8</div>
+                <div class="topic-header-text">
+                    <div class="topic-title">Marketing Strategy</div>
+                    <div class="topic-subtitle">Integrated marketing mix and legal controls</div>
+                </div>
+                <div class="topic-toggle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+            </div>
+            <div class="topic-content">
+                <div class="topic-inner">
+                    <h3>The 4Ps Working Together</h3>
+                    <p>The four Ps (Product, Price, Place, Promotion) do not work in isolation. A successful marketing strategy coordinates all four elements to create a consistent message and meet customer needs.</p>
+
+                    <div class="key-term">
+                        <span class="key-term-label">KEY TERM</span>
+                        <h5>Integrated Marketing Mix</h5>
+                        <p>A coordinated approach where product, price, place, and promotion work together as one strategy to achieve business objectives.</p>
+                    </div>
+
+                    <h3>How the 4Ps Interact</h3>
+                    <p><strong>Product and Price:</strong> Premium products command premium prices. Budget products have low prices. The price must match customer perception of product quality.</p>
+
+                    <p><strong>Product and Promotion:</strong> New products need heavy promotion to build awareness. Mature products need less. Premium products use premium positioning in advertising.</p>
+
+                    <p><strong>Price and Place:</strong> Luxury products sold in exclusive shops at high prices. Budget products sold in discount shops at low prices. Channel must match price positioning.</p>
+
+                    <p><strong>Price and Promotion:</strong> Low price promotions accompany discount sales channels. Premium products promoted through brand building not price cutting.</p>
+
+                    <p><strong>Place and Promotion:</strong> If only sold online, promote online. If sold in shops, use in store displays and local advertising.</p>
+
+                    <h3>Importance of an Integrated Marketing Mix</h3>
+                    <ul>
+                        <li>Consistent message across all elements; customers see unified brand image</li>
+                        <li>Avoids conflicting signals; premium price but poor quality disappoints customers</li>
+                        <li>More efficient use of resources; avoid waste from misalignment</li>
+                        <li>Stronger brand building; all elements reinforce each other</li>
+                        <li>Better customer understanding; all elements reflect customer needs</li>
+                        <li>Competitive advantage; competitors with misaligned mix underperform</li>
+                    </ul>
+
+                    <h3>Marketing Strategy for Different Situations</h3>
+
+                    <h4>New Product Launch</h4>
+                    <p>Challenges: Build awareness, trial, and differentiation from existing products.</p>
+                    <p><strong>Product:</strong> Unique features to differentiate from competitors.</p>
+                    <p><strong>Price:</strong> Often premium price or penetration price depending on strategy.</p>
+                    <p><strong>Place:</strong> Selective distribution initially to maintain premium image or wide distribution for penetration.</p>
+                    <p><strong>Promotion:</strong> Heavy advertising for awareness, free samples for trial, PR for credibility.</p>
+
+                    <h4>Entering New Geographic Markets</h4>
+                    <p>Challenges: Unknown customer preferences, unfamiliar distribution channels, competition from local brands.</p>
+                    <p><strong>Product:</strong> May need adaptation for local preferences.</p>
+                    <p><strong>Price:</strong> May differ from home market due to different purchasing power.</p>
+                    <p><strong>Place:</strong> Establish distribution network in new country, may partner with local distributors.</p>
+                    <p><strong>Promotion:</strong> Explain product benefits to unfamiliar market, may use local celebrities or influencers.</p>
+
+                    <h4>Responding to Competition</h4>
+                    <p>Challenges: Differentiate from competitors, maintain market share, build loyalty.</p>
+                    <p><strong>Product:</strong> Improve or add features competitors don't have.</p>
+                    <p><strong>Price:</strong> May need to match or undercut competitors. Or differentiate with premium positioning.</p>
+                    <p><strong>Place:</strong> Ensure wider distribution than competitors or more convenient locations.</p>
+                    <p><strong>Promotion:</strong> Compare with competitors, emphasise unique benefits, build brand loyalty.</p>
+
+                    <h3>Impact of Technology on Marketing</h3>
+                    <p><strong>Digital Marketing:</strong> Marketing increasingly happens online through websites, social media, email, online advertising. Enables precise targeting and measurement.</p>
+
+                    <p><strong>Data Analytics:</strong> Businesses collect and analyse customer data to understand behaviour and preferences. Enables personalised marketing.</p>
+
+                    <p><strong>Social Media:</strong> Platforms like Facebook, Instagram, TikTok allow direct communication with customers. Customers become brand advocates.</p>
+
+                    <p><strong>Ecommerce:</strong> Online selling has changed how products reach customers and how pricing works.</p>
+
+                    <p><strong>Artificial Intelligence:</strong> Recommendation engines suggest products customers might want. Chatbots handle customer service.</p>
+
+                    <p><strong>Mobile Technology:</strong> Smartphone apps and mobile websites enable shopping on the go. Location based offers target customers in specific locations.</p>
+
+                    <h3>Legal Controls on Marketing</h3>
+                    <p><strong>Misleading Advertising:</strong> Advertising must not deceive customers. Claims must be truthful and substantiated. Businesses can be fined for misleading claims.</p>
+
+                    <p><strong>Data Protection:</strong> Customer data must be protected and used responsibly. Businesses must get permission before sending marketing messages. GDPR in Europe, CCPA in California regulate data use.</p>
+
+                    <p><strong>Consumer Protection:</strong> Products must be safe and as described. Customers have right to refund if product is faulty or not as advertised.</p>
+
+                    <p><strong>Environmental Claims:</strong> Environmental marketing claims must be truthful. Cannot greenwash by claiming products are eco friendly if they are not.</p>
+
+                    <p><strong>Advertising Standards:</strong> Advertising codes regulate content; no harmful stereotypes, no targeting children inappropriately, tobacco and alcohol have special restrictions.</p>
+
+                    <p><strong>Pricing Controls:</strong> Some pricing practices are illegal. Cannot mislead about prices (hidden charges, false comparisons). Price discrimination against protected groups is illegal.</p>
+
+                    <div class="real-world">
+                        <span class="real-world-label">REAL-WORLD EXAMPLE</span>
+                        <h5>Volkswagen Dieselgate</h5>
+                        <p>Volkswagen was fined billions for misleading advertising about diesel car emissions. The cars polluted much more than advertised. This shows how serious authorities take misleading marketing claims and why companies must ensure accuracy.</p>
+                    </div>
+
+                    <div class="exam-tip">
+                        <span class="exam-tip-label">EXAM TIP</span>
+                        <p>Understand how the 4Ps work together. A good integrated marketing strategy has consistency across product, price, place, and promotion. Be able to explain how a business might adjust the mix for new products, new markets, or competitive situations. Know about legal constraints on marketing.</p>
+                    </div>
+
+                    <h3>Key Takeaways</h3>
+                    <ul>
+                        <li>Integrated marketing mix coordinates all four Ps to create consistent strategy</li>
+                        <li>Product, price, place, and promotion must work together</li>
+                        <li>Inconsistent mix confuses customers; consistent mix builds strong brand</li>
+                        <li>Different strategies suit new products, new markets, and competitive situations</li>
+                        <li>Technology increasingly shapes marketing through digital, data, social media, ecommerce</li>
+                        <li>Marketing is subject to legal controls on misleading advertising and data protection</li>
+                        <li>Businesses must be truthful and not deceive customers</li>
+                        <li>Environmental claims and pricing must be fair and legal</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Supabase Client -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+var SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
+var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
+var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+var currentSession = null;
+var currentLevel = localStorage.getItem('mybiz_level') || 'alevel';
+
+async function checkAuth() {
+    var session;
+    try {
+        var result = await supabaseClient.auth.getSession();
+        session = result.data.session;
+    } catch (error) {
+        console.error('Auth check error:', error);
+        document.querySelectorAll('.auth-only').forEach(function(el) { el.style.display = 'none'; });
+        document.querySelectorAll('.guest-only').forEach(function(el) { el.style.display = ''; });
+        return;
+    }
+
+    if (!session) {
+        document.querySelectorAll('.auth-only').forEach(function(el) { el.style.display = 'none'; });
+        document.querySelectorAll('.guest-only').forEach(function(el) { el.style.display = ''; });
+        return;
+    }
+
+    currentSession = session;
+    document.querySelectorAll('.auth-only').forEach(function(el) { el.style.display = ''; });
+    if (session.user.email === 'hello@mybizstudies.com') {
+        document.querySelectorAll('.admin-only').forEach(function(el) { el.style.display = ''; });
+    }
+    document.querySelectorAll('.guest-only').forEach(function(el) { el.style.display = 'none'; });
+
+    var fullName = session.user.user_metadata && (session.user.user_metadata.full_name || session.user.user_metadata.name) || '';
+    var email = session.user.email || '';
+    var initials = '?';
+    if (fullName) {
+        var parts = fullName.trim().split(' ');
+        initials = parts.length >= 2 ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase() : parts[0][0].toUpperCase();
+    } else if (email) {
+        initials = email[0].toUpperCase();
+    }
+    var initialsEl = document.getElementById('profileAvatar');
+    var nameEl = document.getElementById('profileName');
+    var emailEl = document.getElementById('profileEmail');
+    if (initialsEl) initialsEl.textContent = initials;
+    if (nameEl) nameEl.textContent = fullName || 'Student';
+    if (emailEl) emailEl.textContent = email;
+}
+
+async function handleLogout() {
+    try {
+        await supabaseClient.auth.signOut();
+        window.location.href = 'login.html';
+    } catch (error) {
+        console.error('Logout error:', error);
+        window.location.href = 'login.html';
+    }
+}
+
+function setupMobileMenu() {
+    var hamburger = document.getElementById('siteHamburger');
+    var overlay = document.getElementById('siteMobileOverlay');
+    var menu = document.getElementById('siteMobileMenu');
+
+    function toggleMenu() {
+        hamburger.classList.toggle('active');
+        overlay.classList.toggle('active');
+        menu.classList.toggle('active');
+    }
+
+    hamburger.addEventListener('click', toggleMenu);
+    overlay.addEventListener('click', toggleMenu);
+}
+
+function toggleProfileDropdown() {
+    var dropdown = document.getElementById('profileDropdown');
+    if (dropdown) dropdown.classList.toggle('open');
+}
+
+document.addEventListener('click', function(e) {
+    var wrapper = document.querySelector('.profile-dropdown-wrapper');
+    var dropdown = document.getElementById('profileDropdown');
+    if (wrapper && dropdown && !wrapper.contains(e.target)) {
+        dropdown.classList.remove('open');
+    }
+});
+
+function setLevel(level) {
+    currentLevel = level;
+    localStorage.setItem('mybiz_level', level);
+    document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
+        btn.classList.toggle('active', btn.dataset.level === level);
+    });
+    if (level === 'alevel') {
+        window.location.href = 'notes.html';
+    }
+}
+
+document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.dataset.level === currentLevel);
+    btn.addEventListener('click', function() { setLevel(this.dataset.level); });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    checkAuth();
+    setupMobileMenu();
+    var mobileLogout = document.getElementById('mobileLogoutBtn');
+    if (mobileLogout) mobileLogout.addEventListener('click', handleLogout);
+    var navLogout = document.getElementById('navLogoutBtn');
+    if (navLogout) navLogout.addEventListener('click', handleLogout);
+    drawAllDiagrams();
+});
+</script>
+
+<script>
+function toggleSection(element) {
+    var section = element.parentElement;
+    section.classList.toggle('open');
+}
+
+function scrollToTopic(topicId) {
+    var element = document.getElementById(topicId);
+    if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (!element.classList.contains('open')) {
+            element.classList.add('open');
+        }
+    }
+}
+
+var plcStage = 'all';
+var showExtension = false;
+
+function drawAllDiagrams() {
+    drawPLC();
+    drawBoston('all');
+}
+
+function drawPLC() {
+    var canvas = document.getElementById('plcCanvas');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    var w = canvas.width; var h = canvas.height;
+    var pad = 50;
+
+    ctx.clearRect(0, 0, w, h);
+
+    var bgGrad = ctx.createLinearGradient(0, 0, 0, h);
+    bgGrad.addColorStop(0, '#f8fafc');
+    bgGrad.addColorStop(1, '#f0f4f8');
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, w, h);
+
+    ctx.strokeStyle = '#1e3a5f'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(pad, pad - 10); ctx.lineTo(pad, h - pad); ctx.lineTo(w - pad, h - pad); ctx.stroke();
+
+    ctx.font = '700 13px Inter, sans-serif'; ctx.fillStyle = '#1e3a5f'; ctx.textAlign = 'center';
+    ctx.fillText('Time', w / 2, h - 12);
+    ctx.save(); ctx.translate(15, h / 2 - 20); ctx.rotate(-Math.PI / 2); ctx.font = '700 13px Inter, sans-serif'; ctx.fillText('Sales', 0, 0); ctx.restore();
+
+    var gW = w - 2 * pad; var gH = h - 2 * pad;
+
+    var stages = [
+        { name: 'Development', x1: 0, x2: 0.12, color: 'rgba(149, 165, 166, 0.12)' },
+        { name: 'Introduction', x1: 0.12, x2: 0.28, color: 'rgba(231, 76, 60, 0.08)' },
+        { name: 'Growth', x1: 0.28, x2: 0.50, color: 'rgba(46, 204, 113, 0.08)' },
+        { name: 'Maturity', x1: 0.50, x2: 0.75, color: 'rgba(52, 152, 219, 0.08)' },
+        { name: 'Decline', x1: 0.75, x2: 1.0, color: 'rgba(230, 126, 34, 0.08)' }
+    ];
+
+    var stageMap = { 'dev': 0, 'intro': 1, 'growth': 2, 'maturity': 3, 'decline': 4 };
+    var activeIdx = plcStage === 'all' ? -1 : stageMap[plcStage];
+
+    stages.forEach(function(s, i) {
+        var x1 = pad + s.x1 * gW; var x2 = pad + s.x2 * gW;
+        var isActive = activeIdx === -1 || activeIdx === i;
+        ctx.fillStyle = isActive ? s.color.replace('0.08', '0.2').replace('0.12', '0.25') : s.color;
+        ctx.fillRect(x1, pad, x2 - x1, gH);
+
+        if (i > 0) {
+            ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+            ctx.beginPath(); ctx.moveTo(x1, pad); ctx.lineTo(x1, h - pad); ctx.stroke();
+            ctx.setLineDash([]);
+        }
+
+        ctx.font = isActive ? '700 11px Inter, sans-serif' : '500 10px Inter, sans-serif';
+        ctx.fillStyle = isActive ? '#1e3a5f' : '#94a3b8';
+        ctx.textAlign = 'center';
+        ctx.fillText(s.name, (x1 + x2) / 2, h - pad + 20);
+    });
+
+    var salesPts = [
+        [0.02, 0.90], [0.08, 0.85], [0.15, 0.75], [0.25, 0.55],
+        [0.38, 0.32], [0.50, 0.15], [0.62, 0.12], [0.75, 0.18],
+        [0.85, 0.35], [0.92, 0.55]
+    ];
+
+    ctx.shadowColor = 'rgba(231, 76, 60, 0.3)';
+    ctx.shadowBlur = 12;
+    ctx.strokeStyle = '#e74c3c';
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+
+    for (var i = 0; i < salesPts.length; i++) {
+        var pt = salesPts[i];
+        var x = pad + pt[0] * gW;
+        var y = pad + pt[1] * gH;
+
+        if (i === 0) {
+            ctx.moveTo(x, y);
+        } else {
+            var prev = salesPts[i - 1];
+            var px = pad + prev[0] * gW;
+            var py = pad + prev[1] * gH;
+
+            var cp1x = px + (x - px) * 0.3;
+            var cp1y = py;
+            var cp2x = px + (x - px) * 0.7;
+            var cp2y = y;
+            ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
+        }
+    }
+    ctx.stroke();
+    ctx.shadowColor = 'transparent';
+
+    ctx.font = '700 13px Inter, sans-serif'; ctx.fillStyle = '#e74c3c'; ctx.textAlign = 'left';
+    ctx.fillText('Sales', pad + 0.72 * gW, pad + 0.15 * gH);
+
+    if (showExtension) {
+        var declineStartX = pad + 0.75 * gW;
+        var declineStartY = pad + 0.18 * gH;
+
+        ctx.strokeStyle = '#27ae60';
+        ctx.lineWidth = 3.5;
+        ctx.setLineDash([8, 4]);
+
+        ctx.beginPath();
+        ctx.moveTo(declineStartX, declineStartY);
+
+        var extEndX = pad + 0.95 * gW;
+        var extEndY = pad + 0.05 * gH;
+        var cp1x = declineStartX + (extEndX - declineStartX) * 0.3;
+        var cp1y = declineStartY - 40;
+        var cp2x = declineStartX + (extEndX - declineStartX) * 0.7;
+        var cp2y = extEndY - 20;
+
+        ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, extEndX, extEndY);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        ctx.fillStyle = '#27ae60';
+        ctx.beginPath();
+        ctx.arc(declineStartX, declineStartY, 5, 0, Math.PI * 2);
+        ctx.fill();
+
+        var extLabelX = pad + 0.55 * gW;
+        var extLabelY = pad + 0.04 * gH;
+        ctx.fillStyle = 'rgba(39, 174, 96, 0.1)';
+        ctx.beginPath();
+        ctx.roundRect(extLabelX - 8, extLabelY - 14, 145, 22, 4);
+        ctx.fill();
+        ctx.font = '700 11px Inter, sans-serif';
+        ctx.fillStyle = '#27ae60';
+        ctx.textAlign = 'left';
+        ctx.fillText('Extension Strategy', extLabelX, extLabelY + 2);
+    }
+
+    var plcInfoDiv = document.getElementById('plcStageInfo');
+    if (plcInfoDiv) {
+        if (activeIdx >= 0) {
+            var details = [
+                '<strong>Development:</strong> High R&D costs with no revenue yet. The business is investing heavily with significant financial risk. Many products fail at this stage and never reach the market.',
+                '<strong>Introduction:</strong> The product launches and sales begin slowly as awareness builds. Heavy promotion spending is needed. Losses are likely as the business tries to recover development costs.',
+                '<strong>Growth:</strong> Sales increase rapidly as the product gains market acceptance. Profits start to rise. Competitors may enter the market, attracted by the product\'s success.',
+                '<strong>Maturity:</strong> Sales reach their peak and growth slows. The market becomes saturated with intense competition. Profits are at their highest but begin to level off. Businesses may need to cut prices or increase promotion.',
+                '<strong>Decline:</strong> Sales fall as customer tastes change, new technology emerges, or competition intensifies. The business must decide whether to discontinue the product or invest in extension strategies.'
+            ];
+            plcInfoDiv.innerHTML = details[activeIdx];
+            plcInfoDiv.style.display = 'block';
+        } else {
+            plcInfoDiv.style.display = 'none';
+        }
+    }
+}
+
+function drawBoston(highlightQuadrant) {
+    var canvas = document.getElementById('bostonCanvas');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    var w = canvas.width; var h = canvas.height;
+
+    ctx.clearRect(0, 0, w, h);
+
+    var bgGrad = ctx.createLinearGradient(0, 0, 0, h);
+    bgGrad.addColorStop(0, '#f8fafc');
+    bgGrad.addColorStop(1, '#f0f4f8');
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, w, h);
+
+    var quadrants = [
+        { id: 'star', name: 'Star', emoji: '⭐', x: 0, y: 0, bg: '#eaf4fc', border: '#3498db', text: 'High share, High growth', desc: 'Invest to maintain position' },
+        { id: 'qm', name: 'Question Mark', emoji: '❓', x: 1, y: 0, bg: '#fef9e7', border: '#f39c12', text: 'Low share, High growth', desc: 'Invest or divest?' },
+        { id: 'cow', name: 'Cash Cow', emoji: '💰', x: 0, y: 1, bg: '#eafaf1', border: '#27ae60', text: 'High share, Low growth', desc: 'Harvest steady profits' },
+        { id: 'dog', name: 'Dog', emoji: '🐕', x: 1, y: 1, bg: '#fdedec', border: '#e74c3c', text: 'Low share, Low growth', desc: 'Divest or harvest' }
+    ];
+
+    var pad = 50; var size = (w - 2 * pad) / 2;
+
+    window.bostonQuadrants = [];
+
+    quadrants.forEach(function(q) {
+        var x = pad + q.x * size;
+        var y = pad + q.y * size;
+        var isHighlight = highlightQuadrant === q.id;
+
+        window.bostonQuadrants.push({ id: q.id, x: x, y: y, size: size, name: q.name });
+
+        if (isHighlight) {
+            ctx.shadowColor = q.border;
+            ctx.shadowBlur = 15;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 0;
+        }
+
+        var qGrad = ctx.createLinearGradient(x, y, x + size, y + size);
+        qGrad.addColorStop(0, q.bg);
+        qGrad.addColorStop(1, q.bg.replace('0.', '0.'));
+
+        ctx.fillStyle = isHighlight ? q.bg.replace('0.', '0.3') : q.bg;
+        ctx.beginPath();
+        ctx.roundRect(x + 3, y + 3, size - 6, size - 6, 14);
+        ctx.fill();
+
+        ctx.shadowColor = 'transparent';
+        ctx.strokeStyle = q.border;
+        ctx.lineWidth = isHighlight ? 3.5 : 2.5;
+        ctx.beginPath();
+        ctx.roundRect(x + 3, y + 3, size - 6, size - 6, 14);
+        ctx.stroke();
+
+        ctx.font = '40px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(q.emoji, x + size / 2, y + size / 2 - 25);
+
+        ctx.font = isHighlight ? '700 18px Inter, sans-serif' : '700 16px Inter, sans-serif';
+        ctx.fillStyle = '#1e3a5f';
+        ctx.fillText(q.name, x + size / 2, y + size / 2 + 10);
+
+        ctx.font = '500 11px Inter, sans-serif';
+        ctx.fillStyle = '#64748b';
+        ctx.fillText(q.text, x + size / 2, y + size / 2 + 32);
+        ctx.font = '600 11px Inter, sans-serif';
+        ctx.fillStyle = q.border;
+        ctx.fillText(q.desc, x + size / 2, y + size / 2 + 52);
+    });
+
+    ctx.font = '700 13px Inter, sans-serif';
+    ctx.fillStyle = '#1e3a5f';
+    ctx.textAlign = 'center';
+    ctx.fillText('HIGH MARKET SHARE', pad + size / 2, h - 12);
+    ctx.fillText('LOW MARKET SHARE', pad + size + size / 2, h - 12);
+
+    ctx.save();
+    ctx.translate(14, pad + size / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.font = '700 13px Inter, sans-serif';
+    ctx.fillText('HIGH GROWTH', 0, 0);
+    ctx.restore();
+
+    ctx.save();
+    ctx.translate(14, pad + size + size / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.font = '700 13px Inter, sans-serif';
+    ctx.fillText('LOW GROWTH', 0, 0);
+    ctx.restore();
+
+    ctx.strokeStyle = '#cbd5e1';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath();
+    ctx.moveTo(pad + size, pad + 3);
+    ctx.lineTo(pad + size, h - pad - 20);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(pad + 3, pad + size);
+    ctx.lineTo(w - pad - 3, pad + size);
+    ctx.stroke();
+    ctx.setLineDash([]);
+}
+
+function showPLCStage(stage, btn) {
+    plcStage = stage;
+    document.querySelectorAll('#topic-3-4 .diagram-controls .diagram-btn').forEach(function(b) { b.classList.remove('active'); });
+    if (btn) btn.classList.add('active');
+    drawPLC();
+}
+
+function toggleExtension(btn) {
+    showExtension = !showExtension;
+    if (showExtension) {
+        btn.style.background = '#27ae60';
+        btn.style.color = 'white';
+        btn.style.borderColor = '#27ae60';
+        btn.style.boxShadow = '0 6px 16px rgba(39, 174, 96, 0.3)';
+    } else {
+        btn.style.background = 'white';
+        btn.style.color = '#27ae60';
+        btn.style.borderColor = '#27ae60';
+        btn.style.boxShadow = '0 2px 6px rgba(0, 0, 0, 0.08)';
+    }
+    drawPLC();
+}
+
+setTimeout(drawPLC, 700);
+
+function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? (parseInt(result[1], 16) + ',' + parseInt(result[2], 16) + ',' + parseInt(result[3], 16)) : '0,0,0';
+}
+</script>
+</body>
+</html>

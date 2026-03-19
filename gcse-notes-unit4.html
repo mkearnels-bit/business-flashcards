@@ -1,0 +1,2310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <title>Unit 4: Operations Management | GCSE Business Studies Notes</title>
+    <meta name="description" content="Complete Unit 4 Operations Management study notes for GCSE Business Studies. Covers production methods, quality management, supply chain, customer service, costs and break even, location, and technology.">
+    <meta name="keywords" content="GCSE Business Studies, AQA, CIE, revision notes, exam technique, operations management, production">
+    <link rel="canonical" href="https://mybizstudies.com/gcse-notes-unit4.html">
+    <meta property="og:title" content="Unit 4: Operations Management | GCSE Business Studies Notes">
+    <meta property="og:description" content="Complete Unit 4 Operations Management study notes for GCSE Business Studies.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mybizstudies.com/gcse-notes-unit4.html">
+    <meta property="og:site_name" content="MyBizStudies">
+    <meta property="og:image" content="https://mybizstudies.com/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://mybizstudies.com/og-image.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --primary: #3498db;
+    --unit-color: #f39c12;
+    --gray-50: #f9fafb;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-400: #94a3b8;
+    --gray-500: #64748b;
+    --gray-600: #475569;
+    --gray-700: #334155;
+    --gray-800: #1e3a5f;
+    --gray-900: #0f1829;
+}
+
+/* ==================== SITE NAVBAR ==================== */
+.site-navbar {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #f1f5f9;
+    padding: 0.75rem 2rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.site-navbar-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.site-navbar-logo {
+    height: 55px;
+    width: auto;
+}
+
+.site-nav-buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.site-nav-link {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #334155;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.site-nav-link:hover {
+    color: #1e3a5f;
+    background: #f1f5f9;
+}
+
+.site-nav-link.active {
+    color: #f39c12;
+    font-weight: 600;
+}
+
+.site-nav-btn {
+    padding: 0.5rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    font-family: inherit;
+}
+
+.site-nav-btn-ghost {
+    color: #1e3a5f;
+    background: transparent;
+    border: 1px solid #cbd5e1;
+}
+
+.site-nav-btn-ghost:hover {
+    background: #f1f5f9;
+    border-color: #1e3a5f;
+}
+
+.site-hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1100;
+    position: relative;
+}
+
+.site-hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: #1e3a5f;
+    border-radius: 2px;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    position: absolute;
+}
+
+.site-hamburger span:nth-child(1) { transform: translateY(-7px); }
+.site-hamburger span:nth-child(2) { opacity: 1; }
+.site-hamburger span:nth-child(3) { transform: translateY(7px); }
+.site-hamburger.active span:nth-child(1) { transform: rotate(45deg); }
+.site-hamburger.active span:nth-child(2) { opacity: 0; }
+.site-hamburger.active span:nth-child(3) { transform: rotate(-45deg); }
+
+.site-mobile-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 1040;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.site-mobile-overlay.active {
+    display: block;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.site-mobile-menu {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 280px;
+    height: 100%;
+    background: #ffffff;
+    z-index: 1050;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
+    padding: 5.5rem 1.5rem 2rem;
+}
+
+.site-mobile-menu.active {
+    display: block;
+    transform: translateX(0);
+}
+
+.site-mobile-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.site-mobile-menu a,
+.site-mobile-menu button {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.875rem 1rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #334155;
+    transition: all 0.2s ease;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: inherit;
+    width: 100%;
+}
+
+.site-mobile-menu a:hover,
+.site-mobile-menu button:hover {
+    background: #f1f5f9;
+    color: #1e3a5f;
+}
+
+.site-mobile-menu a.active {
+    background: #f1f5f9;
+    color: #1e3a5f;
+}
+
+.site-menu-icon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #f1f5f9;
+    flex-shrink: 0;
+}
+
+.site-menu-icon svg {
+    width: 18px;
+    height: 18px;
+    stroke: #64748b;
+}
+
+.site-mobile-menu a.active .site-menu-icon {
+    background: #1e3a5f;
+}
+
+.site-mobile-menu a.active .site-menu-icon svg {
+    stroke: white;
+}
+
+.site-mobile-divider {
+    height: 1px;
+    background: #f1f5f9;
+    margin: 0.5rem 0;
+}
+
+.site-mobile-cta {
+    margin-top: 0.5rem;
+    background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+    color: white !important;
+    justify-content: center;
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+}
+
+.site-mobile-cta:hover {
+    color: white !important;
+    transform: translateY(-1px);
+}
+
+.site-mobile-cta .site-menu-icon {
+    display: none;
+}
+
+.site-mobile-logout {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.875rem 1rem;
+    border-radius: 12px;
+    border: none;
+    background: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #e74c3c;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    margin-top: auto;
+}
+
+.site-mobile-logout:hover {
+    background: rgba(231, 76, 60, 0.06);
+}
+
+.site-mobile-logout .site-menu-icon {
+    background: rgba(231, 76, 60, 0.08);
+}
+
+.site-mobile-logout .site-menu-icon svg {
+    stroke: #e74c3c;
+}
+
+/* ===== LEVEL TOGGLE ===== */
+.level-toggle {
+    display: flex;
+    align-items: center;
+    background: #f1f5f9;
+    border-radius: 8px;
+    padding: 3px;
+    gap: 0;
+    flex-shrink: 0;
+}
+
+.level-toggle-btn {
+    padding: 5px 14px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: inherit;
+    color: #64748b;
+    background: transparent;
+    white-space: nowrap;
+}
+
+.level-toggle-btn.active {
+    background: #1e3a5f;
+    color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+.level-toggle-btn:hover:not(.active) {
+    color: #1e3a5f;
+    background: rgba(30, 58, 95, 0.08);
+}
+
+.mobile-level-toggle {
+    display: flex;
+    align-items: center;
+    background: #f1f5f9;
+    border-radius: 10px;
+    padding: 4px;
+    margin-bottom: 1rem;
+    gap: 0;
+}
+
+.mobile-level-toggle .level-toggle-btn {
+    flex: 1;
+    padding: 8px 0;
+    font-size: 0.85rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+/* Profile Dropdown */
+.profile-dropdown-wrapper {
+    position: relative;
+}
+
+.profile-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e67e22, #f39c12);
+    border: 2px solid #e9ecef;
+    color: white;
+    font-weight: 700;
+    font-size: 0.8rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    font-family: 'Inter', sans-serif;
+}
+
+.profile-avatar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
+}
+
+.profile-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: rgba(255,255,255,0.98);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    border: 1px solid #e9ecef;
+    min-width: 220px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: all 0.2s ease;
+    z-index: 2000;
+    overflow: hidden;
+}
+
+.profile-dropdown.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.profile-dropdown-header {
+    padding: 1rem;
+    border-bottom: none;
+}
+
+.profile-dropdown-name {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #343a40;
+}
+
+.profile-dropdown-email {
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-top: 2px;
+}
+
+.profile-dropdown-divider {
+    height: 1px;
+    background: #e9ecef;
+    margin: 0;
+}
+
+.profile-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    color: #495057;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    font-family: 'Inter', sans-serif;
+}
+
+.profile-dropdown-item:hover {
+    background: #f8f9fa;
+    color: #1e3a5f;
+}
+
+.profile-dropdown-item svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.profile-dropdown-item.logout-item {
+    color: #e74c3c;
+}
+
+.profile-dropdown-item.logout-item:hover {
+    background: #fdf2f2;
+}
+
+/* Main layout */
+.notes-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 2rem;
+    margin-top: 70px;
+    padding: 2rem;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Sidebar */
+.sidebar {
+    position: sticky;
+    top: 90px;
+    height: fit-content;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+}
+
+.sidebar-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--unit-color);
+}
+
+.sidebar-unit-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: var(--unit-color);
+    color: white;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.sidebar-unit-name {
+    font-weight: 700;
+    color: var(--gray-900);
+    font-size: 0.95rem;
+}
+
+.sidebar-topics {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.sidebar-topic-item {
+    border-radius: 8px;
+}
+
+.sidebar-topic-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 0.875rem;
+    font-size: 0.9rem;
+    color: var(--gray-700);
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    background: transparent;
+    border: none;
+    font-family: inherit;
+    width: 100%;
+    text-align: left;
+}
+
+.sidebar-topic-link:hover {
+    background: var(--gray-100);
+    color: var(--primary);
+}
+
+.sidebar-topic-link.active {
+    background: rgba(52, 152, 219, 0.08);
+    color: var(--unit-color);
+    font-weight: 600;
+}
+
+.sidebar-topic-num {
+    display: inline-block;
+    min-width: 24px;
+    font-weight: 700;
+    color: var(--unit-color);
+}
+
+/* Main content */
+.main-content {
+    min-height: calc(100vh - 140px);
+}
+
+.topic-section {
+    margin-bottom: 0;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.topic-section.open .topic-content {
+    display: block;
+    animation: slideDown 0.3s ease;
+}
+
+.topic-section .topic-content {
+    display: none;
+}
+
+.topic-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s ease;
+    background: var(--gray-50);
+}
+
+.topic-header:hover {
+    background: var(--gray-100);
+}
+
+.topic-section.open .topic-header {
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.04), white);
+    border-left: 4px solid var(--unit-color);
+}
+
+.topic-num-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--unit-color), rgba(243, 156, 18, 0.75));
+    color: white;
+    font-weight: 700;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.topic-header-text {
+    flex: 1;
+}
+
+.topic-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin: 0;
+}
+
+.topic-subtitle {
+    font-size: 0.9rem;
+    color: var(--gray-500);
+    margin-top: 0.25rem;
+}
+
+.topic-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    color: var(--gray-700);
+    flex-shrink: 0;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.topic-toggle svg {
+    width: 24px;
+    height: 24px;
+    stroke-width: 2;
+}
+
+.topic-section.open .topic-toggle {
+    transform: rotate(180deg);
+    color: var(--unit-color);
+}
+
+.topic-content {
+    padding: 2rem;
+    background: white;
+}
+
+.topic-inner {
+    line-height: 1.8;
+    color: var(--gray-700);
+    font-size: 1rem;
+}
+
+.topic-inner h3 {
+    color: var(--gray-900);
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.topic-inner h3:first-child {
+    margin-top: 0;
+}
+
+.topic-inner h4 {
+    color: var(--primary);
+    font-size: 1rem;
+    font-weight: 700;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.topic-inner h5 {
+    margin: 0;
+    color: var(--gray-900);
+}
+
+.topic-inner p {
+    margin: 0.75rem 0;
+}
+
+.topic-inner ul, .topic-inner ol {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+}
+
+.topic-inner li {
+    margin: 0.5rem 0;
+}
+
+/* Key terms, exam tips, real world examples */
+.key-term {
+    border-left: 4px solid #3498db;
+    padding: 1rem;
+    margin: 1.5rem 0;
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.08), rgba(52, 152, 219, 0.04));
+    border-radius: 6px;
+}
+
+.key-term-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #3498db;
+    margin-bottom: 0.5rem;
+}
+
+.exam-tip {
+    border-left: 4px solid #f39c12;
+    padding: 1rem;
+    margin: 1.5rem 0;
+    background: linear-gradient(135deg, rgba(243, 156, 18, 0.08), rgba(243, 156, 18, 0.04));
+    border-radius: 6px;
+}
+
+.exam-tip-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #f39c12;
+    margin-bottom: 0.5rem;
+}
+
+.real-world {
+    border-left: 4px solid #27ae60;
+    padding: 1rem;
+    margin: 1.5rem 0;
+    background: linear-gradient(135deg, rgba(39, 174, 96, 0.08), rgba(39, 174, 96, 0.04));
+    border-radius: 6px;
+}
+
+.real-world-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #27ae60;
+    margin-bottom: 0.5rem;
+}
+
+.key-term h5, .exam-tip h5, .real-world h5 {
+    color: var(--gray-900);
+    margin: 0.5rem 0;
+}
+
+.key-term p, .exam-tip p, .real-world p {
+    margin: 0.5rem 0 0 0;
+    font-size: 0.95rem;
+}
+
+/* Tables */
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.comparison-table thead {
+    background: var(--gray-100);
+}
+
+.comparison-table th {
+    padding: 0.875rem;
+    text-align: left;
+    font-weight: 700;
+    color: var(--gray-900);
+    border-bottom: 2px solid var(--unit-color);
+}
+
+.comparison-table td {
+    padding: 0.875rem;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.comparison-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Formula boxes */
+.formula-box {
+    background: linear-gradient(135deg, rgba(155, 89, 182, 0.08), rgba(155, 89, 182, 0.04));
+    border-left: 4px solid #9b59b6;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+    color: var(--gray-900);
+    font-size: 0.95rem;
+}
+
+/* Advantages and Disadvantages grids */
+.adv-disadv-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.adv-box, .disadv-box {
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.adv-box {
+    background: #ecf9f5;
+    border: 1px solid #a8e6d9;
+}
+
+.adv-box-title {
+    font-weight: 700;
+    color: #27ae60;
+    margin-bottom: 0.5rem;
+}
+
+.adv-box ul {
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+.adv-box li {
+    margin: 0.25rem 0;
+    font-size: 0.95rem;
+}
+
+.disadv-box {
+    background: #fadbd8;
+    border: 1px solid #f5b7b1;
+}
+
+.disadv-box-title {
+    font-weight: 700;
+    color: #e74c3c;
+    margin-bottom: 0.5rem;
+}
+
+.disadv-box ul {
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+.disadv-box li {
+    margin: 0.25rem 0;
+    font-size: 0.95rem;
+}
+
+/* Interactive containers */
+.interactive-container {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    background: var(--gray-50);
+    border-radius: 12px;
+    border: 2px solid var(--gray-200);
+}
+
+.interactive-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 1rem;
+}
+
+.badge {
+    display: inline-block;
+    background: var(--unit-color);
+    color: white;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-left: 0.5rem;
+}
+
+.diagram-canvas-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+}
+
+.diagram-canvas-wrapper canvas {
+    max-width: 100%;
+    height: auto;
+}
+
+.diagram-instruction {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--gray-500);
+    margin: 0.5rem 0;
+}
+
+.diagram-controls {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+}
+
+.calc-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.calc-input-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.calc-input-row label {
+    font-weight: 600;
+    color: var(--gray-700);
+    min-width: 150px;
+    font-size: 0.9rem;
+}
+
+.calc-input-row input {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid var(--gray-300);
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 0.9rem;
+}
+
+.calc-input-row input[type="range"] {
+    flex: 1;
+    min-width: 200px;
+}
+
+.calc-result {
+    padding: 0.75rem 1rem;
+    background: white;
+    border-radius: 8px;
+    border: 2px solid var(--unit-color);
+    text-align: center;
+}
+
+.calc-result-label {
+    font-size: 0.8rem;
+    color: var(--gray-600);
+    font-weight: 600;
+}
+
+.calc-result-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--unit-color);
+    margin-top: 0.25rem;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .adv-disadv-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .notes-layout {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+    }
+
+    .sidebar {
+        position: relative;
+        top: 0;
+        max-height: none;
+    }
+}
+
+.sidebar-mobile-toggle {
+    display: none;
+    position: fixed;
+    top: 80px;
+    left: 1rem;
+    width: 50px;
+    height: 50px;
+    background: white;
+    border-radius: 50%;
+    border: 2px solid var(--unit-color);
+    cursor: pointer;
+    z-index: 900;
+    justify-content: center;
+    align-items: center;
+}
+
+.sidebar-mobile-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 800;
+}
+
+.sidebar-mobile-overlay.active {
+    display: block;
+}
+
+.sidebar.mobile-open {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 70px;
+    z-index: 900;
+    overflow-y: auto;
+    max-height: none;
+}
+
+@media (max-width: 768px) {
+    .sidebar-mobile-toggle {
+        display: flex;
+    }
+
+    .notes-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        display: none;
+    }
+
+    .sidebar.mobile-open {
+        display: block;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    background: #fafbfc;
+    color: var(--gray-700);
+}
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="site-navbar" id="siteNavbar">
+    <div class="site-navbar-content">
+        <a href="index.html"><img src="logo.png" alt="MyBizStudies" class="site-navbar-logo"></a>
+        <div class="level-toggle" id="desktopLevelToggle">
+            <button class="level-toggle-btn" data-level="alevel">A-Level</button>
+            <button class="level-toggle-btn active" data-level="gcse">GCSE</button>
+        </div>
+        <div class="site-nav-buttons" id="siteNavButtons">
+            <a href="exam-practice.html" class="site-nav-link auth-only" style="display:none;">Exam Practice</a>
+            <a href="app.html" class="site-nav-link auth-only" style="display:none;">Flash Cards</a>
+            <a href="exam-skills-v2.html" class="site-nav-link auth-only" style="display:none;">Exam Skills</a>
+            <a href="gcse-notes.html" class="active site-nav-link auth-only" style="display:none;">Study Notes</a>
+            <a href="blog.html" class="site-nav-link">Blog</a>
+            <a href="contact.html" class="site-nav-link">Contact Us</a>
+            <a href="login.html" class="site-nav-btn site-nav-btn-ghost guest-only">Log In</a>
+            <a href="signup.html" class="site-nav-btn site-nav-btn-primary guest-only">Get Started</a>
+            <div class="profile-dropdown-wrapper auth-only" style="display:none;">
+                <div class="profile-avatar" id="profileAvatar" onclick="toggleProfileDropdown()">--</div>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <div class="profile-dropdown-header">
+                        <div class="profile-dropdown-name" id="profileName">Student</div>
+                        <div class="profile-dropdown-email" id="profileEmail"></div>
+                    </div>
+                    <div class="profile-dropdown-divider"></div>
+                    <a href="student-progress.html" class="profile-dropdown-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+                        Student Progress
+                    </a>
+                    <a href="account.html" class="profile-dropdown-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                        My Account
+                    </a>
+                    <a href="admin.html" class="profile-dropdown-item admin-only" style="display:none;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        Admin
+                    </a>
+                    <button class="profile-dropdown-item" onclick="showSavedTestsView()" style="background: none; padding: 0.75rem 1rem; width: 100%; text-align: left;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        Saved Tests
+                    </button>
+                    <div class="profile-dropdown-divider"></div>
+                    <button class="profile-dropdown-item logout-item" id="navLogoutBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                        Log Out
+                    </button>
+                </div>
+            </div>
+        </div>
+        <button class="site-hamburger" id="siteHamburger" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="site-mobile-overlay" id="siteMobileOverlay"></div>
+<div class="site-mobile-menu" id="siteMobileMenu">
+    <div class="site-mobile-links">
+        <div class="mobile-level-toggle">
+            <button class="level-toggle-btn" data-level="alevel">A-Level</button>
+            <button class="level-toggle-btn active" data-level="gcse">GCSE</button>
+        </div>
+        <div class="site-mobile-divider auth-only" style="display:none;"></div>
+        <a href="exam-practice.html" class="auth-only" style="display:none;">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z"/></svg></span>
+            Exam Practice
+        </a>
+        <a href="app.html" class="auth-only" style="display:none;">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
+            Flash Cards
+        </a>
+        <a href="exam-skills-v2.html" class="auth-only" style="display:none;">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg></span>
+            Exam Skills
+        </a>
+        <a href="gcse-notes.html" class="active auth-only" style="display:none;">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></span>
+            Study Notes
+        </a>
+        <a href="blog.html">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"/></svg></span>
+            Blog
+        </a>
+        <div class="site-mobile-divider"></div>
+        <a href="contact.html">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></span>
+            Contact Us
+        </a>
+        <div class="site-mobile-divider guest-only"></div>
+        <a href="login.html" class="guest-only">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"/></svg></span>
+            Log In
+        </a>
+        <a href="signup.html" class="site-mobile-cta guest-only">
+            Get Started
+        </a>
+        <div class="site-mobile-divider auth-only" style="display:none;"></div>
+        <button class="site-mobile-logout auth-only" style="display:none;" id="mobileLogoutBtn">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l3-3m0 0l-3-3m3 3H3"/></svg></span>
+            Logout
+        </button>
+    </div>
+</div>
+
+<div class="notes-layout">
+    <aside class="sidebar">
+        <div class="sidebar-card">
+            <div class="sidebar-header">
+                <div class="sidebar-unit-badge">U4</div>
+                <div class="sidebar-unit-name">Operations Management</div>
+            </div>
+            <div class="sidebar-topics">
+                <div class="sidebar-topic-item">
+                    <button class="sidebar-topic-link active" onclick="scrollToTopic('topic-4-1')">
+                        <span class="sidebar-topic-num">4.1</span> Production Methods
+                    </button>
+                </div>
+                <div class="sidebar-topic-item">
+                    <button class="sidebar-topic-link" onclick="scrollToTopic('topic-4-2')">
+                        <span class="sidebar-topic-num">4.2</span> Quality Management
+                    </button>
+                </div>
+                <div class="sidebar-topic-item">
+                    <button class="sidebar-topic-link" onclick="scrollToTopic('topic-4-3')">
+                        <span class="sidebar-topic-num">4.3</span> Supply Chain & Stock
+                    </button>
+                </div>
+                <div class="sidebar-topic-item">
+                    <button class="sidebar-topic-link" onclick="scrollToTopic('topic-4-4')">
+                        <span class="sidebar-topic-num">4.4</span> Sales & Customer Service
+                    </button>
+                </div>
+                <div class="sidebar-topic-item">
+                    <button class="sidebar-topic-link" onclick="scrollToTopic('topic-4-5')">
+                        <span class="sidebar-topic-num">4.5</span> Costs, Revenue & Profit
+                    </button>
+                </div>
+                <div class="sidebar-topic-item">
+                    <button class="sidebar-topic-link" onclick="scrollToTopic('topic-4-6')">
+                        <span class="sidebar-topic-num">4.6</span> Break Even Analysis
+                    </button>
+                </div>
+                <div class="sidebar-topic-item">
+                    <button class="sidebar-topic-link" onclick="scrollToTopic('topic-4-7')">
+                        <span class="sidebar-topic-num">4.7</span> Business Location
+                    </button>
+                </div>
+                <div class="sidebar-topic-item">
+                    <button class="sidebar-topic-link" onclick="scrollToTopic('topic-4-8')">
+                        <span class="sidebar-topic-num">4.8</span> Technology in Operations
+                    </button>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <!-- Topic 4.1: Production Methods -->
+        <div class="topic-section open" id="topic-4-1">
+            <div class="topic-header" onclick="toggleSection(this)">
+                <div class="topic-num-badge">4.1</div>
+                <div class="topic-header-text">
+                    <div class="topic-title">Production Methods</div>
+                    <div class="topic-subtitle">Job, batch, and flow production compared</div>
+                </div>
+                <div class="topic-toggle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+            </div>
+            <div class="topic-content">
+                <div class="topic-inner">
+                    <h3>What is Production?</h3>
+                    <p>Production is the process of turning raw materials into finished goods that customers can buy. Businesses choose different production methods depending on what they make, how many customers want it, and what costs them the least money.</p>
+
+                    <h3>Job Production</h3>
+                    <p>Each product is unique and made especially for one customer. Workers make the whole item themselves or in small teams, often using general purpose equipment.</p>
+                    <p><strong>Examples:</strong> Wedding dresses, custom furniture, bespoke tailoring, handmade jewellery.</p>
+                    <p><strong>Advantages:</strong> High quality. Workers feel satisfied because they complete whole items. Customers get exactly what they want. Can charge high prices.</p>
+                    <p><strong>Disadvantages:</strong> Very slow and expensive. Each worker must be highly skilled. Hard to meet deadlines. Not suitable for bulk orders.</p>
+
+                    <div class="key-term">
+                        <span class="key-term-label">KEY TERM</span>
+                        <h5>Job Production</h5>
+                        <p>Making individual, custom products one at a time for specific customers.</p>
+                    </div>
+
+                    <h3>Batch Production</h3>
+                    <p>The business makes groups (batches) of identical products. Each batch goes through one stage completely before moving to the next stage. Different batches can be different.</p>
+                    <p><strong>Examples:</strong> Bread in a bakery, T-shirts with different colours, printed books, industrial chemicals.</p>
+                    <p><strong>Advantages:</strong> More efficient than job production. Equipment can be reused for different batches. Workers become faster with practice. Good balance between cost and flexibility.</p>
+                    <p><strong>Disadvantages:</strong> Takes time to switch between batches. Stock of finished goods takes up storage space. Less flexibility than job production. More expensive than flow production.</p>
+
+                    <div class="key-term">
+                        <span class="key-term-label">KEY TERM</span>
+                        <h5>Batch Production</h5>
+                        <p>Making groups of identical products in batches, with different batches often being different from each other.</p>
+                    </div>
+
+                    <h3>Flow Production</h3>
+                    <p>The business makes thousands of identical products continuously on an assembly line. Work is broken into small repetitive tasks. Products move constantly from one worker to the next.</p>
+                    <p><strong>Examples:</strong> Car manufacturing, fast food preparation, mobile phones, mass produced clothing.</p>
+                    <p><strong>Advantages:</strong> Very fast and efficient. Low cost per unit because nothing is wasted. Easy to manage inventory. High output.</p>
+                    <p><strong>Disadvantages:</strong> Very boring repetitive work. Workers may feel unsatisfied. Hard to change product design. Expensive machinery stops everything if it breaks. High set up costs.</p>
+
+                    <div class="key-term">
+                        <span class="key-term-label">KEY TERM</span>
+                        <h5>Flow Production</h5>
+                        <p>Making thousands of identical products continuously on an assembly line, using repetitive tasks.</p>
+                    </div>
+
+                    <h3>Lean Production and Just In Time (JIT)</h3>
+                    <p>Lean production means eliminating waste. The business produces only what customers want, when they want it, with minimal wastage. Just In Time is a key part of this.</p>
+                    <p>Just In Time means suppliers deliver materials exactly when the business needs them, not before. This reduces storage costs and waste.</p>
+                    <p><strong>Advantages of JIT:</strong> Lower storage costs. Less waste. Materials stay fresh. Reduced inventory damage. Fast response to customer changes.</p>
+                    <p><strong>Disadvantages of JIT:</strong> If delivery is late, production stops. Requires excellent supplier relationships. Higher transport costs. Less flexibility if demand suddenly increases.</p>
+
+                    <h3>Kaizen (Continuous Improvement)</h3>
+                    <p>Kaizen is a Japanese philosophy of continuous small improvements. All workers look for small ways to improve their work every day. These small improvements add up to big results.</p>
+                    <p><strong>Examples of Kaizen:</strong> Removing unnecessary steps from a process, reorganising storage to reach items faster, training workers to spot mistakes early.</p>
+
+                    <div class="exam-tip">
+                        <span class="exam-tip-label">EXAM TIP</span>
+                        <p>Questions often ask you to compare production methods or recommend one for a business. Think about: what the business makes, how many products it needs, how flexible it needs to be, and what costs matter most.</p>
+                    </div>
+
+                    <div class="real-world">
+                        <span class="real-world-label">REAL-WORLD EXAMPLE</span>
+                        <h5>Tesla and Lean Production</h5>
+                        <p>Tesla uses flow production for car manufacturing but applies Kaizen throughout. Workers constantly suggest improvements. Tesla focuses on minimising waste and just in time delivery of parts. This helps them reduce costs despite making high quality electric cars.</p>
+                    </div>
+
+                    <h3>Key Takeaways</h3>
+                    <ul>
+                        <li>Job production makes unique custom items for individual customers</li>
+                        <li>Batch production makes groups of identical items in batches</li>
+                        <li>Flow production makes thousands of identical items continuously on assembly lines</li>
+                        <li>Each method has different advantages and disadvantages</li>
+                        <li>Lean production eliminates waste and focuses on efficiency</li>
+                        <li>Just In Time means delivering materials exactly when needed</li>
+                        <li>Kaizen means continuous small improvements every day</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Topic 4.2: Quality Management -->
+        <div class="topic-section" id="topic-4-2">
+            <div class="topic-header" onclick="toggleSection(this)">
+                <div class="topic-num-badge">4.2</div>
+                <div class="topic-header-text">
+                    <div class="topic-title">Quality Management</div>
+                    <div class="topic-subtitle">Why quality matters and how to maintain it</div>
+                </div>
+                <div class="topic-toggle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+            </div>
+            <div class="topic-content">
+                <div class="topic-inner">
+                    <h3>Why Quality Matters</h3>
+                    <p>Quality means the product does what it promises and lasts as long as it should. Poor quality products lead to complaints, returns, and damage to business reputation. Good quality builds customer loyalty and allows the business to charge higher prices.</p>
+
+                    <h3>Quality Control vs Quality Assurance</h3>
+                    <p><strong>Quality Control:</strong> Checking finished products before they leave the factory. Tests are done on some or all products. If products fail, they are rejected or fixed.</p>
+                    <p><strong>Quality Assurance:</strong> Preventing problems from happening in the first place. This means training workers properly, using good equipment, checking processes regularly, and fixing problems early.</p>
+
+                    <div class="key-term">
+                        <span class="key-term-label">KEY TERM</span>
+                        <h5>Quality Control</h5>
+                        <p>Testing finished products to check they meet quality standards.</p>
+                    </div>
+
+                    <div class="key-term">
+                        <span class="key-term-label">KEY TERM</span>
+                        <h5>Quality Assurance</h5>
+                        <p>Preventing quality problems by managing the production process properly.</p>
+                    </div>
+
+                    <h3>Total Quality Management (TQM)</h3>
+                    <p>TQM means everyone in the business is responsible for quality, not just one department. The entire business focuses on meeting customer needs and continuous improvement.</p>
+                    <p><strong>Key features of TQM:</strong> All workers focus on customer needs. Workers are trained well and empowered to make decisions. Quality is measured constantly. Problems are fixed immediately. The business learns from mistakes.</p>
+
+                    <h3>Benefits and Costs of Quality</h3>
+                    <p><strong>Benefits:</strong> Customer satisfaction and loyalty increase. Fewer complaints and returns. Reputation improves. Can charge higher prices. Workers feel proud of their work. Less waste because products are made right first time.</p>
+                    <p><strong>Costs:</strong> Better materials cost more. Training workers takes time and money. Quality testing adds to expenses. Better equipment is expensive. Slows down production initially.</p>
+
+                    <h3>Consequences of Poor Quality</h3>
+                    <ul>
+                        <li><strong>Customer Complaints:</strong> Angry customers tell others about problems</li>
+                        <li><strong>Returns and Refunds:</strong> Products come back, costing money to fix or replace</li>
+                        <li><strong>Reputation Damage:</strong> Bad reviews online affect future sales</li>
+                        <li><strong>Legal Problems:</strong> Dangerous products can lead to law suits</li>
+                        <li><strong>Lost Sales:</strong> Customers buy from competitors instead</li>
+                        <li><strong>Waste:</strong> Defective products cost money to remake or dispose of</li>
+                    </ul>
+
+                    <div class="exam-tip">
+                        <span class="exam-tip-label">EXAM TIP</span>
+                        <p>Exam questions often ask about the link between quality and customer satisfaction, or costs of quality versus benefits. Remember that poor quality damages reputation long term, even if it saves money short term.</p>
+                    </div>
+
+                    <div class="real-world">
+                        <span class="real-world-label">REAL-WORLD EXAMPLE</span>
+                        <h5>Apple and Quality Standards</h5>
+                        <p>Apple spends heavily on quality control and materials. This leads to high prices but also customer loyalty. When problems do happen (rare), Apple fixes them quickly. This builds trust. Apple's quality reputation is a major strength.</p>
+                    </div>
+
+                    <h3>Key Takeaways</h3>
+                    <ul>
+                        <li>Quality means products perform as promised and last appropriately</li>
+                        <li>Quality control tests finished products; quality assurance prevents problems</li>
+                        <li>Total Quality Management involves everyone in the business</li>
+                        <li>Good quality leads to customer loyalty and higher prices</li>
+                        <li>Poor quality damages reputation and leads to returns</li>
+                        <li>Balancing quality costs with benefits is important for profitability</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Topic 4.3: Supply Chain and Stock Management -->
+        <div class="topic-section" id="topic-4-3">
+            <div class="topic-header" onclick="toggleSection(this)">
+                <div class="topic-num-badge">4.3</div>
+                <div class="topic-header-text">
+                    <div class="topic-title">Supply Chain and Stock Management</div>
+                    <div class="topic-subtitle">Managing suppliers and inventory efficiently</div>
+                </div>
+                <div class="topic-toggle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+            </div>
+            <div class="topic-content">
+                <div class="topic-inner">
+                    <h3>What is a Supply Chain?</h3>
+                    <p>A supply chain is all the businesses and people involved in getting a product from the raw material stage to the final customer. It includes: suppliers of materials, manufacturers, distributors, retailers, and delivery services.</p>
+
+                    <div class="key-term">
+                        <span class="key-term-label">KEY TERM</span>
+                        <h5>Supply Chain</h5>
+                        <p>All the businesses and processes involved in making a product and getting it to the customer.</p>
+                    </div>
+
+                    <h3>Choosing Suppliers</h3>
+                    <p>Businesses choose suppliers based on several factors:</p>
+                    <p><strong>Price:</strong> Lower cost is attractive but cheap often means poor quality. Balance is needed.</p>
+                    <p><strong>Quality:</strong> Materials must be good enough. Poor quality materials lead to poor products.</p>
+                    <p><strong>Reliability:</strong> Can the supplier deliver on time, every time? Late deliveries stop production.</p>
+                    <p><strong>Location:</strong> Local suppliers may be more reliable. Far away suppliers have longer lead times.</p>
+                    <p><strong>Flexibility:</strong> Can the supplier increase deliveries if demand increases suddenly?</p>
+                    <p><strong>Relationships:</strong> Good suppliers become trusted partners. They communicate well and solve problems.</p>
+
+                    <h3>Just In Time (JIT) Stock Management</h3>
+                    <p>Materials arrive exactly when needed, minimizing storage. The business only keeps stock for immediate use.</p>
+                    <p><strong>Advantages:</strong> Very low storage costs. Reduced waste and damage. Less money tied up in inventory. Materials stay fresh.</p>
+                    <p><strong>Disadvantages:</strong> If delivery is late, production stops immediately. Requires perfect supplier relationships. Cannot handle sudden demand increases. Higher transport costs from frequent small deliveries.</p>
+
+                    <h3>Just In Case (JIC) Stock Management</h3>
+                    <p>The business keeps extra stock as a safety buffer in case something goes wrong. This is called buffer stock.</p>
+                    <p><strong>Advantages:</strong> Production never stops if a supplier is late. Can respond quickly to sudden demand increases. Smooths out supply inconsistencies.</p>
+                    <p><strong>Disadvantages:</strong> High storage costs. Money is tied up in inventory. Stock may expire or become obsolete. Storage space is expensive. Risk of stock being damaged.</p>
+
+                    <div class="key-term">
+                        <span class="key-term-label">KEY TERM</span>
+                        <h5>Buffer Stock</h5>
+                        <p>Extra stock kept as a safety reserve in case of emergencies or unexpected changes in demand.</p>
+                    </div>
+
+                    <h3>Benefits and Costs of Holding Stock</h3>
+                    <p><strong>Benefits:</strong> Never runs out (production doesn't stop). Can meet sudden demand increases. Negotiates better prices by buying larger quantities. Smooths supply problems.</p>
+                    <p><strong>Costs:</strong> Storage is expensive. Money is tied up in inventory. Stock may spoil or become out of date. Risk of theft or damage. Takes space that could be used for production.</p>
+
+                    <h3>Managing Stock Levels</h3>
+                    <p>The business must balance holding too much stock (high costs) with holding too little (production stops). Managers use stock control systems to monitor levels and reorder automatically when stock falls below a certain point.</p>
+
+                    <div class="exam-tip">
+                        <span class="exam-tip-label">EXAM TIP</span>
+                        <p>Questions often ask which stock management system is best for a situation. Think about how reliable suppliers are, how much demand fluctuates, and how expensive storage is. JIT is good for reliable suppliers and cost conscious businesses. JIC is good when reliability matters more than cost.</p>
+                    </div>
+
+                    <div class="real-world">
+                        <span class="real-world-label">REAL-WORLD EXAMPLE</span>
+                        <h5>McDonald's and Just In Time</h5>
+                        <p>McDonald's operates globally with JIT principles. Restaurants receive deliveries multiple times daily based on expected demand. This keeps food fresh and minimizes waste. Strong relationships with suppliers make this work smoothly.</p>
+                    </div>
+
+                    <h3>Key Takeaways</h3>
+                    <ul>
+                        <li>A supply chain includes all businesses from raw materials to final customer</li>
+                        <li>Suppliers are chosen based on price, quality, reliability, location, and flexibility</li>
+                        <li>JIT minimizes storage costs but requires reliable suppliers</li>
+                        <li>JIC keeps buffer stock for emergencies but costs more</li>
+                        <li>Holding stock has benefits (never runs out) and costs (storage, money tied up)</li>
+                        <li>Balancing inventory is critical for efficiency and profitability</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Topic 4.4: The Sales Process and Customer Service -->
+        <div class="topic-section" id="topic-4-4">
+            <div class="topic-header" onclick="toggleSection(this)">
+                <div class="topic-num-badge">4.4</div>
+                <div class="topic-header-text">
+                    <div class="topic-title">The Sales Process and Customer Service</div>
+                    <div class="topic-subtitle">Making sales and keeping customers satisfied</div>
+                </div>
+                <div class="topic-toggle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+            </div>
+            <div class="topic-content">
+                <div class="topic-inner">
+                    <h3>The Sales Process</h3>
+                    <p>The sales process has several stages. Sales staff must move customers through each stage to complete a sale.</p>
+                    <p><strong>1. Prospecting:</strong> Identifying potential customers who might want the product.</p>
+                    <p><strong>2. Approaching:</strong> Making first contact with the prospect. This creates first impression.</p>
+                    <p><strong>3. Presenting:</strong> Explaining the product and how it solves the customer's problem.</p>
+                    <p><strong>4. Handling Objections:</strong> Answering customer concerns and doubts about the product.</p>
+                    <p><strong>5. Closing:</strong> Asking the customer to buy and confirming the sale.</p>
+                    <p><strong>6. After Sales:</strong> Following up to ensure customer satisfaction and build loyalty.</p>
+
+                    <h3>Why Good Customer Service Matters</h3>
+                    <p>Good customer service creates loyal customers who buy repeatedly and tell others about the business. Poor service loses customers and damages reputation.</p>
+                    <p><strong>Benefits of Good Service:</strong> Repeat business from satisfied customers. Positive word of mouth marketing. Higher prices can be charged. Reduced complaints. Staff satisfaction improves.</p>
+
+                    <h3>Methods of Providing Good Customer Service</h3>
+                    <p><strong>Product Knowledge:</strong> Staff must know the product inside and out to answer questions and recommend correctly.</p>
+                    <p><strong>Customer Engagement:</strong> Making genuine effort to understand what the customer needs and wants, not just pushing products.</p>
+                    <p><strong>Problem Solving:</strong> When problems occur, staff fix them quickly and fairly without the customer having to fight.</p>
+                    <p><strong>Post Sales Service:</strong> Following up after purchase to ensure satisfaction. Offering warranties, repairs, returns, or help with the product.</p>
+                    <p><strong>Availability:</strong> Being accessible when customers need help. Quick response to calls, emails, and messages.</p>
+
+                    <div class="key-term">
+                        <span class="key-term-label">KEY TERM</span>
+                        <h5>Customer Service</h5>
+                        <p>All the ways a business helps customers before, during, and after a sale.</p>
+                    </div>
+
+                    <h3>Benefits of Good Customer Service</h3>
+                    <ul>
+                        <li><strong>Customer Loyalty:</strong> Happy customers return and buy more</li>
+                        <li><strong>Positive Reputation:</strong> Good reviews spread on social media</li>
+                        <li><strong>Repeat Business:</strong> Loyal customers are more profitable long term</li>
+                        <li><strong>Higher Prices:</strong> Customers pay more for better service</li>
+                        <li><strong>Reduced Complaints:</strong> Fewer problems and disputes to handle</li>
+                        <li><strong>Employee Satisfaction:</strong> Staff enjoy helping customers</li>
+                    </ul>
+
+                    <h3>Dangers of Poor Customer Service</h3>
+                    <ul>
+                        <li><strong>Lost Sales:</strong> Customers go to competitors</li>
+                        <li><strong>Negative Reviews:</strong> Bad reviews online hurt future sales</li>
+                        <li><strong>Damage to Reputation:</strong> Poor service reputation spreads fast</li>
+                        <li><strong>Low Loyalty:</strong> Customers do not return</li>
+                        <li><strong>Complaints:</strong> Time and money wasted handling disputes</li>
+                        <li><strong>Legal Issues:</strong> Serious mistakes can lead to law suits</li>
+                    </ul>
+
+                    <h3>How Technology Improves Customer Service</h3>
+                    <p><strong>Online Shopping:</strong> Customers can shop 24/7 from anywhere. No staff needed at checkout.</p>
+                    <p><strong>Customer Databases:</strong> Staff instantly see customer history and preferences. Personalized service becomes possible.</p>
+                    <p><strong>Chat Bots:</strong> Answer simple questions instantly without waiting for a staff member.</p>
+                    <p><strong>Email and Messaging:</strong> Customers can contact business anytime. Faster than phone calls.</p>
+                    <p><strong>Online Reviews:</strong> Customers share experiences publicly. Business can respond and improve.</p>
+                    <p><strong>Social Media:</strong> Real time communication with customers and quick problem solving.</p>
+                    <p><strong>Video Calls:</strong> Remote staff can help customers face to face without being in same location.</p>
+
+                    <div class="exam-tip">
+                        <span class="exam-tip-label">EXAM TIP</span>
+                        <p>Questions about customer service often ask how to improve it or what benefits it brings. Remember: good service builds loyalty and allows higher prices. Technology helps but personal touch still matters for complex problems.</p>
+                    </div>
+
+                    <div class="real-world">
+                        <span class="real-world-label">REAL-WORLD EXAMPLE</span>
+                        <h5>Amazon Customer Service</h5>
+                        <p>Amazon excels at customer service. Returns are easy and quick. Customer databases show personal recommendations. Chat support is available instantly. If something goes wrong, Amazon fixes it without argument. This builds fierce customer loyalty.</p>
+                    </div>
+
+                    <h3>Key Takeaways</h3>
+                    <ul>
+                        <li>The sales process moves customers from prospect through to loyal repeat buyer</li>
+                        <li>Good customer service builds loyalty and reputation</li>
+                        <li>Key methods include product knowledge, engagement, problem solving, and after sales support</li>
+                        <li>Good service leads to repeat business and positive word of mouth</li>
+                        <li>Poor service damages reputation and loses customers</li>
+                        <li>Technology improves service but should not replace personal touch</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Topic 4.5: Costs, Revenue and Profit -->
+        <div class="topic-section" id="topic-4-5">
+            <div class="topic-header" onclick="toggleSection(this)">
+                <div class="topic-num-badge">4.5</div>
+                <div class="topic-header-text">
+                    <div class="topic-title">Costs, Revenue and Profit</div>
+                    <div class="topic-subtitle">Understanding business finances</div>
+                </div>
+                <div class="topic-toggle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+            </div>
+            <div class="topic-content">
+                <div class="topic-inner">
+                    <h3>Fixed Costs</h3>
+                    <p>Costs that stay the same regardless of how much the business produces. These must be paid even if the business produces nothing.</p>
+                    <p><strong>Examples:</strong> Rent for factory or shop. Managers' salaries. Insurance. Loans repayments. Maintenance on buildings.</p>
+
+                    <div class="key-term">
+                        <span class="key-term-label">KEY TERM</span>
+                        <h5>Fixed Costs</h5>
+                        <p>Costs that do not change with the level of production output.</p>
+                    </div>
+
+                    <h3>Variable Costs</h3>
+                    <p>Costs that change depending on how much the business produces. As production increases, variable costs increase.</p>
+                    <p><strong>Examples:</strong> Raw materials. Wages for production workers. Packaging. Transport to deliver products.</p>
+
+                    <div class="key-term">
+                        <span class="key-term-label">KEY TERM</span>
+                        <h5>Variable Costs</h5>
+                        <p>Costs that change with the level of production output.</p>
+                    </div>
+
+                    <h3>Total Costs</h3>
+                    <p>Total costs are fixed costs plus variable costs. As production increases, total costs increase because variable costs increase (even though fixed costs stay the same).</p>
+
+                    <div class="formula-box">
+                        Total Costs = Fixed Costs + Variable Costs
+                    </div>
+
+                    <h3>Revenue (Turnover)</h3>
+                    <p>Revenue is the total money the business receives from selling products. It is calculated by multiplying the price per unit by the number of units sold (quantity).</p>
+
+                    <div class="formula-box">
+                        Revenue = Price per Unit x Quantity Sold
+                    </div>
+
+                    <p><strong>Example:</strong> A business sells shoes at £50 each and sells 1000 pairs per month. Revenue = £50 x 1000 = £50,000 per month.</p>
+
+                    <div class="key-term">
+                        <span class="key-term-label">KEY TERM</span>
+                        <h5>Revenue</h5>
+                        <p>Total money a business receives from selling products (also called turnover or sales).</p>
+                    </div>
+
+                    <h3>Profit and Loss</h3>
+                    <p>Profit is what the business has left after paying all costs. Loss is when costs are higher than revenue.</p>
+
+                    <div class="formula-box">
+                        Profit = Total Revenue minus Total Costs
+                    </div>
+
+                    <p><strong>Example:</strong> Revenue is £50,000. Total costs are £35,000. Profit = £50,000 - £35,000 = £15,000.</p>
+
+                    <p>If costs are £60,000 but revenue is only £50,000, the business makes a loss of £10,000.</p>
+
+                    <div class="key-term">
+                        <span class="key-term-label">KEY TERM</span>
+                        <h5>Profit</h5>
+                        <p>Money left over after all costs are paid (revenue minus total costs).</p>
+                    </div>
+
+                    <h3>Average Unit Cost</h3>
+                    <p>The average cost of producing one unit. As production increases, average unit cost falls because fixed costs are spread over more units.</p>
+
+                    <div class="formula-box">
+                        Average Unit Cost = Total Cost / Output (Number of Units)
+                    </div>
+
+                    <p><strong>Example:</strong> Total costs are £10,000 and production is 1000 units. Average unit cost = £10,000 / 1000 = £10 per unit. If production increases to 2000 units but total costs only rise to £15,000, average unit cost = £15,000 / 2000 = £7.50 per unit.</p>
+
+                    <h3>Contribution per Unit</h3>
+                    <p>The amount left from the selling price after paying variable costs. This contribution goes towards paying fixed costs and profit.</p>
+
+                    <div class="formula-box">
+                        Contribution per Unit = Selling Price per Unit minus Variable Cost per Unit
+                    </div>
+
+                    <div class="exam-tip">
+                        <span class="exam-tip-label">EXAM TIP</span>
+                        <p>Learn the formulas for revenue, costs, and profit. Questions often ask you to calculate these. Also understand why average unit cost falls as production increases. This is due to fixed costs being spread over more units.</p>
+                    </div>
+
+                    <div class="real-world">
+                        <span class="real-world-label">REAL-WORLD EXAMPLE</span>
+                        <h5>Streaming Services Pricing</h5>
+                        <p>Netflix has huge fixed costs (servers, staff, content purchase) but low variable costs (streaming data is cheap). As more customers subscribe, revenue increases but variable costs barely increase. This creates high profit margins on each new subscriber.</p>
+                    </div>
+
+                    <h3>Key Takeaways</h3>
+                    <ul>
+                        <li>Fixed costs stay the same regardless of production level</li>
+                        <li>Variable costs increase as production increases</li>
+                        <li>Total costs equals fixed costs plus variable costs</li>
+                        <li>Revenue equals price per unit times quantity sold</li>
+                        <li>Profit equals revenue minus total costs</li>
+                        <li>Average unit cost falls as production increases</li>
+                        <li>Contribution per unit helps with pricing decisions</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Topic 4.6: Break Even Analysis -->
+        <div class="topic-section" id="topic-4-6">
+            <div class="topic-header" onclick="toggleSection(this)">
+                <div class="topic-num-badge">4.6</div>
+                <div class="topic-header-text">
+                    <div class="topic-title">Break Even Analysis</div>
+                    <div class="topic-subtitle">Finding the point where revenue equals costs</div>
+                </div>
+                <div class="topic-toggle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+            </div>
+            <div class="topic-content">
+                <div class="topic-inner">
+                    <h3>What is Break Even?</h3>
+                    <p>Break even is the point where total revenue exactly equals total costs. The business makes neither profit nor loss. At this point, every pound of revenue goes to paying costs.</p>
+
+                    <div class="key-term">
+                        <span class="key-term-label">KEY TERM</span>
+                        <h5>Break Even</h5>
+                        <p>The level of production where total revenue equals total costs, resulting in neither profit nor loss.</p>
+                    </div>
+
+                    <h3>Break Even Formula</h3>
+                    <p>To find break even, divide fixed costs by contribution per unit. This tells us how many units must be sold to break even.</p>
+
+                    <div class="formula-box">
+                        Break Even Output = Fixed Costs / (Price per Unit minus Variable Cost per Unit)
+                    </div>
+
+                    <p><strong>Example:</strong> Fixed costs are £50,000. Price is £25 per unit. Variable cost is £10 per unit. Contribution per unit = £25 - £10 = £15. Break even = £50,000 / £15 = 3,333 units.</p>
+
+                    <h3>Break Even Charts</h3>
+                    <p>A break even chart plots revenue and cost lines on a graph. The horizontal axis shows output (number of units). The vertical axis shows money in pounds. The break even point is where the revenue line crosses the total cost line.</p>
+
+                    <div class="interactive-container">
+                        <div class="interactive-title">Break Even Chart <span class="badge">Interactive</span></div>
+                        <div class="diagram-canvas-wrapper">
+                            <canvas id="breakEvenCanvas" width="700" height="450"></canvas>
+                        </div>
+                        <div class="diagram-controls">
+                            <div class="calc-input-group">
+                                <div class="calc-input-row">
+                                    <label>Fixed Costs (£):</label>
+                                    <input type="number" id="beFixedCosts" value="50000" min="0" step="1000" onchange="drawBreakEvenChart()">
+                                </div>
+                                <div class="calc-input-row">
+                                    <label>Variable Cost per Unit (£):</label>
+                                    <input type="number" id="beVariableCost" value="10" min="0" step="1" onchange="drawBreakEvenChart()">
+                                </div>
+                                <div class="calc-input-row">
+                                    <label>Selling Price per Unit (£):</label>
+                                    <input type="number" id="beSellingPrice" value="25" min="0" step="1" onchange="drawBreakEvenChart()">
+                                </div>
+                                <div class="calc-input-row" style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--gray-200);">
+                                    <label>Sales Volume (units):</label>
+                                    <input type="range" id="beSalesVolume" min="0" max="10000" value="5000" step="100" oninput="document.getElementById('beSalesVolumeVal').textContent=this.value; drawBreakEvenChart()">
+                                    <span id="beSalesVolumeVal" style="min-width: 50px; text-align: right; font-weight: 600; color: var(--primary);">5000</span>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                                <div class="calc-result">
+                                    <div class="calc-result-label">Contribution per Unit</div>
+                                    <div class="calc-result-value" id="beContribution">£0</div>
+                                </div>
+                                <div class="calc-result">
+                                    <div class="calc-result-label">Break Even Output</div>
+                                    <div class="calc-result-value" id="beResult">0 units</div>
+                                </div>
+                                <div class="calc-result">
+                                    <div class="calc-result-label">Margin of Safety</div>
+                                    <div class="calc-result-value" id="beMarginResult">0 units</div>
+                                </div>
+                                <div class="calc-result">
+                                    <div class="calc-result-label">Profit/Loss at Sales Volume</div>
+                                    <div class="calc-result-value" id="beProfitLoss">£0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>Margin of Safety</h3>
+                    <p>Margin of safety is how much sales can fall before the business reaches break even and starts making losses.</p>
+
+                    <div class="formula-box">
+                        Margin of Safety = Current Sales Volume minus Break Even Output
+                    </div>
+
+                    <p><strong>Example:</strong> Break even is 3,000 units but the business expects to sell 5,000 units. Margin of safety = 5,000 - 3,000 = 2,000 units. Sales can fall by 2,000 units before the business makes a loss.</p>
+
+                    <div class="key-term">
+                        <span class="key-term-label">KEY TERM</span>
+                        <h5>Margin of Safety</h5>
+                        <p>How much sales can fall before reaching break even and making a loss.</p>
+                    </div>
+
+                    <h3>Using Break Even for Decisions</h3>
+                    <p><strong>Pricing Decisions:</strong> If break even output is too high, the business may lower the price to increase sales volume.</p>
+                    <p><strong>Cost Control:</strong> If break even output is too high, the business should find ways to reduce fixed or variable costs.</p>
+                    <p><strong>Launch Decisions:</strong> If expected sales are only slightly above break even, the risk is high. A small change in demand means loss instead of profit.</p>
+                    <p><strong>New Product Decisions:</strong> New products must be able to reach break even within a reasonable time.</p>
+
+                    <h3>Limitations of Break Even Analysis</h3>
+                    <ul>
+                        <li><strong>Assumes costs are linear:</strong> In reality, some costs change in steps, not gradually</li>
+                        <li><strong>Assumes selling price is constant:</strong> Businesses often offer discounts or change prices seasonally</li>
+                        <li><strong>Ignores other factors:</strong> Does not consider quality, competition, or customer preferences</li>
+                        <li><strong>Ignores time:</strong> Does not show when break even happens, only the point</li>
+                        <li><strong>Assumes production equals sales:</strong> Does not account for stock building or selling old stock</li>
+                        <li><strong>Only gives a snapshot:</strong> Business conditions change; analysis must be updated regularly</li>
+                    </ul>
+
+                    <div class="exam-tip">
+                        <span class="exam-tip-label">EXAM TIP</span>
+                        <p>Break even questions often ask you to calculate break even output, read it from a chart, or explain what the break even point means. Learn the formula well. Also understand margin of safety and why a high margin of safety is desirable (gives safety buffer against sales falls).</p>
+                    </div>
+
+                    <div class="real-world">
+                        <span class="real-world-label">REAL-WORLD EXAMPLE</span>
+                        <h5>Mobile Phone Launches</h5>
+                        <p>When Apple launches a new iPhone, they calculate break even before deciding to go ahead. High fixed costs for design and manufacturing mean break even output is large. Sales must be strong enough to quickly reach break even and make profit. Marketing and brand strength help Apple reach break even volumes quickly.</p>
+                    </div>
+
+                    <h3>Key Takeaways</h3>
+                    <ul>
+                        <li>Break even is where revenue equals total costs</li>
+                        <li>Break even output = fixed costs divided by contribution per unit</li>
+                        <li>Break even charts show break even graphically</li>
+                        <li>Margin of safety shows how much sales can drop before losses begin</li>
+                        <li>Break even helps with pricing, cost control, and launch decisions</li>
+                        <li>Break even analysis has limitations and should be used with other tools</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Topic 4.7: Business Location -->
+        <div class="topic-section" id="topic-4-7">
+            <div class="topic-header" onclick="toggleSection(this)">
+                <div class="topic-num-badge">4.7</div>
+                <div class="topic-header-text">
+                    <div class="topic-title">Business Location</div>
+                    <div class="topic-subtitle">Choosing where to operate a business</div>
+                </div>
+                <div class="topic-toggle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+            </div>
+            <div class="topic-content">
+                <div class="topic-inner">
+                    <h3>Why Location Matters</h3>
+                    <p>Location affects the business in many ways: where customers are, how much the business pays for rent and labour, how easy it is to get materials, and how far goods must travel to reach customers. The right location can cut costs and increase sales.</p>
+
+                    <h3>Factors Affecting Location Decisions</h3>
+
+                    <h4 style="font-weight: 700; color: var(--primary); margin-top: 1rem; margin-bottom: 0.5rem;">Proximity to Market</h4>
+                    <p>Being close to customers reduces transport costs and delivery times. Perishable goods must be close to market (bread, flowers). Retail businesses must be where customers go (high streets, shopping centres).</p>
+
+                    <h4 style="font-weight: 700; color: var(--primary); margin-top: 1rem; margin-bottom: 0.5rem;">Access to Raw Materials</h4>
+                    <p>Factories should be near where raw materials are available to reduce transport costs. A fishing business must be near the coast. A steel factory should be near iron mines and coal.</p>
+
+                    <h4 style="font-weight: 700; color: var(--primary); margin-top: 1rem; margin-bottom: 0.5rem;">Labour Availability</h4>
+                    <p>Businesses need skilled or unskilled workers depending on the industry. Locating near universities attracts graduate workers. Locating in areas with high unemployment provides a cheaper labour supply.</p>
+
+                    <h4 style="font-weight: 700; color: var(--primary); margin-top: 1rem; margin-bottom: 0.5rem;">Transport Links</h4>
+                    <p>Being near motorways, rail lines, or ports reduces transport times and costs. Many businesses cluster around major transport hubs like airports or ports.</p>
+
+                    <h4 style="font-weight: 700; color: var(--primary); margin-top: 1rem; margin-bottom: 0.5rem;">Costs</h4>
+                    <p>Rent varies dramatically by location. City centres are very expensive. Out of town locations are cheaper but may be harder for customers to reach. The business must balance low rent with accessibility.</p>
+
+                    <h4 style="font-weight: 700; color: var(--primary); margin-top: 1rem; margin-bottom: 0.5rem;">Competition</h4>
+                    <p>Being near competitors can help (customers compare shop nearby) or hurt (price wars). Some industries cluster in certain regions (fashion in London, financial services in the City).</p>
+
+                    <h4 style="font-weight: 700; color: var(--primary); margin-top: 1rem; margin-bottom: 0.5rem;">Government Incentives</h4>
+                    <p>Governments offer grants, tax breaks, or subsidised land to encourage businesses to locate in certain areas. This helps poorer regions develop.</p>
+
+                    <h3>Impact of E-commerce on Location</h3>
+                    <p>E-commerce has changed location decisions dramatically. Retail shops no longer need prime high street locations. Instead, they need warehouses near transport links for fast delivery. Many online retailers locate near motorways or in industrial areas rather than city centres.</p>
+                    <p>Some businesses now operate entirely from home or small units, avoiding high shop rent completely. However, logistics still matter: warehouses must be positioned to deliver to customers quickly.</p>
+
+                    <h3>Location for Manufacturing vs Services</h3>
+                    <p><strong>Manufacturing:</strong> Needs space for factories and warehouses. Seeks low land costs. Should be near raw materials and transport. Labour costs matter. Customer location matters less (products travel).</p>
+                    <p><strong>Services:</strong> Needs to be convenient for customers. High street locations matter more. Space requirements are smaller. Parking may be important. Must be visible and accessible.</p>
+
+                    <p><strong>Example:</strong> A car manufacturer can locate in rural China near steel suppliers. A hairdresser must locate on a busy high street where customers walk past.</p>
+
+                    <h3>Why Businesses Relocate</h3>
+                    <p><strong>Costs have increased:</strong> Rent, wages, or tax rises make current location uneconomical.</p>
+                    <p><strong>Better locations become available:</strong> Better transport links, cheaper land, or new business parks open.</p>
+                    <p><strong>Customer locations shift:</strong> Population moves to new areas. Businesses follow customers.</p>
+                    <p><strong>Need more space:</strong> Successful businesses outgrow current premises.</p>
+                    <p><strong>Supply chain changes:</strong> New suppliers or better transport routes make new locations attractive.</p>
+                    <p><strong>Government incentives:</strong> Grants or tax breaks make moving worthwhile.</p>
+
+                    <div class="key-term">
+                        <span class="key-term-label">KEY TERM</span>
+                        <h5>Relocation</h5>
+                        <p>Moving a business to a different location.</p>
+                    </div>
+
+                    <div class="exam-tip">
+                        <span class="exam-tip-label">EXAM TIP</span>
+                        <p>Location questions often give a scenario and ask you to recommend the best location or explain location factors. Think about whether the business is manufacturing or services. Consider what matters most: cost, customer access, or raw materials. Always justify your answer with reasons.</p>
+                    </div>
+
+                    <div class="real-world">
+                        <span class="real-world-label">REAL-WORLD EXAMPLE</span>
+                        <h5>Tech Clusters in Silicon Valley</h5>
+                        <p>Tech companies cluster in Silicon Valley (near San Francisco) because universities there produce skilled workers, venture capital is available, and other tech companies are there. While rent is extremely expensive, the location provides advantages that justify the cost. This shows location is not only about finding the cheapest option.</p>
+                    </div>
+
+                    <h3>Key Takeaways</h3>
+                    <ul>
+                        <li>Location affects costs, access to customers, and access to materials</li>
+                        <li>Factors include proximity to market, raw materials, labour, transport, costs, and competition</li>
+                        <li>Government incentives can encourage location in certain areas</li>
+                        <li>E-commerce has reduced importance of high street locations</li>
+                        <li>Manufacturing and services have different location needs</li>
+                        <li>Businesses relocate when costs change or better locations become available</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Topic 4.8: Technology in Operations -->
+        <div class="topic-section" id="topic-4-8">
+            <div class="topic-header" onclick="toggleSection(this)">
+                <div class="topic-num-badge">4.8</div>
+                <div class="topic-header-text">
+                    <div class="topic-title">Technology in Operations</div>
+                    <div class="topic-subtitle">How technology changes production</div>
+                </div>
+                <div class="topic-toggle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+            </div>
+            <div class="topic-content">
+                <div class="topic-inner">
+                    <h3>How Technology Improves Production</h3>
+                    <p>Technology has transformed manufacturing and service operations. Automation, computers, and new equipment make production faster, cheaper, and more reliable.</p>
+
+                    <h3>Automation</h3>
+                    <p>Machines do work that humans used to do. Robots perform repetitive tasks like welding, painting, or assembly.</p>
+                    <p><strong>Advantages:</strong> Very fast and reliable. 24/7 production without fatigue. Consistent quality. No human errors. Can do dangerous tasks safely.</p>
+                    <p><strong>Disadvantages:</strong> Expensive to buy and install. Requires technical staff to maintain and repair. Inflexible (hard to change what it does). Workers displaced from jobs.</p>
+
+                    <div class="key-term">
+                        <span class="key-term-label">KEY TERM</span>
+                        <h5>Automation</h5>
+                        <p>Using machines and technology to do work with little or no human involvement.</p>
+                    </div>
+
+                    <h3>CAD and CAM</h3>
+                    <p><strong>CAD (Computer Aided Design):</strong> Designers use computers to create 3D models of products before making them. Changes are easy and quick.</p>
+                    <p><strong>CAM (Computer Aided Manufacturing):</strong> Computers control machinery to make products exactly to the design. No manual setup needed each time.</p>
+                    <p>CAD and CAM work together. Designers create the design in CAD. The file is sent directly to CAM machines which produce the product.</p>
+                    <p><strong>Advantages:</strong> Fast design process. No manual setup. High consistency. Easy to make changes. Can simulate performance before manufacturing.</p>
+                    <p><strong>Disadvantages:</strong> Expensive software and equipment. Requires training. Files must be correct (errors are multiplied across all units).</p>
+
+                    <div class="key-term">
+                        <span class="key-term-label">KEY TERM</span>
+                        <h5>CAD</h5>
+                        <p>Computer software used to design products in detail before manufacturing.</p>
+                    </div>
+
+                    <h3>Robotics</h3>
+                    <p>Industrial robots are programmable machines that perform complex tasks. Unlike simple automation, robots can be reprogrammed for different tasks.</p>
+                    <p><strong>Advantages:</strong> Flexible (can be reprogrammed). Precise and consistent. Can work in dangerous environments. Continuous operation.</p>
+                    <p><strong>Disadvantages:</strong> High capital cost. Complex to program. Need skilled technicians. Initial setup time.</p>
+
+                    <h3>Impact on Efficiency</h3>
+                    <p>Technology dramatically improves efficiency. Robots and automation work faster and with no breaks. Products are made to precise standards. Waste is minimized. Production can operate 24 hours a day. This reduces the time taken to produce each item and increases output per worker.</p>
+
+                    <h3>Impact on Quality</h3>
+                    <p>Machines produce consistently to exact specifications. Human error is eliminated. Quality is more reliable. Defects are rarer. This supports lean production and just in time principles.</p>
+
+                    <h3>Impact on Costs</h3>
+                    <p>While technology requires large upfront investment, it reduces long term costs. Labour costs are reduced (fewer workers needed). Material waste decreases. Production speeds up so overheads are spread over more units. Energy efficiency improves. However, maintenance and technical support are needed.</p>
+
+                    <h3>Impact on Employment</h3>
+                    <p>Technology displaces workers. Robots replace assembly line workers. Automation reduces the need for manual labour. However, new jobs are created: technicians to maintain robots, engineers to program them, supervisors to manage automated systems. But these jobs require different skills than assembly work.</p>
+                    <p><strong>Challenges:</strong> Workers displaced may lack skills for new jobs. Retraining takes time and money. Some regions suffer more than others if whole industries automate. Unemployment rises in affected areas.</p>
+
+                    <h3>Benefits of Technology in Operations</h3>
+                    <ul>
+                        <li>Higher production speed and volume</li>
+                        <li>Consistent quality and fewer defects</li>
+                        <li>Lower labour costs long term</li>
+                        <li>Reduced material waste</li>
+                        <li>Improved safety (robots handle dangerous tasks)</li>
+                        <li>Flexibility (robots can be reprogrammed)</li>
+                        <li>Better product design (CAD allows complex shapes)</li>
+                    </ul>
+
+                    <h3>Drawbacks of Technology in Operations</h3>
+                    <ul>
+                        <li>High capital investment required</li>
+                        <li>Skills needed to operate and maintain systems</li>
+                        <li>Workers displaced from jobs</li>
+                        <li>System breakdown stops all production</li>
+                        <li>Initial setup and programming takes time</li>
+                        <li>Inflexible (hard to switch between products quickly)</li>
+                        <li>Environmental impact of power consumption</li>
+                    </ul>
+
+                    <h3>Technology and the Future of Work</h3>
+                    <p>As technology advances, more jobs become automated. Artificial intelligence and machine learning create systems that can learn and adapt. The future will see fewer routine manual jobs but more technical and creative roles.</p>
+                    <p>Businesses must invest in worker training. Schools must teach technical skills. Society must support workers displaced by technology. However, technology also creates new opportunities and improves productivity and living standards overall.</p>
+
+                    <div class="exam-tip">
+                        <span class="exam-tip-label">EXAM TIP</span>
+                        <p>Questions about technology often ask about advantages, disadvantages, or the impact on employment. Always discuss both benefits (efficiency, quality, speed) and drawbacks (cost, job losses, inflexibility). Show you understand the complexity of technological change.</p>
+                    </div>
+
+                    <div class="real-world">
+                        <span class="real-world-label">REAL-WORLD EXAMPLE</span>
+                        <h5>Manufacturing in Germany</h5>
+                        <p>Germany is a leader in industrial automation. Factories use advanced robots and CAD/CAM systems. This allows Germany to maintain manufacturing despite high labour costs. Workers are redeployed to programming, maintenance, and quality control roles. This model shows how technology can help countries compete despite high wages.</p>
+                    </div>
+
+                    <h3>Key Takeaways</h3>
+                    <ul>
+                        <li>Automation uses machines to do repetitive work</li>
+                        <li>CAD is for design; CAM controls production machinery</li>
+                        <li>Robotics provides flexible automation</li>
+                        <li>Technology improves efficiency, quality, and cost long term</li>
+                        <li>Technology displaces workers but creates new roles</li>
+                        <li>Benefits include speed and quality; drawbacks include cost and job losses</li>
+                        <li>The future requires new skills and retraining</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<!-- Supabase Client -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+var SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
+var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
+var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+var currentSession = null;
+var currentLevel = localStorage.getItem('mybiz_level') || 'gcse';
+
+async function checkAuth() {
+    var session;
+    try {
+        var result = await supabaseClient.auth.getSession();
+        session = result.data.session;
+    } catch (error) {
+        console.error('Auth check error:', error);
+        document.querySelectorAll('.auth-only').forEach(function(el) { el.style.display = 'none'; });
+        document.querySelectorAll('.guest-only').forEach(function(el) { el.style.display = ''; });
+        return;
+    }
+
+    if (!session) {
+        document.querySelectorAll('.auth-only').forEach(function(el) { el.style.display = 'none'; });
+        document.querySelectorAll('.guest-only').forEach(function(el) { el.style.display = ''; });
+        return;
+    }
+
+    currentSession = session;
+    document.querySelectorAll('.auth-only').forEach(function(el) { el.style.display = ''; });
+    if (session.user.email === 'hello@mybizstudies.com') {
+        document.querySelectorAll('.admin-only').forEach(function(el) { el.style.display = ''; });
+    }
+    document.querySelectorAll('.guest-only').forEach(function(el) { el.style.display = 'none'; });
+
+    var fullName = session.user.user_metadata && (session.user.user_metadata.full_name || session.user.user_metadata.name) || '';
+    var email = session.user.email || '';
+    var initials = '?';
+    if (fullName) {
+        var parts = fullName.trim().split(' ');
+        initials = parts.length >= 2 ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase() : parts[0][0].toUpperCase();
+    } else if (email) {
+        initials = email[0].toUpperCase();
+    }
+    var initialsEl = document.getElementById('profileAvatar');
+    var nameEl = document.getElementById('profileName');
+    var emailEl = document.getElementById('profileEmail');
+    if (initialsEl) initialsEl.textContent = initials;
+    if (nameEl) nameEl.textContent = fullName || 'Student';
+    if (emailEl) emailEl.textContent = email;
+}
+
+async function handleLogout() {
+    try {
+        await supabaseClient.auth.signOut();
+        window.location.href = 'login.html';
+    } catch (error) {
+        console.error('Logout error:', error);
+        window.location.href = 'login.html';
+    }
+}
+
+function setupMobileMenu() {
+    var hamburger = document.getElementById('siteHamburger');
+    var overlay = document.getElementById('siteMobileOverlay');
+    var menu = document.getElementById('siteMobileMenu');
+
+    function toggleMenu() {
+        hamburger.classList.toggle('active');
+        overlay.classList.toggle('active');
+        menu.classList.toggle('active');
+    }
+
+    hamburger.addEventListener('click', toggleMenu);
+    overlay.addEventListener('click', toggleMenu);
+}
+
+function toggleProfileDropdown() {
+    var dropdown = document.getElementById('profileDropdown');
+    if (dropdown) dropdown.classList.toggle('open');
+}
+
+document.addEventListener('click', function(e) {
+    var wrapper = document.querySelector('.profile-dropdown-wrapper');
+    var dropdown = document.getElementById('profileDropdown');
+    if (wrapper && dropdown && !wrapper.contains(e.target)) {
+        dropdown.classList.remove('open');
+    }
+});
+
+function setLevel(level) {
+    currentLevel = level;
+    localStorage.setItem('mybiz_level', level);
+    document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
+        btn.classList.toggle('active', btn.dataset.level === level);
+    });
+
+    if (level === 'alevel') {
+        window.location.href = 'notes.html';
+    }
+}
+
+document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.dataset.level === currentLevel);
+    btn.addEventListener('click', function() { setLevel(this.dataset.level); });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    checkAuth();
+    setupMobileMenu();
+
+    var mobileLogout = document.getElementById('mobileLogoutBtn');
+    if (mobileLogout) mobileLogout.addEventListener('click', handleLogout);
+    var navLogout = document.getElementById('navLogoutBtn');
+    if (navLogout) navLogout.addEventListener('click', handleLogout);
+});
+</script>
+
+<script>
+function toggleSection(element) {
+    var section = element.parentElement;
+    section.classList.toggle('open');
+}
+
+function scrollToTopic(topicId) {
+    var element = document.getElementById(topicId);
+    if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (!element.classList.contains('open')) {
+            element.classList.add('open');
+        }
+    }
+}
+
+function drawBreakEvenChart() {
+    var canvas = document.getElementById('breakEvenCanvas');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+
+    var fixedCosts = parseFloat(document.getElementById('beFixedCosts').value) || 0;
+    var variableCost = parseFloat(document.getElementById('beVariableCost').value) || 0;
+    var sellingPrice = parseFloat(document.getElementById('beSellingPrice').value) || 0;
+    var currentSales = parseInt(document.getElementById('beSalesVolume').value) || 0;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    var leftPadding = 80;
+    var bottomPadding = 60;
+    var topPadding = 40;
+    var rightPadding = 40;
+    var graphWidth = canvas.width - leftPadding - rightPadding;
+    var graphHeight = canvas.height - topPadding - bottomPadding;
+
+    var maxOutput = 10000;
+    var maxRevenue = sellingPrice * maxOutput;
+    var maxCosts = fixedCosts + (variableCost * maxOutput);
+    var maxY = Math.max(maxRevenue, maxCosts) * 1.15;
+
+    var scaleX = graphWidth / maxOutput;
+    var scaleY = graphHeight / maxY;
+
+    ctx.fillStyle = '#f9fafb';
+    ctx.fillRect(leftPadding, topPadding, graphWidth, graphHeight);
+
+    ctx.strokeStyle = '#e2e8f0';
+    ctx.lineWidth = 1;
+    for (var i = 0; i <= 10; i++) {
+        var x = leftPadding + (i * graphWidth / 10);
+        var y = topPadding + (i * graphHeight / 10);
+        ctx.beginPath();
+        ctx.moveTo(x, topPadding);
+        ctx.lineTo(x, canvas.height - bottomPadding);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(leftPadding, y);
+        ctx.lineTo(canvas.width - rightPadding, y);
+        ctx.stroke();
+    }
+
+    ctx.strokeStyle = '#94a3b8';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(leftPadding, topPadding);
+    ctx.lineTo(leftPadding, canvas.height - bottomPadding);
+    ctx.lineTo(canvas.width - rightPadding, canvas.height - bottomPadding);
+    ctx.stroke();
+
+    ctx.strokeStyle = '#27ae60';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(leftPadding, canvas.height - bottomPadding);
+    for (var output = 0; output <= maxOutput; output += 500) {
+        var x = leftPadding + (output * scaleX);
+        var revenue = sellingPrice * output;
+        var y = canvas.height - bottomPadding - (revenue * scaleY);
+        if (output === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    ctx.strokeStyle = '#e74c3c';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    for (var output = 0; output <= maxOutput; output += 500) {
+        var x = leftPadding + (output * scaleX);
+        var totalCosts = fixedCosts + (variableCost * output);
+        var y = canvas.height - bottomPadding - (totalCosts * scaleY);
+        if (output === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    if (sellingPrice > variableCost) {
+        var breakEvenOutput = fixedCosts / (sellingPrice - variableCost);
+        var beX = leftPadding + (breakEvenOutput * scaleX);
+        var beY = canvas.height - bottomPadding - ((sellingPrice * breakEvenOutput) * scaleY);
+
+        ctx.strokeStyle = '#f39c12';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([5, 5]);
+        ctx.beginPath();
+        ctx.moveTo(beX, topPadding);
+        ctx.lineTo(beX, canvas.height - bottomPadding);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(leftPadding, beY);
+        ctx.lineTo(canvas.width - rightPadding, beY);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        ctx.fillStyle = '#f39c12';
+        ctx.beginPath();
+        ctx.arc(beX, beY, 6, 0, 2 * Math.PI);
+        ctx.fill();
+
+        ctx.fillStyle = '#f39c12';
+        ctx.font = 'bold 14px Inter';
+        ctx.fillText('Break Even', beX + 10, beY - 10);
+    }
+
+    ctx.fillStyle = '#333';
+    ctx.font = '12px Inter';
+    ctx.textAlign = 'right';
+    for (var i = 0; i <= 10; i++) {
+        var value = (i * maxOutput / 10).toFixed(0);
+        var x = leftPadding + (i * graphWidth / 10);
+        ctx.fillText(value, x, canvas.height - bottomPadding + 20);
+    }
+
+    ctx.textAlign = 'center';
+    for (var i = 0; i <= 10; i++) {
+        var value = '£' + (i * maxY / 10).toFixed(0);
+        var y = canvas.height - bottomPadding - (i * graphHeight / 10);
+        ctx.textAlign = 'right';
+        ctx.fillText(value, leftPadding - 10, y + 4);
+    }
+
+    ctx.fillStyle = '#333';
+    ctx.font = 'bold 14px Inter';
+    ctx.textAlign = 'center';
+    ctx.fillText('Output (units)', canvas.width / 2, canvas.height - 10);
+    ctx.save();
+    ctx.translate(20, canvas.height / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillText('Revenue and Costs (£)', 0, 0);
+    ctx.restore();
+
+    ctx.fillStyle = '#27ae60';
+    ctx.font = 'bold 12px Inter';
+    ctx.fillText('Revenue', canvas.width - 100, topPadding + 20);
+
+    ctx.fillStyle = '#e74c3c';
+    ctx.fillText('Total Cost', canvas.width - 100, topPadding + 40);
+
+    if (sellingPrice > variableCost) {
+        var contribution = sellingPrice - variableCost;
+        var breakEvenOutput = fixedCosts / contribution;
+        var marginSafety = Math.max(0, currentSales - breakEvenOutput);
+        var profitLoss = (sellingPrice * currentSales) - (fixedCosts + (variableCost * currentSales));
+
+        document.getElementById('beContribution').textContent = '£' + contribution.toFixed(2);
+        document.getElementById('beResult').textContent = Math.round(breakEvenOutput) + ' units';
+        document.getElementById('beMarginResult').textContent = Math.round(marginSafety) + ' units';
+        document.getElementById('beProfitLoss').textContent = '£' + profitLoss.toFixed(0);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    drawBreakEvenChart();
+});
+</script>
+
+</body>
+</html>

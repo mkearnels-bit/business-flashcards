@@ -1368,25 +1368,7 @@
                 Premium Study Notes
             </div>
             <h1>Everything You Need to <span>Ace Your Exams</span></h1>
-            <p>Comprehensive, interactive study notes covering every topic across all four units of Edexcel A Level Business Studies. Written in clear, simple language with interactive diagrams, real world examples, and built in quizzes.</p>
-            <div class="hero-stats">
-                <div class="hero-stat">
-                    <span class="hero-stat-value">22</span>
-                    <span class="hero-stat-label">Topics</span>
-                </div>
-                <div class="hero-stat">
-                    <span class="hero-stat-value">4</span>
-                    <span class="hero-stat-label">Units</span>
-                </div>
-                <div class="hero-stat">
-                    <span class="hero-stat-value">100%</span>
-                    <span class="hero-stat-label">Syllabus</span>
-                </div>
-                <div class="hero-stat">
-                    <span class="hero-stat-value">50+</span>
-                    <span class="hero-stat-label">Interactive Diagrams</span>
-                </div>
-            </div>
+            <p>Interactive study notes covering the core topics of the A Level Business Studies curriculum. These notes are designed to support your learning alongside your specification and textbook, which should remain your primary source of information.</p>
             <a href="glossary.html" class="glossary-sticker">
                 <svg viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                 Business Glossary
@@ -1726,11 +1708,12 @@
             var currentLevel = localStorage.getItem(LEVEL_KEY) || 'alevel';
             var alevelPages = {
                 'app.html': 'gcse-app.html', 'glossary.html': 'gcse-glossary.html',
-                'exam-skills-v2.html': null, 'exam-practice.html': null, 'notes.html': null,
-                'notes-unit1.html': null, 'notes-unit2.html': null, 'notes-unit3.html': null, 'notes-unit4.html': null
+                'exam-skills-v2.html': null, 'exam-practice.html': 'exam-practice.html',
+                'notes.html': 'gcse-notes.html', 'notes-unit1.html': 'gcse-notes.html',
+                'notes-unit2.html': 'gcse-notes.html', 'notes-unit3.html': 'gcse-notes.html', 'notes-unit4.html': 'gcse-notes.html'
             };
-            var gcsePages = { 'gcse-app.html': 'app.html', 'gcse-glossary.html': 'glossary.html' };
-            var comingSoon = ['exam-skills-v2.html', 'exam-practice.html', 'notes.html', 'notes-unit1.html', 'notes-unit2.html', 'notes-unit3.html', 'notes-unit4.html'];
+            var gcsePages = { 'gcse-app.html': 'app.html', 'gcse-glossary.html': 'glossary.html', 'gcse-notes.html': 'notes.html' };
+            var comingSoon = ['exam-skills-v2.html'];
             function getCurrentPage() {
                 var path = window.location.pathname;
                 return path.substring(path.lastIndexOf('/') + 1) || 'index.html';
