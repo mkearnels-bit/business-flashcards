@@ -928,6 +928,12 @@ var LOGO_BASE64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAACFCAYAAAB
             var results = resultsParam || lastTestResults;
             var paper = paperParam || currentTest;
             if (!results) { alert('No test results to download.'); return; }
+            // Handle both formats: array (from database) or object with question_results property
+            if (Array.isArray(results)) {
+                results = { question_results: results };
+            } else if (!results.question_results && results.length) {
+                results = { question_results: results };
+            }
             var jsPDF = window.jspdf.jsPDF;
             var doc = new jsPDF('p', 'mm', 'a4');
             
