@@ -1114,15 +1114,28 @@ body {
     .sidebar.mobile-open { display: block; }
 }
     </style>
-<!-- TikTok Pixel Code Start -->
+<!-- TikTok Pixel Code Start (Consent-Aware) -->
 <script>
-!function (w, d, t) {
+(function(w, d, t) {
+  var consent = localStorage.getItem('mybiz_cookie_consent');
+  if (consent === 'accepted') {
+    w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
+    var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
+    ;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+    ttq.load('D6UMCABC77U4GR00ENM0');
+    ttq.page();
+  }
+})(window, document, 'ttq');
+
+function mybizLoadTikTokPixel() {
+  if (window.TiktokAnalyticsObject) return;
+  var w = window, d = document, t = 'ttq';
   w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
-var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
-;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+  var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
+  ;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
   ttq.load('D6UMCABC77U4GR00ENM0');
   ttq.page();
-}(window, document, 'ttq');
+}
 </script>
 <!-- TikTok Pixel Code End -->
 </head>
@@ -2934,5 +2947,41 @@ document.addEventListener('DOMContentLoaded', function() {
     drawHerzberg();
 });
     </script>
+
+<!-- Cookie Consent Banner -->
+<div id="mybiz-cookie-banner" style="display:none; position:fixed; bottom:0; left:0; right:0; z-index:99999; background:#1e3a5f; color:#fff; padding:16px 24px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; font-size:14px; line-height:1.5; box-shadow:0 -2px 16px rgba(0,0,0,0.2); align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+  <div style="flex:1; min-width:240px;">
+    We use cookies to help improve your experience and measure how our ads perform. You can accept or reject non-essential cookies. See our <a href="/privacy" style="color:#f39c12; text-decoration:underline;">Privacy Policy</a> for details.
+  </div>
+  <div style="display:flex; gap:10px; flex-shrink:0;">
+    <button id="mybiz-cookie-reject" style="background:transparent; color:#fff; border:1px solid rgba(255,255,255,0.4); padding:8px 20px; border-radius:6px; cursor:pointer; font-size:14px; font-weight:500; transition:background 0.2s;">Reject</button>
+    <button id="mybiz-cookie-accept" style="background:#e67e22; color:#fff; border:none; padding:8px 20px; border-radius:6px; cursor:pointer; font-size:14px; font-weight:600; transition:background 0.2s;">Accept</button>
+  </div>
+</div>
+<script>
+(function() {
+  var consent = localStorage.getItem('mybiz_cookie_consent');
+  var banner = document.getElementById('mybiz-cookie-banner');
+  if (!consent && banner) {
+    banner.style.display = 'flex';
+  }
+  var acceptBtn = document.getElementById('mybiz-cookie-accept');
+  var rejectBtn = document.getElementById('mybiz-cookie-reject');
+  if (acceptBtn) {
+    acceptBtn.onclick = function() {
+      localStorage.setItem('mybiz_cookie_consent', 'accepted');
+      banner.style.display = 'none';
+      mybizLoadTikTokPixel();
+    };
+  }
+  if (rejectBtn) {
+    rejectBtn.onclick = function() {
+      localStorage.setItem('mybiz_cookie_consent', 'rejected');
+      banner.style.display = 'none';
+    };
+  }
+})();
+</script>
+<!-- End Cookie Consent Banner -->
 </body>
 </html>
