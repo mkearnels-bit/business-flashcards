@@ -6,206 +6,375 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-    <title>Privacy Policy | MyBizStudies A-Level Learning Platform</title>
-<meta name="description" content="Read the privacy policy for MyBizStudies. Learn how we protect your personal data, manage cookies, and handle GDPR rights on our A-Level learning platform.">
+    <title>Privacy Policy | MyBizStudies</title>
+<meta name="description" content="MyBizStudies privacy policy. Learn how we collect, use, and protect your personal data, including our use of cookies and TikTok pixel tracking.">
 <meta name="keywords" content="A-Level Business Studies, Edexcel IAL, revision notes, flashcards, exam technique, GCSE Business">
 <link rel="canonical" href="https://mybizstudies.com/privacy.html">
-<meta property="og:title" content="Privacy Policy | MyBizStudies A-Level Learning Platform">
-<meta property="og:description" content="Read the privacy policy for MyBizStudies. Learn how we protect your personal data, manage cookies, and handle GDPR rights on our A-Level learning platform.">
+<meta property="og:title" content="Privacy Policy | MyBizStudies">
+<meta property="og:description" content="MyBizStudies privacy policy. Learn how we collect, use, and protect your personal data, including our use of cookies and TikTok pixel tracking.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://mybizstudies.com/privacy.html">
 <meta property="og:site_name" content="MyBizStudies">
     <meta property="og:image" content="https://mybizstudies.com/og-image.png">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="https://mybizstudies.com/og-image.png">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         :root {
             --primary: #1e3a5f;
+            --primary-dark: #152a45;
+            --primary-light: #2d5a8a;
             --accent: #e67e22;
+            --accent-light: #f39c12;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --error: #e74c3c;
             --dark: #0f172a;
+            --gray-900: #1e293b;
+            --gray-700: #334155;
             --gray-500: #64748b;
+            --gray-300: #cbd5e1;
             --gray-100: #f1f5f9;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            --gray-50: #f8fafc;
+            --white: #ffffff;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            color: var(--dark);
-            background-color: #ffffff;
-            line-height: 1.6;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding-top: 70px;
         }
 
-        header {
-            background-color: var(--primary);
-            color: white;
-            padding: 1.5rem 2rem;
+        /* Header */
+        .page-header {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-100);
+            padding: 0.75rem 2rem;
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: white;
-            text-decoration: none;
+        .page-header .header-logo {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            text-decoration: none;
         }
 
-        .logo:hover {
-            opacity: 0.9;
+        .page-header img {
+            height: 55px;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            background: var(--gray-100);
+            border-radius: 10px;
+            padding: 0.25rem;
+        }
+
+        .header-nav a {
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            color: var(--gray-500);
+            transition: all 0.2s ease;
+        }
+
+        .header-nav a:hover {
+            color: var(--primary);
+            background: rgba(255,255,255,0.5);
+        }
+
+        .header-nav a.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
         }
 
         .back-link {
-            color: white;
+            color: var(--primary);
             text-decoration: none;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: opacity 0.2s;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
         }
 
         .back-link:hover {
-            opacity: 0.8;
+            color: var(--accent);
         }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 44px;
+            height: 44px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1100;
+            position: relative;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--primary);
+            border-radius: 2px;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: absolute;
+        }
+
+        .hamburger span:nth-child(1) { transform: translateY(-7px); }
+        .hamburger span:nth-child(2) { opacity: 1; }
+        .hamburger span:nth-child(3) { transform: translateY(7px); }
+
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg); }
+
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 1040;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .mobile-menu-overlay.active { opacity: 1; pointer-events: auto; }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 280px;
+            height: 100%;
+            background: var(--white);
+            z-index: 1050;
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
+            padding: 5.5rem 1.5rem 2rem;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .mobile-menu.active { transform: translateX(0); }
+
+        .mobile-menu-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            min-height: 100%;
+        }
+
+        .mobile-menu-links a {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            padding: 0.875rem 1rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-links a .menu-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background: var(--gray-100);
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-links a .menu-icon svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--gray-500);
+            transition: stroke 0.2s ease;
+        }
+
+        .mobile-menu-links a:hover,
+        .mobile-menu-links a.active {
+            background: var(--gray-100);
+            color: var(--primary);
+        }
+
+        .mobile-menu-links a.active .menu-icon {
+            background: var(--primary);
+        }
+
+        .mobile-menu-links a.active .menu-icon svg {
+            stroke: white;
+        }
+
+        .mobile-menu-divider {
+            height: 1px;
+            background: var(--gray-100);
+            margin: 0.5rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .header-nav { display: none; }
+            .back-link { display: none; }
+            .page-header img { height: 45px; }
+            .page-header { padding: 0.5rem 1rem; }
+            .hamburger { display: flex; }
+            .mobile-menu-overlay { display: block; }
+            .mobile-menu { display: block; }
+        }
+
+        /* Hero */
+        .privacy-hero {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
+            color: white;
+            text-align: center;
             padding: 3rem 2rem;
         }
 
-        .page-title {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-            font-weight: 700;
-        }
-
-        .last-updated {
-            color: var(--gray-500);
-            font-size: 0.95rem;
-            margin-bottom: 2.5rem;
-        }
-
-        .intro {
-            background-color: var(--gray-100);
-            padding: 1.5rem;
-            border-left: 4px solid var(--accent);
-            margin-bottom: 2.5rem;
-            border-radius: 4px;
-        }
-
-        .intro p {
+        .privacy-hero h1 {
+            font-size: 2rem;
+            font-weight: 800;
             margin-bottom: 0.5rem;
         }
 
-        .intro p:last-child {
-            margin-bottom: 0;
+        .privacy-hero p {
+            font-size: 1rem;
+            opacity: 0.85;
+            max-width: 500px;
+            margin: 0 auto;
         }
 
-        section {
-            margin-bottom: 2.5rem;
+        /* Main Content */
+        .privacy-container {
+            max-width: 700px;
+            margin: -2rem auto 3rem;
+            padding: 0 1.5rem;
+            width: 100%;
+            flex: 1;
         }
 
-        h2 {
+        .privacy-card {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            padding: 2.5rem;
+        }
+
+        /* Content Sections */
+        .policy-section {
+            margin-bottom: 2rem;
+        }
+
+        .policy-section h2 {
             color: var(--primary);
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
+            font-size: 1.25rem;
             font-weight: 600;
+            margin-bottom: 1rem;
             border-bottom: 2px solid var(--gray-100);
             padding-bottom: 0.5rem;
         }
 
-        h3 {
-            color: var(--primary);
-            font-size: 1.1rem;
-            margin-top: 1.5rem;
-            margin-bottom: 0.75rem;
-            font-weight: 600;
-        }
-
-        p {
+        .policy-section p {
+            color: var(--gray-900);
             margin-bottom: 1rem;
-            color: var(--dark);
+            line-height: 1.6;
+            text-align: left;
         }
 
-        ul, ol {
+        .policy-section ul {
             margin-left: 1.5rem;
             margin-bottom: 1rem;
         }
 
-        li {
+        .policy-section li {
             margin-bottom: 0.75rem;
-            color: var(--dark);
+            color: var(--gray-900);
+            line-height: 1.6;
         }
 
-        strong {
+        .policy-section strong {
             color: var(--primary);
             font-weight: 600;
         }
 
-        .highlight {
-            background-color: var(--gray-100);
-            padding: 0.2rem 0.4rem;
-            border-radius: 2px;
-        }
-
-        .contact-box {
-            background-color: var(--gray-100);
-            padding: 1.5rem;
-            border-radius: 4px;
-            margin-top: 2rem;
-        }
-
-        .contact-box p {
-            margin-bottom: 0.5rem;
-        }
-
-        .contact-box a {
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .contact-box a:hover {
-            text-decoration: underline;
-        }
-
-        footer {
-            background-color: var(--gray-100);
-            padding: 2rem;
-            text-align: center;
+        .last-updated {
             color: var(--gray-500);
             font-size: 0.9rem;
-            margin-top: 3rem;
+            font-style: italic;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--gray-100);
         }
 
-        @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                gap: 1rem;
-                align-items: flex-start;
+        .contact-email {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .contact-email:hover {
+            color: var(--accent);
+        }
+
+        /* Footer */
+        .page-footer {
+            background: var(--dark);
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            padding: 1.5rem 2rem;
+            font-size: 0.8rem;
+            margin-top: auto;
+        }
+
+        .page-footer a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+        }
+
+        .page-footer a:hover {
+            color: var(--accent);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .privacy-hero h1 {
+                font-size: 1.5rem;
             }
 
-            .page-title {
-                font-size: 2rem;
-            }
-
-            .container {
-                padding: 2rem 1rem;
+            .privacy-card {
+                padding: 1.5rem;
             }
         }
-    
+
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
         animation-duration: 0.01ms !important;
@@ -214,183 +383,812 @@
         scroll-behavior: auto !important;
     }
 }
+
+/* ==================== SITE NAVBAR ==================== */
+.site-navbar {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #f1f5f9;
+    padding: 0.75rem 2rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.site-navbar-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.site-navbar-logo {
+    height: 55px;
+    width: auto;
+}
+.site-nav-buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.site-nav-link {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #334155;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+.site-nav-link:hover {
+    color: #1e3a5f;
+    background: #f1f5f9;
+}
+.site-nav-link.active {
+    color: #e67e22;
+    font-weight: 600;
+}
+.site-nav-btn {
+    padding: 0.5rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    font-family: inherit;
+}
+.site-nav-btn-ghost {
+    color: #1e3a5f;
+    background: transparent;
+    border: 1px solid #cbd5e1;
+}
+.site-nav-btn-ghost:hover {
+    background: #f1f5f9;
+    border-color: #1e3a5f;
+}
+
+.site-nav-btn-primary {
+    background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+}
+
+.site-nav-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(230, 126, 34, 0.4);
+}
+
+.site-hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1100;
+    position: relative;
+}
+
+.site-hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: #1e3a5f;
+    border-radius: 2px;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    position: absolute;
+}
+
+.site-hamburger span:nth-child(1) { transform: translateY(-7px); }
+.site-hamburger span:nth-child(2) { opacity: 1; }
+.site-hamburger span:nth-child(3) { transform: translateY(7px); }
+
+.site-hamburger.active span:nth-child(1) { transform: rotate(45deg); }
+.site-hamburger.active span:nth-child(2) { opacity: 0; }
+.site-hamburger.active span:nth-child(3) { transform: rotate(-45deg); }
+
+/* Mobile overlay */
+.site-mobile-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 1040;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.site-mobile-overlay.active { opacity: 1; pointer-events: auto; }
+
+.site-mobile-menu {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 280px;
+    height: 100%;
+    background: white;
+    z-index: 1050;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
+    padding: 5.5rem 1.5rem 2rem;
+}
+
+.site-mobile-menu.active { transform: translateX(0); }
+
+.site-mobile-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.site-mobile-links a {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.875rem 1rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #334155;
+    transition: all 0.2s ease;
+}
+
+.site-mobile-links a:hover {
+    background: #f1f5f9;
+    color: #1e3a5f;
+}
+
+.site-menu-icon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #f1f5f9;
+    flex-shrink: 0;
+}
+
+.site-menu-icon svg {
+    width: 18px;
+    height: 18px;
+    stroke: #64748b;
+}
+
+.site-mobile-divider {
+    height: 1px;
+    background: #f1f5f9;
+    margin: 0.5rem 0;
+}
+
+.site-mobile-cta {
+    margin-top: 0.5rem;
+    background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+    color: white !important;
+    justify-content: center;
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+}
+
+.site-mobile-cta:hover {
+    color: white !important;
+    transform: translateY(-1px);
+}
+
+.site-mobile-cta .site-menu-icon {
+    display: none;
+}
+
+.site-mobile-logout {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.875rem 1rem;
+    border-radius: 12px;
+    border: none;
+    background: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #e74c3c;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+.site-mobile-logout:hover {
+    background: rgba(231, 76, 60, 0.06);
+}
+
+.site-mobile-logout .site-menu-icon {
+    background: rgba(231, 76, 60, 0.08);
+}
+
+.site-mobile-logout .site-menu-icon svg {
+    stroke: #e74c3c;
+}
+
+/* Profile Dropdown */
+.profile-dropdown-wrapper {
+    position: relative;
+}
+.profile-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e67e22, #f39c12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid #f1f5f9;
+    font-family: 'Inter', sans-serif;
+}
+.profile-avatar:hover {
+    box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
+    transform: scale(1.05);
+}
+.profile-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: rgba(255,255,255,0.98);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    border: 1px solid #e9ecef;
+    min-width: 200px;
+    display: none;
+    z-index: 2000;
+    overflow: hidden;
+}
+.profile-dropdown.active { display: block; }
+.profile-dropdown a,
+.profile-dropdown button {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    width: 100%;
+    padding: 0.7rem 1rem;
+    text-align: left;
+    border: none;
+    background: none;
+    color: #334155;
+    font-size: 0.88rem;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+.profile-dropdown a:hover,
+.profile-dropdown button:hover {
+    background: #f1f5f9;
+    color: #1e3a5f;
+}
+.profile-dropdown button.logout-item {
+    color: #e74c3c;
+    border-top: 1px solid #f1f5f9;
+}
+.profile-dropdown button.logout-item:hover {
+    background: #fef2f2;
+}
+.profile-dropdown svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+    .site-nav-buttons { display: none; }
+    .site-hamburger { display: flex; }
+    .site-mobile-overlay { display: block; }
+    .site-mobile-menu { display: block; }
+    .site-navbar { padding: 0.5rem 1rem; }
+    .site-navbar-logo { height: 45px; }
+}
+
+/* ===== LEVEL TOGGLE ===== */
+.level-toggle { display: flex; align-items: center; background: #f1f5f9; border-radius: 8px; padding: 3px; gap: 0; flex-shrink: 0; }
+.level-toggle-btn { padding: 5px 14px; font-size: 0.8rem; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; transition: all 0.25s ease; font-family: inherit; color: #64748b; background: transparent; white-space: nowrap; }
+.level-toggle-btn.active { background: #1e3a5f; color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
+.level-toggle-btn:hover:not(.active) { color: #1e3a5f; background: rgba(30, 58, 95, 0.08); }
+.mobile-level-toggle { display: flex; align-items: center; background: #f1f5f9; border-radius: 10px; padding: 4px; margin-bottom: 1rem; gap: 0; }
+.mobile-level-toggle .level-toggle-btn { flex: 1; padding: 8px 0; font-size: 0.85rem; border-radius: 8px; text-align: center; }
+
 </style>
-<!-- Google Analytics - Replace G-HFSYK32ZFT with your actual ID -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-HFSYK32ZFT"></script>
+<!-- Google Analytics - Replace GA_MEASUREMENT_ID with your actual ID -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-HFSYK32ZFT');
+  gtag('config', 'GA_MEASUREMENT_ID');
 </script>
+<!-- TikTok Pixel Code Start (Consent-Aware) -->
+<script>
+(function(w, d, t) {
+  var consent = localStorage.getItem('mybiz_cookie_consent');
+  if (consent === 'accepted') {
+    w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
+    var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
+    ;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+    ttq.load('D6UMCABC77U4GR00ENM0');
+    ttq.page();
+  }
+})(window, document, 'ttq');
+
+function mybizLoadTikTokPixel() {
+  if (window.TiktokAnalyticsObject) return;
+  var w = window, d = document, t = 'ttq';
+  w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
+  var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
+  ;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+  ttq.load('D6UMCABC77U4GR00ENM0');
+  ttq.page();
+}
+</script>
+<!-- TikTok Pixel Code End -->
 </head>
 <body>
-    <header>
-        <a href="index.html" class="logo">
-            MyBizStudies
-        </a>
-        <a href="index.html" class="back-link">
-            &larr; Back to Home
-        </a>
-    </header>
 
-    <div class="container">
-        <h1 class="page-title">Privacy Policy</h1>
-        <p class="last-updated">Last updated: February 2026</p>
-
-        <div class="intro">
-            <p>At MyBizStudies, we are committed to protecting your privacy and ensuring transparency about how we collect, use, and store your personal data. This Privacy Policy explains our practices regarding your information and your rights as a user of our A-Level Business Studies learning platform.</p>
+    <nav class="site-navbar" id="siteNavbar">
+    <div class="site-navbar-content">
+        <a href="index.html"><img src="logo.png" alt="MyBizStudies" class="site-navbar-logo"></a>
+        <div class="level-toggle" id="desktopLevelToggle">
+            <button class="level-toggle-btn active" data-level="alevel">A-Level</button>
+            <button class="level-toggle-btn" data-level="gcse">GCSE</button>
         </div>
-
-        <section>
-            <h2>1. Introduction</h2>
-            <p>MyBizStudies (referred to as "we," "us," "our," or "Company") operates the mybizstudies.com website and platform. We are dedicated to providing a secure and private learning environment for our users.</p>
-            <p>This Privacy Policy applies to all users of our platform and describes how we collect, use, disclose, and otherwise process information in connection with our services.</p>
-        </section>
-
-        <section>
-            <h2>2. Information We Collect</h2>
-            <p>We collect information in the following ways:</p>
-
-            <h3>2.1 Information You Provide Directly</h3>
-            <ul>
-                <li><strong>Account Registration:</strong> When you create an account, we collect your name, email address, and password.</li>
-                <li><strong>Profile Information:</strong> You may choose to provide additional information such as your school, year of study, and learning goals.</li>
-                <li><strong>Communications:</strong> When you contact us via email or through our contact form, we collect the content of your messages.</li>
-            </ul>
-
-            <h3>2.2 Automatically Collected Information</h3>
-            <ul>
-                <li><strong>Usage Data:</strong> We collect information about your interaction with our platform, including pages visited, time spent on content, and progress in courses.</li>
-                <li><strong>Device Information:</strong> We collect information about the device you use to access our platform, including browser type, operating system, and IP address.</li>
-                <li><strong>Cookies and Tracking:</strong> We use cookies and similar technologies to remember your preferences and track your activity.</li>
-            </ul>
-
-            <h3>2.3 Information from Third Parties</h3>
-            <p>We do not actively seek information from third parties, but may receive information about you if you choose to link your account to external services or platforms.</p>
-        </section>
-
-        <section>
-            <h2>3. How We Use Your Information</h2>
-            <p>We use the information we collect for the following purposes:</p>
-            <ul>
-                <li>To create and maintain your account and provide access to our learning platform</li>
-                <li>To deliver personalized learning experiences and track your academic progress</li>
-                <li>To send educational updates, announcements, and course recommendations</li>
-                <li>To respond to your inquiries and provide customer support</li>
-                <li>To improve our platform, features, and services based on user feedback and usage patterns</li>
-                <li>To comply with legal obligations and enforce our terms of service</li>
-                <li>To detect and prevent fraudulent activity and unauthorized access</li>
-                <li>To analyze platform performance and user trends</li>
-            </ul>
-        </section>
-
-        <section>
-            <h2>4. Third-Party Service Providers</h2>
-
-            <h3>4.1 Supabase for Authentication and Data Storage</h3>
-            <p>MyBizStudies uses <strong>Supabase</strong> as our backend infrastructure provider for user authentication and data storage. Supabase securely stores your account credentials, profile information, and learning progress. Supabase operates under strict security standards and privacy controls. Your data with Supabase is subject to their privacy policy and security measures.</p>
-
-            <h3>4.2 Resend for Email Communications</h3>
-            <p>We use <strong>Resend</strong> to send transactional and marketing emails, including account confirmations, password resets, course updates, and educational content. When you receive emails from us, your email address and message content are processed by Resend. Resend maintains high standards for email security and privacy.</p>
-
-            <h3>4.3 Data Sharing</h3>
-            <p>We only share your personal information with these third-party service providers to the extent necessary to provide our services. These providers are contractually obligated to use your information only for specified purposes and to maintain the confidentiality and security of your data.</p>
-        </section>
-
-        <section>
-            <h2>5. Cookies and Tracking Technologies</h2>
-            <p>Our platform uses cookies to enhance your user experience. Cookies are small files stored on your device that help us remember your preferences and login status.</p>
-
-            <h3>5.1 Types of Cookies We Use</h3>
-            <ul>
-                <li><strong>Essential Cookies:</strong> Required for basic functionality, such as maintaining your session and security.</li>
-                <li><strong>Preference Cookies:</strong> Remember your settings and preferences for a personalized experience.</li>
-                <li><strong>Analytics Cookies:</strong> Help us understand how users interact with our platform to improve services.</li>
-            </ul>
-
-            <h3>5.2 Managing Cookies</h3>
-            <p>Most web browsers allow you to control cookies through your browser settings. You can choose to disable cookies, but this may limit your ability to use certain features of our platform. We do not respond to Do Not Track signals at this time.</p>
-        </section>
-
-        <section>
-            <h2>6. Your Privacy Rights</h2>
-            <p>Depending on your location, you may have certain rights regarding your personal data:</p>
-
-            <h3>6.1 Right to Access</h3>
-            <p>You have the right to request a copy of the personal information we hold about you.</p>
-
-            <h3>6.2 Right to Correction</h3>
-            <p>You can request that we correct any inaccurate or incomplete information in your account.</p>
-
-            <h3>6.3 Right to Deletion</h3>
-            <p>You may request the deletion of your account and associated personal data, subject to certain legal obligations.</p>
-
-            <h3>6.4 Right to Data Portability</h3>
-            <p>You have the right to request your data in a structured, commonly used, and machine-readable format.</p>
-
-            <h3>6.5 Right to Object</h3>
-            <p>You can object to the processing of your personal information for certain purposes, such as marketing communications.</p>
-
-            <p>To exercise any of these rights, please contact us at <span class="highlight">hello@mybizstudies.com</span>.</p>
-        </section>
-
-        <section>
-            <h2>7. Data Security</h2>
-            <p>We implement comprehensive security measures to protect your personal information from unauthorized access, disclosure, alteration, and destruction. These measures include:</p>
-            <ul>
-                <li>Encryption of data in transit using HTTPS protocols</li>
-                <li>Secure password hashing and storage practices</li>
-                <li>Regular security audits and updates</li>
-                <li>Limited access to personal data among our staff members</li>
-                <li>Compliance with industry security standards</li>
-            </ul>
-            <p>However, no method of transmission over the internet or electronic storage is completely secure. While we strive to protect your information, we cannot guarantee absolute security.</p>
-        </section>
-
-        <section>
-            <h2>8. Children's Privacy</h2>
-            <p>MyBizStudies is designed for A-Level students, who are typically 16 years and older. We do not knowingly collect personal information from children under the age of 13. If we become aware that we have collected information from a child under 13, we will take steps to delete such information promptly.</p>
-            <p>For users between 13 and 16 years of age, we implement additional safeguards to protect their privacy in accordance with applicable laws.</p>
-            <p>Parents or guardians who believe their child has provided information to MyBizStudies are encouraged to contact us immediately at hello@mybizstudies.com.</p>
-        </section>
-
-        <section>
-            <h2>9. Data Retention</h2>
-            <p>We retain your personal information for as long as necessary to provide our services and fulfill the purposes outlined in this Privacy Policy. Specific retention periods depend on the type of data and the purposes for which we process it.</p>
-            <p>When you delete your account, we will remove your personal data from our systems within 30 days, except where we are required to retain information by law.</p>
-        </section>
-
-        <section>
-            <h2>10. International Data Transfers</h2>
-            <p>Your information may be transferred to and stored in countries other than your country of residence. These countries may have data protection laws that differ from your home country. By using MyBizStudies, you consent to the transfer of your information to countries outside your country of residence.</p>
-        </section>
-
-        <section>
-            <h2>11. Changes to This Privacy Policy</h2>
-            <p>We may update this Privacy Policy from time to time to reflect changes in our practices, technology, legal requirements, or other factors. We will notify you of any material changes by posting the new Privacy Policy on our website and updating the "Last Updated" date.</p>
-            <p>Your continued use of our platform following the posting of changes constitutes your acceptance of such changes. We encourage you to review this Privacy Policy regularly to stay informed about how we protect your information.</p>
-        </section>
-
-        <section>
-            <h2>12. Contact Us</h2>
-            <p>If you have questions, concerns, or requests regarding this Privacy Policy or our privacy practices, please do not hesitate to contact us:</p>
-            <div class="contact-box">
-                <p><strong>MyBizStudies</strong></p>
-                <p>Email: <a href="mailto:hello@mybizstudies.com">hello@mybizstudies.com</a></p>
-                <p>Website: <a href="https://mybizstudies.com">mybizstudies.com</a></p>
+        <div class="site-nav-buttons" id="siteNavButtons">
+            <a href="exam-practice.html" class="site-nav-link auth-only" style="display:none;" data-nav-key="exam-practice">Exam Practice</a>
+            <a href="app.html" class="site-nav-link" data-nav-key="flashcards">Flash Cards</a>
+            <a href="exam-skills-v2.html" class="site-nav-link" data-nav-key="exam-skills">Exam Skills</a>
+            <a href="notes.html" class="site-nav-link" data-nav-key="study-notes">Study Notes</a>
+            <a href="blog.html" class="site-nav-link">Blog</a>
+            <a href="contact.html" class="site-nav-link">Contact Us</a>
+            <a href="login.html" class="site-nav-btn site-nav-btn-ghost guest-only">Log In</a>
+            <a href="signup.html" class="site-nav-btn site-nav-btn-primary guest-only">Get Started</a>
+            <div class="profile-dropdown-wrapper auth-only" style="display:none;">
+                <div class="profile-avatar" id="profileAvatar">--
+        </div>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <a href="student-progress.html">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+                        Student Progress
+                    </a>
+                    <a href="account.html">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                        My Account
+                    </a>
+                    <a href="admin.html" class="profile-dropdown-item admin-only" style="display:none;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        Admin
+                    </a>
+                    <button class="logout-item" id="navLogoutBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                        Log Out
+                    </button>
+                </div>
             </div>
-        </section>
+        </div>
+        <button class="site-hamburger" id="siteHamburger" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</nav>
 
-        <section>
-            <h2>13. Additional Information</h2>
-            <p>This Privacy Policy is part of our commitment to transparency and user protection. We believe that privacy is a fundamental right, and we are dedicated to maintaining the trust you place in MyBizStudies.</p>
-            <p>Thank you for being part of our learning community. Your education and privacy matter to us.</p>
-        </section>
+    <!-- Unified Site Mobile Menu -->
+<div class="site-mobile-overlay" id="siteMobileOverlay"></div>
+<div class="site-mobile-menu" id="siteMobileMenu">
+    <div class="site-mobile-links"><div class="mobile-level-toggle">
+            <button class="level-toggle-btn active" data-level="alevel">A-Level</button>
+            <button class="level-toggle-btn" data-level="gcse">GCSE</button>
+        </div>
+        <div class="site-mobile-divider auth-only" style="display:none;"></div>
+        <a href="exam-practice.html" class="auth-only" style="display:none;">Exam Practice</a>
+        <div class="site-mobile-divider"></div>
+        <a href="app.html" class="auth-only" style="display:none;">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
+            Flash Cards
+        </a>
+        <div class="site-mobile-divider"></div>
+        <a href="exam-skills-v2.html" class="auth-only" style="display:none;">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg></span>
+            Exam Skills
+        </a>
+        <div class="site-mobile-divider"></div>
+        <a href="notes.html" class="auth-only" style="display:none;">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></span>
+            Study Notes
+        </a>
+        <div class="site-mobile-divider"></div>
+        <a href="blog.html">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"/></svg></span>
+            Blog
+        </a>
+        <div class="site-mobile-divider"></div>
+        <a href="contact.html">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></span>
+            Contact Us
+        </a>
+        <div class="site-mobile-divider guest-only"></div>
+        <a href="login.html" class="guest-only">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"/></svg></span>
+            Log In
+        </a>
+        <a href="signup.html" class="site-mobile-cta guest-only">
+            Get Started
+        </a>
+        <div class="site-mobile-divider auth-only" style="display:none;"></div>
+        <button class="site-mobile-logout auth-only" style="display:none;" id="mobileLogoutBtn">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l3-3m0 0l-3-3m3 3H3"/></svg></span>
+            Logout
+        </button>
+    </div>
     </div>
 
-    <footer>
-        <p>&copy; 2026 MyBizStudies. All rights reserved. | <a href="privacy.html" style="color: var(--gray-500); text-decoration: none;">Privacy Policy</a></p>
+    <!-- Hero -->
+    <section class="privacy-hero">
+        <h1>Privacy Policy</h1>
+        <p>How we collect, use, and protect your data.</p>
+    </section>
+
+    <!-- Privacy Content -->
+    <div class="privacy-container">
+        <div class="privacy-card">
+            <div class="policy-section">
+                <h2>Who We Are</h2>
+                <p>MyBizStudies (mybizstudies.com) is an interactive revision platform for GCSE and A-Level Business Studies students, operated by Mark Kearney. Contact: <a href="mailto:hello@mybizstudies.com" class="contact-email">hello@mybizstudies.com</a>.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>Information We Collect</h2>
+                <ul>
+                    <li><strong>Account information:</strong> When you sign up, we collect your name and email address. You can register using Google OAuth or email/password.</li>
+                    <li><strong>Usage data:</strong> We record your exam practice attempts, flashcard progress, and test results to provide personalised coaching and progress tracking.</li>
+                    <li><strong>Payment information:</strong> Payments are processed by Creem.io, our Merchant of Record. We do not store your card details. Creem.io handles all payment processing, VAT, and tax compliance on our behalf.</li>
+                </ul>
+            </div>
+
+            <div class="policy-section">
+                <h2>How We Use Your Data</h2>
+                <p>We use your personal data to: provide and improve the MyBizStudies platform, deliver AI-powered exam practice, marking, and coaching summaries, track your study progress and generate personalised feedback, send transactional emails (account confirmation, password resets) via our email provider Resend, and process subscription payments through Creem.io.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>Cookies and Tracking</h2>
+                <p>MyBizStudies uses the following cookies and tracking technologies:</p>
+                <p><strong>Essential cookies:</strong> We use localStorage to save your preferences (such as your A-Level/GCSE level selection and login session). These are necessary for the site to function and do not require consent.</p>
+                <p><strong>Non-essential cookies:</strong> We use the TikTok Pixel (ID: D6UMCABC77U4GR00ENM0) to measure the effectiveness of our advertising on TikTok. When Automatic Advanced Matching (AAM) is enabled, the pixel may collect hashed (encrypted) email addresses from form fields on our site to match website activity with TikTok users. This data is encrypted using SHA-256 before being sent to TikTok.</p>
+                <p>You can accept or reject non-essential cookies when you first visit our site using the cookie consent banner. Your choice is saved and the banner will not appear again. If you reject cookies, the TikTok pixel will not load and no tracking data will be shared with TikTok.</p>
+                <p>To change your cookie preferences, clear your browser's localStorage for mybizstudies.com and the consent banner will reappear on your next visit.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>Data Sharing</h2>
+                <p>We share data with the following third parties, solely for the purposes described above: Supabase (database and authentication hosting), Anthropic (AI services for exam practice and coaching, via Supabase Edge Functions), TikTok (advertising measurement, only if you accept cookies), Creem.io (payment processing), and Resend (transactional email delivery). We do not sell your personal data to any third party.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>Data Security</h2>
+                <p>Your data is stored securely using Supabase, which provides encrypted database hosting and authentication services. All TikTok tracking data is hashed (encrypted) before transmission. Payment data is handled entirely by Creem.io and never passes through our servers.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>Your Rights</h2>
+                <p>Under UK data protection law (UK GDPR), you have the right to: access the personal data we hold about you, request correction of inaccurate data, request deletion of your data, object to processing of your data, and withdraw consent for non-essential cookies at any time. To exercise any of these rights, contact us at <a href="mailto:hello@mybizstudies.com" class="contact-email">hello@mybizstudies.com</a>.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>Children's Privacy</h2>
+                <p>MyBizStudies is designed for GCSE and A-Level students, some of whom may be under 18. We only collect the minimum data necessary to provide our service. We do not knowingly collect unnecessary personal information from minors. If you are a parent or guardian and believe your child has provided personal data without your consent, please contact us at <a href="mailto:hello@mybizstudies.com" class="contact-email">hello@mybizstudies.com</a>.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>Changes to This Policy</h2>
+                <p>We may update this privacy policy from time to time. Any changes will be posted on this page with an updated "Last updated" date.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>Contact</h2>
+                <p>If you have any questions about this privacy policy, please contact us at <a href="mailto:hello@mybizstudies.com" class="contact-email">hello@mybizstudies.com</a> or visit our <a href="contact.html" class="contact-email">Contact</a> page.</p>
+            </div>
+
+            <p class="last-updated">Last updated: March 2026</p>
+        </div>
+    </div>
+
+    <footer class="page-footer">
+        <p>&copy; 2026 MyBizStudies. All rights reserved. | <a href="about.html">About</a> | <a href="pricing.html">Pricing</a> | <a href="privacy.html">Privacy</a> | <a href="terms.html">Terms</a> | <a href="refund.html">Refund Policy</a> | <a href="blog.html">Blog</a> | <a href="contact.html">Contact</a></p>
     </footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4"></script>
+<script>
+// Unified Navbar Auth
+(function() {
+    const SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
+
+    // Use existing supabaseClient if available, otherwise create one for nav only
+    var client;
+    if (typeof supabaseClient !== 'undefined') {
+        client = supabaseClient;
+    } else {
+        if (typeof window._navSupabase === 'undefined') {
+            window._navSupabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+        }
+        client = window._navSupabase;
+    }
+
+    if (!client) return;
+
+    async function setupNav() {
+        try {
+            const { data: { session } } = await client.auth.getSession();
+            const authEls = document.querySelectorAll('.auth-only');
+            const guestEls = document.querySelectorAll('.guest-only');
+
+            if (session) {
+                authEls.forEach(el => el.style.display = '');
+                // Show admin link only for admin email
+                if (session.user.email === 'hello@mybizstudies.com') {
+                    document.querySelectorAll('.admin-only').forEach(function(el) { el.style.display = ''; });
+                }
+                guestEls.forEach(el => el.style.display = 'none');
+            }
+            // else defaults are fine (auth-only hidden, guest-only visible)
+        } catch (e) {
+            console.log('Nav auth check skipped:', e.message);
+        }
+    }
+
+    setupNav();
+
+    // Hamburger toggle
+    const ham = document.getElementById('siteHamburger');
+    const mob = document.getElementById('siteMobileMenu');
+    const ovl = document.getElementById('siteMobileOverlay');
+
+    function toggleSiteMenu() {
+        if (ham) ham.classList.toggle('active');
+        if (mob) mob.classList.toggle('active');
+        if (ovl) ovl.classList.toggle('active');
+        document.body.style.overflow = mob && mob.classList.contains('active') ? 'hidden' : '';
+    }
+
+    if (ham) ham.addEventListener('click', toggleSiteMenu);
+    if (ovl) ovl.addEventListener('click', toggleSiteMenu);
+
+    // Profile dropdown
+    function getProfileInitials(session) {
+            var fullName = session.user_metadata && (session.user_metadata.full_name || session.user_metadata.name) || '';
+            var email = session.email || '';
+            if (fullName) {
+                var parts = fullName.trim().split(' ');
+                return parts.length >= 2 ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase() : parts[0][0].toUpperCase();
+            }
+            if (!email) return '--';
+            return email[0].toUpperCase();
+        }
+
+    var profileAvatar = document.getElementById('profileAvatar');
+    var profileDropdown = document.getElementById('profileDropdown');
+    if (profileAvatar && profileDropdown) {
+        profileAvatar.addEventListener('click', function(e) {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('active');
+        });
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.profile-avatar') && !e.target.closest('.profile-dropdown')) {
+                profileDropdown.classList.remove('active');
+            }
+        });
+    }
+
+    // Check auth and populate profile avatar
+    (async () => {
+        const { data: { session } } = await client.auth.getSession();
+        if (session && profileAvatar && session.user && session.user.email) {
+            profileAvatar.textContent = getProfileInitials(session.user);
+        }
+    })();
+
+    // Close mobile menu when clicking a link
+    if (mob) {
+        mob.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (mob.classList.contains('active')) toggleSiteMenu();
+            });
+        });
+    }
+
+    // Logout buttons
+    const navLogout = document.getElementById('navLogoutBtn');
+    const mobileLogout = document.getElementById('mobileLogoutBtn');
+
+    async function handleNavLogout() {
+        await client.auth.signOut();
+        window.location.href = 'login.html';
+    }
+
+    if (navLogout) navLogout.addEventListener('click', handleNavLogout);
+    if (mobileLogout) mobileLogout.addEventListener('click', handleNavLogout);
+})();
+
+// ===== LEVEL TOGGLE =====
+        var LEVEL_KEY = 'mybiz_level';
+        var currentLevel = localStorage.getItem(LEVEL_KEY) || 'alevel';
+
+        var levelLinks = {
+            alevel: {
+                'exam-practice': 'exam-practice.html',
+                'flashcards': 'app.html',
+                'exam-skills': 'exam-skills-v2.html',
+                'study-notes': 'notes.html',
+                'glossary': 'glossary.html'
+            },
+            gcse: {
+                'exam-practice': 'exam-practice.html',
+                'flashcards': 'gcse-app.html',
+                'exam-skills': null,
+                'study-notes': 'gcse-notes.html',
+                'glossary': 'gcse-glossary.html'
+            }
+        };
+
+        function updateNavForLevel(level) {
+            var links = levelLinks[level];
+            document.querySelectorAll('[data-nav-key]').forEach(function(link) {
+                var key = link.getAttribute('data-nav-key');
+                if (links[key]) {
+                    link.href = links[key];
+                    link.style.opacity = '1';
+                    link.style.pointerEvents = '';
+                    link.removeAttribute('data-coming-soon');
+                } else if (links[key] === null) {
+                    link.href = '#';
+                    link.setAttribute('data-coming-soon', 'true');
+                }
+            });
+            document.querySelectorAll('[data-mobile-nav-key]').forEach(function(link) {
+                var key = link.getAttribute('data-mobile-nav-key');
+                if (links[key]) {
+                    link.href = links[key];
+                    link.style.opacity = '1';
+                    link.style.pointerEvents = '';
+                    link.removeAttribute('data-coming-soon');
+                } else if (links[key] === null) {
+                    link.href = '#';
+                    link.setAttribute('data-coming-soon', 'true');
+                }
+            });
+            document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
+                btn.classList.toggle('active', btn.dataset.level === level);
+            });
+        }
+
+        function setLevel(level) {
+            currentLevel = level;
+            localStorage.setItem(LEVEL_KEY, level);
+            updateNavForLevel(level);
+
+            // Navigate to the counterpart page for the new level
+            var currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            var pageMap = {
+                'app.html': { alevel: 'app.html', gcse: 'gcse-app.html' },
+                'gcse-app.html': { alevel: 'app.html', gcse: 'gcse-app.html' },
+                'notes.html': { alevel: 'notes.html', gcse: 'gcse-notes.html' },
+                'gcse-notes.html': { alevel: 'notes.html', gcse: 'gcse-notes.html' },
+                'glossary.html': { alevel: 'glossary.html', gcse: 'gcse-glossary.html' },
+                'gcse-glossary.html': { alevel: 'glossary.html', gcse: 'gcse-glossary.html' },
+                'notes-unit1.html': { alevel: 'notes-unit1.html', gcse: 'gcse-notes.html' },
+                'notes-unit2.html': { alevel: 'notes-unit2.html', gcse: 'gcse-notes.html' },
+                'notes-unit3.html': { alevel: 'notes-unit3.html', gcse: 'gcse-notes.html' },
+                'notes-unit4.html': { alevel: 'notes-unit4.html', gcse: 'gcse-notes.html' },
+                'gcse-notes-unit1.html': { alevel: 'notes.html', gcse: 'gcse-notes-unit1.html' },
+                'gcse-notes-unit2.html': { alevel: 'notes.html', gcse: 'gcse-notes-unit2.html' },
+                'gcse-notes-unit3.html': { alevel: 'notes.html', gcse: 'gcse-notes-unit3.html' },
+                'gcse-notes-unit4.html': { alevel: 'notes.html', gcse: 'gcse-notes-unit4.html' },
+                'gcse-notes-unit5.html': { alevel: 'notes.html', gcse: 'gcse-notes-unit5.html' },
+                'gcse-notes-unit6.html': { alevel: 'notes.html', gcse: 'gcse-notes-unit6.html' },
+                'exam-skills-v2.html': { alevel: 'exam-skills-v2.html', gcse: null }
+            };
+            var mapping = pageMap[currentPage];
+            if (mapping) {
+                var target = mapping[level];
+                if (target === null) {
+                    // Coming soon; don't navigate, show toast
+                    return;
+                }
+                if (target && target !== currentPage) {
+                    window.location.href = target;
+                    return;
+                }
+            }
+        }
+
+        document.addEventListener('click', function(e) {
+            var link = e.target.closest('[data-coming-soon]');
+            if (link) {
+                e.preventDefault();
+                var toast = document.getElementById('comingSoonToast');
+                if (!toast) {
+                    toast = document.createElement('div');
+                    toast.id = 'comingSoonToast';
+                    toast.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#1e3a5f;color:white;padding:12px 24px;border-radius:8px;font-size:0.9rem;font-weight:600;z-index:9999;opacity:0;transition:opacity 0.3s;font-family:Inter,sans-serif;';
+                    toast.textContent = 'GCSE Exam Skills coming soon!';
+                    document.body.appendChild(toast);
+                }
+                toast.style.opacity = '1';
+                setTimeout(function() { toast.style.opacity = '0'; }, 2500);
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateNavForLevel(currentLevel);
+            document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    setLevel(this.dataset.level);
+                });
+            });
+        });
+
+</script>
+
+<!-- Cookie Consent Banner -->
+<div id="mybiz-cookie-banner" style="display:none; position:fixed; bottom:0; left:0; right:0; z-index:99999; background:#1e3a5f; color:#fff; padding:16px 24px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; font-size:14px; line-height:1.5; box-shadow:0 -2px 16px rgba(0,0,0,0.2); align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+  <div style="flex:1; min-width:240px;">
+    We use cookies to help improve your experience and measure how our ads perform. You can accept or reject non-essential cookies. See our <a href="/privacy" style="color:#f39c12; text-decoration:underline;">Privacy Policy</a> for details.
+  </div>
+  <div style="display:flex; gap:10px; flex-shrink:0;">
+    <button id="mybiz-cookie-reject" style="background:transparent; color:#fff; border:1px solid rgba(255,255,255,0.4); padding:8px 20px; border-radius:6px; cursor:pointer; font-size:14px; font-weight:500; transition:background 0.2s;">Reject</button>
+    <button id="mybiz-cookie-accept" style="background:#e67e22; color:#fff; border:none; padding:8px 20px; border-radius:6px; cursor:pointer; font-size:14px; font-weight:600; transition:background 0.2s;">Accept</button>
+  </div>
+</div>
+<script>
+(function() {
+  var consent = localStorage.getItem('mybiz_cookie_consent');
+  var banner = document.getElementById('mybiz-cookie-banner');
+  if (!consent && banner) {
+    banner.style.display = 'flex';
+  }
+  var acceptBtn = document.getElementById('mybiz-cookie-accept');
+  var rejectBtn = document.getElementById('mybiz-cookie-reject');
+  if (acceptBtn) {
+    acceptBtn.onclick = function() {
+      localStorage.setItem('mybiz_cookie_consent', 'accepted');
+      banner.style.display = 'none';
+      mybizLoadTikTokPixel();
+    };
+  }
+  if (rejectBtn) {
+    rejectBtn.onclick = function() {
+      localStorage.setItem('mybiz_cookie_consent', 'rejected');
+      banner.style.display = 'none';
+    };
+  }
+})();
+</script>
+<!-- End Cookie Consent Banner -->
 </body>
 </html>
