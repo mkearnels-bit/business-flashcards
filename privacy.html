@@ -568,21 +568,6 @@
     stroke: #64748b;
 }
 
-/* Mobile menu user info */
-.mobile-user-info {
-    padding: 0.75rem 1rem;
-}
-.mobile-user-name {
-    font-size: 1rem;
-    font-weight: 700;
-    color: #1e3a5f;
-}
-.mobile-user-email {
-    font-size: 0.8rem;
-    color: #64748b;
-    margin-top: 2px;
-}
-
 .site-mobile-divider {
     height: 1px;
     background: #f1f5f9;
@@ -761,6 +746,12 @@ function mybizLoadTikTokPixel() {
 }
 </script>
 <!-- TikTok Pixel Code End -->
+<style>
+/* Mobile menu user info - added for consistent mobile menu */
+.mobile-user-info { padding: 0.75rem 1rem; }
+.mobile-user-name { font-size: 1rem; font-weight: 700; color: #1e3a5f; }
+.mobile-user-email { font-size: 0.8rem; color: #64748b; margin-top: 2px; }
+</style>
 </head>
 <body>
 
@@ -871,8 +862,9 @@ function mybizLoadTikTokPixel() {
             <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l3-3m0 0l-3-3m3 3H3"/></svg></span>
             Log Out
         </button>
+    
     </div>
-</div>
+    </div>
 
     <!-- Hero -->
     <section class="privacy-hero">
@@ -983,15 +975,6 @@ function mybizLoadTikTokPixel() {
                     document.querySelectorAll('.admin-only').forEach(function(el) { el.style.display = ''; });
                 }
                 guestEls.forEach(el => el.style.display = 'none');
-                    var mobileUserName = document.getElementById('mobileUserName');
-                    var mobileUserEmail = document.getElementById('mobileUserEmail');
-                    if (mobileUserName) {
-                        var fullName = session.user.user_metadata && (session.user.user_metadata.full_name || session.user.user_metadata.name) || '';
-                        mobileUserName.textContent = fullName || 'Student';
-                    }
-                    if (mobileUserEmail) {
-                        mobileUserEmail.textContent = session.user.email || '';
-                    }
             }
             // else defaults are fine (auth-only hidden, guest-only visible)
         } catch (e) {
@@ -1246,5 +1229,29 @@ function mybizLoadTikTokPixel() {
 })();
 </script>
 <!-- End Cookie Consent Banner -->
+<script>
+/* Mobile menu user info population - standalone block */
+(function() {
+    var sbUrl = 'https://zyaywzzmjpctpodpxhge.supabase.co';
+    var sbKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
+    try {
+        var c = window.supabase.createClient(sbUrl, sbKey);
+        c.auth.getSession().then(function(r) {
+            if (r.data.session && r.data.session.user) {
+                var user = r.data.session.user;
+                var nameEl = document.getElementById('mobileUserName');
+                var emailEl = document.getElementById('mobileUserEmail');
+                if (nameEl) {
+                    var fullName = user.user_metadata && (user.user_metadata.full_name || user.user_metadata.name) || '';
+                    nameEl.textContent = fullName || 'Student';
+                }
+                if (emailEl) {
+                    emailEl.textContent = user.email || '';
+                }
+            }
+        });
+    } catch(e) {}
+})();
+</script>
 </body>
 </html>
