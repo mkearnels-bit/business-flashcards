@@ -3239,7 +3239,8 @@ function mybizLoadTikTokPixel() {
             <div class="loading-text" id="loadingText">Generating your question...</div>
             <div style="margin-top: 1.25rem; padding: 0.75rem 1.5rem; background: rgba(255,255,255,0.08); border-radius: 12px; max-width: 420px;">
                 <div style="font-size: 0.85rem; color: var(--gray-400); line-height: 1.6; text-align: center;">
-                    This can take up to a minute. Please do not refresh or click back.
+                    This can take up to a minute. Please do not refresh, click back, or leave this page.
+                    <br>On mobile, please keep your screen on until the question appears.
                     <br>If you get an error, please <a href="contact.html" style="color: var(--accent); text-decoration: underline;">report the bug to us</a>.
                 </div>
             </div>
@@ -3351,7 +3352,8 @@ function mybizLoadTikTokPixel() {
             <div class="test-progress-percentage" id="testProgressPercentage">0%</div>
             <div style="margin: 1.25rem auto 0; padding: 0.75rem 1.5rem; background: rgba(30, 58, 95, 0.06); border: 1px solid rgba(30, 58, 95, 0.1); border-radius: 12px; max-width: 480px;">
                 <div style="font-size: 0.85rem; color: var(--gray-500); line-height: 1.6; text-align: center;">
-                    Tests and exams can take a few minutes to produce. Please do not refresh or click back. Wait for the "I'm Ready" button to appear.
+                    Tests and exams can take a few minutes to produce. Please do not refresh, click back, or leave this page. Wait for the "I'm Ready" button to appear.
+                    <br>On mobile, please keep your screen on until the test is ready.
                     <br>If you get an error, please <a href="contact.html" style="color: var(--accent); text-decoration: underline;">report the bug to us</a>.
                 </div>
             </div>
@@ -3403,6 +3405,7 @@ function mybizLoadTikTokPixel() {
             </div>
             <div class="test-marking-text">Your test is being marked...</div>
             <div style="color: var(--gray-400); font-size: 0.9rem; margin-top: 0.5rem;">This could take a few minutes as we are generating specific feedback for your answers.</div>
+            <div style="color: var(--gray-400); font-size: 0.85rem; margin-top: 0.75rem;">Please do not refresh, click back, or leave this page. On mobile, keep your screen on.</div>
         </div>
     </div>
 
@@ -4319,6 +4322,7 @@ function checkFreeTrialAndGenerate() {
 // ===== TEST GENERATION =====
 async function generateTest() {
     showPhase('test-loading');
+    requestWakeLock();
 
     // Reset ready button and progress
     document.getElementById('testReadyBtn').classList.remove('show');
@@ -4412,9 +4416,11 @@ async function generateTest() {
 
         setTimeout(function() {
             document.getElementById('testReadyBtn').classList.add('show');
+            releaseWakeLock();
         }, 1000);
 
     } catch (error) {
+        releaseWakeLock();
         console.error('Test generation error:', error);
         showError('Error generating test: ' + error.message);
         resetTestMode();
@@ -4422,6 +4428,30 @@ async function generateTest() {
 }
 
 var testProgressIntervalId = null;
+
+// ===== WAKE LOCK (prevents screen sleep during generation) =====
+var wakeLockSentinel = null;
+
+function requestWakeLock() {
+    if ('wakeLock' in navigator) {
+        navigator.wakeLock.request('screen').then(function(sentinel) {
+            wakeLockSentinel = sentinel;
+            wakeLockSentinel.addEventListener('release', function() {
+                wakeLockSentinel = null;
+            });
+        }).catch(function(err) {
+            console.log('Wake Lock not available:', err.message);
+        });
+    }
+}
+
+function releaseWakeLock() {
+    if (wakeLockSentinel) {
+        wakeLockSentinel.release().then(function() {
+            wakeLockSentinel = null;
+        }).catch(function() {});
+    }
+}
 
 function startTestProgressBar(duration) {
     // Clear any existing interval
@@ -4912,6 +4942,7 @@ function submitTestAnswers() {
 async function performTestSubmission(studentAnswers, studentAnswerTexts) {
     stopTestTimer();
     showPhase('test-marking');
+    requestWakeLock();
 
     try {
         var sessionResult = await supabaseClient.auth.getSession();
@@ -5006,6 +5037,7 @@ async function performTestSubmission(studentAnswers, studentAnswerTexts) {
             elapsed_seconds: elapsed
         };
 
+        releaseWakeLock();
         showTestFeedback(mappedResults);
 
         // Save results to test_results table for student progress tracking
@@ -5061,6 +5093,7 @@ async function performTestSubmission(studentAnswers, studentAnswerTexts) {
         }
 
     } catch (error) {
+        releaseWakeLock();
         console.error('Submission error:', error);
         showError('Error submitting test: ' + error.message);
         showPhase('test-exam');
@@ -6321,6 +6354,7 @@ async function generateQuestion() {
     }
 
     showPhase('loading');
+    requestWakeLock();
     document.getElementById('loadingText').textContent = customTopic ? 'Generating a question on ' + customTopic + '...' : 'Generating your question...';
 
     // Fallback text after 8 seconds
@@ -6368,10 +6402,12 @@ async function generateQuestion() {
         currentQuestion = data.question;
         currentAttemptId = data.attempt_id || null;
 
+        releaseWakeLock();
         renderQuestion(currentQuestion);
         showPhase('question');
 
     } catch (error) {
+        releaseWakeLock();
         clearTimeout(fallbackTimer);
         console.error('Generate error:', error);
         showPhase('selection');
@@ -6628,6 +6664,7 @@ async function submitAnswer() {
     btn.disabled = true;
     btn.innerHTML = '<div class="spinner"></div> Marking...';
     document.getElementById('answerTextarea').readOnly = true;
+    requestWakeLock();
 
     try {
         var response = await fetch(SUPABASE_URL + '/functions/v1/mark-answer', {
@@ -6651,12 +6688,14 @@ async function submitAnswer() {
         }
 
         var data = await response.json();
+        releaseWakeLock();
         renderFeedback(data.marking, currentQuestion);
         showPhase('feedback');
         // Check if we should show the review popup (after 5th completed question)
         checkReviewPopupTrigger();
 
     } catch (error) {
+        releaseWakeLock();
         console.error('Marking error:', error);
         btn.disabled = false;
         btn.innerHTML = 'Submit for Marking';
