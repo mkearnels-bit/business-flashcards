@@ -2837,6 +2837,206 @@
         .extract-modal-body canvas {
             max-width: 100%;
         }
+
+        /* ==================== FEATURE TOUR ==================== */
+        .tour-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 99990;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        .tour-backdrop.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .tour-spotlight {
+            position: fixed;
+            z-index: 99991;
+            border-radius: 12px;
+            box-shadow: 0 0 0 9999px rgba(15, 23, 42, 0.65);
+            transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
+        .tour-spotlight::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 14px;
+            border: 2px solid var(--accent);
+            opacity: 0.6;
+            animation: tourPulse 2s ease-in-out infinite;
+        }
+        @keyframes tourPulse {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.01); }
+        }
+        .tour-tooltip {
+            position: fixed;
+            z-index: 99992;
+            background: linear-gradient(145deg, #ffffff, #fafbfc);
+            border-radius: 16px;
+            padding: 0;
+            width: 340px;
+            max-width: calc(100vw - 2rem);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.2), 0 0 0 1px rgba(30, 58, 95, 0.08);
+            opacity: 0;
+            transform: translateY(12px) scale(0.97);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            overflow: hidden;
+        }
+        .tour-tooltip.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        .tour-tooltip-accent {
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--accent-light));
+        }
+        .tour-tooltip-inner {
+            padding: 1.5rem;
+        }
+        .tour-tooltip-arrow {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            background: #fff;
+            transform: rotate(45deg);
+            border-radius: 2px;
+            z-index: -1;
+        }
+        .tour-tooltip-arrow.arrow-top {
+            top: -6px;
+            box-shadow: -1px -1px 2px rgba(0,0,0,0.06);
+        }
+        .tour-tooltip-arrow.arrow-bottom {
+            bottom: -6px;
+            box-shadow: 1px 1px 2px rgba(0,0,0,0.06);
+        }
+        .tour-tooltip-step {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.6rem;
+        }
+        .tour-tooltip-step svg {
+            width: 14px;
+            height: 14px;
+        }
+        .tour-tooltip-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+        .tour-tooltip-desc {
+            font-size: 0.88rem;
+            color: var(--gray-600);
+            line-height: 1.6;
+            margin-bottom: 1.4rem;
+        }
+        .tour-tooltip-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .tour-dots {
+            display: flex;
+            gap: 5px;
+        }
+        .tour-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--gray-200);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .tour-dot.active {
+            background: var(--accent);
+            width: 22px;
+            border-radius: 4px;
+        }
+        .tour-dot.done {
+            background: var(--primary-light);
+        }
+        .tour-tooltip-btns {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        .tour-btn {
+            padding: 0.55rem 1.1rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .tour-btn-skip {
+            background: transparent;
+            color: var(--gray-500);
+            padding: 0.55rem 0.75rem;
+        }
+        .tour-btn-skip:hover {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+        .tour-btn-next {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: #fff;
+            box-shadow: 0 2px 10px rgba(30, 58, 95, 0.3);
+        }
+        .tour-btn-next:hover {
+            box-shadow: 0 4px 16px rgba(30, 58, 95, 0.4);
+            transform: translateY(-1px);
+        }
+        .tour-btn-finish {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: #fff;
+            box-shadow: 0 2px 10px rgba(230, 126, 34, 0.3);
+        }
+        .tour-btn-finish:hover {
+            box-shadow: 0 4px 16px rgba(230, 126, 34, 0.4);
+            transform: translateY(-1px);
+        }
+        .tour-dismiss-bar {
+            text-align: center;
+            margin-top: 1rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--gray-100);
+        }
+        .tour-dismiss-link {
+            font-size: 0.75rem;
+            color: var(--gray-400);
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-family: inherit;
+        }
+        .tour-dismiss-link:hover {
+            color: var(--gray-600);
+        }
+        @media (max-width: 768px) {
+            .tour-tooltip {
+                width: 300px;
+                max-width: calc(100vw - 1.5rem);
+            }
+            .tour-tooltip-inner {
+                padding: 1.25rem;
+            }
+            .tour-tooltip-title {
+                font-size: 1rem;
+            }
+        }
     </style>
 <!-- TikTok Pixel Code Start (Consent-Aware) -->
 <script>
@@ -8264,6 +8464,366 @@ document.addEventListener('keydown', function(e) {
     } catch(e) {}
 })();
 </script>
+<!-- ==================== FEATURE TOUR ==================== -->
+<div class="tour-backdrop" id="tourBackdrop"></div>
+<div class="tour-spotlight" id="tourSpotlight" style="display:none;"></div>
+<div class="tour-tooltip" id="tourTooltip" style="display:none;">
+    <div class="tour-tooltip-accent"></div>
+    <div class="tour-tooltip-arrow" id="tourArrow"></div>
+    <div class="tour-tooltip-inner">
+        <div class="tour-tooltip-step" id="tourStepLabel"></div>
+        <div class="tour-tooltip-title" id="tourTitle"></div>
+        <div class="tour-tooltip-desc" id="tourDesc"></div>
+        <div class="tour-tooltip-footer">
+            <div class="tour-dots" id="tourDots"></div>
+            <div class="tour-tooltip-btns">
+                <button class="tour-btn tour-btn-skip" id="tourSkipBtn">Skip</button>
+                <button class="tour-btn tour-btn-next" id="tourNextBtn">Next</button>
+            </div>
+        </div>
+        <div class="tour-dismiss-bar">
+            <button class="tour-dismiss-link" id="tourDismissBtn">Don't show this again</button>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    var TOUR_STORAGE_KEY = 'mybiz_tour_dismissed';
+    var TOUR_STEPS = [
+        {
+            selector: '#desktopLevelToggle',
+            mobileSelector: '#desktopLevelToggle',
+            title: 'A-Level or GCSE?',
+            desc: 'Start here. This toggle controls whether you see A-Level or GCSE content across the entire site, including notes, flashcards, and exam boards below.',
+            icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 7h12m0 0l-4-4m4 4l-4 4M16 17H4m0 0l4 4m-4-4l4-4"/></svg>',
+            position: 'bottom',
+            scrollTo: false
+        },
+        {
+            selector: '#boardGrid',
+            title: 'Choose Your Exam Board',
+            desc: 'Select the exam board and qualification you are studying. We support Edexcel, AQA, and Cambridge for both A-Level and GCSE.',
+            icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>',
+            position: 'top',
+            scrollTo: true
+        },
+        {
+            selector: '#modeSelectionSection',
+            title: 'Pick Your Practice Mode',
+            desc: 'After choosing a board, you pick how to practise. Single Question for quick drills, Topic Test for focused revision, or Full Exam for timed exam conditions.',
+            icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
+            position: 'top',
+            scrollTo: true,
+            showHidden: true
+        },
+        {
+            selector: '.profile-dropdown-wrapper',
+            title: 'Your Progress and Saved Tests',
+            desc: 'Click your avatar to access your Progress Dashboard, AI Coaching Summaries, and any tests you have saved to finish later.',
+            icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+            position: 'bottom',
+            scrollTo: false
+        },
+        {
+            selector: '#siteNavButtons',
+            title: 'Explore All Features',
+            desc: 'Don\'t miss Flash Cards, Exam Skills training, and Study Notes in the menu. Remember to keep your A-Level/GCSE toggle set to the right level so you see the correct content.',
+            icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>',
+            position: 'bottom',
+            scrollTo: false
+        }
+    ];
+
+    var currentStep = 0;
+    var tourActive = false;
+    var modeWasHidden = false;
+
+    var backdrop = document.getElementById('tourBackdrop');
+    var spotlight = document.getElementById('tourSpotlight');
+    var tooltip = document.getElementById('tourTooltip');
+    var arrow = document.getElementById('tourArrow');
+    var stepLabel = document.getElementById('tourStepLabel');
+    var titleEl = document.getElementById('tourTitle');
+    var descEl = document.getElementById('tourDesc');
+    var dotsEl = document.getElementById('tourDots');
+    var nextBtn = document.getElementById('tourNextBtn');
+    var skipBtn = document.getElementById('tourSkipBtn');
+    var dismissBtn = document.getElementById('tourDismissBtn');
+
+    function isMobile() {
+        return window.innerWidth <= 768;
+    }
+
+    function getStepElement(step) {
+        if (isMobile() && step.mobileSelector) {
+            return document.querySelector(step.mobileSelector);
+        }
+        return document.querySelector(step.selector);
+    }
+
+    function renderDots() {
+        var html = '';
+        for (var i = 0; i < TOUR_STEPS.length; i++) {
+            var cls = 'tour-dot';
+            if (i === currentStep) cls += ' active';
+            else if (i < currentStep) cls += ' done';
+            html += '<div class="' + cls + '"></div>';
+        }
+        dotsEl.innerHTML = html;
+    }
+
+    function positionTooltip(el, step) {
+        var rect = el.getBoundingClientRect();
+        var padding = 10;
+        var spotPad = 8;
+
+        // Position spotlight
+        spotlight.style.display = 'block';
+        spotlight.style.left = (rect.left - spotPad) + 'px';
+        spotlight.style.top = (rect.top - spotPad) + 'px';
+        spotlight.style.width = (rect.width + spotPad * 2) + 'px';
+        spotlight.style.height = (rect.height + spotPad * 2) + 'px';
+
+        // Show tooltip to measure it
+        tooltip.style.display = 'block';
+        tooltip.classList.remove('visible');
+
+        var tipRect = tooltip.getBoundingClientRect();
+        var tipW = tipRect.width;
+        var tipH = tipRect.height;
+        var viewW = window.innerWidth;
+        var viewH = window.innerHeight;
+        var gap = 14;
+
+        var top, left;
+        var arrowPos = step.position || 'bottom';
+
+        if (arrowPos === 'bottom') {
+            // Tooltip below the element
+            top = rect.bottom + spotPad + gap;
+            left = rect.left + rect.width / 2 - tipW / 2;
+            arrow.className = 'tour-tooltip-arrow arrow-top';
+
+            // If not enough room below, flip to above
+            if (top + tipH > viewH - 20) {
+                top = rect.top - spotPad - gap - tipH;
+                arrowPos = 'top';
+                arrow.className = 'tour-tooltip-arrow arrow-bottom';
+            }
+        } else {
+            // Tooltip above the element
+            top = rect.top - spotPad - gap - tipH;
+            left = rect.left + rect.width / 2 - tipW / 2;
+            arrow.className = 'tour-tooltip-arrow arrow-bottom';
+
+            // If not enough room above, flip to below
+            if (top < 20) {
+                top = rect.bottom + spotPad + gap;
+                arrowPos = 'bottom';
+                arrow.className = 'tour-tooltip-arrow arrow-top';
+            }
+        }
+
+        // Clamp horizontal position
+        if (left < 12) left = 12;
+        if (left + tipW > viewW - 12) left = viewW - 12 - tipW;
+
+        // Position arrow horizontally relative to the target center
+        var arrowLeft = rect.left + rect.width / 2 - left;
+        arrowLeft = Math.max(20, Math.min(arrowLeft, tipW - 34));
+        arrow.style.left = arrowLeft + 'px';
+
+        tooltip.style.top = top + 'px';
+        tooltip.style.left = left + 'px';
+
+        // Animate in
+        requestAnimationFrame(function() {
+            tooltip.classList.add('visible');
+        });
+    }
+
+    function showStep(index) {
+        currentStep = index;
+        var step = TOUR_STEPS[index];
+
+        // If this step targets a hidden element, temporarily show it
+        if (step.showHidden) {
+            var modeSection = document.getElementById('modeSelectionSection');
+            if (modeSection && modeSection.style.display === 'none') {
+                modeSection.style.display = '';
+                modeWasHidden = true;
+            }
+        }
+
+        var el = getStepElement(step);
+        if (!el) {
+            // Skip this step if element not found
+            if (index < TOUR_STEPS.length - 1) {
+                showStep(index + 1);
+            } else {
+                endTour();
+            }
+            return;
+        }
+
+        // Scroll to element if needed
+        if (step.scrollTo) {
+            var elRect = el.getBoundingClientRect();
+            if (elRect.top < 80 || elRect.bottom > window.innerHeight) {
+                var scrollTarget = window.pageYOffset + elRect.top - 100;
+                window.scrollTo({ top: scrollTarget, behavior: 'smooth' });
+                // Wait for scroll then position
+                setTimeout(function() { renderStep(el, step, index); }, 450);
+                return;
+            }
+        }
+
+        renderStep(el, step, index);
+    }
+
+    function renderStep(el, step, index) {
+        // Hide tooltip briefly for transition
+        tooltip.classList.remove('visible');
+
+        setTimeout(function() {
+            // Update content
+            stepLabel.innerHTML = step.icon + ' Step ' + (index + 1) + ' of ' + TOUR_STEPS.length;
+            titleEl.textContent = step.title;
+            descEl.textContent = step.desc;
+
+            // Update buttons
+            if (index === TOUR_STEPS.length - 1) {
+                nextBtn.textContent = 'Got it!';
+                nextBtn.className = 'tour-btn tour-btn-finish';
+                skipBtn.style.display = 'none';
+            } else {
+                nextBtn.textContent = 'Next';
+                nextBtn.className = 'tour-btn tour-btn-next';
+                skipBtn.style.display = '';
+            }
+
+            renderDots();
+            positionTooltip(el, step);
+        }, 150);
+    }
+
+    function cleanupStep() {
+        // Re-hide mode selection if we temporarily showed it
+        if (modeWasHidden) {
+            var modeSection = document.getElementById('modeSelectionSection');
+            if (modeSection) modeSection.style.display = 'none';
+            modeWasHidden = false;
+        }
+    }
+
+    function nextStep() {
+        cleanupStep();
+        if (currentStep < TOUR_STEPS.length - 1) {
+            showStep(currentStep + 1);
+        } else {
+            endTour();
+        }
+    }
+
+    function endTour() {
+        cleanupStep();
+        tourActive = false;
+        tooltip.classList.remove('visible');
+        backdrop.classList.remove('active');
+        setTimeout(function() {
+            spotlight.style.display = 'none';
+            tooltip.style.display = 'none';
+        }, 400);
+        // Scroll back to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function dismissTour() {
+        localStorage.setItem(TOUR_STORAGE_KEY, 'true');
+        endTour();
+    }
+
+    function startTour() {
+        if (tourActive) return;
+        tourActive = true;
+        currentStep = 0;
+        modeWasHidden = false;
+
+        // Scroll to top first
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        setTimeout(function() {
+            backdrop.classList.add('active');
+            showStep(0);
+        }, 400);
+    }
+
+    // Event listeners
+    nextBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        nextStep();
+    });
+
+    skipBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        endTour();
+    });
+
+    dismissBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        dismissTour();
+    });
+
+    // Click backdrop to advance
+    backdrop.addEventListener('click', function() {
+        nextStep();
+    });
+
+    // Reposition on resize
+    var resizeTimer;
+    window.addEventListener('resize', function() {
+        if (!tourActive) return;
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {
+            var step = TOUR_STEPS[currentStep];
+            var el = getStepElement(step);
+            if (el) positionTooltip(el, step);
+        }, 200);
+    });
+
+    // Auto-start: wait for auth check to complete, then start if not dismissed
+    function tryStartTour() {
+        // Only start for logged-in users
+        var authElements = document.querySelectorAll('.auth-only');
+        var isLoggedIn = false;
+        for (var i = 0; i < authElements.length; i++) {
+            if (authElements[i].style.display !== 'none' && authElements[i].offsetParent !== null) {
+                isLoggedIn = true;
+                break;
+            }
+        }
+
+        if (!isLoggedIn) return;
+
+        // Check if dismissed
+        if (localStorage.getItem(TOUR_STORAGE_KEY) === 'true') return;
+
+        // Small delay so the page is fully rendered
+        setTimeout(startTour, 800);
+    }
+
+    // Try after page is settled (auth state takes a moment)
+    setTimeout(tryStartTour, 2000);
+
+    // Expose globally so it can be triggered manually
+    window.startFeatureTour = function() {
+        // Reset dismiss if manually triggered
+        startTour();
+    };
+})();
+</script>
+
 <!-- Google Analytics (GA4) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-HFSYK32ZFT"></script>
 <script>
