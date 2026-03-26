@@ -3025,16 +3025,80 @@
         .tour-dismiss-link:hover {
             color: var(--gray-600);
         }
+        /* ===== MOBILE TOUR: bottom-sheet style ===== */
         @media (max-width: 768px) {
+            .tour-spotlight {
+                border-radius: 8px;
+            }
+            .tour-spotlight::after {
+                inset: -3px;
+                border-radius: 10px;
+            }
             .tour-tooltip {
-                width: 300px;
-                max-width: calc(100vw - 1.5rem);
+                position: fixed !important;
+                bottom: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                top: auto !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                border-radius: 20px 20px 0 0;
+                transform: translateY(100%);
+                box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
+            }
+            .tour-tooltip.visible {
+                transform: translateY(0);
+            }
+            .tour-tooltip-accent {
+                height: 0;
             }
             .tour-tooltip-inner {
-                padding: 1.25rem;
+                padding: 1rem 1.25rem 1.25rem;
+            }
+            .tour-tooltip-inner::before {
+                content: '';
+                display: block;
+                width: 36px;
+                height: 4px;
+                background: var(--gray-300);
+                border-radius: 2px;
+                margin: 0 auto 0.9rem;
+            }
+            .tour-tooltip-arrow {
+                display: none !important;
+            }
+            .tour-tooltip-step {
+                margin-bottom: 0.35rem;
+                font-size: 0.68rem;
+            }
+            .tour-tooltip-step svg {
+                width: 12px;
+                height: 12px;
             }
             .tour-tooltip-title {
                 font-size: 1rem;
+                margin-bottom: 0.35rem;
+            }
+            .tour-tooltip-desc {
+                font-size: 0.84rem;
+                line-height: 1.5;
+                margin-bottom: 1rem;
+            }
+            .tour-tooltip-footer {
+                gap: 0.5rem;
+            }
+            .tour-btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.88rem;
+                border-radius: 12px;
+            }
+            .tour-btn-skip {
+                padding: 0.6rem 0.8rem;
+            }
+            .tour-dismiss-bar {
+                margin-top: 0.6rem;
+                padding-top: 0.6rem;
+                padding-bottom: env(safe-area-inset-bottom, 0);
             }
         }
     </style>
@@ -8490,13 +8554,19 @@ document.addEventListener('keydown', function(e) {
 <script>
 (function() {
     var TOUR_STORAGE_KEY = 'mybiz_tour_dismissed';
-    var TOUR_STEPS = [
+
+    var ICON_TOGGLE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 7h12m0 0l-4-4m4 4l-4 4M16 17H4m0 0l4 4m-4-4l4-4"/></svg>';
+    var ICON_GRID = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>';
+    var ICON_CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
+    var ICON_USER = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+    var ICON_MENU = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>';
+
+    var DESKTOP_STEPS = [
         {
             selector: '#desktopLevelToggle',
-            mobileSelector: '#desktopLevelToggle',
             title: 'A-Level or GCSE?',
             desc: 'Start here. This toggle controls whether you see A-Level or GCSE content across the entire site, including notes, flashcards, and exam boards below.',
-            icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 7h12m0 0l-4-4m4 4l-4 4M16 17H4m0 0l4 4m-4-4l4-4"/></svg>',
+            icon: ICON_TOGGLE,
             position: 'bottom',
             scrollTo: false
         },
@@ -8504,7 +8574,7 @@ document.addEventListener('keydown', function(e) {
             selector: '#boardGrid',
             title: 'Choose Your Exam Board',
             desc: 'Select the exam board and qualification you are studying. We support Edexcel, AQA, and Cambridge for both A-Level and GCSE.',
-            icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>',
+            icon: ICON_GRID,
             position: 'top',
             scrollTo: true
         },
@@ -8512,7 +8582,7 @@ document.addEventListener('keydown', function(e) {
             selector: '#modeSelectionSection',
             title: 'Pick Your Practice Mode',
             desc: 'After choosing a board, you pick how to practise. Single Question for quick drills, Topic Test for focused revision, or Full Exam for timed exam conditions.',
-            icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
+            icon: ICON_CHECK,
             position: 'top',
             scrollTo: true,
             showHidden: true
@@ -8521,7 +8591,7 @@ document.addEventListener('keydown', function(e) {
             selector: '.profile-dropdown-wrapper',
             title: 'Your Progress and Saved Tests',
             desc: 'Click your avatar to access your Progress Dashboard, AI Coaching Summaries, and any tests you have saved to finish later.',
-            icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+            icon: ICON_USER,
             position: 'bottom',
             scrollTo: false
         },
@@ -8529,8 +8599,47 @@ document.addEventListener('keydown', function(e) {
             selector: '#siteNavButtons',
             title: 'Explore All Features',
             desc: 'Don\'t miss Flash Cards, Exam Skills training, and Study Notes in the menu. Remember to keep your A-Level/GCSE toggle set to the right level so you see the correct content.',
-            icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>',
+            icon: ICON_MENU,
             position: 'bottom',
+            scrollTo: false
+        }
+    ];
+
+    var MOBILE_STEPS = [
+        {
+            selector: '#desktopLevelToggle',
+            title: 'A-Level or GCSE?',
+            desc: 'Start here. This toggle controls whether you see A-Level or GCSE content across the entire site, including notes, flashcards, and exam boards.',
+            icon: ICON_TOGGLE,
+            scrollTo: false
+        },
+        {
+            selector: '#boardGrid',
+            title: 'Choose Your Exam Board',
+            desc: 'Select the exam board and qualification you are studying. We support Edexcel, AQA, and Cambridge for both A-Level and GCSE.',
+            icon: ICON_GRID,
+            scrollTo: true
+        },
+        {
+            selector: '#modeSelectionSection',
+            title: 'Pick Your Practice Mode',
+            desc: 'Single Question for quick drills, Topic Test for focused revision, or Full Exam for timed exam conditions.',
+            icon: ICON_CHECK,
+            scrollTo: true,
+            showHidden: true
+        },
+        {
+            selector: '#siteHamburger',
+            title: 'Your Menu',
+            desc: 'Tap here to access your Progress Dashboard, Coaching Summaries, Saved Tests, Flash Cards, Exam Skills, and Study Notes.',
+            icon: ICON_MENU,
+            scrollTo: false
+        },
+        {
+            selector: '#desktopLevelToggle',
+            title: 'Remember Your Level!',
+            desc: 'Always check this toggle is set to A-Level or GCSE so you see the right content across the whole site. You\'re all set. Happy revising!',
+            icon: ICON_TOGGLE,
             scrollTo: false
         }
     ];
@@ -8555,16 +8664,18 @@ document.addEventListener('keydown', function(e) {
         return window.innerWidth <= 768;
     }
 
+    function getSteps() {
+        return isMobile() ? MOBILE_STEPS : DESKTOP_STEPS;
+    }
+
     function getStepElement(step) {
-        if (isMobile() && step.mobileSelector) {
-            return document.querySelector(step.mobileSelector);
-        }
         return document.querySelector(step.selector);
     }
 
     function renderDots() {
+        var steps = getSteps();
         var html = '';
-        for (var i = 0; i < TOUR_STEPS.length; i++) {
+        for (var i = 0; i < steps.length; i++) {
             var cls = 'tour-dot';
             if (i === currentStep) cls += ' active';
             else if (i < currentStep) cls += ' done';
@@ -8573,9 +8684,9 @@ document.addEventListener('keydown', function(e) {
         dotsEl.innerHTML = html;
     }
 
-    function positionTooltip(el, step) {
+    // ===== DESKTOP POSITIONING: floating tooltip near element =====
+    function positionDesktop(el, step) {
         var rect = el.getBoundingClientRect();
-        var padding = 10;
         var spotPad = 8;
 
         // Position spotlight
@@ -8600,36 +8711,26 @@ document.addEventListener('keydown', function(e) {
         var arrowPos = step.position || 'bottom';
 
         if (arrowPos === 'bottom') {
-            // Tooltip below the element
             top = rect.bottom + spotPad + gap;
             left = rect.left + rect.width / 2 - tipW / 2;
             arrow.className = 'tour-tooltip-arrow arrow-top';
-
-            // If not enough room below, flip to above
             if (top + tipH > viewH - 20) {
                 top = rect.top - spotPad - gap - tipH;
-                arrowPos = 'top';
                 arrow.className = 'tour-tooltip-arrow arrow-bottom';
             }
         } else {
-            // Tooltip above the element
             top = rect.top - spotPad - gap - tipH;
             left = rect.left + rect.width / 2 - tipW / 2;
             arrow.className = 'tour-tooltip-arrow arrow-bottom';
-
-            // If not enough room above, flip to below
             if (top < 20) {
                 top = rect.bottom + spotPad + gap;
-                arrowPos = 'bottom';
                 arrow.className = 'tour-tooltip-arrow arrow-top';
             }
         }
 
-        // Clamp horizontal position
         if (left < 12) left = 12;
         if (left + tipW > viewW - 12) left = viewW - 12 - tipW;
 
-        // Position arrow horizontally relative to the target center
         var arrowLeft = rect.left + rect.width / 2 - left;
         arrowLeft = Math.max(20, Math.min(arrowLeft, tipW - 34));
         arrow.style.left = arrowLeft + 'px';
@@ -8637,15 +8738,66 @@ document.addEventListener('keydown', function(e) {
         tooltip.style.top = top + 'px';
         tooltip.style.left = left + 'px';
 
-        // Animate in
         requestAnimationFrame(function() {
             tooltip.classList.add('visible');
         });
     }
 
+    // ===== MOBILE POSITIONING: bottom sheet + spotlight =====
+    function positionMobile(el) {
+        var rect = el.getBoundingClientRect();
+        var spotPad = 6;
+
+        // Position spotlight
+        spotlight.style.display = 'block';
+        spotlight.style.left = (rect.left - spotPad) + 'px';
+        spotlight.style.top = (rect.top - spotPad) + 'px';
+        spotlight.style.width = (rect.width + spotPad * 2) + 'px';
+        spotlight.style.height = (rect.height + spotPad * 2) + 'px';
+
+        // Tooltip positioning is handled by CSS on mobile (fixed bottom sheet)
+        // Just clear any inline positioning from desktop
+        tooltip.style.display = 'block';
+        tooltip.style.top = '';
+        tooltip.style.left = '';
+        tooltip.classList.remove('visible');
+
+        requestAnimationFrame(function() {
+            tooltip.classList.add('visible');
+        });
+    }
+
+    function positionTooltip(el, step) {
+        if (isMobile()) {
+            positionMobile(el);
+        } else {
+            positionDesktop(el, step);
+        }
+    }
+
+    // Mobile scroll: put element in the top portion of the screen, above the bottom sheet
+    function scrollForMobile(el, callback) {
+        var rect = el.getBoundingClientRect();
+        var viewH = window.innerHeight;
+        // Bottom sheet takes roughly 45% of the screen, so target the top 50%
+        var targetZoneTop = 70; // below navbar
+        var targetZoneBottom = viewH * 0.45;
+
+        if (rect.top >= targetZoneTop && rect.bottom <= targetZoneBottom) {
+            // Already visible in the target zone
+            callback();
+            return;
+        }
+
+        var scrollTarget = window.pageYOffset + rect.top - targetZoneTop - 10;
+        window.scrollTo({ top: Math.max(0, scrollTarget), behavior: 'smooth' });
+        setTimeout(callback, 450);
+    }
+
     function showStep(index) {
+        var steps = getSteps();
         currentStep = index;
-        var step = TOUR_STEPS[index];
+        var step = steps[index];
 
         // If this step targets a hidden element, temporarily show it
         if (step.showHidden) {
@@ -8658,8 +8810,7 @@ document.addEventListener('keydown', function(e) {
 
         var el = getStepElement(step);
         if (!el) {
-            // Skip this step if element not found
-            if (index < TOUR_STEPS.length - 1) {
+            if (index < steps.length - 1) {
                 showStep(index + 1);
             } else {
                 endTour();
@@ -8667,14 +8818,29 @@ document.addEventListener('keydown', function(e) {
             return;
         }
 
-        // Scroll to element if needed
+        // Scroll handling
         if (step.scrollTo) {
+            if (isMobile()) {
+                scrollForMobile(el, function() { renderStep(el, step, index); });
+            } else {
+                var elRect = el.getBoundingClientRect();
+                if (elRect.top < 80 || elRect.bottom > window.innerHeight) {
+                    var scrollTarget = window.pageYOffset + elRect.top - 100;
+                    window.scrollTo({ top: scrollTarget, behavior: 'smooth' });
+                    setTimeout(function() { renderStep(el, step, index); }, 450);
+                    return;
+                }
+                renderStep(el, step, index);
+            }
+            return;
+        }
+
+        // For non-scroll steps on mobile, ensure navbar elements are visible
+        if (isMobile() && !step.scrollTo) {
             var elRect = el.getBoundingClientRect();
-            if (elRect.top < 80 || elRect.bottom > window.innerHeight) {
-                var scrollTarget = window.pageYOffset + elRect.top - 100;
-                window.scrollTo({ top: scrollTarget, behavior: 'smooth' });
-                // Wait for scroll then position
-                setTimeout(function() { renderStep(el, step, index); }, 450);
+            if (elRect.top < 0 || elRect.bottom < 0) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                setTimeout(function() { renderStep(el, step, index); }, 400);
                 return;
             }
         }
@@ -8683,17 +8849,15 @@ document.addEventListener('keydown', function(e) {
     }
 
     function renderStep(el, step, index) {
-        // Hide tooltip briefly for transition
+        var steps = getSteps();
         tooltip.classList.remove('visible');
 
         setTimeout(function() {
-            // Update content
-            stepLabel.innerHTML = step.icon + ' Step ' + (index + 1) + ' of ' + TOUR_STEPS.length;
+            stepLabel.innerHTML = step.icon + ' Step ' + (index + 1) + ' of ' + steps.length;
             titleEl.textContent = step.title;
             descEl.textContent = step.desc;
 
-            // Update buttons
-            if (index === TOUR_STEPS.length - 1) {
+            if (index === steps.length - 1) {
                 nextBtn.textContent = 'Got it!';
                 nextBtn.className = 'tour-btn tour-btn-finish';
                 skipBtn.style.display = 'none';
@@ -8719,7 +8883,8 @@ document.addEventListener('keydown', function(e) {
 
     function nextStep() {
         cleanupStep();
-        if (currentStep < TOUR_STEPS.length - 1) {
+        var steps = getSteps();
+        if (currentStep < steps.length - 1) {
             showStep(currentStep + 1);
         } else {
             endTour();
@@ -8786,7 +8951,8 @@ document.addEventListener('keydown', function(e) {
         if (!tourActive) return;
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(function() {
-            var step = TOUR_STEPS[currentStep];
+            var steps = getSteps();
+            var step = steps[currentStep];
             var el = getStepElement(step);
             if (el) positionTooltip(el, step);
         }, 200);
