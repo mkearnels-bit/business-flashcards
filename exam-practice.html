@@ -4027,6 +4027,20 @@ var TEST_GENERATION_TIPS = [
     'Show your working for calculation questions'
 ];
 
+// ===== SMOOTH SCROLL HELPER =====
+function scrollToSection(elementId, delay) {
+    var ms = delay || 150;
+    setTimeout(function() {
+        var el = document.getElementById(elementId);
+        if (el) {
+            var navbarHeight = 80;
+            var rect = el.getBoundingClientRect();
+            var scrollTarget = window.pageYOffset + rect.top - navbarHeight;
+            window.scrollTo({ top: scrollTarget, behavior: 'smooth' });
+        }
+    }, ms);
+}
+
 // ===== MODE SELECTION =====
 function showModeSelection() {
     document.getElementById('modeSelectionSection').style.display = '';
@@ -4037,6 +4051,7 @@ function showModeSelection() {
     document.getElementById('ciePaperSelectionSection').style.display = 'none';
     document.getElementById('cieLevelSelectionSection').style.display = 'none';
     document.getElementById('gcsePaperSelectionSection').style.display = 'none';
+    scrollToSection('modeSelectionSection');
 }
 
 function selectMode(mode) {
@@ -4068,30 +4083,38 @@ function selectMode(mode) {
         // For GCSE boards, show paper selection first (to know which question types apply)
         if (boardData.isGCSE && boardData.isPaperBased && !boardData.skipUnitSelection) {
             renderGcsePaperSelection('single');
+            scrollToSection('gcsePaperSelectionSection');
         } else {
             renderQuestionTypes();
             document.getElementById('qtypeSection').style.display = '';
             document.getElementById('generateSection').style.display = '';
+            scrollToSection('qtypeSection');
         }
     } else if (mode === 'topic_test') {
         if (currentBoard === 'cie_ial') {
             // CIE IAL: show AS/A Level selection first
             document.getElementById('cieLevelSelectionSection').style.display = '';
+            scrollToSection('cieLevelSelectionSection');
         } else if (boardData.isGCSE) {
             // GCSE boards: show paper selection first to determine topics
             renderGcsePaperSelection('topic_test');
+            scrollToSection('gcsePaperSelectionSection');
         } else {
             document.getElementById('topicSelectionSection').style.display = '';
             renderTopics();
+            scrollToSection('topicSelectionSection');
         }
     } else if (mode === 'exam') {
         if (boardData.isGCSE) {
             // All GCSE boards: show paper selection for exam mode
             renderGcsePaperSelection('exam');
+            scrollToSection('gcsePaperSelectionSection');
         } else if (currentBoard === 'cie_ial') {
             document.getElementById('ciePaperSelectionSection').style.display = '';
+            scrollToSection('ciePaperSelectionSection');
         } else if (boardData.skipUnitSelection) {
             document.getElementById('aqaPaperSelectionSection').style.display = '';
+            scrollToSection('aqaPaperSelectionSection');
         } else {
             // For A Level Edexcel: generate exam directly (unit already selected)
             checkFreeTrialAndGenerate();
@@ -4140,6 +4163,7 @@ function selectCieTopicLevel(el) {
     // Now show topic selection
     document.getElementById('topicSelectionSection').style.display = '';
     renderTopics();
+    scrollToSection('topicSelectionSection');
 }
 
 // ===== GCSE PAPER SELECTION =====
@@ -4182,10 +4206,12 @@ function selectGcsePaper(el) {
     } else if (gcsePaperNextAction === 'topic_test') {
         document.getElementById('topicSelectionSection').style.display = '';
         renderTopics();
+        scrollToSection('topicSelectionSection');
     } else if (gcsePaperNextAction === 'single') {
         renderQuestionTypes();
         document.getElementById('qtypeSection').style.display = '';
         document.getElementById('generateSection').style.display = '';
+        scrollToSection('qtypeSection');
     }
 }
 
@@ -6219,6 +6245,7 @@ function selectBoard(el) {
     } else {
         // For A Level Edexcel and others: show unit/paper selection first
         renderUnits();
+        scrollToSection('unitSection');
     }
 }
 
@@ -6257,6 +6284,7 @@ function selectUnit(el) {
 
     // Show mode selection instead of directly showing question types
     showModeSelection();
+    // showModeSelection already scrolls
 }
 
 function renderQuestionTypes() {
@@ -6327,6 +6355,7 @@ function selectQType(el) {
 
     currentQType = el.getAttribute('data-qtype');
     document.getElementById('generateBtn').disabled = false;
+    scrollToSection('generateSection');
 }
 
 // ===== PHASE 2: GENERATE QUESTION =====
