@@ -1983,6 +1983,22 @@ function mybizLoadTikTokPixel() {
 
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+        // ===== PAGE VIEW TRACKING =====
+        (function() {
+            var pvKey = 'mybiz_pv_flashcards';
+            if (sessionStorage.getItem(pvKey)) return;
+            supabaseClient.auth.getSession().then(function(result) {
+                var session = result.data.session;
+                if (session && session.user) {
+                    supabaseClient.from('page_views').insert({
+                        user_id: session.user.id,
+                        page_name: 'Flashcards',
+                        page_path: '/gcse-app.html'
+                    }).then(function() { sessionStorage.setItem(pvKey, '1'); });
+                }
+            });
+        })();
+
         // Flashcard data - loaded from Supabase
         let flashcardData = [];
 
