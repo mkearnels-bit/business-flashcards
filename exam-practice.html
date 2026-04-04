@@ -6273,12 +6273,14 @@ async function loadTrialStatus() {
         var text = document.getElementById('freeTrialText');
         if (!banner || !text) return;
 
-        var paidPlans = ['annual', 'quarterly', 'monthly', 'grandfathered'];
+        var paidPlans = ['annual', 'quarterly', 'monthly'];
 
-        if (data.plan === 'free') {
+        if (paidPlans.indexOf(data.plan) !== -1) {
+            banner.style.display = 'none';
+        } else if (data.plan === 'free' || data.plan === 'grandfathered') {
             var used = data.free_tests_used || 0;
             var remaining = Math.max(0, 5 - used);
-            text.textContent = remaining + ' of 5 practices remaining';
+            text.textContent = remaining + ' of 5 free test/exam practices remaining';
             banner.style.display = 'block';
 
             if (remaining <= 2 && remaining > 0) {
@@ -6287,9 +6289,8 @@ async function loadTrialStatus() {
             } else if (remaining === 0) {
                 banner.style.background = 'linear-gradient(135deg, #fef2f2, #fee2e2)';
                 banner.style.borderColor = '#fca5a5';
+                text.textContent = '0 free test/exam practices remaining. Subscribe to continue.';
             }
-        } else if (paidPlans.indexOf(data.plan) !== -1) {
-            banner.style.display = 'none';
         } else {
             banner.style.display = 'none';
         }
