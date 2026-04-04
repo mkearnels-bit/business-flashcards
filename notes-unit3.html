@@ -695,6 +695,7 @@
             transition: box-shadow 0.3s ease;
         }
 
+        .topic-section { scroll-margin-top: 100px; }
         .topic-section:hover { box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05); }
         .topic-section.open { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); }
 
@@ -6722,7 +6723,7 @@ function mybizLoadTikTokPixel() {
 
         function smoothScrollToSection(section) {
             var rect = section.getBoundingClientRect();
-            var offsetPosition = rect.top + window.pageYOffset - 20;
+            var offsetPosition = rect.top + window.pageYOffset - 100;
             window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
         }
 

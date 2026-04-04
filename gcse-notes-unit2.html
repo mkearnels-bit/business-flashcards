@@ -620,6 +620,7 @@ body {
 }
 
 .topic-section {
+    scroll-margin-top: 100px;
     margin-bottom: 0;
     border-bottom: 1px solid var(--gray-200);
 }
@@ -2346,10 +2347,15 @@ function toggleSection(element) {
 function scrollToTopic(topicId) {
     var element = document.getElementById(topicId);
     if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
         if (!element.classList.contains('open')) {
             element.classList.add('open');
         }
+        var rect = element.getBoundingClientRect();
+        var offsetPosition = rect.top + window.pageYOffset - 100;
+        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+        var link = document.querySelector('[onclick="scrollToTopic(\'' + topicId + '\')"]');
+        document.querySelectorAll('.sidebar-topic-link').forEach(function(l) { l.classList.remove('active'); });
+        if (link) { link.classList.add('active'); }
     }
 }
 
