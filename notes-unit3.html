@@ -3033,7 +3033,7 @@
         /* ==================== PAYWALL LOCK ==================== */
         .topic-locked {
             position: relative;
-            pointer-events: none;
+            cursor: pointer;
         }
         .topic-locked .topic-content {
             display: none !important;
@@ -6613,6 +6613,15 @@ function mybizLoadTikTokPixel() {
                             '<a href="pricing.html">View Plans</a>';
                         firstTopic.parentNode.insertBefore(banner, firstTopic.nextSibling);
                     }
+
+                    // Add click handler to locked topics
+                    document.querySelectorAll('.topic-locked').forEach(function(topic) {
+                        topic.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            window.location.href = 'pricing.html';
+                        });
+                    });
                 }
             } catch (err) {
                 console.error('Plan check error:', err);

@@ -904,7 +904,7 @@ function mybizLoadTikTokPixel() {
 /* Mobile menu spacing and scroll fixes */
 .site-mobile-menu { padding-top: 1.5rem !important; overflow-y: auto !important; -webkit-overflow-scrolling: touch; }
 .site-mobile-links { min-height: unset !important; padding-bottom: 2rem; }
-.topic-locked { position: relative; pointer-events: none; }
+.topic-locked { position: relative; cursor: pointer; }
 .topic-locked .topic-content { display: none !important; }
 .topic-locked .topic-header { opacity: 0.5; }
 .topic-locked .topic-header::after { content: '\1F512'; position: absolute; right: 60px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; }
@@ -2162,6 +2162,14 @@ async function checkPlanAndGateContent() {
                 firstTopic.parentNode.insertBefore(banner, firstTopic.nextSibling);
             }
         }
+
+        document.querySelectorAll('.topic-locked').forEach(function(topic) {
+            topic.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                window.location.href = 'pricing.html';
+            });
+        });
     } catch (err) { console.error('Plan check error:', err); }
 }
 
