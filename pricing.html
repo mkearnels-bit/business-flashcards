@@ -1290,10 +1290,12 @@ function mybizLoadTikTokPixel() {
             window.scrollTo({ top: document.querySelector('.pricing-tabs-wrapper').offsetTop - 100, behavior: 'smooth' });
         });
 
-        // Check URL parameter for ?from=notes
+        // Check URL parameter for ?from=notes or ?from=full
         var urlParams = new URLSearchParams(window.location.search);
         if (urlParams.has('from') && urlParams.get('from') === 'notes') {
             switchTab('notes');
+        } else if (urlParams.has('from') && urlParams.get('from') === 'full') {
+            switchTab('access');
         }
 
         // Pricing option selection
