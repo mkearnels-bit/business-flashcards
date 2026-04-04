@@ -325,6 +325,7 @@
         .type-badge { display: inline-block; padding: 0.2rem 0.65rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; }
         .type-badge.topic { background: rgba(52,152,219,0.1); color: #2980b9; }
         .type-badge.exam { background: rgba(155,89,182,0.1); color: #8e44ad; }
+        .type-badge.question { background: rgba(39,174,96,0.1); color: #27ae60; }
         .score-bold { font-weight: 800; font-size: 1rem; }
         .score-high { color: var(--green); }
         .score-mid { color: var(--accent); }
@@ -563,7 +564,7 @@ function mybizLoadTikTokPixel() {
                 <div class="coaching-header">
                     <div>
                         <div class="coaching-title">Your Coaching Summary</div>
-                        <div class="coaching-subtitle">Updated every 5 tests</div>
+                        <div class="coaching-subtitle">Updated every 5 tests or questions</div>
                     </div>
                     <div class="coaching-updated" id="coachingUpdated"></div>
                 </div>
@@ -586,7 +587,42 @@ function mybizLoadTikTokPixel() {
             </div>
         </div>
 
-        <!-- SECTION 2: TEST & EXAM HISTORY -->
+        <!-- SECTION 2: QUESTION HISTORY -->
+        <div class="history-section" id="questionSection" style="margin-bottom: 2.5rem;">
+            <div class="history-header">
+                <div class="history-title">Question History</div>
+            </div>
+            <div class="stats-row" id="questionStatsRow">
+                <div class="stat-card">
+                    <div class="stat-value" id="qAvgScore">-</div>
+                    <div class="stat-label">Average Score</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="qTrendValue">-</div>
+                    <div class="stat-label">Last 5 Trend</div>
+                    <div class="stat-trend neutral" id="qTrendIndicator"></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="qTotalAttempted">0</div>
+                    <div class="stat-label">Attempted</div>
+                </div>
+            </div>
+            <div class="history-table-wrap" id="questionTableWrap">
+                <table class="history-table">
+                    <thead><tr><th>Board</th><th>Unit</th><th>Question Type</th><th>Score</th><th>Date</th></tr></thead>
+                    <tbody id="questionTableBody"></tbody>
+                </table>
+            </div>
+            <div class="history-cards" id="questionCards"></div>
+            <div class="history-empty" id="questionEmpty" style="display:none;">
+                <div class="history-empty-icon">💡</div>
+                <div class="history-empty-title">No questions attempted yet</div>
+                <div class="history-empty-text">Practice individual questions to see your results here.</div>
+                <a href="exam-practice.html" class="history-empty-btn">Go to Exam Practice</a>
+            </div>
+        </div>
+
+        <!-- SECTION 3: TEST & EXAM HISTORY -->
         <div class="history-section" id="historySection">
             <div class="history-header">
                 <div class="history-title">Test & Exam History</div>
@@ -747,7 +783,7 @@ var LOGO_BASE64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAACFCAYAAAB
             });
 
             // Load data
-            await Promise.all([loadCoachingSummary(), loadTestResults()]);
+            await Promise.all([loadCoachingSummary(), loadTestResults(), loadQuestionHistory()]);
         }
 
         async function handleLogout() {
@@ -777,7 +813,13 @@ var LOGO_BASE64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAACFCAYAAAB
                     .select('id', { count: 'exact', head: true })
                     .eq('user_id', currentSession.user.id);
 
-                var testCount = countResp.count || 0;
+                var qCountResp = await supabaseClient
+                    .from('exam_practice_attempts')
+                    .select('id', { count: 'exact', head: true })
+                    .eq('user_id', currentSession.user.id)
+                    .not('marks_awarded', 'is', null);
+
+                var testCount = (countResp.count || 0) + (qCountResp.count || 0);
 
                 if (testCount < 5) {
                     loadingEl.style.display = 'none';
@@ -838,6 +880,116 @@ var LOGO_BASE64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAACFCAYAAAB
                 loadingEl.style.display = 'none';
                 emptyEl.style.display = 'block';
             }
+        }
+
+        // ===== QUESTION HISTORY =====
+        var allQuestionResults = [];
+
+        async function loadQuestionHistory() {
+            try {
+                var response = await supabaseClient
+                    .from('exam_practice_attempts')
+                    .select('id, board, unit, question_type, marks_awarded, total_marks, percentage_score, marked_at, created_at')
+                    .eq('user_id', currentSession.user.id)
+                    .not('marks_awarded', 'is', null)
+                    .order('created_at', { ascending: false })
+                    .limit(100);
+
+                if (response.error) throw response.error;
+                allQuestionResults = response.data || [];
+                renderQuestionHistory();
+            } catch (error) {
+                console.error('Error loading question history:', error);
+                allQuestionResults = [];
+                renderQuestionHistory();
+            }
+        }
+
+        function renderQuestionHistory() {
+            var results = allQuestionResults;
+            var tableBody = document.getElementById('questionTableBody');
+            var cardsContainer = document.getElementById('questionCards');
+            var emptyEl = document.getElementById('questionEmpty');
+            var tableWrap = document.getElementById('questionTableWrap');
+            var statsRow = document.getElementById('questionStatsRow');
+
+            if (results.length === 0) {
+                emptyEl.style.display = 'block';
+                tableWrap.style.display = 'none';
+                cardsContainer.innerHTML = '';
+                statsRow.style.display = 'none';
+                document.getElementById('qAvgScore').textContent = '-';
+                document.getElementById('qTrendValue').textContent = '-';
+                document.getElementById('qTrendIndicator').textContent = '';
+                document.getElementById('qTotalAttempted').textContent = '0';
+                return;
+            }
+
+            emptyEl.style.display = 'none';
+            tableWrap.style.display = '';
+            statsRow.style.display = '';
+
+            var totalPerc = results.reduce(function(sum, r) { return sum + (r.percentage_score || 0); }, 0);
+            var avg = Math.round(totalPerc / results.length);
+            document.getElementById('qAvgScore').textContent = avg + '%';
+            document.getElementById('qTotalAttempted').textContent = results.length;
+
+            var sortedAsc = results.slice().sort(function(a, b) { return new Date(a.created_at) - new Date(b.created_at); });
+            var last5 = sortedAsc.slice(-5);
+            var prev5 = sortedAsc.slice(-10, -5);
+            var last5Avg = last5.reduce(function(s, r) { return s + (r.percentage_score || 0); }, 0) / last5.length;
+            var trendEl = document.getElementById('qTrendValue');
+            var trendInd = document.getElementById('qTrendIndicator');
+
+            if (prev5.length === 0) {
+                trendEl.textContent = avg + '%';
+                trendInd.textContent = 'Not enough data';
+                trendInd.className = 'stat-trend neutral';
+            } else {
+                var prev5Avg = prev5.reduce(function(s, r) { return s + (r.percentage_score || 0); }, 0) / prev5.length;
+                var diff = Math.round(last5Avg - prev5Avg);
+                trendEl.textContent = Math.round(last5Avg) + '%';
+                if (diff > 0) {
+                    trendInd.textContent = '+' + diff + '% vs previous';
+                    trendInd.className = 'stat-trend positive';
+                } else if (diff < 0) {
+                    trendInd.textContent = diff + '% vs previous';
+                    trendInd.className = 'stat-trend negative';
+                } else {
+                    trendInd.textContent = 'No change';
+                    trendInd.className = 'stat-trend neutral';
+                }
+            }
+
+            var tableHTML = '';
+            var cardsHTML = '';
+            results.forEach(function(r) {
+                var date = new Date(r.created_at);
+                var dateStr = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+                var scoreClass = (r.percentage_score || 0) >= 70 ? 'score-high' : ((r.percentage_score || 0) >= 50 ? 'score-mid' : 'score-low');
+                var qTypeDisplay = r.question_type || 'Question';
+                var boardDisplay = r.board || '-';
+                var unitDisplay = r.unit || '-';
+
+                tableHTML += '<tr>' +
+                    '<td>' + escapeHtml(boardDisplay) + '</td>' +
+                    '<td>' + escapeHtml(unitDisplay) + '</td>' +
+                    '<td><span class="type-badge question">' + escapeHtml(qTypeDisplay) + '</span></td>' +
+                    '<td><span class="score-bold ' + scoreClass + '">' + r.marks_awarded + '/' + r.total_marks + '</span></td>' +
+                    '<td>' + dateStr + '</td></tr>';
+
+                cardsHTML += '<div class="history-card">' +
+                    '<div class="history-card-top">' +
+                    '<div class="history-card-title">' + escapeHtml(qTypeDisplay) + '</div>' +
+                    '<span class="type-badge question">' + escapeHtml(boardDisplay) + '</span></div>' +
+                    '<div class="history-card-meta"><span>' + escapeHtml(unitDisplay) + '</span><span>' + dateStr + '</span></div>' +
+                    '<div class="history-card-bottom">' +
+                    '<span class="score-bold ' + scoreClass + '">' + r.marks_awarded + '/' + r.total_marks + '</span>' +
+                    '</div></div>';
+            });
+
+            tableBody.innerHTML = tableHTML;
+            cardsContainer.innerHTML = cardsHTML;
         }
 
         // ===== TEST RESULTS =====
