@@ -609,7 +609,7 @@ function mybizLoadTikTokPixel() {
             </div>
             <div class="history-table-wrap" id="questionTableWrap">
                 <table class="history-table">
-                    <thead><tr><th>Board</th><th>Unit</th><th>Question Type</th><th>Score</th><th>Date</th></tr></thead>
+                    <thead><tr><th>Board</th><th>Unit</th><th>Question Type</th><th>Score</th><th>Date</th><th></th></tr></thead>
                     <tbody id="questionTableBody"></tbody>
                 </table>
             </div>
@@ -976,7 +976,10 @@ var LOGO_BASE64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAACFCAYAAAB
                     '<td>' + escapeHtml(unitDisplay) + '</td>' +
                     '<td><span class="type-badge question">' + escapeHtml(qTypeDisplay) + '</span></td>' +
                     '<td><span class="score-bold ' + scoreClass + '">' + r.marks_awarded + '/' + r.total_marks + '</span></td>' +
-                    '<td>' + dateStr + '</td></tr>';
+                    '<td>' + dateStr + '</td>' +
+                    '<td><button class="download-btn" onclick="downloadQuestionPDF(\'' + r.id + '\', this)">' +
+                    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>' +
+                    'PDF</button></td></tr>';
 
                 cardsHTML += '<div class="history-card">' +
                     '<div class="history-card-top">' +
@@ -985,11 +988,192 @@ var LOGO_BASE64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAACFCAYAAAB
                     '<div class="history-card-meta"><span>' + escapeHtml(unitDisplay) + '</span><span>' + dateStr + '</span></div>' +
                     '<div class="history-card-bottom">' +
                     '<span class="score-bold ' + scoreClass + '">' + r.marks_awarded + '/' + r.total_marks + '</span>' +
-                    '</div></div>';
+                    '<button class="download-btn" onclick="downloadQuestionPDF(\'' + r.id + '\', this)">' +
+                    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>' +
+                    'PDF</button></div></div>';
             });
 
             tableBody.innerHTML = tableHTML;
             cardsContainer.innerHTML = cardsHTML;
+        }
+
+        // ===== QUESTION PDF DOWNLOAD =====
+        async function downloadQuestionPDF(attemptId, btnEl) {
+            var btn = btnEl || null;
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<div class="spinner" style="width:14px;height:14px;border-width:2px;margin:0;"></div> Loading...';
+            }
+
+            try {
+                var response = await supabaseClient
+                    .from('exam_practice_attempts')
+                    .select('board, unit, question_type, question_data, student_answer, marking_data, marks_awarded, total_marks, percentage_score, created_at')
+                    .eq('id', attemptId)
+                    .eq('user_id', currentSession.user.id)
+                    .single();
+
+                if (response.error) throw response.error;
+                var a = response.data;
+                var md = a.marking_data || {};
+                var qd = a.question_data || {};
+
+                var jsPDF = window.jspdf.jsPDF;
+                var doc = new jsPDF('p', 'mm', 'a4');
+                var pageWidth = 210;
+                var margin = 20;
+                var contentWidth = pageWidth - 2 * margin;
+                var y = 20;
+
+                var primaryDark = [30, 58, 95];
+                var accent = [230, 126, 34];
+                var greenAccent = [39, 174, 96];
+                var redAccent = [192, 57, 43];
+                var darkGray = [55, 55, 55];
+                var midGray = [100, 100, 100];
+                var grayLight = [241, 245, 249];
+
+                // Header bar
+                doc.setFillColor(primaryDark[0], primaryDark[1], primaryDark[2]);
+                doc.rect(0, 0, pageWidth, 40, 'F');
+                doc.setFillColor(accent[0], accent[1], accent[2]);
+                doc.rect(0, 40, pageWidth, 3, 'F');
+
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(18);
+                doc.setTextColor(255, 255, 255);
+                doc.text('Question Feedback Report', margin, 18);
+
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(10);
+                doc.setTextColor(200, 200, 200);
+                var dateStr = new Date(a.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+                doc.text(a.board + '  |  ' + a.unit + '  |  ' + (a.question_type || 'Question') + '  |  ' + dateStr, margin, 30);
+
+                y = 52;
+
+                // Score box
+                var scorePercent = a.percentage_score || 0;
+                var scoreColor = scorePercent >= 70 ? greenAccent : (scorePercent >= 50 ? accent : redAccent);
+                doc.setFillColor(grayLight[0], grayLight[1], grayLight[2]);
+                doc.roundedRect(margin, y, contentWidth, 18, 3, 3, 'F');
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(22);
+                doc.setTextColor(scoreColor[0], scoreColor[1], scoreColor[2]);
+                doc.text(a.marks_awarded + '/' + a.total_marks, margin + 10, y + 12);
+                doc.setFontSize(12);
+                doc.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
+                doc.text(scorePercent + '%', margin + 40, y + 12);
+                if (md.level) {
+                    doc.setFont('helvetica', 'normal');
+                    doc.setFontSize(10);
+                    doc.setTextColor(midGray[0], midGray[1], midGray[2]);
+                    doc.text('Level ' + md.level, margin + 65, y + 12);
+                }
+                y += 26;
+
+                // Helper to wrap and print text with page break support
+                var bottomLimit = 297 - 20;
+                function printWrapped(text, fontSize, textColor, isBold, indent) {
+                    indent = indent || 0;
+                    doc.setFont('helvetica', isBold ? 'bold' : 'normal');
+                    doc.setFontSize(fontSize);
+                    doc.setTextColor(textColor[0], textColor[1], textColor[2]);
+                    var lines = doc.splitTextToSize(text, contentWidth - indent);
+                    for (var li = 0; li < lines.length; li++) {
+                        if (y > bottomLimit) {
+                            doc.addPage();
+                            y = 20;
+                        }
+                        doc.text(lines[li], margin + indent, y);
+                        y += fontSize * 0.45;
+                    }
+                    y += 2;
+                }
+
+                // Section: Question
+                var questionText = qd.question || qd.question_text || '';
+                if (questionText) {
+                    printWrapped('Question', 12, primaryDark, true);
+                    y += 1;
+                    printWrapped(questionText, 10, darkGray, false);
+                    y += 4;
+                }
+
+                // Section: Student Answer
+                if (a.student_answer) {
+                    printWrapped('Your Answer', 12, primaryDark, true);
+                    y += 1;
+                    printWrapped(a.student_answer, 10, darkGray, false);
+                    y += 4;
+                }
+
+                // Section: Feedback
+                var feedback = md.feedback || '';
+                if (feedback) {
+                    printWrapped('Examiner Feedback', 12, primaryDark, true);
+                    y += 1;
+                    printWrapped(feedback, 10, darkGray, false);
+                    y += 4;
+                }
+
+                // Section: What Went Well
+                var www = md.what_went_well || '';
+                if (www) {
+                    printWrapped('What Went Well', 12, greenAccent, true);
+                    y += 1;
+                    printWrapped(www, 10, darkGray, false);
+                    y += 4;
+                }
+
+                // Section: Areas for Improvement
+                var afi = md.areas_for_improvement || '';
+                if (afi) {
+                    printWrapped('Areas for Improvement', 12, redAccent, true);
+                    y += 1;
+                    printWrapped(afi, 10, darkGray, false);
+                    y += 4;
+                }
+
+                // Section: Improved Paragraph
+                var improved = md.improved_paragraph || '';
+                if (improved) {
+                    printWrapped('Example Improved Answer', 12, accent, true);
+                    y += 1;
+                    doc.setFillColor(grayLight[0], grayLight[1], grayLight[2]);
+                    var impLines = doc.splitTextToSize(improved, contentWidth - 8);
+                    var impHeight = impLines.length * 4.5 + 6;
+                    if (y + impHeight > bottomLimit) {
+                        doc.addPage();
+                        y = 20;
+                    }
+                    doc.roundedRect(margin, y - 2, contentWidth, impHeight, 2, 2, 'F');
+                    doc.setFont('helvetica', 'italic');
+                    doc.setFontSize(10);
+                    doc.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
+                    for (var il = 0; il < impLines.length; il++) {
+                        doc.text(impLines[il], margin + 4, y + 4 + il * 4.5);
+                    }
+                    y += impHeight + 6;
+                }
+
+                // Footer
+                doc.setFontSize(8);
+                doc.setTextColor(midGray[0], midGray[1], midGray[2]);
+                doc.text('Generated by MyBizStudies  |  mybizstudies.com', margin, 290);
+
+                var fileName = 'Question-' + (a.question_type || 'feedback') + '-' + dateStr.replace(/ /g, '-') + '.pdf';
+                doc.save(fileName);
+
+            } catch (error) {
+                console.error('Error downloading question PDF:', error);
+                alert('Unable to download this report. Please try again.');
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> PDF';
+                }
+            }
         }
 
         // ===== TEST RESULTS =====
