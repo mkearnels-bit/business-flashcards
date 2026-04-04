@@ -6549,13 +6549,15 @@ function mybizLoadTikTokPixel() {
                 // Check subscription plan
                 const { data: subs } = await supabaseClient
                     .from('subscriptions')
-                    .select('plan')
+                    .select('plan, notes_access')
                     .eq('user_id', session.user.id)
                     .limit(1);
 
                 var plan = 'free';
+                var notesAccess = false;
                 if (subs && subs.length > 0) {
                     plan = subs[0].plan;
+                    notesAccess = subs[0].notes_access || false;
                 } else {
                     // Auto-create subscription for new users
                     var expiresAt = new Date();
@@ -6571,7 +6573,7 @@ function mybizLoadTikTokPixel() {
                 }
 
                 // Pro and grandfathered users get full access to notes
-                if (plan === 'annual' || plan === 'quarterly' || plan === 'monthly' || plan === 'grandfathered') return;
+                if (plan === 'annual' || plan === 'quarterly' || plan === 'monthly' || plan === 'grandfathered' || notesAccess) return;
 
                 // Free users: lock all topics except the first one
                 var allTopics = document.querySelectorAll('.topic-section');
@@ -6607,8 +6609,8 @@ function mybizLoadTikTokPixel() {
                         var banner = document.createElement('div');
                         banner.className = 'paywall-banner';
                         banner.innerHTML = '<h3>Unlock All Study Notes</h3>' +
-                            '<p>Upgrade to Pro to access all topics across every unit, plus exam practice with instant AI feedback and mind maps.</p>' +
-                            '<a href="pricing.html">View Pro Plans</a>';
+                            '<p>Get access to all topics across every unit for a one-off payment of just $4, or subscribe for full access to everything including AI exam practice.</p>' +
+                            '<a href="pricing.html">View Plans</a>';
                         firstTopic.parentNode.insertBefore(banner, firstTopic.nextSibling);
                     }
                 }

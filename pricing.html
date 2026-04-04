@@ -848,6 +848,23 @@ function mybizLoadTikTokPixel() {
             </div>
         </div>
 
+        <!-- Study Notes One-Off -->
+        <div class="notes-offer" style="max-width: 680px; margin: 3rem auto 0; background: linear-gradient(135deg, #f8fafc, #f1f5f9); border: 1px solid #e2e8f0; border-radius: 16px; padding: 2rem; text-align: center;">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                <svg width="24" height="24" fill="none" stroke="#1e3a5f" stroke-width="2" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                <h3 style="font-size: 1.2rem; font-weight: 700; color: #1e3a5f;">Just want the Study Notes?</h3>
+            </div>
+            <p style="color: #64748b; font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.25rem;">
+                Unlock all GCSE and A-Level study notes across every unit with a single one-off payment. No subscription required.
+            </p>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                <div style="font-size: 2rem; font-weight: 800; color: #1e3a5f;">$4</div>
+                <div style="font-size: 0.85rem; color: #94a3b8; text-align: left;">One-off payment<br>Lifetime access</div>
+            </div>
+            <button class="subscribe-btn" id="notesBtn" style="margin-top: 1.25rem; background: linear-gradient(135deg, #1e3a5f, #2d5a8a);">Buy Study Notes Access</button>
+            <p style="color: #94a3b8; font-size: 0.75rem; margin-top: 0.75rem;">Includes all study notes only. Exam practice, flashcards, and coaching require a subscription.</p>
+        </div>
+
     </div>
 
     <!-- Footer -->
@@ -961,6 +978,24 @@ function mybizLoadTikTokPixel() {
             var url = selectedOption.getAttribute('data-url');
 
             // Append user metadata so Creem webhook can identify the user
+            try {
+                var { data: { session } } = await supabaseClient.auth.getSession();
+                if (session && session.user) {
+                    var separator = url.indexOf('?') === -1 ? '?' : '&';
+                    url += separator + 'metadata[user_id]=' + encodeURIComponent(session.user.id);
+                    url += '&metadata[email]=' + encodeURIComponent(session.user.email || '');
+                }
+            } catch (e) {
+                console.warn('Could not attach user metadata to checkout URL:', e);
+            }
+
+            window.location.href = url;
+        });
+
+        // Study Notes one-off purchase
+        document.getElementById('notesBtn').addEventListener('click', async function() {
+            var url = 'https://www.creem.io/payment/NOTES_PRODUCT_ID_HERE';
+
             try {
                 var { data: { session } } = await supabaseClient.auth.getSession();
                 if (session && session.user) {

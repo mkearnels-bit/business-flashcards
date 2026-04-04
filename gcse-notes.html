@@ -1015,6 +1015,8 @@ function mybizLoadTikTokPixel() {
 /* Mobile menu spacing and scroll fixes */
 .site-mobile-menu { padding-top: 1.5rem !important; overflow-y: auto !important; -webkit-overflow-scrolling: touch; }
 .site-mobile-links { min-height: unset !important; padding-bottom: 2rem; }
+.topic-list li.topic-locked-hub { opacity: 0.5; pointer-events: none; position: relative; }
+.topic-list li.topic-locked-hub::after { content: '\1F512'; position: absolute; right: 10px; font-size: 0.8rem; }
 </style>
 </head>
 <body>
@@ -1351,6 +1353,29 @@ function mybizLoadTikTokPixel() {
                 }
             });
         })();
+
+        async function checkPlanAndGateContent() {
+            try {
+                var result = await supabaseClient.auth.getSession();
+                var session = result.data.session;
+                if (!session) return;
+                var subResult = await supabaseClient.from('subscriptions').select('plan, notes_access').eq('user_id', session.user.id).limit(1);
+                var plan = 'free';
+                var notesAccess = false;
+                if (subResult.data && subResult.data.length > 0) { plan = subResult.data[0].plan; notesAccess = subResult.data[0].notes_access || false; }
+                if (plan === 'annual' || plan === 'quarterly' || plan === 'monthly' || plan === 'grandfathered' || notesAccess) return;
+
+                // Lock topic list items beyond the first in each unit card
+                document.querySelectorAll('.topic-list').forEach(function(list) {
+                    var items = list.querySelectorAll('li');
+                    for (var i = 1; i < items.length; i++) {
+                        items[i].classList.add('topic-locked-hub');
+                    }
+                });
+            } catch (err) { console.error('Plan check error:', err); }
+        }
+
+        checkPlanAndGateContent();
 
         document.addEventListener('DOMContentLoaded', function() {
             var siteHamburger = document.getElementById('siteHamburger');

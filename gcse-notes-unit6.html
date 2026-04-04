@@ -1146,6 +1146,17 @@ function mybizLoadTikTokPixel() {
 /* Mobile menu spacing and scroll fixes */
 .site-mobile-menu { padding-top: 1.5rem !important; overflow-y: auto !important; -webkit-overflow-scrolling: touch; }
 .site-mobile-links { min-height: unset !important; padding-bottom: 2rem; }
+.topic-locked { position: relative; pointer-events: none; }
+.topic-locked .topic-content { display: none !important; }
+.topic-locked .topic-header { opacity: 0.5; }
+.topic-locked .topic-header::after { content: '\1F512'; position: absolute; right: 60px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; }
+.sidebar-topic-locked { opacity: 0.5; pointer-events: none; }
+.sidebar-topic-locked .sidebar-topic-link::after { content: '\1F512'; margin-left: 0.5rem; font-size: 0.75rem; }
+.paywall-banner { background: linear-gradient(135deg, #1e3a5f 0%, #152a45 100%); border-radius: 16px; padding: 2.5rem; text-align: center; margin: 2rem auto; max-width: 600px; color: white; }
+.paywall-banner h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.75rem; color: white; }
+.paywall-banner p { font-size: 0.95rem; color: rgba(255, 255, 255, 0.8); margin-bottom: 1.5rem; line-height: 1.6; }
+.paywall-banner a { display: inline-block; background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%); color: white; padding: 0.85rem 2rem; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 0.95rem; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3); }
+.paywall-banner a:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(230, 126, 34, 0.4); }
 </style>
 </head>
 <body>
@@ -2215,8 +2226,44 @@ function mybizLoadTikTokPixel() {
             btn.addEventListener('click', function() { setLevel(this.dataset.level); });
         });
 
+        async function checkPlanAndGateContent() {
+            try {
+                var result = await supabaseClient.auth.getSession();
+                var session = result.data.session;
+                if (!session) return;
+                var subResult = await supabaseClient.from('subscriptions').select('plan, notes_access').eq('user_id', session.user.id).limit(1);
+                var plan = 'free';
+                var notesAccess = false;
+                if (subResult.data && subResult.data.length > 0) { plan = subResult.data[0].plan; notesAccess = subResult.data[0].notes_access || false; }
+                if (plan === 'annual' || plan === 'quarterly' || plan === 'monthly' || plan === 'grandfathered' || notesAccess) return;
+                var allTopics = document.querySelectorAll('.topic-section');
+                var allSidebarItems = document.querySelectorAll('.sidebar-topic-item');
+                var lockedCount = 0;
+                allTopics.forEach(function(topic) {
+                    var topicId = topic.id; if (!topicId) return;
+                    var parts = topicId.split('-'); var topicNum = parseInt(parts[2]);
+                    if (topicNum > 1) { topic.classList.add('topic-locked'); topic.classList.remove('open'); lockedCount++; }
+                });
+                allSidebarItems.forEach(function(item) {
+                    var link = item.querySelector('.sidebar-topic-link'); if (!link) return;
+                    var onclick = link.getAttribute('onclick') || '';
+                    var match = onclick.match(/topic-\d+-(\d+)/);
+                    if (match && parseInt(match[1]) > 1) { item.classList.add('sidebar-topic-locked'); }
+                });
+                if (lockedCount > 0) {
+                    var firstTopic = document.querySelector('.topic-section');
+                    if (firstTopic) {
+                        var banner = document.createElement('div'); banner.className = 'paywall-banner';
+                        banner.innerHTML = '<h3>Unlock All Study Notes</h3><p>Get access to all topics across every unit for a one-off payment of just $4, or subscribe for full access to everything including AI exam practice.</p><a href="pricing.html">View Plans</a>';
+                        firstTopic.parentNode.insertBefore(banner, firstTopic.nextSibling);
+                    }
+                }
+            } catch (err) { console.error('Plan check error:', err); }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             checkAuth();
+            checkPlanAndGateContent();
             setupMobileMenu();
 
             // Logout buttons

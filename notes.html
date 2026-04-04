@@ -1252,6 +1252,8 @@
     .site-navbar-logo { height: 45px; }
 }
 
+.topic-list li.topic-locked-hub { opacity: 0.5; pointer-events: none; position: relative; }
+.topic-list li.topic-locked-hub::after { content: '\1F512'; position: absolute; right: 10px; font-size: 0.8rem; }
 
 </style>
 <!-- Google Analytics - Replace G-HFSYK32ZFT with your actual ID -->
@@ -1904,9 +1906,34 @@ function mybizLoadTikTokPixel() {
             }
         });
 
+        async function checkPlanAndGateContent() {
+            try {
+                var result = await supabaseClient.auth.getSession();
+                var session = result.data.session;
+                if (!session) return;
+                var subResult = await supabaseClient.from('subscriptions').select('plan, notes_access').eq('user_id', session.user.id).limit(1);
+                var plan = 'free';
+                var notesAccess = false;
+                if (subResult.data && subResult.data.length > 0) { plan = subResult.data[0].plan; notesAccess = subResult.data[0].notes_access || false; }
+                if (plan === 'annual' || plan === 'quarterly' || plan === 'monthly' || plan === 'grandfathered' || notesAccess) return;
+
+                // Lock topic links beyond X.1 on the hub page
+                document.querySelectorAll('.topic-list li').forEach(function(li) {
+                    var link = li.querySelector('a');
+                    if (!link) return;
+                    var href = link.getAttribute('href') || '';
+                    var match = href.match(/topic-\d+-(\d+)/);
+                    if (match && parseInt(match[1]) > 1) {
+                        li.classList.add('topic-locked-hub');
+                    }
+                });
+            } catch (err) { console.error('Plan check error:', err); }
+        }
+
         // Initialize on load
         document.addEventListener('DOMContentLoaded', function() {
             updateNavForLevel(currentLevel);
+            checkPlanAndGateContent();
 
             document.querySelectorAll('.level-toggle-btn').forEach(function(btn) {
                 btn.addEventListener('click', function() {
