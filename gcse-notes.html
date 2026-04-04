@@ -1015,7 +1015,7 @@ function mybizLoadTikTokPixel() {
 /* Mobile menu spacing and scroll fixes */
 .site-mobile-menu { padding-top: 1.5rem !important; overflow-y: auto !important; -webkit-overflow-scrolling: touch; }
 .site-mobile-links { min-height: unset !important; padding-bottom: 2rem; }
-.topic-list li.topic-locked-hub { opacity: 0.5; pointer-events: none; position: relative; }
+.topic-list li.topic-locked-hub { opacity: 0.5; cursor: pointer; position: relative; }
 .topic-list li.topic-locked-hub::after { content: '\1F512'; position: absolute; right: 10px; font-size: 0.8rem; }
 </style>
 </head>
@@ -1371,6 +1371,14 @@ function mybizLoadTikTokPixel() {
                     for (var i = 1; i < items.length; i++) {
                         items[i].classList.add('topic-locked-hub');
                     }
+                });
+
+                document.querySelectorAll('.topic-locked-hub').forEach(function(item) {
+                    item.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        window.location.href = 'pricing.html';
+                    });
                 });
             } catch (err) { console.error('Plan check error:', err); }
         }

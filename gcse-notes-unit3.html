@@ -453,6 +453,7 @@ body {
     max-width: 1400px;
     margin: 0 auto;
     padding: 2rem;
+    padding-top: 100px;
 }
 /* Sidebar */
 .sidebar {
@@ -908,7 +909,7 @@ function mybizLoadTikTokPixel() {
 .topic-locked .topic-content { display: none !important; }
 .topic-locked .topic-header { opacity: 0.5; }
 .topic-locked .topic-header::after { content: '\1F512'; position: absolute; right: 60px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; }
-.sidebar-topic-locked { opacity: 0.5; pointer-events: none; }
+.sidebar-topic-locked { opacity: 0.5; cursor: pointer; }
 .sidebar-topic-locked .sidebar-topic-link::after { content: '\1F512'; margin-left: 0.5rem; font-size: 0.75rem; }
 .paywall-banner { background: linear-gradient(135deg, #1e3a5f 0%, #152a45 100%); border-radius: 16px; padding: 2.5rem; text-align: center; margin: 2rem auto; max-width: 600px; color: white; }
 .paywall-banner h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.75rem; color: white; }
@@ -2165,6 +2166,14 @@ async function checkPlanAndGateContent() {
 
         document.querySelectorAll('.topic-locked').forEach(function(topic) {
             topic.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                window.location.href = 'pricing.html';
+            });
+        });
+
+        document.querySelectorAll('.sidebar-topic-locked').forEach(function(item) {
+            item.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 window.location.href = 'pricing.html';

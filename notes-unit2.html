@@ -550,6 +550,7 @@
             grid-template-columns: 280px 1fr;
             gap: 2rem;
             padding: 2rem;
+            padding-top: 100px;
             min-height: calc(100vh - 200px);
         }
 
@@ -1945,7 +1946,7 @@
         }
         .sidebar-topic-locked {
             opacity: 0.5;
-            pointer-events: none;
+            cursor: pointer;
         }
         .sidebar-topic-locked .sidebar-topic-link::after {
             content: '\1F512';
@@ -6228,6 +6229,14 @@ function mybizLoadTikTokPixel() {
                     // Add click handler to locked topics
                     document.querySelectorAll('.topic-locked').forEach(function(topic) {
                         topic.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            window.location.href = 'pricing.html';
+                        });
+                    });
+
+                    document.querySelectorAll('.sidebar-topic-locked').forEach(function(item) {
+                        item.addEventListener('click', function(e) {
                             e.preventDefault();
                             e.stopPropagation();
                             window.location.href = 'pricing.html';

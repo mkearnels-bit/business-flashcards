@@ -1252,7 +1252,7 @@
     .site-navbar-logo { height: 45px; }
 }
 
-.topic-list li.topic-locked-hub { opacity: 0.5; pointer-events: none; position: relative; }
+.topic-list li.topic-locked-hub { opacity: 0.5; cursor: pointer; position: relative; }
 .topic-list li.topic-locked-hub::after { content: '\1F512'; position: absolute; right: 10px; font-size: 0.8rem; }
 
 </style>
@@ -1926,6 +1926,14 @@ function mybizLoadTikTokPixel() {
                     if (match && parseInt(match[1]) > 1) {
                         li.classList.add('topic-locked-hub');
                     }
+                });
+
+                document.querySelectorAll('.topic-locked-hub').forEach(function(item) {
+                    item.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        window.location.href = 'pricing.html';
+                    });
                 });
             } catch (err) { console.error('Plan check error:', err); }
         }
