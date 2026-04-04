@@ -6309,16 +6309,21 @@ async function handleLogout() {
 }
 
 // ===== NAVIGATION =====
+var phaseHistory = ['selection'];
+
 function showPhase(phase) {
     document.querySelectorAll('.phase').forEach(function(el) { el.classList.remove('active'); });
     document.getElementById('phase-' + phase).classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // Push a history state when entering a test so browser back stays on this page
-    if (phase === 'test-exam') {
-        history.pushState({ phase: 'test-exam' }, '', window.location.pathname);
-    } else if (phase === 'selection') {
+    if (phase === 'selection') {
+        // Reset the phase stack and replace state
+        phaseHistory = ['selection'];
         history.replaceState({ phase: 'selection' }, '', window.location.pathname);
+    } else {
+        // Push a history entry for every non-selection phase
+        phaseHistory.push(phase);
+        history.pushState({ phase: phase }, '', window.location.pathname);
     }
 }
 
@@ -7499,6 +7504,9 @@ document.addEventListener('click', function(e) {
 // ===== DISCLAIMER (moved to welcome.html onboarding) =====
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Set initial history state for back button handling
+    history.replaceState({ phase: 'selection' }, '', window.location.pathname);
+
     checkAuth();
     setupMobileMenu();
 
@@ -8435,28 +8443,37 @@ window.addEventListener('beforeunload', function(e) {
     }
 });
 
-// Handle browser back button — stay on exam practice page, show save prompt if in a test
+// Handle browser back button — navigate back through phases
 window.addEventListener('popstate', function(e) {
     var testPhase = document.getElementById('phase-test-exam');
     var isInTest = testPhase && testPhase.classList.contains('active') && currentTest && testExamStartTime;
 
     if (isInTest) {
-        // Push state again so back doesn't leave the page
+        // In an active test, show save prompt instead of going back
         history.pushState({ phase: 'test-exam' }, '', window.location.pathname);
-        // Show the save prompt
         if (typeof promptSaveBeforeLeaving === 'function') {
             promptSaveBeforeLeaving();
         } else {
-            // Fallback if save feature not loaded: just go to selection
             resetTestMode();
         }
-    } else {
-        // Not in an active test — go to selection phase if not already there
-        var selectionPhase = document.getElementById('phase-selection');
-        if (selectionPhase && !selectionPhase.classList.contains('active')) {
-            history.pushState({ phase: 'selection' }, '', window.location.pathname);
-            showPhase('selection');
-        }
+        return;
+    }
+
+    // Pop the current phase off the stack
+    if (phaseHistory.length > 1) {
+        phaseHistory.pop();
+    }
+
+    // Go to the previous phase
+    var prevPhase = phaseHistory[phaseHistory.length - 1] || 'selection';
+    document.querySelectorAll('.phase').forEach(function(el) { el.classList.remove('active'); });
+    document.getElementById('phase-' + prevPhase).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // If we're back at selection, make sure it's a replace state
+    if (prevPhase === 'selection') {
+        phaseHistory = ['selection'];
+        history.replaceState({ phase: 'selection' }, '', window.location.pathname);
     }
 });
 
