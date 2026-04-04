@@ -4592,7 +4592,10 @@ async function checkFreeTrialAndRun(callback, genType) {
         if (!data || !data.allowed) {
             var reason = data ? data.reason : 'unknown';
 
-            if (reason === 'paid_only' || reason === 'limit_reached') {
+            if (reason === 'paid_only') {
+                window.location.href = 'pricing.html';
+                return;
+            } else if (reason === 'limit_reached') {
                 showPhase('paywall');
             } else if (reason === 'monthly_limit_reached') {
                 var limitType = data.limit_type === 'questions' ? 'single questions' : 'tests and exams';
