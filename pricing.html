@@ -360,19 +360,92 @@
             font-size: 1.1rem;
             color: var(--gray-500);
             max-width: 500px;
-            margin: 0 auto 40px;
+            margin: 0 auto;
             line-height: 1.6;
         }
 
-        /* Main Two-Column Layout */
+        /* ==================== TAB SECTION ==================== */
+
+        .pricing-tabs-wrapper {
+            max-width: 960px;
+            margin: 40px auto 0;
+            padding: 0 2rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .pricing-tabs {
+            display: flex;
+            gap: 0;
+            list-style: none;
+            justify-content: center;
+        }
+
+        .pricing-tab {
+            position: relative;
+        }
+
+        .pricing-tab-button {
+            padding: 14px 28px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--gray-500);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            transition: color 0.25s ease;
+            position: relative;
+            display: block;
+        }
+
+        .pricing-tab-button:hover {
+            color: var(--primary);
+        }
+
+        .pricing-tab-button.active {
+            color: var(--primary);
+        }
+
+        .pricing-tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            border-radius: 2px 2px 0 0;
+        }
+
+        /* ==================== TAB CONTENT ==================== */
+
+        .pricing-content {
+            display: none;
+        }
+
+        .pricing-content.active {
+            display: block;
+        }
+
+        /* Main Two-Column Layout (for Full Access tab) */
         .pricing-main {
             max-width: 960px;
             margin: 0 auto;
-            padding: 0 2rem 60px;
+            padding: 40px 2rem 60px;
             display: grid;
             grid-template-columns: 1fr 380px;
             gap: 40px;
             align-items: flex-start;
+        }
+
+        /* Study Notes Card Layout (for Study Notes tab) */
+        .pricing-main-notes {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 40px 2rem 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         /* What's Included Section */
@@ -537,6 +610,160 @@
             text-align: center;
         }
 
+        /* Study Notes Card */
+        .notes-card {
+            background: #ffffff;
+            border: 2px solid var(--gray-200);
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            max-width: 480px;
+            text-align: center;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        .notes-card h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .notes-card-subheading {
+            font-size: 1rem;
+            color: var(--gray-500);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .notes-price-display {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .notes-price-amount {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .notes-price-description {
+            font-size: 0.95rem;
+            color: var(--gray-500);
+            text-align: left;
+        }
+
+        .notes-features {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .notes-features li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.95rem;
+            color: var(--gray-700);
+        }
+
+        .notes-features svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            color: var(--success);
+            stroke-width: 2;
+        }
+
+        .notes-btn {
+            width: 100%;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
+            margin-bottom: 1.5rem;
+        }
+
+        .notes-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(230, 126, 34, 0.4);
+        }
+
+        /* Upsell Section */
+        .upsell-section {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .upsell-section h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .upsell-section p {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .upsell-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .upsell-link:hover {
+            color: var(--accent-light);
+            text-decoration: underline;
+        }
+
+        /* Downgrade Note */
+        .downgrade-note {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--gray-500);
+        }
+
+        .downgrade-note .notes-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .downgrade-note .notes-link:hover {
+            color: var(--accent-light);
+            text-decoration: underline;
+        }
+
         /* Footer */
         .pricing-footer {
             background: var(--gray-50);
@@ -615,6 +842,29 @@
             .feature-list li {
                 gap: 10px;
                 font-size: 0.95rem;
+            }
+
+            .pricing-tabs-wrapper {
+                padding: 0 1rem;
+            }
+
+            .pricing-tab-button {
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+
+            .notes-card {
+                padding: 2rem 1.5rem;
+                max-width: 100%;
+            }
+
+            .notes-price-amount {
+                font-size: 2.4rem;
+            }
+
+            .pricing-main,
+            .pricing-main-notes {
+                padding: 30px 1rem 40px;
             }
         }
     </style>
@@ -770,99 +1020,129 @@ function mybizLoadTikTokPixel() {
             <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l3-3m0 0l-3-3m3 3H3"/></svg></span>
             Log Out
         </button>
-    
+
     </div>
 </div>
 
     <div class="pricing-container">
         <!-- Hero Section -->
         <section class="pricing-hero">
-            <h1>Get unlimited access</h1>
-            <p>All plans include every feature. Pick the billing that works for you.</p>
+            <h1 id="heroTitle">Get unlimited access</h1>
+            <p id="heroSubtitle">All plans include every feature. Pick the billing that works for you.</p>
         </section>
 
-        <!-- Main Pricing Content -->
-        <div class="pricing-main">
-            <!-- What's Included -->
-            <div class="whats-included">
-                <h2>What's included</h2>
-                <ul class="feature-list">
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Unlimited AI exam practice</li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> AI-generated tests & marking</li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Exam board style questions & examiner feedback</li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> 500+ interactive flashcards</li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Comprehensive study notes</li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Exam technique training</li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Progress tracking & coaching</li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Cancel anytime</li>
-                </ul>
-            </div>
+        <!-- Pricing Tabs -->
+        <div class="pricing-tabs-wrapper">
+            <ul class="pricing-tabs">
+                <li class="pricing-tab">
+                    <button class="pricing-tab-button active" id="tabNotesBtn" data-tab="notes">Study Notes</button>
+                </li>
+                <li class="pricing-tab">
+                    <button class="pricing-tab-button" id="tabAccessBtn" data-tab="access">Full Access</button>
+                </li>
+            </ul>
+        </div>
 
-            <!-- Pricing Panel -->
-            <div class="pricing-panel">
-                <div class="pricing-options" id="pricingOptions">
-                    <!-- 12 Months Option (Pre-selected) -->
-                    <label class="pricing-option selected" data-plan="annual" data-url="https://www.creem.io/payment/prod_7jO7MJzPiDR0YNseZUAOlZ">
-                        <input type="radio" name="pricing-plan" value="annual" checked>
-                        <div class="pricing-option-content">
-                            <div class="pricing-option-title">12 months</div>
-                            <div class="pricing-option-price">
-                                <span class="pricing-option-amount">$9</span>
-                                <span class="pricing-option-period">/month</span>
-                            </div>
-                            <div class="pricing-option-billing">Billed at $108/year</div>
-                        </div>
-                        <div class="save-badge">Save 77%</div>
-                    </label>
+        <!-- Study Notes Tab Content -->
+        <div class="pricing-content active" id="contentNotes">
+            <div class="pricing-main-notes">
+                <div class="notes-card">
+                    <h2>Unlock All Study Notes</h2>
+                    <p class="notes-card-subheading">One payment. Lifetime access. No subscription needed.</p>
 
-                    <!-- 3 Months Option -->
-                    <label class="pricing-option" data-plan="quarterly" data-url="https://www.creem.io/payment/prod_5ZrtSKRnnMMeM0EcPMHPQ6">
-                        <input type="radio" name="pricing-plan" value="quarterly">
-                        <div class="pricing-option-content">
-                            <div class="pricing-option-title">3 months</div>
-                            <div class="pricing-option-price">
-                                <span class="pricing-option-amount">$18</span>
-                                <span class="pricing-option-period">/month</span>
-                            </div>
-                            <div class="pricing-option-billing">Billed at $54/quarter</div>
-                        </div>
-                        <div class="save-badge">Save 54%</div>
-                    </label>
+                    <div class="notes-price-display">
+                        <div class="notes-price-amount">$4</div>
+                    </div>
 
-                    <!-- 1 Month Option -->
-                    <label class="pricing-option" data-plan="monthly" data-url="https://www.creem.io/payment/prod_2CShKDsiBWCbJkoG1jOFkz">
-                        <input type="radio" name="pricing-plan" value="monthly">
-                        <div class="pricing-option-content">
-                            <div class="pricing-option-title">1 month</div>
-                            <div class="pricing-option-price">
-                                <span class="pricing-option-amount">$36</span>
-                                <span class="pricing-option-period">/month</span>
-                            </div>
-                            <div class="pricing-option-billing">Billed monthly</div>
-                        </div>
-                    </label>
+                    <ul class="notes-features">
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> All GCSE study notes (6 units)</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> All A-Level study notes (4 units)</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Searchable content</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Mobile friendly</li>
+                    </ul>
+
+                    <button class="notes-btn" id="notesBtn">Buy Study Notes Access</button>
+
+                    <div class="upsell-section">
+                        <h3>Want more than just notes?</h3>
+                        <p>Get unlimited access to exam practice, flashcards, coaching, and more with a Full Access subscription.</p>
+                        <a class="upsell-link" id="upsellLink">Switch to Full Access</a>
+                    </div>
                 </div>
-
-                <button class="subscribe-btn" id="subscribeBtn">Subscribe now</button>
-                <p class="billing-note">Recurring billing, cancel anytime</p>
             </div>
         </div>
 
-        <!-- Study Notes One-Off -->
-        <div class="notes-offer" style="max-width: 680px; margin: 3rem auto 0; background: linear-gradient(135deg, #f8fafc, #f1f5f9); border: 1px solid #e2e8f0; border-radius: 16px; padding: 2rem; text-align: center;">
-            <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 0.75rem;">
-                <svg width="24" height="24" fill="none" stroke="#1e3a5f" stroke-width="2" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-                <h3 style="font-size: 1.2rem; font-weight: 700; color: #1e3a5f;">Just want the Study Notes?</h3>
+        <!-- Full Access Tab Content -->
+        <div class="pricing-content" id="contentAccess">
+            <!-- What's Included -->
+            <div class="pricing-main">
+                <div class="whats-included">
+                    <h2>What's included</h2>
+                    <ul class="feature-list">
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Unlimited AI exam practice</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> AI-generated tests & marking</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Exam board style questions & examiner feedback</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> 500+ interactive flashcards</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Comprehensive study notes</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Exam technique training</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Progress tracking & coaching</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Cancel anytime</li>
+                    </ul>
+                </div>
+
+                <!-- Pricing Panel -->
+                <div class="pricing-panel">
+                    <div class="pricing-options" id="pricingOptions">
+                        <!-- 12 Months Option (Pre-selected) -->
+                        <label class="pricing-option selected" data-plan="annual" data-url="https://www.creem.io/payment/prod_7jO7MJzPiDR0YNseZUAOlZ">
+                            <input type="radio" name="pricing-plan" value="annual" checked>
+                            <div class="pricing-option-content">
+                                <div class="pricing-option-title">12 months</div>
+                                <div class="pricing-option-price">
+                                    <span class="pricing-option-amount">$9</span>
+                                    <span class="pricing-option-period">/month</span>
+                                </div>
+                                <div class="pricing-option-billing">Billed at $108/year</div>
+                            </div>
+                            <div class="save-badge">Save 77%</div>
+                        </label>
+
+                        <!-- 3 Months Option -->
+                        <label class="pricing-option" data-plan="quarterly" data-url="https://www.creem.io/payment/prod_5ZrtSKRnnMMeM0EcPMHPQ6">
+                            <input type="radio" name="pricing-plan" value="quarterly">
+                            <div class="pricing-option-content">
+                                <div class="pricing-option-title">3 months</div>
+                                <div class="pricing-option-price">
+                                    <span class="pricing-option-amount">$18</span>
+                                    <span class="pricing-option-period">/month</span>
+                                </div>
+                                <div class="pricing-option-billing">Billed at $54/quarter</div>
+                            </div>
+                            <div class="save-badge">Save 54%</div>
+                        </label>
+
+                        <!-- 1 Month Option -->
+                        <label class="pricing-option" data-plan="monthly" data-url="https://www.creem.io/payment/prod_2CShKDsiBWCbJkoG1jOFkz">
+                            <input type="radio" name="pricing-plan" value="monthly">
+                            <div class="pricing-option-content">
+                                <div class="pricing-option-title">1 month</div>
+                                <div class="pricing-option-price">
+                                    <span class="pricing-option-amount">$36</span>
+                                    <span class="pricing-option-period">/month</span>
+                                </div>
+                                <div class="pricing-option-billing">Billed monthly</div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <button class="subscribe-btn" id="subscribeBtn">Subscribe now</button>
+                    <p class="billing-note">Recurring billing, cancel anytime</p>
+
+                    <div class="downgrade-note">
+                        Just want the study notes? Get lifetime access for <span style="font-weight: 700;">$4</span> by switching to <a class="notes-link" id="downgradeLinkBottom">Study Notes</a>.
+                    </div>
+                </div>
             </div>
-            <p style="color: #64748b; font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.25rem;">
-                Unlock all GCSE and A-Level study notes across every unit with a single one-off payment. No subscription required.
-            </p>
-            <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap;">
-                <div style="font-size: 2rem; font-weight: 800; color: #1e3a5f;">$4</div>
-                <div style="font-size: 0.85rem; color: #94a3b8; text-align: left;">One-off payment<br>Lifetime access</div>
-            </div>
-            <button class="subscribe-btn" id="notesBtn" style="margin-top: 1.25rem; background: linear-gradient(135deg, #1e3a5f, #2d5a8a);">Buy Study Notes Access</button>
-            <p style="color: #94a3b8; font-size: 0.75rem; margin-top: 0.75rem;">Includes all study notes only. Exam practice, flashcards, and coaching require a subscription.</p>
         </div>
 
     </div>
@@ -875,13 +1155,13 @@ function mybizLoadTikTokPixel() {
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         // Supabase setup
-        const supabaseUrl = 'https://zyaywzzmjpctpodpxhge.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
-        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+        var supabaseUrl = 'https://zyaywzzmjpctpodpxhge.supabase.co';
+        var supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
+        var supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
         // Check auth state
         async function checkAuth() {
-            const { data: { session } } = await supabaseClient.auth.getSession();
+            var { data: { session } } = await supabaseClient.auth.getSession();
             if (session) {
                 // Show auth-only, hide guest-only
                 document.querySelectorAll('.auth-only').forEach(function(el) { el.style.display = ''; });
@@ -892,22 +1172,22 @@ function mybizLoadTikTokPixel() {
                 document.querySelectorAll('.guest-only').forEach(function(el) { el.style.display = 'none'; });
 
                 // Populate profile avatar
-                const profileAvatarEl = document.getElementById('profileAvatar');
+                var profileAvatarEl = document.getElementById('profileAvatar');
                 var fullName = session.user.user_metadata && (session.user.user_metadata.full_name || session.user.user_metadata.name) || '';
-                    var email = session.user.email || '';
-                    var initials = '?';
-                    if (fullName) {
-                        var parts = fullName.trim().split(' ');
-                        initials = parts.length >= 2 ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase() : parts[0][0].toUpperCase();
-                    } else if (email) {
-                        initials = email[0].toUpperCase();
-                    }
-                    var initialsEl = document.getElementById('profileAvatar');
-                    var nameEl = document.getElementById('profileName');
-                    var emailEl = document.getElementById('profileEmail');
-                    if (initialsEl) initialsEl.textContent = initials;
-                    if (nameEl) nameEl.textContent = fullName || 'Student';
-                    if (emailEl) emailEl.textContent = email;
+                var email = session.user.email || '';
+                var initials = '?';
+                if (fullName) {
+                    var parts = fullName.trim().split(' ');
+                    initials = parts.length >= 2 ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase() : parts[0][0].toUpperCase();
+                } else if (email) {
+                    initials = email[0].toUpperCase();
+                }
+                var initialsEl = document.getElementById('profileAvatar');
+                var nameEl = document.getElementById('profileName');
+                var emailEl = document.getElementById('profileEmail');
+                if (initialsEl) initialsEl.textContent = initials;
+                if (nameEl) nameEl.textContent = fullName || 'Student';
+                if (emailEl) emailEl.textContent = email;
             }
         }
 
@@ -958,6 +1238,63 @@ function mybizLoadTikTokPixel() {
         // Logout handlers for new nav buttons
         if (document.getElementById('navLogoutBtn')) document.getElementById('navLogoutBtn').addEventListener('click', function() { handleLogout(); });
         if (document.getElementById('mobileLogoutBtn')) document.getElementById('mobileLogoutBtn').addEventListener('click', function() { handleLogout(); });
+
+        /* ==================== TAB SWITCHING ==================== */
+
+        var tabNotesBtn = document.getElementById('tabNotesBtn');
+        var tabAccessBtn = document.getElementById('tabAccessBtn');
+        var contentNotes = document.getElementById('contentNotes');
+        var contentAccess = document.getElementById('contentAccess');
+        var heroTitle = document.getElementById('heroTitle');
+        var heroSubtitle = document.getElementById('heroSubtitle');
+
+        function switchTab(tabName) {
+            if (tabName === 'notes') {
+                tabNotesBtn.classList.add('active');
+                tabAccessBtn.classList.remove('active');
+                contentNotes.classList.add('active');
+                contentAccess.classList.remove('active');
+                heroTitle.textContent = 'Unlock All Study Notes';
+                heroSubtitle.textContent = 'One payment. Lifetime access. No subscription needed.';
+            } else {
+                tabNotesBtn.classList.remove('active');
+                tabAccessBtn.classList.add('active');
+                contentNotes.classList.remove('active');
+                contentAccess.classList.add('active');
+                heroTitle.textContent = 'Get unlimited access';
+                heroSubtitle.textContent = 'All plans include every feature. Pick the billing that works for you.';
+            }
+        }
+
+        tabNotesBtn.addEventListener('click', function() {
+            switchTab('notes');
+        });
+
+        tabAccessBtn.addEventListener('click', function() {
+            switchTab('access');
+        });
+
+        // Upsell and downgrade links
+        var upsellLink = document.getElementById('upsellLink');
+        var downgradeLinkBottom = document.getElementById('downgradeLinkBottom');
+
+        upsellLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            switchTab('access');
+            window.scrollTo({ top: document.querySelector('.pricing-tabs-wrapper').offsetTop - 100, behavior: 'smooth' });
+        });
+
+        downgradeLinkBottom.addEventListener('click', function(e) {
+            e.preventDefault();
+            switchTab('notes');
+            window.scrollTo({ top: document.querySelector('.pricing-tabs-wrapper').offsetTop - 100, behavior: 'smooth' });
+        });
+
+        // Check URL parameter for ?from=notes
+        var urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('from') && urlParams.get('from') === 'notes') {
+            switchTab('notes');
+        }
 
         // Pricing option selection
         document.querySelectorAll('.pricing-option').forEach(function(option) {
@@ -1074,7 +1411,7 @@ function mybizLoadTikTokPixel() {
             currentLevel = level;
             localStorage.setItem(LEVEL_KEY, level);
             updateNavForLevel(level);
-            
+
             // Navigate to the counterpart page for the new level
             var currentPage = window.location.pathname.split('/').pop() || 'index.html';
             var pageMap = {
@@ -1100,7 +1437,6 @@ function mybizLoadTikTokPixel() {
             if (mapping) {
                 var target = mapping[level];
                 if (target === null) {
-                    // Coming soon — don't navigate, show toast
                     return;
                 }
                 if (target && target !== currentPage) {

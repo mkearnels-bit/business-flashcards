@@ -1865,6 +1865,160 @@
 }
 
 
+
+        /* ==================== PAYWALL MODAL ==================== */
+        .paywall-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+        .paywall-modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+        .paywall-modal {
+            background: #ffffff;
+            border-radius: 20px;
+            max-width: 520px;
+            width: 100%;
+            padding: 2.5rem 2rem 2rem;
+            position: relative;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+            animation: modalSlideUp 0.3s ease;
+        }
+        @keyframes modalSlideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .paywall-modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: #f1f5f9;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            font-size: 1.2rem;
+            color: #64748b;
+        }
+        .paywall-modal-close:hover { background: #e2e8f0; }
+        .paywall-modal-lock {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #1e3a5f, #2d5a8a);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.25rem;
+            font-size: 1.5rem;
+        }
+        .paywall-modal h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #1e3a5f;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        .paywall-modal-sub {
+            text-align: center;
+            color: #64748b;
+            font-size: 0.95rem;
+            margin-bottom: 1.75rem;
+            line-height: 1.5;
+        }
+        .paywall-modal-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .paywall-modal-option {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.1rem 1.25rem;
+            border-radius: 14px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        .paywall-modal-option:hover {
+            transform: translateY(-2px);
+        }
+        .paywall-option-notes {
+            background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+        }
+        .paywall-option-notes:hover {
+            box-shadow: 0 8px 25px rgba(230, 126, 34, 0.4);
+        }
+        .paywall-option-full {
+            background: #f8fafc;
+            border-color: #e2e8f0;
+            color: #1e3a5f;
+        }
+        .paywall-option-full:hover {
+            border-color: #1e3a5f;
+            background: #f1f5f9;
+            box-shadow: 0 4px 12px rgba(30, 58, 95, 0.1);
+        }
+        .paywall-option-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1.25rem;
+        }
+        .paywall-option-notes .paywall-option-icon {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .paywall-option-full .paywall-option-icon {
+            background: #e8edf3;
+        }
+        .paywall-option-text {
+            flex: 1;
+        }
+        .paywall-option-title {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 2px;
+        }
+        .paywall-option-desc {
+            font-size: 0.8rem;
+            opacity: 0.85;
+        }
+        .paywall-option-price {
+            font-weight: 800;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .paywall-option-notes .paywall-option-desc { color: rgba(255,255,255,0.85); }
+        .paywall-option-full .paywall-option-desc { color: #64748b; }
+        @media (max-width: 500px) {
+            .paywall-modal { padding: 2rem 1.25rem 1.5rem; }
+            .paywall-modal h2 { font-size: 1.25rem; }
+            .paywall-option-price { font-size: 1rem; }
+        }
+
         /* ==================== PAYWALL LOCK ==================== */
         .topic-locked {
             position: relative;
@@ -5225,6 +5379,34 @@ function mybizLoadTikTokPixel() {
     </div>
 
     <!-- Footer -->
+    <!-- Paywall Modal -->
+    <div class="paywall-modal-overlay" id="paywallModal">
+        <div class="paywall-modal">
+            <button class="paywall-modal-close" id="paywallModalClose">&times;</button>
+            <div class="paywall-modal-lock">&#x1F513;</div>
+            <h2>Unlock This Topic</h2>
+            <p class="paywall-modal-sub" id="paywallModalSub">This topic is available to subscribers and notes access holders.</p>
+            <div class="paywall-modal-options">
+                <a href="pricing.html?from=notes" class="paywall-modal-option paywall-option-notes" id="paywallNotesBtn">
+                    <div class="paywall-option-icon">&#x1F4D6;</div>
+                    <div class="paywall-option-text">
+                        <div class="paywall-option-title">Study Notes Access</div>
+                        <div class="paywall-option-desc">One payment, lifetime access to all notes</div>
+                    </div>
+                    <div class="paywall-option-price">$4</div>
+                </a>
+                <a href="pricing.html?from=full" class="paywall-modal-option paywall-option-full">
+                    <div class="paywall-option-icon">&#x1F680;</div>
+                    <div class="paywall-option-text">
+                        <div class="paywall-option-title">Full Access Subscription</div>
+                        <div class="paywall-option-desc">Notes, exam practice, flashcards, coaching</div>
+                    </div>
+                    <div class="paywall-option-price">From $9/mo</div>
+                </a>
+            </div>
+        </div>
+    </div>
+
     <footer class="notes-footer">
         <p>&copy; 2026 MyBizStudies. All rights reserved. &nbsp; <a href="about.html">About</a> &nbsp; | &nbsp; <a href="privacy.html">Privacy</a> &nbsp; | &nbsp; <a href="terms.html">Terms</a> &nbsp; | &nbsp; <a href="refund.html">Refund Policy</a> &nbsp; | &nbsp; <a href="contact.html">Contact</a></p>
     
@@ -5358,7 +5540,7 @@ function mybizLoadTikTokPixel() {
                         banner.className = 'paywall-banner';
                         banner.innerHTML = '<h3>Unlock All Study Notes</h3>' +
                             '<p>Get access to all topics across every unit for a one-off payment of just $4, or subscribe for full access to everything including AI exam practice.</p>' +
-                            '<a href="pricing.html">View Plans</a>';
+                            '<a href="pricing.html?from=notes">View Plans</a>';
                         firstTopic.parentNode.insertBefore(banner, firstTopic.nextSibling);
                     }
 
@@ -5367,7 +5549,7 @@ function mybizLoadTikTokPixel() {
                         topic.addEventListener('click', function(e) {
                             e.preventDefault();
                             e.stopPropagation();
-                            window.location.href = 'pricing.html';
+                            showPaywallModal();
                         });
                     });
 
@@ -5375,7 +5557,7 @@ function mybizLoadTikTokPixel() {
                         item.addEventListener('click', function(e) {
                             e.preventDefault();
                             e.stopPropagation();
-                            window.location.href = 'pricing.html';
+                            showPaywallModal();
                         });
                     });
                 }
@@ -5385,6 +5567,36 @@ function mybizLoadTikTokPixel() {
         }
 
         checkPlanAndGateContent();
+
+        // ==================== PAYWALL MODAL ====================
+        function showPaywallModal() {
+            var modal = document.getElementById('paywallModal');
+            if (modal) {
+                modal.style.display = 'flex';
+                void modal.offsetHeight;
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+        function closePaywallModal() {
+            var modal = document.getElementById('paywallModal');
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+                setTimeout(function() { modal.style.display = 'none'; }, 250);
+            }
+        }
+        (function() {
+            var closeBtn = document.getElementById('paywallModalClose');
+            var overlay = document.getElementById('paywallModal');
+            if (closeBtn) closeBtn.addEventListener('click', closePaywallModal);
+            if (overlay) overlay.addEventListener('click', function(e) {
+                if (e.target === overlay) closePaywallModal();
+            });
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closePaywallModal();
+            });
+        })();
 
 
         // Logout
