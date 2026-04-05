@@ -985,6 +985,7 @@ function mybizLoadTikTokPixel() {
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Plan</th>
+                                    <th>Study Notes</th>
                                     <th>Status</th>
                                     <th>Signed Up</th>
                                     <th>Cards Studied</th>
@@ -993,7 +994,7 @@ function mybizLoadTikTokPixel() {
                             </thead>
                             <tbody id="usersTableBody">
                                 <tr>
-                                    <td colspan="8" class="loading"><div class="spinner"></div> Loading users...</td>
+                                    <td colspan="9" class="loading"><div class="spinner"></div> Loading users...</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -2136,7 +2137,7 @@ function mybizLoadTikTokPixel() {
             document.getElementById('userCount').textContent = `${users.length} users`;
 
             if (users.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="8" class="empty-state">No users found</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="9" class="empty-state">No users found</td></tr>';
                 return;
             }
 
@@ -2159,6 +2160,7 @@ function mybizLoadTikTokPixel() {
                     </td>
                     <td>${user.email || '-'}</td>
                     <td><span class="badge ${planBadge}">${(user.plan || 'free').toUpperCase()}</span></td>
+                    <td><span class="badge ${user.notes_access ? 'badge-success' : 'badge-gray'}">${user.notes_access ? 'PAID' : 'LIMITED'}</span></td>
                     <td><span class="badge ${statusBadge}">${(user.status || 'active').toUpperCase()}</span></td>
                     <td>${formatDate(user.created_at)}</td>
                     <td><span class="badge badge-info">${progressCounts[user.user_id] || 0} cards</span></td>
@@ -2469,8 +2471,8 @@ function mybizLoadTikTokPixel() {
         // Export Users
         document.getElementById('exportUsersBtn').addEventListener('click', () => {
             const csv = [
-                ['Name', 'Email', 'Plan', 'Status', 'Created At', 'Expires At'],
-                ...allUsers.map(u => [u.name || '', u.email, u.plan || 'free', u.status || 'active', u.created_at, u.expires_at || ''])
+                ['Name', 'Email', 'Plan', 'Study Notes', 'Status', 'Created At', 'Expires At'],
+                ...allUsers.map(u => [u.name || '', u.email, u.plan || 'free', u.notes_access ? 'Paid' : 'Limited', u.status || 'active', u.created_at, u.expires_at || ''])
             ].map(row => row.join(',')).join('\n');
 
             const blob = new Blob([csv], { type: 'text/csv' });
@@ -2784,6 +2786,20 @@ function mybizLoadTikTokPixel() {
                 </div>
 
                 <div style="background: var(--gray-50); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <div style="font-size: 0.8rem; color: var(--gray-500); font-weight: 600;">Study Notes</div>
+                            <div style="font-weight: 600; margin-top: 0.25rem;">
+                                <span class="badge ${user.notes_access ? 'badge-success' : 'badge-gray'}">${user.notes_access ? 'PAID' : 'LIMITED'}</span>
+                            </div>
+                        </div>
+                        <button class="btn ${user.notes_access ? 'btn-danger' : 'btn-primary'} btn-sm" onclick="toggleNotesAccess('${user.user_id}', '${user.email}', ${!user.notes_access})" style="white-space: nowrap;">
+                            ${user.notes_access ? 'Revoke Access' : 'Grant Access'}
+                        </button>
+                    </div>
+                </div>
+
+                <div style="background: var(--gray-50); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                         <div>
                             <div style="font-size: 0.8rem; color: var(--gray-500);">Signed Up</div>
@@ -2945,6 +2961,32 @@ function mybizLoadTikTokPixel() {
                 document.getElementById('userModal').classList.remove('active');
             } catch (err) {
                 showToast('Failed to update plan: ' + err.message, 'error');
+            }
+        }
+
+        // Toggle study notes access from admin modal
+        async function toggleNotesAccess(userId, email, grantAccess) {
+            var action = grantAccess ? 'grant' : 'revoke';
+            if (!confirm(grantAccess ? 'Grant study notes access to ' + email + '?' : 'Revoke study notes access from ' + email + '?')) return;
+            try {
+                var { error } = await supabaseClient
+                    .from('subscriptions')
+                    .update({ notes_access: grantAccess })
+                    .eq('user_id', userId);
+
+                if (error) throw error;
+
+                // Update local data
+                var user = allUsers.find(function(u) { return u.user_id === userId; });
+                if (user) user.notes_access = grantAccess;
+
+                showToast('Study notes access ' + (grantAccess ? 'granted' : 'revoked') + ' for ' + email, 'success');
+
+                // Refresh user table and re-open modal
+                renderUsers(allUsers);
+                viewUser(userId);
+            } catch (err) {
+                showToast('Failed to update notes access: ' + err.message, 'error');
             }
         }
 

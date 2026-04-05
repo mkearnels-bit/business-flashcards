@@ -276,6 +276,33 @@
             display: none;
         }
 
+        .email-suggestion {
+            font-size: 0.8rem;
+            color: #b45309;
+            background: #fef3c7;
+            border: 1px solid #fcd34d;
+            border-radius: 8px;
+            padding: 0.5rem 0.75rem;
+            margin-top: 0.35rem;
+            display: none;
+            line-height: 1.4;
+        }
+
+        .email-suggestion a {
+            color: #92400e;
+            font-weight: 600;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .email-suggestion .dismiss-suggestion {
+            color: #92400e;
+            opacity: 0.7;
+            font-size: 0.75rem;
+            cursor: pointer;
+            margin-left: 0.5rem;
+        }
+
         .auth-footer {
             text-align: center;
             margin-top: 1.5rem;
@@ -636,6 +663,7 @@ function mybizLoadTikTokPixel() {
                         placeholder="you@example.com"
                         required
                     >
+                    <div class="email-suggestion" id="emailSuggestion"></div>
                 </div>
 
                 <div class="form-group">
@@ -752,6 +780,118 @@ function mybizLoadTikTokPixel() {
             messageDiv.className = `message ${type} show`;
         }
 
+        // Email typo detection
+        var commonDomains = {
+            // Gmail typos
+            'gmial.com': 'gmail.com',
+            'gmai.com': 'gmail.com',
+            'gmaill.com': 'gmail.com',
+            'gmali.com': 'gmail.com',
+            'gamil.com': 'gmail.com',
+            'gnail.com': 'gmail.com',
+            'gmal.com': 'gmail.com',
+            'gmail.co': 'gmail.com',
+            'gmail.con': 'gmail.com',
+            'gmail.cpm': 'gmail.com',
+            'gmail.cm': 'gmail.com',
+            'gmail.om': 'gmail.com',
+            'gmailcom': 'gmail.com',
+            // iCloud typos
+            'icould.com': 'icloud.com',
+            'iclould.com': 'icloud.com',
+            'icloud.con': 'icloud.com',
+            'icloud.co': 'icloud.com',
+            'icloud.cm': 'icloud.com',
+            'icoud.com': 'icloud.com',
+            'icload.com': 'icloud.com',
+            'iclod.com': 'icloud.com',
+            'iclou.com': 'icloud.com',
+            'icloudcom': 'icloud.com',
+            'icloudd.com': 'icloud.com',
+            // Outlook typos
+            'outlok.com': 'outlook.com',
+            'outloo.com': 'outlook.com',
+            'outlook.con': 'outlook.com',
+            'outlook.co': 'outlook.com',
+            'outlookcom': 'outlook.com',
+            'outllook.com': 'outlook.com',
+            // Hotmail typos
+            'hotmal.com': 'hotmail.com',
+            'hotmai.com': 'hotmail.com',
+            'hotmial.com': 'hotmail.com',
+            'hotmail.con': 'hotmail.com',
+            'hotmail.co': 'hotmail.com',
+            'hotmailcom': 'hotmail.com',
+            // Yahoo typos
+            'yaho.com': 'yahoo.com',
+            'yahooo.com': 'yahoo.com',
+            'yahoo.con': 'yahoo.com',
+            'yahoo.co': 'yahoo.com',
+            'yahoocom': 'yahoo.com',
+            'yahooo.co.uk': 'yahoo.co.uk',
+            // Other common UK ones
+            'btinternrt.com': 'btinternet.com',
+            'btinteret.com': 'btinternet.com',
+            'sky.con': 'sky.com',
+            'live.co': 'live.com',
+            'live.con': 'live.com'
+        };
+
+        var emailSuggestionDismissed = false;
+        var suggestedEmail = '';
+
+        function checkEmailTypo(email) {
+            var parts = email.split('@');
+            if (parts.length !== 2) return null;
+            var domain = parts[1].toLowerCase();
+            if (commonDomains[domain]) {
+                return parts[0] + '@' + commonDomains[domain];
+            }
+            return null;
+        }
+
+        function showEmailSuggestion(corrected) {
+            var suggestionDiv = document.getElementById('emailSuggestion');
+            suggestedEmail = corrected;
+            suggestionDiv.innerHTML = 'Did you mean <a onclick="acceptEmailSuggestion()">' + corrected + '</a>? <span class="dismiss-suggestion" onclick="dismissEmailSuggestion()">Ignore</span>';
+            suggestionDiv.style.display = 'block';
+        }
+
+        function acceptEmailSuggestion() {
+            emailInput.value = suggestedEmail;
+            hideEmailSuggestion();
+            emailSuggestionDismissed = false;
+        }
+
+        function dismissEmailSuggestion() {
+            hideEmailSuggestion();
+            emailSuggestionDismissed = true;
+        }
+
+        function hideEmailSuggestion() {
+            var suggestionDiv = document.getElementById('emailSuggestion');
+            suggestionDiv.style.display = 'none';
+            suggestedEmail = '';
+        }
+
+        // Check on blur (when user tabs/clicks away from email field)
+        emailInput.addEventListener('blur', function() {
+            var email = emailInput.value.trim();
+            if (!email || emailSuggestionDismissed) return;
+            var corrected = checkEmailTypo(email);
+            if (corrected) {
+                showEmailSuggestion(corrected);
+            } else {
+                hideEmailSuggestion();
+            }
+        });
+
+        // Also clear suggestion when they type again
+        emailInput.addEventListener('input', function() {
+            hideEmailSuggestion();
+            emailSuggestionDismissed = false;
+        });
+
         // Toggle password visibility
         function togglePassword() {
             const type = passwordInput.type === 'password' ? 'text' : 'password';
@@ -794,6 +934,15 @@ function mybizLoadTikTokPixel() {
             const lastName = lastNameInput.value.trim();
             const email = emailInput.value.trim();
             const password = passwordInput.value;
+
+            // Validate email for common typos
+            var correctedEmail = checkEmailTypo(email);
+            if (correctedEmail && !emailSuggestionDismissed) {
+                showEmailSuggestion(correctedEmail);
+                emailInput.focus();
+                showMessage('Please check your email address. Did you mean ' + correctedEmail + '?', 'error');
+                return;
+            }
 
             // Validate password
             if (password.length < 8) {
