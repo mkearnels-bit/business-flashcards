@@ -4801,9 +4801,9 @@ async function generateTest() {
         var questions2 = data3.questions || [];
         snapProgress(75);
 
-        // ===== PHASE 4: Generate questions batch 3 of 3 and assemble paper =====
+        // ===== PHASE 4: Generate questions batch 3 of 3 =====
         stageEl.textContent = 'Writing final questions...';
-        animateProgress(75, 95, 60000);
+        animateProgress(75, 90, 60000);
 
         var phase4Payload = Object.assign({}, basePayload, {
             phase: 'questions_3',
@@ -4825,7 +4825,35 @@ async function generateTest() {
         }
 
         var data4 = await response4.json();
-        currentTest = data4.paper;
+        var questions3 = data4.questions || [];
+        snapProgress(90);
+
+        // ===== PHASE 5: Assemble the full paper (no AI call, just stitching) =====
+        stageEl.textContent = 'Assembling your exam paper...';
+        animateProgress(90, 98, 5000);
+
+        var phase5Payload = Object.assign({}, basePayload, {
+            phase: 'assemble',
+            source_booklet_data: {
+                _source_booklet: sourceBooklet,
+                _questions_1: questions1,
+                _questions_2: questions2,
+                _questions_3: questions3
+            }
+        });
+        var response5 = await fetch(SUPABASE_URL + '/functions/v1/generate-test', {
+            method: 'POST',
+            headers: authHeaders,
+            body: JSON.stringify(phase5Payload)
+        });
+
+        if (!response5.ok) {
+            var error5 = await response5.json();
+            throw new Error(error5.error || 'Failed to assemble exam paper');
+        }
+
+        var data5 = await response5.json();
+        currentTest = data5.paper;
 
         // Stop the progress interval and animate to 100%
         if (testProgressIntervalId) {
