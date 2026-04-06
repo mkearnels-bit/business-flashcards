@@ -2837,18 +2837,304 @@
         .extract-modal-body canvas {
             max-width: 100%;
         }
+
+        /* ==================== FEATURE TOUR ==================== */
+        .tour-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 99990;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        .tour-backdrop.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .tour-spotlight {
+            position: fixed;
+            z-index: 99991;
+            border-radius: 12px;
+            box-shadow: 0 0 0 9999px rgba(15, 23, 42, 0.65);
+            transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
+        .tour-spotlight::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 14px;
+            border: 2px solid var(--accent);
+            opacity: 0.6;
+            animation: tourPulse 2s ease-in-out infinite;
+        }
+        @keyframes tourPulse {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.01); }
+        }
+        .tour-tooltip {
+            position: fixed;
+            z-index: 99992;
+            background: linear-gradient(145deg, #ffffff, #fafbfc);
+            border-radius: 16px;
+            padding: 0;
+            width: 340px;
+            max-width: calc(100vw - 2rem);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.2), 0 0 0 1px rgba(30, 58, 95, 0.08);
+            opacity: 0;
+            transform: translateY(12px) scale(0.97);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            overflow: hidden;
+        }
+        .tour-tooltip.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        .tour-tooltip-accent {
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--accent-light));
+        }
+        .tour-tooltip-inner {
+            padding: 1.5rem;
+        }
+        .tour-tooltip-arrow {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            background: #fff;
+            transform: rotate(45deg);
+            border-radius: 2px;
+            z-index: -1;
+        }
+        .tour-tooltip-arrow.arrow-top {
+            top: -6px;
+            box-shadow: -1px -1px 2px rgba(0,0,0,0.06);
+        }
+        .tour-tooltip-arrow.arrow-bottom {
+            bottom: -6px;
+            box-shadow: 1px 1px 2px rgba(0,0,0,0.06);
+        }
+        .tour-tooltip-step {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.6rem;
+        }
+        .tour-tooltip-step svg {
+            width: 14px;
+            height: 14px;
+        }
+        .tour-tooltip-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+        .tour-tooltip-desc {
+            font-size: 0.88rem;
+            color: var(--gray-600);
+            line-height: 1.6;
+            margin-bottom: 1.4rem;
+        }
+        .tour-tooltip-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .tour-dots {
+            display: flex;
+            gap: 5px;
+        }
+        .tour-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--gray-200);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .tour-dot.active {
+            background: var(--accent);
+            width: 22px;
+            border-radius: 4px;
+        }
+        .tour-dot.done {
+            background: var(--primary-light);
+        }
+        .tour-tooltip-btns {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        .tour-btn {
+            padding: 0.55rem 1.1rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .tour-btn-skip {
+            background: transparent;
+            color: var(--gray-500);
+            padding: 0.55rem 0.75rem;
+        }
+        .tour-btn-skip:hover {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+        .tour-btn-next {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: #fff;
+            box-shadow: 0 2px 10px rgba(30, 58, 95, 0.3);
+        }
+        .tour-btn-next:hover {
+            box-shadow: 0 4px 16px rgba(30, 58, 95, 0.4);
+            transform: translateY(-1px);
+        }
+        .tour-btn-finish {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: #fff;
+            box-shadow: 0 2px 10px rgba(230, 126, 34, 0.3);
+        }
+        .tour-btn-finish:hover {
+            box-shadow: 0 4px 16px rgba(230, 126, 34, 0.4);
+            transform: translateY(-1px);
+        }
+        .tour-dismiss-bar {
+            text-align: center;
+            margin-top: 1rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--gray-100);
+        }
+        .tour-dismiss-link {
+            font-size: 0.75rem;
+            color: var(--gray-400);
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-family: inherit;
+        }
+        .tour-dismiss-link:hover {
+            color: var(--gray-600);
+        }
+        /* ===== MOBILE TOUR: bottom-sheet style ===== */
+        @media (max-width: 768px) {
+            .tour-spotlight {
+                border-radius: 8px;
+            }
+            .tour-spotlight::after {
+                inset: -3px;
+                border-radius: 10px;
+            }
+            .tour-tooltip {
+                position: fixed !important;
+                bottom: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                top: auto !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                border-radius: 20px 20px 0 0;
+                transform: translateY(100%);
+                box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
+            }
+            .tour-tooltip.visible {
+                transform: translateY(0);
+            }
+            .tour-tooltip-accent {
+                height: 0;
+            }
+            .tour-tooltip-inner {
+                padding: 1rem 1.25rem 1.25rem;
+            }
+            .tour-tooltip-inner::before {
+                content: '';
+                display: block;
+                width: 36px;
+                height: 4px;
+                background: var(--gray-300);
+                border-radius: 2px;
+                margin: 0 auto 0.9rem;
+            }
+            .tour-tooltip-arrow {
+                display: none !important;
+            }
+            .tour-tooltip-step {
+                margin-bottom: 0.35rem;
+                font-size: 0.68rem;
+            }
+            .tour-tooltip-step svg {
+                width: 12px;
+                height: 12px;
+            }
+            .tour-tooltip-title {
+                font-size: 1rem;
+                margin-bottom: 0.35rem;
+            }
+            .tour-tooltip-desc {
+                font-size: 0.84rem;
+                line-height: 1.5;
+                margin-bottom: 1rem;
+            }
+            .tour-tooltip-footer {
+                gap: 0.5rem;
+            }
+            .tour-btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.88rem;
+                border-radius: 12px;
+            }
+            .tour-btn-skip {
+                padding: 0.6rem 0.8rem;
+            }
+            .tour-dismiss-bar {
+                margin-top: 0.6rem;
+                padding-top: 0.6rem;
+                padding-bottom: env(safe-area-inset-bottom, 0);
+            }
+        }
     </style>
-<!-- TikTok Pixel Code Start -->
+<!-- TikTok Pixel Code Start (Consent-Aware) -->
 <script>
-!function (w, d, t) {
+(function(w, d, t) {
+  var consent = localStorage.getItem('mybiz_cookie_consent');
+  if (consent === 'accepted') {
+    w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
+    var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
+    ;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+    ttq.load('D6UMCABC77U4GR00ENM0');
+    ttq.page();
+  }
+})(window, document, 'ttq');
+
+function mybizLoadTikTokPixel() {
+  if (window.TiktokAnalyticsObject) return;
+  var w = window, d = document, t = 'ttq';
   w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
-var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
-;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+  var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
+  ;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
   ttq.load('D6UMCABC77U4GR00ENM0');
   ttq.page();
-}(window, document, 'ttq');
+}
 </script>
 <!-- TikTok Pixel Code End -->
+<style>
+/* Mobile menu user info - added for consistent mobile menu */
+.mobile-user-info { padding: 0.75rem 1rem; }
+.mobile-user-name { font-size: 1rem; font-weight: 700; color: #1e3a5f; }
+.mobile-user-email { font-size: 0.8rem; color: #64748b; margin-top: 2px; }
+/* Mobile menu spacing and scroll fixes */
+.site-mobile-menu { padding-top: 1.5rem !important; overflow-y: auto !important; -webkit-overflow-scrolling: touch; }
+.site-mobile-links { min-height: unset !important; padding-bottom: 2rem; }
+</style>
 </head>
 <body>
 
@@ -2912,13 +3198,27 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 <!-- Unified Site Mobile Menu -->
 <div class="site-mobile-overlay" id="siteMobileOverlay"></div>
 <div class="site-mobile-menu" id="siteMobileMenu">
-    <div class="site-mobile-links"><div class="mobile-level-toggle">
-            <button class="level-toggle-btn active" data-level="alevel">A-Level</button>
-            <button class="level-toggle-btn" data-level="gcse">GCSE</button>
+    <div class="site-mobile-links">
+        <div class="mobile-user-info auth-only" style="display:none;">
+            <div class="mobile-user-name" id="mobileUserName"></div>
+            <div class="mobile-user-email" id="mobileUserEmail"></div>
         </div>
         <div class="site-mobile-divider auth-only" style="display:none;"></div>
-        <a href="exam-practice.html" class="active auth-only" style="display:none;" data-mobile-nav-key="exam-practice">
-            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z"/></svg></span>
+        <a href="account.html" class="auth-only" style="display:none;">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg></span>
+            My Account
+        </a>
+        <a href="student-progress.html" class="auth-only" style="display:none;">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg></span>
+            Student Progress
+        </a>
+        <a href="exam-practice.html" class="auth-only" style="display:none;">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"/></svg></span>
+            Saved Tests
+        </a>
+        <div class="site-mobile-divider auth-only" style="display:none;"></div>
+        <a href="exam-practice.html" class="auth-only" style="display:none;" data-mobile-nav-key="exam-practice">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>
             Exam Practice
         </a>
         <a href="app.html" class="auth-only" style="display:none;" data-mobile-nav-key="flashcards">
@@ -2933,15 +3233,14 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></span>
             Study Notes
         </a>
-        <a href="blog.html">
-            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"/></svg></span>
-            Blog
-        </a>
-
-        <div class="site-mobile-divider"></div>
+        <div class="site-mobile-divider auth-only" style="display:none;"></div>
         <a href="contact.html">
             <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></span>
             Contact Us
+        </a>
+        <a href="blog.html">
+            <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"/></svg></span>
+            Blog
         </a>
         <div class="site-mobile-divider guest-only"></div>
         <a href="login.html" class="guest-only">
@@ -2954,8 +3253,9 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         <div class="site-mobile-divider auth-only" style="display:none;"></div>
         <button class="site-mobile-logout auth-only" style="display:none;" id="mobileLogoutBtn">
             <span class="site-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l3-3m0 0l-3-3m3 3H3"/></svg></span>
-            Logout
+            Log Out
         </button>
+    
     </div>
 </div>
 
@@ -2994,7 +3294,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                         <div style="font-size: 0.8rem; color: var(--gray-500);" id="freeTrialText">5 of 5 practices remaining</div>
                     </div>
                 </div>
-                <a href="pricing.html" style="font-size: 0.8rem; font-weight: 600; color: var(--accent); text-decoration: none;">Upgrade</a>
+                <a href="pricing.html?from=full" style="font-size: 0.8rem; font-weight: 600; color: var(--accent); text-decoration: none;">Upgrade</a>
             </div>
         </div>
 
@@ -3203,7 +3503,8 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             <div class="loading-text" id="loadingText">Generating your question...</div>
             <div style="margin-top: 1.25rem; padding: 0.75rem 1.5rem; background: rgba(255,255,255,0.08); border-radius: 12px; max-width: 420px;">
                 <div style="font-size: 0.85rem; color: var(--gray-400); line-height: 1.6; text-align: center;">
-                    This can take up to a minute. Please do not refresh or click back.
+                    This can take up to a minute. Please do not refresh, click back, or leave this page.
+                    <br>On mobile, please keep your screen on until the question appears.
                     <br>If you get an error, please <a href="contact.html" style="color: var(--accent); text-decoration: underline;">report the bug to us</a>.
                 </div>
             </div>
@@ -3275,9 +3576,9 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--accent), var(--accent-light)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
                 <svg width="40" height="40" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
             </div>
-            <h2 style="font-size: 1.6rem; font-weight: 800; color: var(--primary); margin-bottom: 0.75rem;">You've Used Your Free Practices</h2>
+            <h2 style="font-size: 1.6rem; font-weight: 800; color: var(--primary); margin-bottom: 0.75rem;">Tests and Exams are for Subscribers</h2>
             <p style="color: var(--gray-500); font-size: 1rem; line-height: 1.6; margin-bottom: 1.5rem;">
-                You've completed your <strong>5 free exam practices</strong>. Subscribe to get unlimited access to AI-generated exam papers, instant marking, and detailed feedback.
+                Tests and exams are available exclusively to subscribers. Subscribe to get unlimited access to AI-generated exam papers, instant marking, and detailed feedback.
             </p>
             <div style="background: var(--gray-50); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem; text-align: left;">
                 <div style="font-weight: 700; color: var(--primary); margin-bottom: 0.75rem;">What you'll get:</div>
@@ -3298,7 +3599,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                     All exam boards covered
                 </div>
             </div>
-            <a href="pricing.html" class="action-btn action-btn-primary" style="display: inline-block; text-decoration: none; padding: 14px 32px; font-size: 1rem;">
+            <a href="pricing.html?from=full" class="action-btn action-btn-primary" style="display: inline-block; text-decoration: none; padding: 14px 32px; font-size: 1rem;">
                 View Plans & Subscribe
             </a>
             <p style="color: var(--gray-400); font-size: 0.8rem; margin-top: 1rem;">Starting from just $9/month</p>
@@ -3313,9 +3614,11 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                 <div class="test-progress-fill" id="testProgressFill"></div>
             </div>
             <div class="test-progress-percentage" id="testProgressPercentage">0%</div>
+            <div id="testLoadingStage" style="font-size: 0.85rem; color: var(--accent); font-weight: 600; margin-top: 0.5rem; min-height: 1.25rem;"></div>
             <div style="margin: 1.25rem auto 0; padding: 0.75rem 1.5rem; background: rgba(30, 58, 95, 0.06); border: 1px solid rgba(30, 58, 95, 0.1); border-radius: 12px; max-width: 480px;">
                 <div style="font-size: 0.85rem; color: var(--gray-500); line-height: 1.6; text-align: center;">
-                    Tests and exams can take a few minutes to produce. Please do not refresh or click back. Wait for the "I'm Ready" button to appear.
+                    Tests and exams can take a few minutes to produce. Please do not refresh, click back, or leave this page. Wait for the "I'm Ready" button to appear.
+                    <br>On mobile, please keep your screen on until the test is ready.
                     <br>If you get an error, please <a href="contact.html" style="color: var(--accent); text-decoration: underline;">report the bug to us</a>.
                 </div>
             </div>
@@ -3367,6 +3670,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             </div>
             <div class="test-marking-text">Your test is being marked...</div>
             <div style="color: var(--gray-400); font-size: 0.9rem; margin-top: 0.5rem;">This could take a few minutes as we are generating specific feedback for your answers.</div>
+            <div style="color: var(--gray-400); font-size: 0.85rem; margin-top: 0.75rem;">Please do not refresh, click back, or leave this page. On mobile, keep your screen on.</div>
         </div>
     </div>
 
@@ -3499,6 +3803,22 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 const SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ===== PAGE VIEW TRACKING =====
+(function() {
+    var pvKey = 'mybiz_pv_exam_practice';
+    if (sessionStorage.getItem(pvKey)) return;
+    supabaseClient.auth.getSession().then(function(result) {
+        var session = result.data.session;
+        if (session && session.user) {
+            supabaseClient.from('page_views').insert({
+                user_id: session.user.id,
+                page_name: 'Exam Practice',
+                page_path: '/exam-practice.html'
+            }).then(function() { sessionStorage.setItem(pvKey, '1'); });
+        }
+    });
+})();
 
 // ===== BOARD DATA =====
 const BOARD_DATA = {
@@ -3988,6 +4308,20 @@ var TEST_GENERATION_TIPS = [
     'Show your working for calculation questions'
 ];
 
+// ===== SMOOTH SCROLL HELPER =====
+function scrollToSection(elementId, delay) {
+    var ms = delay || 150;
+    setTimeout(function() {
+        var el = document.getElementById(elementId);
+        if (el) {
+            var navbarHeight = 80;
+            var rect = el.getBoundingClientRect();
+            var scrollTarget = window.pageYOffset + rect.top - navbarHeight;
+            window.scrollTo({ top: scrollTarget, behavior: 'smooth' });
+        }
+    }, ms);
+}
+
 // ===== MODE SELECTION =====
 function showModeSelection() {
     document.getElementById('modeSelectionSection').style.display = '';
@@ -3998,6 +4332,7 @@ function showModeSelection() {
     document.getElementById('ciePaperSelectionSection').style.display = 'none';
     document.getElementById('cieLevelSelectionSection').style.display = 'none';
     document.getElementById('gcsePaperSelectionSection').style.display = 'none';
+    scrollToSection('modeSelectionSection');
 }
 
 function selectMode(mode) {
@@ -4029,30 +4364,38 @@ function selectMode(mode) {
         // For GCSE boards, show paper selection first (to know which question types apply)
         if (boardData.isGCSE && boardData.isPaperBased && !boardData.skipUnitSelection) {
             renderGcsePaperSelection('single');
+            scrollToSection('gcsePaperSelectionSection');
         } else {
             renderQuestionTypes();
             document.getElementById('qtypeSection').style.display = '';
             document.getElementById('generateSection').style.display = '';
+            scrollToSection('qtypeSection');
         }
     } else if (mode === 'topic_test') {
         if (currentBoard === 'cie_ial') {
             // CIE IAL: show AS/A Level selection first
             document.getElementById('cieLevelSelectionSection').style.display = '';
+            scrollToSection('cieLevelSelectionSection');
         } else if (boardData.isGCSE) {
             // GCSE boards: show paper selection first to determine topics
             renderGcsePaperSelection('topic_test');
+            scrollToSection('gcsePaperSelectionSection');
         } else {
             document.getElementById('topicSelectionSection').style.display = '';
             renderTopics();
+            scrollToSection('topicSelectionSection');
         }
     } else if (mode === 'exam') {
         if (boardData.isGCSE) {
             // All GCSE boards: show paper selection for exam mode
             renderGcsePaperSelection('exam');
+            scrollToSection('gcsePaperSelectionSection');
         } else if (currentBoard === 'cie_ial') {
             document.getElementById('ciePaperSelectionSection').style.display = '';
+            scrollToSection('ciePaperSelectionSection');
         } else if (boardData.skipUnitSelection) {
             document.getElementById('aqaPaperSelectionSection').style.display = '';
+            scrollToSection('aqaPaperSelectionSection');
         } else {
             // For A Level Edexcel: generate exam directly (unit already selected)
             checkFreeTrialAndGenerate();
@@ -4101,6 +4444,7 @@ function selectCieTopicLevel(el) {
     // Now show topic selection
     document.getElementById('topicSelectionSection').style.display = '';
     renderTopics();
+    scrollToSection('topicSelectionSection');
 }
 
 // ===== GCSE PAPER SELECTION =====
@@ -4143,10 +4487,12 @@ function selectGcsePaper(el) {
     } else if (gcsePaperNextAction === 'topic_test') {
         document.getElementById('topicSelectionSection').style.display = '';
         renderTopics();
+        scrollToSection('topicSelectionSection');
     } else if (gcsePaperNextAction === 'single') {
         renderQuestionTypes();
         document.getElementById('qtypeSection').style.display = '';
         document.getElementById('generateSection').style.display = '';
+        scrollToSection('qtypeSection');
     }
 }
 
@@ -4247,7 +4593,7 @@ async function checkFreeTrialAndRun(callback, genType) {
         if (!data || !data.allowed) {
             var reason = data ? data.reason : 'unknown';
 
-            if (reason === 'limit_reached') {
+            if (reason === 'paid_only' || reason === 'limit_reached') {
                 showPhase('paywall');
             } else if (reason === 'monthly_limit_reached') {
                 var limitType = data.limit_type === 'questions' ? 'single questions' : 'tests and exams';
@@ -4283,11 +4629,14 @@ function checkFreeTrialAndGenerate() {
 // ===== TEST GENERATION =====
 async function generateTest() {
     showPhase('test-loading');
+    requestWakeLock();
 
     // Reset ready button and progress
     document.getElementById('testReadyBtn').classList.remove('show');
     document.getElementById('testProgressFill').style.width = '0%';
+    document.getElementById('testProgressFill').style.transition = 'none';
     document.getElementById('testProgressPercentage').textContent = '0%';
+    document.getElementById('testLoadingStage').textContent = '';
 
     // Set loading title and subtitle based on mode
     var board = BOARD_DATA[currentBoard];
@@ -4317,8 +4666,8 @@ async function generateTest() {
         document.getElementById('testLoadingSubtitle').textContent = 'Timed test covering topic ' + (currentTopic || '');
     }
 
-    // Start progress bar animation
-    startTestProgressBar(90);
+    // Start progress bar animation (phase 1: extracts, targets ~45%)
+    startTestProgressBar(60, 45);
 
     try {
         var sessionResult = await supabaseClient.auth.getSession();
@@ -4333,7 +4682,7 @@ async function generateTest() {
         // For AQA topic tests, use 'all' as unit since there's no unit selection
         var effectiveUnit = unitNumber || 'all';
 
-        var payload = {
+        var basePayload = {
             test_type: currentMode === 'topic_test' ? 'topic_test' : 'unit_exam',
             board: currentBoard,
             unit: effectiveUnit,
@@ -4343,42 +4692,99 @@ async function generateTest() {
         // For CIE IAL topic tests, include the selected level so the edge function
         // knows whether to test AS-only subtopics or all (AS + A Level)
         if (currentBoard === 'cie_ial' && currentCieTopicLevel) {
-            payload.cie_level = currentCieTopicLevel;
+            basePayload.cie_level = currentCieTopicLevel;
         }
 
-        var response = await fetch(SUPABASE_URL + '/functions/v1/generate-test', {
+        var authHeaders = {
+            'Authorization': 'Bearer ' + session.access_token,
+            'Content-Type': 'application/json'
+        };
+
+        var stageEl = document.getElementById('testLoadingStage');
+
+        // ===== PHASE 1: Generate extracts / source booklet =====
+        stageEl.textContent = 'Creating case studies and business data...';
+
+        var phase1Payload = Object.assign({}, basePayload, { phase: 'extracts' });
+        var response1 = await fetch(SUPABASE_URL + '/functions/v1/generate-test', {
             method: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + session.access_token,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
+            headers: authHeaders,
+            body: JSON.stringify(phase1Payload)
         });
 
-        if (!response.ok) {
-            var error = await response.json();
-            throw new Error(error.message || 'Failed to generate test');
+        if (!response1.ok) {
+            var error1 = await response1.json();
+            throw new Error(error1.error || 'Failed to generate case studies');
         }
 
-        var data = await response.json();
-        currentTest = data.paper;
+        var data1 = await response1.json();
+        var sourceBooklet = data1.source_booklet || [];
 
-        // Stop the progress interval and animate to 100%
+        // Update progress to ~50%
         if (testProgressIntervalId) {
             clearInterval(testProgressIntervalId);
             testProgressIntervalId = null;
         }
         var progressFill = document.getElementById('testProgressFill');
         var progressPct = document.getElementById('testProgressPercentage');
+        progressFill.style.transition = 'width 0.5s ease-out';
+        progressFill.style.width = '50%';
+        progressPct.textContent = '50%';
+
+        // ===== PHASE 2: Generate questions =====
+        stageEl.textContent = 'Writing exam questions...';
+
+        // Restart progress animation from 50% to 90%
+        var phase2Start = Date.now();
+        var phase2Duration = 90000; // 90 seconds max for phase 2
+        testProgressIntervalId = setInterval(function() {
+            var elapsed = Date.now() - phase2Start;
+            var phase2Pct = Math.min((elapsed / phase2Duration) * 100, 90);
+            var totalPct = 50 + (phase2Pct * 0.5); // 50% to 95%
+            progressFill.style.transition = 'none';
+            progressFill.style.width = totalPct + '%';
+            progressPct.textContent = Math.round(totalPct) + '%';
+            if (elapsed >= phase2Duration) {
+                clearInterval(testProgressIntervalId);
+                testProgressIntervalId = null;
+            }
+        }, 100);
+
+        var phase2Payload = Object.assign({}, basePayload, {
+            phase: 'questions',
+            source_booklet_data: sourceBooklet
+        });
+        var response2 = await fetch(SUPABASE_URL + '/functions/v1/generate-test', {
+            method: 'POST',
+            headers: authHeaders,
+            body: JSON.stringify(phase2Payload)
+        });
+
+        if (!response2.ok) {
+            var error2 = await response2.json();
+            throw new Error(error2.error || 'Failed to generate questions');
+        }
+
+        var data2 = await response2.json();
+        currentTest = data2.paper;
+
+        // Stop the progress interval and animate to 100%
+        if (testProgressIntervalId) {
+            clearInterval(testProgressIntervalId);
+            testProgressIntervalId = null;
+        }
+        stageEl.textContent = 'Your exam is ready!';
         progressFill.style.transition = 'width 0.8s ease-out';
         progressFill.style.width = '100%';
         progressPct.textContent = '100%';
 
         setTimeout(function() {
             document.getElementById('testReadyBtn').classList.add('show');
+            releaseWakeLock();
         }, 1000);
 
     } catch (error) {
+        releaseWakeLock();
         console.error('Test generation error:', error);
         showError('Error generating test: ' + error.message);
         resetTestMode();
@@ -4387,10 +4793,35 @@ async function generateTest() {
 
 var testProgressIntervalId = null;
 
-function startTestProgressBar(duration) {
+// ===== WAKE LOCK (prevents screen sleep during generation) =====
+var wakeLockSentinel = null;
+
+function requestWakeLock() {
+    if ('wakeLock' in navigator) {
+        navigator.wakeLock.request('screen').then(function(sentinel) {
+            wakeLockSentinel = sentinel;
+            wakeLockSentinel.addEventListener('release', function() {
+                wakeLockSentinel = null;
+            });
+        }).catch(function(err) {
+            console.log('Wake Lock not available:', err.message);
+        });
+    }
+}
+
+function releaseWakeLock() {
+    if (wakeLockSentinel) {
+        wakeLockSentinel.release().then(function() {
+            wakeLockSentinel = null;
+        }).catch(function() {});
+    }
+}
+
+function startTestProgressBar(duration, maxPct) {
     // Clear any existing interval
     if (testProgressIntervalId) clearInterval(testProgressIntervalId);
 
+    var targetPct = maxPct || 90;
     var progressFill = document.getElementById('testProgressFill');
     var progressPct = document.getElementById('testProgressPercentage');
     var startTime = Date.now();
@@ -4398,8 +4829,9 @@ function startTestProgressBar(duration) {
 
     testProgressIntervalId = setInterval(function() {
         var elapsed = Date.now() - startTime;
-        var percentage = Math.min((elapsed / maxDuration) * 100, 90);
+        var percentage = Math.min((elapsed / maxDuration) * targetPct, targetPct);
 
+        progressFill.style.transition = 'none';
         progressFill.style.width = percentage + '%';
         progressPct.textContent = Math.round(percentage) + '%';
 
@@ -4876,6 +5308,7 @@ function submitTestAnswers() {
 async function performTestSubmission(studentAnswers, studentAnswerTexts) {
     stopTestTimer();
     showPhase('test-marking');
+    requestWakeLock();
 
     try {
         var sessionResult = await supabaseClient.auth.getSession();
@@ -4970,6 +5403,7 @@ async function performTestSubmission(studentAnswers, studentAnswerTexts) {
             elapsed_seconds: elapsed
         };
 
+        releaseWakeLock();
         showTestFeedback(mappedResults);
 
         // Save results to test_results table for student progress tracking
@@ -5025,6 +5459,7 @@ async function performTestSubmission(studentAnswers, studentAnswerTexts) {
         }
 
     } catch (error) {
+        releaseWakeLock();
         console.error('Submission error:', error);
         showError('Error submitting test: ' + error.message);
         showPhase('test-exam');
@@ -5827,14 +6262,30 @@ function resetTestMode() {
 
 // ===== AUTH =====
 async function checkAuth() {
-    let session;
+    var session;
     try {
-        const result = await supabaseClient.auth.getSession();
+        var result = await supabaseClient.auth.getSession();
         session = result.data.session;
     } catch (error) {
         console.error('Auth check error:', error);
         window.location.href = 'login.html';
         return;
+    }
+
+    // If no session but URL has OAuth callback tokens, wait for Supabase to process them
+    if (!session && window.location.hash && window.location.hash.includes('access_token')) {
+        session = await new Promise(function(resolve) {
+            var done = false;
+            supabaseClient.auth.onAuthStateChange(function(event, s) {
+                if (!done && s) {
+                    done = true;
+                    resolve(s);
+                }
+            });
+            setTimeout(function() {
+                if (!done) { done = true; resolve(null); }
+            }, 5000);
+        });
     }
 
     if (!session) {
@@ -5898,23 +6349,23 @@ async function loadTrialStatus() {
         var text = document.getElementById('freeTrialText');
         if (!banner || !text) return;
 
-        var paidPlans = ['annual', 'quarterly', 'monthly', 'grandfathered'];
+        var paidPlans = ['annual', 'quarterly', 'monthly'];
 
-        if (data.plan === 'free') {
+        if (paidPlans.indexOf(data.plan) !== -1) {
+            banner.style.display = 'none';
+        } else if (data.plan === 'free' || data.plan === 'grandfathered') {
             var used = data.free_tests_used || 0;
             var remaining = Math.max(0, 5 - used);
-            text.textContent = remaining + ' of 5 practices remaining';
+            text.textContent = remaining + ' of 5 free question practices remaining. Tests and exams require a subscription.';
             banner.style.display = 'block';
+            banner.style.background = 'linear-gradient(135deg, #fffbeb, #fef3c7)';
+            banner.style.borderColor = '#fcd34d';
 
-            if (remaining <= 2 && remaining > 0) {
-                banner.style.background = 'linear-gradient(135deg, #fffbeb, #fef3c7)';
-                banner.style.borderColor = '#fcd34d';
-            } else if (remaining === 0) {
+            if (remaining === 0) {
                 banner.style.background = 'linear-gradient(135deg, #fef2f2, #fee2e2)';
                 banner.style.borderColor = '#fca5a5';
+                text.textContent = 'Subscribe to access tests, exams, and unlimited questions.';
             }
-        } else if (paidPlans.indexOf(data.plan) !== -1) {
-            banner.style.display = 'none';
         } else {
             banner.style.display = 'none';
         }
@@ -5934,16 +6385,21 @@ async function handleLogout() {
 }
 
 // ===== NAVIGATION =====
+var phaseHistory = ['selection'];
+
 function showPhase(phase) {
     document.querySelectorAll('.phase').forEach(function(el) { el.classList.remove('active'); });
     document.getElementById('phase-' + phase).classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // Push a history state when entering a test so browser back stays on this page
-    if (phase === 'test-exam') {
-        history.pushState({ phase: 'test-exam' }, '', window.location.pathname);
-    } else if (phase === 'selection') {
+    if (phase === 'selection') {
+        // Reset the phase stack and replace state
+        phaseHistory = ['selection'];
         history.replaceState({ phase: 'selection' }, '', window.location.pathname);
+    } else {
+        // Push a history entry for every non-selection phase
+        phaseHistory.push(phase);
+        history.pushState({ phase: phase }, '', window.location.pathname);
     }
 }
 
@@ -6150,6 +6606,7 @@ function selectBoard(el) {
     } else {
         // For A Level Edexcel and others: show unit/paper selection first
         renderUnits();
+        scrollToSection('unitSection');
     }
 }
 
@@ -6188,6 +6645,7 @@ function selectUnit(el) {
 
     // Show mode selection instead of directly showing question types
     showModeSelection();
+    // showModeSelection already scrolls
 }
 
 function renderQuestionTypes() {
@@ -6258,6 +6716,7 @@ function selectQType(el) {
 
     currentQType = el.getAttribute('data-qtype');
     document.getElementById('generateBtn').disabled = false;
+    scrollToSection('generateSection');
 }
 
 // ===== PHASE 2: GENERATE QUESTION =====
@@ -6285,6 +6744,7 @@ async function generateQuestion() {
     }
 
     showPhase('loading');
+    requestWakeLock();
     document.getElementById('loadingText').textContent = customTopic ? 'Generating a question on ' + customTopic + '...' : 'Generating your question...';
 
     // Fallback text after 8 seconds
@@ -6332,10 +6792,12 @@ async function generateQuestion() {
         currentQuestion = data.question;
         currentAttemptId = data.attempt_id || null;
 
+        releaseWakeLock();
         renderQuestion(currentQuestion);
         showPhase('question');
 
     } catch (error) {
+        releaseWakeLock();
         clearTimeout(fallbackTimer);
         console.error('Generate error:', error);
         showPhase('selection');
@@ -6592,6 +7054,7 @@ async function submitAnswer() {
     btn.disabled = true;
     btn.innerHTML = '<div class="spinner"></div> Marking...';
     document.getElementById('answerTextarea').readOnly = true;
+    requestWakeLock();
 
     try {
         var response = await fetch(SUPABASE_URL + '/functions/v1/mark-answer', {
@@ -6615,12 +7078,14 @@ async function submitAnswer() {
         }
 
         var data = await response.json();
+        releaseWakeLock();
         renderFeedback(data.marking, currentQuestion);
         showPhase('feedback');
         // Check if we should show the review popup (after 5th completed question)
         checkReviewPopupTrigger();
 
     } catch (error) {
+        releaseWakeLock();
         console.error('Marking error:', error);
         btn.disabled = false;
         btn.innerHTML = 'Submit for Marking';
@@ -6754,7 +7219,7 @@ function renderFeedback(marking, question) {
     html += '<button class="action-btn action-btn-primary" onclick="resetToSelection()">';
     html += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>';
     html += 'Try Another Question</button>';
-    html += '<button class="action-btn action-btn-secondary" onclick="showDashboard()">';
+    html += '<button class="action-btn action-btn-secondary" onclick="window.location.href=\'student-progress.html\'">';
     html += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>';
     html += 'View Progress</button>';
     html += '</div>';
@@ -7115,6 +7580,9 @@ document.addEventListener('click', function(e) {
 // ===== DISCLAIMER (moved to welcome.html onboarding) =====
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Set initial history state for back button handling
+    history.replaceState({ phase: 'selection' }, '', window.location.pathname);
+
     checkAuth();
     setupMobileMenu();
 
@@ -7304,6 +7772,68 @@ document.addEventListener('DOMContentLoaded', function() {
     font-size: 0.95rem;
     color: #64748b;
     line-height: 1.5;
+}
+/* === MOBILE OPTIMISATION FIXES (21 March 2026) === */
+@media (max-width: 768px) {
+    .data-table,
+    .extract-table,
+    .recent-table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        font-size: 0.8rem;
+    }
+    .data-table th,
+    .data-table td,
+    .extract-table th,
+    .extract-table td,
+    .recent-table th,
+    .recent-table td {
+        padding: 0.5rem 0.75rem;
+        min-width: 80px;
+    }
+    .test-chart-container {
+        height: 250px;
+        margin: 15px 0;
+    }
+    canvas {
+        max-width: 100% !important;
+    }
+    .extract-modal {
+        max-width: 95vw;
+        max-height: 90vh;
+    }
+    .extract-modal-body {
+        padding: 16px;
+        font-size: 0.9em;
+    }
+    .exam-section {
+        padding: 15px;
+    }
+    .source-booklet-section {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .test-exam-header {
+        padding: 8px 12px;
+        gap: 6px;
+    }
+    .test-exam-title {
+        font-size: 0.95rem;
+    }
+    .test-exam-timer {
+        font-size: 1.1rem;
+    }
+    .test-answer-textarea {
+        min-height: 120px;
+        padding: 10px;
+    }
+    .score-ring-container {
+        width: 110px;
+        height: 110px;
+    }
 }
 </style>
 
@@ -7989,28 +8519,37 @@ window.addEventListener('beforeunload', function(e) {
     }
 });
 
-// Handle browser back button — stay on exam practice page, show save prompt if in a test
+// Handle browser back button — navigate back through phases
 window.addEventListener('popstate', function(e) {
     var testPhase = document.getElementById('phase-test-exam');
     var isInTest = testPhase && testPhase.classList.contains('active') && currentTest && testExamStartTime;
 
     if (isInTest) {
-        // Push state again so back doesn't leave the page
+        // In an active test, show save prompt instead of going back
         history.pushState({ phase: 'test-exam' }, '', window.location.pathname);
-        // Show the save prompt
         if (typeof promptSaveBeforeLeaving === 'function') {
             promptSaveBeforeLeaving();
         } else {
-            // Fallback if save feature not loaded: just go to selection
             resetTestMode();
         }
-    } else {
-        // Not in an active test — go to selection phase if not already there
-        var selectionPhase = document.getElementById('phase-selection');
-        if (selectionPhase && !selectionPhase.classList.contains('active')) {
-            history.pushState({ phase: 'selection' }, '', window.location.pathname);
-            showPhase('selection');
-        }
+        return;
+    }
+
+    // Pop the current phase off the stack
+    if (phaseHistory.length > 1) {
+        phaseHistory.pop();
+    }
+
+    // Go to the previous phase
+    var prevPhase = phaseHistory[phaseHistory.length - 1] || 'selection';
+    document.querySelectorAll('.phase').forEach(function(el) { el.classList.remove('active'); });
+    document.getElementById('phase-' + prevPhase).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // If we're back at selection, make sure it's a replace state
+    if (prevPhase === 'selection') {
+        phaseHistory = ['selection'];
+        history.replaceState({ phase: 'selection' }, '', window.location.pathname);
     }
 });
 
@@ -8019,5 +8558,555 @@ document.addEventListener('keydown', function(e) {
 });
 </script>
 
+
+<style>
+/* Cookie banner mobile fix */
+@media (max-width: 480px) {
+    #mybiz-cookie-banner {
+        flex-direction: column !important;
+        padding: 12px 16px !important;
+        gap: 10px !important;
+    }
+    #mybiz-cookie-banner > div:first-child {
+        min-width: 0 !important;
+    }
+    #mybiz-cookie-banner > div:last-child {
+        width: 100%;
+    }
+    #mybiz-cookie-accept, #mybiz-cookie-reject {
+        flex: 1;
+    }
+}
+</style>
+<!-- Cookie Consent Banner -->
+<div id="mybiz-cookie-banner" style="display:none; position:fixed; bottom:0; left:0; right:0; z-index:99999; background:#1e3a5f; color:#fff; padding:16px 24px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; font-size:14px; line-height:1.5; box-shadow:0 -2px 16px rgba(0,0,0,0.2); align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+  <div style="flex:1; min-width:240px;">
+    We use cookies to help improve your experience and measure how our ads perform. You can accept or reject non-essential cookies. See our <a href="/privacy" style="color:#f39c12; text-decoration:underline;">Privacy Policy</a> for details.
+  </div>
+  <div style="display:flex; gap:10px; flex-shrink:0;">
+    <button id="mybiz-cookie-reject" style="background:transparent; color:#fff; border:1px solid rgba(255,255,255,0.4); padding:8px 20px; border-radius:6px; cursor:pointer; font-size:14px; font-weight:500; transition:background 0.2s;">Reject</button>
+    <button id="mybiz-cookie-accept" style="background:#e67e22; color:#fff; border:none; padding:8px 20px; border-radius:6px; cursor:pointer; font-size:14px; font-weight:600; transition:background 0.2s;">Accept</button>
+  </div>
+</div>
+<script>
+(function() {
+  var consent = localStorage.getItem('mybiz_cookie_consent');
+  var banner = document.getElementById('mybiz-cookie-banner');
+  if (!consent && banner) {
+    banner.style.display = 'flex';
+  }
+  var acceptBtn = document.getElementById('mybiz-cookie-accept');
+  var rejectBtn = document.getElementById('mybiz-cookie-reject');
+  if (acceptBtn) {
+    acceptBtn.onclick = function() {
+      localStorage.setItem('mybiz_cookie_consent', 'accepted');
+      banner.style.display = 'none';
+      mybizLoadTikTokPixel();
+    };
+  }
+  if (rejectBtn) {
+    rejectBtn.onclick = function() {
+      localStorage.setItem('mybiz_cookie_consent', 'rejected');
+      banner.style.display = 'none';
+    };
+  }
+})();
+</script>
+<!-- End Cookie Consent Banner -->
+<script>
+/* Mobile menu user info population - standalone block */
+(function() {
+    var sbUrl = 'https://zyaywzzmjpctpodpxhge.supabase.co';
+    var sbKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
+    try {
+        var c = window.supabase.createClient(sbUrl, sbKey);
+        c.auth.getSession().then(function(r) {
+            if (r.data.session && r.data.session.user) {
+                var user = r.data.session.user;
+                var nameEl = document.getElementById('mobileUserName');
+                var emailEl = document.getElementById('mobileUserEmail');
+                if (nameEl) {
+                    var fullName = user.user_metadata && (user.user_metadata.full_name || user.user_metadata.name) || '';
+                    nameEl.textContent = fullName || 'Student';
+                }
+                if (emailEl) {
+                    emailEl.textContent = user.email || '';
+                }
+            }
+        });
+    } catch(e) {}
+})();
+</script>
+<!-- ==================== FEATURE TOUR ==================== -->
+<div class="tour-backdrop" id="tourBackdrop"></div>
+<div class="tour-spotlight" id="tourSpotlight" style="display:none;"></div>
+<div class="tour-tooltip" id="tourTooltip" style="display:none;">
+    <div class="tour-tooltip-accent"></div>
+    <div class="tour-tooltip-arrow" id="tourArrow"></div>
+    <div class="tour-tooltip-inner">
+        <div class="tour-tooltip-step" id="tourStepLabel"></div>
+        <div class="tour-tooltip-title" id="tourTitle"></div>
+        <div class="tour-tooltip-desc" id="tourDesc"></div>
+        <div class="tour-tooltip-footer">
+            <div class="tour-dots" id="tourDots"></div>
+            <div class="tour-tooltip-btns">
+                <button class="tour-btn tour-btn-skip" id="tourSkipBtn">Skip</button>
+                <button class="tour-btn tour-btn-next" id="tourNextBtn">Next</button>
+            </div>
+        </div>
+        <div class="tour-dismiss-bar">
+            <button class="tour-dismiss-link" id="tourDismissBtn">Don't show this again</button>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    var TOUR_STORAGE_KEY = 'mybiz_tour_dismissed';
+
+    var ICON_TOGGLE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 7h12m0 0l-4-4m4 4l-4 4M16 17H4m0 0l4 4m-4-4l4-4"/></svg>';
+    var ICON_GRID = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>';
+    var ICON_CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
+    var ICON_USER = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+    var ICON_MENU = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>';
+
+    var DESKTOP_STEPS = [
+        {
+            selector: '#desktopLevelToggle',
+            title: 'A-Level or GCSE?',
+            desc: 'Start here. This toggle controls whether you see A-Level or GCSE content across the entire site, including notes, flashcards, and exam boards below.',
+            icon: ICON_TOGGLE,
+            position: 'bottom',
+            scrollTo: false
+        },
+        {
+            selector: '#boardGrid',
+            title: 'Choose Your Exam Board',
+            desc: 'Select the exam board and qualification you are studying. We support Edexcel, AQA, and Cambridge for both A-Level and GCSE.',
+            icon: ICON_GRID,
+            position: 'top',
+            scrollTo: true
+        },
+        {
+            selector: '#modeSelectionSection',
+            title: 'Pick Your Practice Mode',
+            desc: 'After choosing a board, you pick how to practise. Single Question for quick drills, Topic Test for focused revision, or Full Exam for timed exam conditions.',
+            icon: ICON_CHECK,
+            position: 'top',
+            scrollTo: true,
+            showHidden: true
+        },
+        {
+            selector: '.profile-dropdown-wrapper',
+            title: 'Your Progress and Saved Tests',
+            desc: 'Click your avatar to access your Progress Dashboard, AI Coaching Summaries, and any tests you have saved to finish later.',
+            icon: ICON_USER,
+            position: 'bottom',
+            scrollTo: false
+        },
+        {
+            selector: '#siteNavButtons',
+            title: 'Explore All Features',
+            desc: 'Don\'t miss Flash Cards, Exam Skills training, and Study Notes in the menu. Remember to keep your A-Level/GCSE toggle set to the right level so you see the correct content.',
+            icon: ICON_MENU,
+            position: 'bottom',
+            scrollTo: false
+        }
+    ];
+
+    var MOBILE_STEPS = [
+        {
+            selector: '#desktopLevelToggle',
+            title: 'A-Level or GCSE?',
+            desc: 'Start here. This toggle controls whether you see A-Level or GCSE content across the entire site, including notes, flashcards, and exam boards.',
+            icon: ICON_TOGGLE,
+            scrollTo: false
+        },
+        {
+            selector: '#boardGrid',
+            title: 'Choose Your Exam Board',
+            desc: 'Select the exam board and qualification you are studying. We support Edexcel, AQA, and Cambridge for both A-Level and GCSE.',
+            icon: ICON_GRID,
+            scrollTo: true
+        },
+        {
+            selector: '#modeSelectionSection',
+            title: 'Pick Your Practice Mode',
+            desc: 'Single Question for quick drills, Topic Test for focused revision, or Full Exam for timed exam conditions.',
+            icon: ICON_CHECK,
+            scrollTo: true,
+            showHidden: true
+        },
+        {
+            selector: '#siteHamburger',
+            title: 'Your Menu',
+            desc: 'Tap here to access your Progress Dashboard, Coaching Summaries, Saved Tests, Flash Cards, Exam Skills, and Study Notes.',
+            icon: ICON_MENU,
+            scrollTo: false
+        },
+        {
+            selector: '#desktopLevelToggle',
+            title: 'Remember Your Level!',
+            desc: 'Always check this toggle is set to A-Level or GCSE so you see the right content across the whole site. You\'re all set. Happy revising!',
+            icon: ICON_TOGGLE,
+            scrollTo: false
+        }
+    ];
+
+    var currentStep = 0;
+    var tourActive = false;
+    var modeWasHidden = false;
+
+    var backdrop = document.getElementById('tourBackdrop');
+    var spotlight = document.getElementById('tourSpotlight');
+    var tooltip = document.getElementById('tourTooltip');
+    var arrow = document.getElementById('tourArrow');
+    var stepLabel = document.getElementById('tourStepLabel');
+    var titleEl = document.getElementById('tourTitle');
+    var descEl = document.getElementById('tourDesc');
+    var dotsEl = document.getElementById('tourDots');
+    var nextBtn = document.getElementById('tourNextBtn');
+    var skipBtn = document.getElementById('tourSkipBtn');
+    var dismissBtn = document.getElementById('tourDismissBtn');
+
+    function isMobile() {
+        return window.innerWidth <= 768;
+    }
+
+    function getSteps() {
+        return isMobile() ? MOBILE_STEPS : DESKTOP_STEPS;
+    }
+
+    function getStepElement(step) {
+        return document.querySelector(step.selector);
+    }
+
+    function renderDots() {
+        var steps = getSteps();
+        var html = '';
+        for (var i = 0; i < steps.length; i++) {
+            var cls = 'tour-dot';
+            if (i === currentStep) cls += ' active';
+            else if (i < currentStep) cls += ' done';
+            html += '<div class="' + cls + '"></div>';
+        }
+        dotsEl.innerHTML = html;
+    }
+
+    // ===== DESKTOP POSITIONING: floating tooltip near element =====
+    function positionDesktop(el, step) {
+        var rect = el.getBoundingClientRect();
+        var spotPad = 8;
+
+        // Position spotlight
+        spotlight.style.display = 'block';
+        spotlight.style.left = (rect.left - spotPad) + 'px';
+        spotlight.style.top = (rect.top - spotPad) + 'px';
+        spotlight.style.width = (rect.width + spotPad * 2) + 'px';
+        spotlight.style.height = (rect.height + spotPad * 2) + 'px';
+
+        // Show tooltip to measure it
+        tooltip.style.display = 'block';
+        tooltip.classList.remove('visible');
+
+        var tipRect = tooltip.getBoundingClientRect();
+        var tipW = tipRect.width;
+        var tipH = tipRect.height;
+        var viewW = window.innerWidth;
+        var viewH = window.innerHeight;
+        var gap = 14;
+
+        var top, left;
+        var arrowPos = step.position || 'bottom';
+
+        if (arrowPos === 'bottom') {
+            top = rect.bottom + spotPad + gap;
+            left = rect.left + rect.width / 2 - tipW / 2;
+            arrow.className = 'tour-tooltip-arrow arrow-top';
+            if (top + tipH > viewH - 20) {
+                top = rect.top - spotPad - gap - tipH;
+                arrow.className = 'tour-tooltip-arrow arrow-bottom';
+            }
+        } else {
+            top = rect.top - spotPad - gap - tipH;
+            left = rect.left + rect.width / 2 - tipW / 2;
+            arrow.className = 'tour-tooltip-arrow arrow-bottom';
+            if (top < 20) {
+                top = rect.bottom + spotPad + gap;
+                arrow.className = 'tour-tooltip-arrow arrow-top';
+            }
+        }
+
+        if (left < 12) left = 12;
+        if (left + tipW > viewW - 12) left = viewW - 12 - tipW;
+
+        var arrowLeft = rect.left + rect.width / 2 - left;
+        arrowLeft = Math.max(20, Math.min(arrowLeft, tipW - 34));
+        arrow.style.left = arrowLeft + 'px';
+
+        tooltip.style.top = top + 'px';
+        tooltip.style.left = left + 'px';
+
+        requestAnimationFrame(function() {
+            tooltip.classList.add('visible');
+        });
+    }
+
+    // ===== MOBILE POSITIONING: bottom sheet + spotlight =====
+    function positionMobile(el) {
+        var rect = el.getBoundingClientRect();
+        var spotPad = 6;
+
+        // Position spotlight
+        spotlight.style.display = 'block';
+        spotlight.style.left = (rect.left - spotPad) + 'px';
+        spotlight.style.top = (rect.top - spotPad) + 'px';
+        spotlight.style.width = (rect.width + spotPad * 2) + 'px';
+        spotlight.style.height = (rect.height + spotPad * 2) + 'px';
+
+        // Tooltip positioning is handled by CSS on mobile (fixed bottom sheet)
+        // Just clear any inline positioning from desktop
+        tooltip.style.display = 'block';
+        tooltip.style.top = '';
+        tooltip.style.left = '';
+        tooltip.classList.remove('visible');
+
+        requestAnimationFrame(function() {
+            tooltip.classList.add('visible');
+        });
+    }
+
+    function positionTooltip(el, step) {
+        if (isMobile()) {
+            positionMobile(el);
+        } else {
+            positionDesktop(el, step);
+        }
+    }
+
+    // Mobile scroll: put element in the top portion of the screen, above the bottom sheet
+    function scrollForMobile(el, callback) {
+        var rect = el.getBoundingClientRect();
+        var viewH = window.innerHeight;
+        // Bottom sheet takes roughly 45% of the screen, so target the top 50%
+        var targetZoneTop = 70; // below navbar
+        var targetZoneBottom = viewH * 0.45;
+
+        if (rect.top >= targetZoneTop && rect.bottom <= targetZoneBottom) {
+            // Already visible in the target zone
+            callback();
+            return;
+        }
+
+        var scrollTarget = window.pageYOffset + rect.top - targetZoneTop - 10;
+        window.scrollTo({ top: Math.max(0, scrollTarget), behavior: 'smooth' });
+        setTimeout(callback, 450);
+    }
+
+    function showStep(index) {
+        var steps = getSteps();
+        currentStep = index;
+        var step = steps[index];
+
+        // If this step targets a hidden element, temporarily show it
+        if (step.showHidden) {
+            var modeSection = document.getElementById('modeSelectionSection');
+            if (modeSection && modeSection.style.display === 'none') {
+                modeSection.style.display = '';
+                modeWasHidden = true;
+            }
+        }
+
+        var el = getStepElement(step);
+        if (!el) {
+            if (index < steps.length - 1) {
+                showStep(index + 1);
+            } else {
+                endTour();
+            }
+            return;
+        }
+
+        // Scroll handling
+        if (step.scrollTo) {
+            if (isMobile()) {
+                scrollForMobile(el, function() { renderStep(el, step, index); });
+            } else {
+                var elRect = el.getBoundingClientRect();
+                if (elRect.top < 80 || elRect.bottom > window.innerHeight) {
+                    var scrollTarget = window.pageYOffset + elRect.top - 100;
+                    window.scrollTo({ top: scrollTarget, behavior: 'smooth' });
+                    setTimeout(function() { renderStep(el, step, index); }, 450);
+                    return;
+                }
+                renderStep(el, step, index);
+            }
+            return;
+        }
+
+        // For non-scroll steps on mobile, ensure navbar elements are visible
+        if (isMobile() && !step.scrollTo) {
+            var elRect = el.getBoundingClientRect();
+            if (elRect.top < 0 || elRect.bottom < 0) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                setTimeout(function() { renderStep(el, step, index); }, 400);
+                return;
+            }
+        }
+
+        renderStep(el, step, index);
+    }
+
+    function renderStep(el, step, index) {
+        var steps = getSteps();
+        tooltip.classList.remove('visible');
+
+        setTimeout(function() {
+            stepLabel.innerHTML = step.icon + ' Step ' + (index + 1) + ' of ' + steps.length;
+            titleEl.textContent = step.title;
+            descEl.textContent = step.desc;
+
+            if (index === steps.length - 1) {
+                nextBtn.textContent = 'Got it!';
+                nextBtn.className = 'tour-btn tour-btn-finish';
+                skipBtn.style.display = 'none';
+            } else {
+                nextBtn.textContent = 'Next';
+                nextBtn.className = 'tour-btn tour-btn-next';
+                skipBtn.style.display = '';
+            }
+
+            renderDots();
+            positionTooltip(el, step);
+        }, 150);
+    }
+
+    function cleanupStep() {
+        // Re-hide mode selection if we temporarily showed it
+        if (modeWasHidden) {
+            var modeSection = document.getElementById('modeSelectionSection');
+            if (modeSection) modeSection.style.display = 'none';
+            modeWasHidden = false;
+        }
+    }
+
+    function nextStep() {
+        cleanupStep();
+        var steps = getSteps();
+        if (currentStep < steps.length - 1) {
+            showStep(currentStep + 1);
+        } else {
+            endTour();
+        }
+    }
+
+    function endTour() {
+        cleanupStep();
+        tourActive = false;
+        tooltip.classList.remove('visible');
+        backdrop.classList.remove('active');
+        setTimeout(function() {
+            spotlight.style.display = 'none';
+            tooltip.style.display = 'none';
+        }, 400);
+        // Scroll back to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function dismissTour() {
+        localStorage.setItem(TOUR_STORAGE_KEY, 'true');
+        endTour();
+    }
+
+    function startTour() {
+        if (tourActive) return;
+        tourActive = true;
+        currentStep = 0;
+        modeWasHidden = false;
+
+        // Scroll to top first
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        setTimeout(function() {
+            backdrop.classList.add('active');
+            showStep(0);
+        }, 400);
+    }
+
+    // Event listeners
+    nextBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        nextStep();
+    });
+
+    skipBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        endTour();
+    });
+
+    dismissBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        dismissTour();
+    });
+
+    // Click backdrop to advance
+    backdrop.addEventListener('click', function() {
+        nextStep();
+    });
+
+    // Reposition on resize
+    var resizeTimer;
+    window.addEventListener('resize', function() {
+        if (!tourActive) return;
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {
+            var steps = getSteps();
+            var step = steps[currentStep];
+            var el = getStepElement(step);
+            if (el) positionTooltip(el, step);
+        }, 200);
+    });
+
+    // Auto-start: wait for auth check to complete, then start if not dismissed
+    function tryStartTour() {
+        // Only start for logged-in users
+        var authElements = document.querySelectorAll('.auth-only');
+        var isLoggedIn = false;
+        for (var i = 0; i < authElements.length; i++) {
+            if (authElements[i].style.display !== 'none' && authElements[i].offsetParent !== null) {
+                isLoggedIn = true;
+                break;
+            }
+        }
+
+        if (!isLoggedIn) return;
+
+        // Check if dismissed
+        if (localStorage.getItem(TOUR_STORAGE_KEY) === 'true') return;
+
+        // Small delay so the page is fully rendered
+        setTimeout(startTour, 800);
+    }
+
+    // Try after page is settled (auth state takes a moment)
+    setTimeout(tryStartTour, 2000);
+
+    // Expose globally so it can be triggered manually
+    window.startFeatureTour = function() {
+        // Reset dismiss if manually triggered
+        startTour();
+    };
+})();
+</script>
+
+<!-- Google Analytics (GA4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HFSYK32ZFT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-HFSYK32ZFT');
+  gtag('config', 'AW-18038973402');
+</script>
 </body>
 </html>
