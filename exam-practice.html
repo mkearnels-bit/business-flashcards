@@ -4666,8 +4666,8 @@ async function generateTest() {
         document.getElementById('testLoadingSubtitle').textContent = 'Timed test covering topic ' + (currentTopic || '');
     }
 
-    // Start progress bar animation (phase 1: extracts, targets ~33%)
-    startTestProgressBar(50, 33);
+    // Start progress bar animation (phase 1: extracts, targets ~25%)
+    startTestProgressBar(40, 25);
 
     try {
         var sessionResult = await supabaseClient.auth.getSession();
@@ -4704,6 +4704,35 @@ async function generateTest() {
         var progressPct = document.getElementById('testProgressPercentage');
         var stageEl = document.getElementById('testLoadingStage');
 
+        // Helper to snap progress to a target percentage
+        var snapProgress = function(pct) {
+            if (testProgressIntervalId) {
+                clearInterval(testProgressIntervalId);
+                testProgressIntervalId = null;
+            }
+            progressFill.style.transition = 'width 0.5s ease-out';
+            progressFill.style.width = pct + '%';
+            progressPct.textContent = pct + '%';
+        };
+
+        // Helper to animate progress between two percentages
+        var animateProgress = function(fromPct, toPct, durationMs) {
+            var start = Date.now();
+            var range = toPct - fromPct;
+            testProgressIntervalId = setInterval(function() {
+                var elapsed = Date.now() - start;
+                var progress = Math.min((elapsed / durationMs) * 100, 100);
+                var currentPct = fromPct + (progress / 100 * range);
+                progressFill.style.transition = 'none';
+                progressFill.style.width = currentPct + '%';
+                progressPct.textContent = Math.round(currentPct) + '%';
+                if (elapsed >= durationMs) {
+                    clearInterval(testProgressIntervalId);
+                    testProgressIntervalId = null;
+                }
+            }, 100);
+        };
+
         // ===== PHASE 1: Generate extracts / source booklet =====
         stageEl.textContent = 'Creating case studies and business data...';
 
@@ -4721,34 +4750,11 @@ async function generateTest() {
 
         var data1 = await response1.json();
         var sourceBooklet = data1.source_booklet || [];
+        snapProgress(25);
 
-        // Snap progress to 33%
-        if (testProgressIntervalId) {
-            clearInterval(testProgressIntervalId);
-            testProgressIntervalId = null;
-        }
-        progressFill.style.transition = 'width 0.5s ease-out';
-        progressFill.style.width = '33%';
-        progressPct.textContent = '33%';
-
-        // ===== PHASE 2: Generate first half of questions =====
-        stageEl.textContent = 'Writing first set of questions...';
-
-        // Animate progress from 33% to 66%
-        var phase2Start = Date.now();
-        var phase2Duration = 80000;
-        testProgressIntervalId = setInterval(function() {
-            var elapsed = Date.now() - phase2Start;
-            var phase2Pct = Math.min((elapsed / phase2Duration) * 100, 100);
-            var totalPct = 33 + (phase2Pct * 0.33);
-            progressFill.style.transition = 'none';
-            progressFill.style.width = totalPct + '%';
-            progressPct.textContent = Math.round(totalPct) + '%';
-            if (elapsed >= phase2Duration) {
-                clearInterval(testProgressIntervalId);
-                testProgressIntervalId = null;
-            }
-        }, 100);
+        // ===== PHASE 2: Generate questions batch 1 of 3 =====
+        stageEl.textContent = 'Writing questions (1 of 3)...';
+        animateProgress(25, 50, 60000);
 
         var phase2Payload = Object.assign({}, basePayload, {
             phase: 'questions_1',
@@ -4762,39 +4768,16 @@ async function generateTest() {
 
         if (!response2.ok) {
             var error2 = await response2.json();
-            throw new Error(error2.error || 'Failed to generate first set of questions');
+            throw new Error(error2.error || 'Failed to generate questions (batch 1)');
         }
 
         var data2 = await response2.json();
         var questions1 = data2.questions || [];
+        snapProgress(50);
 
-        // Snap progress to 66%
-        if (testProgressIntervalId) {
-            clearInterval(testProgressIntervalId);
-            testProgressIntervalId = null;
-        }
-        progressFill.style.transition = 'width 0.5s ease-out';
-        progressFill.style.width = '66%';
-        progressPct.textContent = '66%';
-
-        // ===== PHASE 3: Generate second half of questions and assemble paper =====
-        stageEl.textContent = 'Writing remaining questions...';
-
-        // Animate progress from 66% to 95%
-        var phase3Start = Date.now();
-        var phase3Duration = 80000;
-        testProgressIntervalId = setInterval(function() {
-            var elapsed = Date.now() - phase3Start;
-            var phase3Pct = Math.min((elapsed / phase3Duration) * 100, 100);
-            var totalPct = 66 + (phase3Pct * 0.29);
-            progressFill.style.transition = 'none';
-            progressFill.style.width = totalPct + '%';
-            progressPct.textContent = Math.round(totalPct) + '%';
-            if (elapsed >= phase3Duration) {
-                clearInterval(testProgressIntervalId);
-                testProgressIntervalId = null;
-            }
-        }, 100);
+        // ===== PHASE 3: Generate questions batch 2 of 3 =====
+        stageEl.textContent = 'Writing questions (2 of 3)...';
+        animateProgress(50, 75, 60000);
 
         var phase3Payload = Object.assign({}, basePayload, {
             phase: 'questions_2',
@@ -4811,11 +4794,38 @@ async function generateTest() {
 
         if (!response3.ok) {
             var error3 = await response3.json();
-            throw new Error(error3.error || 'Failed to generate remaining questions');
+            throw new Error(error3.error || 'Failed to generate questions (batch 2)');
         }
 
         var data3 = await response3.json();
-        currentTest = data3.paper;
+        var questions2 = data3.questions || [];
+        snapProgress(75);
+
+        // ===== PHASE 4: Generate questions batch 3 of 3 and assemble paper =====
+        stageEl.textContent = 'Writing final questions...';
+        animateProgress(75, 95, 60000);
+
+        var phase4Payload = Object.assign({}, basePayload, {
+            phase: 'questions_3',
+            source_booklet_data: {
+                _source_booklet: sourceBooklet,
+                _questions_1: questions1,
+                _questions_2: questions2
+            }
+        });
+        var response4 = await fetch(SUPABASE_URL + '/functions/v1/generate-test', {
+            method: 'POST',
+            headers: authHeaders,
+            body: JSON.stringify(phase4Payload)
+        });
+
+        if (!response4.ok) {
+            var error4 = await response4.json();
+            throw new Error(error4.error || 'Failed to generate final questions');
+        }
+
+        var data4 = await response4.json();
+        currentTest = data4.paper;
 
         // Stop the progress interval and animate to 100%
         if (testProgressIntervalId) {
