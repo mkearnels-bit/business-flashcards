@@ -4733,22 +4733,53 @@ async function generateTest() {
             }, 100);
         };
 
+        // Reusable fetch-with-retry helper (1 retry after 3s delay)
+        var fetchPhase = async function(payload, fallbackError, maxRetries) {
+            var retries = maxRetries || 1;
+            for (var attempt = 0; attempt <= retries; attempt++) {
+                try {
+                    var resp = await fetch(SUPABASE_URL + '/functions/v1/generate-test', {
+                        method: 'POST',
+                        headers: authHeaders,
+                        body: JSON.stringify(payload)
+                    });
+                    if (!resp.ok) {
+                        var errText = '';
+                        try {
+                            var errJson = await resp.json();
+                            errText = errJson.error || '';
+                        } catch (e) {
+                            try { errText = await resp.text(); } catch (e2) { errText = ''; }
+                        }
+                        var errMsg = errText || fallbackError + ' (HTTP ' + resp.status + ')';
+                        if (attempt < retries) {
+                            console.warn('Phase failed (attempt ' + (attempt + 1) + '), retrying in 3s:', errMsg);
+                            stageEl.textContent = 'Retrying...';
+                            await new Promise(function(r) { setTimeout(r, 3000); });
+                            continue;
+                        }
+                        throw new Error(errMsg);
+                    }
+                    return await resp.json();
+                } catch (fetchErr) {
+                    if (fetchErr.message && fetchErr.message.indexOf('HTTP ') === -1 && attempt < retries) {
+                        console.warn('Network error (attempt ' + (attempt + 1) + '), retrying in 3s:', fetchErr.message);
+                        stageEl.textContent = 'Retrying...';
+                        await new Promise(function(r) { setTimeout(r, 3000); });
+                        continue;
+                    }
+                    throw fetchErr;
+                }
+            }
+        };
+
         // ===== PHASE 1: Generate extracts / source booklet =====
         stageEl.textContent = 'Creating case studies and business data...';
 
-        var phase1Payload = Object.assign({}, basePayload, { phase: 'extracts' });
-        var response1 = await fetch(SUPABASE_URL + '/functions/v1/generate-test', {
-            method: 'POST',
-            headers: authHeaders,
-            body: JSON.stringify(phase1Payload)
-        });
-
-        if (!response1.ok) {
-            var error1 = await response1.json();
-            throw new Error(error1.error || 'Failed to generate case studies');
-        }
-
-        var data1 = await response1.json();
+        var data1 = await fetchPhase(
+            Object.assign({}, basePayload, { phase: 'extracts' }),
+            'Failed to generate case studies'
+        );
         var sourceBooklet = data1.source_booklet || [];
         snapProgress(25);
 
@@ -4756,22 +4787,13 @@ async function generateTest() {
         stageEl.textContent = 'Writing questions (1 of 3)...';
         animateProgress(25, 50, 60000);
 
-        var phase2Payload = Object.assign({}, basePayload, {
-            phase: 'questions_1',
-            source_booklet_data: sourceBooklet
-        });
-        var response2 = await fetch(SUPABASE_URL + '/functions/v1/generate-test', {
-            method: 'POST',
-            headers: authHeaders,
-            body: JSON.stringify(phase2Payload)
-        });
-
-        if (!response2.ok) {
-            var error2 = await response2.json();
-            throw new Error(error2.error || 'Failed to generate questions (batch 1)');
-        }
-
-        var data2 = await response2.json();
+        var data2 = await fetchPhase(
+            Object.assign({}, basePayload, {
+                phase: 'questions_1',
+                source_booklet_data: sourceBooklet
+            }),
+            'Failed to generate questions (batch 1)'
+        );
         var questions1 = data2.questions || [];
         snapProgress(50);
 
@@ -4779,25 +4801,16 @@ async function generateTest() {
         stageEl.textContent = 'Writing questions (2 of 3)...';
         animateProgress(50, 75, 60000);
 
-        var phase3Payload = Object.assign({}, basePayload, {
-            phase: 'questions_2',
-            source_booklet_data: {
-                _source_booklet: sourceBooklet,
-                _questions_1: questions1
-            }
-        });
-        var response3 = await fetch(SUPABASE_URL + '/functions/v1/generate-test', {
-            method: 'POST',
-            headers: authHeaders,
-            body: JSON.stringify(phase3Payload)
-        });
-
-        if (!response3.ok) {
-            var error3 = await response3.json();
-            throw new Error(error3.error || 'Failed to generate questions (batch 2)');
-        }
-
-        var data3 = await response3.json();
+        var data3 = await fetchPhase(
+            Object.assign({}, basePayload, {
+                phase: 'questions_2',
+                source_booklet_data: {
+                    _source_booklet: sourceBooklet,
+                    _questions_1: questions1
+                }
+            }),
+            'Failed to generate questions (batch 2)'
+        );
         var questions2 = data3.questions || [];
         snapProgress(75);
 
@@ -4805,26 +4818,17 @@ async function generateTest() {
         stageEl.textContent = 'Writing final questions...';
         animateProgress(75, 90, 60000);
 
-        var phase4Payload = Object.assign({}, basePayload, {
-            phase: 'questions_3',
-            source_booklet_data: {
-                _source_booklet: sourceBooklet,
-                _questions_1: questions1,
-                _questions_2: questions2
-            }
-        });
-        var response4 = await fetch(SUPABASE_URL + '/functions/v1/generate-test', {
-            method: 'POST',
-            headers: authHeaders,
-            body: JSON.stringify(phase4Payload)
-        });
-
-        if (!response4.ok) {
-            var error4 = await response4.json();
-            throw new Error(error4.error || 'Failed to generate final questions');
-        }
-
-        var data4 = await response4.json();
+        var data4 = await fetchPhase(
+            Object.assign({}, basePayload, {
+                phase: 'questions_3',
+                source_booklet_data: {
+                    _source_booklet: sourceBooklet,
+                    _questions_1: questions1,
+                    _questions_2: questions2
+                }
+            }),
+            'Failed to generate final questions'
+        );
         var questions3 = data4.questions || [];
         snapProgress(90);
 
@@ -4832,27 +4836,19 @@ async function generateTest() {
         stageEl.textContent = 'Assembling your exam paper...';
         animateProgress(90, 98, 5000);
 
-        var phase5Payload = Object.assign({}, basePayload, {
-            phase: 'assemble',
-            source_booklet_data: {
-                _source_booklet: sourceBooklet,
-                _questions_1: questions1,
-                _questions_2: questions2,
-                _questions_3: questions3
-            }
-        });
-        var response5 = await fetch(SUPABASE_URL + '/functions/v1/generate-test', {
-            method: 'POST',
-            headers: authHeaders,
-            body: JSON.stringify(phase5Payload)
-        });
-
-        if (!response5.ok) {
-            var error5 = await response5.json();
-            throw new Error(error5.error || 'Failed to assemble exam paper');
-        }
-
-        var data5 = await response5.json();
+        var data5 = await fetchPhase(
+            Object.assign({}, basePayload, {
+                phase: 'assemble',
+                source_booklet_data: {
+                    _source_booklet: sourceBooklet,
+                    _questions_1: questions1,
+                    _questions_2: questions2,
+                    _questions_3: questions3
+                }
+            }),
+            'Failed to assemble exam paper',
+            0
+        );
         currentTest = data5.paper;
 
         // Stop the progress interval and animate to 100%
