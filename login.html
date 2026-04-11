@@ -428,7 +428,7 @@
             const { data, error } = await supabaseClient.auth.signInWithOAuth({
                 provider: 'google',
                 options: {
-                    redirectTo: window.location.origin + '/exam-practice.html'
+                    redirectTo: window.location.origin + '/welcome.html'
                 }
             });
             if (error) {
