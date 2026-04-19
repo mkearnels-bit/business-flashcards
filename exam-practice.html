@@ -3135,11 +3135,6 @@ function mybizLoadTikTokPixel() {
 .site-mobile-menu { padding-top: 1.5rem !important; overflow-y: auto !important; -webkit-overflow-scrolling: touch; }
 .site-mobile-links { min-height: unset !important; padding-bottom: 2rem; }
 </style>
-<style>
-#navPricing { color: #e67e22 !important; font-weight: 600 !important; }
-#navPricing:hover { color: #d35400 !important; }
-#navPricing.active { color: #e67e22 !important; border-bottom-color: #e67e22 !important; }
-</style>
 </head>
 <body>
 
@@ -3158,7 +3153,7 @@ function mybizLoadTikTokPixel() {
             <a href="notes.html" class="site-nav-link auth-only" style="display:none;" data-nav-key="study-notes">Study Notes</a>
             <a href="blog.html" class="site-nav-link">Blog</a>
             <a href="contact.html" class="site-nav-link">Contact Us</a>
-            <a href="pricing.html" class="site-nav-link" id="navPricing">Pricing</a>
+            <a href="pricing.html" class="site-nav-link">Pricing</a>
             <a href="login.html" class="site-nav-btn site-nav-btn-ghost guest-only">Log In</a>
             <a href="signup.html" class="site-nav-btn site-nav-btn-primary guest-only">Get Started</a>
             <div class="profile-dropdown-wrapper auth-only" style="display:none;">
@@ -6950,7 +6945,7 @@ function updateWordCount() {
         counter.className = 'word-counter high';
     }
 
-    document.getElementById('submitBtn').disabled = words < 20;
+    document.getElementById('submitBtn').disabled = text.length < 1;
 }
 
 function toggleTimer() {
