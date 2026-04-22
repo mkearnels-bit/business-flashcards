@@ -2244,7 +2244,7 @@ function mybizLoadTikTokPixel() {
                 var plan = 'free';
                 var notesAccess = false;
                 if (subResult.data && subResult.data.length > 0) { plan = subResult.data[0].plan; notesAccess = subResult.data[0].notes_access || false; }
-                if (plan === 'annual' || plan === 'quarterly' || plan === 'monthly' || plan === 'grandfathered' || notesAccess) return;
+                if (plan === 'annual' || plan === 'quarterly' || plan === 'monthly' || plan === 'grandfathered' || plan === 'exam_pass' || notesAccess) return;
                 var allTopics = document.querySelectorAll('.topic-section');
                 var allSidebarItems = document.querySelectorAll('.sidebar-topic-item');
                 var lockedCount = 0;
@@ -3104,6 +3104,372 @@ document.addEventListener('DOMContentLoaded', function() {
   gtag('config', 'AW-18038973402');
 </script>
 
+
+<!-- ============ SPECIAL OFFER POPUP + FLOATING STICKER ============ -->
+<!-- $18 One-Month Exam Practice Special -->
+<style>
+/* ---- POPUP OVERLAY ---- */
+#specialOfferOverlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+    animation: soFadeIn 0.3s ease;
+}
+@keyframes soFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes soSlideUp { from { opacity: 0; transform: translateY(40px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes soPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+@keyframes soShine { 0% { left: -75%; } 100% { left: 125%; } }
+@keyframes soGlow { 0%, 100% { box-shadow: 0 0 15px rgba(230,126,34,0.4); } 50% { box-shadow: 0 0 30px rgba(230,126,34,0.7); } }
+@keyframes soBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes soFloat { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-8px) rotate(2deg); } }
+@keyframes soRing { 0% { transform: rotate(0deg); } 10% { transform: rotate(14deg); } 20% { transform: rotate(-14deg); } 30% { transform: rotate(8deg); } 40% { transform: rotate(-4deg); } 50%, 100% { transform: rotate(0deg); } }
+
+#specialOfferPopup {
+    background: linear-gradient(135deg, #0f2744 0%, #1a3a5c 40%, #1e4d6e 100%);
+    border-radius: 20px;
+    max-width: 480px;
+    width: 92%;
+    padding: 0;
+    position: relative;
+    animation: soSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+    box-shadow: 0 25px 80px rgba(0,0,0,0.5);
+}
+.so-popup-sparkle {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #e67e22, #f1c40f, #e67e22);
+    background-size: 200% 100%;
+    animation: soShine 2s linear infinite;
+}
+.so-popup-close {
+    position: absolute;
+    top: 14px; right: 14px;
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: rgba(255,255,255,0.6);
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    z-index: 2;
+    display: flex; align-items: center; justify-content: center;
+}
+.so-popup-close:hover { background: rgba(255,255,255,0.2); color: #fff; }
+.so-popup-badge {
+    text-align: center;
+    padding: 28px 24px 0;
+}
+.so-popup-badge-tag {
+    display: inline-block;
+    background: linear-gradient(135deg, #e67e22, #f39c12);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+}
+.so-popup-title {
+    color: #fff;
+    font-size: 1.55rem;
+    font-weight: 800;
+    line-height: 1.3;
+    margin: 0 0 6px;
+}
+.so-popup-subtitle {
+    color: rgba(255,255,255,0.7);
+    font-size: 0.92rem;
+    margin: 0 0 20px;
+    line-height: 1.5;
+}
+.so-popup-price-box {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    padding: 20px;
+    margin: 0 24px 20px;
+    text-align: center;
+}
+.so-popup-price {
+    color: #f39c12;
+    font-size: 2.8rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+.so-popup-price-note {
+    color: rgba(255,255,255,0.5);
+    font-size: 0.82rem;
+}
+.so-popup-features {
+    padding: 0 28px;
+    margin: 0 0 22px;
+    list-style: none;
+}
+.so-popup-features li {
+    color: rgba(255,255,255,0.85);
+    font-size: 0.88rem;
+    padding: 6px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.so-popup-features li svg {
+    width: 18px; height: 18px;
+    color: #2ecc71;
+    flex-shrink: 0;
+}
+.so-popup-cta {
+    display: block;
+    margin: 0 24px 10px;
+    padding: 15px;
+    background: linear-gradient(135deg, #e67e22, #f39c12);
+    color: #fff;
+    font-size: 1.05rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+    animation: soPulse 2.5s ease-in-out infinite;
+}
+.so-popup-cta:hover { transform: scale(1.02); filter: brightness(1.1); }
+.so-popup-cta::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -75%;
+    width: 50%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: soShine 3s ease-in-out infinite;
+}
+.so-popup-footer {
+    text-align: center;
+    padding: 8px 24px 22px;
+    color: rgba(255,255,255,0.4);
+    font-size: 0.75rem;
+}
+.so-popup-footer a { color: rgba(255,255,255,0.5); text-decoration: underline; }
+
+/* ---- FLOATING STICKER ---- */
+#specialOfferSticker {
+    display: none;
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+    cursor: pointer;
+    text-decoration: none;
+    animation: soFloat 3s ease-in-out infinite;
+    filter: drop-shadow(0 8px 24px rgba(230,126,34,0.35));
+    transition: filter 0.2s;
+}
+#specialOfferSticker:hover {
+    filter: drop-shadow(0 12px 32px rgba(230,126,34,0.5));
+    animation-play-state: paused;
+}
+.so-sticker-inner {
+    background: linear-gradient(135deg, #e67e22, #d35400);
+    border-radius: 16px;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+    animation: soGlow 2s ease-in-out infinite;
+}
+.so-sticker-inner::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -75%;
+    width: 50%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    animation: soShine 3s ease-in-out infinite;
+}
+.so-sticker-icon {
+    font-size: 1.4rem;
+    animation: soRing 2s ease-in-out infinite;
+    animation-delay: 1s;
+}
+.so-sticker-text {
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.85rem;
+    line-height: 1.3;
+}
+.so-sticker-text span {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 800;
+}
+.so-sticker-close {
+    position: absolute;
+    top: -6px; right: -6px;
+    width: 22px; height: 22px;
+    background: #1e3a5f;
+    border: 2px solid #e67e22;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 0.7rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+    z-index: 2;
+    line-height: 1;
+}
+.so-sticker-close:hover { background: #e74c3c; border-color: #e74c3c; }
+
+/* ---- MOBILE ---- */
+@media (max-width: 600px) {
+    #specialOfferPopup {
+        max-width: 95%;
+        border-radius: 16px;
+    }
+    .so-popup-title { font-size: 1.3rem; }
+    .so-popup-price { font-size: 2.2rem; }
+    .so-popup-badge { padding: 22px 18px 0; }
+    .so-popup-price-box { margin: 0 18px 16px; padding: 16px; }
+    .so-popup-features { padding: 0 22px; }
+    .so-popup-cta { margin: 0 18px 8px; padding: 14px; font-size: 0.95rem; }
+    .so-popup-footer { padding: 6px 18px 18px; }
+
+    #specialOfferSticker {
+        bottom: 16px;
+        right: 16px;
+    }
+    .so-sticker-inner {
+        padding: 10px 14px;
+        border-radius: 14px;
+    }
+    .so-sticker-icon { font-size: 1.2rem; }
+    .so-sticker-text { font-size: 0.78rem; }
+    .so-sticker-text span { font-size: 0.95rem; }
+}
+</style>
+
+<!-- Popup Modal -->
+<div id="specialOfferOverlay">
+    <div id="specialOfferPopup">
+        <div class="so-popup-sparkle"></div>
+        <button class="so-popup-close" onclick="closeSpecialOffer()" aria-label="Close">&times;</button>
+        <div class="so-popup-badge">
+            <div class="so-popup-badge-tag">Limited Exam Season Offer</div>
+            <h2 class="so-popup-title">1 Month of Unlimited<br>Exam Practice</h2>
+            <p class="so-popup-subtitle">AI-powered marking, instant feedback, and coaching across every exam board.</p>
+        </div>
+        <div class="so-popup-price-box">
+            <div class="so-popup-price">&pound;18</div>
+            <div class="so-popup-price-note">One-off payment. No subscription. No auto-renewal.</div>
+        </div>
+        <ul class="so-popup-features">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Unlimited exam practice questions</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>AI marking with detailed feedback</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>All exam boards and units included</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>AI coaching summaries to track progress</li>
+        </ul>
+        <a href="https://www.creem.io/payment/prod_2fDMWWccZvDrhBDTFhPS2J" class="so-popup-cta" id="soPopupCta" target="_blank" rel="noopener">Get 30 Days of Full Access</a>
+        <div class="so-popup-footer">No commitment. Practice hard, ace your exam.<br><a href="refund.html">Refund policy</a></div>
+    </div>
+</div>
+
+<!-- Floating Sticker -->
+<a href="https://www.creem.io/payment/prod_2fDMWWccZvDrhBDTFhPS2J" id="specialOfferSticker" target="_blank" rel="noopener">
+    <div class="so-sticker-inner">
+        <div class="so-sticker-icon">&#x1F525;</div>
+        <div class="so-sticker-text">Exam Season<span>&pound;18 for 30 Days</span></div>
+        <button class="so-sticker-close" onclick="event.preventDefault();event.stopPropagation();closeSpecialSticker();" aria-label="Close">&times;</button>
+    </div>
+</a>
+
+<script>
+/* Special Offer Logic */
+(function() {
+    var OFFER_POPUP_KEY = 'so_popup_dismissed';
+    var OFFER_STICKER_KEY = 'so_sticker_dismissed';
+
+    function isPaidUser(callback) {
+        try {
+            var sbUrl = 'https://zyaywzzmjpctpodpxhge.supabase.co';
+            var sbKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
+            var client = (typeof supabaseClient !== 'undefined') ? supabaseClient : (window._navSupabase || (window.supabase ? window.supabase.createClient(sbUrl, sbKey) : null));
+            if (!client) { callback(false); return; }
+
+            client.auth.getSession().then(function(r) {
+                if (!r.data.session) {
+                    callback(false); // guest
+                    return;
+                }
+                client.from('subscriptions').select('plan, expires_at').eq('user_id', r.data.session.user.id).single().then(function(subRes) {
+                    if (subRes.data && subRes.data.plan && subRes.data.plan !== 'free') {
+                        // Check if exam_pass has expired
+                        if (subRes.data.plan === 'exam_pass' && subRes.data.expires_at && new Date(subRes.data.expires_at) < new Date()) {
+                            callback(false); // expired exam pass
+                        } else {
+                            callback(true); // paid user
+                        }
+                    } else {
+                        callback(false); // free user
+                    }
+                }).catch(function() { callback(false); });
+            }).catch(function() { callback(false); });
+        } catch(e) { callback(false); }
+    }
+
+    window.closeSpecialOffer = function() {
+        var overlay = document.getElementById('specialOfferOverlay');
+        if (overlay) overlay.style.display = 'none';
+        sessionStorage.setItem(OFFER_POPUP_KEY, '1');
+    };
+
+    window.closeSpecialSticker = function() {
+        var sticker = document.getElementById('specialOfferSticker');
+        if (sticker) sticker.style.display = 'none';
+        sessionStorage.setItem(OFFER_STICKER_KEY, '1');
+    };
+
+    // Show after short delay for better UX
+    setTimeout(function() {
+        isPaidUser(function(paid) {
+            if (paid) return;
+
+            // Show popup if not dismissed this session
+            if (!sessionStorage.getItem(OFFER_POPUP_KEY)) {
+                var overlay = document.getElementById('specialOfferOverlay');
+                if (overlay) overlay.style.display = 'flex';
+            }
+
+            // Show sticker if not dismissed this session
+            if (!sessionStorage.getItem(OFFER_STICKER_KEY)) {
+                var sticker = document.getElementById('specialOfferSticker');
+                if (sticker) sticker.style.display = 'block';
+            }
+        });
+    }, 1500);
+
+    // Close popup on overlay click
+    var overlay = document.getElementById('specialOfferOverlay');
+    if (overlay) {
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) window.closeSpecialOffer();
+        });
+    }
+})();
+</script>
+<!-- ============ END SPECIAL OFFER ============ -->
 
 </body>
 </html>
