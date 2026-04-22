@@ -487,7 +487,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 <!-- TikTok Pixel Code End -->
 </head>
 <body>
-    <div class="welcome-container">
+    <div class="welcome-container" id="welcomeContainer" style="display:none;">
         <div class="logo">
             <img src="logo.png" alt="MyBizStudies">
         </div>
@@ -817,6 +817,9 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             if (name) {
                 document.getElementById('welcomeTitle').textContent = `Welcome, ${name}!`;
             }
+
+            // Only show the page once we know onboarding is needed
+            document.getElementById('welcomeContainer').style.display = '';
         }
         init();
 
