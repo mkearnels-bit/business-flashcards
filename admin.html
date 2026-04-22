@@ -2147,6 +2147,7 @@ function mybizLoadTikTokPixel() {
                 const planBadge = user.plan === 'free' ? 'badge-gray' :
                                   ['annual','quarterly','monthly'].includes(user.plan) ? 'badge-success' :
                                   user.plan === 'grandfathered' ? 'badge-info' :
+                                  user.plan === 'exam_pass' ? 'badge-warning' :
                                   user.plan === 'yearly' ? 'badge-success' : 'badge-info';
                 const statusBadge = user.status === 'active' ? 'badge-success' :
                                     user.status === 'expired' ? 'badge-danger' : 'badge-warning';
@@ -2748,6 +2749,7 @@ function mybizLoadTikTokPixel() {
             const planBadge = user.plan === 'free' ? 'badge-gray' :
                               ['annual','quarterly','monthly'].includes(user.plan) ? 'badge-success' :
                               user.plan === 'grandfathered' ? 'badge-info' :
+                              user.plan === 'exam_pass' ? 'badge-warning' :
                               user.plan === 'yearly' ? 'badge-success' : 'badge-info';
             const statusBadge = user.status === 'active' ? 'badge-success' :
                                 user.status === 'expired' ? 'badge-danger' : 'badge-warning';
@@ -3815,7 +3817,7 @@ function mybizLoadTikTokPixel() {
                 return;
             }
 
-            var planBadge = { annual: 'badge-green', quarterly: 'badge-blue', monthly: 'badge-purple', grandfathered: 'badge-amber', exam_pass: 'badge-blue' };
+            var planBadge = { annual: 'badge-green', quarterly: 'badge-blue', monthly: 'badge-purple', grandfathered: 'badge-amber', exam_pass: 'badge-warning' };
             var statusBadge = { active: 'badge-green', canceled: 'badge-red', expired: 'badge-gray' };
 
             tbody.innerHTML = filtered.map(function(s) {
