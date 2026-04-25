@@ -216,21 +216,15 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
 
             <!-- Standard test fields -->
             <div id="standardTestFields">
-                <div class="field-row">
-                    <div class="field">
-                        <label class="field-label">Test type</label>
-                        <select class="field-select" id="tTestTypeSelect">
-                            <option value="topic_test">Topic Test</option>
-                        </select>
-                    </div>
-                    <div class="field">
-                        <label class="field-label">Unit</label>
-                        <select class="field-select" id="tUnitSelect"></select>
-                    </div>
+                <input type="hidden" id="tTestTypeSelect" value="topic_test">
+                <div class="field">
+                    <label class="field-label">Unit</label>
+                    <select class="field-select" id="tUnitSelect"></select>
                 </div>
-                <div class="field" id="testTopicField" style="display:none;">
-                    <label class="field-label">Topic (for topic tests)</label>
+                <div class="field" id="testTopicField">
+                    <label class="field-label">Topic focus (optional)</label>
                     <input type="text" class="field-input" id="tTopicInput" placeholder="e.g. The marketing mix">
+                    <small style="color: var(--gray-500); font-size:0.82rem;">Leave blank to let the AI pick a topic for you.</small>
                 </div>
             </div>
 
@@ -243,8 +237,9 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
 
                 <div class="field-row">
                     <div class="field" style="margin-bottom: 0.5rem;">
-                        <label class="field-label">Topic focus (optional)</label>
-                        <input type="text" class="field-input" id="customTopicInput" placeholder="e.g. The marketing mix">
+                        <label class="field-label">Topic focus <span style="color: var(--accent);">*</span></label>
+                        <input type="text" class="field-input" id="customTopicInput" placeholder="e.g. The marketing mix" required>
+                        <small style="color: var(--gray-500); font-size:0.82rem;">This will be the title of the test.</small>
                     </div>
                     <div class="field" style="margin-bottom: 0.5rem;">
                         <label class="field-label">Time allowed (optional)</label>
@@ -834,10 +829,7 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
             });
         });
 
-        document.getElementById('tTestTypeSelect').addEventListener('change', function() {
-            var v = document.getElementById('tTestTypeSelect').value;
-            document.getElementById('testTopicField').style.display = (v === 'topic_test') ? 'block' : 'none';
-        });
+        // Test type is fixed to topic_test — topic field is always visible.
 
         // Test variant toggle (standard / custom)
         document.querySelectorAll('#testVariantToggle button').forEach(function(b) {
@@ -942,6 +934,7 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
                 if (customSlots.length === 0) throw new Error('Add at least one question slot first.');
 
                 var topic3 = document.getElementById('customTopicInput').value.trim();
+                if (!topic3) throw new Error('Topic focus is required for custom tests. It will be used as the test title.');
                 var time3 = document.getElementById('customTimeInput').value.trim();
                 var unit3 = document.getElementById('tUnitSelect') ? document.getElementById('tUnitSelect').value : null;
 
@@ -1051,7 +1044,8 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
         document.getElementById('caseStudyContainer').innerHTML = caseHtml;
 
         var totalMarks = paper.total_marks || (paper.questions || []).reduce(function(s, q) { return s + (q.marks || 0); }, 0);
-        document.getElementById('approveTitle').textContent = paper.test_title || 'Standard test';
+        var paperTitleText = paper.test_title || paper.title || paper.topic || 'Topic test';
+        document.getElementById('approveTitle').textContent = paperTitleText;
         document.getElementById('approveSub').textContent = (BOARD_LABELS[currentClass.board] || currentClass.board) + ', ' + totalMarks + ' marks total, ' + (paper.questions || []).length + ' questions';
         totalMarksForPayload = totalMarks;
 
@@ -1136,14 +1130,22 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
         var dueDate = document.getElementById('dueDateInput').value;
         var dueAtIso = dueDate ? new Date(dueDate + 'T23:59:00').toISOString() : null;
 
+        var variant = (currentType === 'test' && currentTestVariant === 'custom') ? 'custom' : 'standard';
+
         var unit = currentType === 'question'
             ? document.getElementById('qUnitSelect').value
             : document.getElementById('tUnitSelect').value;
-        var topic = currentType === 'question'
-            ? document.getElementById('qTopicInput').value.trim()
-            : document.getElementById('tTopicInput').value.trim();
 
-        var variant = (currentType === 'test' && currentTestVariant === 'custom') ? 'custom' : 'standard';
+        // Pick the topic source based on the section the teacher used.
+        var topic = '';
+        if (currentType === 'question') {
+            topic = document.getElementById('qTopicInput').value.trim();
+        } else if (variant === 'custom') {
+            topic = document.getElementById('customTopicInput').value.trim();
+        } else {
+            topic = document.getElementById('tTopicInput').value.trim();
+        }
+
         var timeAllowed = (currentType === 'test' && currentTestVariant === 'custom')
             ? (document.getElementById('customTimeInput').value.trim() || null)
             : null;
