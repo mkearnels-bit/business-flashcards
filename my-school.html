@@ -62,22 +62,26 @@ body {
 
             var profileResult = await supabaseClient
                 .from('user_profiles')
-                .select('role')
+                .select('role, school_id')
                 .eq('user_id', session.user.id)
                 .maybeSingle();
 
             var role = profileResult && profileResult.data && profileResult.data.role;
+            var schoolId = profileResult && profileResult.data && profileResult.data.school_id;
 
-            if (role === 'teacher') {
+            // Only school-linked teachers and students get routed to the portal.
+            // role='teacher' without a school_id is just an individual user who picked
+            // 'teacher' on the welcome onboarding survey; they should see the schools
+            // landing page like everyone else.
+            if (role === 'teacher' && schoolId) {
                 go('/teacher-dashboard.html', 'Welcome back, taking you to your classes...');
                 return;
             }
-            if (role === 'student') {
+            if (role === 'student' && schoolId) {
                 go('/student-portal.html', 'Welcome back, opening your work...');
                 return;
             }
 
-            // Authenticated but not a teacher or student (e.g. an individual paying user)
             go('/schools.html', 'Loading school portal...');
         } catch (e) {
             go('/schools.html', 'Loading school portal...');

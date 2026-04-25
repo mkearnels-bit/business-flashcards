@@ -414,15 +414,19 @@
                 }
                 var profileResult = await supabaseClient
                     .from('user_profiles')
-                    .select('role')
+                    .select('role, school_id')
                     .eq('user_id', userId)
                     .maybeSingle();
                 if (profileResult && profileResult.data) {
-                    if (profileResult.data.role === 'teacher') {
+                    // Only route to school portal pages when the user is school-linked.
+                    // role='teacher' or 'student' with NULL school_id is an individual
+                    // user who self-described that way during onboarding; they should
+                    // land on the normal exam-practice page.
+                    if (profileResult.data.role === 'teacher' && profileResult.data.school_id) {
                         window.location.href = '/teacher-dashboard.html';
                         return;
                     }
-                    if (profileResult.data.role === 'student') {
+                    if (profileResult.data.role === 'student' && profileResult.data.school_id) {
                         window.location.href = '/student-portal.html';
                         return;
                     }

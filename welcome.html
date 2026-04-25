@@ -799,22 +799,23 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             // Check if they've already completed onboarding
             const { data: profile } = await supabaseClient
                 .from('user_profiles')
-                .select('id, role')
+                .select('id, role, school_id')
                 .eq('user_id', currentUser.id)
                 .single();
 
             if (profile) {
-                // Teachers (invited by admin, skip student onboarding) go to teacher portal
-                if (profile.role === 'teacher') {
+                // School-linked teachers (invited by admin, have school_id) go to teacher portal
+                if (profile.role === 'teacher' && profile.school_id) {
                     window.location.href = '/teacher-dashboard.html';
                     return;
                 }
-                // Students go to the student portal
-                if (profile.role === 'student') {
+                // School-linked students (signed up via class join code) go to student portal
+                if (profile.role === 'student' && profile.school_id) {
                     window.location.href = '/student-portal.html';
                     return;
                 }
-                // Already onboarded, go to app
+                // Already onboarded individual user (incl. self-described 'teacher' or 'student'
+                // from the original welcome survey, with no school_id) goes to the main app
                 window.location.href = '/exam-practice.html';
                 return;
             }
