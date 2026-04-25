@@ -699,46 +699,199 @@ table.data-table { width: 100%; border-collapse: collapse; }
         var att = ATTEMPTS_CACHE.find(function(x) { return x.id === attemptId; });
         if (!att) return;
 
-        // Fetch full attempt with feedback + answers
-        var { data: full, error } = await supabaseClient
-            .from('student_attempts')
-            .select('id, assignment_id, student_id, status, ai_score, ai_total, ai_feedback, answers, submitted_at, teacher_feedback')
-            .eq('id', attemptId)
-            .maybeSingle();
-        if (error || !full) { showToast('Could not load attempt', 'error'); return; }
+        // Fetch full attempt + the parent assignment's payload so we can show question text alongside answers
+        var [attRes, assignRes] = await Promise.all([
+            supabaseClient.from('student_attempts')
+                .select('id, assignment_id, student_id, status, ai_score, ai_total, ai_feedback, answers, submitted_at, teacher_feedback, teacher_feedback_at')
+                .eq('id', attemptId).maybeSingle(),
+            (function() {
+                var ass = ASSIGNMENTS_CACHE.find(function(a) { return a.id === att.assignment_id; });
+                if (ass) return Promise.resolve({ data: ass });
+                return supabaseClient.from('assignments').select('id, type, total_marks, generated_payload').eq('id', att.assignment_id).maybeSingle();
+            })()
+        ]);
+
+        if (attRes.error || !attRes.data) { showToast('Could not load attempt', 'error'); return; }
+        var full = attRes.data;
+        var assignment = assignRes.data || null;
 
         var s = STUDENTS_CACHE.find(function(x) { return x.user_id === full.student_id; }) || {};
         var displayName = s.name || s.email || 'Student';
 
         document.getElementById('detailTitle').textContent = displayName;
-        document.getElementById('detailSub').textContent = full.status === 'graded' ? 'Score: ' + full.ai_score + ' / ' + full.ai_total : full.status;
+        var subParts = [];
+        if (full.status === 'graded') {
+            var pct = full.ai_total > 0 ? Math.round((full.ai_score / full.ai_total) * 100) : null;
+            subParts.push('Scored ' + full.ai_score + ' / ' + full.ai_total + (pct !== null ? ' (' + pct + '%)' : ''));
+        } else if (full.status === 'in_progress') {
+            subParts.push('In progress');
+        } else {
+            subParts.push('Not started');
+        }
+        if (full.submitted_at) subParts.push('Submitted ' + new Date(full.submitted_at).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' }));
+        document.getElementById('detailSub').textContent = subParts.join(' · ');
 
-        var answersHtml = '';
-        if (full.answers && full.answers.answer) {
-            answersHtml = '<div style="margin-bottom:1rem; padding:1rem; background:var(--gray-50); border-radius:var(--radius);"><div style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.4rem; color:var(--gray-600);">Their answer</div><div style="white-space:pre-wrap; line-height:1.65;">' + esc(full.answers.answer) + '</div></div>';
-        } else if (full.answers && full.answers.student_answers) {
-            answersHtml = (full.answers.student_answers || []).map(function(sa, idx) {
-                return '<div style="margin-bottom:0.85rem; padding:1rem; background:var(--gray-50); border-radius:var(--radius);"><strong>Q' + (idx + 1) + '</strong><div style="margin-top:0.4rem; white-space:pre-wrap; line-height:1.6;">' + esc(sa.student_answer || '<no answer>') + '</div></div>';
-            }).join('');
+        var detailHtml = '';
+
+        if (full.status !== 'graded') {
+            detailHtml = '<div class="muted" style="text-align:center; padding:2rem;">' +
+                (full.status === 'in_progress' ? 'This student is still working on the assignment.' : 'This student hasn\'t started this assignment yet.') +
+            '</div>';
+        } else {
+            // Score banner
+            var pct2 = full.ai_total > 0 ? Math.round((full.ai_score / full.ai_total) * 100) : 0;
+            var bannerColor = pct2 >= 70 ? 'linear-gradient(135deg, var(--success-bg), #c5e8d2); border-color:#a7e0b9;'
+                : pct2 >= 50 ? 'linear-gradient(135deg, var(--warning-bg), #ffe6c7); border-color:#f5c878;'
+                : 'linear-gradient(135deg, var(--error-bg), #fad5d0); border-color:#f0a59d;';
+            detailHtml += '<div style="background:' + bannerColor + ' border:1px solid; border-radius:var(--radius); padding:1.25rem; text-align:center; margin-bottom:1.25rem;">' +
+                '<div class="muted" style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em;">AI marked score</div>' +
+                '<div style="font-size:2.2rem; font-weight:800; color:var(--gray-900); line-height:1; margin-top:0.3rem;">' + full.ai_score + ' / ' + full.ai_total + '</div>' +
+                '<div class="muted" style="margin-top:0.25rem;">' + pct2 + '%</div>' +
+            '</div>';
+
+            // Build per-question or single-answer view depending on assignment type
+            var assignmentType = assignment ? assignment.type : ((full.answers && full.answers.student_answers) ? 'test' : 'question');
+
+            if (assignmentType === 'question') {
+                detailHtml += renderSingleQuestionDetail(full, assignment);
+            } else {
+                detailHtml += renderTestDetail(full, assignment);
+            }
         }
 
-        var feedbackHtml = '<div class="muted">No AI feedback available.</div>';
-        if (full.ai_feedback) {
-            try {
-                feedbackHtml = '<pre style="background:var(--gray-50); padding:1rem; border-radius:var(--radius); overflow-x:auto; font-size:0.85rem; line-height:1.5; white-space: pre-wrap;">' + esc(JSON.stringify(full.ai_feedback, null, 2)) + '</pre>';
-            } catch (e) {}
+        // Teacher feedback section (always visible if attempt is graded)
+        if (full.status === 'graded') {
+            var existingFeedback = full.teacher_feedback || '';
+            var lastSavedNote = full.teacher_feedback_at
+                ? '<div class="muted" style="font-size:0.78rem; margin-top:0.4rem;">Last saved ' + new Date(full.teacher_feedback_at).toLocaleString('en-GB') + '. The student sees this in their portal.</div>'
+                : '<div class="muted" style="font-size:0.78rem; margin-top:0.4rem;">When you save, the student will see this in their portal labelled "Your teacher\'s note".</div>';
+            detailHtml += '<div style="margin-top:1.5rem; padding-top:1.25rem; border-top:1px solid var(--gray-200);">' +
+                '<div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:0.5rem;">' +
+                    '<div style="font-size:1rem; font-weight:700; color:var(--gray-900);">Your feedback for ' + esc(displayName.split(/\s+/)[0]) + '</div>' +
+                    '<span class="pill pill-info">Optional</span>' +
+                '</div>' +
+                '<textarea class="field-textarea" id="teacherFeedbackInput" placeholder="Add a personal note. Things they did well, what to focus on next, anything you want them to know.">' + esc(existingFeedback) + '</textarea>' +
+                lastSavedNote +
+                '<div style="margin-top:0.6rem; display:flex; justify-content:flex-end; gap:0.5rem;">' +
+                    '<button class="btn btn-primary btn-sm" onclick="saveTeacherFeedback(\'' + full.id + '\')">Save feedback</button>' +
+                '</div>' +
+            '</div>';
         }
-
-        var detailHtml = answersHtml +
-            '<div style="margin-top:1rem;"><div style="font-size:0.95rem; font-weight:700; color:var(--gray-900); margin-bottom:0.5rem;">AI feedback (raw)</div>' + feedbackHtml + '</div>' +
-            '<div class="muted" style="margin-top:1rem; font-size:0.82rem;">Phase 6 will polish this view with formatted feedback, teacher notes, and a per-question breakdown.</div>';
 
         document.getElementById('detailBody').innerHTML = detailHtml;
         document.getElementById('attemptDetail').style.display = 'flex';
     }
 
+    function renderSingleQuestionDetail(full, assignment) {
+        var qPayload = (assignment && assignment.generated_payload && assignment.generated_payload.question) || (assignment && assignment.generated_payload) || {};
+        var qText = qPayload.question || qPayload.text || '';
+        var marks = qPayload.marks || (assignment && assignment.total_marks) || '';
+        var studentAnswer = (full.answers && full.answers.answer) || '';
+        var marking = (full.ai_feedback && full.ai_feedback.marking) || full.ai_feedback || {};
+
+        return '<div style="margin-bottom:1.25rem; padding:1rem 1.1rem; background:var(--gray-50); border:1px solid var(--gray-200); border-radius:var(--radius);">' +
+            '<div style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.4rem; color:var(--gray-500);">Question' + (marks ? ' (' + marks + ' marks)' : '') + '</div>' +
+            '<div style="white-space:pre-wrap; line-height:1.6;">' + esc(qText) + '</div>' +
+        '</div>' +
+        '<div style="margin-bottom:1.25rem; padding:1rem 1.1rem; background:white; border:1px solid var(--gray-200); border-radius:var(--radius);">' +
+            '<div style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.4rem; color:var(--gray-600);">Their answer</div>' +
+            '<div style="white-space:pre-wrap; line-height:1.65;">' + esc(studentAnswer || 'No answer submitted.') + '</div>' +
+        '</div>' +
+        renderMarkingDetail(marking);
+    }
+
+    function renderTestDetail(full, assignment) {
+        var paper = (assignment && assignment.generated_payload && assignment.generated_payload.paper) || (assignment && assignment.generated_payload) || {};
+        var studentAnswers = (full.answers && full.answers.student_answers) || [];
+        var feedback = full.ai_feedback || {};
+        var qResults = feedback.question_results || [];
+
+        // Map answers by question_id for lookup
+        var answerMap = {};
+        studentAnswers.forEach(function(sa) { if (sa && sa.question_id) answerMap[sa.question_id] = sa.student_answer; });
+        var resultMap = {};
+        qResults.forEach(function(qr) { if (qr && qr.question_id) resultMap[qr.question_id] = qr; });
+
+        var html = '';
+        if (feedback.test_summary && feedback.test_summary.overall_feedback) {
+            html += '<div style="margin-bottom:1.25rem; padding:1rem 1.1rem; background:#f0f7ff; border:1px solid #cfe1f7; border-radius:var(--radius);">' +
+                '<div style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.4rem; color:var(--info);">Overall AI feedback</div>' +
+                '<div style="line-height:1.65;">' + esc(feedback.test_summary.overall_feedback) + '</div>' +
+            '</div>';
+        }
+
+        (paper.questions || []).forEach(function(q, idx) {
+            var qid = q.id || ('q' + (idx + 1));
+            var qNum = (q.number || (idx + 1)) + (q.part || '');
+            var qText = q.question || q.text || '';
+            var marks = q.marks || '';
+            var ans = answerMap[qid] !== undefined ? answerMap[qid] : (studentAnswers[idx] && studentAnswers[idx].student_answer) || '';
+            var qr = resultMap[qid] || qResults[idx] || {};
+
+            html += '<div style="margin-bottom:1rem; padding:1rem 1.1rem; background:var(--gray-50); border:1px solid var(--gray-200); border-radius:var(--radius);">' +
+                '<div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:0.5rem; flex-wrap:wrap; gap:0.4rem;">' +
+                    '<div style="font-size:0.85rem; font-weight:700; color:var(--primary);">Question ' + esc(String(qNum)) + (marks ? ' (' + marks + ' marks)' : '') + '</div>' +
+                    (qr.marks_awarded !== undefined ? '<span class="pill pill-info">' + qr.marks_awarded + ' / ' + (qr.total_marks || marks) + '</span>' : '') +
+                '</div>' +
+                '<div style="white-space:pre-wrap; line-height:1.55; margin-bottom:0.75rem;">' + esc(qText) + '</div>' +
+                '<div style="background:white; border:1px solid var(--gray-200); border-radius:var(--radius-sm); padding:0.85rem;">' +
+                    '<div style="font-size:0.74rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.35rem; color:var(--gray-500);">Their answer</div>' +
+                    '<div style="white-space:pre-wrap; line-height:1.6; font-size:0.95rem;">' + esc(ans || 'No answer.') + '</div>' +
+                '</div>' +
+                renderMarkingDetail(qr) +
+            '</div>';
+        });
+
+        if (!html) html = '<div class="muted">No detailed per-question feedback returned.</div>';
+        return html;
+    }
+
+    function renderMarkingDetail(m) {
+        if (!m) return '';
+        var html = '';
+        var mainFeedback = m.feedback || m.overall || m.summary;
+        if (mainFeedback && typeof mainFeedback === 'string') {
+            html += '<div style="margin-top:0.85rem; padding:0.85rem; background:white; border:1px solid var(--gray-200); border-radius:var(--radius-sm); line-height:1.55;">' + esc(mainFeedback) + '</div>';
+        }
+        if (Array.isArray(m.strengths) && m.strengths.length > 0) {
+            html += '<div style="margin-top:0.65rem;">' +
+                '<div style="font-size:0.78rem; font-weight:700; color:var(--success); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.3rem;">Strengths</div>' +
+                '<ul style="padding-left:1.2rem; line-height:1.65;">' + m.strengths.map(function(s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul>' +
+            '</div>';
+        }
+        if (Array.isArray(m.improvements) && m.improvements.length > 0) {
+            html += '<div style="margin-top:0.65rem;">' +
+                '<div style="font-size:0.78rem; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.3rem;">To improve</div>' +
+                '<ul style="padding-left:1.2rem; line-height:1.65;">' + m.improvements.map(function(s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul>' +
+            '</div>';
+        }
+        if (Array.isArray(m.next_steps) && m.next_steps.length > 0) {
+            html += '<div style="margin-top:0.65rem;">' +
+                '<div style="font-size:0.78rem; font-weight:700; color:var(--gray-700); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.3rem;">Next steps</div>' +
+                '<ul style="padding-left:1.2rem; line-height:1.65;">' + m.next_steps.map(function(s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul>' +
+            '</div>';
+        }
+        return html;
+    }
+
+    async function saveTeacherFeedback(attemptId) {
+        var ta = document.getElementById('teacherFeedbackInput');
+        if (!ta) return;
+        var note = ta.value.trim();
+        var nowIso = new Date().toISOString();
+
+        var { error } = await supabaseClient
+            .from('student_attempts')
+            .update({ teacher_feedback: note || null, teacher_feedback_at: note ? nowIso : null, updated_at: nowIso })
+            .eq('id', attemptId);
+
+        if (error) { showToast('Could not save: ' + error.message, 'error'); return; }
+        showToast('Feedback saved. The student will see it in their portal.', 'success');
+    }
+
     window.openAssignmentDetail = openAssignmentDetail;
     window.openAttemptDetail = openAttemptDetail;
+    window.saveTeacherFeedback = saveTeacherFeedback;
 
     function extractEmails(raw) {
         if (!raw) return [];
@@ -884,13 +1037,20 @@ table.data-table { width: 100%; border-collapse: collapse; }
             var email = p.email || '-';
             var joined = link.joined_at ? new Date(link.joined_at).toLocaleDateString('en-GB') : '-';
             var initials = (p.name || p.email || '?').trim().split(/\s+/).slice(0, 2).map(function(s) { return s[0] ? s[0].toUpperCase() : ''; }).join('') || '?';
+            var safeEmail = esc(email).replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+            var safeName = (esc(p.name || email)).replace(/\\/g, "\\\\").replace(/'/g, "\\'");
             return '<tr>' +
                 '<td><div style="display:flex;align-items:center;gap:0.6rem;"><span class="student-avatar">' + esc(initials) + '</span><strong>' + name + '</strong></div></td>' +
                 '<td class="muted">' + esc(email) + '</td>' +
                 '<td class="muted">' + joined + '</td>' +
-                '<td><button class="icon-btn danger" title="Remove from class" onclick="tcRemoveStudent(\'' + link.student_id + '\', \'' + esc(email).replace(/\\/g, "\\\\").replace(/'/g, "\\'") + '\')">' +
-                    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>' +
-                '</button></td>' +
+                '<td style="white-space:nowrap;">' +
+                    '<button class="icon-btn" title="Send password reset email" onclick="tcResetStudentPassword(\'' + safeEmail + '\', \'' + safeName + '\')">' +
+                        '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>' +
+                    '</button>' +
+                    '<button class="icon-btn danger" title="Remove from class" onclick="tcRemoveStudent(\'' + link.student_id + '\', \'' + safeEmail + '\')">' +
+                        '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>' +
+                    '</button>' +
+                '</td>' +
             '</tr>';
         }).join('');
 
@@ -904,6 +1064,19 @@ table.data-table { width: 100%; border-collapse: collapse; }
         showToast('Removed', 'success');
         loadPendingApprovals();
     }
+
+    async function tcResetStudentPassword(email, displayName) {
+        if (!email) { showToast('No email on file for this student', 'error'); return; }
+        if (!confirm('Send a password reset email to ' + displayName + ' (' + email + ')?')) return;
+
+        var siteOrigin = window.location.origin;
+        var { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+            redirectTo: siteOrigin + '/login.html'
+        });
+        if (error) { showToast('Reset failed: ' + error.message, 'error'); return; }
+        showToast('Reset email sent to ' + displayName, 'success');
+    }
+    window.tcResetStudentPassword = tcResetStudentPassword;
 
     async function tcRemoveStudent(studentId, email) {
         if (!confirm('Remove ' + email + ' from this class? Their account stays; they just leave this class.')) return;

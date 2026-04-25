@@ -218,7 +218,7 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
         // Load attempt + assignment
         var { data: att, error: attErr } = await supabaseClient
             .from('student_attempts')
-            .select('id, assignment_id, status, ai_score, ai_total, ai_feedback, answers, submitted_at')
+            .select('id, assignment_id, status, ai_score, ai_total, ai_feedback, answers, submitted_at, teacher_feedback, teacher_feedback_at')
             .eq('id', attemptId)
             .maybeSingle();
         if (attErr || !att) { showAccessDenied('Could not load assignment.'); return; }
@@ -405,7 +405,7 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
 
             // Refresh attempt from DB to render the feedback
             var refreshed = await supabaseClient.from('student_attempts')
-                .select('id, assignment_id, status, ai_score, ai_total, ai_feedback, answers, submitted_at')
+                .select('id, assignment_id, status, ai_score, ai_total, ai_feedback, answers, submitted_at, teacher_feedback, teacher_feedback_at')
                 .eq('id', attemptId).maybeSingle();
             if (refreshed.data) currentAttempt = refreshed.data;
             renderFeedback();
@@ -446,6 +446,21 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
 
         var feedback = att.ai_feedback || {};
         var html = '';
+
+        // Teacher feedback card sits above the AI feedback when present
+        if (att.teacher_feedback && att.teacher_feedback.trim()) {
+            var teacherWhen = att.teacher_feedback_at
+                ? new Date(att.teacher_feedback_at).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' })
+                : '';
+            html += '<div class="feedback-card" style="background: linear-gradient(135deg, #fff4e6, #fef6e7); border-color: #f7d98a;">' +
+                '<div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.5rem;">' +
+                    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>' +
+                    '<div style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--accent);">Your teacher\'s note</div>' +
+                '</div>' +
+                '<div style="white-space:pre-wrap; line-height:1.7; color:var(--gray-800);">' + esc(att.teacher_feedback) + '</div>' +
+                (teacherWhen ? '<div class="muted" style="font-size:0.78rem; margin-top:0.5rem;">Added ' + teacherWhen + '</div>' : '') +
+            '</div>';
+        }
 
         if (a.type === 'question') {
             var marking = feedback.marking || feedback;
