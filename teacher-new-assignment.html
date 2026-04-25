@@ -179,7 +179,6 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
                     <span class="choice-sub">A full paper with case study and questions. AI marks all of it.</span>
                 </button>
             </div>
-            <p style="font-size:0.85rem; color: var(--gray-500); margin-top:0.5rem;">Custom test builder is coming in Phase 5.</p>
         </div>
 
         <div class="panel" id="questionParamsPanel">
@@ -204,23 +203,68 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
 
         <div class="panel" id="testParamsPanel" style="display:none;">
             <div class="panel-title">Test parameters</div>
-            <div class="panel-sub">For Phase 4, only standard tests are wired up. The AI builds a full paper for the chosen unit.</div>
-            <div class="field-row">
-                <div class="field">
-                    <label class="field-label">Test type</label>
-                    <select class="field-select" id="tTestTypeSelect">
-                        <option value="topic_test">Topic test (shorter)</option>
-                        <option value="unit_exam">Unit exam (longer)</option>
-                    </select>
-                </div>
-                <div class="field">
-                    <label class="field-label">Unit</label>
-                    <select class="field-select" id="tUnitSelect"></select>
+            <div class="panel-sub">Standard tests are AI-built using the board's normal paper structure. Custom tests let you set the exact marks for each question.</div>
+
+            <div class="field">
+                <label class="field-label">Test format</label>
+                <div style="display:inline-flex; background: var(--gray-100); padding: 4px; border-radius: var(--radius-sm); gap: 2px;" id="testVariantToggle">
+                    <button type="button" data-variant="standard" class="active" style="padding: 0.55rem 1.1rem; font-size: 0.9rem; font-weight: 600; color: var(--primary); background: white; box-shadow: 0 1px 2px rgba(15,23,42,0.04); border-radius: 6px; border: none; cursor: pointer;">Standard</button>
+                    <button type="button" data-variant="custom" style="padding: 0.55rem 1.1rem; font-size: 0.9rem; font-weight: 600; color: var(--gray-600); background: none; border-radius: 6px; border: none; cursor: pointer;">Custom</button>
                 </div>
             </div>
-            <div class="field" id="testTopicField" style="display:none;">
-                <label class="field-label">Topic (for topic tests)</label>
-                <input type="text" class="field-input" id="tTopicInput" placeholder="e.g. The marketing mix">
+
+            <!-- Standard test fields -->
+            <div id="standardTestFields">
+                <div class="field-row">
+                    <div class="field">
+                        <label class="field-label">Test type</label>
+                        <select class="field-select" id="tTestTypeSelect">
+                            <option value="topic_test">Topic test (shorter)</option>
+                            <option value="unit_exam">Unit exam (longer)</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label class="field-label">Unit</label>
+                        <select class="field-select" id="tUnitSelect"></select>
+                    </div>
+                </div>
+                <div class="field" id="testTopicField" style="display:none;">
+                    <label class="field-label">Topic (for topic tests)</label>
+                    <input type="text" class="field-input" id="tTopicInput" placeholder="e.g. The marketing mix">
+                </div>
+            </div>
+
+            <!-- Custom test builder -->
+            <div id="customTestFields" style="display:none;">
+                <div style="display:flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.6rem;">
+                    <div class="muted" style="font-size:0.88rem;">Add question slots and pick the marks for each. Everything else is handled for you.</div>
+                    <span class="pill pill-primary" id="boardMarksHint"></span>
+                </div>
+
+                <div class="field-row">
+                    <div class="field" style="margin-bottom: 0.5rem;">
+                        <label class="field-label">Topic focus (optional)</label>
+                        <input type="text" class="field-input" id="customTopicInput" placeholder="e.g. The marketing mix">
+                    </div>
+                    <div class="field" style="margin-bottom: 0.5rem;">
+                        <label class="field-label">Time allowed (optional)</label>
+                        <input type="text" class="field-input" id="customTimeInput" placeholder="e.g. 30 minutes">
+                    </div>
+                </div>
+
+                <div id="slotsContainer" style="background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 1rem; margin-bottom: 0.5rem;">
+                    <!-- slots injected here -->
+                </div>
+
+                <button type="button" id="addSlotBtn" style="width:100%; padding:0.7rem; border: 1.5px dashed var(--gray-300); border-radius: var(--radius-sm); background: transparent; color: var(--gray-500); font-weight: 600; cursor: pointer;">+ Add another question</button>
+
+                <div style="margin-top: 0.85rem; padding: 0.85rem 1rem; background: white; border: 1px solid var(--gray-200); border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <span class="muted" style="font-size: 0.82rem; display: block;">Total for this test</span>
+                        <span style="font-size: 1.2rem; font-weight: 800; color: var(--gray-900);" id="customTotalLabel">0 marks</span>
+                    </div>
+                    <span class="muted" style="font-size: 0.85rem;" id="customSlotCount">0 questions</span>
+                </div>
             </div>
         </div>
 
@@ -308,9 +352,17 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
 
     var BOARD_LABELS = {
         aqa_gcse: 'AQA GCSE', edexcel_gcse: 'Edexcel GCSE', edexcel_igcse: 'Edexcel IGCSE',
-        cie_igcse: 'CIE IGCSE', aqa_a_level: 'AQA A-Level', edexcel_a_level: 'Edexcel A-Level',
-        edexcel_ial: 'Edexcel International A-Level', cambridge_a_level: 'Cambridge International AS & A-Level'
+        cie_igcse: 'CIE IGCSE', aqa_uk: 'AQA A-Level', edexcel_uk: 'Edexcel A-Level',
+        edexcel_ial: 'Edexcel International A-Level', cie_ial: 'Cambridge International AS & A-Level',
+        // Legacy aliases for any classes already created with old keys
+        aqa_a_level: 'AQA A-Level', edexcel_a_level: 'Edexcel A-Level', cambridge_a_level: 'Cambridge International AS & A-Level'
     };
+
+    // Map any legacy alias to canonical so downstream lookups work
+    function canonicaliseBoard(b) {
+        var aliases = { aqa_a_level: 'aqa_uk', edexcel_a_level: 'edexcel_uk', cambridge_a_level: 'cie_ial' };
+        return aliases[b] || b;
+    }
 
     // Lightweight unit + question type lookups for the boards we generate for.
     // These are conservative defaults that match the existing edge function vocabulary.
@@ -335,16 +387,23 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
         cie_igcse: [
             { code: 'all', label: 'Any unit (AI picks)' }
         ],
-        aqa_a_level: [
-            { code: 'all', label: 'Any unit (AI picks)' }
+        aqa_uk: [
+            { code: 'all', label: 'Any unit (AI picks)' },
+            { code: '1', label: 'Paper 1 topics' },
+            { code: '2', label: 'Paper 2 topics' },
+            { code: '3', label: 'Paper 3 topics' }
         ],
-        edexcel_a_level: [
-            { code: 'all', label: 'Any unit (AI picks)' }
+        edexcel_uk: [
+            { code: 'all', label: 'Any unit (AI picks)' },
+            { code: 'theme-1', label: 'Theme 1: Marketing and people' },
+            { code: 'theme-2', label: 'Theme 2: Managing business activities' },
+            { code: 'theme-3', label: 'Theme 3: Business decisions and strategy' },
+            { code: 'theme-4', label: 'Theme 4: Global business' }
         ],
         edexcel_ial: [
             { code: 'all', label: 'Any unit (AI picks)' }
         ],
-        cambridge_a_level: [
+        cie_ial: [
             { code: 'all', label: 'Any unit (AI picks)' }
         ]
     };
@@ -377,7 +436,7 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
             { id: '8_mark_explain', label: '8 marks - Explain' },
             { id: '12_mark_justify', label: '12 marks - Justify' }
         ],
-        aqa_a_level: [
+        aqa_uk: [
             { id: '6_mark_analyse', label: '6 marks - Analyse' },
             { id: '9_mark_analyse', label: '9 marks - Analyse' },
             { id: '12_mark_analyse', label: '12 marks - Analyse' },
@@ -385,9 +444,11 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
             { id: '20_mark_evaluate', label: '20 marks - Evaluate' },
             { id: '25_mark_evaluate', label: '25 marks - Evaluate' }
         ],
-        edexcel_a_level: [
-            { id: '6_mark_explain', label: '6 marks - Explain' },
-            { id: '8_mark_analyse', label: '8 marks - Analyse' },
+        edexcel_uk: [
+            { id: '6_mark_analyse', label: '6 marks - Analyse' },
+            { id: '8_mark_discuss', label: '8 marks - Discuss' },
+            { id: '10_mark_assess', label: '10 marks - Assess' },
+            { id: '12_mark_assess', label: '12 marks - Assess' },
             { id: '20_mark_evaluate', label: '20 marks - Evaluate' }
         ],
         edexcel_ial: [
@@ -396,12 +457,24 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
             { id: '10_mark_assess', label: '10 marks - Assess' },
             { id: '20_mark_evaluate', label: '20 marks - Evaluate' }
         ],
-        cambridge_a_level: [
+        cie_ial: [
             { id: '5_mark_analyse', label: '5 marks - Analyse' },
             { id: '8_mark_analyse', label: '8 marks - Analyse' },
             { id: '12_mark_evaluate', label: '12 marks - Evaluate' },
             { id: '20_mark_evaluate', label: '20 marks - Evaluate' }
         ]
+    };
+
+    // Valid mark values per board for the custom builder (matches generate-custom-test BOARD_COMMAND_FOR_MARKS)
+    var BOARD_VALID_MARKS = {
+        aqa_gcse: [2, 4, 5, 6, 9, 12],
+        edexcel_gcse: [1, 2, 3, 6, 9, 12],
+        edexcel_igcse: [1, 2, 3, 6, 9, 12],
+        cie_igcse: [2, 4, 6, 8, 12],
+        aqa_uk: [4, 6, 9, 12, 16, 20, 25],
+        edexcel_uk: [4, 6, 8, 10, 12, 20],
+        edexcel_ial: [2, 4, 6, 8, 10, 12, 20],
+        cie_ial: [2, 3, 5, 8, 12, 20]
     };
 
     // State
@@ -410,7 +483,9 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
     var currentUser = null;
     var currentSession = null;
     var currentType = 'question';
-    var generatedPayload = null;  // raw response from generate-question or generate-test
+    var currentTestVariant = 'standard';
+    var customSlots = [];  // array of { marks }
+    var generatedPayload = null;  // raw response from generate-question / generate-test / generate-custom-test
     var totalMarksForPayload = null;
 
     document.addEventListener('DOMContentLoaded', init);
@@ -440,6 +515,8 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
             return;
         }
         currentClass = classResult.data;
+        // Translate any legacy alias to the canonical board ID before everything downstream
+        currentClass.board = canonicaliseBoard(currentClass.board);
 
         // Confirm teacher is on class_teachers
         var ctCheck = await supabaseClient.from('class_teachers').select('class_id').eq('class_id', classId).eq('teacher_id', currentUser.id).maybeSingle();
@@ -459,8 +536,68 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
 
         populateUnitDropdowns();
         populateQTypeDropdown();
+        populateCustomBuilder();
         wireEvents();
         loadUsageCap();
+    }
+
+    function populateCustomBuilder() {
+        var marks = BOARD_VALID_MARKS[currentClass.board] || [];
+        var hint = marks.length > 0 ? 'Valid marks: ' + marks.join(', ') : '';
+        document.getElementById('boardMarksHint').textContent = hint;
+
+        // Seed with two slots so it doesn't start empty
+        if (customSlots.length === 0 && marks.length > 0) {
+            customSlots = [{ marks: marks[Math.min(2, marks.length - 1)] }, { marks: marks[Math.min(3, marks.length - 1)] }];
+        }
+        renderSlots();
+    }
+
+    function renderSlots() {
+        var container = document.getElementById('slotsContainer');
+        var marks = BOARD_VALID_MARKS[currentClass.board] || [];
+
+        if (customSlots.length === 0) {
+            container.innerHTML = '<div class="muted" style="text-align:center; padding: 1rem;">Click "Add another question" below to start.</div>';
+        } else {
+            container.innerHTML = customSlots.map(function(slot, idx) {
+                var options = marks.map(function(m) {
+                    return '<option value="' + m + '"' + (m === slot.marks ? ' selected' : '') + '>' + m + ' marks</option>';
+                }).join('');
+                return '<div class="slot-row" data-slot-idx="' + idx + '" style="display:grid; grid-template-columns: 40px 1fr 140px 36px; gap: 0.6rem; align-items: center; background: white; padding: 0.7rem; border: 1px solid var(--gray-200); border-radius: var(--radius-sm); margin-bottom: 0.5rem;">' +
+                    '<div style="width:34px; height:34px; border-radius: var(--radius-sm); background: var(--primary); color:white; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.9rem;">' + (idx + 1) + '</div>' +
+                    '<div style="color: var(--gray-600); font-size:0.92rem;">Question slot <small style="color:var(--gray-400);">- AI picks command word and topic</small></div>' +
+                    '<select class="field-select slot-marks" data-idx="' + idx + '" style="padding: 0.5rem 2rem 0.5rem 0.7rem; font-weight:600;">' + options + '</select>' +
+                    '<button type="button" class="slot-remove" data-idx="' + idx + '" title="Remove" style="width:32px; height:32px; border-radius: var(--radius-sm); border:none; background:transparent; color: var(--gray-400); cursor:pointer; display:flex; align-items:center; justify-content:center;">' +
+                        '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg>' +
+                    '</button>' +
+                '</div>';
+            }).join('');
+        }
+
+        // Wire slot events
+        document.querySelectorAll('.slot-marks').forEach(function(s) {
+            s.addEventListener('change', function() {
+                var idx = parseInt(s.getAttribute('data-idx'), 10);
+                customSlots[idx].marks = parseInt(s.value, 10);
+                updateCustomTotals();
+            });
+        });
+        document.querySelectorAll('.slot-remove').forEach(function(b) {
+            b.addEventListener('click', function() {
+                var idx = parseInt(b.getAttribute('data-idx'), 10);
+                customSlots.splice(idx, 1);
+                renderSlots();
+                updateCustomTotals();
+            });
+        });
+        updateCustomTotals();
+    }
+
+    function updateCustomTotals() {
+        var total = customSlots.reduce(function(s, x) { return s + (parseInt(x.marks, 10) || 0); }, 0);
+        document.getElementById('customTotalLabel').textContent = total + ' marks';
+        document.getElementById('customSlotCount').textContent = customSlots.length + ' question' + (customSlots.length === 1 ? '' : 's');
     }
 
     function showAccessDenied(message) {
@@ -511,6 +648,37 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
         document.getElementById('tTestTypeSelect').addEventListener('change', function() {
             var v = document.getElementById('tTestTypeSelect').value;
             document.getElementById('testTopicField').style.display = (v === 'topic_test') ? 'block' : 'none';
+        });
+
+        // Test variant toggle (standard / custom)
+        document.querySelectorAll('#testVariantToggle button').forEach(function(b) {
+            b.addEventListener('click', function() {
+                document.querySelectorAll('#testVariantToggle button').forEach(function(x) {
+                    x.classList.remove('active');
+                    x.style.background = 'none';
+                    x.style.color = 'var(--gray-600)';
+                    x.style.boxShadow = 'none';
+                });
+                b.classList.add('active');
+                b.style.background = 'white';
+                b.style.color = 'var(--primary)';
+                b.style.boxShadow = '0 1px 2px rgba(15,23,42,0.04)';
+
+                currentTestVariant = b.getAttribute('data-variant');
+                document.getElementById('standardTestFields').style.display = (currentTestVariant === 'standard') ? 'block' : 'none';
+                document.getElementById('customTestFields').style.display = (currentTestVariant === 'custom') ? 'block' : 'none';
+            });
+        });
+
+        // Add slot
+        document.getElementById('addSlotBtn').addEventListener('click', function() {
+            var marks = BOARD_VALID_MARKS[currentClass.board] || [];
+            if (customSlots.length >= 10) {
+                showToast('Maximum 10 questions per custom test', 'error');
+                return;
+            }
+            customSlots.push({ marks: marks[Math.min(3, marks.length - 1)] || 4 });
+            renderSlots();
         });
 
         document.getElementById('generateBtn').addEventListener('click', handleGenerate);
@@ -577,6 +745,41 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
                 generatedPayload = data;  // store full response
                 totalMarksForPayload = (data.question && data.question.marks) || null;
                 renderApprovalForQuestion(data);
+            } else if (currentTestVariant === 'custom') {
+                loadingTitle.textContent = 'Generating your custom test...';
+                loadingSub.textContent = 'Custom tests are usually quick, around 20-40 seconds.';
+
+                if (customSlots.length === 0) throw new Error('Add at least one question slot first.');
+
+                var topic3 = document.getElementById('customTopicInput').value.trim();
+                var time3 = document.getElementById('customTimeInput').value.trim();
+                var unit3 = document.getElementById('tUnitSelect') ? document.getElementById('tUnitSelect').value : null;
+
+                var customPayload = {
+                    board: currentClass.board,
+                    unit: unit3,
+                    topic: topic3 || null,
+                    time_allowed: time3 || null,
+                    custom_marks_spec: customSlots.map(function(s) { return { marks: parseInt(s.marks, 10) }; })
+                };
+
+                var respC = await fetch(SUPABASE_URL + '/functions/v1/generate-custom-test', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + currentSession.access_token,
+                        'apikey': SUPABASE_ANON_KEY
+                    },
+                    body: JSON.stringify(customPayload)
+                });
+                if (!respC.ok) {
+                    var errC = await respC.json().catch(function() { return {}; });
+                    throw new Error(errC.error || 'Generation failed');
+                }
+                var dataC = await respC.json();
+                generatedPayload = dataC;
+                totalMarksForPayload = (dataC.paper && dataC.paper.total_marks) || null;
+                renderApprovalForTest(dataC);
             } else {
                 loadingTitle.textContent = 'Generating your test...';
                 loadingSub.textContent = 'Standard tests can take up to a minute.';
@@ -733,13 +936,19 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
             ? document.getElementById('qTopicInput').value.trim()
             : document.getElementById('tTopicInput').value.trim();
 
+        var variant = (currentType === 'test' && currentTestVariant === 'custom') ? 'custom' : 'standard';
+        var timeAllowed = (currentType === 'test' && currentTestVariant === 'custom')
+            ? (document.getElementById('customTimeInput').value.trim() || null)
+            : null;
+
         var payload = {
             class_id: classId,
             type: currentType,
-            variant: 'standard',
+            variant: variant,
             unit: unit || null,
             topic: topic || null,
             total_marks: totalMarksForPayload,
+            time_allowed: timeAllowed,
             generated_payload: generatedPayload,
             due_at: dueAtIso
         };
