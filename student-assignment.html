@@ -327,9 +327,9 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
         }
 
         function renderOneQuestion(q, studentAnswer, marking, idx) {
-            var qNum = q.number || (idx !== undefined ? idx + 1 : 1);
+            var qNum = (idx !== undefined ? idx + 1 : (q.number || 1));
             var partSuffix = q.part ? '(' + q.part + ')' : '';
-            var label = 'Q' + qNum + partSuffix + (q.marks ? '  (' + q.marks + ' marks)' : '');
+            var label = 'Question ' + qNum + partSuffix + (q.marks ? '  (' + q.marks + ' marks)' : '');
 
             ensureSpace(20);
             writeBoldHeading(label, 12, [30, 58, 95]);
@@ -343,10 +343,11 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
             writeWrapped(studentAnswer || 'No answer.');
             y += 3;
 
-            // Marks awarded if present
-            if (marking && marking.marks_awarded !== undefined) {
+            // Marks awarded
+            var awarded = marking ? (marking.marks_awarded !== undefined ? marking.marks_awarded : marking.marks) : undefined;
+            if (awarded !== undefined && awarded !== null) {
                 writeSubLabel('Marks awarded', [60, 60, 60]);
-                doc.text(marking.marks_awarded + ' / ' + (marking.total_marks || q.marks || '?'), marginL, y);
+                doc.text(awarded + ' / ' + (marking.total_marks || q.marks || '?'), marginL, y);
                 y += 6;
             }
 
@@ -680,10 +681,30 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
         }
 
         if (a.type === 'question') {
+            // Single question: show case study (if any), the question, the student's answer, then AI marking.
+            var qPayload = (a.generated_payload && a.generated_payload.question) || a.generated_payload || {};
+            var qText = qPayload.question_text || qPayload.question || qPayload.text || '';
+            var marks = qPayload.marks || a.total_marks || '';
+            var studentAnswer = (att.answers && att.answers.answer) || '';
             var marking = feedback.marking || feedback;
-            html += renderQuestionFeedback(marking);
+
+            if (qPayload.question_context && String(qPayload.question_context).trim()) {
+                html += '<div class="feedback-card" style="background:#fffbea; border-color:#f7d98a;">' +
+                    '<div class="fb-section-title" style="color:#8a5a00;">Case study</div>' +
+                    '<div style="white-space:pre-wrap; line-height:1.7;">' + esc(qPayload.question_context) + '</div>' +
+                '</div>';
+            }
+            html += '<div class="feedback-card">' +
+                '<div class="fb-section-title">Question' + (marks ? ' (' + marks + ' marks)' : '') + '</div>' +
+                '<div style="white-space:pre-wrap; line-height:1.65;">' + esc(qText) + '</div>' +
+                '<div class="fb-section-title" style="margin-top:1rem; color:var(--gray-600);">Your answer</div>' +
+                '<div class="fb-section" style="white-space:pre-wrap; line-height:1.65;">' + esc(studentAnswer || 'No answer.') + '</div>' +
+                renderQuestionFeedback(marking) +
+            '</div>';
         } else {
-            // Test feedback
+            // Test feedback: per-question, show question text + their answer + AI marking
+            var paper = (a.generated_payload && a.generated_payload.paper) || a.generated_payload || {};
+            var paperQuestions = paper.questions || [];
             var summary = feedback.test_summary || null;
             if (summary && summary.overall_feedback) {
                 html += '<div class="feedback-card">' +
@@ -691,10 +712,30 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
                     '<div class="muted" style="line-height:1.65;">' + esc(summary.overall_feedback) + '</div>' +
                 '</div>';
             }
+
+            // Map student answers by question_id
+            var answerMap = {};
+            ((att.answers && att.answers.student_answers) || []).forEach(function(sa) {
+                if (sa && sa.question_id) answerMap[sa.question_id] = sa.student_answer;
+            });
+
             var qResults = feedback.question_results || [];
             qResults.forEach(function(qr, idx) {
+                var awarded = (qr.marks_awarded !== undefined ? qr.marks_awarded : qr.marks);
+                if (awarded === undefined || awarded === null) awarded = 0;
+                var total = qr.total_marks || qr.total_possible || 0;
+
+                var paperQ = paperQuestions[idx] || (paperQuestions.find ? paperQuestions.find(function(pq) { return pq.id === qr.question_id; }) : null) || {};
+                var qText = paperQ.text || paperQ.question || paperQ.question_text || '';
+                var studentAns = (qr.question_id && answerMap[qr.question_id] !== undefined)
+                    ? answerMap[qr.question_id]
+                    : ((att.answers && att.answers.student_answers && att.answers.student_answers[idx] && att.answers.student_answers[idx].student_answer) || '');
+
                 html += '<div class="feedback-card">' +
-                    '<div class="fb-section-title">Question ' + (qr.question_id || (idx + 1)) + ' &middot; ' + (qr.marks_awarded || 0) + ' / ' + (qr.total_marks || 0) + '</div>' +
+                    '<div class="fb-section-title">Question ' + (idx + 1) + ' &middot; ' + awarded + ' / ' + total + '</div>' +
+                    (qText ? '<div style="white-space:pre-wrap; line-height:1.65; color:var(--gray-800);">' + esc(qText) + '</div>' : '') +
+                    '<div class="fb-section-title" style="margin-top:1rem; color:var(--gray-600);">Your answer</div>' +
+                    '<div class="fb-section" style="white-space:pre-wrap; line-height:1.65;">' + esc(studentAns || 'No answer.') + '</div>' +
                     renderQuestionFeedback(qr) +
                 '</div>';
             });

@@ -1096,10 +1096,11 @@ table.data-table { width: 100%; border-collapse: collapse; }
             var ans = answerMap[qid] !== undefined ? answerMap[qid] : (studentAnswers[idx] && studentAnswers[idx].student_answer) || '';
             var qr = resultMap[qid] || qResults[idx] || {};
 
+            var qrAwarded = (qr.marks_awarded !== undefined ? qr.marks_awarded : qr.marks);
             html += '<div style="margin-bottom:1rem; padding:1rem 1.1rem; background:var(--gray-50); border:1px solid var(--gray-200); border-radius:var(--radius);">' +
                 '<div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:0.5rem; flex-wrap:wrap; gap:0.4rem;">' +
                     '<div style="font-size:0.85rem; font-weight:700; color:var(--primary);">Question ' + esc(String(qNum)) + (marks ? ' (' + marks + ' marks)' : '') + '</div>' +
-                    (qr.marks_awarded !== undefined ? '<span class="pill pill-info">' + qr.marks_awarded + ' / ' + (qr.total_marks || marks) + '</span>' : '') +
+                    (qrAwarded !== undefined && qrAwarded !== null ? '<span class="pill pill-info">' + qrAwarded + ' / ' + (qr.total_marks || marks) + '</span>' : '') +
                 '</div>' +
                 '<div style="white-space:pre-wrap; line-height:1.55; margin-bottom:0.75rem;">' + esc(qText) + '</div>' +
                 '<div style="background:white; border:1px solid var(--gray-200); border-radius:var(--radius-sm); padding:0.85rem;">' +
