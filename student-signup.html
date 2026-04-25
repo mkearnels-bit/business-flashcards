@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<title>Student sign up | MyBizStudies</title>
+<meta name="description" content="Sign up for the MyBizStudies student portal using your school email and class join code.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+    --primary: #1e3a5f;
+    --primary-dark: #152a45;
+    --primary-light: #2d5a8a;
+    --accent: #e67e22;
+    --accent-light: #f39c12;
+    --accent-glow: rgba(230, 126, 34, 0.3);
+    --success: #27ae60;
+    --error: #e74c3c;
+    --error-bg: #fceae8;
+    --info: #3498db;
+    --info-bg: #e8f2fb;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-400: #94a3b8;
+    --gray-500: #64748b;
+    --gray-700: #334155;
+    --gray-800: #1e293b;
+    --gray-900: #0f172a;
+    --shadow-lg: 0 10px 40px rgba(15, 23, 42, 0.12);
+    --radius: 12px;
+    --radius-lg: 16px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    color: var(--gray-800);
+    -webkit-font-smoothing: antialiased;
+}
+.signup-shell {
+    background: white;
+    width: 100%;
+    max-width: 460px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+}
+.signup-head {
+    padding: 1.75rem 2rem 1.25rem;
+    text-align: center;
+    border-bottom: 1px solid var(--gray-200);
+}
+.signup-logo { height: 56px; margin-bottom: 0.75rem; }
+.signup-title { font-size: 1.4rem; font-weight: 800; color: var(--primary); letter-spacing: -0.01em; }
+.signup-sub { font-size: 0.92rem; color: var(--gray-500); margin-top: 0.35rem; }
+
+.signup-body { padding: 1.5rem 2rem 1.75rem; }
+.field { margin-bottom: 1rem; }
+.field-label { display: block; font-size: 0.88rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.4rem; }
+.field-input {
+    width: 100%; padding: 0.75rem 0.9rem; border: 1px solid var(--gray-300); border-radius: var(--radius);
+    font-size: 0.96rem; background: white; color: var(--gray-900);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.field-input:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(45,90,138,0.15); }
+.field-input.code { font-family: 'SF Mono', Menlo, monospace; letter-spacing: 0.1em; text-transform: uppercase; }
+.field-hint { display: block; font-size: 0.82rem; color: var(--gray-500); margin-top: 0.3rem; }
+
+.btn-primary {
+    width: 100%; padding: 0.9rem 1.2rem; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+    color: white; border: none; border-radius: var(--radius); font-size: 0.98rem; font-weight: 700;
+    cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease; box-shadow: 0 2px 10px var(--accent-glow);
+}
+.btn-primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 20px var(--accent-glow); }
+.btn-primary:disabled { opacity: 0.65; cursor: not-allowed; }
+
+.alert { padding: 0.85rem 1rem; border-radius: var(--radius); font-size: 0.9rem; margin-bottom: 1rem; display: none; line-height: 1.45; }
+.alert.error { background: var(--error-bg); color: var(--error); border: 1px solid #f5c6c0; display: block; }
+.alert.info { background: var(--info-bg); color: var(--info); border: 1px solid #c9e3f7; display: block; }
+.alert.success { background: #e8f5ec; color: var(--success); border: 1px solid #b8e0c4; display: block; }
+
+.foot-link { text-align: center; margin-top: 1rem; font-size: 0.88rem; color: var(--gray-500); }
+.foot-link a { color: var(--primary); font-weight: 600; text-decoration: none; }
+.foot-link a:hover { text-decoration: underline; }
+
+.policy { margin-top: 1.25rem; font-size: 0.78rem; color: var(--gray-400); text-align: center; line-height: 1.5; }
+.policy a { color: var(--gray-500); text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<div class="signup-shell">
+    <div class="signup-head">
+        <img src="assets/Site Logo Transparent.png" alt="MyBizStudies" class="signup-logo">
+        <div class="signup-title">Student sign up</div>
+        <div class="signup-sub">Use your school email and the join code from your teacher.</div>
+    </div>
+
+    <div class="signup-body">
+        <div class="alert info" id="prefillNote" style="display: none;">
+            Class join code prefilled from your invite link. Just add your details below.
+        </div>
+        <div class="alert error" id="errorAlert"></div>
+        <div class="alert success" id="successAlert"></div>
+
+        <form id="signupForm" autocomplete="off">
+            <div class="field">
+                <label class="field-label" for="emailInput">School email</label>
+                <input type="email" class="field-input" id="emailInput" placeholder="firstname.lastname@school.ac.uk" required>
+            </div>
+            <div class="field">
+                <label class="field-label" for="nameInput">Your name (optional)</label>
+                <input type="text" class="field-input" id="nameInput" placeholder="e.g. Alex Carter">
+            </div>
+            <div class="field">
+                <label class="field-label" for="passwordInput">Choose a password</label>
+                <input type="password" class="field-input" id="passwordInput" placeholder="At least 8 characters" minlength="8" required>
+                <span class="field-hint">Pick something memorable. Your teacher can help reset it later if needed.</span>
+            </div>
+            <div class="field">
+                <label class="field-label" for="codeInput">Class join code</label>
+                <input type="text" class="field-input code" id="codeInput" placeholder="ABCD-1234" maxlength="9" required>
+                <span class="field-hint">Looks like four letters/numbers, a dash, four more.</span>
+            </div>
+
+            <button type="submit" class="btn-primary" id="submitBtn">Create my student account</button>
+        </form>
+
+        <div class="foot-link">Already have an account? <a href="login.html">Sign in</a></div>
+        <div class="policy">By signing up you agree to the MyBizStudies <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy notice</a>.</div>
+    </div>
+</div>
+
+<script>
+    var SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
+    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
+    var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    var form = document.getElementById('signupForm');
+    var emailInput = document.getElementById('emailInput');
+    var nameInput = document.getElementById('nameInput');
+    var passwordInput = document.getElementById('passwordInput');
+    var codeInput = document.getElementById('codeInput');
+    var submitBtn = document.getElementById('submitBtn');
+    var errorAlert = document.getElementById('errorAlert');
+    var successAlert = document.getElementById('successAlert');
+    var prefillNote = document.getElementById('prefillNote');
+
+    // Prefill code from URL ?code=XXXX-XXXX
+    (function() {
+        var params = new URLSearchParams(window.location.search);
+        var code = params.get('code');
+        if (code) {
+            codeInput.value = code.toUpperCase();
+            prefillNote.style.display = 'block';
+        }
+    })();
+
+    // Auto-format the join code as user types: uppercase, insert dash
+    codeInput.addEventListener('input', function(e) {
+        var raw = codeInput.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        if (raw.length > 8) raw = raw.slice(0, 8);
+        if (raw.length > 4) raw = raw.slice(0, 4) + '-' + raw.slice(4);
+        codeInput.value = raw;
+    });
+
+    function showError(msg) {
+        errorAlert.textContent = msg;
+        errorAlert.style.display = 'block';
+        successAlert.style.display = 'none';
+    }
+    function showSuccess(msg) {
+        successAlert.textContent = msg;
+        successAlert.style.display = 'block';
+        errorAlert.style.display = 'none';
+    }
+    function hideAlerts() {
+        errorAlert.style.display = 'none';
+        successAlert.style.display = 'none';
+    }
+
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        hideAlerts();
+
+        var email = emailInput.value.trim().toLowerCase();
+        var password = passwordInput.value;
+        var name = nameInput.value.trim();
+        var joinCode = codeInput.value.trim().toUpperCase();
+
+        if (!email || !password || !joinCode) {
+            showError('Fill in your email, password and class join code.');
+            return;
+        }
+        if (password.length < 8) {
+            showError('Password must be at least 8 characters.');
+            return;
+        }
+        if (!/^[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(joinCode)) {
+            showError('Class join code looks wrong. It should look like ABCD-1234.');
+            return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Creating your account...';
+
+        try {
+            var resp = await fetch(SUPABASE_URL + '/functions/v1/student-signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'apikey': SUPABASE_ANON_KEY
+                },
+                body: JSON.stringify({ email: email, password: password, join_code: joinCode, name: name })
+            });
+            var result = await resp.json();
+
+            if (!resp.ok) {
+                showError(result.error || 'Something went wrong. Try again.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Create my student account';
+                return;
+            }
+
+            showSuccess('Account created. Signing you in...');
+
+            // Sign in with the credentials they just used
+            var signin = await supabaseClient.auth.signInWithPassword({ email: email, password: password });
+            if (signin.error) {
+                showError('Account created but sign-in failed: ' + signin.error.message + '. Try logging in normally.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Go to login';
+                return;
+            }
+
+            // Phase 3: student-portal.html is built in Phase 4. For now, route to the main site
+            // so the student can start practising. Phase 4 will switch this to /student-portal.html.
+            setTimeout(function() {
+                window.location.href = '/exam-practice.html';
+            }, 600);
+
+        } catch (err) {
+            showError('Network error: ' + err.message);
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Create my student account';
+        }
+    });
+</script>
+
+</body>
+</html>

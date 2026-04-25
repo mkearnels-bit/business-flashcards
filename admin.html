@@ -1977,13 +1977,55 @@ function mybizLoadTikTokPixel() {
                         </div>
                     </div>
 
-                    <!-- Student approvals subtab (populated in phase 3) -->
+                    <!-- Student approvals subtab (Phase 3) -->
                     <div class="tp-pane" id="tp-pane-approvals" style="display:none;">
+                        <div class="panel" style="margin-bottom:1.5rem;">
+                            <div class="panel-header">
+                                <span class="panel-title">Pending student approvals <span id="pendingApprovalsCount" style="background:var(--warning); color:white; padding:0.1rem 0.55rem; border-radius:999px; font-size:0.75rem; margin-left:0.4rem;">0</span></span>
+                                <div style="display:flex; gap:0.5rem; align-items:center;">
+                                    <select class="form-select" id="approvalsSchoolFilter" style="width:auto; padding:0.4rem 1.5rem 0.4rem 0.7rem; font-size:0.85rem;">
+                                        <option value="">All schools</option>
+                                    </select>
+                                    <button class="btn btn-success btn-sm" id="approveAllBtn">Approve all on this filter</button>
+                                    <button class="btn btn-ghost btn-sm" id="refreshApprovalsBtn">Refresh</button>
+                                </div>
+                            </div>
+                            <div class="panel-body" style="padding:0;">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Email</th>
+                                            <th>School</th>
+                                            <th>Added by</th>
+                                            <th>Submitted</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="approvalsTableBody">
+                                        <tr><td colspan="5" style="text-align:center;color:var(--gray-400);padding:2rem;">Loading...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
                         <div class="panel">
-                            <div class="panel-body" style="text-align:center;padding:3rem 1rem;color:var(--gray-500);">
-                                <div style="font-size:2rem;margin-bottom:0.5rem;">&#128196;</div>
-                                <div style="font-weight:600;color:var(--gray-700);margin-bottom:0.25rem;">Student approvals come in Phase 3</div>
-                                <div style="font-size:0.9rem;">Once teachers upload student email lists they will appear here for approval.</div>
+                            <div class="panel-header">
+                                <span class="panel-title">Recently processed</span>
+                            </div>
+                            <div class="panel-body" style="padding:0;">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Email</th>
+                                            <th>School</th>
+                                            <th>Status</th>
+                                            <th>Approved</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="approvalsHistoryTableBody">
+                                        <tr><td colspan="4" style="text-align:center;color:var(--gray-400);padding:2rem;">No approvals yet.</td></tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -4399,6 +4441,7 @@ function mybizLoadTikTokPixel() {
             }
             tpRefreshSchools();
             tpRefreshTeachers();
+            tpRefreshApprovals();
         }
 
         function tpWireEvents() {
@@ -4427,6 +4470,11 @@ function mybizLoadTikTokPixel() {
             document.getElementById('refreshSchoolsBtn').addEventListener('click', tpRefreshSchools);
             document.getElementById('refreshTeachersBtn').addEventListener('click', tpRefreshTeachers);
             document.getElementById('inviteTeacherBtn').addEventListener('click', tpInviteTeacher);
+
+            // Approvals
+            document.getElementById('refreshApprovalsBtn').addEventListener('click', tpRefreshApprovals);
+            document.getElementById('approveAllBtn').addEventListener('click', tpApproveAll);
+            document.getElementById('approvalsSchoolFilter').addEventListener('change', tpRenderApprovals);
         }
 
         async function tpCreateSchool() {
@@ -4675,6 +4723,169 @@ function mybizLoadTikTokPixel() {
                 .replace(/>/g, '&gt;')
                 .replace(/"/g, '&quot;');
         }
+
+        // ============ APPROVALS (Phase 3) ============
+
+        var TP_APPROVALS_CACHE = [];
+
+        async function tpRefreshApprovals() {
+            var tbody = document.getElementById('approvalsTableBody');
+            var historyBody = document.getElementById('approvalsHistoryTableBody');
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--gray-400);padding:2rem;">Loading...</td></tr>';
+
+            var { data, error } = await supabaseClient
+                .from('approved_school_students')
+                .select('id, email, status, school_id, added_by, approved_by, created_at, approved_at')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--danger);padding:1rem;">' + error.message + '</td></tr>';
+                return;
+            }
+
+            TP_APPROVALS_CACHE = data || [];
+
+            // Hydrate teacher names for "added_by"
+            var teacherIds = Array.from(new Set(TP_APPROVALS_CACHE.map(function(r) { return r.added_by; }).filter(Boolean)));
+            var teacherMap = {};
+            if (teacherIds.length > 0) {
+                var teacherResult = await supabaseClient
+                    .from('user_profiles')
+                    .select('user_id, name, email')
+                    .in('user_id', teacherIds);
+                (teacherResult.data || []).forEach(function(t) { teacherMap[t.user_id] = t; });
+            }
+            TP_APPROVALS_CACHE.forEach(function(r) {
+                r._teacher = teacherMap[r.added_by] || null;
+            });
+
+            // Populate school filter
+            var schoolFilter = document.getElementById('approvalsSchoolFilter');
+            var currentValue = schoolFilter.value;
+            var schoolOptions = '<option value="">All schools</option>' +
+                TP_SCHOOLS_CACHE.map(function(s) { return '<option value="' + s.id + '">' + tpEscape(s.name) + '</option>'; }).join('');
+            schoolFilter.innerHTML = schoolOptions;
+            if (currentValue) schoolFilter.value = currentValue;
+
+            tpRenderApprovals();
+
+            // History
+            var processed = TP_APPROVALS_CACHE.filter(function(r) { return r.status === 'approved' || r.status === 'rejected'; }).slice(0, 25);
+            if (processed.length === 0) {
+                historyBody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--gray-400);padding:2rem;">No approvals yet.</td></tr>';
+            } else {
+                var schoolMap = {};
+                TP_SCHOOLS_CACHE.forEach(function(s) { schoolMap[s.id] = s.name; });
+                historyBody.innerHTML = processed.map(function(r) {
+                    var statusClass = r.status === 'approved' ? 'background:var(--success); color:white;' : 'background:var(--danger); color:white;';
+                    var when = r.approved_at ? new Date(r.approved_at).toLocaleDateString('en-GB') : '-';
+                    return '<tr>' +
+                        '<td>' + tpEscape(r.email) + '</td>' +
+                        '<td>' + tpEscape(schoolMap[r.school_id] || '-') + '</td>' +
+                        '<td><span style="' + statusClass + ' padding:0.15rem 0.6rem; border-radius:999px; font-size:0.75rem; font-weight:600;">' + r.status + '</span></td>' +
+                        '<td class="muted">' + when + '</td>' +
+                    '</tr>';
+                }).join('');
+            }
+        }
+
+        function tpRenderApprovals() {
+            var tbody = document.getElementById('approvalsTableBody');
+            var schoolFilter = document.getElementById('approvalsSchoolFilter').value;
+            var schoolMap = {};
+            TP_SCHOOLS_CACHE.forEach(function(s) { schoolMap[s.id] = s.name; });
+
+            var pending = TP_APPROVALS_CACHE.filter(function(r) {
+                if (r.status !== 'pending') return false;
+                if (schoolFilter && r.school_id !== schoolFilter) return false;
+                return true;
+            });
+
+            document.getElementById('pendingApprovalsCount').textContent = pending.length;
+
+            if (pending.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--gray-400);padding:2rem;">Nothing pending. Teachers can upload student emails from their class page.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = pending.map(function(r) {
+                var added = r.created_at ? new Date(r.created_at).toLocaleDateString('en-GB') : '-';
+                var teacherName = r._teacher ? (r._teacher.name || r._teacher.email) : '<span class="muted">unknown</span>';
+                return '<tr>' +
+                    '<td><strong>' + tpEscape(r.email) + '</strong></td>' +
+                    '<td>' + tpEscape(schoolMap[r.school_id] || '-') + '</td>' +
+                    '<td>' + (typeof teacherName === 'string' ? tpEscape(teacherName) : teacherName) + '</td>' +
+                    '<td class="muted">' + added + '</td>' +
+                    '<td style="white-space:nowrap;">' +
+                        '<button class="btn btn-success btn-sm" onclick="tpApproveOne(\'' + r.id + '\')">Approve</button> ' +
+                        '<button class="btn btn-danger btn-sm" onclick="tpRejectOne(\'' + r.id + '\')">Reject</button>' +
+                    '</td>' +
+                '</tr>';
+            }).join('');
+        }
+
+        async function tpApproveOne(id) {
+            await tpSetApprovalStatus(id, 'approved');
+        }
+        async function tpRejectOne(id) {
+            if (!confirm('Reject this email? The student will not be able to sign up with it.')) return;
+            await tpSetApprovalStatus(id, 'rejected');
+        }
+        async function tpSetApprovalStatus(id, newStatus) {
+            var sessionResult = await supabaseClient.auth.getSession();
+            var adminUserId = sessionResult.data && sessionResult.data.session ? sessionResult.data.session.user.id : null;
+
+            var { error } = await supabaseClient
+                .from('approved_school_students')
+                .update({
+                    status: newStatus,
+                    approved_by: adminUserId,
+                    approved_at: new Date().toISOString()
+                })
+                .eq('id', id);
+            if (error) {
+                showToast('Could not update: ' + error.message, 'error');
+                return;
+            }
+            showToast(newStatus === 'approved' ? 'Approved' : 'Rejected', 'success');
+            tpRefreshApprovals();
+        }
+
+        async function tpApproveAll() {
+            var schoolFilter = document.getElementById('approvalsSchoolFilter').value;
+            var ids = TP_APPROVALS_CACHE
+                .filter(function(r) { return r.status === 'pending' && (!schoolFilter || r.school_id === schoolFilter); })
+                .map(function(r) { return r.id; });
+
+            if (ids.length === 0) {
+                showToast('Nothing pending to approve', 'error');
+                return;
+            }
+            if (!confirm('Approve ' + ids.length + ' email' + (ids.length === 1 ? '' : 's') + '? Approved students will be able to sign up.')) return;
+
+            var sessionResult = await supabaseClient.auth.getSession();
+            var adminUserId = sessionResult.data && sessionResult.data.session ? sessionResult.data.session.user.id : null;
+
+            var { error } = await supabaseClient
+                .from('approved_school_students')
+                .update({
+                    status: 'approved',
+                    approved_by: adminUserId,
+                    approved_at: new Date().toISOString()
+                })
+                .in('id', ids);
+
+            if (error) {
+                showToast('Bulk approve failed: ' + error.message, 'error');
+                return;
+            }
+            showToast('Approved ' + ids.length + ' email' + (ids.length === 1 ? '' : 's'), 'success');
+            tpRefreshApprovals();
+        }
+
+        // Expose for inline onclick
+        window.tpApproveOne = tpApproveOne;
+        window.tpRejectOne = tpRejectOne;
 
         // Expose delete handler for inline onclick
         window.tpDeleteSchool = tpDeleteSchool;

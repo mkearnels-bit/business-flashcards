@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<title>Class | MyBizStudies Teacher Portal</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+    --primary: #1e3a5f;
+    --primary-dark: #152a45;
+    --primary-light: #2d5a8a;
+    --accent: #e67e22;
+    --accent-light: #f39c12;
+    --accent-glow: rgba(230, 126, 34, 0.3);
+    --success: #27ae60;
+    --success-bg: #e8f5ec;
+    --warning: #f39c12;
+    --warning-bg: #fef6e7;
+    --error: #e74c3c;
+    --error-bg: #fceae8;
+    --info: #3498db;
+    --info-bg: #e8f2fb;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-400: #94a3b8;
+    --gray-500: #64748b;
+    --gray-600: #475569;
+    --gray-700: #334155;
+    --gray-800: #1e293b;
+    --gray-900: #0f172a;
+    --white: #ffffff;
+    --shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+    --shadow-md: 0 4px 18px rgba(15, 23, 42, 0.08);
+    --shadow-lg: 0 10px 40px rgba(15, 23, 42, 0.12);
+    --radius-sm: 8px;
+    --radius: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--gray-50); color: var(--gray-800); line-height: 1.55; -webkit-font-smoothing: antialiased; min-height: 100vh; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gray-800); }
+
+.portal-bar { position: sticky; top: 0; z-index: 100; background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--gray-200); }
+.portal-bar-inner { max-width: 1280px; margin: 0 auto; padding: 0.75rem 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.portal-bar-left { display: flex; align-items: center; gap: 1.25rem; }
+.portal-logo { height: 46px; width: auto; }
+.portal-label { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.8rem; background: rgba(30, 58, 95, 0.08); color: var(--primary); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; border-radius: 999px; }
+.portal-bar-right { display: flex; align-items: center; gap: 0.5rem; }
+.portal-nav-link { padding: 0.5rem 0.9rem; font-size: 0.92rem; font-weight: 500; color: var(--gray-600); border-radius: var(--radius-sm); transition: all 0.15s ease; }
+.portal-nav-link:hover { background: var(--gray-100); color: var(--primary); }
+.portal-nav-link.active { background: var(--gray-100); color: var(--primary); font-weight: 600; }
+.portal-avatar { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.9rem; }
+
+.page { max-width: 1280px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+.breadcrumb { display: flex; align-items: center; gap: 0.5rem; color: var(--gray-500); font-size: 0.88rem; margin-bottom: 0.75rem; }
+.breadcrumb a:hover { color: var(--primary); }
+.breadcrumb-sep { color: var(--gray-300); }
+
+.class-hero { background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%); color: white; border-radius: var(--radius-xl); padding: 1.75rem 2rem; margin-bottom: 1.75rem; display: flex; align-items: center; justify-content: space-between; gap: 1.25rem; flex-wrap: wrap; }
+.class-hero-title { font-size: 1.7rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.35rem; }
+.class-hero-meta { display: flex; gap: 0.5rem; flex-wrap: wrap; opacity: 0.9; font-size: 0.92rem; }
+.class-hero-meta .dot { width: 4px; height: 4px; background: rgba(255,255,255,0.5); border-radius: 50%; align-self: center; }
+.class-hero-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+.join-code-display { display: inline-flex; align-items: center; gap: 0.6rem; background: rgba(255,255,255,0.12); padding: 0.6rem 1rem; border-radius: var(--radius-sm); font-family: 'SF Mono', Menlo, monospace; font-size: 1rem; font-weight: 700; letter-spacing: 0.08em; color: white; }
+.join-code-display small { font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; opacity: 0.75; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.7rem 1.2rem; font-weight: 600; font-size: 0.94rem; border-radius: var(--radius-sm); transition: all 0.15s ease; white-space: nowrap; line-height: 1; }
+.btn-primary { background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%); color: white; box-shadow: 0 2px 10px var(--accent-glow); }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px var(--accent-glow); }
+.btn-ghost { background: var(--white); color: var(--gray-700); border: 1px solid var(--gray-200); }
+.btn-ghost:hover { background: var(--gray-50); border-color: var(--gray-300); }
+.btn-ghost.on-hero { background: rgba(255,255,255,0.12); color: white; border-color: rgba(255,255,255,0.22); }
+.btn-ghost.on-hero:hover { background: rgba(255,255,255,0.2); }
+.btn-danger { background: white; color: var(--error); border: 1px solid var(--error-bg); }
+.btn-danger:hover { background: var(--error-bg); }
+.btn-sm { padding: 0.45rem 0.8rem; font-size: 0.85rem; }
+
+.tabs { display: flex; gap: 0.25rem; border-bottom: 1px solid var(--gray-200); margin-bottom: 1.5rem; }
+.tab { padding: 0.8rem 1.2rem; font-size: 0.95rem; font-weight: 600; color: var(--gray-500); border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.15s ease; display: inline-flex; align-items: center; gap: 0.4rem; }
+.tab:hover { color: var(--gray-700); }
+.tab.active { color: var(--primary); border-bottom-color: var(--accent); }
+.tab .tab-count { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; padding: 0 0.4rem; height: 20px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; background: var(--gray-100); color: var(--gray-600); }
+.tab.active .tab-count { background: rgba(230,126,34,0.12); color: var(--accent); }
+
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+
+.panel { background: white; border-radius: var(--radius-lg); border: 1px solid var(--gray-200); box-shadow: var(--shadow); margin-bottom: 1.5rem; overflow: hidden; }
+.panel-head { padding: 1.1rem 1.4rem; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.panel-title { font-size: 1.02rem; font-weight: 700; color: var(--gray-900); }
+.panel-sub { color: var(--gray-500); font-size: 0.88rem; margin-top: 0.2rem; }
+.panel-body { padding: 1.4rem; }
+
+.field { margin-bottom: 1rem; }
+.field-label { display: block; margin-bottom: 0.4rem; font-size: 0.88rem; font-weight: 600; color: var(--gray-700); }
+.field-input, .field-textarea { width: 100%; padding: 0.7rem 0.9rem; border: 1px solid var(--gray-300); border-radius: var(--radius-sm); background: white; }
+.field-input:focus, .field-textarea:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(45, 90, 138, 0.15); }
+.field-textarea { min-height: 130px; font-family: inherit; line-height: 1.55; resize: vertical; }
+.field-hint { display: block; margin-top: 0.35rem; font-size: 0.82rem; color: var(--gray-500); }
+
+table.data-table { width: 100%; border-collapse: collapse; }
+.data-table th, .data-table td { padding: 0.82rem 1.4rem; text-align: left; font-size: 0.92rem; border-bottom: 1px solid var(--gray-100); }
+.data-table th { background: var(--gray-50); color: var(--gray-600); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tbody tr:hover { background: var(--gray-50); }
+
+.pill { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.22rem 0.65rem; font-size: 0.78rem; font-weight: 600; border-radius: 999px; background: var(--gray-100); color: var(--gray-700); }
+.pill-success { background: var(--success-bg); color: var(--success); }
+.pill-warning { background: var(--warning-bg); color: #b87100; }
+.pill-error { background: var(--error-bg); color: var(--error); }
+.pill-info { background: var(--info-bg); color: var(--info); }
+
+.muted { color: var(--gray-500); }
+
+.icon-btn { width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border-radius: var(--radius-sm); color: var(--gray-500); background: transparent; transition: all 0.15s ease; }
+.icon-btn:hover { background: var(--gray-100); color: var(--gray-800); }
+.icon-btn.danger:hover { background: var(--error-bg); color: var(--error); }
+
+.student-avatar { width: 32px; height: 32px; border-radius: 50%; color: white; display: inline-flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.78rem; flex-shrink: 0; background: linear-gradient(135deg, var(--primary), var(--primary-light)); }
+
+.empty { text-align: center; padding: 3rem 1.5rem; color: var(--gray-500); }
+.empty .ico { font-size: 1.8rem; margin-bottom: 0.75rem; }
+
+.coming-soon { text-align: center; padding: 4rem 1.5rem; color: var(--gray-500); }
+.coming-soon .ico { font-size: 2rem; margin-bottom: 0.75rem; }
+.coming-soon h3 { color: var(--gray-700); font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; }
+
+/* Toast */
+.toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); background: var(--gray-900); color: white; padding: 0.75rem 1.25rem; border-radius: 999px; font-size: 0.92rem; font-weight: 500; box-shadow: var(--shadow-lg); display: none; z-index: 300; }
+.toast.show { display: block; animation: toastIn 0.2s ease; }
+.toast.success { background: var(--success); }
+.toast.error { background: var(--error); }
+@keyframes toastIn { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+/* Access denied */
+.access-block { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+.access-card { max-width: 420px; background: white; padding: 2.5rem 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); text-align: center; border: 1px solid var(--gray-200); }
+
+@media (max-width: 720px) {
+    .class-hero { padding: 1.25rem; }
+    .class-hero-title { font-size: 1.3rem; }
+    .page { padding: 1.25rem 1rem 3rem; }
+    .panel-body { padding: 1.1rem; }
+    .data-table th, .data-table td { padding: 0.7rem 0.9rem; font-size: 0.88rem; }
+}
+</style>
+</head>
+<body>
+
+<div id="loadingShell" style="padding: 3rem; text-align: center; color: var(--gray-500);">Loading...</div>
+
+<div id="accessDenied" style="display: none;" class="access-block">
+    <div class="access-card">
+        <div style="font-size: 2.5rem; margin-bottom: 1rem;">&#128274;</div>
+        <h1 style="font-size: 1.25rem; color: var(--gray-900); margin-bottom: 0.5rem;">Class not available</h1>
+        <p style="color: var(--gray-600); margin-bottom: 1.5rem;" id="accessMsg">You don't have access to this class.</p>
+        <a href="teacher-dashboard.html" class="btn btn-ghost">Back to dashboard</a>
+    </div>
+</div>
+
+<div id="classShell" style="display: none;">
+
+<header class="portal-bar">
+    <div class="portal-bar-inner">
+        <div class="portal-bar-left">
+            <a href="teacher-dashboard.html"><img src="assets/Site Logo Transparent.png" alt="MyBizStudies" class="portal-logo"></a>
+            <span class="portal-label">Teacher Portal</span>
+        </div>
+        <div class="portal-bar-right">
+            <a href="teacher-dashboard.html" class="portal-nav-link">Dashboard</a>
+            <a href="index.html" class="portal-nav-link">Main site</a>
+            <a href="#" class="portal-nav-link" id="logoutLink">Sign out</a>
+            <div class="portal-avatar" id="navAvatar">--</div>
+        </div>
+    </div>
+</header>
+
+<main class="page">
+
+    <div class="breadcrumb">
+        <a href="teacher-dashboard.html">Dashboard</a>
+        <span class="breadcrumb-sep">/</span>
+        <span style="color: var(--gray-700);" id="breadcrumbName">Class</span>
+    </div>
+
+    <div class="class-hero">
+        <div>
+            <h1 class="class-hero-title" id="className">Class</h1>
+            <div class="class-hero-meta" id="classMeta"></div>
+        </div>
+        <div class="class-hero-actions">
+            <div class="join-code-display">
+                <small>Join code</small>
+                <span id="classJoinCode">--</span>
+            </div>
+            <button class="btn btn-ghost on-hero btn-sm" id="copyCodeBtn">Copy</button>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" data-tab="students">Students <span class="tab-count" id="studentCount">0</span></button>
+        <button class="tab" data-tab="assignments">Assignments</button>
+        <button class="tab" data-tab="markbook">Markbook</button>
+    </div>
+
+    <!-- Students tab -->
+    <section class="tab-pane active" id="pane-students">
+
+        <!-- Upload emails panel -->
+        <div class="panel">
+            <div class="panel-head">
+                <div>
+                    <div class="panel-title">Add students by email</div>
+                    <div class="panel-sub">Upload your class roster. The admin approves the list before students can sign up.</div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="field">
+                    <label class="field-label">Paste student emails (one per line, or comma-separated)</label>
+                    <textarea class="field-textarea" id="emailsInput" placeholder="alex.carter@school.ac.uk&#10;bethany.shah@school.ac.uk&#10;charlie.nguyen@school.ac.uk"></textarea>
+                    <span class="field-hint">You can also paste a CSV directly. We'll pull email-looking values out automatically.</span>
+                </div>
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <button class="btn btn-primary" id="uploadEmailsBtn">Submit for approval</button>
+                    <span class="muted" style="font-size: 0.85rem;" id="uploadHint"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending approvals panel -->
+        <div class="panel" id="pendingPanel" style="display: none;">
+            <div class="panel-head">
+                <div>
+                    <div class="panel-title">Awaiting approval <span class="pill pill-warning" id="pendingCountPill">0</span></div>
+                    <div class="panel-sub">These emails are with the admin. Students cannot sign up until they're approved.</div>
+                </div>
+                <button class="btn btn-ghost btn-sm" id="refreshPendingBtn">Refresh</button>
+            </div>
+            <div class="panel-body" style="padding: 0;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th>Added</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="pendingTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Enrolled students panel -->
+        <div class="panel">
+            <div class="panel-head">
+                <div>
+                    <div class="panel-title">Enrolled students <span class="pill pill-success" id="enrolledCountPill">0</span></div>
+                    <div class="panel-sub">Students who have signed up using your class join code.</div>
+                </div>
+                <button class="btn btn-ghost btn-sm" id="refreshStudentsBtn">Refresh</button>
+            </div>
+            <div class="panel-body" style="padding: 0;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Joined</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="enrolledTableBody">
+                        <tr><td colspan="4" class="empty">No students yet. Share the join code <strong id="emptyJoinCode">--</strong> after their emails are approved.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Assignments tab -->
+    <section class="tab-pane" id="pane-assignments">
+        <div class="panel">
+            <div class="panel-body coming-soon">
+                <div class="ico">&#128221;</div>
+                <h3>Assignments coming in Phase 4</h3>
+                <p>Generate questions and tests for this class, approve before pushing, then track results in the markbook.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Markbook tab -->
+    <section class="tab-pane" id="pane-markbook">
+        <div class="panel">
+            <div class="panel-body coming-soon">
+                <div class="ico">&#128202;</div>
+                <h3>Markbook coming in Phase 4</h3>
+                <p>Once you push your first assignment, this view will show every student's score, with click-through to their work and feedback.</p>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+</div>
+
+<div class="toast" id="toast"><span id="toastMessage">Saved</span></div>
+
+<script>
+    var SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
+    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
+    var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    var BOARD_LABELS = {
+        aqa_gcse: 'AQA GCSE',
+        edexcel_gcse: 'Edexcel GCSE',
+        edexcel_igcse: 'Edexcel IGCSE',
+        cie_igcse: 'CIE IGCSE',
+        aqa_a_level: 'AQA A-Level',
+        edexcel_a_level: 'Edexcel A-Level',
+        edexcel_ial: 'Edexcel International A-Level',
+        cambridge_a_level: 'Cambridge International AS & A-Level'
+    };
+
+    var currentUser = null;
+    var currentProfile = null;
+    var currentClass = null;
+    var classId = null;
+
+    document.addEventListener('DOMContentLoaded', init);
+
+    async function init() {
+        var params = new URLSearchParams(window.location.search);
+        classId = params.get('id');
+        if (!classId) { showAccessDenied('No class specified.'); return; }
+
+        var sessionResult = await supabaseClient.auth.getSession();
+        if (!sessionResult.data.session) {
+            window.location.href = 'login.html?redirect=teacher-class.html?id=' + encodeURIComponent(classId);
+            return;
+        }
+        currentUser = sessionResult.data.session.user;
+
+        // Load profile
+        var profileResult = await supabaseClient
+            .from('user_profiles')
+            .select('user_id, email, name, role, school_id')
+            .eq('user_id', currentUser.id)
+            .maybeSingle();
+
+        if (profileResult.error || !profileResult.data || profileResult.data.role !== 'teacher') {
+            showAccessDenied('This page is for teachers.');
+            return;
+        }
+        currentProfile = profileResult.data;
+
+        // Load class (RLS will hide if teacher isn't on it)
+        var classResult = await supabaseClient
+            .from('classes')
+            .select('id, name, level, board, join_code, school_id, archived_at')
+            .eq('id', classId)
+            .maybeSingle();
+
+        if (classResult.error || !classResult.data) {
+            showAccessDenied("Couldn't load this class. You may not be on it, or it doesn't exist.");
+            return;
+        }
+        currentClass = classResult.data;
+
+        // Confirm teacher is on class_teachers (defence-in-depth, RLS already enforces)
+        var ctCheck = await supabaseClient
+            .from('class_teachers')
+            .select('class_id')
+            .eq('class_id', classId)
+            .eq('teacher_id', currentUser.id)
+            .maybeSingle();
+        if (!ctCheck.data) {
+            showAccessDenied("You're not on this class. Ask a co-teacher to add you.");
+            return;
+        }
+
+        showShell();
+        await Promise.all([
+            loadEnrolledStudents(),
+            loadPendingApprovals()
+        ]);
+        wireEvents();
+    }
+
+    function showAccessDenied(message) {
+        document.getElementById('loadingShell').style.display = 'none';
+        document.getElementById('classShell').style.display = 'none';
+        document.getElementById('accessMsg').textContent = message;
+        document.getElementById('accessDenied').style.display = 'flex';
+    }
+
+    function showShell() {
+        document.getElementById('loadingShell').style.display = 'none';
+        document.getElementById('classShell').style.display = 'block';
+
+        var displayName = currentProfile.name || currentUser.email || '';
+        var initials = displayName.trim().split(/\s+/).slice(0, 2).map(function(s) { return s[0] ? s[0].toUpperCase() : ''; }).join('') || 'T';
+        document.getElementById('navAvatar').textContent = initials;
+        document.getElementById('navAvatar').title = displayName;
+
+        document.getElementById('breadcrumbName').textContent = currentClass.name;
+        document.getElementById('className').textContent = currentClass.name;
+        document.getElementById('classJoinCode').textContent = currentClass.join_code;
+        document.getElementById('emptyJoinCode').textContent = currentClass.join_code;
+
+        var board = BOARD_LABELS[currentClass.board] || currentClass.board;
+        var level = currentClass.level === 'a_level' ? 'A-Level' : 'GCSE';
+        document.getElementById('classMeta').innerHTML =
+            '<span>' + board + '</span><span class="dot"></span><span>' + level + '</span>';
+    }
+
+    function wireEvents() {
+        document.querySelectorAll('.tab').forEach(function(tab) {
+            tab.addEventListener('click', function() {
+                var target = tab.getAttribute('data-tab');
+                document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+                tab.classList.add('active');
+                document.querySelectorAll('.tab-pane').forEach(function(p) { p.classList.remove('active'); });
+                document.getElementById('pane-' + target).classList.add('active');
+            });
+        });
+
+        document.getElementById('uploadEmailsBtn').addEventListener('click', uploadEmails);
+        document.getElementById('refreshPendingBtn').addEventListener('click', loadPendingApprovals);
+        document.getElementById('refreshStudentsBtn').addEventListener('click', loadEnrolledStudents);
+
+        document.getElementById('copyCodeBtn').addEventListener('click', function() {
+            navigator.clipboard.writeText(currentClass.join_code).then(function() { showToast('Code copied', 'success'); });
+        });
+
+        document.getElementById('logoutLink').addEventListener('click', async function(e) {
+            e.preventDefault();
+            await supabaseClient.auth.signOut();
+            window.location.href = 'index.html';
+        });
+    }
+
+    function extractEmails(raw) {
+        if (!raw) return [];
+        var matches = raw.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g) || [];
+        var lower = matches.map(function(s) { return s.toLowerCase(); });
+        // dedupe
+        var seen = {};
+        return lower.filter(function(e) { if (seen[e]) return false; seen[e] = true; return true; });
+    }
+
+    async function uploadEmails() {
+        var raw = document.getElementById('emailsInput').value;
+        var emails = extractEmails(raw);
+        var hint = document.getElementById('uploadHint');
+
+        if (emails.length === 0) {
+            hint.textContent = '';
+            showToast('No valid emails found in input', 'error');
+            return;
+        }
+
+        var btn = document.getElementById('uploadEmailsBtn');
+        btn.disabled = true;
+        btn.textContent = 'Submitting...';
+        hint.textContent = '';
+
+        var rows = emails.map(function(e) {
+            return {
+                school_id: currentClass.school_id,
+                email: e,
+                added_by: currentUser.id,
+                status: 'pending'
+            };
+        });
+
+        // Use upsert on (school_id, email) to skip duplicates without erroring
+        var { data, error } = await supabaseClient
+            .from('approved_school_students')
+            .upsert(rows, { onConflict: 'school_id,email', ignoreDuplicates: true })
+            .select('id, email, status');
+
+        btn.disabled = false;
+        btn.textContent = 'Submit for approval';
+
+        if (error) {
+            showToast('Could not submit: ' + error.message, 'error');
+            return;
+        }
+
+        var added = (data || []).length;
+        var skipped = emails.length - added;
+        document.getElementById('emailsInput').value = '';
+        if (added > 0) {
+            showToast('Submitted ' + added + ' email' + (added === 1 ? '' : 's') + ' for approval', 'success');
+        }
+        if (skipped > 0) {
+            hint.textContent = skipped + ' already on the list, skipped.';
+        }
+        loadPendingApprovals();
+    }
+
+    async function loadPendingApprovals() {
+        if (!currentClass || !currentClass.school_id) return;
+        var tbody = document.getElementById('pendingTableBody');
+        tbody.innerHTML = '<tr><td colspan="4" class="empty">Loading...</td></tr>';
+
+        var { data, error } = await supabaseClient
+            .from('approved_school_students')
+            .select('id, email, status, created_at, approved_at')
+            .eq('school_id', currentClass.school_id)
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            tbody.innerHTML = '<tr><td colspan="4" class="empty">Could not load: ' + esc(error.message) + '</td></tr>';
+            return;
+        }
+
+        var pending = (data || []).filter(function(r) { return r.status === 'pending' || r.status === 'rejected'; });
+        document.getElementById('pendingCountPill').textContent = pending.length;
+        document.getElementById('pendingPanel').style.display = pending.length > 0 ? 'block' : 'none';
+
+        if (pending.length === 0) { tbody.innerHTML = ''; return; }
+
+        var html = pending.map(function(r) {
+            var statusPill;
+            if (r.status === 'pending') statusPill = '<span class="pill pill-warning">Waiting on admin</span>';
+            else if (r.status === 'rejected') statusPill = '<span class="pill pill-error">Rejected</span>';
+            else statusPill = '<span class="pill">' + esc(r.status) + '</span>';
+
+            var added = r.created_at ? new Date(r.created_at).toLocaleDateString('en-GB') : '-';
+            return '<tr>' +
+                '<td>' + esc(r.email) + '</td>' +
+                '<td>' + statusPill + '</td>' +
+                '<td class="muted">' + added + '</td>' +
+                '<td><button class="icon-btn danger" title="Remove from list" onclick="tcRemoveApproval(\'' + r.id + '\', \'' + esc(r.email).replace(/\\/g, "\\\\").replace(/'/g, "\\'") + '\')">' +
+                    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg>' +
+                '</button></td>' +
+            '</tr>';
+        }).join('');
+        tbody.innerHTML = html;
+    }
+
+    async function loadEnrolledStudents() {
+        var tbody = document.getElementById('enrolledTableBody');
+        tbody.innerHTML = '<tr><td colspan="4" class="empty">Loading...</td></tr>';
+
+        var { data: links, error: linkErr } = await supabaseClient
+            .from('class_students')
+            .select('student_id, joined_at')
+            .eq('class_id', currentClass.id)
+            .order('joined_at', { ascending: false });
+
+        if (linkErr) {
+            tbody.innerHTML = '<tr><td colspan="4" class="empty">Could not load: ' + esc(linkErr.message) + '</td></tr>';
+            return;
+        }
+
+        document.getElementById('studentCount').textContent = (links || []).length;
+        document.getElementById('enrolledCountPill').textContent = (links || []).length;
+
+        if (!links || links.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" class="empty">No students yet. Share the join code <strong>' + esc(currentClass.join_code) + '</strong> after their emails are approved.</td></tr>';
+            return;
+        }
+
+        var ids = links.map(function(l) { return l.student_id; });
+        var { data: profiles, error: profErr } = await supabaseClient
+            .from('user_profiles')
+            .select('user_id, email, name')
+            .in('user_id', ids);
+
+        if (profErr) {
+            tbody.innerHTML = '<tr><td colspan="4" class="empty">Could not load profiles: ' + esc(profErr.message) + '</td></tr>';
+            return;
+        }
+
+        var profileMap = {};
+        (profiles || []).forEach(function(p) { profileMap[p.user_id] = p; });
+
+        var html = links.map(function(link) {
+            var p = profileMap[link.student_id] || {};
+            var name = p.name || '<span class="muted">No name</span>';
+            var email = p.email || '-';
+            var joined = link.joined_at ? new Date(link.joined_at).toLocaleDateString('en-GB') : '-';
+            var initials = (p.name || p.email || '?').trim().split(/\s+/).slice(0, 2).map(function(s) { return s[0] ? s[0].toUpperCase() : ''; }).join('') || '?';
+            return '<tr>' +
+                '<td><div style="display:flex;align-items:center;gap:0.6rem;"><span class="student-avatar">' + esc(initials) + '</span><strong>' + name + '</strong></div></td>' +
+                '<td class="muted">' + esc(email) + '</td>' +
+                '<td class="muted">' + joined + '</td>' +
+                '<td><button class="icon-btn danger" title="Remove from class" onclick="tcRemoveStudent(\'' + link.student_id + '\', \'' + esc(email).replace(/\\/g, "\\\\").replace(/'/g, "\\'") + '\')">' +
+                    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>' +
+                '</button></td>' +
+            '</tr>';
+        }).join('');
+
+        tbody.innerHTML = html;
+    }
+
+    async function tcRemoveApproval(id, email) {
+        if (!confirm('Remove ' + email + ' from the approval list?')) return;
+        var { error } = await supabaseClient.from('approved_school_students').delete().eq('id', id);
+        if (error) { showToast('Could not remove: ' + error.message, 'error'); return; }
+        showToast('Removed', 'success');
+        loadPendingApprovals();
+    }
+
+    async function tcRemoveStudent(studentId, email) {
+        if (!confirm('Remove ' + email + ' from this class? Their account stays; they just leave this class.')) return;
+        var { error } = await supabaseClient
+            .from('class_students')
+            .delete()
+            .eq('class_id', currentClass.id)
+            .eq('student_id', studentId);
+        if (error) { showToast('Could not remove: ' + error.message, 'error'); return; }
+        showToast('Removed from class', 'success');
+        loadEnrolledStudents();
+    }
+
+    function esc(s) {
+        if (s === null || s === undefined) return '';
+        return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function showToast(message, type) {
+        var toast = document.getElementById('toast');
+        toast.className = 'toast show ' + (type || '');
+        document.getElementById('toastMessage').textContent = message;
+        setTimeout(function() { toast.classList.remove('show'); }, 2800);
+    }
+
+    window.tcRemoveApproval = tcRemoveApproval;
+    window.tcRemoveStudent = tcRemoveStudent;
+</script>
+
+</body>
+</html>
