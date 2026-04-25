@@ -294,6 +294,12 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
         if (assignment.type === 'question') {
             var q = (assignment.generated_payload && assignment.generated_payload.question) || assignment.generated_payload || {};
             var marking = (attempt.ai_feedback && attempt.ai_feedback.marking) || attempt.ai_feedback || {};
+            // Render the case study (question_context) before the question if present
+            if (q.question_context && String(q.question_context).trim()) {
+                writeBoldHeading('Case study', 13, [138, 90, 0]);
+                writeWrapped(q.question_context);
+                y += 4;
+            }
             renderOneQuestion(q, attempt.answers && attempt.answers.answer, marking);
         } else {
             var paper = (assignment.generated_payload && assignment.generated_payload.paper) || assignment.generated_payload || {};
@@ -329,7 +335,7 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
             writeBoldHeading(label, 12, [30, 58, 95]);
 
             // Question text
-            writeWrapped(q.question || q.text || '');
+            writeWrapped(q.question_text || q.question || q.text || '');
             y += 3;
 
             // Student answer
@@ -491,17 +497,32 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
 
         if (a.type === 'question') {
             var q = (a.generated_payload && a.generated_payload.question) || a.generated_payload || {};
-            var qText = q.question || q.text || '';
+            var qText = q.question_text || q.question || q.text || '';
             var marks = q.marks || a.total_marks || '';
+            // Single questions sometimes have a case study in question_context
+            if (q.question_context && String(q.question_context).trim()) {
+                caseHtml = '<div class="case-panel"><div class="case-label">Case study</div><div class="case-body">' + esc(q.question_context) + '</div></div>';
+            }
             qHtml = renderQuestionCard(0, marks, qText, true);
         } else {
             var paper = (a.generated_payload && a.generated_payload.paper) || a.generated_payload || {};
-            var cs = paper.case_study || paper.scenario || paper.context;
-            if (cs) {
-                caseHtml = '<div class="case-panel"><div class="case-label">Case study</div><div class="case-body">' + esc(typeof cs === 'string' ? cs : JSON.stringify(cs)) + '</div></div>';
+            // Tests use source_booklet for case study extracts; older keys kept as fallback
+            var extracts = paper.source_booklet || [];
+            if (Array.isArray(extracts) && extracts.length > 0) {
+                caseHtml = '<div class="case-panel"><div class="case-label">Case study</div><div class="case-body">' +
+                    extracts.map(function(ext) {
+                        var biz = ext.business_name ? '<strong>' + esc(ext.business_name) + '</strong><br>' : '';
+                        return biz + esc(ext.content || '');
+                    }).join('<br><br>') +
+                '</div></div>';
+            } else {
+                var cs = paper.case_study || paper.scenario || paper.context;
+                if (cs) {
+                    caseHtml = '<div class="case-panel"><div class="case-label">Case study</div><div class="case-body">' + esc(typeof cs === 'string' ? cs : JSON.stringify(cs)) + '</div></div>';
+                }
             }
             qHtml = (paper.questions || []).map(function(q, idx) {
-                var qText = q.question || q.text || '';
+                var qText = q.text || q.question || q.question_text || '';
                 var label = 'Question ' + (q.number || (idx + 1)) + (q.part ? q.part : '');
                 return renderQuestionCard(idx, q.marks, qText, true, label, q.id);
             }).join('');

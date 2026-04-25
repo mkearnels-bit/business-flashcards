@@ -413,7 +413,7 @@ table.data-table { width: 100%; border-collapse: collapse; }
                 duration_minutes: paper.duration_minutes || null,
                 case_extracts: paper.source_booklet || [],
                 questions: (paper.questions || []).map(function (q) {
-                    return { number: q.number || '', part: q.part || '', text: q.question || q.text || '', marks: q.marks, command_word: q.command_word || q.command || '', question_type: q.question_type || '', options: q.options || null };
+                    return { number: q.number || '', part: q.part || '', text: q.text || q.question || q.question_text || '', marks: q.marks, command_word: q.command_word || q.command || '', question_type: q.question_type || '', options: q.options || null };
                 })
             };
         }
@@ -423,8 +423,8 @@ table.data-table { width: 100%; border-collapse: collapse; }
                 title: 'Practice question',
                 board: null, board_name: null,
                 total_marks: q.marks, time_allowed: null, duration_minutes: null,
-                case_extracts: [],
-                questions: [{ number: '1', part: '', text: q.question || q.text || '', marks: q.marks, command_word: q.command_word || q.command || '', question_type: q.question_type || '', options: q.options || null }]
+                case_extracts: q.question_context && String(q.question_context).trim() ? [{ id: 'A', title: 'Case study', business_name: '', content: q.question_context, data: null }] : [],
+                questions: [{ number: '1', part: '', text: q.question_text || q.question || q.text || '', marks: q.marks, command_word: q.command_word || q.command || '', question_type: q.question_type || '', options: q.options || null }]
             };
         }
         return null;
@@ -897,13 +897,26 @@ table.data-table { width: 100%; border-collapse: collapse; }
         var qHtml = '';
         if (a.type === 'question') {
             var q = (a.generated_payload && a.generated_payload.question) || a.generated_payload || {};
-            qHtml = '<div style="margin-bottom:1.5rem; padding:1rem; background:var(--gray-50); border-radius:var(--radius);"><div class="muted" style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.4rem;">Question</div><div style="white-space:pre-wrap;">' + esc(q.question || q.text || '') + '</div></div>';
+            if (q.question_context && String(q.question_context).trim()) {
+                qHtml += '<div style="margin-bottom:1rem; padding:1rem; background:#fffbea; border:1px solid #f7d98a; border-radius:var(--radius);"><div style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#8a5a00; margin-bottom:0.4rem;">Case study</div><div style="white-space:pre-wrap;">' + esc(q.question_context) + '</div></div>';
+            }
+            qHtml += '<div style="margin-bottom:1.5rem; padding:1rem; background:var(--gray-50); border-radius:var(--radius);"><div class="muted" style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.4rem;">Question</div><div style="white-space:pre-wrap;">' + esc(q.question_text || q.question || q.text || '') + '</div></div>';
         } else {
             var paper = (a.generated_payload && a.generated_payload.paper) || a.generated_payload || {};
-            var cs = paper.case_study || paper.scenario;
-            if (cs) qHtml += '<div style="margin-bottom:1rem; padding:1rem; background:#fffbea; border:1px solid #f7d98a; border-radius:var(--radius);"><div style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#8a5a00; margin-bottom:0.4rem;">Case study</div><div style="white-space:pre-wrap;">' + esc(typeof cs === 'string' ? cs : JSON.stringify(cs)) + '</div></div>';
+            var extracts = paper.source_booklet || [];
+            if (Array.isArray(extracts) && extracts.length > 0) {
+                qHtml += '<div style="margin-bottom:1rem; padding:1rem; background:#fffbea; border:1px solid #f7d98a; border-radius:var(--radius);"><div style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#8a5a00; margin-bottom:0.4rem;">Case study</div>' +
+                    extracts.map(function(ext) {
+                        var biz = ext.business_name ? '<strong>' + esc(ext.business_name) + '</strong><br>' : '';
+                        return '<div style="white-space:pre-wrap; margin-bottom:0.5rem;">' + biz + esc(ext.content || '') + '</div>';
+                    }).join('') +
+                '</div>';
+            } else {
+                var cs = paper.case_study || paper.scenario;
+                if (cs) qHtml += '<div style="margin-bottom:1rem; padding:1rem; background:#fffbea; border:1px solid #f7d98a; border-radius:var(--radius);"><div style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#8a5a00; margin-bottom:0.4rem;">Case study</div><div style="white-space:pre-wrap;">' + esc(typeof cs === 'string' ? cs : JSON.stringify(cs)) + '</div></div>';
+            }
             (paper.questions || []).forEach(function(q, idx) {
-                qHtml += '<div style="margin-bottom:0.85rem; padding:0.9rem 1rem; background:var(--gray-50); border-radius:var(--radius);"><strong>Q' + (q.number || (idx + 1)) + (q.part || '') + ' (' + (q.marks || '?') + ' marks)</strong><div style="margin-top:0.4rem; white-space:pre-wrap;">' + esc(q.question || q.text || '') + '</div></div>';
+                qHtml += '<div style="margin-bottom:0.85rem; padding:0.9rem 1rem; background:var(--gray-50); border-radius:var(--radius);"><strong>Q' + (q.number || (idx + 1)) + (q.part || '') + ' (' + (q.marks || '?') + ' marks)</strong><div style="margin-top:0.4rem; white-space:pre-wrap;">' + esc(q.text || q.question || q.question_text || '') + '</div></div>';
             });
         }
 
@@ -1030,20 +1043,29 @@ table.data-table { width: 100%; border-collapse: collapse; }
 
     function renderSingleQuestionDetail(full, assignment) {
         var qPayload = (assignment && assignment.generated_payload && assignment.generated_payload.question) || (assignment && assignment.generated_payload) || {};
-        var qText = qPayload.question || qPayload.text || '';
+        var qText = qPayload.question_text || qPayload.question || qPayload.text || '';
         var marks = qPayload.marks || (assignment && assignment.total_marks) || '';
+        var caseContext = qPayload.question_context && String(qPayload.question_context).trim() ? qPayload.question_context : null;
         var studentAnswer = (full.answers && full.answers.answer) || '';
         var marking = (full.ai_feedback && full.ai_feedback.marking) || full.ai_feedback || {};
 
-        return '<div style="margin-bottom:1.25rem; padding:1rem 1.1rem; background:var(--gray-50); border:1px solid var(--gray-200); border-radius:var(--radius);">' +
-            '<div style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.4rem; color:var(--gray-500);">Question' + (marks ? ' (' + marks + ' marks)' : '') + '</div>' +
-            '<div style="white-space:pre-wrap; line-height:1.6;">' + esc(qText) + '</div>' +
-        '</div>' +
-        '<div style="margin-bottom:1.25rem; padding:1rem 1.1rem; background:white; border:1px solid var(--gray-200); border-radius:var(--radius);">' +
-            '<div style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.4rem; color:var(--gray-600);">Their answer</div>' +
-            '<div style="white-space:pre-wrap; line-height:1.65;">' + esc(studentAnswer || 'No answer submitted.') + '</div>' +
-        '</div>' +
-        renderMarkingDetail(marking);
+        var caseHtml = caseContext
+            ? '<div style="margin-bottom:1.25rem; padding:1rem 1.1rem; background:#fffbea; border:1px solid #f7d98a; border-radius:var(--radius);">' +
+                '<div style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.4rem; color:#8a5a00;">Case study</div>' +
+                '<div style="white-space:pre-wrap; line-height:1.6;">' + esc(caseContext) + '</div>' +
+              '</div>'
+            : '';
+
+        return caseHtml +
+            '<div style="margin-bottom:1.25rem; padding:1rem 1.1rem; background:var(--gray-50); border:1px solid var(--gray-200); border-radius:var(--radius);">' +
+                '<div style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.4rem; color:var(--gray-500);">Question' + (marks ? ' (' + marks + ' marks)' : '') + '</div>' +
+                '<div style="white-space:pre-wrap; line-height:1.6;">' + esc(qText) + '</div>' +
+            '</div>' +
+            '<div style="margin-bottom:1.25rem; padding:1rem 1.1rem; background:white; border:1px solid var(--gray-200); border-radius:var(--radius);">' +
+                '<div style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.4rem; color:var(--gray-600);">Their answer</div>' +
+                '<div style="white-space:pre-wrap; line-height:1.65;">' + esc(studentAnswer || 'No answer submitted.') + '</div>' +
+            '</div>' +
+            renderMarkingDetail(marking);
     }
 
     function renderTestDetail(full, assignment) {
@@ -1069,7 +1091,7 @@ table.data-table { width: 100%; border-collapse: collapse; }
         (paper.questions || []).forEach(function(q, idx) {
             var qid = q.id || ('q' + (idx + 1));
             var qNum = (q.number || (idx + 1)) + (q.part || '');
-            var qText = q.question || q.text || '';
+            var qText = q.text || q.question || q.question_text || '';
             var marks = q.marks || '';
             var ans = answerMap[qid] !== undefined ? answerMap[qid] : (studentAnswers[idx] && studentAnswers[idx].student_answer) || '';
             var qr = resultMap[qid] || qResults[idx] || {};

@@ -391,7 +391,7 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
                 duration_minutes: paper.duration_minutes || null,
                 case_extracts: paper.source_booklet || [],
                 questions: (paper.questions || []).map(function (q) {
-                    return { number: q.number || '', part: q.part || '', text: q.question || q.text || '', marks: q.marks, command_word: q.command_word || q.command || '', question_type: q.question_type || '', options: q.options || null };
+                    return { number: q.number || '', part: q.part || '', text: q.text || q.question || q.question_text || '', marks: q.marks, command_word: q.command_word || q.command || '', question_type: q.question_type || '', options: q.options || null };
                 })
             };
         }
@@ -401,8 +401,8 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
                 title: 'Practice question',
                 board: null, board_name: null,
                 total_marks: q.marks, time_allowed: null, duration_minutes: null,
-                case_extracts: [],
-                questions: [{ number: '1', part: '', text: q.question || q.text || '', marks: q.marks, command_word: q.command_word || q.command || '', question_type: q.question_type || '', options: q.options || null }]
+                case_extracts: q.question_context && String(q.question_context).trim() ? [{ id: 'A', title: 'Case study', business_name: '', content: q.question_context, data: null }] : [],
+                questions: [{ number: '1', part: '', text: q.question_text || q.question || q.text || '', marks: q.marks, command_word: q.command_word || q.command || '', question_type: q.question_type || '', options: q.options || null }]
             };
         }
         return null;
@@ -1015,14 +1015,20 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
     }
 
     function renderApprovalForQuestion(data) {
-        document.getElementById('caseStudyContainer').innerHTML = '';
         var q = data.question || {};
         var marks = q.marks || '';
-        var command = q.command || '';
+        var command = q.command_word || q.command || '';
         document.getElementById('approveTitle').textContent = (command ? command + ' question' : 'Single question');
         document.getElementById('approveSub').textContent = (BOARD_LABELS[currentClass.board] || currentClass.board) + ', ' + marks + ' marks';
 
-        var qText = q.question || q.text || JSON.stringify(q);
+        // Single questions sometimes include a case study in question_context
+        var caseHtml = '';
+        if (q.question_context && String(q.question_context).trim()) {
+            caseHtml = '<div class="case-study"><div class="case-label">Case study</div><div class="case-body">' + esc(q.question_context) + '</div></div>';
+        }
+        document.getElementById('caseStudyContainer').innerHTML = caseHtml;
+
+        var qText = q.question_text || q.question || q.text || '';
         document.getElementById('questionsContainer').innerHTML = renderEditableQuestion(0, marks, qText);
         wireEditButtons();
     }
@@ -1045,7 +1051,7 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
             var qNum = q.number || (idx + 1);
             var qPart = q.part ? (q.part) : '';
             var label = 'Question ' + qNum + (qPart ? qPart : '') + ' (' + (q.marks || '?') + ' marks)';
-            var qText = q.question || q.text || JSON.stringify(q);
+            var qText = q.text || q.question || q.question_text || '';
             return renderEditableQuestion(idx, q.marks, qText, label);
         }).join('');
 
@@ -1089,14 +1095,16 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
                 document.querySelector('[data-display="' + idx + '"]').style.display = 'block';
                 document.querySelector('[data-edit="' + idx + '"]').style.display = 'none';
 
-                // Update generatedPayload in place
+                // Update generatedPayload in place. Different field names for single questions
+                // (question_text) vs test papers (text/question per question entry).
                 if (currentType === 'question') {
                     if (!generatedPayload.question) generatedPayload.question = {};
-                    generatedPayload.question.question = newText;
+                    generatedPayload.question.question_text = newText;
                 } else {
                     if (generatedPayload.paper && generatedPayload.paper.questions) {
                         var i = parseInt(idx, 10);
                         if (generatedPayload.paper.questions[i]) {
+                            generatedPayload.paper.questions[i].text = newText;
                             generatedPayload.paper.questions[i].question = newText;
                         }
                     }
