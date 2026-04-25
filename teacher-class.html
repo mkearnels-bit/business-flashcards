@@ -212,8 +212,12 @@ table.data-table { width: 100%; border-collapse: collapse; }
 
     <div class="tabs">
         <button class="tab active" data-tab="students">Students <span class="tab-count" id="studentCount">0</span></button>
-        <button class="tab" data-tab="assignments">Assignments</button>
+        <button class="tab" data-tab="assignments">Assignments <span class="tab-count" id="assignmentCount">0</span></button>
         <button class="tab" data-tab="markbook">Markbook</button>
+        <a href="#" id="newAssignmentBtnTop" style="margin-left:auto; align-self:center;" class="btn btn-primary btn-sm">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            New assignment
+        </a>
     </div>
 
     <!-- Students tab -->
@@ -295,10 +299,29 @@ table.data-table { width: 100%; border-collapse: collapse; }
     <!-- Assignments tab -->
     <section class="tab-pane" id="pane-assignments">
         <div class="panel">
-            <div class="panel-body coming-soon">
-                <div class="ico">&#128221;</div>
-                <h3>Assignments coming in Phase 4</h3>
-                <p>Generate questions and tests for this class, approve before pushing, then track results in the markbook.</p>
+            <div class="panel-head">
+                <div>
+                    <div class="panel-title">Pushed assignments <span class="pill" id="assignmentsPill" style="display:none;">0</span></div>
+                    <div class="panel-sub">Click an assignment to see all student attempts and feedback.</div>
+                </div>
+                <button class="btn btn-ghost btn-sm" id="refreshAssignmentsBtn">Refresh</button>
+            </div>
+            <div class="panel-body" style="padding: 0;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Assignment</th>
+                            <th>Type</th>
+                            <th>Pushed</th>
+                            <th>Due</th>
+                            <th>Submitted</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="assignmentsTableBody">
+                        <tr><td colspan="6" class="empty">No assignments yet. Click "New assignment" to push your first one.</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </section>
@@ -306,13 +329,36 @@ table.data-table { width: 100%; border-collapse: collapse; }
     <!-- Markbook tab -->
     <section class="tab-pane" id="pane-markbook">
         <div class="panel">
-            <div class="panel-body coming-soon">
-                <div class="ico">&#128202;</div>
-                <h3>Markbook coming in Phase 4</h3>
-                <p>Once you push your first assignment, this view will show every student's score, with click-through to their work and feedback.</p>
+            <div class="panel-head">
+                <div>
+                    <div class="panel-title">Markbook</div>
+                    <div class="panel-sub">Rows = students, columns = assignments. Click a cell to see that attempt. The full drill-down view is in Phase 6.</div>
+                </div>
+                <button class="btn btn-ghost btn-sm" id="refreshMarkbookBtn">Refresh</button>
+            </div>
+            <div class="panel-body" style="padding: 0; overflow-x: auto;">
+                <div id="markbookContainer" style="padding:1rem;">
+                    <div class="muted" style="text-align:center; padding: 2rem;">Loading...</div>
+                </div>
             </div>
         </div>
     </section>
+
+    <!-- Attempt detail drawer -->
+    <div id="attemptDetail" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.55); z-index:200; padding:1rem; align-items:flex-start; justify-content:center; overflow:auto;">
+        <div style="background:white; max-width:900px; width:100%; margin: 2rem auto; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); max-height: 90vh; overflow-y:auto;">
+            <div style="padding:1.25rem 1.5rem; border-bottom:1px solid var(--gray-200); display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <div style="font-weight:700; color: var(--gray-900); font-size:1.05rem;" id="detailTitle">Student attempt</div>
+                    <div class="muted" style="font-size:0.85rem; margin-top:0.2rem;" id="detailSub"></div>
+                </div>
+                <button class="icon-btn" id="closeDetailBtn" title="Close">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div style="padding:1.5rem;" id="detailBody"></div>
+        </div>
+    </div>
 
 </main>
 
@@ -396,7 +442,8 @@ table.data-table { width: 100%; border-collapse: collapse; }
         showShell();
         await Promise.all([
             loadEnrolledStudents(),
-            loadPendingApprovals()
+            loadPendingApprovals(),
+            loadAssignments()
         ]);
         wireEvents();
     }
@@ -436,12 +483,24 @@ table.data-table { width: 100%; border-collapse: collapse; }
                 tab.classList.add('active');
                 document.querySelectorAll('.tab-pane').forEach(function(p) { p.classList.remove('active'); });
                 document.getElementById('pane-' + target).classList.add('active');
+                if (target === 'markbook') renderMarkbook();
             });
         });
 
         document.getElementById('uploadEmailsBtn').addEventListener('click', uploadEmails);
         document.getElementById('refreshPendingBtn').addEventListener('click', loadPendingApprovals);
         document.getElementById('refreshStudentsBtn').addEventListener('click', loadEnrolledStudents);
+        document.getElementById('refreshAssignmentsBtn').addEventListener('click', loadAssignments);
+        document.getElementById('refreshMarkbookBtn').addEventListener('click', function() { loadAssignments().then(renderMarkbook); });
+
+        document.getElementById('newAssignmentBtnTop').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = 'teacher-new-assignment.html?class=' + encodeURIComponent(currentClass.id);
+        });
+
+        document.getElementById('closeDetailBtn').addEventListener('click', function() {
+            document.getElementById('attemptDetail').style.display = 'none';
+        });
 
         document.getElementById('copyCodeBtn').addEventListener('click', function() {
             navigator.clipboard.writeText(currentClass.join_code).then(function() { showToast('Code copied', 'success'); });
@@ -453,6 +512,230 @@ table.data-table { width: 100%; border-collapse: collapse; }
             window.location.href = 'index.html';
         });
     }
+
+    // ============ ASSIGNMENTS + MARKBOOK ============
+
+    var ASSIGNMENTS_CACHE = [];
+    var ATTEMPTS_CACHE = [];
+    var STUDENTS_CACHE = [];
+
+    async function loadAssignments() {
+        var { data: assignments, error } = await supabaseClient
+            .from('assignments')
+            .select('id, type, total_marks, board, level, unit, topic, status, pushed_at, due_at, created_at, generated_payload')
+            .eq('class_id', currentClass.id)
+            .eq('status', 'pushed')
+            .order('pushed_at', { ascending: false });
+
+        if (error) {
+            document.getElementById('assignmentsTableBody').innerHTML = '<tr><td colspan="6" class="empty">Could not load: ' + esc(error.message) + '</td></tr>';
+            return;
+        }
+        ASSIGNMENTS_CACHE = assignments || [];
+
+        document.getElementById('assignmentCount').textContent = ASSIGNMENTS_CACHE.length;
+        var pill = document.getElementById('assignmentsPill');
+        pill.textContent = ASSIGNMENTS_CACHE.length;
+        pill.style.display = ASSIGNMENTS_CACHE.length > 0 ? 'inline-flex' : 'none';
+
+        // Load attempts for these assignments
+        if (ASSIGNMENTS_CACHE.length > 0) {
+            var aIds = ASSIGNMENTS_CACHE.map(function(a) { return a.id; });
+            var { data: atts } = await supabaseClient
+                .from('student_attempts')
+                .select('id, assignment_id, student_id, status, ai_score, ai_total, submitted_at')
+                .in('assignment_id', aIds);
+            ATTEMPTS_CACHE = atts || [];
+        } else {
+            ATTEMPTS_CACHE = [];
+        }
+
+        renderAssignmentsTable();
+    }
+
+    function renderAssignmentsTable() {
+        var tbody = document.getElementById('assignmentsTableBody');
+        if (ASSIGNMENTS_CACHE.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="empty">No assignments yet. Click "New assignment" to push your first one.</td></tr>';
+            return;
+        }
+
+        var attemptCounts = {};
+        ATTEMPTS_CACHE.forEach(function(a) {
+            if (!attemptCounts[a.assignment_id]) attemptCounts[a.assignment_id] = { total: 0, submitted: 0 };
+            attemptCounts[a.assignment_id].total += 1;
+            if (a.status === 'graded' || a.status === 'submitted') attemptCounts[a.assignment_id].submitted += 1;
+        });
+
+        tbody.innerHTML = ASSIGNMENTS_CACHE.map(function(a) {
+            var title = a.topic || a.unit || (a.type === 'test' ? 'Standard test' : 'Single question');
+            var pushed = a.pushed_at ? new Date(a.pushed_at).toLocaleDateString('en-GB', { day:'numeric', month:'short' }) : '-';
+            var due = a.due_at ? new Date(a.due_at).toLocaleDateString('en-GB', { day:'numeric', month:'short' }) : 'No due date';
+            var counts = attemptCounts[a.id] || { total: 0, submitted: 0 };
+            var typeLabel = a.type === 'test' ? 'Test (' + (a.total_marks || '?') + ')' : 'Question (' + (a.total_marks || '?') + ')';
+            return '<tr>' +
+                '<td><strong>' + esc(title) + '</strong></td>' +
+                '<td>' + typeLabel + '</td>' +
+                '<td class="muted">' + pushed + '</td>' +
+                '<td class="muted">' + due + '</td>' +
+                '<td>' + counts.submitted + ' / ' + counts.total + '</td>' +
+                '<td><button class="btn btn-ghost btn-sm" onclick="openAssignmentDetail(\'' + a.id + '\')">View</button></td>' +
+            '</tr>';
+        }).join('');
+    }
+
+    async function renderMarkbook() {
+        var container = document.getElementById('markbookContainer');
+
+        // Load students if not yet
+        if (STUDENTS_CACHE.length === 0) {
+            var { data: links } = await supabaseClient.from('class_students').select('student_id').eq('class_id', currentClass.id);
+            var ids = (links || []).map(function(l) { return l.student_id; });
+            if (ids.length > 0) {
+                var { data: profiles } = await supabaseClient.from('user_profiles').select('user_id, name, email').in('user_id', ids);
+                STUDENTS_CACHE = profiles || [];
+            }
+        }
+
+        if (ASSIGNMENTS_CACHE.length === 0 || STUDENTS_CACHE.length === 0) {
+            container.innerHTML = '<div class="muted" style="text-align:center; padding: 2rem;">' +
+                (STUDENTS_CACHE.length === 0 ? 'No students enrolled yet.' : 'No assignments pushed yet.') +
+                '</div>';
+            return;
+        }
+
+        // Build {studentId, assignmentId} -> attempt lookup
+        var lookup = {};
+        ATTEMPTS_CACHE.forEach(function(a) {
+            lookup[a.student_id + '|' + a.assignment_id] = a;
+        });
+
+        var html = '<table class="data-table" style="min-width: 700px;"><thead><tr>';
+        html += '<th style="position:sticky; left:0; background: var(--gray-50); min-width: 200px;">Student</th>';
+        ASSIGNMENTS_CACHE.forEach(function(a) {
+            var typeShort = a.type === 'test' ? 'Test' : 'Q';
+            html += '<th style="text-align:center;">' + typeShort + ' (' + (a.total_marks || '?') + ')<br><span class="muted" style="font-weight:500; font-size:0.75rem;">' + (a.pushed_at ? new Date(a.pushed_at).toLocaleDateString('en-GB', { day:'numeric', month:'short' }) : '') + '</span></th>';
+        });
+        html += '</tr></thead><tbody>';
+
+        STUDENTS_CACHE.forEach(function(s) {
+            var displayName = s.name || s.email || '-';
+            html += '<tr>';
+            html += '<td style="position:sticky; left:0; background:white;"><strong>' + esc(displayName) + '</strong></td>';
+            ASSIGNMENTS_CACHE.forEach(function(a) {
+                var att = lookup[s.user_id + '|' + a.id];
+                if (!att) {
+                    html += '<td class="muted" style="text-align:center;">-</td>';
+                } else if (att.status === 'graded') {
+                    var pct = (att.ai_total > 0) ? Math.round((att.ai_score / att.ai_total) * 100) : 0;
+                    var bg = pct >= 70 ? 'var(--success-bg);color:#1e7e4c' : pct >= 50 ? 'var(--warning-bg);color:#b87100' : 'var(--error-bg);color:#a03528';
+                    html += '<td style="text-align:center;"><button onclick="openAttemptDetail(\'' + att.id + '\')" style="background:' + bg + '; padding:0.25rem 0.6rem; border-radius:6px; font-weight:700; cursor:pointer; border:none;">' + att.ai_score + ' / ' + att.ai_total + '</button></td>';
+                } else if (att.status === 'in_progress') {
+                    html += '<td class="muted" style="text-align:center; font-size:0.78rem;">In progress</td>';
+                } else {
+                    html += '<td class="muted" style="text-align:center; font-size:0.78rem;">Not started</td>';
+                }
+            });
+            html += '</tr>';
+        });
+        html += '</tbody></table>';
+
+        container.innerHTML = html;
+    }
+
+    async function openAssignmentDetail(assignmentId) {
+        var a = ASSIGNMENTS_CACHE.find(function(x) { return x.id === assignmentId; });
+        if (!a) return;
+
+        var title = a.topic || a.unit || (a.type === 'test' ? 'Standard test' : 'Single question');
+        document.getElementById('detailTitle').textContent = title;
+        document.getElementById('detailSub').textContent = (a.type === 'test' ? 'Test' : 'Question') + (a.total_marks ? ', ' + a.total_marks + ' marks' : '');
+
+        var attempts = ATTEMPTS_CACHE.filter(function(x) { return x.assignment_id === assignmentId; });
+        var students = {};
+        STUDENTS_CACHE.forEach(function(s) { students[s.user_id] = s; });
+
+        // Render question text + per-student status
+        var qHtml = '';
+        if (a.type === 'question') {
+            var q = (a.generated_payload && a.generated_payload.question) || a.generated_payload || {};
+            qHtml = '<div style="margin-bottom:1.5rem; padding:1rem; background:var(--gray-50); border-radius:var(--radius);"><div class="muted" style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.4rem;">Question</div><div style="white-space:pre-wrap;">' + esc(q.question || q.text || '') + '</div></div>';
+        } else {
+            var paper = (a.generated_payload && a.generated_payload.paper) || a.generated_payload || {};
+            var cs = paper.case_study || paper.scenario;
+            if (cs) qHtml += '<div style="margin-bottom:1rem; padding:1rem; background:#fffbea; border:1px solid #f7d98a; border-radius:var(--radius);"><div style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#8a5a00; margin-bottom:0.4rem;">Case study</div><div style="white-space:pre-wrap;">' + esc(typeof cs === 'string' ? cs : JSON.stringify(cs)) + '</div></div>';
+            (paper.questions || []).forEach(function(q, idx) {
+                qHtml += '<div style="margin-bottom:0.85rem; padding:0.9rem 1rem; background:var(--gray-50); border-radius:var(--radius);"><strong>Q' + (q.number || (idx + 1)) + (q.part || '') + ' (' + (q.marks || '?') + ' marks)</strong><div style="margin-top:0.4rem; white-space:pre-wrap;">' + esc(q.question || q.text || '') + '</div></div>';
+            });
+        }
+
+        var rows = attempts.map(function(att) {
+            var s = students[att.student_id] || {};
+            var displayName = s.name || s.email || '-';
+            var statusCell = '';
+            if (att.status === 'graded') {
+                var pct = (att.ai_total > 0) ? Math.round((att.ai_score / att.ai_total) * 100) : 0;
+                statusCell = '<button class="btn btn-ghost btn-sm" onclick="openAttemptDetail(\'' + att.id + '\')">' + att.ai_score + ' / ' + att.ai_total + ' (' + pct + '%)</button>';
+            } else if (att.status === 'in_progress') {
+                statusCell = '<span class="pill pill-info">In progress</span>';
+            } else {
+                statusCell = '<span class="muted">Not started</span>';
+            }
+            return '<tr><td><strong>' + esc(displayName) + '</strong></td><td>' + statusCell + '</td></tr>';
+        }).join('');
+
+        var detailHtml = qHtml +
+            '<div style="margin-top:1.5rem;"><h3 style="font-size:1rem; font-weight:700; color:var(--gray-900); margin-bottom:0.6rem;">Student attempts (' + attempts.length + ')</h3>' +
+            '<table class="data-table"><thead><tr><th>Student</th><th>Status</th></tr></thead><tbody>' + (rows || '<tr><td colspan="2" class="empty">No attempts yet.</td></tr>') + '</tbody></table></div>';
+
+        document.getElementById('detailBody').innerHTML = detailHtml;
+        document.getElementById('attemptDetail').style.display = 'flex';
+    }
+
+    async function openAttemptDetail(attemptId) {
+        var att = ATTEMPTS_CACHE.find(function(x) { return x.id === attemptId; });
+        if (!att) return;
+
+        // Fetch full attempt with feedback + answers
+        var { data: full, error } = await supabaseClient
+            .from('student_attempts')
+            .select('id, assignment_id, student_id, status, ai_score, ai_total, ai_feedback, answers, submitted_at, teacher_feedback')
+            .eq('id', attemptId)
+            .maybeSingle();
+        if (error || !full) { showToast('Could not load attempt', 'error'); return; }
+
+        var s = STUDENTS_CACHE.find(function(x) { return x.user_id === full.student_id; }) || {};
+        var displayName = s.name || s.email || 'Student';
+
+        document.getElementById('detailTitle').textContent = displayName;
+        document.getElementById('detailSub').textContent = full.status === 'graded' ? 'Score: ' + full.ai_score + ' / ' + full.ai_total : full.status;
+
+        var answersHtml = '';
+        if (full.answers && full.answers.answer) {
+            answersHtml = '<div style="margin-bottom:1rem; padding:1rem; background:var(--gray-50); border-radius:var(--radius);"><div style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.4rem; color:var(--gray-600);">Their answer</div><div style="white-space:pre-wrap; line-height:1.65;">' + esc(full.answers.answer) + '</div></div>';
+        } else if (full.answers && full.answers.student_answers) {
+            answersHtml = (full.answers.student_answers || []).map(function(sa, idx) {
+                return '<div style="margin-bottom:0.85rem; padding:1rem; background:var(--gray-50); border-radius:var(--radius);"><strong>Q' + (idx + 1) + '</strong><div style="margin-top:0.4rem; white-space:pre-wrap; line-height:1.6;">' + esc(sa.student_answer || '<no answer>') + '</div></div>';
+            }).join('');
+        }
+
+        var feedbackHtml = '<div class="muted">No AI feedback available.</div>';
+        if (full.ai_feedback) {
+            try {
+                feedbackHtml = '<pre style="background:var(--gray-50); padding:1rem; border-radius:var(--radius); overflow-x:auto; font-size:0.85rem; line-height:1.5; white-space: pre-wrap;">' + esc(JSON.stringify(full.ai_feedback, null, 2)) + '</pre>';
+            } catch (e) {}
+        }
+
+        var detailHtml = answersHtml +
+            '<div style="margin-top:1rem;"><div style="font-size:0.95rem; font-weight:700; color:var(--gray-900); margin-bottom:0.5rem;">AI feedback (raw)</div>' + feedbackHtml + '</div>' +
+            '<div class="muted" style="margin-top:1rem; font-size:0.82rem;">Phase 6 will polish this view with formatted feedback, teacher notes, and a per-question breakdown.</div>';
+
+        document.getElementById('detailBody').innerHTML = detailHtml;
+        document.getElementById('attemptDetail').style.display = 'flex';
+    }
+
+    window.openAssignmentDetail = openAssignmentDetail;
+    window.openAttemptDetail = openAttemptDetail;
 
     function extractEmails(raw) {
         if (!raw) return [];

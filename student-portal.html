@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<title>Your work | MyBizStudies Student Portal</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+    --primary: #1e3a5f; --primary-dark: #152a45; --primary-light: #2d5a8a;
+    --accent: #e67e22; --accent-light: #f39c12; --accent-glow: rgba(230,126,34,0.3);
+    --success: #27ae60; --success-bg: #e8f5ec;
+    --warning: #f39c12; --warning-bg: #fef6e7;
+    --error: #e74c3c; --error-bg: #fceae8;
+    --info: #3498db; --info-bg: #e8f2fb;
+    --gray-50: #f8fafc; --gray-100: #f1f5f9; --gray-200: #e2e8f0; --gray-300: #cbd5e1;
+    --gray-400: #94a3b8; --gray-500: #64748b; --gray-700: #334155; --gray-800: #1e293b; --gray-900: #0f172a;
+    --shadow-md: 0 4px 18px rgba(15,23,42,0.08); --shadow-lg: 0 10px 40px rgba(15,23,42,0.12);
+    --radius-sm: 8px; --radius: 12px; --radius-lg: 16px; --radius-xl: 24px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--gray-50); color: var(--gray-800); line-height: 1.55; min-height: 100vh; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+.portal-bar { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.96); backdrop-filter: blur(12px); border-bottom: 1px solid var(--gray-200); }
+.portal-bar-inner { max-width: 1100px; margin: 0 auto; padding: 0.75rem 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.portal-bar-left { display: flex; align-items: center; gap: 1.25rem; }
+.portal-logo { height: 46px; }
+.portal-label { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.8rem; background: rgba(52, 152, 219, 0.1); color: var(--info); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; border-radius: 999px; }
+.portal-bar-right { display: flex; align-items: center; gap: 0.5rem; }
+.portal-nav-link { padding: 0.5rem 0.9rem; font-size: 0.92rem; font-weight: 500; color: var(--gray-500); border-radius: var(--radius-sm); transition: all 0.15s ease; }
+.portal-nav-link:hover { background: var(--gray-100); color: var(--primary); }
+.portal-avatar { width: 38px; height: 38px; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.9rem; background: linear-gradient(135deg, var(--accent), var(--accent-light)); }
+
+.page { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+.welcome-hero { background: linear-gradient(135deg, #2d5a8a 0%, #1e3a5f 60%, #152a45 100%); color: white; border-radius: var(--radius-xl); padding: 2rem; margin-bottom: 1.75rem; position: relative; overflow: hidden; }
+.welcome-hero::before { content: ""; position: absolute; right: -80px; bottom: -80px; width: 280px; height: 280px; background: radial-gradient(circle, rgba(230,126,34,0.25) 0%, transparent 70%); }
+.welcome-content { position: relative; z-index: 1; }
+.welcome-greeting { font-size: 0.92rem; opacity: 0.8; margin-bottom: 0.3rem; }
+.welcome-title { font-size: 1.9rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 0.6rem; }
+.welcome-sub { opacity: 0.9; font-size: 0.98rem; }
+
+.section-head { display: flex; align-items: center; justify-content: space-between; margin: 1.5rem 0 1rem; gap: 1rem; }
+.section-title { font-size: 1.1rem; font-weight: 700; color: var(--gray-900); display: flex; align-items: center; gap: 0.6rem; }
+.count-chip { background: var(--gray-100); color: var(--gray-500); padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.8rem; font-weight: 600; }
+
+.assignment-card { background: white; border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 1.25rem 1.35rem; display: flex; gap: 1rem; align-items: center; margin-bottom: 0.85rem; transition: all 0.2s ease; cursor: pointer; }
+.assignment-card:hover { border-color: var(--accent); box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.assignment-card.completed { background: var(--gray-50); }
+.a-icon { width: 50px; height: 50px; border-radius: var(--radius); background: rgba(230,126,34,0.1); color: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.05rem; flex-shrink: 0; }
+.a-icon.test { background: rgba(30,58,95,0.08); color: var(--primary); }
+.a-icon.done { background: var(--success-bg); color: var(--success); }
+.a-body { flex-grow: 1; min-width: 0; }
+.a-title { font-weight: 600; color: var(--gray-900); margin-bottom: 0.2rem; font-size: 1rem; }
+.a-meta { display: flex; align-items: center; gap: 0.75rem; color: var(--gray-500); font-size: 0.85rem; flex-wrap: wrap; }
+.a-meta .dot { width: 3px; height: 3px; background: var(--gray-300); border-radius: 50%; }
+.a-score { text-align: right; flex-shrink: 0; }
+.a-score-num { font-size: 1.25rem; font-weight: 700; color: var(--gray-900); line-height: 1; }
+.a-score-lbl { font-size: 0.75rem; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.04em; margin-top: 0.3rem; font-weight: 600; }
+.a-arrow { color: var(--gray-400); flex-shrink: 0; }
+
+.pill { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.22rem 0.65rem; font-size: 0.78rem; font-weight: 600; border-radius: 999px; background: var(--gray-100); color: var(--gray-700); }
+.pill-success { background: var(--success-bg); color: var(--success); }
+.pill-warning { background: var(--warning-bg); color: #b87100; }
+.pill-error { background: var(--error-bg); color: var(--error); }
+.pill-info { background: var(--info-bg); color: var(--info); }
+.muted { color: var(--gray-500); }
+
+.empty-card { background: white; border: 1px dashed var(--gray-300); border-radius: var(--radius-lg); padding: 2.5rem 1.5rem; text-align: center; color: var(--gray-500); }
+.empty-card .ico { font-size: 2rem; margin-bottom: 0.5rem; }
+.empty-card-title { font-weight: 700; color: var(--gray-700); margin-bottom: 0.4rem; }
+
+.access-block { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+.access-card { max-width: 420px; background: white; padding: 2.5rem 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); text-align: center; border: 1px solid var(--gray-200); }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.7rem 1.2rem; font-weight: 600; font-size: 0.94rem; border-radius: var(--radius-sm); }
+.btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent-light)); color: white; box-shadow: 0 2px 10px var(--accent-glow); }
+.btn-secondary { background: var(--primary); color: white; }
+.btn-ghost { background: white; color: var(--gray-700); border: 1px solid var(--gray-200); }
+.btn-sm { padding: 0.45rem 0.8rem; font-size: 0.85rem; }
+
+@media (max-width: 640px) {
+    .welcome-hero { padding: 1.5rem; }
+    .welcome-title { font-size: 1.5rem; }
+    .page { padding: 1.25rem 1rem 3rem; }
+}
+</style>
+</head>
+<body>
+
+<div id="loadingShell" style="padding: 3rem; text-align: center; color: var(--gray-500);">Loading...</div>
+
+<div id="accessDenied" style="display: none;" class="access-block">
+    <div class="access-card">
+        <div style="font-size: 2.2rem; margin-bottom: 1rem;">&#128274;</div>
+        <h1 style="font-size: 1.2rem; color: var(--gray-900); margin-bottom: 0.5rem;">Student access only</h1>
+        <p style="color: var(--gray-600); margin-bottom: 1.5rem;" id="accessMsg">This page is for student accounts.</p>
+        <a href="index.html" class="btn btn-secondary">Back to main site</a>
+    </div>
+</div>
+
+<div id="shell" style="display: none;">
+
+<header class="portal-bar">
+    <div class="portal-bar-inner">
+        <div class="portal-bar-left">
+            <a href="student-portal.html"><img src="assets/Site Logo Transparent.png" alt="MyBizStudies" class="portal-logo"></a>
+            <span class="portal-label">Student Portal</span>
+        </div>
+        <div class="portal-bar-right">
+            <a href="student-portal.html" class="portal-nav-link" style="color: var(--primary); background: var(--gray-100); font-weight: 600;">My work</a>
+            <a href="exam-practice.html" class="portal-nav-link">Main site</a>
+            <a href="#" class="portal-nav-link" id="logoutLink">Sign out</a>
+            <div class="portal-avatar" id="navAvatar">--</div>
+        </div>
+    </div>
+</header>
+
+<main class="page">
+
+    <div class="welcome-hero">
+        <div class="welcome-content">
+            <div class="welcome-greeting" id="heroDate"></div>
+            <h1 class="welcome-title" id="heroTitle">Welcome back.</h1>
+            <p class="welcome-sub" id="heroMeta">Loading your work...</p>
+        </div>
+    </div>
+
+    <div class="section-head">
+        <div class="section-title">To do <span class="count-chip" id="pendingCount">0</span></div>
+    </div>
+    <div id="pendingContainer"><div class="muted" style="padding: 1rem;">Loading...</div></div>
+
+    <div class="section-head">
+        <div class="section-title">Completed <span class="count-chip" id="completedCount">0</span></div>
+    </div>
+    <div id="completedContainer"></div>
+
+</main>
+
+</div>
+
+<script>
+    var SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
+    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
+    var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    var BOARD_LABELS = {
+        aqa_gcse: 'AQA GCSE', edexcel_gcse: 'Edexcel GCSE', edexcel_igcse: 'Edexcel IGCSE',
+        cie_igcse: 'CIE IGCSE', aqa_a_level: 'AQA A-Level', edexcel_a_level: 'Edexcel A-Level',
+        edexcel_ial: 'Edexcel International A-Level', cambridge_a_level: 'Cambridge International AS & A-Level'
+    };
+
+    var currentUser = null;
+    var currentProfile = null;
+
+    document.addEventListener('DOMContentLoaded', init);
+
+    async function init() {
+        var sessionResult = await supabaseClient.auth.getSession();
+        if (!sessionResult.data.session) {
+            window.location.href = 'login.html?redirect=student-portal.html';
+            return;
+        }
+        currentUser = sessionResult.data.session.user;
+
+        var profileResult = await supabaseClient.from('user_profiles').select('user_id, email, name, role, school_id').eq('user_id', currentUser.id).maybeSingle();
+        if (!profileResult.data || profileResult.data.role !== 'student') {
+            showAccessDenied('This page is for student accounts.');
+            return;
+        }
+        currentProfile = profileResult.data;
+        showShell();
+        await loadAssignments();
+    }
+
+    function showAccessDenied(msg) {
+        document.getElementById('loadingShell').style.display = 'none';
+        document.getElementById('shell').style.display = 'none';
+        document.getElementById('accessMsg').textContent = msg;
+        document.getElementById('accessDenied').style.display = 'flex';
+    }
+
+    function showShell() {
+        document.getElementById('loadingShell').style.display = 'none';
+        document.getElementById('shell').style.display = 'block';
+
+        var displayName = currentProfile.name || currentUser.email || '';
+        var initials = displayName.trim().split(/\s+/).slice(0, 2).map(function(s) { return s[0] ? s[0].toUpperCase() : ''; }).join('') || 'S';
+        document.getElementById('navAvatar').textContent = initials;
+
+        var firstName = (currentProfile.name || '').trim().split(/\s+/)[0] || 'there';
+        var hour = new Date().getHours();
+        var greet = hour < 12 ? 'Good morning' : (hour < 18 ? 'Good afternoon' : 'Good evening');
+        document.getElementById('heroTitle').textContent = greet + ', ' + firstName + '.';
+
+        var dayName = new Date().toLocaleDateString('en-GB', { weekday: 'long' });
+        var datePart = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long' });
+        document.getElementById('heroDate').textContent = dayName + ', ' + datePart;
+
+        document.getElementById('logoutLink').addEventListener('click', async function(e) {
+            e.preventDefault();
+            await supabaseClient.auth.signOut();
+            window.location.href = 'index.html';
+        });
+    }
+
+    async function loadAssignments() {
+        // Get all attempts for this student
+        var { data: attempts, error: attErr } = await supabaseClient
+            .from('student_attempts')
+            .select('id, assignment_id, status, ai_score, ai_total, submitted_at')
+            .eq('student_id', currentUser.id);
+
+        if (attErr) {
+            document.getElementById('pendingContainer').innerHTML = '<div class="muted">Could not load: ' + esc(attErr.message) + '</div>';
+            return;
+        }
+        if (!attempts || attempts.length === 0) {
+            renderEmpty();
+            return;
+        }
+
+        var assignmentIds = attempts.map(function(a) { return a.assignment_id; });
+        var { data: assignments } = await supabaseClient
+            .from('assignments')
+            .select('id, type, total_marks, board, level, unit, topic, due_at, class_id, created_at')
+            .in('id', assignmentIds);
+
+        var classIds = (assignments || []).map(function(a) { return a.class_id; }).filter(Boolean);
+        var classMap = {};
+        if (classIds.length > 0) {
+            var { data: classes } = await supabaseClient.from('classes').select('id, name, board').in('id', classIds);
+            (classes || []).forEach(function(c) { classMap[c.id] = c; });
+        }
+
+        var aMap = {};
+        (assignments || []).forEach(function(a) { aMap[a.id] = a; });
+
+        var pending = [];
+        var completed = [];
+        attempts.forEach(function(att) {
+            var a = aMap[att.assignment_id];
+            if (!a) return;
+            var entry = { attempt: att, assignment: a, klass: classMap[a.class_id] || null };
+            if (att.status === 'graded') completed.push(entry);
+            else pending.push(entry);
+        });
+
+        // Sort: pending by due date asc (with no due last), completed by submitted desc
+        pending.sort(function(x, y) {
+            if (!x.assignment.due_at && !y.assignment.due_at) return 0;
+            if (!x.assignment.due_at) return 1;
+            if (!y.assignment.due_at) return -1;
+            return new Date(x.assignment.due_at) - new Date(y.assignment.due_at);
+        });
+        completed.sort(function(x, y) {
+            return new Date(y.attempt.submitted_at || 0) - new Date(x.attempt.submitted_at || 0);
+        });
+
+        renderPending(pending);
+        renderCompleted(completed);
+        renderHeroMeta(pending.length, completed.length);
+    }
+
+    function renderHeroMeta(pendingCount, completedCount) {
+        var msg = pendingCount === 0
+            ? 'You\'re all caught up. Nothing new to do right now.'
+            : 'You have ' + pendingCount + ' assignment' + (pendingCount === 1 ? '' : 's') + ' to do.';
+        document.getElementById('heroMeta').textContent = msg;
+    }
+
+    function renderPending(items) {
+        document.getElementById('pendingCount').textContent = items.length;
+        var container = document.getElementById('pendingContainer');
+        if (items.length === 0) {
+            container.innerHTML = '<div class="empty-card"><div class="ico">&#9989;</div><div class="empty-card-title">All caught up</div><div class="muted">When your teacher pushes a question or test, it will appear here.</div></div>';
+            return;
+        }
+        container.innerHTML = items.map(function(it) {
+            var a = it.assignment;
+            var att = it.attempt;
+            var iconClass = a.type === 'test' ? 'a-icon test' : 'a-icon';
+            var iconLetter = a.type === 'test' ? 'T' : 'Q';
+            var dueLabel = '';
+            if (a.due_at) {
+                var due = new Date(a.due_at);
+                var now = new Date();
+                var diffDays = Math.ceil((due - now) / (1000 * 60 * 60 * 24));
+                if (diffDays < 0) dueLabel = '<span class="pill pill-error">Overdue</span>';
+                else if (diffDays === 0) dueLabel = '<span class="pill pill-warning">Due today</span>';
+                else if (diffDays <= 3) dueLabel = '<span class="pill pill-warning">Due in ' + diffDays + ' day' + (diffDays === 1 ? '' : 's') + '</span>';
+                else dueLabel = '<span class="pill">Due ' + due.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) + '</span>';
+            }
+            var typeLabel = a.type === 'test' ? 'Test' : 'Question';
+            var className = it.klass ? it.klass.name : '';
+            var statusLabel = att.status === 'in_progress' ? '<span class="pill pill-info">In progress</span>' : '';
+
+            return '<a class="assignment-card" href="student-assignment.html?id=' + encodeURIComponent(att.id) + '">' +
+                '<div class="' + iconClass + '">' + iconLetter + '</div>' +
+                '<div class="a-body">' +
+                    '<div class="a-title">' + esc(generateTitle(a)) + '</div>' +
+                    '<div class="a-meta">' +
+                        dueLabel +
+                        '<span class="muted">' + typeLabel + (a.total_marks ? ', ' + a.total_marks + ' marks' : '') + '</span>' +
+                        (className ? '<span class="dot"></span><span class="muted">' + esc(className) + '</span>' : '') +
+                        (statusLabel ? '<span class="dot"></span>' + statusLabel : '') +
+                    '</div>' +
+                '</div>' +
+                '<div class="a-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m9 18 6-6-6-6"/></svg></div>' +
+            '</a>';
+        }).join('');
+    }
+
+    function renderCompleted(items) {
+        document.getElementById('completedCount').textContent = items.length;
+        var container = document.getElementById('completedContainer');
+        if (items.length === 0) {
+            container.innerHTML = '<div class="muted" style="padding: 0.5rem 0;">Nothing completed yet. Submit your first assignment and it will appear here.</div>';
+            return;
+        }
+        container.innerHTML = items.map(function(it) {
+            var a = it.assignment;
+            var att = it.attempt;
+            var typeLabel = a.type === 'test' ? 'Test' : 'Question';
+            var className = it.klass ? it.klass.name : '';
+            var submittedAgo = att.submitted_at ? friendlyAgo(new Date(att.submitted_at)) : '-';
+            var scoreDisplay = (att.ai_score !== null && att.ai_score !== undefined) ? att.ai_score + ' / ' + (att.ai_total || a.total_marks || '?') : '-';
+
+            return '<a class="assignment-card completed" href="student-assignment.html?id=' + encodeURIComponent(att.id) + '">' +
+                '<div class="a-icon done"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>' +
+                '<div class="a-body">' +
+                    '<div class="a-title">' + esc(generateTitle(a)) + '</div>' +
+                    '<div class="a-meta">' +
+                        '<span class="muted">' + typeLabel + '</span>' +
+                        '<span class="dot"></span>' +
+                        '<span class="muted">Submitted ' + submittedAgo + '</span>' +
+                        (className ? '<span class="dot"></span><span class="muted">' + esc(className) + '</span>' : '') +
+                    '</div>' +
+                '</div>' +
+                '<div class="a-score"><div class="a-score-num">' + scoreDisplay + '</div><div class="a-score-lbl">Score</div></div>' +
+            '</a>';
+        }).join('');
+    }
+
+    function generateTitle(a) {
+        if (a.topic) return a.topic;
+        if (a.unit) return (a.type === 'test' ? 'Test on ' : 'Question on ') + a.unit;
+        return a.type === 'test' ? 'Standard test' : 'Single question';
+    }
+
+    function friendlyAgo(date) {
+        var seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+        if (seconds < 60) return 'just now';
+        if (seconds < 3600) return Math.floor(seconds / 60) + 'm ago';
+        if (seconds < 86400) return Math.floor(seconds / 3600) + 'h ago';
+        if (seconds < 86400 * 7) return Math.floor(seconds / 86400) + ' day' + (Math.floor(seconds / 86400) === 1 ? '' : 's') + ' ago';
+        return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+    }
+
+    function renderEmpty() {
+        document.getElementById('heroMeta').textContent = 'No assignments yet. Your teacher will push some here.';
+        document.getElementById('pendingCount').textContent = '0';
+        document.getElementById('completedCount').textContent = '0';
+        document.getElementById('pendingContainer').innerHTML = '<div class="empty-card"><div class="ico">&#127981;</div><div class="empty-card-title">No assignments yet</div><div class="muted">When your teacher pushes a question or test, it will appear here.</div></div>';
+        document.getElementById('completedContainer').innerHTML = '';
+    }
+
+    function esc(s) { if (s === null || s === undefined) return ''; return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+</script>
+
+</body>
+</html>

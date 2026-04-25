@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<title>New assignment | MyBizStudies Teacher Portal</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+    --primary: #1e3a5f; --primary-dark: #152a45; --primary-light: #2d5a8a;
+    --accent: #e67e22; --accent-light: #f39c12; --accent-glow: rgba(230,126,34,0.3);
+    --success: #27ae60; --success-bg: #e8f5ec;
+    --warning: #f39c12; --warning-bg: #fef6e7;
+    --error: #e74c3c; --error-bg: #fceae8;
+    --info: #3498db; --info-bg: #e8f2fb;
+    --gray-50: #f8fafc; --gray-100: #f1f5f9; --gray-200: #e2e8f0; --gray-300: #cbd5e1;
+    --gray-400: #94a3b8; --gray-500: #64748b; --gray-600: #475569; --gray-700: #334155;
+    --gray-800: #1e293b; --gray-900: #0f172a;
+    --shadow: 0 2px 8px rgba(15,23,42,0.06); --shadow-md: 0 4px 18px rgba(15,23,42,0.08); --shadow-lg: 0 10px 40px rgba(15,23,42,0.12);
+    --radius-sm: 8px; --radius: 12px; --radius-lg: 16px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--gray-50); color: var(--gray-800); line-height: 1.55; -webkit-font-smoothing: antialiased; min-height: 100vh; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gray-800); }
+
+.portal-bar { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.96); backdrop-filter: blur(12px); border-bottom: 1px solid var(--gray-200); }
+.portal-bar-inner { max-width: 1100px; margin: 0 auto; padding: 0.75rem 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.portal-bar-left { display: flex; align-items: center; gap: 1.25rem; }
+.portal-logo { height: 46px; }
+.portal-label { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.8rem; background: rgba(30,58,95,0.08); color: var(--primary); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; border-radius: 999px; }
+.portal-bar-right { display: flex; align-items: center; gap: 0.5rem; }
+.portal-nav-link { padding: 0.5rem 0.9rem; font-size: 0.92rem; font-weight: 500; color: var(--gray-600); border-radius: var(--radius-sm); transition: all 0.15s ease; }
+.portal-nav-link:hover { background: var(--gray-100); color: var(--primary); }
+
+.page { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+.breadcrumb { display: flex; align-items: center; gap: 0.5rem; color: var(--gray-500); font-size: 0.88rem; margin-bottom: 0.75rem; }
+.breadcrumb a:hover { color: var(--primary); }
+.breadcrumb-sep { color: var(--gray-300); }
+
+.page-title { font-size: 1.85rem; font-weight: 800; letter-spacing: -0.02em; color: var(--gray-900); margin-bottom: 0.4rem; }
+.page-sub { color: var(--gray-500); margin-bottom: 1.5rem; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.7rem 1.2rem; font-weight: 600; font-size: 0.94rem; border-radius: var(--radius-sm); transition: all 0.15s ease; line-height: 1; white-space: nowrap; }
+.btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent-light)); color: white; box-shadow: 0 2px 10px var(--accent-glow); }
+.btn-primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 20px var(--accent-glow); }
+.btn-primary:disabled { opacity: 0.65; cursor: not-allowed; }
+.btn-secondary { background: var(--primary); color: white; }
+.btn-ghost { background: white; color: var(--gray-700); border: 1px solid var(--gray-200); }
+.btn-ghost:hover { background: var(--gray-50); border-color: var(--gray-300); }
+.btn-sm { padding: 0.45rem 0.8rem; font-size: 0.85rem; }
+.btn-lg { padding: 0.9rem 1.6rem; font-size: 1rem; }
+
+.pill { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.22rem 0.65rem; font-size: 0.78rem; font-weight: 600; border-radius: 999px; background: var(--gray-100); color: var(--gray-700); }
+.pill-primary { background: rgba(30,58,95,0.08); color: var(--primary); }
+.pill-warning { background: var(--warning-bg); color: #b87100; }
+
+.panel { background: white; border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 1.6rem; margin-bottom: 1.4rem; }
+.panel-title { font-size: 1.1rem; font-weight: 700; color: var(--gray-900); margin-bottom: 0.3rem; }
+.panel-sub { color: var(--gray-500); font-size: 0.9rem; margin-bottom: 1.2rem; }
+
+.field { margin-bottom: 1rem; }
+.field-label { display: block; margin-bottom: 0.4rem; font-size: 0.88rem; font-weight: 600; color: var(--gray-700); }
+.field-select, .field-input { width: 100%; padding: 0.7rem 0.9rem; border: 1px solid var(--gray-300); border-radius: var(--radius-sm); background: white; }
+.field-select:focus, .field-input:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(45,90,138,0.15); }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 640px) { .field-row { grid-template-columns: 1fr; } }
+
+.choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 0.5rem; }
+@media (max-width: 640px) { .choice-grid { grid-template-columns: 1fr; } }
+.choice { padding: 1.25rem; border: 2px solid var(--gray-200); border-radius: var(--radius); background: white; cursor: pointer; transition: all 0.15s ease; text-align: left; display: flex; flex-direction: column; gap: 0.35rem; position: relative; }
+.choice:hover { border-color: var(--accent); }
+.choice.selected { border-color: var(--accent); background: rgba(230,126,34,0.04); box-shadow: 0 0 0 3px rgba(230,126,34,0.1); }
+.choice.disabled { opacity: 0.55; cursor: not-allowed; pointer-events: none; }
+.choice-icon { width: 40px; height: 40px; border-radius: var(--radius-sm); background: var(--gray-100); display: flex; align-items: center; justify-content: center; color: var(--gray-500); margin-bottom: 0.5rem; }
+.choice.selected .choice-icon { background: rgba(230,126,34,0.12); color: var(--accent); }
+.choice-title { font-weight: 700; color: var(--gray-900); font-size: 1rem; }
+.choice-sub { color: var(--gray-500); font-size: 0.88rem; }
+.choice-tag { position: absolute; top: 0.85rem; right: 0.85rem; }
+
+.case-study { padding: 1.25rem; background: #fffbea; border: 1px solid #f7d98a; border-radius: var(--radius); margin-bottom: 1.5rem; }
+.case-label { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #8a5a00; margin-bottom: 0.5rem; }
+.case-body { color: var(--gray-800); line-height: 1.7; white-space: pre-wrap; }
+
+.q-block { border: 1px solid var(--gray-200); border-radius: var(--radius); margin-bottom: 1rem; overflow: hidden; }
+.q-block-head { padding: 0.9rem 1.2rem; background: var(--gray-50); display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; border-bottom: 1px solid var(--gray-200); }
+.q-label { font-weight: 700; color: var(--primary); font-size: 0.92rem; }
+.q-body { padding: 1.1rem 1.2rem; color: var(--gray-800); line-height: 1.65; white-space: pre-wrap; }
+.q-edit { width: 100%; padding: 0.6rem 0.7rem; border: 1px solid var(--gray-300); border-radius: var(--radius-sm); font-size: 0.95rem; line-height: 1.55; resize: vertical; min-height: 100px; font-family: inherit; }
+
+.toolbar { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: space-between; align-items: center; margin-top: 0.5rem; }
+.actions-right { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+
+.alert { padding: 0.85rem 1rem; border-radius: var(--radius); font-size: 0.9rem; margin-bottom: 1rem; line-height: 1.5; }
+.alert.error { background: var(--error-bg); color: var(--error); border: 1px solid #f5c6c0; }
+.alert.success { background: var(--success-bg); color: var(--success); border: 1px solid #b8e0c4; }
+.alert.info { background: var(--info-bg); color: var(--info); border: 1px solid #c9e3f7; }
+
+.loading-card { background: white; border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 2.5rem 1.5rem; text-align: center; margin: 1.5rem 0; }
+.spinner { display: inline-block; width: 32px; height: 32px; border: 3px solid var(--gray-200); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 0.75rem; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); background: var(--gray-900); color: white; padding: 0.75rem 1.25rem; border-radius: 999px; font-size: 0.92rem; font-weight: 500; box-shadow: var(--shadow-lg); display: none; z-index: 300; }
+.toast.show { display: block; }
+.toast.success { background: var(--success); } .toast.error { background: var(--error); }
+
+.access-block { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+.access-card { max-width: 420px; background: white; padding: 2.5rem 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); text-align: center; border: 1px solid var(--gray-200); }
+</style>
+</head>
+<body>
+
+<div id="loadingShell" style="padding: 3rem; text-align: center; color: var(--gray-500);">Loading...</div>
+
+<div id="accessDenied" style="display: none;" class="access-block">
+    <div class="access-card">
+        <div style="font-size: 2.2rem; margin-bottom: 1rem;">&#128274;</div>
+        <h1 style="font-size: 1.2rem; color: var(--gray-900); margin-bottom: 0.5rem;">Class not available</h1>
+        <p style="color: var(--gray-600); margin-bottom: 1.5rem;" id="accessMsg">You don't have access to this class.</p>
+        <a href="teacher-dashboard.html" class="btn btn-ghost">Back to dashboard</a>
+    </div>
+</div>
+
+<div id="shell" style="display: none;">
+
+<header class="portal-bar">
+    <div class="portal-bar-inner">
+        <div class="portal-bar-left">
+            <a href="teacher-dashboard.html"><img src="assets/Site Logo Transparent.png" alt="MyBizStudies" class="portal-logo"></a>
+            <span class="portal-label">Teacher Portal</span>
+        </div>
+        <div class="portal-bar-right">
+            <a href="teacher-dashboard.html" class="portal-nav-link">Dashboard</a>
+            <a href="#" class="portal-nav-link" id="logoutLink">Sign out</a>
+        </div>
+    </div>
+</header>
+
+<main class="page">
+
+    <div class="breadcrumb">
+        <a href="teacher-dashboard.html">Dashboard</a>
+        <span class="breadcrumb-sep">/</span>
+        <a id="classBreadcrumb" href="#">Class</a>
+        <span class="breadcrumb-sep">/</span>
+        <span style="color: var(--gray-700);">New assignment</span>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem;">
+        <div>
+            <h1 class="page-title">Create a new assignment</h1>
+            <p class="page-sub">For <strong id="classNameLabel">your class</strong>. The board and level are locked from the class.</p>
+        </div>
+        <div id="usageCapPill"></div>
+    </div>
+
+    <!-- ============ STEP 1: BUILD ============ -->
+    <div id="view-build">
+
+        <div class="panel">
+            <div class="panel-title">What are you creating?</div>
+            <div class="panel-sub">A single question marks one answer. A standard test marks a full paper.</div>
+            <div class="choice-grid" id="typeChoices">
+                <button class="choice selected" data-type="question" type="button">
+                    <div class="choice-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></div>
+                    <span class="choice-title">Single question</span>
+                    <span class="choice-sub">One question on a focused topic. AI assesses the answer.</span>
+                </button>
+                <button class="choice" data-type="test" type="button">
+                    <div class="choice-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v5h5M7 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8l-5-5z"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg></div>
+                    <span class="choice-title">Standard test</span>
+                    <span class="choice-sub">A full paper with case study and questions. AI marks all of it.</span>
+                </button>
+            </div>
+            <p style="font-size:0.85rem; color: var(--gray-500); margin-top:0.5rem;">Custom test builder is coming in Phase 5.</p>
+        </div>
+
+        <div class="panel" id="questionParamsPanel">
+            <div class="panel-title">Question parameters</div>
+            <div class="panel-sub">Pick what kind of question you'd like the AI to generate.</div>
+            <div class="field-row">
+                <div class="field">
+                    <label class="field-label">Unit</label>
+                    <select class="field-select" id="qUnitSelect"></select>
+                </div>
+                <div class="field">
+                    <label class="field-label">Question type</label>
+                    <select class="field-select" id="qTypeSelect"></select>
+                </div>
+            </div>
+            <div class="field">
+                <label class="field-label">Topic focus (optional)</label>
+                <input type="text" class="field-input" id="qTopicInput" placeholder="e.g. Pricing strategies">
+                <small style="color: var(--gray-500); font-size:0.82rem;">Leave blank to let the AI pick a topic for you.</small>
+            </div>
+        </div>
+
+        <div class="panel" id="testParamsPanel" style="display:none;">
+            <div class="panel-title">Test parameters</div>
+            <div class="panel-sub">For Phase 4, only standard tests are wired up. The AI builds a full paper for the chosen unit.</div>
+            <div class="field-row">
+                <div class="field">
+                    <label class="field-label">Test type</label>
+                    <select class="field-select" id="tTestTypeSelect">
+                        <option value="topic_test">Topic test (shorter)</option>
+                        <option value="unit_exam">Unit exam (longer)</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label class="field-label">Unit</label>
+                    <select class="field-select" id="tUnitSelect"></select>
+                </div>
+            </div>
+            <div class="field" id="testTopicField" style="display:none;">
+                <label class="field-label">Topic (for topic tests)</label>
+                <input type="text" class="field-input" id="tTopicInput" placeholder="e.g. The marketing mix">
+            </div>
+        </div>
+
+        <div id="errorBox"></div>
+
+        <div class="toolbar">
+            <a href="#" class="btn btn-ghost" id="cancelBtn">Cancel</a>
+            <div class="actions-right">
+                <button class="btn btn-primary btn-lg" id="generateBtn">
+                    Generate
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="loading-card" id="loadingCard" style="display:none;">
+            <div class="spinner"></div>
+            <div style="font-weight: 600; color: var(--gray-700); margin-bottom: 0.25rem;" id="loadingTitle">Generating...</div>
+            <div style="color: var(--gray-500); font-size: 0.9rem;" id="loadingSub">This usually takes 10-30 seconds.</div>
+        </div>
+
+    </div>
+
+    <!-- ============ STEP 2: APPROVE ============ -->
+    <div id="view-approve" style="display:none;">
+
+        <div class="panel">
+            <div class="alert info">
+                Review the generated content before pushing to your class. The mark scheme is hidden by design. You can regenerate, edit any text, or push as-is.
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+                <div>
+                    <h2 class="panel-title" id="approveTitle">Generated assignment</h2>
+                    <p style="color: var(--gray-500); font-size: 0.9rem;" id="approveSub"></p>
+                </div>
+                <div class="actions-right">
+                    <button class="btn btn-ghost btn-sm" id="regenerateBtn">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 4v5h5"/></svg>
+                        Regenerate
+                    </button>
+                    <button class="btn btn-ghost btn-sm" id="backToBuildBtn">Back</button>
+                </div>
+            </div>
+
+            <div id="caseStudyContainer"></div>
+            <div id="questionsContainer"></div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">Push to class</div>
+            <div class="panel-sub">Students see this in their portal as soon as you push.</div>
+            <div class="field-row">
+                <div class="field">
+                    <label class="field-label">Due date (optional)</label>
+                    <input type="date" class="field-input" id="dueDateInput">
+                </div>
+                <div class="field">
+                    <label class="field-label">Assign to</label>
+                    <input type="text" class="field-input" id="assignToLabel" readonly>
+                </div>
+            </div>
+            <div id="pushErrorBox"></div>
+            <div class="toolbar">
+                <a href="#" class="btn btn-ghost" id="approveCancelBtn">Cancel</a>
+                <button class="btn btn-primary btn-lg" id="pushBtn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg>
+                    Push to class
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+</main>
+
+</div>
+
+<div class="toast" id="toast"><span id="toastMessage">Saved</span></div>
+
+<script>
+    var SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
+    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
+    var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    var BOARD_LABELS = {
+        aqa_gcse: 'AQA GCSE', edexcel_gcse: 'Edexcel GCSE', edexcel_igcse: 'Edexcel IGCSE',
+        cie_igcse: 'CIE IGCSE', aqa_a_level: 'AQA A-Level', edexcel_a_level: 'Edexcel A-Level',
+        edexcel_ial: 'Edexcel International A-Level', cambridge_a_level: 'Cambridge International AS & A-Level'
+    };
+
+    // Lightweight unit + question type lookups for the boards we generate for.
+    // These are conservative defaults that match the existing edge function vocabulary.
+    var UNITS_BY_BOARD = {
+        aqa_gcse: [
+            { code: 'all', label: 'Any unit (AI picks)' },
+            { code: 'unit-1', label: 'Business in the real world' },
+            { code: 'unit-2', label: 'Influences on business' },
+            { code: 'unit-3', label: 'Business operations' },
+            { code: 'unit-4', label: 'Human resources' },
+            { code: 'unit-5', label: 'Marketing' },
+            { code: 'unit-6', label: 'Finance' }
+        ],
+        edexcel_gcse: [
+            { code: 'all', label: 'Any unit (AI picks)' },
+            { code: 'theme-1', label: 'Theme 1: Investigating small business' },
+            { code: 'theme-2', label: 'Theme 2: Building a business' }
+        ],
+        edexcel_igcse: [
+            { code: 'all', label: 'Any unit (AI picks)' }
+        ],
+        cie_igcse: [
+            { code: 'all', label: 'Any unit (AI picks)' }
+        ],
+        aqa_a_level: [
+            { code: 'all', label: 'Any unit (AI picks)' }
+        ],
+        edexcel_a_level: [
+            { code: 'all', label: 'Any unit (AI picks)' }
+        ],
+        edexcel_ial: [
+            { code: 'all', label: 'Any unit (AI picks)' }
+        ],
+        cambridge_a_level: [
+            { code: 'all', label: 'Any unit (AI picks)' }
+        ]
+    };
+
+    // Question types per board, matching format expected by generate-question (`{marks}_mark_{command}`)
+    var Q_TYPES_BY_BOARD = {
+        aqa_gcse: [
+            { id: '2_mark_explain', label: '2 marks - Explain' },
+            { id: '3_mark_explain', label: '3 marks - Explain' },
+            { id: '4_mark_explain', label: '4 marks - Explain' },
+            { id: '6_mark_analyse', label: '6 marks - Analyse' },
+            { id: '9_mark_recommend', label: '9 marks - Recommend' },
+            { id: '12_mark_evaluate', label: '12 marks - Evaluate' }
+        ],
+        edexcel_gcse: [
+            { id: '3_mark_explain', label: '3 marks - Explain' },
+            { id: '6_mark_discuss', label: '6 marks - Discuss' },
+            { id: '9_mark_justify', label: '9 marks - Justify' },
+            { id: '12_mark_evaluate', label: '12 marks - Evaluate' }
+        ],
+        edexcel_igcse: [
+            { id: '3_mark_explain', label: '3 marks - Explain' },
+            { id: '6_mark_analyse', label: '6 marks - Analyse' },
+            { id: '9_mark_justify', label: '9 marks - Justify' },
+            { id: '12_mark_evaluate', label: '12 marks - Evaluate' }
+        ],
+        cie_igcse: [
+            { id: '4_mark_outline', label: '4 marks - Outline' },
+            { id: '6_mark_explain', label: '6 marks - Explain' },
+            { id: '8_mark_explain', label: '8 marks - Explain' },
+            { id: '12_mark_justify', label: '12 marks - Justify' }
+        ],
+        aqa_a_level: [
+            { id: '6_mark_analyse', label: '6 marks - Analyse' },
+            { id: '9_mark_analyse', label: '9 marks - Analyse' },
+            { id: '12_mark_analyse', label: '12 marks - Analyse' },
+            { id: '16_mark_evaluate', label: '16 marks - Evaluate' },
+            { id: '20_mark_evaluate', label: '20 marks - Evaluate' },
+            { id: '25_mark_evaluate', label: '25 marks - Evaluate' }
+        ],
+        edexcel_a_level: [
+            { id: '6_mark_explain', label: '6 marks - Explain' },
+            { id: '8_mark_analyse', label: '8 marks - Analyse' },
+            { id: '20_mark_evaluate', label: '20 marks - Evaluate' }
+        ],
+        edexcel_ial: [
+            { id: '6_mark_analyse', label: '6 marks - Analyse' },
+            { id: '8_mark_discuss', label: '8 marks - Discuss' },
+            { id: '10_mark_assess', label: '10 marks - Assess' },
+            { id: '20_mark_evaluate', label: '20 marks - Evaluate' }
+        ],
+        cambridge_a_level: [
+            { id: '5_mark_analyse', label: '5 marks - Analyse' },
+            { id: '8_mark_analyse', label: '8 marks - Analyse' },
+            { id: '12_mark_evaluate', label: '12 marks - Evaluate' },
+            { id: '20_mark_evaluate', label: '20 marks - Evaluate' }
+        ]
+    };
+
+    // State
+    var classId = null;
+    var currentClass = null;
+    var currentUser = null;
+    var currentSession = null;
+    var currentType = 'question';
+    var generatedPayload = null;  // raw response from generate-question or generate-test
+    var totalMarksForPayload = null;
+
+    document.addEventListener('DOMContentLoaded', init);
+
+    async function init() {
+        var params = new URLSearchParams(window.location.search);
+        classId = params.get('class');
+        if (!classId) { showAccessDenied('No class specified.'); return; }
+
+        var sessionResult = await supabaseClient.auth.getSession();
+        if (!sessionResult.data.session) {
+            window.location.href = 'login.html?redirect=teacher-new-assignment.html?class=' + encodeURIComponent(classId);
+            return;
+        }
+        currentSession = sessionResult.data.session;
+        currentUser = currentSession.user;
+
+        var profileResult = await supabaseClient.from('user_profiles').select('user_id, role').eq('user_id', currentUser.id).maybeSingle();
+        if (!profileResult.data || profileResult.data.role !== 'teacher') {
+            showAccessDenied('This page is for teachers.');
+            return;
+        }
+
+        var classResult = await supabaseClient.from('classes').select('id, name, level, board, school_id, archived_at').eq('id', classId).maybeSingle();
+        if (classResult.error || !classResult.data) {
+            showAccessDenied("Couldn't load this class.");
+            return;
+        }
+        currentClass = classResult.data;
+
+        // Confirm teacher is on class_teachers
+        var ctCheck = await supabaseClient.from('class_teachers').select('class_id').eq('class_id', classId).eq('teacher_id', currentUser.id).maybeSingle();
+        if (!ctCheck.data) { showAccessDenied("You're not on this class."); return; }
+
+        // Count students enrolled
+        var enrolResult = await supabaseClient.from('class_students').select('student_id', { count: 'exact', head: true }).eq('class_id', classId);
+        var studentCount = enrolResult.count || 0;
+
+        showShell();
+        document.getElementById('classNameLabel').textContent = currentClass.name + ', ' + (BOARD_LABELS[currentClass.board] || currentClass.board);
+        document.getElementById('classBreadcrumb').textContent = currentClass.name;
+        document.getElementById('classBreadcrumb').href = 'teacher-class.html?id=' + encodeURIComponent(classId);
+        document.getElementById('cancelBtn').href = 'teacher-class.html?id=' + encodeURIComponent(classId);
+        document.getElementById('approveCancelBtn').href = 'teacher-class.html?id=' + encodeURIComponent(classId);
+        document.getElementById('assignToLabel').value = currentClass.name + ' (' + studentCount + ' student' + (studentCount === 1 ? '' : 's') + ')';
+
+        populateUnitDropdowns();
+        populateQTypeDropdown();
+        wireEvents();
+        loadUsageCap();
+    }
+
+    function showAccessDenied(message) {
+        document.getElementById('loadingShell').style.display = 'none';
+        document.getElementById('shell').style.display = 'none';
+        document.getElementById('accessMsg').textContent = message;
+        document.getElementById('accessDenied').style.display = 'flex';
+    }
+    function showShell() {
+        document.getElementById('loadingShell').style.display = 'none';
+        document.getElementById('shell').style.display = 'block';
+    }
+
+    function populateUnitDropdowns() {
+        var units = UNITS_BY_BOARD[currentClass.board] || [{ code: 'all', label: 'Any unit (AI picks)' }];
+        var html = units.map(function(u) { return '<option value="' + u.code + '">' + u.label + '</option>'; }).join('');
+        document.getElementById('qUnitSelect').innerHTML = html;
+        document.getElementById('tUnitSelect').innerHTML = html;
+    }
+
+    function populateQTypeDropdown() {
+        var types = Q_TYPES_BY_BOARD[currentClass.board] || [];
+        var html = types.map(function(t) { return '<option value="' + t.id + '">' + t.label + '</option>'; }).join('');
+        document.getElementById('qTypeSelect').innerHTML = html;
+    }
+
+    async function loadUsageCap() {
+        var period = (function() { var d = new Date(); return d.getUTCFullYear() + '-' + String(d.getUTCMonth() + 1).padStart(2, '0'); })();
+        var { data } = await supabaseClient.from('teacher_usage').select('questions_used, tests_used').eq('class_id', classId).eq('period', period).maybeSingle();
+        var qUsed = (data && data.questions_used) || 0;
+        var tUsed = (data && data.tests_used) || 0;
+        var pillEl = document.getElementById('usageCapPill');
+        pillEl.innerHTML = '<span class="pill pill-primary">This month: ' + qUsed + ' / 40 questions, ' + tUsed + ' / 5 tests</span>';
+    }
+
+    function wireEvents() {
+        document.querySelectorAll('#typeChoices .choice').forEach(function(c) {
+            c.addEventListener('click', function() {
+                var t = c.getAttribute('data-type');
+                document.querySelectorAll('#typeChoices .choice').forEach(function(x) { x.classList.remove('selected'); });
+                c.classList.add('selected');
+                currentType = t;
+                document.getElementById('questionParamsPanel').style.display = (t === 'question') ? 'block' : 'none';
+                document.getElementById('testParamsPanel').style.display = (t === 'test') ? 'block' : 'none';
+            });
+        });
+
+        document.getElementById('tTestTypeSelect').addEventListener('change', function() {
+            var v = document.getElementById('tTestTypeSelect').value;
+            document.getElementById('testTopicField').style.display = (v === 'topic_test') ? 'block' : 'none';
+        });
+
+        document.getElementById('generateBtn').addEventListener('click', handleGenerate);
+        document.getElementById('regenerateBtn').addEventListener('click', handleGenerate);
+        document.getElementById('backToBuildBtn').addEventListener('click', function() {
+            switchView('build');
+        });
+        document.getElementById('pushBtn').addEventListener('click', handlePush);
+
+        document.getElementById('logoutLink').addEventListener('click', async function(e) {
+            e.preventDefault();
+            await supabaseClient.auth.signOut();
+            window.location.href = 'index.html';
+        });
+    }
+
+    function switchView(v) {
+        document.getElementById('view-build').style.display = (v === 'build') ? 'block' : 'none';
+        document.getElementById('view-approve').style.display = (v === 'approve') ? 'block' : 'none';
+        if (v === 'build') document.getElementById('errorBox').innerHTML = '';
+        if (v === 'approve') document.getElementById('pushErrorBox').innerHTML = '';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function setError(msg) { document.getElementById('errorBox').innerHTML = '<div class="alert error">' + esc(msg) + '</div>'; }
+    function setPushError(msg) { document.getElementById('pushErrorBox').innerHTML = '<div class="alert error">' + esc(msg) + '</div>'; }
+
+    async function handleGenerate() {
+        document.getElementById('errorBox').innerHTML = '';
+        document.getElementById('loadingCard').style.display = 'block';
+        document.getElementById('generateBtn').disabled = true;
+        document.getElementById('generateBtn').textContent = 'Generating...';
+        document.getElementById('regenerateBtn').disabled = true;
+
+        var loadingTitle = document.getElementById('loadingTitle');
+        var loadingSub = document.getElementById('loadingSub');
+
+        try {
+            if (currentType === 'question') {
+                loadingTitle.textContent = 'Generating your question...';
+                var unit = document.getElementById('qUnitSelect').value;
+                var qtype = document.getElementById('qTypeSelect').value;
+                var topic = document.getElementById('qTopicInput').value.trim();
+
+                var resp = await fetch(SUPABASE_URL + '/functions/v1/generate-question', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + currentSession.access_token,
+                        'apikey': SUPABASE_ANON_KEY
+                    },
+                    body: JSON.stringify({
+                        board: currentClass.board,
+                        unit: unit,
+                        question_type: qtype,
+                        topics: topic ? [topic] : undefined
+                    })
+                });
+                if (!resp.ok) {
+                    var err = await resp.json().catch(function() { return {}; });
+                    throw new Error(err.error || 'Generation failed');
+                }
+                var data = await resp.json();
+                generatedPayload = data;  // store full response
+                totalMarksForPayload = (data.question && data.question.marks) || null;
+                renderApprovalForQuestion(data);
+            } else {
+                loadingTitle.textContent = 'Generating your test...';
+                loadingSub.textContent = 'Standard tests can take up to a minute.';
+                var testType = document.getElementById('tTestTypeSelect').value;
+                var unit2 = document.getElementById('tUnitSelect').value;
+                var topic2 = document.getElementById('tTopicInput').value.trim();
+
+                var payload = {
+                    test_type: testType,
+                    board: currentClass.board,
+                    unit: unit2,
+                    topic: testType === 'topic_test' && topic2 ? topic2 : null
+                };
+
+                var resp2 = await fetch(SUPABASE_URL + '/functions/v1/generate-test', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + currentSession.access_token,
+                        'apikey': SUPABASE_ANON_KEY
+                    },
+                    body: JSON.stringify(payload)
+                });
+                if (!resp2.ok) {
+                    var err2 = await resp2.json().catch(function() { return {}; });
+                    throw new Error(err2.error || err2.message || 'Generation failed');
+                }
+                var data2 = await resp2.json();
+                generatedPayload = data2;
+                totalMarksForPayload = (data2.paper && data2.paper.total_marks) || null;
+                renderApprovalForTest(data2);
+            }
+            switchView('approve');
+        } catch (e) {
+            setError(e.message || 'Something went wrong. Try again.');
+        }
+
+        document.getElementById('loadingCard').style.display = 'none';
+        document.getElementById('generateBtn').disabled = false;
+        document.getElementById('generateBtn').innerHTML = 'Generate <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>';
+        document.getElementById('regenerateBtn').disabled = false;
+    }
+
+    function renderApprovalForQuestion(data) {
+        document.getElementById('caseStudyContainer').innerHTML = '';
+        var q = data.question || {};
+        var marks = q.marks || '';
+        var command = q.command || '';
+        document.getElementById('approveTitle').textContent = (command ? command + ' question' : 'Single question');
+        document.getElementById('approveSub').textContent = (BOARD_LABELS[currentClass.board] || currentClass.board) + ', ' + marks + ' marks';
+
+        var qText = q.question || q.text || JSON.stringify(q);
+        document.getElementById('questionsContainer').innerHTML = renderEditableQuestion(0, marks, qText);
+        wireEditButtons();
+    }
+
+    function renderApprovalForTest(data) {
+        var paper = data.paper || {};
+        var caseHtml = '';
+        if (paper.case_study || paper.scenario || paper.context) {
+            var cs = paper.case_study || paper.scenario || paper.context;
+            caseHtml = '<div class="case-study"><div class="case-label">Case study</div><div class="case-body">' + esc(typeof cs === 'string' ? cs : JSON.stringify(cs)) + '</div></div>';
+        }
+        document.getElementById('caseStudyContainer').innerHTML = caseHtml;
+
+        var totalMarks = paper.total_marks || (paper.questions || []).reduce(function(s, q) { return s + (q.marks || 0); }, 0);
+        document.getElementById('approveTitle').textContent = paper.test_title || 'Standard test';
+        document.getElementById('approveSub').textContent = (BOARD_LABELS[currentClass.board] || currentClass.board) + ', ' + totalMarks + ' marks total, ' + (paper.questions || []).length + ' questions';
+        totalMarksForPayload = totalMarks;
+
+        var html = (paper.questions || []).map(function(q, idx) {
+            var qNum = q.number || (idx + 1);
+            var qPart = q.part ? (q.part) : '';
+            var label = 'Question ' + qNum + (qPart ? qPart : '') + ' (' + (q.marks || '?') + ' marks)';
+            var qText = q.question || q.text || JSON.stringify(q);
+            return renderEditableQuestion(idx, q.marks, qText, label);
+        }).join('');
+
+        document.getElementById('questionsContainer').innerHTML = html;
+        wireEditButtons();
+    }
+
+    function renderEditableQuestion(idx, marks, qText, customLabel) {
+        var label = customLabel || ('Question ' + (idx + 1) + ' (' + (marks || '?') + ' marks)');
+        return '<div class="q-block" data-q-idx="' + idx + '">' +
+            '<div class="q-block-head"><span class="q-label">' + esc(label) + '</span>' +
+            '<button class="btn btn-ghost btn-sm edit-toggle" data-idx="' + idx + '">Edit text</button></div>' +
+            '<div class="q-body" data-display="' + idx + '">' + esc(qText) + '</div>' +
+            '<div class="q-body" data-edit="' + idx + '" style="display:none;"><textarea class="q-edit" data-edit-area="' + idx + '">' + esc(qText) + '</textarea>' +
+            '<div style="margin-top:0.5rem; display:flex; gap:0.5rem; justify-content:flex-end;">' +
+            '<button class="btn btn-ghost btn-sm cancel-edit" data-idx="' + idx + '">Cancel</button>' +
+            '<button class="btn btn-secondary btn-sm save-edit" data-idx="' + idx + '">Save</button></div></div>' +
+        '</div>';
+    }
+
+    function wireEditButtons() {
+        document.querySelectorAll('.edit-toggle').forEach(function(b) {
+            b.addEventListener('click', function() {
+                var idx = b.getAttribute('data-idx');
+                document.querySelector('[data-display="' + idx + '"]').style.display = 'none';
+                document.querySelector('[data-edit="' + idx + '"]').style.display = 'block';
+            });
+        });
+        document.querySelectorAll('.cancel-edit').forEach(function(b) {
+            b.addEventListener('click', function() {
+                var idx = b.getAttribute('data-idx');
+                document.querySelector('[data-display="' + idx + '"]').style.display = 'block';
+                document.querySelector('[data-edit="' + idx + '"]').style.display = 'none';
+            });
+        });
+        document.querySelectorAll('.save-edit').forEach(function(b) {
+            b.addEventListener('click', function() {
+                var idx = b.getAttribute('data-idx');
+                var newText = document.querySelector('[data-edit-area="' + idx + '"]').value;
+                document.querySelector('[data-display="' + idx + '"]').textContent = newText;
+                document.querySelector('[data-display="' + idx + '"]').style.display = 'block';
+                document.querySelector('[data-edit="' + idx + '"]').style.display = 'none';
+
+                // Update generatedPayload in place
+                if (currentType === 'question') {
+                    if (!generatedPayload.question) generatedPayload.question = {};
+                    generatedPayload.question.question = newText;
+                } else {
+                    if (generatedPayload.paper && generatedPayload.paper.questions) {
+                        var i = parseInt(idx, 10);
+                        if (generatedPayload.paper.questions[i]) {
+                            generatedPayload.paper.questions[i].question = newText;
+                        }
+                    }
+                }
+                showToast('Saved your edit', 'success');
+            });
+        });
+    }
+
+    async function handlePush() {
+        document.getElementById('pushErrorBox').innerHTML = '';
+        if (!generatedPayload) {
+            setPushError('Nothing to push. Generate first.');
+            return;
+        }
+
+        var pushBtn = document.getElementById('pushBtn');
+        pushBtn.disabled = true;
+        pushBtn.textContent = 'Pushing...';
+
+        var dueDate = document.getElementById('dueDateInput').value;
+        var dueAtIso = dueDate ? new Date(dueDate + 'T23:59:00').toISOString() : null;
+
+        var unit = currentType === 'question'
+            ? document.getElementById('qUnitSelect').value
+            : document.getElementById('tUnitSelect').value;
+        var topic = currentType === 'question'
+            ? document.getElementById('qTopicInput').value.trim()
+            : document.getElementById('tTopicInput').value.trim();
+
+        var payload = {
+            class_id: classId,
+            type: currentType,
+            variant: 'standard',
+            unit: unit || null,
+            topic: topic || null,
+            total_marks: totalMarksForPayload,
+            generated_payload: generatedPayload,
+            due_at: dueAtIso
+        };
+
+        try {
+            var resp = await fetch(SUPABASE_URL + '/functions/v1/push-assignment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + currentSession.access_token,
+                    'apikey': SUPABASE_ANON_KEY
+                },
+                body: JSON.stringify(payload)
+            });
+            var result = await resp.json();
+            if (!resp.ok) {
+                if (result.code === 'CAP_REACHED') {
+                    setPushError(result.error + ' You can push again next month.');
+                } else {
+                    setPushError(result.error || 'Push failed');
+                }
+                pushBtn.disabled = false;
+                pushBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg> Push to class';
+                return;
+            }
+            showToast('Pushed to class. ' + (result.student_count || 0) + ' student' + (result.student_count === 1 ? '' : 's') + ' notified.', 'success');
+            setTimeout(function() {
+                window.location.href = 'teacher-class.html?id=' + encodeURIComponent(classId) + '&just_pushed=' + result.assignment_id;
+            }, 700);
+        } catch (e) {
+            setPushError('Network error: ' + e.message);
+            pushBtn.disabled = false;
+            pushBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg> Push to class';
+        }
+    }
+
+    function esc(s) { if (s === null || s === undefined) return ''; return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+    function showToast(message, type) {
+        var t = document.getElementById('toast');
+        t.className = 'toast show ' + (type || '');
+        document.getElementById('toastMessage').textContent = message;
+        setTimeout(function() { t.classList.remove('show'); }, 2800);
+    }
+</script>
+
+</body>
+</html>

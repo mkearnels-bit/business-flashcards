@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<title>Assignment | MyBizStudies Student Portal</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+    --primary: #1e3a5f; --primary-dark: #152a45; --primary-light: #2d5a8a;
+    --accent: #e67e22; --accent-light: #f39c12; --accent-glow: rgba(230,126,34,0.3);
+    --success: #27ae60; --success-bg: #e8f5ec;
+    --warning: #f39c12; --warning-bg: #fef6e7;
+    --error: #e74c3c; --error-bg: #fceae8;
+    --info: #3498db; --info-bg: #e8f2fb;
+    --gray-50: #f8fafc; --gray-100: #f1f5f9; --gray-200: #e2e8f0; --gray-300: #cbd5e1;
+    --gray-400: #94a3b8; --gray-500: #64748b; --gray-600: #475569; --gray-700: #334155;
+    --gray-800: #1e293b; --gray-900: #0f172a;
+    --shadow: 0 2px 8px rgba(15,23,42,0.06); --shadow-md: 0 4px 18px rgba(15,23,42,0.08); --shadow-lg: 0 10px 40px rgba(15,23,42,0.12);
+    --radius-sm: 8px; --radius: 12px; --radius-lg: 16px; --radius-xl: 24px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--gray-50); color: var(--gray-800); line-height: 1.55; min-height: 100vh; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gray-800); }
+
+.portal-bar { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.96); backdrop-filter: blur(12px); border-bottom: 1px solid var(--gray-200); }
+.portal-bar-inner { max-width: 1100px; margin: 0 auto; padding: 0.75rem 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.portal-bar-left { display: flex; align-items: center; gap: 1.25rem; }
+.portal-logo { height: 46px; }
+.portal-label { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.8rem; background: rgba(52,152,219,0.1); color: var(--info); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; border-radius: 999px; }
+.portal-bar-right { display: flex; align-items: center; gap: 0.5rem; }
+.portal-nav-link { padding: 0.5rem 0.9rem; font-size: 0.92rem; font-weight: 500; color: var(--gray-600); border-radius: var(--radius-sm); }
+.portal-nav-link:hover { background: var(--gray-100); color: var(--primary); }
+
+.page { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+.breadcrumb { display: flex; align-items: center; gap: 0.5rem; color: var(--gray-500); font-size: 0.88rem; margin-bottom: 0.75rem; }
+.breadcrumb a:hover { color: var(--primary); }
+.breadcrumb-sep { color: var(--gray-300); }
+
+.assignment-hero { background: white; border: 1px solid var(--gray-200); border-radius: var(--radius-xl); padding: 1.5rem 1.75rem; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; }
+.assignment-hero-title { font-size: 1.4rem; font-weight: 800; color: var(--gray-900); letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 0.3rem; }
+.meta-row { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; color: var(--gray-500); font-size: 0.9rem; }
+.meta-row .dot { width: 3px; height: 3px; background: var(--gray-300); border-radius: 50%; }
+
+.case-panel { background: #fffbea; border: 1px solid #f7d98a; border-radius: var(--radius-lg); padding: 1.25rem 1.35rem; margin-bottom: 1.25rem; }
+.case-label { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #8a5a00; margin-bottom: 0.5rem; }
+.case-body { color: var(--gray-800); line-height: 1.7; white-space: pre-wrap; }
+
+.q-card { background: white; border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 1.4rem; margin-bottom: 1.25rem; }
+.q-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.85rem; }
+.q-number { font-weight: 700; color: var(--primary); font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.5rem; }
+.q-number .n { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; background: var(--primary); color: white; border-radius: 50%; font-size: 0.78rem; }
+.q-marks { font-weight: 700; background: var(--accent); color: white; padding: 0.22rem 0.7rem; border-radius: 999px; font-size: 0.8rem; }
+.q-text { font-size: 1.02rem; color: var(--gray-800); line-height: 1.65; margin-bottom: 1rem; white-space: pre-wrap; }
+.answer-textarea { width: 100%; min-height: 180px; padding: 0.9rem; border: 1px solid var(--gray-300); border-radius: var(--radius); font-family: inherit; font-size: 0.98rem; line-height: 1.7; resize: vertical; }
+.answer-textarea:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(45,90,138,0.15); }
+.answer-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; flex-wrap: wrap; gap: 0.5rem; font-size: 0.82rem; color: var(--gray-500); }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.7rem 1.2rem; font-weight: 600; font-size: 0.94rem; border-radius: var(--radius-sm); transition: all 0.15s ease; }
+.btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent-light)); color: white; box-shadow: 0 2px 10px var(--accent-glow); }
+.btn-primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 20px var(--accent-glow); }
+.btn-primary:disabled { opacity: 0.65; cursor: not-allowed; }
+.btn-ghost { background: white; color: var(--gray-700); border: 1px solid var(--gray-200); }
+.btn-lg { padding: 0.95rem 1.6rem; font-size: 1rem; }
+.btn-sm { padding: 0.45rem 0.8rem; font-size: 0.85rem; }
+
+.submit-row { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap; }
+
+/* Feedback view */
+.feedback-card { background: white; border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1rem; }
+.feedback-score-banner { background: linear-gradient(135deg, var(--success-bg), #c5e8d2); border: 1px solid #a7e0b9; border-radius: var(--radius-lg); padding: 1.5rem; text-align: center; margin-bottom: 1.5rem; }
+.feedback-score-banner.mid { background: linear-gradient(135deg, var(--warning-bg), #ffe6c7); border-color: #f5c878; }
+.feedback-score-banner.low { background: linear-gradient(135deg, var(--error-bg), #fad5d0); border-color: #f0a59d; }
+.fb-score { font-size: 2.5rem; font-weight: 800; color: var(--gray-900); line-height: 1; }
+.fb-percent { color: var(--gray-700); font-weight: 600; margin-top: 0.4rem; }
+.fb-section-title { font-size: 1rem; font-weight: 700; color: var(--gray-900); margin: 1.25rem 0 0.5rem; }
+.fb-section { background: var(--gray-50); padding: 1rem 1.1rem; border-radius: var(--radius); border: 1px solid var(--gray-200); margin-bottom: 0.75rem; }
+.fb-section ul { padding-left: 1.25rem; margin-top: 0.4rem; line-height: 1.65; }
+
+.alert { padding: 0.85rem 1rem; border-radius: var(--radius); font-size: 0.9rem; line-height: 1.5; }
+.alert.error { background: var(--error-bg); color: var(--error); border: 1px solid #f5c6c0; }
+.alert.info { background: var(--info-bg); color: var(--info); border: 1px solid #c9e3f7; }
+
+.spinner { display: inline-block; width: 32px; height: 32px; border: 3px solid var(--gray-200); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.access-block { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+.access-card { max-width: 420px; background: white; padding: 2.5rem 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); text-align: center; border: 1px solid var(--gray-200); }
+
+@media (max-width: 640px) {
+    .page { padding: 1.25rem 1rem 3rem; }
+    .assignment-hero { padding: 1.25rem; }
+    .assignment-hero-title { font-size: 1.2rem; }
+}
+</style>
+</head>
+<body>
+
+<div id="loadingShell" style="padding: 3rem; text-align: center; color: var(--gray-500);">Loading your assignment...</div>
+
+<div id="accessDenied" style="display: none;" class="access-block">
+    <div class="access-card">
+        <div style="font-size: 2.2rem; margin-bottom: 1rem;">&#128274;</div>
+        <h1 style="font-size: 1.2rem; color: var(--gray-900); margin-bottom: 0.5rem;">Assignment not available</h1>
+        <p style="color: var(--gray-600); margin-bottom: 1.5rem;" id="accessMsg">This assignment isn't available.</p>
+        <a href="student-portal.html" class="btn btn-ghost">Back to my work</a>
+    </div>
+</div>
+
+<div id="shell" style="display: none;">
+
+<header class="portal-bar">
+    <div class="portal-bar-inner">
+        <div class="portal-bar-left">
+            <a href="student-portal.html"><img src="assets/Site Logo Transparent.png" alt="MyBizStudies" class="portal-logo"></a>
+            <span class="portal-label">Student Portal</span>
+        </div>
+        <div class="portal-bar-right">
+            <a href="student-portal.html" class="portal-nav-link">My work</a>
+        </div>
+    </div>
+</header>
+
+<main class="page">
+
+    <div class="breadcrumb">
+        <a href="student-portal.html">My work</a>
+        <span class="breadcrumb-sep">/</span>
+        <span style="color: var(--gray-700);" id="breadcrumbName">Assignment</span>
+    </div>
+
+    <div class="assignment-hero">
+        <div>
+            <h1 class="assignment-hero-title" id="title">Loading</h1>
+            <div class="meta-row" id="metaRow"></div>
+        </div>
+    </div>
+
+    <!-- View: take the assignment -->
+    <div id="takeView">
+        <div id="caseStudyContainer"></div>
+        <div id="questionsContainer"></div>
+
+        <div id="errorBox"></div>
+
+        <div class="submit-row">
+            <button class="btn btn-primary btn-lg" id="submitBtn">
+                Submit for marking
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- View: marking in progress -->
+    <div id="markingView" style="display:none; text-align:center; padding: 4rem 1rem;">
+        <div class="spinner" style="margin: 0 auto 1rem;"></div>
+        <div style="font-weight:700; color: var(--gray-800); font-size: 1.1rem; margin-bottom: 0.4rem;">Marking your work...</div>
+        <div class="muted" style="color: var(--gray-500);">This usually takes 10-30 seconds. Don't close the page.</div>
+    </div>
+
+    <!-- View: feedback -->
+    <div id="feedbackView" style="display:none;">
+        <div class="feedback-score-banner" id="scoreBanner">
+            <div class="muted" style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em;">Your score</div>
+            <div class="fb-score" id="fbScore">-</div>
+            <div class="fb-percent" id="fbPercent">-</div>
+        </div>
+        <div id="feedbackContent"></div>
+        <div style="text-align:center; margin-top: 1rem;">
+            <a href="student-portal.html" class="btn btn-primary">Back to my work</a>
+        </div>
+    </div>
+
+</main>
+
+</div>
+
+<script>
+    var SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
+    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
+    var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    var BOARD_LABELS = {
+        aqa_gcse: 'AQA GCSE', edexcel_gcse: 'Edexcel GCSE', edexcel_igcse: 'Edexcel IGCSE',
+        cie_igcse: 'CIE IGCSE', aqa_a_level: 'AQA A-Level', edexcel_a_level: 'Edexcel A-Level',
+        edexcel_ial: 'Edexcel International A-Level', cambridge_a_level: 'Cambridge International AS & A-Level'
+    };
+
+    var attemptId = null;
+    var currentAttempt = null;
+    var currentAssignment = null;
+    var currentSession = null;
+    var startedAt = null;
+    var wakeLock = null;
+
+    document.addEventListener('DOMContentLoaded', init);
+
+    async function init() {
+        var params = new URLSearchParams(window.location.search);
+        attemptId = params.get('id');
+        if (!attemptId) { showAccessDenied('No assignment specified.'); return; }
+
+        var sessionResult = await supabaseClient.auth.getSession();
+        if (!sessionResult.data.session) {
+            window.location.href = 'login.html?redirect=student-assignment.html?id=' + encodeURIComponent(attemptId);
+            return;
+        }
+        currentSession = sessionResult.data.session;
+
+        // Load attempt + assignment
+        var { data: att, error: attErr } = await supabaseClient
+            .from('student_attempts')
+            .select('id, assignment_id, status, ai_score, ai_total, ai_feedback, answers, submitted_at')
+            .eq('id', attemptId)
+            .maybeSingle();
+        if (attErr || !att) { showAccessDenied('Could not load assignment.'); return; }
+        currentAttempt = att;
+
+        // Note: we deliberately do NOT request mark_spec - students must not see the mark scheme.
+        var { data: a, error: aErr } = await supabaseClient
+            .from('assignments')
+            .select('id, type, total_marks, board, level, unit, topic, due_at, generated_payload, class_id, status')
+            .eq('id', att.assignment_id)
+            .maybeSingle();
+        if (aErr || !a) { showAccessDenied('Assignment not found.'); return; }
+        currentAssignment = a;
+
+        // Get class for breadcrumb
+        var { data: klass } = await supabaseClient.from('classes').select('id, name, board, level').eq('id', a.class_id).maybeSingle();
+
+        showShell(klass);
+
+        if (att.status === 'graded') {
+            renderFeedback();
+        } else {
+            startedAt = Date.now();
+            // Mark as in_progress so the teacher can see
+            await supabaseClient.from('student_attempts').update({ status: 'in_progress', started_at: new Date().toISOString() }).eq('id', att.id);
+            renderTakeView();
+        }
+    }
+
+    function showAccessDenied(msg) {
+        document.getElementById('loadingShell').style.display = 'none';
+        document.getElementById('shell').style.display = 'none';
+        document.getElementById('accessMsg').textContent = msg;
+        document.getElementById('accessDenied').style.display = 'flex';
+    }
+
+    function showShell(klass) {
+        document.getElementById('loadingShell').style.display = 'none';
+        document.getElementById('shell').style.display = 'block';
+
+        var a = currentAssignment;
+        var title = generateTitle(a);
+        document.getElementById('title').textContent = title;
+        document.getElementById('breadcrumbName').textContent = title;
+
+        var meta = [];
+        if (a.due_at) {
+            var due = new Date(a.due_at);
+            var now = new Date();
+            var diffDays = Math.ceil((due - now) / (1000*60*60*24));
+            if (currentAttempt.status === 'graded') {
+                meta.push('<span class="muted">Submitted</span>');
+            } else if (diffDays < 0) meta.push('<span class="muted" style="color: var(--error);">Overdue</span>');
+            else if (diffDays === 0) meta.push('<span class="muted" style="color: #b87100;">Due today</span>');
+            else meta.push('<span class="muted">Due in ' + diffDays + ' day' + (diffDays === 1 ? '' : 's') + '</span>');
+        }
+        meta.push('<span class="muted">' + (a.type === 'test' ? 'Test' : 'Question') + (a.total_marks ? ', ' + a.total_marks + ' marks' : '') + '</span>');
+        if (klass) {
+            meta.push('<span class="dot"></span><span class="muted">' + esc(klass.name) + '</span>');
+        }
+        document.getElementById('metaRow').innerHTML = meta.join('');
+    }
+
+    function generateTitle(a) {
+        if (a.topic) return a.topic;
+        if (a.unit) return (a.type === 'test' ? 'Test on ' : 'Question on ') + a.unit;
+        return a.type === 'test' ? 'Standard test' : 'Single question';
+    }
+
+    function renderTakeView() {
+        var a = currentAssignment;
+        var caseHtml = '';
+        var qHtml = '';
+
+        if (a.type === 'question') {
+            var q = (a.generated_payload && a.generated_payload.question) || a.generated_payload || {};
+            var qText = q.question || q.text || '';
+            var marks = q.marks || a.total_marks || '';
+            qHtml = renderQuestionCard(0, marks, qText, true);
+        } else {
+            var paper = (a.generated_payload && a.generated_payload.paper) || a.generated_payload || {};
+            var cs = paper.case_study || paper.scenario || paper.context;
+            if (cs) {
+                caseHtml = '<div class="case-panel"><div class="case-label">Case study</div><div class="case-body">' + esc(typeof cs === 'string' ? cs : JSON.stringify(cs)) + '</div></div>';
+            }
+            qHtml = (paper.questions || []).map(function(q, idx) {
+                var qText = q.question || q.text || '';
+                var label = 'Question ' + (q.number || (idx + 1)) + (q.part ? q.part : '');
+                return renderQuestionCard(idx, q.marks, qText, true, label, q.id);
+            }).join('');
+        }
+
+        document.getElementById('caseStudyContainer').innerHTML = caseHtml;
+        document.getElementById('questionsContainer').innerHTML = qHtml;
+
+        document.querySelectorAll('.answer-textarea').forEach(function(t) {
+            t.addEventListener('input', function() {
+                var idx = t.getAttribute('data-idx');
+                var wc = (t.value.trim().match(/\b\w+\b/g) || []).length;
+                document.querySelector('[data-wc="' + idx + '"]').textContent = wc + ' word' + (wc === 1 ? '' : 's');
+            });
+        });
+
+        document.getElementById('submitBtn').addEventListener('click', submitAnswers);
+    }
+
+    function renderQuestionCard(idx, marks, qText, withTextarea, customLabel, qid) {
+        var label = customLabel || 'Question ' + (idx + 1);
+        return '<div class="q-card" data-q-idx="' + idx + '" data-qid="' + esc(qid || '') + '">' +
+            '<div class="q-header">' +
+                '<div class="q-number"><span class="n">' + (idx + 1) + '</span> ' + esc(label) + '</div>' +
+                (marks ? '<span class="q-marks">' + marks + ' marks</span>' : '') +
+            '</div>' +
+            '<div class="q-text">' + esc(qText) + '</div>' +
+            (withTextarea
+                ? '<textarea class="answer-textarea" data-idx="' + idx + '" placeholder="Type your answer here."></textarea>' +
+                  '<div class="answer-footer"><span data-wc="' + idx + '">0 words</span></div>'
+                : '') +
+        '</div>';
+    }
+
+    async function requestWakeLock() {
+        try {
+            if ('wakeLock' in navigator) {
+                wakeLock = await navigator.wakeLock.request('screen');
+            }
+        } catch (_e) { /* not critical */ }
+    }
+    function releaseWakeLock() {
+        if (wakeLock) { try { wakeLock.release(); } catch (_e) {} wakeLock = null; }
+    }
+
+    async function submitAnswers() {
+        document.getElementById('errorBox').innerHTML = '';
+        var a = currentAssignment;
+
+        var payload = { attempt_id: attemptId };
+
+        if (a.type === 'question') {
+            var ans = document.querySelector('.answer-textarea[data-idx="0"]').value.trim();
+            if (!ans) { showError('Please write your answer before submitting.'); return; }
+            payload.answer = ans;
+        } else {
+            var studentAnswers = [];
+            var paper = (a.generated_payload && a.generated_payload.paper) || a.generated_payload || {};
+            (paper.questions || []).forEach(function(q, idx) {
+                var card = document.querySelector('[data-q-idx="' + idx + '"]');
+                if (!card) return;
+                var t = card.querySelector('.answer-textarea');
+                var ans = t ? t.value.trim() : '';
+                studentAnswers.push({ question_id: (q.id || ('q' + idx)), student_answer: ans });
+            });
+            if (studentAnswers.every(function(s) { return !s.student_answer; })) {
+                showError('Please write at least one answer before submitting.');
+                return;
+            }
+            payload.student_answers = studentAnswers;
+            payload.total_time_seconds = startedAt ? Math.floor((Date.now() - startedAt) / 1000) : null;
+        }
+
+        document.getElementById('takeView').style.display = 'none';
+        document.getElementById('markingView').style.display = 'block';
+        await requestWakeLock();
+
+        try {
+            var resp = await fetch(SUPABASE_URL + '/functions/v1/submit-student-attempt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + currentSession.access_token,
+                    'apikey': SUPABASE_ANON_KEY
+                },
+                body: JSON.stringify(payload)
+            });
+            var result = await resp.json();
+            releaseWakeLock();
+
+            if (!resp.ok) {
+                document.getElementById('markingView').style.display = 'none';
+                document.getElementById('takeView').style.display = 'block';
+                showError(result.error || 'Marking failed. Please try again.');
+                return;
+            }
+
+            // Refresh attempt from DB to render the feedback
+            var refreshed = await supabaseClient.from('student_attempts')
+                .select('id, assignment_id, status, ai_score, ai_total, ai_feedback, answers, submitted_at')
+                .eq('id', attemptId).maybeSingle();
+            if (refreshed.data) currentAttempt = refreshed.data;
+            renderFeedback();
+        } catch (e) {
+            releaseWakeLock();
+            document.getElementById('markingView').style.display = 'none';
+            document.getElementById('takeView').style.display = 'block';
+            showError('Network error: ' + e.message);
+        }
+    }
+
+    function showError(msg) {
+        document.getElementById('errorBox').innerHTML = '<div class="alert error" style="margin-top:1rem;">' + esc(msg) + '</div>';
+    }
+
+    function renderFeedback() {
+        document.getElementById('takeView').style.display = 'none';
+        document.getElementById('markingView').style.display = 'none';
+        document.getElementById('feedbackView').style.display = 'block';
+
+        var att = currentAttempt;
+        var a = currentAssignment;
+
+        var score = att.ai_score !== null && att.ai_score !== undefined ? att.ai_score : '-';
+        var total = att.ai_total || a.total_marks || '-';
+        var pct = (typeof score === 'number' && typeof total === 'number' && total > 0)
+            ? Math.round((score / total) * 100) : null;
+
+        document.getElementById('fbScore').textContent = score + ' / ' + total;
+        document.getElementById('fbPercent').textContent = pct !== null ? pct + '%' : '';
+
+        var banner = document.getElementById('scoreBanner');
+        banner.classList.remove('mid', 'low');
+        if (pct !== null) {
+            if (pct < 50) banner.classList.add('low');
+            else if (pct < 70) banner.classList.add('mid');
+        }
+
+        var feedback = att.ai_feedback || {};
+        var html = '';
+
+        if (a.type === 'question') {
+            var marking = feedback.marking || feedback;
+            html += renderQuestionFeedback(marking);
+        } else {
+            // Test feedback
+            var summary = feedback.test_summary || null;
+            if (summary && summary.overall_feedback) {
+                html += '<div class="feedback-card">' +
+                    '<div class="fb-section-title">Overall feedback</div>' +
+                    '<div class="muted" style="line-height:1.65;">' + esc(summary.overall_feedback) + '</div>' +
+                '</div>';
+            }
+            var qResults = feedback.question_results || [];
+            qResults.forEach(function(qr, idx) {
+                html += '<div class="feedback-card">' +
+                    '<div class="fb-section-title">Question ' + (qr.question_id || (idx + 1)) + ' &middot; ' + (qr.marks_awarded || 0) + ' / ' + (qr.total_marks || 0) + '</div>' +
+                    renderQuestionFeedback(qr) +
+                '</div>';
+            });
+        }
+
+        if (!html) {
+            html = '<div class="feedback-card"><div class="muted">Your work has been marked but no detailed feedback was returned.</div></div>';
+        }
+
+        document.getElementById('feedbackContent').innerHTML = html;
+    }
+
+    function renderQuestionFeedback(m) {
+        if (!m) return '';
+        var html = '';
+        if (m.feedback && typeof m.feedback === 'string') {
+            html += '<div class="fb-section">' + esc(m.feedback) + '</div>';
+        }
+        if (m.strengths && m.strengths.length) {
+            html += '<div class="fb-section-title" style="color: var(--success);">Strengths</div>' +
+                    '<div class="fb-section"><ul>' + m.strengths.map(function(s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul></div>';
+        }
+        if (m.improvements && m.improvements.length) {
+            html += '<div class="fb-section-title" style="color: var(--accent);">To improve</div>' +
+                    '<div class="fb-section"><ul>' + m.improvements.map(function(s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul></div>';
+        }
+        if (m.next_steps && m.next_steps.length) {
+            html += '<div class="fb-section-title">Next steps</div>' +
+                    '<div class="fb-section"><ul>' + m.next_steps.map(function(s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul></div>';
+        }
+        return html;
+    }
+
+    function esc(s) { if (s === null || s === undefined) return ''; return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+</script>
+
+</body>
+</html>
