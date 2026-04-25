@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<title>Teacher Dashboard | MyBizStudies</title>
+<meta name="description" content="MyBizStudies teacher portal: manage your classes, push AI-marked questions and tests, and review student work.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+    --primary: #1e3a5f;
+    --primary-dark: #152a45;
+    --primary-light: #2d5a8a;
+    --accent: #e67e22;
+    --accent-light: #f39c12;
+    --accent-glow: rgba(230, 126, 34, 0.3);
+    --success: #27ae60;
+    --success-bg: #e8f5ec;
+    --warning: #f39c12;
+    --warning-bg: #fef6e7;
+    --error: #e74c3c;
+    --error-bg: #fceae8;
+    --info: #3498db;
+    --info-bg: #e8f2fb;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-400: #94a3b8;
+    --gray-500: #64748b;
+    --gray-600: #475569;
+    --gray-700: #334155;
+    --gray-800: #1e293b;
+    --gray-900: #0f172a;
+    --white: #ffffff;
+    --shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+    --shadow-md: 0 4px 18px rgba(15, 23, 42, 0.08);
+    --shadow-lg: 0 10px 40px rgba(15, 23, 42, 0.12);
+    --radius-sm: 8px;
+    --radius: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--gray-50);
+    color: var(--gray-800);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+}
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gray-800); }
+
+/* Top bar */
+.portal-bar { position: sticky; top: 0; z-index: 100; background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--gray-200); }
+.portal-bar-inner { max-width: 1280px; margin: 0 auto; padding: 0.75rem 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.portal-bar-left { display: flex; align-items: center; gap: 1.25rem; }
+.portal-logo { height: 46px; width: auto; }
+.portal-label { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.8rem; background: rgba(30, 58, 95, 0.08); color: var(--primary); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; border-radius: 999px; }
+.portal-bar-right { display: flex; align-items: center; gap: 0.5rem; }
+.portal-nav-link { padding: 0.5rem 0.9rem; font-size: 0.92rem; font-weight: 500; color: var(--gray-600); border-radius: var(--radius-sm); transition: all 0.15s ease; }
+.portal-nav-link:hover { background: var(--gray-100); color: var(--primary); }
+.portal-nav-link.active { background: var(--gray-100); color: var(--primary); font-weight: 600; }
+.portal-avatar { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.9rem; }
+
+.page { max-width: 1280px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+/* Hero */
+.hero-banner { background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%); color: white; border-radius: var(--radius-xl); padding: 2.25rem 2rem; margin-bottom: 2rem; position: relative; overflow: hidden; }
+.hero-banner::before { content: ""; position: absolute; right: -60px; top: -60px; width: 260px; height: 260px; background: radial-gradient(circle, rgba(230,126,34,0.25) 0%, transparent 70%); }
+.hero-content { position: relative; }
+.hero-greeting { font-size: 0.92rem; opacity: 0.8; margin-bottom: 0.3rem; }
+.hero-title { font-size: 1.9rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 0.6rem; }
+.hero-meta { opacity: 0.85; font-size: 0.98rem; }
+
+/* Buttons */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.7rem 1.2rem; font-weight: 600; font-size: 0.94rem; border-radius: var(--radius-sm); transition: all 0.15s ease; white-space: nowrap; line-height: 1; }
+.btn-primary { background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%); color: white; box-shadow: 0 2px 10px var(--accent-glow); }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px var(--accent-glow); }
+.btn-secondary { background: var(--primary); color: white; }
+.btn-secondary:hover { background: var(--primary-dark); }
+.btn-ghost { background: var(--white); color: var(--gray-700); border: 1px solid var(--gray-200); }
+.btn-ghost:hover { background: var(--gray-50); border-color: var(--gray-300); }
+.btn-sm { padding: 0.45rem 0.8rem; font-size: 0.85rem; }
+
+/* Pills */
+.pill { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.22rem 0.65rem; font-size: 0.78rem; font-weight: 600; border-radius: 999px; background: var(--gray-100); color: var(--gray-700); }
+.pill-primary { background: rgba(30,58,95,0.08); color: var(--primary); }
+
+/* Usage card */
+.usage-card { background: white; border-radius: var(--radius-lg); padding: 1.5rem; border: 1px solid var(--gray-200); margin-bottom: 2rem; }
+.usage-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; gap: 1rem; flex-wrap: wrap; }
+.section-title { font-size: 1.15rem; font-weight: 700; color: var(--gray-900); }
+.muted { color: var(--gray-500); }
+.usage-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+@media (max-width: 640px) { .usage-grid { grid-template-columns: 1fr; } }
+.usage-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem; }
+.usage-label { font-weight: 600; color: var(--gray-700); }
+.usage-count { font-weight: 700; color: var(--gray-900); font-variant-numeric: tabular-nums; }
+.usage-count span { color: var(--gray-400); font-weight: 500; }
+.usage-bar { height: 10px; background: var(--gray-100); border-radius: 999px; overflow: hidden; }
+.usage-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent) 0%, var(--accent-light) 100%); border-radius: 999px; transition: width 0.4s ease; }
+.usage-bar-fill.warn { background: linear-gradient(90deg, var(--warning) 0%, #f1c40f 100%); }
+
+/* Classes grid */
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; gap: 1rem; }
+.class-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.25rem; }
+.class-card { background: white; border-radius: var(--radius-lg); border: 1px solid var(--gray-200); padding: 1.5rem; transition: all 0.2s ease; cursor: pointer; display: flex; flex-direction: column; gap: 1rem; }
+.class-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.class-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.75rem; }
+.class-name { font-size: 1.15rem; font-weight: 700; color: var(--gray-900); margin-bottom: 0.2rem; }
+.class-sub { color: var(--gray-500); font-size: 0.88rem; }
+.class-badge { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.3rem 0.6rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; background: rgba(230,126,34,0.1); color: var(--accent); border-radius: 999px; }
+.class-badge.a-level { background: rgba(52, 152, 219, 0.1); color: var(--info); }
+.join-code-chip { font-family: 'SF Mono', Menlo, monospace; font-size: 0.82rem; letter-spacing: 0.08em; background: var(--gray-100); color: var(--gray-700); padding: 0.35rem 0.65rem; border-radius: 6px; font-weight: 600; }
+.class-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; padding: 0.9rem 1rem; background: var(--gray-50); border-radius: var(--radius); }
+.class-stats div { text-align: center; }
+.class-stat-num { font-size: 1.25rem; font-weight: 700; color: var(--gray-900); line-height: 1; }
+.class-stat-lbl { display: block; margin-top: 0.3rem; font-size: 0.72rem; color: var(--gray-500); font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; }
+.class-card-add { border: 2px dashed var(--gray-300); background: transparent; color: var(--gray-500); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem; min-height: 220px; }
+.class-card-add:hover { border-color: var(--accent); color: var(--accent); background: rgba(230,126,34,0.04); }
+.class-card-add-icon { width: 52px; height: 52px; border-radius: 50%; background: var(--gray-100); display: flex; align-items: center; justify-content: center; margin-bottom: 0.75rem; font-size: 1.5rem; font-weight: 300; }
+.class-card-add:hover .class-card-add-icon { background: rgba(230,126,34,0.12); color: var(--accent); }
+.class-card-add-title { font-size: 1rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.25rem; }
+
+/* Empty state */
+.empty-state { background: white; border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 3rem 1.5rem; text-align: center; }
+.empty-icon { width: 72px; height: 72px; margin: 0 auto 1rem; background: var(--gray-100); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--gray-400); font-size: 1.75rem; }
+.empty-title { font-size: 1.2rem; font-weight: 700; color: var(--gray-900); margin-bottom: 0.4rem; }
+.empty-body { color: var(--gray-500); max-width: 420px; margin: 0 auto 1.5rem; }
+
+/* Modal */
+.modal-backdrop { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.55); z-index: 200; display: none; align-items: center; justify-content: center; padding: 1rem; }
+.modal-backdrop.open { display: flex; }
+.modal { background: white; border-radius: var(--radius-lg); width: 100%; max-width: 540px; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg); }
+.modal-head { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; justify-content: space-between; }
+.modal-title { font-size: 1.05rem; font-weight: 700; color: var(--gray-900); }
+.modal-close { color: var(--gray-500); font-size: 1.4rem; line-height: 1; padding: 0.25rem 0.5rem; border-radius: 6px; }
+.modal-close:hover { background: var(--gray-100); color: var(--gray-900); }
+.modal-body { padding: 1.5rem; }
+.modal-foot { padding: 1rem 1.5rem; border-top: 1px solid var(--gray-200); display: flex; justify-content: flex-end; gap: 0.5rem; }
+.field { margin-bottom: 1.1rem; }
+.field-label { display: block; margin-bottom: 0.4rem; font-size: 0.88rem; font-weight: 600; color: var(--gray-700); }
+.field-input, .field-select { width: 100%; padding: 0.7rem 0.9rem; border: 1px solid var(--gray-300); border-radius: var(--radius-sm); background: white; }
+.field-input:focus, .field-select:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(45, 90, 138, 0.15); }
+
+/* Toast */
+.toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); background: var(--gray-900); color: white; padding: 0.75rem 1.25rem; border-radius: 999px; font-size: 0.92rem; font-weight: 500; box-shadow: var(--shadow-lg); display: none; z-index: 300; }
+.toast.show { display: block; animation: toastIn 0.2s ease; }
+.toast.success { background: var(--success); }
+.toast.error { background: var(--error); }
+@keyframes toastIn { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+/* Success join code display */
+.join-code-hero { text-align: center; padding: 1.5rem; background: linear-gradient(135deg, #f0fdf4, #d4edda); border: 1px solid #a7e0b9; border-radius: var(--radius); margin-bottom: 1rem; }
+.join-code-big { font-family: 'SF Mono', Menlo, monospace; font-size: 2rem; font-weight: 800; color: var(--success); letter-spacing: 0.15em; padding: 0.5rem 0.75rem; background: white; border-radius: var(--radius-sm); display: inline-block; margin: 0.5rem 0; }
+
+@media (max-width: 640px) {
+    .hero-banner { padding: 1.5rem; }
+    .hero-title { font-size: 1.5rem; }
+    .class-grid { grid-template-columns: 1fr; }
+    .page { padding: 1.25rem 1rem 3rem; }
+}
+
+/* Access denied state */
+.access-block { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+.access-card { max-width: 420px; background: white; padding: 2.5rem 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); text-align: center; border: 1px solid var(--gray-200); }
+.access-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+</style>
+</head>
+<body>
+
+<div id="loadingShell" style="padding: 3rem; text-align: center; color: var(--gray-500);">Loading...</div>
+
+<div id="accessDenied" style="display: none;" class="access-block">
+    <div class="access-card">
+        <div class="access-icon">&#128274;</div>
+        <h1 style="font-size: 1.25rem; color: var(--gray-900); margin-bottom: 0.5rem;">Teacher access only</h1>
+        <p style="color: var(--gray-600); margin-bottom: 1.5rem;" id="accessMsg">This page is for teacher accounts. Your account does not have teacher access yet.</p>
+        <a href="index.html" class="btn btn-secondary">Back to main site</a>
+    </div>
+</div>
+
+<div id="teacherShell" style="display: none;">
+
+<header class="portal-bar">
+    <div class="portal-bar-inner">
+        <div class="portal-bar-left">
+            <a href="teacher-dashboard.html"><img src="assets/Site Logo Transparent.png" alt="MyBizStudies" class="portal-logo"></a>
+            <span class="portal-label">Teacher Portal</span>
+        </div>
+        <div class="portal-bar-right">
+            <a href="teacher-dashboard.html" class="portal-nav-link active">Dashboard</a>
+            <a href="index.html" class="portal-nav-link">Main site</a>
+            <a href="#" class="portal-nav-link" id="logoutLink">Sign out</a>
+            <div class="portal-avatar" id="navAvatar">--</div>
+        </div>
+    </div>
+</header>
+
+<main class="page">
+
+    <div class="hero-banner">
+        <div class="hero-content">
+            <div class="hero-greeting" id="heroDate"></div>
+            <h1 class="hero-title" id="heroTitle">Good morning.</h1>
+            <p class="hero-meta" id="heroMeta">Loading your classes...</p>
+        </div>
+    </div>
+
+    <div class="usage-card" id="usageCard" style="display: none;">
+        <div class="usage-head">
+            <div>
+                <div class="section-title" style="margin-bottom: 0.2rem;">This month's generation usage</div>
+                <div class="muted" style="font-size: 0.88rem;">Caps are per class, per month. One generation pushed to a whole class still counts as one.</div>
+            </div>
+            <span class="pill pill-primary" id="usagePeriod"></span>
+        </div>
+        <div class="usage-grid" id="usageGrid">
+            <!-- Populated by JS -->
+        </div>
+    </div>
+
+    <div class="section-header">
+        <h2 class="section-title">Your classes</h2>
+        <button class="btn btn-primary btn-sm" id="newClassBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            New class
+        </button>
+    </div>
+
+    <div id="classesContainer">
+        <!-- Populated by JS -->
+    </div>
+
+</main>
+
+</div>
+
+<!-- New class modal -->
+<div class="modal-backdrop" id="classModal">
+    <div class="modal">
+        <div class="modal-head">
+            <div class="modal-title" id="classModalTitle">Create a new class</div>
+            <button class="modal-close" id="classModalClose">&times;</button>
+        </div>
+        <div class="modal-body" id="classModalBody">
+            <div class="field">
+                <label class="field-label">Class name</label>
+                <input type="text" class="field-input" id="newClassName" placeholder="e.g. Year 10 Business">
+            </div>
+            <div class="field">
+                <label class="field-label">Level</label>
+                <select class="field-select" id="newClassLevel">
+                    <option value="gcse">GCSE</option>
+                    <option value="a_level">A-Level</option>
+                </select>
+            </div>
+            <div class="field">
+                <label class="field-label">Exam board</label>
+                <select class="field-select" id="newClassBoard">
+                    <option value="aqa_gcse">AQA GCSE</option>
+                    <option value="edexcel_gcse">Edexcel GCSE</option>
+                    <option value="edexcel_igcse">Edexcel IGCSE</option>
+                    <option value="cie_igcse">CIE IGCSE</option>
+                    <option value="aqa_a_level">AQA A-Level</option>
+                    <option value="edexcel_a_level">Edexcel A-Level</option>
+                    <option value="edexcel_ial">Edexcel International A-Level</option>
+                    <option value="cambridge_a_level">Cambridge International AS &amp; A-Level</option>
+                </select>
+            </div>
+            <div class="muted" style="font-size: 0.85rem;">Level and board are locked after creation so every assignment for this class uses the same paper structure.</div>
+        </div>
+        <div class="modal-foot">
+            <button class="btn btn-ghost" id="classModalCancel">Cancel</button>
+            <button class="btn btn-primary" id="classModalCreate">Create class</button>
+        </div>
+    </div>
+</div>
+
+<!-- Join code shown after successful creation -->
+<div class="modal-backdrop" id="codeModal">
+    <div class="modal">
+        <div class="modal-head">
+            <div class="modal-title">Class created</div>
+            <button class="modal-close" id="codeModalClose">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="join-code-hero">
+                <div class="muted" style="font-size: 0.85rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">Class join code</div>
+                <div class="join-code-big" id="codeModalCode">XXXX-XXXX</div>
+                <div class="muted" style="font-size: 0.88rem;">Share this code with your students. They'll enter it after signing up.</div>
+            </div>
+            <div class="muted" style="font-size: 0.88rem;" id="codeModalClassName"></div>
+        </div>
+        <div class="modal-foot">
+            <button class="btn btn-ghost" id="codeModalCopy">Copy code</button>
+            <button class="btn btn-primary" id="codeModalDone">Done</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"><span id="toastMessage">Saved</span></div>
+
+<script>
+    // Supabase config (matches admin.html)
+    var SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
+    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
+    var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    var currentUser = null;
+    var currentProfile = null;
+
+    var BOARD_LABELS = {
+        aqa_gcse: 'AQA GCSE',
+        edexcel_gcse: 'Edexcel GCSE',
+        edexcel_igcse: 'Edexcel IGCSE',
+        cie_igcse: 'CIE IGCSE',
+        aqa_a_level: 'AQA A-Level',
+        edexcel_a_level: 'Edexcel A-Level',
+        edexcel_ial: 'Edexcel International A-Level',
+        cambridge_a_level: 'Cambridge International AS & A-Level'
+    };
+
+    document.addEventListener('DOMContentLoaded', init);
+
+    async function init() {
+        var sessionResult = await supabaseClient.auth.getSession();
+        var session = sessionResult.data.session;
+
+        if (!session || !session.user) {
+            window.location.href = 'login.html?redirect=teacher-dashboard.html';
+            return;
+        }
+
+        currentUser = session.user;
+
+        // Look up role on user_profiles
+        var profileResult = await supabaseClient
+            .from('user_profiles')
+            .select('user_id, email, name, role, school_id')
+            .eq('user_id', currentUser.id)
+            .maybeSingle();
+
+        if (profileResult.error) {
+            showAccessDenied('Could not load your profile: ' + profileResult.error.message);
+            return;
+        }
+        if (!profileResult.data || profileResult.data.role !== 'teacher') {
+            showAccessDenied('This page is for teacher accounts. If you think this is a mistake, contact hello@mybizstudies.com.');
+            return;
+        }
+        if (!profileResult.data.school_id) {
+            showAccessDenied('Your teacher profile is not linked to a school yet. Contact hello@mybizstudies.com.');
+            return;
+        }
+
+        currentProfile = profileResult.data;
+
+        showShell();
+        await loadDashboard();
+    }
+
+    function showAccessDenied(message) {
+        document.getElementById('loadingShell').style.display = 'none';
+        document.getElementById('teacherShell').style.display = 'none';
+        var denied = document.getElementById('accessDenied');
+        document.getElementById('accessMsg').textContent = message;
+        denied.style.display = 'flex';
+    }
+
+    function showShell() {
+        document.getElementById('loadingShell').style.display = 'none';
+        document.getElementById('teacherShell').style.display = 'block';
+
+        // Header avatar initials
+        var displayName = currentProfile.name || currentUser.email || '';
+        var initials = displayName.trim().split(/\s+/).slice(0, 2).map(function(s) { return s[0] ? s[0].toUpperCase() : ''; }).join('') || 'T';
+        document.getElementById('navAvatar').textContent = initials;
+        document.getElementById('navAvatar').title = displayName;
+
+        // Hero greeting
+        var now = new Date();
+        var dayName = now.toLocaleDateString('en-GB', { weekday: 'long' });
+        var datePart = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'long' });
+        document.getElementById('heroDate').textContent = dayName + ', ' + datePart;
+
+        var hour = now.getHours();
+        var firstName = (currentProfile.name || '').trim().split(/\s+/)[0] || 'there';
+        var greeting = hour < 12 ? 'Good morning' : (hour < 18 ? 'Good afternoon' : 'Good evening');
+        document.getElementById('heroTitle').textContent = greeting + ', ' + firstName + '.';
+    }
+
+    async function loadDashboard() {
+        // Load the teacher's classes
+        var classTeacherResult = await supabaseClient
+            .from('class_teachers')
+            .select('class_id')
+            .eq('teacher_id', currentUser.id);
+
+        if (classTeacherResult.error) {
+            document.getElementById('heroMeta').textContent = 'Could not load classes: ' + classTeacherResult.error.message;
+            return;
+        }
+
+        var classIds = (classTeacherResult.data || []).map(function(r) { return r.class_id; });
+
+        if (classIds.length === 0) {
+            renderEmptyClasses();
+            document.getElementById('heroMeta').textContent = 'No classes yet. Create your first class to get started.';
+            renderEmptyUsage();
+            return;
+        }
+
+        var classesResult = await supabaseClient
+            .from('classes')
+            .select('id, name, level, board, join_code, archived_at, created_at')
+            .in('id', classIds)
+            .order('created_at', { ascending: false });
+
+        if (classesResult.error) {
+            document.getElementById('heroMeta').textContent = 'Could not load classes: ' + classesResult.error.message;
+            return;
+        }
+
+        var classes = (classesResult.data || []).filter(function(c) { return !c.archived_at; });
+
+        await renderClasses(classes);
+        await renderUsage(classes);
+        await renderHeroMeta(classes);
+    }
+
+    async function renderClasses(classes) {
+        var container = document.getElementById('classesContainer');
+
+        if (!classes || classes.length === 0) {
+            renderEmptyClasses();
+            return;
+        }
+
+        // Counts per class (students, assignments)
+        var classIds = classes.map(function(c) { return c.id; });
+        var [studentsResult, assignmentsResult] = await Promise.all([
+            supabaseClient.from('class_students').select('class_id').in('class_id', classIds),
+            supabaseClient.from('assignments').select('class_id').in('class_id', classIds)
+        ]);
+
+        var studentCounts = {};
+        (studentsResult.data || []).forEach(function(r) { studentCounts[r.class_id] = (studentCounts[r.class_id] || 0) + 1; });
+        var assignmentCounts = {};
+        (assignmentsResult.data || []).forEach(function(r) { assignmentCounts[r.class_id] = (assignmentCounts[r.class_id] || 0) + 1; });
+
+        var html = '<div class="class-grid">';
+        classes.forEach(function(c) {
+            var boardLabel = BOARD_LABELS[c.board] || c.board;
+            var badgeClass = (c.level === 'a_level') ? 'class-badge a-level' : 'class-badge';
+            html += '<a class="class-card" href="teacher-class.html?id=' + encodeURIComponent(c.id) + '">' +
+                '<div class="class-card-head">' +
+                    '<div>' +
+                        '<div class="class-name">' + tpEscape(c.name) + '</div>' +
+                        '<div class="class-sub">' + (c.level === 'a_level' ? 'A-Level' : 'GCSE') + '</div>' +
+                    '</div>' +
+                    '<span class="' + badgeClass + '">' + tpEscape(boardLabel) + '</span>' +
+                '</div>' +
+                '<div style="display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;">' +
+                    '<span class="muted" style="font-size: 0.82rem;">Join code</span>' +
+                    '<span class="join-code-chip">' + tpEscape(c.join_code) + '</span>' +
+                '</div>' +
+                '<div class="class-stats">' +
+                    '<div><span class="class-stat-num">' + (studentCounts[c.id] || 0) + '</span><span class="class-stat-lbl">Students</span></div>' +
+                    '<div><span class="class-stat-num">' + (assignmentCounts[c.id] || 0) + '</span><span class="class-stat-lbl">Assignments</span></div>' +
+                    '<div><span class="class-stat-num">-</span><span class="class-stat-lbl">Avg score</span></div>' +
+                '</div>' +
+            '</a>';
+        });
+        html += '<button class="class-card class-card-add" onclick="openNewClassModal()">' +
+            '<div class="class-card-add-icon">+</div>' +
+            '<div class="class-card-add-title">Create a new class</div>' +
+            '<div class="muted" style="font-size: 0.88rem;">Set up students and push assignments</div>' +
+        '</button></div>';
+
+        container.innerHTML = html;
+    }
+
+    function renderEmptyClasses() {
+        var container = document.getElementById('classesContainer');
+        container.innerHTML = '<div class="empty-state">' +
+            '<div class="empty-icon">&#127979;</div>' +
+            '<div class="empty-title">You don\'t have any classes yet</div>' +
+            '<div class="empty-body">Create a class to generate a join code that students can use to enrol. You can also invite co-teachers for oversight.</div>' +
+            '<button class="btn btn-primary" onclick="openNewClassModal()">Create your first class</button>' +
+        '</div>';
+    }
+
+    async function renderUsage(classes) {
+        var period = formatPeriod(new Date());
+        document.getElementById('usagePeriod').textContent = periodLabel(new Date());
+
+        var classIds = classes.map(function(c) { return c.id; });
+        var totalQ = 0;
+        var totalT = 0;
+
+        if (classIds.length > 0) {
+            var usageResult = await supabaseClient
+                .from('teacher_usage')
+                .select('class_id, period, questions_used, tests_used')
+                .in('class_id', classIds)
+                .eq('period', period);
+
+            (usageResult.data || []).forEach(function(r) {
+                totalQ += r.questions_used || 0;
+                totalT += r.tests_used || 0;
+            });
+        }
+
+        // Caps: 40 questions + 5 tests per class per month. Show cap as (classes * cap).
+        var qCap = classes.length * 40;
+        var tCap = classes.length * 5;
+        var qPct = qCap > 0 ? Math.round((totalQ / qCap) * 100) : 0;
+        var tPct = tCap > 0 ? Math.round((totalT / tCap) * 100) : 0;
+
+        document.getElementById('usageGrid').innerHTML =
+            '<div>' +
+                '<div class="usage-top"><span class="usage-label">Questions generated (all classes)</span><span class="usage-count">' + totalQ + ' <span>/ ' + qCap + '</span></span></div>' +
+                '<div class="usage-bar"><div class="usage-bar-fill" style="width: ' + Math.min(qPct, 100) + '%;"></div></div>' +
+                '<div class="muted" style="margin-top: 0.4rem; font-size: 0.82rem;">Each class has a monthly cap of 40 questions.</div>' +
+            '</div>' +
+            '<div>' +
+                '<div class="usage-top"><span class="usage-label">Tests generated (all classes)</span><span class="usage-count">' + totalT + ' <span>/ ' + tCap + '</span></span></div>' +
+                '<div class="usage-bar"><div class="usage-bar-fill ' + (tPct >= 60 ? 'warn' : '') + '" style="width: ' + Math.min(tPct, 100) + '%;"></div></div>' +
+                '<div class="muted" style="margin-top: 0.4rem; font-size: 0.82rem;">Each class has a monthly cap of 5 tests.</div>' +
+            '</div>';
+
+        document.getElementById('usageCard').style.display = 'block';
+    }
+
+    function renderEmptyUsage() {
+        document.getElementById('usageCard').style.display = 'none';
+    }
+
+    async function renderHeroMeta(classes) {
+        // Count total students across teacher's classes
+        var classIds = classes.map(function(c) { return c.id; });
+        var studentTotal = 0;
+        if (classIds.length > 0) {
+            var result = await supabaseClient
+                .from('class_students')
+                .select('student_id', { count: 'exact' })
+                .in('class_id', classIds);
+            studentTotal = result.count || 0;
+        }
+
+        var msg = 'You have ' + classes.length + (classes.length === 1 ? ' class' : ' classes');
+        if (studentTotal > 0) msg += ' and ' + studentTotal + ' student' + (studentTotal === 1 ? '' : 's') + '.';
+        else msg += '. Share your class join codes with students to get started.';
+        document.getElementById('heroMeta').textContent = msg;
+    }
+
+    function formatPeriod(date) {
+        var y = date.getFullYear();
+        var m = String(date.getMonth() + 1).padStart(2, '0');
+        return y + '-' + m;
+    }
+
+    function periodLabel(date) {
+        return date.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+    }
+
+    // ================ Modal handlers ================
+
+    function openNewClassModal() {
+        document.getElementById('newClassName').value = '';
+        document.getElementById('newClassLevel').value = 'gcse';
+        document.getElementById('newClassBoard').value = 'aqa_gcse';
+        document.getElementById('classModal').classList.add('open');
+    }
+
+    function closeNewClassModal() {
+        document.getElementById('classModal').classList.remove('open');
+    }
+
+    async function createClass() {
+        var name = document.getElementById('newClassName').value.trim();
+        var level = document.getElementById('newClassLevel').value;
+        var board = document.getElementById('newClassBoard').value;
+
+        if (!name) {
+            showToast('Class name is required', 'error');
+            return;
+        }
+        if (!currentProfile || !currentProfile.school_id) {
+            showToast('No school linked to your profile', 'error');
+            return;
+        }
+
+        var createBtn = document.getElementById('classModalCreate');
+        createBtn.disabled = true;
+        createBtn.textContent = 'Creating...';
+
+        // 1. Generate a join code via RPC
+        var codeResult = await supabaseClient.rpc('generate_class_join_code');
+        if (codeResult.error || !codeResult.data) {
+            showToast('Could not generate join code: ' + (codeResult.error ? codeResult.error.message : 'unknown'), 'error');
+            createBtn.disabled = false;
+            createBtn.textContent = 'Create class';
+            return;
+        }
+        var joinCode = codeResult.data;
+
+        // 2. Insert class
+        var classRow = {
+            school_id: currentProfile.school_id,
+            name: name,
+            level: level,
+            board: board,
+            join_code: joinCode,
+            created_by: currentUser.id
+        };
+        var insertResult = await supabaseClient.from('classes').insert(classRow).select().single();
+        if (insertResult.error) {
+            showToast('Could not create class: ' + insertResult.error.message, 'error');
+            createBtn.disabled = false;
+            createBtn.textContent = 'Create class';
+            return;
+        }
+
+        var newClass = insertResult.data;
+
+        // 3. Add current teacher to class_teachers
+        var linkResult = await supabaseClient.from('class_teachers').insert({
+            class_id: newClass.id,
+            teacher_id: currentUser.id
+        });
+        if (linkResult.error) {
+            // Roll back the class to keep data clean
+            await supabaseClient.from('classes').delete().eq('id', newClass.id);
+            showToast('Could not link teacher to class: ' + linkResult.error.message, 'error');
+            createBtn.disabled = false;
+            createBtn.textContent = 'Create class';
+            return;
+        }
+
+        createBtn.disabled = false;
+        createBtn.textContent = 'Create class';
+        closeNewClassModal();
+
+        // Show the join code
+        document.getElementById('codeModalCode').textContent = joinCode;
+        document.getElementById('codeModalClassName').textContent = name + ', ' + (BOARD_LABELS[board] || board);
+        document.getElementById('codeModal').classList.add('open');
+
+        await loadDashboard();
+    }
+
+    document.getElementById('newClassBtn').addEventListener('click', openNewClassModal);
+    document.getElementById('classModalClose').addEventListener('click', closeNewClassModal);
+    document.getElementById('classModalCancel').addEventListener('click', closeNewClassModal);
+    document.getElementById('classModalCreate').addEventListener('click', createClass);
+
+    document.getElementById('codeModalClose').addEventListener('click', function() {
+        document.getElementById('codeModal').classList.remove('open');
+    });
+    document.getElementById('codeModalDone').addEventListener('click', function() {
+        document.getElementById('codeModal').classList.remove('open');
+    });
+    document.getElementById('codeModalCopy').addEventListener('click', function() {
+        var code = document.getElementById('codeModalCode').textContent;
+        navigator.clipboard.writeText(code).then(function() {
+            showToast('Code copied', 'success');
+        }, function() {
+            showToast('Copy failed, try manually', 'error');
+        });
+    });
+
+    document.getElementById('logoutLink').addEventListener('click', async function(e) {
+        e.preventDefault();
+        await supabaseClient.auth.signOut();
+        window.location.href = 'index.html';
+    });
+
+    // Expose for inline onclick
+    window.openNewClassModal = openNewClassModal;
+
+    // ================ Helpers ================
+
+    function tpEscape(s) {
+        if (s === null || s === undefined) return '';
+        return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function showToast(message, type) {
+        var toast = document.getElementById('toast');
+        toast.className = 'toast show ' + (type || '');
+        document.getElementById('toastMessage').textContent = message;
+        setTimeout(function() { toast.classList.remove('show'); }, 2800);
+    }
+</script>
+
+</body>
+</html>

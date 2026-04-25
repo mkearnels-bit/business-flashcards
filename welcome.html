@@ -799,11 +799,16 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             // Check if they've already completed onboarding
             const { data: profile } = await supabaseClient
                 .from('user_profiles')
-                .select('id')
+                .select('id, role')
                 .eq('user_id', currentUser.id)
                 .single();
 
             if (profile) {
+                // Teachers (invited by admin, skip student onboarding) go to teacher portal
+                if (profile.role === 'teacher') {
+                    window.location.href = '/teacher-dashboard.html';
+                    return;
+                }
                 // Already onboarded, go to app
                 window.location.href = '/exam-practice.html';
                 return;

@@ -402,11 +402,36 @@
         const submitBtn = document.getElementById('submitBtn');
         const messageDiv = document.getElementById('message');
 
+        // Role-aware redirect: teachers go to teacher-dashboard, everyone else to exam-practice.
+        // Honours an optional ?redirect= query param but only if it's a same-origin relative path.
+        async function postLoginRedirect(userId) {
+            try {
+                var urlParams = new URLSearchParams(window.location.search);
+                var requested = urlParams.get('redirect');
+                if (requested && /^[a-z0-9\-._/]+\.html(\?.*)?$/i.test(requested)) {
+                    window.location.href = '/' + requested;
+                    return;
+                }
+                var profileResult = await supabaseClient
+                    .from('user_profiles')
+                    .select('role')
+                    .eq('user_id', userId)
+                    .maybeSingle();
+                if (profileResult && profileResult.data && profileResult.data.role === 'teacher') {
+                    window.location.href = '/teacher-dashboard.html';
+                    return;
+                }
+            } catch (_e) {
+                // fall through to default
+            }
+            window.location.href = '/exam-practice.html';
+        }
+
         // Check if already logged in
         async function checkAuth() {
             const { data: { session } } = await supabaseClient.auth.getSession();
-            if (session) {
-                window.location.href = '/exam-practice.html';
+            if (session && session.user) {
+                postLoginRedirect(session.user.id);
             }
         }
         checkAuth();
@@ -455,10 +480,10 @@
 
                 if (error) throw error;
 
-                // Success - redirect to app
+                // Success - role-aware redirect
                 showMessage('Login successful! Redirecting...', 'success');
                 setTimeout(() => {
-                    window.location.href = '/exam-practice.html';
+                    postLoginRedirect(data.user.id);
                 }, 1000);
 
             } catch (error) {
