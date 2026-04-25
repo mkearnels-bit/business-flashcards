@@ -274,10 +274,10 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
                     <option value="edexcel_gcse">Edexcel GCSE</option>
                     <option value="edexcel_igcse">Edexcel IGCSE</option>
                     <option value="cie_igcse">CIE IGCSE</option>
-                    <option value="aqa_a_level">AQA A-Level</option>
-                    <option value="edexcel_a_level">Edexcel A-Level</option>
+                    <option value="aqa_uk">AQA A-Level</option>
+                    <option value="edexcel_uk">Edexcel A-Level</option>
                     <option value="edexcel_ial">Edexcel International A-Level</option>
-                    <option value="cambridge_a_level">Cambridge International AS &amp; A-Level</option>
+                    <option value="cie_ial">Cambridge International AS &amp; A-Level</option>
                 </select>
             </div>
             <div class="muted" style="font-size: 0.85rem;">Level and board are locked after creation so every assignment for this class uses the same paper structure.</div>
@@ -327,9 +327,13 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
         edexcel_gcse: 'Edexcel GCSE',
         edexcel_igcse: 'Edexcel IGCSE',
         cie_igcse: 'CIE IGCSE',
+        aqa_uk: 'AQA A-Level',
+        edexcel_uk: 'Edexcel A-Level',
+        edexcel_ial: 'Edexcel International A-Level',
+        cie_ial: 'Cambridge International AS & A-Level',
+        // Aliases (legacy) for any classes that were created during testing
         aqa_a_level: 'AQA A-Level',
         edexcel_a_level: 'Edexcel A-Level',
-        edexcel_ial: 'Edexcel International A-Level',
         cambridge_a_level: 'Cambridge International AS & A-Level'
     };
 

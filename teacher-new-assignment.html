@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root {
     --primary: #1e3a5f; --primary-dark: #152a45; --primary-light: #2d5a8a;
@@ -302,6 +303,10 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
                     <p style="color: var(--gray-500); font-size: 0.9rem;" id="approveSub"></p>
                 </div>
                 <div class="actions-right">
+                    <button class="btn btn-ghost btn-sm" id="downloadPdfBtn" title="Download a print-ready PDF for handwritten use">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Download PDF
+                    </button>
                     <button class="btn btn-ghost btn-sm" id="regenerateBtn">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 4v5h5"/></svg>
                         Regenerate
@@ -344,6 +349,191 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
 </div>
 
 <div class="toast" id="toast"><span id="toastMessage">Saved</span></div>
+
+<!-- ====== Printable PDF generator (inline so the only file types in this project are HTML) ====== -->
+<script>
+(function () {
+    var BOARD_NAMES = {
+        aqa_gcse: 'AQA GCSE', edexcel_gcse: 'Edexcel GCSE', edexcel_igcse: 'Edexcel IGCSE',
+        cie_igcse: 'CIE IGCSE', aqa_uk: 'AQA A-Level', edexcel_uk: 'Edexcel A-Level',
+        edexcel_ial: 'Edexcel International A-Level', cie_ial: 'Cambridge International AS & A-Level',
+        aqa_a_level: 'AQA A-Level', edexcel_a_level: 'Edexcel A-Level', cambridge_a_level: 'Cambridge International AS & A-Level'
+    };
+    var LINES_PER_PAGE = 22;
+    function linesForMarks(marks, level) {
+        var m = parseInt(marks, 10) || 0;
+        if (level === 'a_level') {
+            if (m <= 2) return 3;
+            if (m <= 4) return 8;
+            if (m <= 6) return 12;
+            if (m <= 12) return LINES_PER_PAGE * 2;
+            return LINES_PER_PAGE * 4;
+        }
+        if (m <= 2) return 3;
+        if (m <= 4) return 6;
+        if (m <= 6) return 10;
+        if (m <= 9) return LINES_PER_PAGE;
+        return LINES_PER_PAGE * 2;
+    }
+    function safeFilename(s) {
+        return String(s || 'practice').replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-+|-+$/g, '').substring(0, 80) || 'practice';
+    }
+    function normalisePayload(payload) {
+        if (!payload) return null;
+        if (payload.paper) {
+            var paper = payload.paper;
+            return {
+                title: paper.title || 'Practice test',
+                board: paper.board || null,
+                board_name: paper.board_name || null,
+                total_marks: paper.total_marks || (paper.questions || []).reduce(function (s, q) { return s + (parseInt(q.marks, 10) || 0); }, 0),
+                time_allowed: paper.time_allowed || null,
+                duration_minutes: paper.duration_minutes || null,
+                case_extracts: paper.source_booklet || [],
+                questions: (paper.questions || []).map(function (q) {
+                    return { number: q.number || '', part: q.part || '', text: q.question || q.text || '', marks: q.marks, command_word: q.command_word || q.command || '', question_type: q.question_type || '', options: q.options || null };
+                })
+            };
+        }
+        if (payload.question) {
+            var q = payload.question;
+            return {
+                title: 'Practice question',
+                board: null, board_name: null,
+                total_marks: q.marks, time_allowed: null, duration_minutes: null,
+                case_extracts: [],
+                questions: [{ number: '1', part: '', text: q.question || q.text || '', marks: q.marks, command_word: q.command_word || q.command || '', question_type: q.question_type || '', options: q.options || null }]
+            };
+        }
+        return null;
+    }
+    function generate(payload, opts) {
+        var jsPDFCtor = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
+        if (!jsPDFCtor) { alert('PDF library not loaded. Refresh the page and try again.'); return; }
+        var data = normalisePayload(payload);
+        if (!data) { alert('Nothing to print yet. Generate a question or test first.'); return; }
+        opts = opts || {};
+        var className = opts.className || 'Class';
+        var level = opts.level || 'gcse';
+        var board = opts.board || data.board;
+        var boardName = BOARD_NAMES[board] || data.board_name || board || '';
+        var dueDate = opts.dueDate || null;
+        var doc = new jsPDFCtor({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+        var pageW = 210, pageH = 297;
+        var marginL = 20, marginR = 20, marginT = 20, marginB = 22;
+        var usableW = pageW - marginL - marginR;
+        var contentBottom = pageH - marginB;
+        var y = marginT;
+        var pageNum = 1;
+        function drawHeaderFooter() {
+            doc.setTextColor(100); doc.setFontSize(9); doc.setFont('helvetica', 'normal');
+            doc.text(className + (boardName ? '  ·  ' + boardName : ''), marginL, marginT - 8);
+            doc.setFont('helvetica', 'bold');
+            doc.text('MyBizStudies', pageW - marginR, marginT - 8, { align: 'right' });
+            doc.setFont('helvetica', 'normal');
+            doc.setDrawColor(220); doc.setLineWidth(0.3);
+            doc.line(marginL, marginT - 5, pageW - marginR, marginT - 5);
+            doc.setFontSize(8); doc.setTextColor(150);
+            doc.text('Page ' + pageNum, pageW / 2, pageH - 8, { align: 'center' });
+            doc.setTextColor(0);
+        }
+        function newPage() { doc.addPage(); pageNum++; y = marginT; drawHeaderFooter(); }
+        function ensureSpace(needed) { if (y + needed > contentBottom) newPage(); }
+        drawHeaderFooter();
+        doc.setFontSize(18); doc.setFont('helvetica', 'bold'); doc.setTextColor(30, 58, 95);
+        var titleLines = doc.splitTextToSize(data.title || 'Practice test', usableW);
+        doc.text(titleLines, marginL, y); y += titleLines.length * 8;
+        doc.setFontSize(11); doc.setFont('helvetica', 'normal'); doc.setTextColor(70);
+        var metaParts = [];
+        metaParts.push(level === 'a_level' ? 'A-Level' : 'GCSE');
+        if (boardName) metaParts.push(boardName);
+        if (data.total_marks) metaParts.push(data.total_marks + ' marks');
+        if (data.questions.length) metaParts.push(data.questions.length + (data.questions.length === 1 ? ' question' : ' questions'));
+        if (data.time_allowed) metaParts.push('Time: ' + data.time_allowed);
+        else if (data.duration_minutes) metaParts.push('Approx ' + data.duration_minutes + ' minutes');
+        doc.text(metaParts.join('  ·  '), marginL, y + 2); y += 10;
+        if (dueDate) { doc.text('Due: ' + dueDate, marginL, y); y += 8; }
+        doc.setTextColor(0); doc.setFontSize(11);
+        var nameLine = 'Name: _______________________________   Class: _______________   Date: _______________';
+        var nameWrapped = doc.splitTextToSize(nameLine, usableW);
+        doc.text(nameWrapped, marginL, y); y += nameWrapped.length * 6 + 8;
+        doc.setFontSize(10); doc.setTextColor(70);
+        var instrLines = doc.splitTextToSize('Answer all questions in the space provided. Show your working where appropriate.', usableW);
+        doc.text(instrLines, marginL, y); y += instrLines.length * 5 + 6;
+        doc.setTextColor(0);
+        if (data.case_extracts && data.case_extracts.length > 0) {
+            newPage();
+            doc.setFontSize(15); doc.setFont('helvetica', 'bold'); doc.setTextColor(30, 58, 95);
+            doc.text('Case study', marginL, y); y += 9;
+            doc.setTextColor(0); doc.setFont('helvetica', 'normal'); doc.setFontSize(11);
+            data.case_extracts.forEach(function (ext) {
+                var extractTitle = (ext.title || ('Extract ' + (ext.id || ''))) + (ext.business_name ? '  -  ' + ext.business_name : '');
+                ensureSpace(14);
+                doc.setFont('helvetica', 'bold'); doc.setFontSize(11);
+                doc.text(extractTitle, marginL, y); y += 6;
+                doc.setFont('helvetica', 'normal'); doc.setFontSize(11);
+                var lines = doc.splitTextToSize(ext.content || '', usableW);
+                lines.forEach(function (ln) { ensureSpace(6); doc.text(ln, marginL, y); y += 5.5; });
+                y += 3;
+                if (ext.data && ext.data.type === 'table' && Array.isArray(ext.data.headers || ext.data.columns) && Array.isArray(ext.data.rows)) {
+                    ensureSpace(20);
+                    var headers = ext.data.headers || ext.data.columns;
+                    var colW = usableW / headers.length;
+                    doc.setFont('helvetica', 'bold');
+                    doc.setFillColor(241, 245, 249);
+                    doc.rect(marginL, y, usableW, 7, 'F');
+                    headers.forEach(function (h, idx) { doc.text(String(h), marginL + idx * colW + 2, y + 5); });
+                    y += 7;
+                    doc.setFont('helvetica', 'normal');
+                    ext.data.rows.forEach(function (row) {
+                        ensureSpace(7);
+                        doc.setDrawColor(220);
+                        doc.line(marginL, y + 7, marginL + usableW, y + 7);
+                        row.forEach(function (cell, idx) { doc.text(String(cell), marginL + idx * colW + 2, y + 5); });
+                        y += 7;
+                    });
+                    y += 6;
+                }
+            });
+        }
+        if (data.questions.length > 0) {
+            newPage();
+            doc.setFontSize(15); doc.setFont('helvetica', 'bold'); doc.setTextColor(30, 58, 95);
+            doc.text('Questions', marginL, y); y += 10;
+            doc.setTextColor(0);
+            data.questions.forEach(function (q, idx) {
+                var lineCount = linesForMarks(q.marks, level);
+                var lineSpacing = 9;
+                doc.setFont('helvetica', 'bold'); doc.setFontSize(12); doc.setTextColor(30, 58, 95);
+                var qNum = q.number || (idx + 1);
+                var partSuffix = q.part ? '(' + q.part + ')' : '';
+                var label = 'Q' + qNum + partSuffix + '  (' + (q.marks || '?') + ' marks)';
+                ensureSpace(8);
+                doc.text(label, marginL, y); y += 7;
+                doc.setFont('helvetica', 'normal'); doc.setFontSize(11); doc.setTextColor(0);
+                var wrapped = doc.splitTextToSize(q.text || '', usableW);
+                wrapped.forEach(function (ln) { ensureSpace(6); doc.text(ln, marginL, y); y += 5.5; });
+                y += 3;
+                if (q.question_type === 'mcq' && q.options && typeof q.options === 'object') {
+                    Object.keys(q.options).forEach(function (k) { ensureSpace(6); doc.text(k + '.  ' + q.options[k], marginL + 6, y); y += 6; });
+                    y += 3;
+                }
+                doc.setDrawColor(180); doc.setLineWidth(0.2);
+                for (var i = 0; i < lineCount; i++) {
+                    ensureSpace(lineSpacing);
+                    doc.line(marginL, y + 5, pageW - marginR, y + 5);
+                    y += lineSpacing;
+                }
+                y += 4;
+                if (idx < data.questions.length - 1 && lineCount >= LINES_PER_PAGE && y > marginT + 40) newPage();
+            });
+        }
+        var fileBase = safeFilename(className + ' ' + (data.title || 'practice'));
+        doc.save(fileBase + '.pdf');
+    }
+    window.MyBizPdf = { generate: generate, linesForMarks: linesForMarks };
+})();
+</script>
 
 <script>
     var SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
@@ -687,6 +877,7 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
             switchView('build');
         });
         document.getElementById('pushBtn').addEventListener('click', handlePush);
+        document.getElementById('downloadPdfBtn').addEventListener('click', handleDownloadPdf);
 
         document.getElementById('logoutLink').addEventListener('click', async function(e) {
             e.preventDefault();
@@ -982,6 +1173,28 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
             setPushError('Network error: ' + e.message);
             pushBtn.disabled = false;
             pushBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg> Push to class';
+        }
+    }
+
+    function handleDownloadPdf() {
+        if (!generatedPayload) {
+            showToast('Generate something first.', 'error');
+            return;
+        }
+        if (!window.MyBizPdf) {
+            showToast('PDF library not loaded yet. Try again in a second.', 'error');
+            return;
+        }
+        try {
+            window.MyBizPdf.generate(generatedPayload, {
+                className: currentClass.name,
+                level: currentClass.level,
+                board: currentClass.board,
+                dueDate: document.getElementById('dueDateInput').value || null
+            });
+            showToast('PDF downloaded', 'success');
+        } catch (e) {
+            showToast('Could not build PDF: ' + e.message, 'error');
         }
     }
 
