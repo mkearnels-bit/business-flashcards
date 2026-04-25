@@ -208,7 +208,12 @@ table.data-table { width: 100%; border-collapse: collapse; }
                 <span id="classJoinCode">--</span>
             </div>
             <button class="btn btn-ghost on-hero btn-sm" id="copyCodeBtn">Copy</button>
+            <button class="btn btn-ghost on-hero btn-sm" id="archiveClassBtn" title="Archive this class at end of year">Archive</button>
         </div>
+    </div>
+
+    <div id="archivedBanner" style="display:none; background: var(--warning-bg); border: 1px solid #f5c878; color: #8a5a00; padding: 0.85rem 1rem; border-radius: var(--radius); margin-bottom: 1rem; font-size: 0.92rem;">
+        <strong>This class is archived.</strong> Assignments and student data are preserved, but you cannot push new assignments. <button id="unarchiveBtn" style="margin-left: 0.6rem; background: white; color: var(--primary); border: 1px solid var(--gray-300); padding: 0.3rem 0.7rem; border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 600; cursor: pointer;">Unarchive</button>
     </div>
 
     <div class="tabs">
@@ -700,6 +705,43 @@ table.data-table { width: 100%; border-collapse: collapse; }
             await supabaseClient.auth.signOut();
             window.location.href = 'index.html';
         });
+
+        document.getElementById('archiveClassBtn').addEventListener('click', archiveClass);
+        document.getElementById('unarchiveBtn').addEventListener('click', unarchiveClass);
+
+        // Show archive banner if this class is archived already
+        if (currentClass.archived_at) {
+            document.getElementById('archivedBanner').style.display = 'block';
+            document.getElementById('archiveClassBtn').style.display = 'none';
+            // Hide the New assignment button when archived
+            var newAssignBtn = document.getElementById('newAssignmentBtnTop');
+            if (newAssignBtn) newAssignBtn.style.display = 'none';
+        }
+    }
+
+    async function archiveClass() {
+        if (!confirm('Archive ' + currentClass.name + '? Students keep access to their feedback, but you can\'t push new assignments. You can unarchive at any time.')) return;
+        var nowIso = new Date().toISOString();
+        var { error } = await supabaseClient.from('classes').update({ archived_at: nowIso, updated_at: nowIso }).eq('id', currentClass.id);
+        if (error) { showToast('Could not archive: ' + error.message, 'error'); return; }
+        currentClass.archived_at = nowIso;
+        showToast('Class archived', 'success');
+        document.getElementById('archivedBanner').style.display = 'block';
+        document.getElementById('archiveClassBtn').style.display = 'none';
+        var newAssignBtn = document.getElementById('newAssignmentBtnTop');
+        if (newAssignBtn) newAssignBtn.style.display = 'none';
+    }
+
+    async function unarchiveClass() {
+        if (!confirm('Unarchive ' + currentClass.name + '? It will appear in your active classes again.')) return;
+        var { error } = await supabaseClient.from('classes').update({ archived_at: null, updated_at: new Date().toISOString() }).eq('id', currentClass.id);
+        if (error) { showToast('Could not unarchive: ' + error.message, 'error'); return; }
+        currentClass.archived_at = null;
+        showToast('Class unarchived', 'success');
+        document.getElementById('archivedBanner').style.display = 'none';
+        document.getElementById('archiveClassBtn').style.display = 'inline-flex';
+        var newAssignBtn = document.getElementById('newAssignmentBtnTop');
+        if (newAssignBtn) newAssignBtn.style.display = 'inline-flex';
     }
 
     // ============ ASSIGNMENTS + MARKBOOK ============
@@ -969,6 +1011,17 @@ table.data-table { width: 100%; border-collapse: collapse; }
                     '<button class="btn btn-primary btn-sm" onclick="saveTeacherFeedback(\'' + full.id + '\')">Save feedback</button>' +
                 '</div>' +
             '</div>';
+
+            // Reopen attempt section
+            detailHtml += '<div style="margin-top:1.5rem; padding-top:1.25rem; border-top:1px solid var(--gray-200);">' +
+                '<div style="display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; flex-wrap:wrap;">' +
+                    '<div>' +
+                        '<div style="font-size:0.95rem; font-weight:700; color:var(--gray-900);">Need to let them try again?</div>' +
+                        '<div class="muted" style="font-size:0.85rem; margin-top:0.3rem;">Reopens the assignment for ' + esc(displayName.split(/\s+/)[0]) + '. Their previous answer, AI feedback and your note are cleared. Use this if they had technical issues or you want to give them another shot.</div>' +
+                    '</div>' +
+                    '<button class="btn btn-danger btn-sm" onclick="reopenAttempt(\'' + full.id + '\')">Reopen attempt</button>' +
+                '</div>' +
+            '</div>';
         }
 
         document.getElementById('detailBody').innerHTML = detailHtml;
@@ -1090,6 +1143,32 @@ table.data-table { width: 100%; border-collapse: collapse; }
         }
     }
     window.downloadAssignmentPdf = downloadAssignmentPdf;
+
+    async function reopenAttempt(attemptId) {
+        if (!confirm('Reopen this attempt? Their previous answer, AI feedback and your note will be cleared so they can try again. This cannot be undone.')) return;
+        var nowIso = new Date().toISOString();
+        var { error } = await supabaseClient
+            .from('student_attempts')
+            .update({
+                status: 'not_started',
+                answers: {},
+                ai_feedback: null,
+                ai_score: null,
+                ai_total: null,
+                teacher_feedback: null,
+                teacher_feedback_at: null,
+                started_at: null,
+                submitted_at: null,
+                graded_at: null,
+                updated_at: nowIso
+            })
+            .eq('id', attemptId);
+        if (error) { showToast('Could not reopen: ' + error.message, 'error'); return; }
+        showToast('Attempt reopened. The student will see it as pending again.', 'success');
+        document.getElementById('attemptDetail').style.display = 'none';
+        loadAssignments();
+    }
+    window.reopenAttempt = reopenAttempt;
 
     async function saveTeacherFeedback(attemptId) {
         var ta = document.getElementById('teacherFeedbackInput');

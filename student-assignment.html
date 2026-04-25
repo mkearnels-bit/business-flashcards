@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root {
     --primary: #1e3a5f; --primary-dark: #152a45; --primary-light: #2d5a8a;
@@ -174,7 +175,11 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
             <div class="fb-percent" id="fbPercent">-</div>
         </div>
         <div id="feedbackContent"></div>
-        <div style="text-align:center; margin-top: 1rem;">
+        <div style="text-align:center; margin-top: 1rem; display:flex; gap:0.5rem; justify-content:center; flex-wrap:wrap;">
+            <button class="btn btn-ghost" id="downloadStudentPdfBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Download as PDF
+            </button>
             <a href="student-portal.html" class="btn btn-primary">Back to my work</a>
         </div>
     </div>
@@ -182,6 +187,197 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
 </main>
 
 </div>
+
+<!-- ====== Student feedback PDF generator (inline) ====== -->
+<script>
+(function () {
+    function safeFilename(s) {
+        return String(s || 'my-feedback').replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-+|-+$/g, '').substring(0, 80) || 'my-feedback';
+    }
+
+    function generateStudentPdf(opts) {
+        var jsPDFCtor = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
+        if (!jsPDFCtor) { alert('PDF library not loaded.'); return; }
+
+        var attempt = opts.attempt || {};
+        var assignment = opts.assignment || {};
+        var studentName = opts.studentName || 'Student';
+        var className = opts.className || '';
+        var assignmentTitle = opts.assignmentTitle || 'Practice attempt';
+
+        var doc = new jsPDFCtor({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+        var pageW = 210, pageH = 297;
+        var marginL = 20, marginR = 20, marginT = 20, marginB = 22;
+        var usableW = pageW - marginL - marginR;
+        var contentBottom = pageH - marginB;
+        var y = marginT;
+        var pageNum = 1;
+
+        function drawHeaderFooter() {
+            doc.setTextColor(100); doc.setFontSize(9); doc.setFont('helvetica', 'normal');
+            doc.text(studentName + (className ? '  ·  ' + className : ''), marginL, marginT - 8);
+            doc.setFont('helvetica', 'bold');
+            doc.text('MyBizStudies', pageW - marginR, marginT - 8, { align: 'right' });
+            doc.setFont('helvetica', 'normal');
+            doc.setDrawColor(220); doc.setLineWidth(0.3);
+            doc.line(marginL, marginT - 5, pageW - marginR, marginT - 5);
+            doc.setFontSize(8); doc.setTextColor(150);
+            doc.text('Page ' + pageNum, pageW / 2, pageH - 8, { align: 'center' });
+            doc.setTextColor(0);
+        }
+        function newPage() { doc.addPage(); pageNum++; y = marginT; drawHeaderFooter(); }
+        function ensureSpace(needed) { if (y + needed > contentBottom) newPage(); }
+        function writeWrapped(text, fontSize, lineHeight) {
+            doc.setFontSize(fontSize || 11);
+            var lines = doc.splitTextToSize(String(text || ''), usableW);
+            lines.forEach(function (ln) { ensureSpace(lineHeight || 6); doc.text(ln, marginL, y); y += lineHeight || 5.5; });
+        }
+        function writeBoldHeading(text, sz, color) {
+            ensureSpace(10);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(sz || 13);
+            if (color) doc.setTextColor(color[0], color[1], color[2]);
+            doc.text(text, marginL, y); y += 7;
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(0);
+        }
+        function writeSubLabel(text, color) {
+            ensureSpace(7);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(9);
+            if (color) doc.setTextColor(color[0], color[1], color[2]);
+            doc.text(text.toUpperCase(), marginL, y); y += 5;
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(0);
+        }
+        function writeBulletList(items) {
+            doc.setFontSize(11);
+            (items || []).forEach(function (it) {
+                var lines = doc.splitTextToSize('  - ' + String(it || ''), usableW);
+                lines.forEach(function (ln) { ensureSpace(6); doc.text(ln, marginL, y); y += 5.5; });
+            });
+        }
+
+        drawHeaderFooter();
+
+        // Title
+        doc.setFontSize(18); doc.setFont('helvetica', 'bold'); doc.setTextColor(30, 58, 95);
+        var titleLines = doc.splitTextToSize(assignmentTitle, usableW);
+        doc.text(titleLines, marginL, y); y += titleLines.length * 8;
+        doc.setFont('helvetica', 'normal'); doc.setTextColor(0);
+
+        // Score banner
+        var score = attempt.ai_score, total = attempt.ai_total || assignment.total_marks;
+        if (typeof score === 'number' && typeof total === 'number' && total > 0) {
+            var pct = Math.round((score / total) * 100);
+            doc.setFontSize(11); doc.setTextColor(70);
+            doc.text('Score:  ' + score + ' / ' + total + '  (' + pct + '%)', marginL, y); y += 7;
+            doc.setTextColor(0);
+        }
+
+        // Submission date
+        if (attempt.submitted_at) {
+            doc.setFontSize(10); doc.setTextColor(100);
+            doc.text('Submitted ' + new Date(attempt.submitted_at).toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' }), marginL, y); y += 6;
+            doc.setTextColor(0);
+        }
+        y += 4;
+
+        // Teacher note (if any)
+        if (attempt.teacher_feedback && attempt.teacher_feedback.trim()) {
+            writeBoldHeading('Your teacher\'s note', 13, [230, 126, 34]);
+            writeWrapped(attempt.teacher_feedback);
+            y += 4;
+        }
+
+        // Body: question + answer + AI feedback per question
+        if (assignment.type === 'question') {
+            var q = (assignment.generated_payload && assignment.generated_payload.question) || assignment.generated_payload || {};
+            var marking = (attempt.ai_feedback && attempt.ai_feedback.marking) || attempt.ai_feedback || {};
+            renderOneQuestion(q, attempt.answers && attempt.answers.answer, marking);
+        } else {
+            var paper = (assignment.generated_payload && assignment.generated_payload.paper) || assignment.generated_payload || {};
+            var feedback = attempt.ai_feedback || {};
+
+            if (feedback.test_summary && feedback.test_summary.overall_feedback) {
+                writeBoldHeading('Overall feedback', 13);
+                writeWrapped(feedback.test_summary.overall_feedback);
+                y += 4;
+            }
+
+            var answerMap = {};
+            (attempt.answers && attempt.answers.student_answers || []).forEach(function (sa) {
+                if (sa && sa.question_id) answerMap[sa.question_id] = sa.student_answer;
+            });
+            var resultMap = {};
+            (feedback.question_results || []).forEach(function (qr) { if (qr && qr.question_id) resultMap[qr.question_id] = qr; });
+
+            (paper.questions || []).forEach(function (q, idx) {
+                var qid = q.id || ('q' + (idx + 1));
+                var ans = answerMap[qid] !== undefined ? answerMap[qid] : '';
+                var qr = resultMap[qid] || (feedback.question_results || [])[idx] || {};
+                renderOneQuestion(q, ans, qr, idx);
+            });
+        }
+
+        function renderOneQuestion(q, studentAnswer, marking, idx) {
+            var qNum = q.number || (idx !== undefined ? idx + 1 : 1);
+            var partSuffix = q.part ? '(' + q.part + ')' : '';
+            var label = 'Q' + qNum + partSuffix + (q.marks ? '  (' + q.marks + ' marks)' : '');
+
+            ensureSpace(20);
+            writeBoldHeading(label, 12, [30, 58, 95]);
+
+            // Question text
+            writeWrapped(q.question || q.text || '');
+            y += 3;
+
+            // Student answer
+            writeSubLabel('Your answer', [60, 60, 60]);
+            writeWrapped(studentAnswer || 'No answer.');
+            y += 3;
+
+            // Marks awarded if present
+            if (marking && marking.marks_awarded !== undefined) {
+                writeSubLabel('Marks awarded', [60, 60, 60]);
+                doc.text(marking.marks_awarded + ' / ' + (marking.total_marks || q.marks || '?'), marginL, y);
+                y += 6;
+            }
+
+            // Feedback
+            if (marking) {
+                if (marking.feedback) {
+                    writeSubLabel('Feedback', [60, 60, 60]);
+                    writeWrapped(marking.feedback);
+                    y += 2;
+                }
+                if (Array.isArray(marking.strengths) && marking.strengths.length) {
+                    writeSubLabel('Strengths', [39, 174, 96]);
+                    writeBulletList(marking.strengths);
+                    y += 2;
+                }
+                if (Array.isArray(marking.improvements) && marking.improvements.length) {
+                    writeSubLabel('To improve', [230, 126, 34]);
+                    writeBulletList(marking.improvements);
+                    y += 2;
+                }
+                if (Array.isArray(marking.next_steps) && marking.next_steps.length) {
+                    writeSubLabel('Next steps', [60, 60, 60]);
+                    writeBulletList(marking.next_steps);
+                    y += 2;
+                }
+            }
+
+            y += 5;
+        }
+
+        var fname = safeFilename(studentName + ' ' + assignmentTitle);
+        doc.save(fname + '.pdf');
+    }
+
+    window.MyBizStudentPdf = { generate: generateStudentPdf };
+})();
+</script>
 
 <script>
     var SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
@@ -510,6 +706,39 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
         }
         return html;
     }
+
+    function downloadStudentPdf() {
+        if (!currentAttempt || currentAttempt.status !== 'graded') {
+            alert('Submit your work first, then you can download the PDF.');
+            return;
+        }
+        if (!window.MyBizStudentPdf) { alert('PDF library not loaded yet.'); return; }
+        try {
+            var meta = pdfMetaFromState();
+            window.MyBizStudentPdf.generate({
+                attempt: currentAttempt,
+                assignment: currentAssignment,
+                studentName: meta.studentName,
+                className: meta.className,
+                assignmentTitle: meta.title
+            });
+        } catch (e) {
+            alert('Could not build PDF: ' + e.message);
+        }
+    }
+
+    function pdfMetaFromState() {
+        var name = '';
+        if (currentSession && currentSession.user) name = currentSession.user.user_metadata && currentSession.user.user_metadata.name
+            ? currentSession.user.user_metadata.name : (currentSession.user.email || '');
+        var title = (document.getElementById('title') && document.getElementById('title').textContent) || 'Practice attempt';
+        return { studentName: name, title: title, className: '' };
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var btn = document.getElementById('downloadStudentPdfBtn');
+        if (btn) btn.addEventListener('click', downloadStudentPdf);
+    });
 
     function esc(s) { if (s === null || s === undefined) return ''; return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
 </script>

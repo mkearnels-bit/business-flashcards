@@ -133,6 +133,8 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
         </div>
     </div>
 
+    <div id="coachingContainer"></div>
+
     <div class="section-head">
         <div class="section-title">To do <span class="count-chip" id="pendingCount">0</span></div>
     </div>
@@ -178,7 +180,33 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
         }
         currentProfile = profileResult.data;
         showShell();
-        await loadAssignments();
+        await Promise.all([
+            loadAssignments(),
+            loadCoachingSummary()
+        ]);
+    }
+
+    async function loadCoachingSummary() {
+        var { data, error } = await supabaseClient
+            .from('coaching_summaries')
+            .select('summary_html, test_count, created_at')
+            .eq('user_id', currentUser.id)
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .maybeSingle();
+        if (error || !data) return;
+
+        var when = data.created_at ? new Date(data.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+        var html = '<div style="background: linear-gradient(135deg, #fff4e6 0%, #fef6e7 100%); border: 1px solid #f7d98a; border-radius: var(--radius-lg); padding: 1.5rem; margin: 1.25rem 0; position: relative;">' +
+            '<div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.75rem;">' +
+                '<svg width="18" height="18" viewBox="0 0 24 24" fill="var(--accent)"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>' +
+                '<div style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--accent);">AI coaching summary</div>' +
+            '</div>' +
+            '<div style="font-weight:700; color:var(--gray-900); font-size:1.05rem; margin-bottom:0.4rem;">After ' + (data.test_count || 'your last') + ' attempts</div>' +
+            '<div style="line-height:1.65; color:var(--gray-700);">' + data.summary_html + '</div>' +
+            (when ? '<div class="muted" style="font-size:0.78rem; margin-top:0.75rem;">Generated ' + when + '. A new summary will appear after every five attempts.</div>' : '') +
+        '</div>';
+        document.getElementById('coachingContainer').innerHTML = html;
     }
 
     function showAccessDenied(msg) {

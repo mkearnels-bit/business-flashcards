@@ -234,10 +234,15 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
 
     <div class="section-header">
         <h2 class="section-title">Your classes</h2>
-        <button class="btn btn-primary btn-sm" id="newClassBtn">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-            New class
-        </button>
+        <div style="display:flex; gap:0.5rem; align-items:center;">
+            <label style="display:inline-flex; align-items:center; gap:0.4rem; font-size:0.88rem; color: var(--gray-600); cursor:pointer;">
+                <input type="checkbox" id="showArchivedToggle" style="cursor:pointer;"> Show archived
+            </label>
+            <button class="btn btn-primary btn-sm" id="newClassBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                New class
+            </button>
+        </div>
     </div>
 
     <div id="classesContainer">
@@ -438,11 +443,21 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
             return;
         }
 
-        var classes = (classesResult.data || []).filter(function(c) { return !c.archived_at; });
+        ALL_CLASSES_CACHE = classesResult.data || [];
+        renderClassesFromCache();
+        await renderUsage(ALL_CLASSES_CACHE.filter(function(c) { return !c.archived_at; }));
+        await renderHeroMeta(ALL_CLASSES_CACHE.filter(function(c) { return !c.archived_at; }));
+    }
 
-        await renderClasses(classes);
-        await renderUsage(classes);
-        await renderHeroMeta(classes);
+    var ALL_CLASSES_CACHE = [];
+
+    function renderClassesFromCache() {
+        var showArchived = document.getElementById('showArchivedToggle') && document.getElementById('showArchivedToggle').checked;
+        var visible = ALL_CLASSES_CACHE.filter(function(c) {
+            if (showArchived) return true;
+            return !c.archived_at;
+        });
+        renderClasses(visible);
     }
 
     async function renderClasses(classes) {
@@ -469,11 +484,13 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
         classes.forEach(function(c) {
             var boardLabel = BOARD_LABELS[c.board] || c.board;
             var badgeClass = (c.level === 'a_level') ? 'class-badge a-level' : 'class-badge';
-            html += '<a class="class-card" href="teacher-class.html?id=' + encodeURIComponent(c.id) + '">' +
+            var archivedStyle = c.archived_at ? ' style="opacity: 0.65;"' : '';
+            var archivedLabel = c.archived_at ? '<span class="muted" style="font-size:0.78rem; font-weight:600; text-transform:uppercase; letter-spacing:0.04em; color: var(--gray-500);">Archived</span>' : '';
+            html += '<a class="class-card" href="teacher-class.html?id=' + encodeURIComponent(c.id) + '"' + archivedStyle + '>' +
                 '<div class="class-card-head">' +
                     '<div>' +
                         '<div class="class-name">' + tpEscape(c.name) + '</div>' +
-                        '<div class="class-sub">' + (c.level === 'a_level' ? 'A-Level' : 'GCSE') + '</div>' +
+                        '<div class="class-sub">' + (c.level === 'a_level' ? 'A-Level' : 'GCSE') + (archivedLabel ? '  ·  ' + archivedLabel : '') + '</div>' +
                     '</div>' +
                     '<span class="' + badgeClass + '">' + tpEscape(boardLabel) + '</span>' +
                 '</div>' +
@@ -668,6 +685,7 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
     }
 
     document.getElementById('newClassBtn').addEventListener('click', openNewClassModal);
+    document.getElementById('showArchivedToggle').addEventListener('change', renderClassesFromCache);
     document.getElementById('classModalClose').addEventListener('click', closeNewClassModal);
     document.getElementById('classModalCancel').addEventListener('click', closeNewClassModal);
     document.getElementById('classModalCreate').addEventListener('click', createClass);
