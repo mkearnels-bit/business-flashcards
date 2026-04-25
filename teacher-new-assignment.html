@@ -294,7 +294,7 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
 
         <div class="panel">
             <div class="alert info">
-                Review the generated content before pushing to your class. The mark scheme is hidden by design. You can regenerate, edit any text, or push as-is.
+                Review the generated content before pushing to your class. You can regenerate, edit any text, or push as-is.
             </div>
 
             <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
@@ -1036,7 +1036,16 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
     function renderApprovalForTest(data) {
         var paper = data.paper || {};
         var caseHtml = '';
-        if (paper.case_study || paper.scenario || paper.context) {
+        // Tests put case study extracts in source_booklet[] (the actual generate-test response shape)
+        var extracts = paper.source_booklet || [];
+        if (Array.isArray(extracts) && extracts.length > 0) {
+            caseHtml = '<div class="case-study"><div class="case-label">Case study</div><div class="case-body">' +
+                extracts.map(function(ext) {
+                    var biz = ext.business_name ? '<strong>' + esc(ext.business_name) + '</strong><br>' : '';
+                    return biz + esc(ext.content || '');
+                }).join('<br><br>') +
+            '</div>';
+        } else if (paper.case_study || paper.scenario || paper.context) {
             var cs = paper.case_study || paper.scenario || paper.context;
             caseHtml = '<div class="case-study"><div class="case-label">Case study</div><div class="case-body">' + esc(typeof cs === 'string' ? cs : JSON.stringify(cs)) + '</div></div>';
         }
