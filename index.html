@@ -4511,7 +4511,7 @@ function mybizLoadTikTokPixel() {
                 <a href="exam-skills-v2.html" class="nav-contact auth-only" style="display:none;">Exam Skills</a>
                 <a href="notes.html" class="nav-contact auth-only" style="display:none;">Study Notes</a>
                 <a href="blog.html" class="nav-contact">Blog</a>
-                <a href="contact.html" class="nav-contact">Contact Us</a>
+                <a href="my-school.html" class="nav-contact">My School</a>
                 <a href="pricing.html" class="nav-contact">Pricing</a>
                 <a href="login.html" class="btn btn-ghost guest-only">Log In</a>
                 <a href="signup.html" class="btn btn-primary guest-only">Get Started</a>
@@ -4588,9 +4588,9 @@ function mybizLoadTikTokPixel() {
                 Study Notes
             </a>
             <div class="mobile-menu-divider auth-only" style="display:none;"></div>
-            <a href="contact.html">
-                <span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></span>
-                Contact Us
+            <a href="my-school.html">
+                <span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg></span>
+                My School
             </a>
             <a href="blog.html">
                 <span class="menu-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"/></svg></span>
@@ -4786,6 +4786,55 @@ function mybizLoadTikTokPixel() {
         </div>
 
     </section>
+
+    <!-- ===== SCHOOLS BANNER ===== -->
+    <a href="schools.html" class="schools-banner" aria-label="Learn about MyBizStudies for schools">
+        <div class="schools-banner-inner">
+            <div class="schools-banner-pill">For schools</div>
+            <div class="schools-banner-message">
+                <strong>Now available for Business Studies departments.</strong>
+                <span class="schools-banner-sub">AI-marked tests for whole classes, with one markbook for the teacher.</span>
+            </div>
+            <span class="schools-banner-cta">Learn more
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </span>
+        </div>
+    </a>
+    <style>
+    .schools-banner {
+        display: block; text-decoration: none; color: white;
+        background: linear-gradient(90deg, #152a45 0%, #1e3a5f 50%, #e67e22 130%);
+        border-top: 1px solid rgba(255,255,255,0.05);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        transition: filter 0.2s ease;
+    }
+    .schools-banner:hover { filter: brightness(1.1); }
+    .schools-banner-inner {
+        max-width: 1200px; margin: 0 auto;
+        display: flex; align-items: center; gap: 1.25rem;
+        padding: 0.95rem 1.5rem; flex-wrap: wrap;
+    }
+    .schools-banner-pill {
+        display: inline-flex; align-items: center;
+        background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.18);
+        padding: 0.32rem 0.85rem; border-radius: 999px;
+        font-size: 0.78rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .schools-banner-message { flex-grow: 1; font-size: 0.96rem; line-height: 1.4; }
+    .schools-banner-message strong { font-weight: 700; }
+    .schools-banner-sub { opacity: 0.78; margin-left: 0.4rem; }
+    .schools-banner-cta {
+        display: inline-flex; align-items: center; gap: 0.4rem;
+        background: white; color: #1e3a5f;
+        padding: 0.5rem 0.95rem; border-radius: 999px;
+        font-weight: 700; font-size: 0.92rem; white-space: nowrap;
+    }
+    @media (max-width: 640px) {
+        .schools-banner-inner { padding: 0.85rem 1rem; gap: 0.85rem; }
+        .schools-banner-message { font-size: 0.9rem; }
+        .schools-banner-sub { display: block; margin-left: 0; margin-top: 0.15rem; }
+    }
+    </style>
 
     <!-- ===== HOW IT WORKS SECTION ===== -->
     <section class="hiw-section" id="how-it-works">

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<title>My School | MyBizStudies</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, #152a45 0%, #1e3a5f 50%, #2d5a8a 100%);
+    color: white; min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 2rem; -webkit-font-smoothing: antialiased;
+}
+.shell { text-align: center; max-width: 420px; }
+.spinner {
+    width: 42px; height: 42px;
+    border: 3px solid rgba(255,255,255,0.18);
+    border-top-color: #e67e22;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 1.25rem;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.title { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.4rem; }
+.sub { font-size: 0.92rem; opacity: 0.75; line-height: 1.55; }
+</style>
+</head>
+<body>
+
+<div class="shell">
+    <div class="spinner"></div>
+    <div class="title" id="msg">Routing you to your portal...</div>
+    <div class="sub" id="sub">Just a moment.</div>
+</div>
+
+<script>
+    var SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
+    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
+    var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    function go(path, label) {
+        if (label) document.getElementById('msg').textContent = label;
+        setTimeout(function() { window.location.replace(path); }, 200);
+    }
+
+    (async function () {
+        try {
+            var sessionResult = await supabaseClient.auth.getSession();
+            var session = sessionResult.data && sessionResult.data.session;
+
+            if (!session || !session.user) {
+                go('/schools.html', 'Loading school portal...');
+                return;
+            }
+
+            var profileResult = await supabaseClient
+                .from('user_profiles')
+                .select('role')
+                .eq('user_id', session.user.id)
+                .maybeSingle();
+
+            var role = profileResult && profileResult.data && profileResult.data.role;
+
+            if (role === 'teacher') {
+                go('/teacher-dashboard.html', 'Welcome back, taking you to your classes...');
+                return;
+            }
+            if (role === 'student') {
+                go('/student-portal.html', 'Welcome back, opening your work...');
+                return;
+            }
+
+            // Authenticated but not a teacher or student (e.g. an individual paying user)
+            go('/schools.html', 'Loading school portal...');
+        } catch (e) {
+            go('/schools.html', 'Loading school portal...');
+        }
+    })();
+</script>
+
+</body>
+</html>

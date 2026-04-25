@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<title>MyBizStudies for schools | AI-marked Business Studies for departments</title>
+<meta name="description" content="Bring AI-marked exam practice to your whole Business Studies department. Push questions and tests to your classes, see every student's work, give personal feedback. Built by a teacher for teachers.">
+<link rel="canonical" href="https://mybizstudies.com/schools.html">
+<meta property="og:title" content="MyBizStudies for schools">
+<meta property="og:description" content="AI-marked exam practice for your whole Business Studies department.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mybizstudies.com/schools.html">
+<meta property="og:image" content="https://mybizstudies.com/og-image.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+    --primary: #1e3a5f; --primary-dark: #152a45; --primary-light: #2d5a8a;
+    --accent: #e67e22; --accent-light: #f39c12; --accent-glow: rgba(230,126,34,0.3);
+    --success: #27ae60; --success-bg: #e8f5ec;
+    --warning: #f39c12; --warning-bg: #fef6e7;
+    --error: #e74c3c; --error-bg: #fceae8;
+    --info: #3498db; --info-bg: #e8f2fb;
+    --gray-50: #f8fafc; --gray-100: #f1f5f9; --gray-200: #e2e8f0; --gray-300: #cbd5e1;
+    --gray-400: #94a3b8; --gray-500: #64748b; --gray-600: #475569; --gray-700: #334155;
+    --gray-800: #1e293b; --gray-900: #0f172a;
+    --shadow-md: 0 4px 18px rgba(15,23,42,0.08); --shadow-lg: 0 10px 40px rgba(15,23,42,0.12);
+    --radius-sm: 8px; --radius: 12px; --radius-lg: 16px; --radius-xl: 24px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--gray-800); line-height: 1.6; background: white;
+    -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+/* === Site nav (matches index.html minimal) === */
+.site-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.96); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--gray-200);
+}
+.site-nav-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.85rem 1.5rem; gap: 1rem;
+}
+.site-nav-logo { height: 50px; }
+.site-nav-links { display: flex; align-items: center; gap: 0.4rem; }
+.site-nav-link {
+    padding: 0.55rem 0.9rem; font-size: 0.92rem; font-weight: 500;
+    color: var(--gray-700); border-radius: var(--radius-sm); transition: all 0.15s ease;
+}
+.site-nav-link:hover { background: var(--gray-100); color: var(--primary); }
+.btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    padding: 0.7rem 1.2rem; font-weight: 600; font-size: 0.95rem;
+    border-radius: var(--radius-sm); transition: all 0.15s ease; line-height: 1;
+}
+.btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent-light));
+    color: white; box-shadow: 0 2px 10px var(--accent-glow);
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px var(--accent-glow); }
+.btn-secondary { background: var(--primary); color: white; }
+.btn-secondary:hover { background: var(--primary-dark); }
+.btn-ghost { background: white; color: var(--gray-700); border: 1px solid var(--gray-200); }
+.btn-ghost:hover { background: var(--gray-50); border-color: var(--gray-300); }
+.btn-lg { padding: 0.95rem 1.6rem; font-size: 1rem; }
+
+/* === Hero === */
+.hero {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
+    color: white; padding: 5rem 1.5rem 4.5rem; position: relative; overflow: hidden;
+}
+.hero::before {
+    content: ""; position: absolute; right: -120px; top: -120px;
+    width: 420px; height: 420px;
+    background: radial-gradient(circle, rgba(230,126,34,0.3) 0%, transparent 70%);
+}
+.hero::after {
+    content: ""; position: absolute; left: -60px; bottom: -120px;
+    width: 360px; height: 360px;
+    background: radial-gradient(circle, rgba(52,152,219,0.18) 0%, transparent 70%);
+}
+.hero-inner { max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
+.hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    padding: 0.4rem 0.9rem;
+    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 999px; font-size: 0.82rem; font-weight: 600;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    margin-bottom: 1.4rem;
+}
+.hero h1 {
+    font-size: clamp(2rem, 4vw, 3rem); font-weight: 800;
+    letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 1.1rem;
+}
+.hero-sub {
+    font-size: 1.15rem; line-height: 1.55; opacity: 0.92;
+    max-width: 640px; margin-bottom: 2rem;
+}
+.hero-ctas { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+.hero-ctas .btn-secondary { background: white; color: var(--primary); }
+.hero-ctas .btn-secondary:hover { background: var(--gray-100); }
+.hero-ctas .btn-on-hero {
+    background: rgba(255,255,255,0.12); color: white;
+    border: 1px solid rgba(255,255,255,0.22);
+}
+.hero-ctas .btn-on-hero:hover { background: rgba(255,255,255,0.2); }
+
+/* === Sections === */
+.section { padding: 4rem 1.5rem; }
+.section-inner { max-width: 1100px; margin: 0 auto; }
+.section-eyebrow {
+    display: block; font-size: 0.8rem; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 0.75rem;
+}
+.section h2 {
+    font-size: clamp(1.7rem, 3vw, 2.4rem); font-weight: 800;
+    letter-spacing: -0.02em; line-height: 1.15; color: var(--gray-900); margin-bottom: 0.75rem;
+}
+.section-lead { font-size: 1.1rem; color: var(--gray-600); max-width: 720px; line-height: 1.55; }
+
+/* === Feature grids === */
+.feature-grid {
+    display: grid; gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    margin-top: 2.25rem;
+}
+.feature {
+    background: white; padding: 1.5rem 1.4rem;
+    border: 1px solid var(--gray-200); border-radius: var(--radius-lg);
+    transition: all 0.2s ease;
+}
+.feature:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--accent); }
+.feature-icon {
+    width: 42px; height: 42px; border-radius: var(--radius-sm);
+    background: rgba(230,126,34,0.1); color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 0.85rem;
+}
+.feature h3 {
+    font-size: 1.05rem; font-weight: 700; color: var(--gray-900); margin-bottom: 0.4rem;
+}
+.feature p { color: var(--gray-600); font-size: 0.95rem; line-height: 1.55; }
+
+/* === Two column section === */
+.split { background: var(--gray-50); }
+.split-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start;
+}
+@media (max-width: 768px) { .split-grid { grid-template-columns: 1fr; gap: 2rem; } }
+.checklist { display: flex; flex-direction: column; gap: 0.85rem; margin-top: 1.5rem; }
+.checklist li {
+    display: flex; gap: 0.7rem; align-items: flex-start;
+    list-style: none; line-height: 1.55;
+}
+.check-icon {
+    width: 22px; height: 22px; flex-shrink: 0; border-radius: 50%;
+    background: var(--success-bg); color: var(--success);
+    display: flex; align-items: center; justify-content: center; margin-top: 1px;
+}
+
+/* === Join class card === */
+.join-section { background: linear-gradient(135deg, #fff7ed 0%, #fef6e7 100%); }
+.join-card {
+    max-width: 560px; margin: 2rem auto 0;
+    background: white; border-radius: var(--radius-lg); border: 1px solid #f7d98a;
+    padding: 1.75rem; box-shadow: var(--shadow-md);
+}
+.join-card h3 { font-size: 1.1rem; font-weight: 700; color: var(--gray-900); margin-bottom: 0.5rem; }
+.join-card p { color: var(--gray-600); font-size: 0.92rem; margin-bottom: 1.25rem; }
+.join-form { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.join-input {
+    flex-grow: 1; min-width: 180px;
+    padding: 0.85rem 1rem; border: 1px solid var(--gray-300); border-radius: var(--radius-sm);
+    font-size: 1.05rem; font-family: 'SF Mono', Menlo, monospace;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--gray-900);
+}
+.join-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(230,126,34,0.15); }
+.join-result {
+    margin-top: 1rem; padding: 0.85rem 1rem; border-radius: var(--radius-sm);
+    font-size: 0.95rem; line-height: 1.5; display: none;
+}
+.join-result.success { background: var(--success-bg); color: #1e7e4c; border: 1px solid #a7e0b9; display: block; }
+.join-result.error { background: var(--error-bg); color: var(--error); border: 1px solid #f5c6c0; display: block; }
+.join-result.success a { color: #1e7e4c; font-weight: 700; text-decoration: underline; }
+
+/* === Get in touch === */
+.contact-section {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
+    color: white; text-align: center; padding: 4rem 1.5rem;
+}
+.contact-section h2 { color: white; margin-bottom: 0.6rem; }
+.contact-section p { opacity: 0.9; max-width: 580px; margin: 0 auto 1.75rem; line-height: 1.55; }
+.contact-section .btn-primary { background: white; color: var(--primary); box-shadow: 0 4px 18px rgba(0,0,0,0.18); }
+.contact-section .btn-primary:hover { background: var(--gray-100); }
+
+/* === Footer === */
+.site-footer {
+    background: var(--gray-900); color: var(--gray-400); padding: 2.5rem 1.5rem; text-align: center;
+}
+.site-footer a { color: var(--gray-300); text-decoration: underline; }
+.site-footer a:hover { color: white; }
+.site-footer .links { margin-bottom: 0.75rem; font-size: 0.92rem; }
+.site-footer .links a { margin: 0 0.4rem; }
+.site-footer .copy { font-size: 0.82rem; }
+
+@media (max-width: 640px) {
+    .hero { padding: 3.5rem 1.25rem 3rem; }
+    .section { padding: 3rem 1.25rem; }
+    .site-nav-link { padding: 0.5rem 0.6rem; font-size: 0.88rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+    <div class="site-nav-inner">
+        <a href="index.html"><img src="logo.png" alt="MyBizStudies" class="site-nav-logo"></a>
+        <div class="site-nav-links">
+            <a href="pricing.html" class="site-nav-link">Pricing</a>
+            <a href="schools.html" class="site-nav-link" style="color: var(--primary); font-weight: 600;">For Schools</a>
+            <a href="login.html" class="btn btn-ghost" style="padding: 0.55rem 1rem;">Sign in</a>
+        </div>
+    </div>
+</header>
+
+<!-- ====== HERO ====== -->
+<section class="hero">
+    <div class="hero-inner">
+        <span class="hero-eyebrow">For Business Studies departments</span>
+        <h1>The AI-marked exam practice your whole department can use.</h1>
+        <p class="hero-sub">
+            Push questions and full tests to your classes. We mark them automatically, board-by-board, with feedback that's exam-paper accurate. You see every student's work in one markbook and add your own notes when it matters.
+        </p>
+        <div class="hero-ctas">
+            <a href="contact.html" class="btn btn-secondary btn-lg">Get in touch about pricing</a>
+            <a href="login.html" class="btn btn-on-hero btn-lg">Already a teacher? Sign in</a>
+        </div>
+    </div>
+</section>
+
+<!-- ====== TEACHER FEATURES ====== -->
+<section class="section">
+    <div class="section-inner">
+        <span class="section-eyebrow">What you can do as a teacher</span>
+        <h2>Run AI-marked practice for your whole class.</h2>
+        <p class="section-lead">Built by a Business Studies teacher. Every feature came from a real classroom problem.</p>
+
+        <div class="feature-grid">
+            <div class="feature">
+                <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+                <h3>Manage classes by year and board</h3>
+                <p>Set up Year 10 AQA GCSE, Year 12 Edexcel A-Level, however your department teaches. Each class gets a join code your students use once.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg></div>
+                <h3>Push questions and tests to a whole class at once</h3>
+                <p>One generation, every student gets the same question. Standard tests follow the board's paper structure. Custom tests let you set the marks for each question yourself.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                <h3>AI marking that's board-aware</h3>
+                <p>The marker uses the right AO splits, command words and case study conventions for your board, so the score and feedback look like real exam-paper marking.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/></svg></div>
+                <h3>One markbook for the whole class</h3>
+                <p>Rows are students, columns are assignments, cells are scores. Click a cell to see exactly what the student wrote and what the AI told them.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+                <h3>Add your own feedback when you want</h3>
+                <p>Drop a personal note on any student attempt. They see it labelled "Your teacher's note" alongside the AI feedback in their portal.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
+                <h3>Print PDFs for handwritten work</h3>
+                <p>Download any question or test as a print-ready PDF. Lines per question follow the standard exam paper conventions for your level.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ====== STUDENT EXPERIENCE ====== -->
+<section class="section split">
+    <div class="section-inner split-grid">
+        <div>
+            <span class="section-eyebrow">What your students get</span>
+            <h2>A focused portal that only shows what their teacher pushes.</h2>
+            <p class="section-lead">No noise, no distractions. Every assignment lands in their To Do list with a clear due date. Their feedback shows up the moment they submit.</p>
+        </div>
+        <div>
+            <ul class="checklist">
+                <li>
+                    <div class="check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                    <div><strong>Their own portal</strong> with assignments, scores and a record of every attempt they've completed.</div>
+                </li>
+                <li>
+                    <div class="check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                    <div><strong>Detailed feedback for every answer.</strong> Strengths, things to improve, and next steps. Exam-board specific.</div>
+                </li>
+                <li>
+                    <div class="check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                    <div><strong>AI coaching summaries</strong> generated automatically every five attempts so students see their progress and patterns over time.</div>
+                </li>
+                <li>
+                    <div class="check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                    <div><strong>Downloadable PDF</strong> of every completed attempt with question, answer and feedback. Useful for revision and showing parents.</div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ====== JOIN A CLASS ====== -->
+<section class="section join-section">
+    <div class="section-inner" style="text-align: center;">
+        <span class="section-eyebrow">For students</span>
+        <h2>Already invited by your teacher?</h2>
+        <p class="section-lead" style="margin: 0.4rem auto 0;">Enter the join code your teacher gave you to get started.</p>
+
+        <div class="join-card">
+            <h3>Join your class</h3>
+            <p>Codes look like ABCD-1234. Your teacher will have shared one with you.</p>
+            <div class="join-form">
+                <input type="text" id="joinCodeInput" class="join-input" placeholder="ABCD-1234" maxlength="9" autocomplete="off">
+                <button class="btn btn-primary" id="joinCodeBtn">Continue</button>
+            </div>
+            <div id="joinResult" class="join-result"></div>
+        </div>
+    </div>
+</section>
+
+<!-- ====== GET IN TOUCH ====== -->
+<section class="contact-section">
+    <h2>Bring MyBizStudies to your department.</h2>
+    <p>Schools pay an annual licence per student. Email <strong>hello@mybizstudies.com</strong> or fill out the contact form and we'll send pricing and answer any questions.</p>
+    <a href="contact.html" class="btn btn-primary btn-lg">Get in touch</a>
+</section>
+
+<footer class="site-footer">
+    <div class="links">
+        <a href="index.html">Home</a> ·
+        <a href="pricing.html">Pricing</a> ·
+        <a href="schools.html">For Schools</a> ·
+        <a href="contact.html">Contact</a> ·
+        <a href="privacy.html">Privacy</a> ·
+        <a href="terms.html">Terms</a>
+    </div>
+    <div class="copy">© MyBizStudies. Built by a Business Studies teacher in the UK.</div>
+</footer>
+
+<script>
+    var SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
+    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
+
+    var codeInput = document.getElementById('joinCodeInput');
+    var joinBtn = document.getElementById('joinCodeBtn');
+    var resultDiv = document.getElementById('joinResult');
+
+    // Auto-format the join code as the user types: uppercase, dash after 4
+    codeInput.addEventListener('input', function() {
+        var raw = codeInput.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        if (raw.length > 8) raw = raw.slice(0, 8);
+        if (raw.length > 4) raw = raw.slice(0, 4) + '-' + raw.slice(4);
+        codeInput.value = raw;
+    });
+
+    function showResult(html, type) {
+        resultDiv.className = 'join-result ' + type;
+        resultDiv.innerHTML = html;
+    }
+
+    function clearResult() {
+        resultDiv.className = 'join-result';
+        resultDiv.innerHTML = '';
+    }
+
+    async function handleJoin() {
+        clearResult();
+        var code = codeInput.value.trim().toUpperCase();
+
+        if (!code) {
+            showResult('Enter the join code your teacher gave you.', 'error');
+            return;
+        }
+        if (!/^[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(code)) {
+            showResult('That doesn\'t look like a valid join code. Codes look like ABCD-1234.', 'error');
+            return;
+        }
+
+        joinBtn.disabled = true;
+        joinBtn.textContent = 'Checking...';
+
+        try {
+            var resp = await fetch(SUPABASE_URL + '/functions/v1/validate-class-code', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'apikey': SUPABASE_ANON_KEY
+                },
+                body: JSON.stringify({ join_code: code })
+            });
+            var result = await resp.json();
+
+            if (!result || result.valid !== true) {
+                showResult('<strong>We couldn\'t find that class.</strong> ' + (result && result.error ? esc(result.error) : 'Check the code with your teacher.'), 'error');
+                joinBtn.disabled = false;
+                joinBtn.textContent = 'Continue';
+                return;
+            }
+
+            var schoolBit = result.school_name ? ' at <strong>' + esc(result.school_name) + '</strong>' : '';
+            showResult(
+                '<strong>Found:</strong> ' + esc(result.class_name) + schoolBit + '. ' +
+                '<a href="student-signup.html?code=' + encodeURIComponent(code) + '">Continue to sign up &rarr;</a>',
+                'success'
+            );
+            joinBtn.disabled = false;
+            joinBtn.textContent = 'Continue';
+        } catch (e) {
+            showResult('Network error. Please try again in a moment.', 'error');
+            joinBtn.disabled = false;
+            joinBtn.textContent = 'Continue';
+        }
+    }
+
+    joinBtn.addEventListener('click', handleJoin);
+    codeInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') { e.preventDefault(); handleJoin(); }
+    });
+
+    function esc(s) {
+        if (s === null || s === undefined) return '';
+        return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // If user is already signed in, the My School nav router will route them to the right portal.
+    // We don't need to do anything special here.
+</script>
+
+</body>
+</html>
