@@ -706,10 +706,26 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
             var paper = (a.generated_payload && a.generated_payload.paper) || a.generated_payload || {};
             var paperQuestions = paper.questions || [];
             var summary = feedback.test_summary || null;
+
+            // Case study at the top, same style as the take view
+            var extracts = paper.source_booklet || [];
+            if (Array.isArray(extracts) && extracts.length > 0) {
+                html += '<div class="feedback-card" style="background:#fffbea; border-color:#f7d98a;">' +
+                    '<div class="fb-section-title" style="color:#8a5a00;">Case study</div>' +
+                    extracts.map(function(ext) {
+                        var biz = ext.business_name ? '<strong>' + esc(ext.business_name) + '</strong><br>' : '';
+                        return '<div style="white-space:pre-wrap; line-height:1.7; margin-bottom:0.5rem;">' + biz + esc(ext.content || '') + '</div>';
+                    }).join('') +
+                '</div>';
+            }
+
             if (summary && summary.overall_feedback) {
-                html += '<div class="feedback-card">' +
-                    '<div class="fb-section-title">Overall feedback</div>' +
-                    '<div class="muted" style="line-height:1.65;">' + esc(summary.overall_feedback) + '</div>' +
+                html += '<div class="feedback-card" style="background:#f0faf3; border-color:#b8e0c4;">' +
+                    '<div style="display:flex; align-items:center; gap:0.45rem; margin-bottom:0.5rem;">' +
+                        '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1e7e4c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>' +
+                        '<div style="font-weight:700; color:#1e7e4c; letter-spacing:0.02em;">Overall feedback</div>' +
+                    '</div>' +
+                    '<div style="line-height:1.65; color:var(--gray-800);">' + esc(summary.overall_feedback) + '</div>' +
                 '</div>';
             }
 
@@ -750,23 +766,30 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
 
     function renderQuestionFeedback(m) {
         if (!m) return '';
-        var html = '';
+        var inner = '';
         if (m.feedback && typeof m.feedback === 'string') {
-            html += '<div class="fb-section">' + esc(m.feedback) + '</div>';
+            inner += '<div style="line-height:1.65; margin-bottom:0.6rem;">' + esc(m.feedback) + '</div>';
         }
         if (m.strengths && m.strengths.length) {
-            html += '<div class="fb-section-title" style="color: var(--success);">Strengths</div>' +
-                    '<div class="fb-section"><ul>' + m.strengths.map(function(s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul></div>';
+            inner += '<div style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#1e7e4c; margin-top:0.6rem; margin-bottom:0.3rem;">Strengths</div>' +
+                     '<ul style="padding-left:1.2rem; line-height:1.65; margin-bottom:0.5rem;">' + m.strengths.map(function(s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul>';
         }
         if (m.improvements && m.improvements.length) {
-            html += '<div class="fb-section-title" style="color: var(--accent);">To improve</div>' +
-                    '<div class="fb-section"><ul>' + m.improvements.map(function(s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul></div>';
+            inner += '<div style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--accent); margin-top:0.6rem; margin-bottom:0.3rem;">To improve</div>' +
+                     '<ul style="padding-left:1.2rem; line-height:1.65; margin-bottom:0.5rem;">' + m.improvements.map(function(s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul>';
         }
         if (m.next_steps && m.next_steps.length) {
-            html += '<div class="fb-section-title">Next steps</div>' +
-                    '<div class="fb-section"><ul>' + m.next_steps.map(function(s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul></div>';
+            inner += '<div style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--gray-700); margin-top:0.6rem; margin-bottom:0.3rem;">Next steps</div>' +
+                     '<ul style="padding-left:1.2rem; line-height:1.65; margin-bottom:0.5rem;">' + m.next_steps.map(function(s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul>';
         }
-        return html;
+        if (!inner) return '';
+        return '<div style="margin-top:1rem; padding:1rem 1.1rem; background:#f0faf3; border:1px solid #b8e0c4; border-radius:var(--radius);">' +
+                '<div style="display:flex; align-items:center; gap:0.45rem; margin-bottom:0.5rem;">' +
+                    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1e7e4c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>' +
+                    '<div style="font-weight:700; color:#1e7e4c; letter-spacing:0.02em;">Feedback</div>' +
+                '</div>' +
+                inner +
+            '</div>';
     }
 
     function downloadStudentPdf() {

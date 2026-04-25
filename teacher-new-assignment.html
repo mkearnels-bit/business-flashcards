@@ -157,7 +157,7 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
     <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem;">
         <div>
             <h1 class="page-title">Create a new assignment</h1>
-            <p class="page-sub">For <strong id="classNameLabel">your class</strong>. The board and level are locked from the class.</p>
+            <p class="page-sub">For <strong id="classNameLabel">your class</strong>.</p>
         </div>
         <div id="usageCapPill"></div>
     </div>
@@ -220,8 +220,7 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
                     <div class="field">
                         <label class="field-label">Test type</label>
                         <select class="field-select" id="tTestTypeSelect">
-                            <option value="topic_test">Topic test (shorter)</option>
-                            <option value="unit_exam">Unit exam (longer)</option>
+                            <option value="topic_test">Topic Test</option>
                         </select>
                     </div>
                     <div class="field">
@@ -1149,12 +1148,26 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
             ? (document.getElementById('customTimeInput').value.trim() || null)
             : null;
 
+        // Derive a display title from the AI output when the teacher didn't provide one,
+        // so we never end up storing 'all' or 'unit-1' as the assignment topic.
+        var displayTopic = topic;
+        if (!displayTopic) {
+            if (currentType === 'question' && generatedPayload && generatedPayload.question) {
+                displayTopic = generatedPayload.question.topic || '';
+            } else if (currentType === 'test' && generatedPayload && generatedPayload.paper) {
+                displayTopic = generatedPayload.paper.title || generatedPayload.paper.topic || '';
+            }
+        }
+
+        // Don't store the unit picker's "all" sentinel as a real unit value.
+        var unitForRow = (unit && unit !== 'all') ? unit : null;
+
         var payload = {
             class_id: classId,
             type: currentType,
             variant: variant,
-            unit: unit || null,
-            topic: topic || null,
+            unit: unitForRow,
+            topic: (displayTopic && displayTopic.trim()) ? displayTopic.trim() : null,
             total_marks: totalMarksForPayload,
             time_allowed: timeAllowed,
             generated_payload: generatedPayload,
