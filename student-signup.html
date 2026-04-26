@@ -86,10 +86,28 @@ body {
 .btn-primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 20px var(--accent-glow); }
 .btn-primary:disabled { opacity: 0.65; cursor: not-allowed; }
 
-.alert { padding: 0.85rem 1rem; border-radius: var(--radius); font-size: 0.9rem; margin-bottom: 1rem; display: none; line-height: 1.45; }
-.alert.error { background: var(--error-bg); color: var(--error); border: 1px solid #f5c6c0; display: block; }
-.alert.info { background: var(--info-bg); color: var(--info); border: 1px solid #c9e3f7; display: block; }
-.alert.success { background: #e8f5ec; color: var(--success); border: 1px solid #b8e0c4; display: block; }
+.btn-ghost {
+    display: inline-block; width: 100%; padding: 0.75rem 1rem; background: white; color: var(--gray-700);
+    border: 1px solid var(--gray-300); border-radius: var(--radius); font-size: 0.92rem; font-weight: 600;
+    text-align: center; text-decoration: none; cursor: pointer; margin-top: 0.5rem;
+}
+.btn-ghost:hover { border-color: var(--primary-light); color: var(--primary); }
+
+/* Default-hidden alerts. JS adds .show to make them visible. */
+.alert { padding: 0.85rem 1rem; border-radius: var(--radius); font-size: 0.9rem; margin-bottom: 1rem; line-height: 1.45; display: none; }
+.alert.show { display: block; }
+.alert.error { background: var(--error-bg); color: var(--error); border: 1px solid #f5c6c0; }
+.alert.info { background: var(--info-bg); color: var(--info); border: 1px solid #c9e3f7; }
+.alert.success { background: #e8f5ec; color: var(--success); border: 1px solid #b8e0c4; }
+
+.class-banner { padding: 0.95rem 1.05rem; border-radius: var(--radius); margin-bottom: 1rem; line-height: 1.45; background: #eef5fc; border: 1px solid #c9e0f4; display: none; }
+.class-banner.show { display: block; }
+.class-banner-label { font-weight: 700; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--primary-light); margin-bottom: 0.25rem; }
+.class-banner-body { font-size: 0.96rem; color: var(--gray-800); }
+.class-banner-body strong { color: var(--primary); font-weight: 700; }
+.code-status { font-size: 0.82rem; margin-top: 0.35rem; min-height: 1em; }
+.code-status.ok { color: var(--success); }
+.code-status.bad { color: var(--error); }
 
 .foot-link { text-align: center; margin-top: 1rem; font-size: 0.88rem; color: var(--gray-500); }
 .foot-link a { color: var(--primary); font-weight: 600; text-decoration: none; }
@@ -97,6 +115,8 @@ body {
 
 .policy { margin-top: 1.25rem; font-size: 0.78rem; color: var(--gray-400); text-align: center; line-height: 1.5; }
 .policy a { color: var(--gray-500); text-decoration: underline; }
+
+.center-spinner { display: flex; justify-content: center; align-items: center; padding: 2rem 0; color: var(--gray-500); }
 </style>
 </head>
 <body>
@@ -104,18 +124,39 @@ body {
 <div class="signup-shell">
     <div class="signup-head">
         <img src="logo.png" alt="MyBizStudies" class="signup-logo">
-        <div class="signup-title">Student sign up</div>
-        <div class="signup-sub">Use your school email and the join code from your teacher.</div>
+        <div class="signup-title" id="pageTitle">Student sign up</div>
+        <div class="signup-sub" id="pageSub">Use your school email and the join code from your teacher.</div>
     </div>
 
     <div class="signup-body">
-        <div class="alert info" id="prefillNote" style="display: none;">
-            Class join code prefilled from your invite link. Just add your details below.
+        <!-- Class info banner: filled in once we validate the join code. -->
+        <div class="class-banner" id="classBanner">
+            <div class="class-banner-label">You're joining</div>
+            <div class="class-banner-body" id="classBannerBody"></div>
         </div>
+
         <div class="alert error" id="errorAlert"></div>
         <div class="alert success" id="successAlert"></div>
 
-        <form id="signupForm" autocomplete="off">
+        <!-- Already-signed-in flow: confirmation card instead of full form. -->
+        <div id="joinConfirmView" style="display:none;">
+            <div style="margin-bottom:1rem; font-size:0.95rem; line-height:1.55; color:var(--gray-700);">
+                You're already signed in as <strong id="joinExistingEmail"></strong>. Add this class to your account?
+            </div>
+            <button type="button" class="btn-primary" id="confirmJoinBtn">Add this class</button>
+            <a href="student-portal.html" class="btn-ghost" id="cancelJoinBtn">Cancel and go to dashboard</a>
+        </div>
+
+        <!-- Initial loading state while we check for an existing session. -->
+        <div id="bootView" class="center-spinner">Loading...</div>
+
+        <!-- Standard signup form. Hidden until we know there's no logged-in user. -->
+        <form id="signupForm" autocomplete="off" style="display:none;">
+            <div class="field">
+                <label class="field-label" for="codeInput">Class join code</label>
+                <input type="text" class="field-input code" id="codeInput" placeholder="ABCD-1234" maxlength="9" required>
+                <div class="code-status" id="codeStatus"></div>
+            </div>
             <div class="field">
                 <label class="field-label" for="emailInput">School email</label>
                 <input type="email" class="field-input" id="emailInput" placeholder="firstname.lastname@school.ac.uk" required>
@@ -129,17 +170,12 @@ body {
                 <input type="password" class="field-input" id="passwordInput" placeholder="At least 8 characters" minlength="8" required>
                 <span class="field-hint">Pick something memorable. Your teacher can help reset it later if needed.</span>
             </div>
-            <div class="field">
-                <label class="field-label" for="codeInput">Class join code</label>
-                <input type="text" class="field-input code" id="codeInput" placeholder="ABCD-1234" maxlength="9" required>
-                <span class="field-hint">Looks like four letters/numbers, a dash, four more.</span>
-            </div>
 
             <button type="submit" class="btn-primary" id="submitBtn">Create my student account</button>
         </form>
 
-        <div class="foot-link">Already have an account? <a href="login.html">Sign in</a></div>
-        <div class="policy">By signing up you agree to the MyBizStudies <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy notice</a>.</div>
+        <div class="foot-link" id="signinFootLink" style="display:none;">Already have an account? <a href="login.html" id="signinLink">Sign in</a></div>
+        <div class="policy" id="policyLine" style="display:none;">By signing up you agree to the MyBizStudies <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy notice</a>.</div>
     </div>
 </div>
 
@@ -156,41 +192,120 @@ body {
     var submitBtn = document.getElementById('submitBtn');
     var errorAlert = document.getElementById('errorAlert');
     var successAlert = document.getElementById('successAlert');
-    var prefillNote = document.getElementById('prefillNote');
+    var classBanner = document.getElementById('classBanner');
+    var classBannerBody = document.getElementById('classBannerBody');
+    var codeStatus = document.getElementById('codeStatus');
+    var bootView = document.getElementById('bootView');
+    var joinConfirmView = document.getElementById('joinConfirmView');
+    var pageTitle = document.getElementById('pageTitle');
+    var pageSub = document.getElementById('pageSub');
+    var signinFootLink = document.getElementById('signinFootLink');
+    var policyLine = document.getElementById('policyLine');
 
-    // Prefill code from URL ?code=XXXX-XXXX
-    (function() {
-        var params = new URLSearchParams(window.location.search);
-        var code = params.get('code');
-        if (code) {
-            codeInput.value = code.toUpperCase();
-            prefillNote.style.display = 'block';
+    var prefilledCode = null;
+    var lastValidatedCode = null;
+    var lastValidationOk = false;
+
+    function showError(msg) {
+        errorAlert.textContent = msg;
+        errorAlert.classList.add('show');
+        successAlert.classList.remove('show');
+    }
+    function showSuccess(msg) {
+        successAlert.textContent = msg;
+        successAlert.classList.add('show');
+        errorAlert.classList.remove('show');
+    }
+    function hideAlerts() {
+        errorAlert.classList.remove('show');
+        successAlert.classList.remove('show');
+    }
+
+    function setBanner(className, schoolName) {
+        var bits = '';
+        if (schoolName) bits += '<strong>' + escapeHtml(schoolName) + '</strong>';
+        if (className) {
+            if (bits) bits += ' &mdash; ';
+            bits += escapeHtml(className);
         }
-    })();
+        classBannerBody.innerHTML = bits || 'Class details loaded.';
+        classBanner.classList.add('show');
+    }
+    function clearBanner() {
+        classBanner.classList.remove('show');
+        classBannerBody.innerHTML = '';
+    }
+    function setCodeStatus(text, ok) {
+        codeStatus.textContent = text || '';
+        codeStatus.classList.remove('ok', 'bad');
+        if (text) codeStatus.classList.add(ok ? 'ok' : 'bad');
+    }
+
+    function escapeHtml(s) {
+        if (s === null || s === undefined) return '';
+        return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    async function validateCode(code) {
+        try {
+            var resp = await fetch(SUPABASE_URL + '/functions/v1/validate-class-code', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY },
+                body: JSON.stringify({ join_code: code })
+            });
+            var result = await resp.json();
+            return result;
+        } catch (e) {
+            return { valid: false, error: 'Could not check the code. Check your connection.' };
+        }
+    }
+
+    async function checkCodeAndUpdateBanner(code) {
+        if (!code || !/^[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(code)) {
+            clearBanner();
+            setCodeStatus('', false);
+            lastValidatedCode = null;
+            lastValidationOk = false;
+            return null;
+        }
+        if (code === lastValidatedCode) return null;
+        lastValidatedCode = code;
+        setCodeStatus('Checking...', true);
+        var r = await validateCode(code);
+        if (r && r.valid) {
+            setBanner(r.class_name, r.school_name);
+            setCodeStatus('Code looks good.', true);
+            lastValidationOk = true;
+            return r;
+        } else {
+            clearBanner();
+            setCodeStatus(r && r.error ? r.error : 'Class code not recognised.', false);
+            lastValidationOk = false;
+            return r;
+        }
+    }
 
     // Auto-format the join code as user types: uppercase, insert dash
-    codeInput.addEventListener('input', function(e) {
+    codeInput.addEventListener('input', function() {
         var raw = codeInput.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
         if (raw.length > 8) raw = raw.slice(0, 8);
         if (raw.length > 4) raw = raw.slice(0, 4) + '-' + raw.slice(4);
         codeInput.value = raw;
+        // Reset status when they edit; revalidate on blur or when complete length is reached.
+        if (raw.length < 9) {
+            clearBanner();
+            setCodeStatus('', false);
+            lastValidatedCode = null;
+            lastValidationOk = false;
+        } else {
+            checkCodeAndUpdateBanner(raw);
+        }
+    });
+    codeInput.addEventListener('blur', function() {
+        checkCodeAndUpdateBanner(codeInput.value.trim().toUpperCase());
     });
 
-    function showError(msg) {
-        errorAlert.textContent = msg;
-        errorAlert.style.display = 'block';
-        successAlert.style.display = 'none';
-    }
-    function showSuccess(msg) {
-        successAlert.textContent = msg;
-        successAlert.style.display = 'block';
-        errorAlert.style.display = 'none';
-    }
-    function hideAlerts() {
-        errorAlert.style.display = 'none';
-        successAlert.style.display = 'none';
-    }
-
+    // Submit handler for the signup form (new account)
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
         hideAlerts();
@@ -228,7 +343,12 @@ body {
             var result = await resp.json();
 
             if (!resp.ok) {
-                showError(result.error || 'Something went wrong. Try again.');
+                if (result.code === 'EMAIL_EXISTS') {
+                    showError('An account already exists for ' + email + '. Sign in below to add this class.');
+                    document.getElementById('signinLink').setAttribute('href', 'login.html?next=' + encodeURIComponent('/student-signup.html?code=' + joinCode));
+                } else {
+                    showError(result.error || 'Something went wrong. Try again.');
+                }
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Create my student account';
                 return;
@@ -236,7 +356,6 @@ body {
 
             showSuccess('Account created. Signing you in...');
 
-            // Sign in with the credentials they just used
             var signin = await supabaseClient.auth.signInWithPassword({ email: email, password: password });
             if (signin.error) {
                 showError('Account created but sign-in failed: ' + signin.error.message + '. Try logging in normally.');
@@ -245,7 +364,6 @@ body {
                 return;
             }
 
-            // Phase 4: student-portal.html is now live, route there.
             setTimeout(function() {
                 window.location.href = '/student-portal.html';
             }, 600);
@@ -256,6 +374,86 @@ body {
             submitBtn.textContent = 'Create my student account';
         }
     });
+
+    // Already-signed-in: just add the class via join-class-by-code edge function.
+    document.getElementById('confirmJoinBtn').addEventListener('click', async function() {
+        hideAlerts();
+        var btn = document.getElementById('confirmJoinBtn');
+        btn.disabled = true;
+        btn.textContent = 'Adding class...';
+        try {
+            var sessionResp = await supabaseClient.auth.getSession();
+            var token = sessionResp && sessionResp.data && sessionResp.data.session && sessionResp.data.session.access_token;
+            if (!token) {
+                showError('Your session expired. Please sign in again.');
+                btn.disabled = false;
+                btn.textContent = 'Add this class';
+                return;
+            }
+            var resp = await fetch(SUPABASE_URL + '/functions/v1/join-class-by-code', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token,
+                    'apikey': SUPABASE_ANON_KEY
+                },
+                body: JSON.stringify({ join_code: prefilledCode })
+            });
+            var result = await resp.json();
+            if (!resp.ok) {
+                showError(result.error || 'Could not join the class.');
+                btn.disabled = false;
+                btn.textContent = 'Add this class';
+                return;
+            }
+            showSuccess('Joined ' + (result.class_name || 'the class') + '. Taking you to the dashboard...');
+            setTimeout(function() { window.location.href = '/student-portal.html'; }, 700);
+        } catch (e) {
+            showError('Network error: ' + e.message);
+            btn.disabled = false;
+            btn.textContent = 'Add this class';
+        }
+    });
+
+    // Boot: figure out which view to show based on existing session and prefilled code.
+    (async function boot() {
+        var params = new URLSearchParams(window.location.search);
+        var code = params.get('code');
+        if (code) {
+            prefilledCode = code.trim().toUpperCase();
+        }
+
+        var sessionResp = await supabaseClient.auth.getSession();
+        var session = sessionResp && sessionResp.data && sessionResp.data.session;
+
+        if (session && session.user) {
+            // Logged-in user. If a code was supplied, show join confirmation.
+            if (prefilledCode) {
+                document.getElementById('joinExistingEmail').textContent = session.user.email || '';
+                pageTitle.textContent = 'Add a class';
+                pageSub.textContent = 'You\'re already signed in. Confirm adding this class to your account.';
+                bootView.style.display = 'none';
+                joinConfirmView.style.display = 'block';
+                // Validate code so we can show the school/class banner above the confirm card.
+                await checkCodeAndUpdateBanner(prefilledCode);
+                return;
+            }
+            // Logged-in but no code: just send them to their dashboard.
+            window.location.href = '/student-portal.html';
+            return;
+        }
+
+        // Anonymous user: show the signup form.
+        bootView.style.display = 'none';
+        form.style.display = 'block';
+        signinFootLink.style.display = 'block';
+        policyLine.style.display = 'block';
+
+        if (prefilledCode) {
+            codeInput.value = prefilledCode;
+            await checkCodeAndUpdateBanner(prefilledCode);
+        }
+    })();
 </script>
 
 </body>

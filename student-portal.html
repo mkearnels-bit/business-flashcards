@@ -91,6 +91,22 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
     .welcome-title { font-size: 1.5rem; }
     .page { padding: 1.25rem 1rem 3rem; }
 }
+
+/* Join-class modal */
+.modal-backdrop { position: fixed; inset: 0; background: rgba(15,23,42,0.55); z-index: 200; display: none; align-items: center; justify-content: center; padding: 1.5rem; }
+.modal-backdrop.show { display: flex; }
+.modal-card { background: white; max-width: 440px; width: 100%; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); overflow: hidden; }
+.modal-head { padding: 1.25rem 1.5rem 0.75rem; }
+.modal-title { font-size: 1.1rem; font-weight: 800; color: var(--primary); }
+.modal-sub { font-size: 0.88rem; color: var(--gray-500); margin-top: 0.25rem; }
+.modal-body { padding: 0.75rem 1.5rem 1.25rem; }
+.modal-foot { padding: 0.75rem 1.5rem 1.25rem; display: flex; gap: 0.5rem; justify-content: flex-end; }
+.modal-input { width: 100%; padding: 0.7rem 0.9rem; border: 1px solid var(--gray-300); border-radius: var(--radius); font-size: 0.96rem; font-family: 'SF Mono', Menlo, monospace; letter-spacing: 0.1em; text-transform: uppercase; }
+.modal-input:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(45,90,138,0.15); }
+.modal-info { margin: 0.6rem 0; padding: 0.7rem 0.85rem; background: #eef5fc; border: 1px solid #c9e0f4; border-radius: var(--radius); color: var(--gray-800); font-size: 0.9rem; display: none; }
+.modal-info.show { display: block; }
+.modal-error { margin: 0.6rem 0; padding: 0.7rem 0.85rem; background: var(--error-bg); border: 1px solid #f5c6c0; border-radius: var(--radius); color: var(--error); font-size: 0.9rem; display: none; }
+.modal-error.show { display: block; }
 </style>
 </head>
 <body>
@@ -116,6 +132,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
         </div>
         <div class="portal-bar-right">
             <a href="student-portal.html" class="portal-nav-link" style="color: var(--primary); background: var(--gray-100); font-weight: 600;">My work</a>
+            <a href="#" class="portal-nav-link" id="joinClassLink" style="color: var(--accent); font-weight: 600;">+ Join class</a>
             <a href="exam-practice.html" class="portal-nav-link">Main site</a>
             <a href="#" class="portal-nav-link" id="logoutLink">Sign out</a>
             <div class="portal-avatar" id="navAvatar">--</div>
@@ -146,6 +163,24 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
     <div id="completedContainer"></div>
 
 </main>
+
+<div class="modal-backdrop" id="joinClassModal">
+    <div class="modal-card">
+        <div class="modal-head">
+            <div class="modal-title">Join another class</div>
+            <div class="modal-sub">Got a new join code from a teacher? Add the class to your account.</div>
+        </div>
+        <div class="modal-body">
+            <input type="text" class="modal-input" id="joinCodeInput" placeholder="ABCD-1234" maxlength="9">
+            <div class="modal-info" id="joinClassInfo"></div>
+            <div class="modal-error" id="joinClassError"></div>
+        </div>
+        <div class="modal-foot">
+            <button class="btn btn-ghost btn-sm" id="joinClassCancelBtn">Cancel</button>
+            <button class="btn btn-primary btn-sm" id="joinClassConfirmBtn">Join class</button>
+        </div>
+    </div>
+</div>
 
 </div>
 
@@ -237,6 +272,111 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
             e.preventDefault();
             await supabaseClient.auth.signOut();
             window.location.href = 'index.html';
+        });
+
+        wireJoinClassModal();
+    }
+
+    function wireJoinClassModal() {
+        var openLink = document.getElementById('joinClassLink');
+        var modal = document.getElementById('joinClassModal');
+        var input = document.getElementById('joinCodeInput');
+        var info = document.getElementById('joinClassInfo');
+        var err = document.getElementById('joinClassError');
+        var confirmBtn = document.getElementById('joinClassConfirmBtn');
+        var cancelBtn = document.getElementById('joinClassCancelBtn');
+
+        function resetModal() {
+            input.value = '';
+            info.textContent = ''; info.classList.remove('show');
+            err.textContent = ''; err.classList.remove('show');
+            confirmBtn.disabled = false;
+            confirmBtn.textContent = 'Join class';
+        }
+        function openModal() {
+            resetModal();
+            modal.classList.add('show');
+            setTimeout(function() { input.focus(); }, 50);
+        }
+        function closeModal() { modal.classList.remove('show'); }
+
+        openLink.addEventListener('click', function(e) { e.preventDefault(); openModal(); });
+        cancelBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', function(e) { if (e.target === modal) closeModal(); });
+
+        // Auto-format the code
+        input.addEventListener('input', function() {
+            var raw = input.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+            if (raw.length > 8) raw = raw.slice(0, 8);
+            if (raw.length > 4) raw = raw.slice(0, 4) + '-' + raw.slice(4);
+            input.value = raw;
+            err.textContent = ''; err.classList.remove('show');
+            info.textContent = ''; info.classList.remove('show');
+            if (raw.length === 9) checkCode(raw);
+        });
+
+        async function checkCode(code) {
+            try {
+                var resp = await fetch(SUPABASE_URL + '/functions/v1/validate-class-code', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY },
+                    body: JSON.stringify({ join_code: code })
+                });
+                var r = await resp.json();
+                if (r && r.valid) {
+                    info.innerHTML = 'Joining <strong>' + esc(r.school_name || '') + (r.class_name ? ' &mdash; ' + esc(r.class_name) : '') + '</strong>';
+                    info.classList.add('show');
+                } else {
+                    err.textContent = (r && r.error) || 'Code not recognised.';
+                    err.classList.add('show');
+                }
+            } catch (_e) { /* swallow; submit will surface real errors */ }
+        }
+
+        confirmBtn.addEventListener('click', async function() {
+            var code = input.value.trim().toUpperCase();
+            err.textContent = ''; err.classList.remove('show');
+            if (!/^[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(code)) {
+                err.textContent = 'Class join code looks wrong. It should look like ABCD-1234.';
+                err.classList.add('show');
+                return;
+            }
+            confirmBtn.disabled = true;
+            confirmBtn.textContent = 'Joining...';
+            try {
+                var sessionResp = await supabaseClient.auth.getSession();
+                var token = sessionResp && sessionResp.data && sessionResp.data.session && sessionResp.data.session.access_token;
+                var resp = await fetch(SUPABASE_URL + '/functions/v1/join-class-by-code', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token,
+                        'apikey': SUPABASE_ANON_KEY
+                    },
+                    body: JSON.stringify({ join_code: code })
+                });
+                var result = await resp.json();
+                if (!resp.ok) {
+                    err.textContent = result.error || 'Could not join the class.';
+                    err.classList.add('show');
+                    confirmBtn.disabled = false;
+                    confirmBtn.textContent = 'Join class';
+                    return;
+                }
+                if (result.already_enrolled) {
+                    info.textContent = 'You\'re already in ' + (result.class_name || 'this class') + '. Refreshing...';
+                    info.classList.add('show');
+                } else {
+                    info.textContent = 'Joined ' + (result.class_name || 'class') + '. Refreshing...';
+                    info.classList.add('show');
+                }
+                setTimeout(function() { window.location.reload(); }, 700);
+            } catch (e) {
+                err.textContent = 'Network error: ' + e.message;
+                err.classList.add('show');
+                confirmBtn.disabled = false;
+                confirmBtn.textContent = 'Join class';
+            }
         });
     }
 

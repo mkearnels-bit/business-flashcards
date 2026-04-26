@@ -1044,7 +1044,8 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
         document.getElementById('caseStudyContainer').innerHTML = caseHtml;
 
         var totalMarks = paper.total_marks || (paper.questions || []).reduce(function(s, q) { return s + (q.marks || 0); }, 0);
-        var paperTitleText = paper.test_title || paper.title || paper.topic || 'Topic test';
+        var rawPaperTitle = paper.test_title || paper.title || paper.topic || 'Topic test';
+        var paperTitleText = cleanTestTitle(rawPaperTitle);
         document.getElementById('approveTitle').textContent = paperTitleText;
         document.getElementById('approveSub').textContent = (BOARD_LABELS[currentClass.board] || currentClass.board) + ', ' + totalMarks + ' marks total, ' + (paper.questions || []).length + ' questions';
         totalMarksForPayload = totalMarks;
@@ -1160,6 +1161,10 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
                 displayTopic = generatedPayload.paper.title || generatedPayload.paper.topic || '';
             }
         }
+        // For tests, tidy the title: strip the board prefix and the word "Practice".
+        if (currentType === 'test' && displayTopic) {
+            displayTopic = cleanTestTitle(displayTopic);
+        }
 
         // Don't store the unit picker's "all" sentinel as a real unit value.
         var unitForRow = (unit && unit !== 'all') ? unit : null;
@@ -1231,6 +1236,24 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
     }
 
     function esc(s) { if (s === null || s === undefined) return ''; return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+    // Tidy up AI-generated test titles. The AI tends to return things like
+    // "AQA GCSE Business Studies: Marketing Practice Test". We just want the
+    // topic plus the word "Test", e.g. "Marketing Test".
+    function cleanTestTitle(rawTitle) {
+        if (!rawTitle) return '';
+        var t = String(rawTitle).trim();
+        var colonIdx = t.indexOf(':');
+        if (colonIdx > -1 && colonIdx < t.length - 1) {
+            t = t.substring(colonIdx + 1).trim();
+        }
+        t = t.replace(/\bpractice\b/gi, '').replace(/\s+/g, ' ').trim();
+        t = t.replace(/\s*[-,]\s*$/, '').trim();
+        if (!/\btest\b\s*$/i.test(t)) {
+            t = t + ' Test';
+        }
+        return t;
+    }
     function showToast(message, type) {
         var t = document.getElementById('toast');
         t.className = 'toast show ' + (type || '');
