@@ -1889,6 +1889,11 @@ function mybizLoadTikTokPixel() {
                                         <input type="number" class="form-input" id="schoolLimitInput" value="100" min="1">
                                     </div>
                                     <div class="form-group">
+                                        <label class="form-label">Allowed email domain (optional)</label>
+                                        <input type="text" class="form-input" id="schoolDomainInput" placeholder="e.g. oakwoodacademy.ac.uk">
+                                        <small style="color: var(--gray-500); font-size:0.78rem;">If set, only emails ending @this-domain can sign up. Leave blank for no restriction.</small>
+                                    </div>
+                                    <div class="form-group">
                                         <label class="form-label">Notes (optional)</label>
                                         <input type="text" class="form-input" id="schoolNotesInput" placeholder="Any internal notes">
                                     </div>
@@ -1911,14 +1916,15 @@ function mybizLoadTikTokPixel() {
                                             <th>Name</th>
                                             <th>Contact</th>
                                             <th>Licence window</th>
-                                            <th>Student limit</th>
+                                            <th>Limit</th>
+                                            <th>Allowed domain</th>
                                             <th>Teachers</th>
                                             <th>Classes</th>
                                             <th></th>
                                         </tr>
                                     </thead>
                                     <tbody id="schoolsTableBody">
-                                        <tr><td colspan="7" style="text-align:center;color:var(--gray-400);padding:2rem;">Loading...</td></tr>
+                                        <tr><td colspan="8" style="text-align:center;color:var(--gray-400);padding:2rem;">Loading...</td></tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -4468,9 +4474,14 @@ function mybizLoadTikTokPixel() {
             var licenceEnd = document.getElementById('schoolLicenceEndInput').value;
             var limit = parseInt(document.getElementById('schoolLimitInput').value, 10);
             var notes = document.getElementById('schoolNotesInput').value.trim();
+            var domainRaw = document.getElementById('schoolDomainInput').value.trim().toLowerCase().replace(/^@/, '');
 
             if (!name) {
                 showToast('School name is required', 'error');
+                return;
+            }
+            if (domainRaw && !/^[a-z0-9.-]+\.[a-z]{2,}$/.test(domainRaw)) {
+                showToast('Allowed email domain looks wrong. Try something like oakwoodacademy.ac.uk', 'error');
                 return;
             }
 
@@ -4484,6 +4495,7 @@ function mybizLoadTikTokPixel() {
                 licence_start: licenceStart || null,
                 licence_end: licenceEnd || null,
                 student_limit: isNaN(limit) ? 100 : limit,
+                allowed_email_domain: domainRaw || null,
                 notes: notes || null
             };
 
@@ -4503,25 +4515,26 @@ function mybizLoadTikTokPixel() {
             document.getElementById('schoolLicenceStartInput').value = '';
             document.getElementById('schoolLicenceEndInput').value = '';
             document.getElementById('schoolLimitInput').value = '100';
+            document.getElementById('schoolDomainInput').value = '';
             document.getElementById('schoolNotesInput').value = '';
             tpRefreshSchools();
         }
 
         async function tpRefreshSchools() {
             var tbody = document.getElementById('schoolsTableBody');
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--gray-400);padding:2rem;">Loading...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--gray-400);padding:2rem;">Loading...</td></tr>';
 
             var { data: schools, error } = await supabaseClient
                 .from('schools')
-                .select('id, name, contact_email, licence_start, licence_end, student_limit, created_at')
+                .select('id, name, contact_email, licence_start, licence_end, student_limit, allowed_email_domain, created_at')
                 .order('name', { ascending: true });
 
             if (error) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--danger);padding:1rem;">' + error.message + '</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--danger);padding:1rem;">' + error.message + '</td></tr>';
                 return;
             }
             if (!schools || schools.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--gray-400);padding:2rem;">No schools yet. Create your first above.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--gray-400);padding:2rem;">No schools yet. Create your first above.</td></tr>';
                 TP_SCHOOLS_CACHE = [];
                 tpPopulateSchoolSelect();
                 return;
@@ -4554,11 +4567,15 @@ function mybizLoadTikTokPixel() {
                     licence = 'Ends ' + s.licence_end;
                 }
                 var email = s.contact_email ? '<span style="color:var(--gray-600);font-size:0.85rem;">' + s.contact_email + '</span>' : '<span style="color:var(--gray-400);">-</span>';
+                var domainCell = s.allowed_email_domain
+                    ? '<span style="font-family: \'SF Mono\', Menlo, monospace; font-size:0.82rem;">@' + tpEscape(s.allowed_email_domain) + '</span>'
+                    : '<span style="color:var(--gray-400);font-size:0.82rem;">Any email</span>';
                 return '<tr>' +
                     '<td><strong>' + tpEscape(s.name) + '</strong></td>' +
                     '<td>' + email + '</td>' +
                     '<td>' + tpEscape(licence) + '</td>' +
                     '<td>' + (s.student_limit || '-') + '</td>' +
+                    '<td>' + domainCell + ' <button class="btn btn-ghost btn-sm" style="padding:0.15rem 0.45rem; font-size:0.72rem; margin-left:0.3rem;" onclick="tpEditSchoolDomain(\'' + s.id + '\', \'' + (s.allowed_email_domain || '') + '\')">Edit</button></td>' +
                     '<td>' + (teacherCounts[s.id] || 0) + '</td>' +
                     '<td>' + (classCounts[s.id] || 0) + '</td>' +
                     '<td><button class="btn btn-danger btn-sm" onclick="tpDeleteSchool(\'' + s.id + '\', \'' + tpEscape(s.name).replace(/'/g, "\\'") + '\')">Delete</button></td>' +
@@ -4592,6 +4609,27 @@ function mybizLoadTikTokPixel() {
             tpRefreshSchools();
             tpRefreshTeachers();
         }
+
+        async function tpEditSchoolDomain(schoolId, currentDomain) {
+            var input = prompt('Allowed email domain for this school. Leave blank for no restriction. Example: oakwoodacademy.ac.uk', currentDomain || '');
+            if (input === null) return; // cancelled
+            var clean = input.trim().toLowerCase().replace(/^@/, '');
+            if (clean && !/^[a-z0-9.-]+\.[a-z]{2,}$/.test(clean)) {
+                showToast('Domain looks wrong. Try something like oakwoodacademy.ac.uk', 'error');
+                return;
+            }
+            var { error } = await supabaseClient
+                .from('schools')
+                .update({ allowed_email_domain: clean || null })
+                .eq('id', schoolId);
+            if (error) {
+                showToast('Could not update: ' + error.message, 'error');
+                return;
+            }
+            showToast(clean ? ('Domain set to @' + clean) : 'Domain restriction cleared', 'success');
+            tpRefreshSchools();
+        }
+        window.tpEditSchoolDomain = tpEditSchoolDomain;
 
         async function tpInviteTeacher() {
             var schoolId = document.getElementById('inviteSchoolSelect').value;
