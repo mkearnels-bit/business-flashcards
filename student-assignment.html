@@ -147,6 +147,10 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
 
     <!-- View: take the assignment -->
     <div id="takeView">
+        <div style="background:#eef5fc; border:1px solid #c9e0f4; border-radius:var(--radius); padding:0.85rem 1rem; margin:0 0 1.25rem; font-size:0.88rem; color:var(--gray-700); display:flex; align-items:flex-start; gap:0.6rem;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1e3a5f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <span>Your typing patterns and any pasted content are recorded for academic integrity. Type your own answers in your own words.</span>
+        </div>
         <div id="caseStudyContainer"></div>
         <div id="questionsContainer"></div>
 
@@ -404,6 +408,95 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
     var startedAt = null;
     var wakeLock = null;
 
+    // Integrity tracking — captures process signals for the academic integrity flag
+    // shown in the teacher's markbook. None of this is shown to the student.
+    var integrity = {
+        keystrokeCount: 0,
+        pasteEvents: [],          // { chars: int, at_seconds: int }
+        focusLossCount: 0,
+        focusLossSeconds: 0,
+        _focusLostAt: null,       // timestamp of most recent focus loss (ms)
+        _trackingStarted: false
+    };
+
+    function startIntegrityTracking() {
+        if (integrity._trackingStarted) return;
+        integrity._trackingStarted = true;
+
+        // Keystrokes — only counted on textareas (input events on the answer fields).
+        document.addEventListener('keydown', function(e) {
+            // Ignore standalone modifier presses
+            if (e.key === 'Shift' || e.key === 'Control' || e.key === 'Alt' || e.key === 'Meta') return;
+            if (e.target && e.target.classList && e.target.classList.contains('answer-textarea')) {
+                integrity.keystrokeCount += 1;
+            }
+        }, true);
+
+        // Paste events — capture size of paste in chars
+        document.addEventListener('paste', function(e) {
+            if (!(e.target && e.target.classList && e.target.classList.contains('answer-textarea'))) return;
+            var clip = (e.clipboardData || window.clipboardData);
+            var text = clip ? clip.getData('text') : '';
+            var chars = text ? text.length : 0;
+            var at = startedAt ? Math.floor((Date.now() - startedAt) / 1000) : 0;
+            integrity.pasteEvents.push({ chars: chars, at_seconds: at });
+        }, true);
+
+        // Visibility change — page goes hidden (tab switch, minimise, screen lock, switch desktop)
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                if (integrity._focusLostAt === null) integrity._focusLostAt = Date.now();
+            } else {
+                if (integrity._focusLostAt !== null) {
+                    integrity.focusLossSeconds += Math.floor((Date.now() - integrity._focusLostAt) / 1000);
+                    integrity.focusLossCount += 1;
+                    integrity._focusLostAt = null;
+                }
+            }
+        });
+
+        // Window blur/focus — switch to another app, browser profile, separate window
+        window.addEventListener('blur', function() {
+            if (integrity._focusLostAt === null) integrity._focusLostAt = Date.now();
+        });
+        window.addEventListener('focus', function() {
+            if (integrity._focusLostAt !== null) {
+                integrity.focusLossSeconds += Math.floor((Date.now() - integrity._focusLostAt) / 1000);
+                integrity.focusLossCount += 1;
+                integrity._focusLostAt = null;
+            }
+        });
+    }
+
+    function buildIntegrityPayload() {
+        // Cumulative answer length across all answer textareas at submit time.
+        var totalAnswerLen = 0;
+        document.querySelectorAll('.answer-textarea').forEach(function(t) {
+            totalAnswerLen += (t.value || '').length;
+        });
+        var totalPaste = integrity.pasteEvents.reduce(function(s, p) { return s + (p.chars || 0); }, 0);
+        var durationSec = startedAt ? Math.floor((Date.now() - startedAt) / 1000) : 0;
+        // If the page was still hidden when they submitted, close out the focus loss.
+        var lossSeconds = integrity.focusLossSeconds;
+        var lossCount = integrity.focusLossCount;
+        if (integrity._focusLostAt !== null) {
+            lossSeconds += Math.floor((Date.now() - integrity._focusLostAt) / 1000);
+            lossCount += 1;
+        }
+
+        return {
+            started_at: startedAt ? new Date(startedAt).toISOString() : null,
+            submitted_at: new Date().toISOString(),
+            duration_seconds: durationSec,
+            keystroke_count: integrity.keystrokeCount,
+            answer_length_chars: totalAnswerLen,
+            paste_events: integrity.pasteEvents,
+            total_pasted_chars: totalPaste,
+            focus_loss_count: lossCount,
+            focus_loss_seconds: lossSeconds
+        };
+    }
+
     document.addEventListener('DOMContentLoaded', init);
 
     async function init() {
@@ -445,6 +538,7 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
             renderFeedback();
         } else {
             startedAt = Date.now();
+            startIntegrityTracking();
             // Mark as in_progress so the teacher can see
             await supabaseClient.from('student_attempts').update({ status: 'in_progress', started_at: new Date().toISOString() }).eq('id', att.id);
             renderTakeView();
@@ -596,6 +690,9 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
             payload.student_answers = studentAnswers;
             payload.total_time_seconds = startedAt ? Math.floor((Date.now() - startedAt) / 1000) : null;
         }
+
+        // Attach integrity signals captured during the attempt.
+        payload.integrity_signals = buildIntegrityPayload();
 
         document.getElementById('takeView').style.display = 'none';
         document.getElementById('markingView').style.display = 'block';

@@ -774,7 +774,7 @@ table.data-table { width: 100%; border-collapse: collapse; }
             var aIds = ASSIGNMENTS_CACHE.map(function(a) { return a.id; });
             var { data: atts } = await supabaseClient
                 .from('student_attempts')
-                .select('id, assignment_id, student_id, status, ai_score, ai_total, submitted_at')
+                .select('id, assignment_id, student_id, status, ai_score, ai_total, submitted_at, integrity_flag')
                 .in('assignment_id', aIds);
             ATTEMPTS_CACHE = atts || [];
         } else {
@@ -866,7 +866,8 @@ table.data-table { width: 100%; border-collapse: collapse; }
                 } else if (att.status === 'graded') {
                     var pct = (att.ai_total > 0) ? Math.round((att.ai_score / att.ai_total) * 100) : 0;
                     var bg = pct >= 70 ? 'var(--success-bg);color:#1e7e4c' : pct >= 50 ? 'var(--warning-bg);color:#b87100' : 'var(--error-bg);color:#a03528';
-                    html += '<td style="text-align:center;"><button onclick="openAttemptDetail(\'' + att.id + '\')" style="background:' + bg + '; padding:0.25rem 0.6rem; border-radius:6px; font-weight:700; cursor:pointer; border:none;">' + att.ai_score + ' / ' + att.ai_total + '</button></td>';
+                    var flagHtml = renderIntegrityFlag(att.integrity_flag, att.id);
+                    html += '<td style="text-align:center; white-space:nowrap;"><button onclick="openAttemptDetail(\'' + att.id + '\')" style="background:' + bg + '; padding:0.25rem 0.6rem; border-radius:6px; font-weight:700; cursor:pointer; border:none;">' + att.ai_score + ' / ' + att.ai_total + '</button>' + flagHtml + '</td>';
                 } else if (att.status === 'in_progress') {
                     html += '<td class="muted" style="text-align:center; font-size:0.78rem;">In progress</td>';
                 } else {
@@ -926,7 +927,8 @@ table.data-table { width: 100%; border-collapse: collapse; }
             var statusCell = '';
             if (att.status === 'graded') {
                 var pct = (att.ai_total > 0) ? Math.round((att.ai_score / att.ai_total) * 100) : 0;
-                statusCell = '<button class="btn btn-ghost btn-sm" onclick="openAttemptDetail(\'' + att.id + '\')">' + att.ai_score + ' / ' + att.ai_total + ' (' + pct + '%)</button>';
+                var flagHtml2 = renderIntegrityFlag(att.integrity_flag, att.id);
+                statusCell = '<button class="btn btn-ghost btn-sm" onclick="openAttemptDetail(\'' + att.id + '\')">' + att.ai_score + ' / ' + att.ai_total + ' (' + pct + '%)</button>' + flagHtml2;
             } else if (att.status === 'in_progress') {
                 statusCell = '<span class="pill pill-info">In progress</span>';
             } else {
@@ -950,7 +952,7 @@ table.data-table { width: 100%; border-collapse: collapse; }
         // Fetch full attempt + the parent assignment's payload so we can show question text alongside answers
         var [attRes, assignRes] = await Promise.all([
             supabaseClient.from('student_attempts')
-                .select('id, assignment_id, student_id, status, ai_score, ai_total, ai_feedback, answers, submitted_at, teacher_feedback, teacher_feedback_at')
+                .select('id, assignment_id, student_id, status, ai_score, ai_total, ai_feedback, answers, submitted_at, teacher_feedback, teacher_feedback_at, integrity_flag, integrity_signals')
                 .eq('id', attemptId).maybeSingle(),
             (function() {
                 var ass = ASSIGNMENTS_CACHE.find(function(a) { return a.id === att.assignment_id; });
@@ -1170,6 +1172,141 @@ table.data-table { width: 100%; border-collapse: collapse; }
         }
     }
     window.downloadAssignmentPdf = downloadAssignmentPdf;
+
+    // ============ Integrity flag rendering ============
+
+    function renderIntegrityFlag(flag, attemptId) {
+        if (!flag || flag === 'green') {
+            // Subtle green flag — confirms checks passed.
+            return '<button onclick="openIntegrityModal(\'' + attemptId + '\'); event.stopPropagation();" title="Integrity: clean" style="background:none;border:none;cursor:pointer;padding:2px 4px;margin-left:6px;vertical-align:middle;line-height:0;">' +
+                '<svg width="14" height="14" viewBox="0 0 16 16" fill="#1d9e75" style="display:inline-block;"><rect x="3" y="1.5" width="1.2" height="13" rx="0.4"/><path d="M4.4 2.2 L13.3 2.2 L11.1 5 L13.3 7.8 L4.4 7.8 Z"/></svg>' +
+            '</button>';
+        }
+        var fill = flag === 'red' ? '#e24b4a' : '#ef9f27';
+        var label = flag === 'red' ? 'Integrity: review recommended' : 'Integrity: worth a look';
+        return '<button onclick="openIntegrityModal(\'' + attemptId + '\'); event.stopPropagation();" title="' + label + '" style="background:none;border:none;cursor:pointer;padding:2px 4px;margin-left:6px;vertical-align:middle;line-height:0;">' +
+            '<svg width="14" height="14" viewBox="0 0 16 16" fill="' + fill + '" style="display:inline-block;"><rect x="3" y="1.5" width="1.2" height="13" rx="0.4"/><path d="M4.4 2.2 L13.3 2.2 L11.1 5 L13.3 7.8 L4.4 7.8 Z"/></svg>' +
+        '</button>';
+    }
+    window.renderIntegrityFlag = renderIntegrityFlag;
+
+    async function openIntegrityModal(attemptId) {
+        var att = ATTEMPTS_CACHE.find(function(x) { return x.id === attemptId; });
+        if (!att) return;
+        // Fetch full integrity_signals (not in the cache).
+        var { data: full } = await supabaseClient
+            .from('student_attempts')
+            .select('id, integrity_flag, integrity_signals, student_id, assignment_id')
+            .eq('id', attemptId).maybeSingle();
+        if (!full) { showToast('Could not load integrity data', 'error'); return; }
+
+        var s = full.integrity_signals || {};
+        var reasons = (s.flag_reasons) || {};
+        var flag = full.integrity_flag || 'green';
+
+        // Find student + assignment for the modal sub-line.
+        var studentName = '-';
+        var stu = STUDENTS_CACHE.find(function(x) { return x.user_id === full.student_id; });
+        if (stu) studentName = stu.name || stu.email || '-';
+        var asn = ASSIGNMENTS_CACHE.find(function(a) { return a.id === full.assignment_id; });
+        var asnTitle = asn ? (asn.topic || asn.unit || (asn.type === 'test' ? 'Test' : 'Question')) : 'Submission';
+        var asnMarks = asn && asn.total_marks ? ' (' + asn.total_marks + ' marks)' : '';
+
+        var bannerColor = flag === 'red' ? { bg: '#fceae8', fg: '#791f1f', label: 'Review recommended' }
+            : flag === 'amber' ? { bg: '#faeeda', fg: '#633806', label: 'Worth a look' }
+            : { bg: '#e1f5ee', fg: '#085041', label: 'Looks clean' };
+
+        function pill(state, fallback) {
+            var st = state || 'green';
+            var bg = st === 'red' ? '#fceae8' : st === 'amber' ? '#faeeda' : '#e1f5ee';
+            var fg = st === 'red' ? '#791f1f' : st === 'amber' ? '#633806' : '#085041';
+            var text = fallback[st] || fallback.green;
+            return '<span style="display:inline-flex; align-items:center; padding:2px 8px; border-radius:999px; background:' + bg + '; color:' + fg + '; font-size:11px; font-weight:500;">' + text + '</span>';
+        }
+
+        function fmtTime(sec) {
+            if (sec === null || sec === undefined) return '-';
+            sec = Math.max(0, Math.round(sec));
+            if (sec < 60) return sec + 's';
+            var m = Math.floor(sec / 60);
+            var r = sec % 60;
+            return m + 'm ' + (r < 10 ? '0' : '') + r + 's';
+        }
+
+        var pasteCount = (s.paste_events || []).length;
+        var pastedChars = s.total_pasted_chars || 0;
+        var answerLen = s.answer_length_chars || 0;
+        var pastedDescription = pasteCount === 0
+            ? 'None'
+            : (answerLen > 0
+                ? Math.min(100, Math.round((pastedChars / answerLen) * 100)) + '% of answer (' + pasteCount + ' paste' + (pasteCount === 1 ? '' : 's') + ')'
+                : pastedChars.toLocaleString() + ' chars (' + pasteCount + ' paste' + (pasteCount === 1 ? '' : 's') + ')');
+
+        var keyRatio = answerLen > 0 ? Math.round(((s.keystroke_count || 0) / answerLen) * 100) : null;
+        var keyDescription = (s.keystroke_count || 0) + (keyRatio !== null ? ' (' + keyRatio + '% of answer length)' : '');
+
+        var awayCount = s.focus_loss_count || 0;
+        var awaySec = s.focus_loss_seconds || 0;
+        var awayDescription = awayCount === 0 ? 'Stayed on page' : fmtTime(awaySec) + ' across ' + awayCount + ' time' + (awayCount === 1 ? '' : 's');
+
+        var html = '<div id="integrityModal" style="position:fixed; inset:0; background:rgba(15,23,42,0.55); z-index:300; display:flex; align-items:flex-start; justify-content:center; padding:3rem 1rem; overflow:auto;">' +
+            '<div style="background:white; max-width:460px; width:100%; border-radius:16px; overflow:hidden; box-shadow:0 20px 60px rgba(15,23,42,0.25);">' +
+                '<div style="padding:18px 22px 14px; display:flex; align-items:flex-start; justify-content:space-between; gap:12px; border-bottom:0.5px solid #e2e8f0;">' +
+                    '<div>' +
+                        '<div style="font-size:16px; font-weight:600; color:#0f172a; margin-bottom:2px;">Submission integrity</div>' +
+                        '<div style="font-size:13px; color:#64748b;">' + esc(studentName) + ' &mdash; ' + esc(asnTitle) + esc(asnMarks) + '</div>' +
+                    '</div>' +
+                    '<button onclick="closeIntegrityModal()" style="background:none;border:none;cursor:pointer;padding:4px;color:#94a3b8;line-height:0;border-radius:6px;">' +
+                        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6 L18 18 M18 6 L6 18"/></svg>' +
+                    '</button>' +
+                '</div>' +
+                '<div style="display:flex; align-items:center; gap:10px; padding:12px 22px; font-size:14px; font-weight:600; background:' + bannerColor.bg + '; color:' + bannerColor.fg + ';">' +
+                    '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="3" y="1.5" width="1.2" height="13" rx="0.4"/><path d="M4.4 2.2 L13.3 2.2 L11.1 5 L13.3 7.8 L4.4 7.8 Z"/></svg>' +
+                    bannerColor.label +
+                '</div>' +
+                '<div style="padding:6px 22px 14px;">' +
+                    '<div style="display:grid; grid-template-columns:1fr auto auto; gap:12px; align-items:center; padding:12px 0; border-bottom:0.5px solid #e2e8f0;">' +
+                        '<span style="font-size:13.5px; color:#334155;">Time on task</span>' +
+                        '<span style="font-variant-numeric:tabular-nums; font-weight:600; font-size:14px; color:#0f172a;">' + fmtTime(s.duration_seconds) + '</span>' +
+                        pill(reasons.time, { red: 'very short', amber: 'below average', green: 'normal' }) +
+                    '</div>' +
+                    '<div style="display:grid; grid-template-columns:1fr auto auto; gap:12px; align-items:center; padding:12px 0; border-bottom:0.5px solid #e2e8f0;">' +
+                        '<span style="font-size:13.5px; color:#334155;">Keystrokes</span>' +
+                        '<span style="font-variant-numeric:tabular-nums; font-weight:600; font-size:14px; color:#0f172a;">' + esc(keyDescription) + '</span>' +
+                        pill(reasons.keystrokes, { red: 'unusually low', amber: 'low', green: 'normal' }) +
+                    '</div>' +
+                    '<div style="display:grid; grid-template-columns:1fr auto auto; gap:12px; align-items:center; padding:12px 0; border-bottom:0.5px solid #e2e8f0;">' +
+                        '<span style="font-size:13.5px; color:#334155;">Pasted content</span>' +
+                        '<span style="font-variant-numeric:tabular-nums; font-weight:600; font-size:14px; color:#0f172a;">' + esc(pastedDescription) + '</span>' +
+                        pill(reasons.paste, { red: 'large paste', amber: 'some pasting', green: 'none' }) +
+                    '</div>' +
+                    '<div style="display:grid; grid-template-columns:1fr auto auto; gap:12px; align-items:center; padding:12px 0;">' +
+                        '<span style="font-size:13.5px; color:#334155;">Time away from page</span>' +
+                        '<span style="font-variant-numeric:tabular-nums; font-weight:600; font-size:14px; color:#0f172a;">' + esc(awayDescription) + '</span>' +
+                        pill(reasons.away, { red: 'long absence', amber: 'left briefly', green: 'on page' }) +
+                    '</div>' +
+                '</div>' +
+                '<div style="padding:14px 22px 18px; border-top:0.5px solid #e2e8f0; background:#f8fafc;">' +
+                    '<p style="font-size:12px; color:#64748b; margin:0; line-height:1.55;">These are factual signals, not proof. Use them as context to start a conversation with the student about how they produced this answer.</p>' +
+                '</div>' +
+            '</div>' +
+        '</div>';
+
+        // Remove any previous instance, then attach.
+        var existing = document.getElementById('integrityModal');
+        if (existing) existing.remove();
+        document.body.insertAdjacentHTML('beforeend', html);
+        document.getElementById('integrityModal').addEventListener('click', function(e) {
+            if (e.target.id === 'integrityModal') closeIntegrityModal();
+        });
+    }
+    window.openIntegrityModal = openIntegrityModal;
+
+    function closeIntegrityModal() {
+        var m = document.getElementById('integrityModal');
+        if (m) m.remove();
+    }
+    window.closeIntegrityModal = closeIntegrityModal;
 
     async function reopenAttempt(attemptId) {
         if (!confirm('Reopen this attempt? Their previous answer, AI feedback and your note will be cleared so they can try again. This cannot be undone.')) return;
