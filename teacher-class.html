@@ -1329,7 +1329,7 @@ table.data-table { width: 100%; border-collapse: collapse; }
 
         var { data: rows, error } = await supabaseClient
             .from('class_teachers')
-            .select('teacher_id, permission, role_label, added_at, profile:teacher_id(name, email)')
+            .select('teacher_id, permission, role_label, added_at')
             .eq('class_id', currentClass.id)
             .order('added_at', { ascending: true });
 
@@ -1339,6 +1339,18 @@ table.data-table { width: 100%; border-collapse: collapse; }
         }
 
         var data = rows || [];
+
+        // Hydrate names/emails from user_profiles in a second query (no FK relationship to inline).
+        var teacherIds = data.map(function(r) { return r.teacher_id; });
+        var profileMap = {};
+        if (teacherIds.length > 0) {
+            var profileResult = await supabaseClient
+                .from('user_profiles')
+                .select('user_id, name, email')
+                .in('user_id', teacherIds);
+            (profileResult.data || []).forEach(function(p) { profileMap[p.user_id] = p; });
+        }
+        data.forEach(function(r) { r.profile = profileMap[r.teacher_id] || {}; });
         document.getElementById('teacherCount').textContent = data.length;
 
         if (data.length === 0) {
