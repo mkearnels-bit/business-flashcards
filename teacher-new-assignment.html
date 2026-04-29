@@ -702,9 +702,14 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
         // Translate any legacy alias to the canonical board ID before everything downstream
         currentClass.board = canonicaliseBoard(currentClass.board);
 
-        // Confirm teacher is on class_teachers
-        var ctCheck = await supabaseClient.from('class_teachers').select('class_id').eq('class_id', classId).eq('teacher_id', currentUser.id).maybeSingle();
+        // Confirm teacher is on class_teachers AND has edit permission. View-only teachers
+        // can browse the class but can't create new assignments — they can only copy existing ones.
+        var ctCheck = await supabaseClient.from('class_teachers').select('class_id, permission').eq('class_id', classId).eq('teacher_id', currentUser.id).maybeSingle();
         if (!ctCheck.data) { showAccessDenied("You're not on this class."); return; }
+        if (ctCheck.data.permission !== 'edit') {
+            showAccessDenied("You have view-only access on this class. You can copy an existing assignment from the assignments list, but you can't create new ones.");
+            return;
+        }
 
         // Count students enrolled
         var enrolResult = await supabaseClient.from('class_students').select('student_id', { count: 'exact', head: true }).eq('class_id', classId);

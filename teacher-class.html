@@ -217,7 +217,8 @@ table.data-table { width: 100%; border-collapse: collapse; }
     </div>
 
     <div class="tabs">
-        <button class="tab active" data-tab="students">Students <span class="tab-count" id="studentCount">0</span></button>
+        <button class="tab active" data-tab="teachers">Teachers <span class="tab-count" id="teacherCount">0</span></button>
+        <button class="tab" data-tab="students">Students <span class="tab-count" id="studentCount">0</span></button>
         <button class="tab" data-tab="assignments">Assignments <span class="tab-count" id="assignmentCount">0</span></button>
         <button class="tab" data-tab="markbook">Markbook</button>
         <a href="#" id="newAssignmentBtnTop" style="margin-left:auto; align-self:center;" class="btn btn-primary btn-sm">
@@ -226,8 +227,117 @@ table.data-table { width: 100%; border-collapse: collapse; }
         </a>
     </div>
 
+    <!-- Teachers tab -->
+    <section class="tab-pane active" id="pane-teachers">
+        <div class="panel" style="margin-bottom:1rem;">
+            <div class="panel-head">
+                <div>
+                    <div class="panel-title">Teachers on this class</div>
+                    <div class="panel-sub">Add other teachers from your school as Co-Teachers or HODs. Choose Edit (full access) or View only (read, copy, download).</div>
+                </div>
+                <button class="btn btn-primary btn-sm" id="addTeacherBtn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                    Add teacher
+                </button>
+            </div>
+            <div class="panel-body" style="padding:0;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Permission</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="teachersTableBody">
+                        <tr><td colspan="5" style="text-align:center;color:var(--gray-400);padding:2rem;">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-head">
+                <div>
+                    <div class="panel-title">This month's generation usage</div>
+                    <div class="panel-sub">Counts every assignment created for this class, by any teacher on this class. Caps reset on the 1st.</div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div id="classUsageBox" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Copy assignment modal -->
+    <div id="copyAssignmentModal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.55); z-index:300; align-items:flex-start; justify-content:center; padding:3rem 1rem; overflow:auto;">
+        <div style="background:white; max-width:480px; width:100%; border-radius:16px; overflow:hidden; box-shadow:0 20px 60px rgba(15,23,42,0.25);">
+            <div style="padding:18px 22px 14px; display:flex; align-items:flex-start; justify-content:space-between; gap:12px; border-bottom:0.5px solid #e2e8f0;">
+                <div>
+                    <div style="font-size:16px; font-weight:600; color:#0f172a; margin-bottom:2px;">Copy assignment to other classes</div>
+                    <div style="font-size:13px; color:#64748b;">Pick which classes to send a copy to. Doesn't use any AI generations.</div>
+                </div>
+                <button onclick="closeCopyAssignmentModal()" style="background:none;border:none;cursor:pointer;padding:4px;color:#94a3b8;line-height:0;border-radius:6px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6 L18 18 M18 6 L6 18"/></svg>
+                </button>
+            </div>
+            <div style="padding:18px 22px;">
+                <div id="copyClassList" style="display:flex; flex-direction:column; gap:0.5rem; max-height:280px; overflow-y:auto;">
+                    <div class="muted" style="font-size:0.88rem;">Loading your classes...</div>
+                </div>
+                <div id="copyAssignmentError" style="display:none; padding:0.6rem 0.85rem; background:#fceae8; color:#791f1f; border:1px solid #f5c6c0; border-radius:var(--radius); font-size:0.88rem; margin-top:0.75rem;"></div>
+            </div>
+            <div style="padding:14px 22px 18px; border-top:0.5px solid #e2e8f0; background:#f8fafc; display:flex; gap:0.5rem; justify-content:flex-end;">
+                <button class="btn btn-ghost" onclick="closeCopyAssignmentModal()">Cancel</button>
+                <button class="btn btn-primary" id="confirmCopyAssignmentBtn" onclick="confirmCopyAssignment()">Send copy</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add-teacher modal -->
+    <div id="addTeacherModal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.55); z-index:300; align-items:flex-start; justify-content:center; padding:3rem 1rem; overflow:auto;">
+        <div style="background:white; max-width:460px; width:100%; border-radius:16px; overflow:hidden; box-shadow:0 20px 60px rgba(15,23,42,0.25);">
+            <div style="padding:18px 22px 14px; display:flex; align-items:flex-start; justify-content:space-between; gap:12px; border-bottom:0.5px solid #e2e8f0;">
+                <div>
+                    <div style="font-size:16px; font-weight:600; color:#0f172a; margin-bottom:2px;">Add a teacher</div>
+                    <div style="font-size:13px; color:#64748b;">Pick from teachers in your school.</div>
+                </div>
+                <button onclick="closeAddTeacherModal()" style="background:none;border:none;cursor:pointer;padding:4px;color:#94a3b8;line-height:0;border-radius:6px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6 L18 18 M18 6 L6 18"/></svg>
+                </button>
+            </div>
+            <div style="padding:18px 22px;">
+                <div class="form-group">
+                    <label class="form-label" style="font-size:0.88rem; font-weight:600; color:var(--gray-700); margin-bottom:0.4rem; display:block;">Teacher</label>
+                    <select id="addTeacherSelect" class="field-select" style="width:100%;"></select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" style="font-size:0.88rem; font-weight:600; color:var(--gray-700); margin-bottom:0.4rem; display:block;">Role</label>
+                    <select id="addTeacherRole" class="field-select" style="width:100%;">
+                        <option value="Co-Teacher">Co-Teacher</option>
+                        <option value="HOD">HOD</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" style="font-size:0.88rem; font-weight:600; color:var(--gray-700); margin-bottom:0.4rem; display:block;">Permission</label>
+                    <select id="addTeacherPermission" class="field-select" style="width:100%;">
+                        <option value="edit">Edit (full access)</option>
+                        <option value="view_only">View only</option>
+                    </select>
+                </div>
+                <div id="addTeacherError" style="display:none; padding:0.6rem 0.85rem; background:#fceae8; color:#791f1f; border:1px solid #f5c6c0; border-radius:var(--radius); font-size:0.88rem; margin-top:0.5rem;"></div>
+            </div>
+            <div style="padding:14px 22px 18px; border-top:0.5px solid #e2e8f0; background:#f8fafc; display:flex; gap:0.5rem; justify-content:flex-end;">
+                <button class="btn btn-ghost" onclick="closeAddTeacherModal()">Cancel</button>
+                <button class="btn btn-primary" id="confirmAddTeacherBtn">Add to class</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Students tab -->
-    <section class="tab-pane active" id="pane-students">
+    <section class="tab-pane" id="pane-students">
 
         <!-- Upload emails panel -->
         <div class="panel">
@@ -621,10 +731,10 @@ table.data-table { width: 100%; border-collapse: collapse; }
         }
         currentClass = classResult.data;
 
-        // Confirm teacher is on class_teachers (defence-in-depth, RLS already enforces)
+        // Confirm teacher is on class_teachers + capture their permission/role.
         var ctCheck = await supabaseClient
             .from('class_teachers')
-            .select('class_id')
+            .select('class_id, permission, role_label')
             .eq('class_id', classId)
             .eq('teacher_id', currentUser.id)
             .maybeSingle();
@@ -632,14 +742,44 @@ table.data-table { width: 100%; border-collapse: collapse; }
             showAccessDenied("You're not on this class. Ask a co-teacher to add you.");
             return;
         }
+        myClassPermission = ctCheck.data.permission || 'edit';
+        myClassRole = ctCheck.data.role_label || 'Co-Teacher';
 
         showShell();
+        applyPermissionLockdown();
         await Promise.all([
+            loadTeachersTab(),
             loadEnrolledStudents(),
             loadPendingApprovals(),
             loadAssignments()
         ]);
         wireEvents();
+    }
+
+    var myClassPermission = 'edit';
+    var myClassRole = 'Co-Teacher';
+
+    function applyPermissionLockdown() {
+        // If view-only, hide every button that mutates state on this class.
+        if (myClassPermission === 'edit') return;
+        var hideSelectors = [
+            '#newAssignmentBtnTop',
+            '#archiveClassBtn',
+            '#addTeacherBtn',
+            '#uploadEmailsBtn',
+            '#newAssignmentBtnEmpty',
+            '#newAssignmentEmptyBtn'
+        ];
+        hideSelectors.forEach(function(sel) {
+            document.querySelectorAll(sel).forEach(function(el) { el.style.display = 'none'; });
+        });
+
+        // Show a "View only" notice in the class header.
+        var header = document.querySelector('.class-meta');
+        if (header && !document.getElementById('viewOnlyChip')) {
+            header.insertAdjacentHTML('beforeend',
+                '<span class="dot"></span><span id="viewOnlyChip" style="display:inline-flex; align-items:center; padding:0.18rem 0.55rem; border-radius:999px; background:#faeeda; color:#633806; font-size:0.74rem; font-weight:600;">View only</span>');
+        }
     }
 
     function showAccessDenied(message) {
@@ -678,8 +818,12 @@ table.data-table { width: 100%; border-collapse: collapse; }
                 document.querySelectorAll('.tab-pane').forEach(function(p) { p.classList.remove('active'); });
                 document.getElementById('pane-' + target).classList.add('active');
                 if (target === 'markbook') renderMarkbook();
+                if (target === 'teachers') loadTeachersTab();
             });
         });
+
+        document.getElementById('addTeacherBtn').addEventListener('click', openAddTeacherModal);
+        document.getElementById('confirmAddTeacherBtn').addEventListener('click', confirmAddTeacher);
 
         document.getElementById('uploadEmailsBtn').addEventListener('click', uploadEmails);
         document.getElementById('refreshPendingBtn').addEventListener('click', loadPendingApprovals);
@@ -812,6 +956,10 @@ table.data-table { width: 100%; border-collapse: collapse; }
                 '<td>' + counts.submitted + ' / ' + counts.total + '</td>' +
                 '<td style="white-space:nowrap;">' +
                     '<button class="btn btn-ghost btn-sm" onclick="openAssignmentDetail(\'' + a.id + '\')">View</button> ' +
+                    '<button class="btn btn-ghost btn-sm" title="Send a copy to one of your other classes" onclick="openCopyAssignmentModal(\'' + a.id + '\')">' +
+                        '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>' +
+                        ' Copy' +
+                    '</button> ' +
                     '<button class="btn btn-ghost btn-sm" title="Download printable PDF" onclick="downloadAssignmentPdf(\'' + a.id + '\')">' +
                         '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>' +
                         ' PDF' +
@@ -1172,6 +1320,333 @@ table.data-table { width: 100%; border-collapse: collapse; }
         }
     }
     window.downloadAssignmentPdf = downloadAssignmentPdf;
+
+    // ============ Teachers tab ============
+
+    async function loadTeachersTab() {
+        var tbody = document.getElementById('teachersTableBody');
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--gray-400);padding:2rem;">Loading...</td></tr>';
+
+        var { data: rows, error } = await supabaseClient
+            .from('class_teachers')
+            .select('teacher_id, permission, role_label, added_at, profile:teacher_id(name, email)')
+            .eq('class_id', currentClass.id)
+            .order('added_at', { ascending: true });
+
+        if (error) {
+            tbody.innerHTML = '<tr><td colspan="5" style="color:var(--error); text-align:center; padding:1rem;">' + esc(error.message) + '</td></tr>';
+            return;
+        }
+
+        var data = rows || [];
+        document.getElementById('teacherCount').textContent = data.length;
+
+        if (data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" class="empty">No teachers on this class.</td></tr>';
+        } else {
+            tbody.innerHTML = data.map(function(r) {
+                var p = r.profile || {};
+                var name = p.name || '-';
+                var email = p.email || '-';
+                var isMe = r.teacher_id === currentUser.id;
+                var canEdit = (myClassPermission === 'edit');
+                var permLabel = r.permission === 'view_only' ? 'View only' : 'Edit';
+                var roleColor = r.role_label === 'Owner' ? '#1e3a5f' : (r.role_label === 'HOD' ? '#085041' : '#334155');
+                var roleBg = r.role_label === 'Owner' ? '#eef5fc' : (r.role_label === 'HOD' ? '#e1f5ee' : '#f1f5f9');
+
+                var roleCell = canEdit && !isMe && r.role_label !== 'Owner'
+                    ? '<select onchange="updateTeacherRole(\'' + r.teacher_id + '\', this.value)" style="padding:0.3rem 0.5rem; border:1px solid var(--gray-300); border-radius:6px; font-size:0.85rem;">' +
+                          ['Co-Teacher', 'HOD'].map(function(o) { return '<option value="' + o + '"' + (o === r.role_label ? ' selected' : '') + '>' + o + '</option>'; }).join('') +
+                      '</select>'
+                    : '<span style="display:inline-flex; padding:0.18rem 0.55rem; border-radius:999px; background:' + roleBg + '; color:' + roleColor + '; font-size:0.78rem; font-weight:600;">' + esc(r.role_label) + '</span>';
+
+                var permCell = canEdit && !isMe && r.role_label !== 'Owner'
+                    ? '<select onchange="updateTeacherPermission(\'' + r.teacher_id + '\', this.value)" style="padding:0.3rem 0.5rem; border:1px solid var(--gray-300); border-radius:6px; font-size:0.85rem;">' +
+                          [{ v: 'edit', l: 'Edit' }, { v: 'view_only', l: 'View only' }].map(function(o) { return '<option value="' + o.v + '"' + (o.v === r.permission ? ' selected' : '') + '>' + o.l + '</option>'; }).join('') +
+                      '</select>'
+                    : '<span style="font-size:0.85rem; color:var(--gray-700);">' + permLabel + '</span>';
+
+                var actionCell = '';
+                if (canEdit && !isMe && r.role_label !== 'Owner') {
+                    actionCell = '<button class="btn btn-danger btn-sm" onclick="removeTeacher(\'' + r.teacher_id + '\', \'' + esc(name).replace(/'/g, "\\'") + '\')">Remove</button>';
+                } else if (isMe && r.role_label !== 'Owner') {
+                    actionCell = '<button class="btn btn-ghost btn-sm" onclick="removeSelfFromClass()">Leave class</button>';
+                }
+
+                var nameDisplay = '<strong>' + esc(name) + '</strong>' + (isMe ? ' <span class="muted" style="font-size:0.78rem;">(you)</span>' : '');
+                return '<tr>' +
+                    '<td>' + nameDisplay + '</td>' +
+                    '<td class="muted">' + esc(email) + '</td>' +
+                    '<td>' + roleCell + '</td>' +
+                    '<td>' + permCell + '</td>' +
+                    '<td>' + actionCell + '</td>' +
+                '</tr>';
+            }).join('');
+        }
+
+        await loadClassUsage();
+    }
+    window.loadTeachersTab = loadTeachersTab;
+
+    async function loadClassUsage() {
+        var box = document.getElementById('classUsageBox');
+        var period = (function() {
+            var d = new Date();
+            return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+        })();
+        var { data } = await supabaseClient
+            .from('teacher_usage')
+            .select('questions_used, tests_used')
+            .eq('class_id', currentClass.id)
+            .eq('period', period)
+            .maybeSingle();
+
+        var qUsed = (data && data.questions_used) || 0;
+        var tUsed = (data && data.tests_used) || 0;
+        var qPct = Math.min(100, Math.round((qUsed / 40) * 100));
+        var tPct = Math.min(100, Math.round((tUsed / 5) * 100));
+
+        function bar(used, cap, pct, label) {
+            var color = pct >= 80 ? '#e24b4a' : (pct >= 60 ? '#ef9f27' : '#1d9e75');
+            return '<div>' +
+                '<div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:0.4rem;">' +
+                    '<span style="font-weight:600; color:var(--gray-700); font-size:0.92rem;">' + label + '</span>' +
+                    '<span style="font-weight:700; color:var(--gray-900); font-variant-numeric:tabular-nums;">' + used + ' <span style="color:var(--gray-400); font-weight:500;">/ ' + cap + '</span></span>' +
+                '</div>' +
+                '<div style="height:10px; background:var(--gray-100); border-radius:999px; overflow:hidden;">' +
+                    '<div style="height:100%; width:' + pct + '%; background:' + color + '; border-radius:999px;"></div>' +
+                '</div>' +
+            '</div>';
+        }
+        box.innerHTML = bar(qUsed, 40, qPct, 'Questions') + bar(tUsed, 5, tPct, 'Tests');
+    }
+
+    function openAddTeacherModal() {
+        document.getElementById('addTeacherError').style.display = 'none';
+        document.getElementById('addTeacherSelect').innerHTML = '<option value="">Loading...</option>';
+        document.getElementById('addTeacherRole').value = 'Co-Teacher';
+        document.getElementById('addTeacherPermission').value = 'edit';
+        document.getElementById('addTeacherModal').style.display = 'flex';
+        loadAvailableTeachersForAdd();
+    }
+    window.openAddTeacherModal = openAddTeacherModal;
+
+    function closeAddTeacherModal() {
+        document.getElementById('addTeacherModal').style.display = 'none';
+    }
+    window.closeAddTeacherModal = closeAddTeacherModal;
+
+    async function loadAvailableTeachersForAdd() {
+        // All teachers from your school...
+        var { data: schoolTeachers } = await supabaseClient
+            .from('user_profiles')
+            .select('user_id, name, email')
+            .eq('role', 'teacher')
+            .eq('school_id', currentClass.school_id)
+            .order('name', { ascending: true });
+
+        // ...minus those already on this class.
+        var { data: alreadyOn } = await supabaseClient
+            .from('class_teachers')
+            .select('teacher_id')
+            .eq('class_id', currentClass.id);
+        var existingSet = new Set((alreadyOn || []).map(function(r) { return r.teacher_id; }));
+
+        var available = (schoolTeachers || []).filter(function(t) {
+            return !existingSet.has(t.user_id);
+        });
+
+        var sel = document.getElementById('addTeacherSelect');
+        if (available.length === 0) {
+            sel.innerHTML = '<option value="">No other teachers available. Ask the admin to invite more.</option>';
+        } else {
+            sel.innerHTML = available.map(function(t) {
+                return '<option value="' + t.user_id + '">' + esc((t.name || t.email) + ' — ' + t.email) + '</option>';
+            }).join('');
+        }
+    }
+
+    async function confirmAddTeacher() {
+        var teacherId = document.getElementById('addTeacherSelect').value;
+        var role = document.getElementById('addTeacherRole').value;
+        var perm = document.getElementById('addTeacherPermission').value;
+        var errBox = document.getElementById('addTeacherError');
+        errBox.style.display = 'none';
+        if (!teacherId) {
+            errBox.textContent = 'Pick a teacher first.';
+            errBox.style.display = 'block';
+            return;
+        }
+        var btn = document.getElementById('confirmAddTeacherBtn');
+        btn.disabled = true;
+        btn.textContent = 'Adding...';
+        try {
+            var sess = await supabaseClient.auth.getSession();
+            var resp = await fetch(SUPABASE_URL + '/functions/v1/manage-class-teacher', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + sess.data.session.access_token,
+                    'apikey': SUPABASE_ANON_KEY
+                },
+                body: JSON.stringify({ action: 'add', class_id: currentClass.id, teacher_id: teacherId, permission: perm, role_label: role })
+            });
+            var result = await resp.json();
+            if (!resp.ok) {
+                errBox.textContent = result.error || 'Failed to add teacher.';
+                errBox.style.display = 'block';
+                btn.disabled = false;
+                btn.textContent = 'Add to class';
+                return;
+            }
+            showToast('Teacher added', 'success');
+            closeAddTeacherModal();
+            loadTeachersTab();
+        } catch (e) {
+            errBox.textContent = 'Network error: ' + e.message;
+            errBox.style.display = 'block';
+        }
+        btn.disabled = false;
+        btn.textContent = 'Add to class';
+    }
+    window.confirmAddTeacher = confirmAddTeacher;
+
+    async function callManageTeacher(payload) {
+        var sess = await supabaseClient.auth.getSession();
+        var resp = await fetch(SUPABASE_URL + '/functions/v1/manage-class-teacher', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + sess.data.session.access_token,
+                'apikey': SUPABASE_ANON_KEY
+            },
+            body: JSON.stringify(payload)
+        });
+        var result = await resp.json();
+        return { ok: resp.ok, result: result };
+    }
+
+    async function updateTeacherPermission(teacherId, newPerm) {
+        var r = await callManageTeacher({ action: 'update_permission', class_id: currentClass.id, teacher_id: teacherId, permission: newPerm });
+        if (!r.ok) { showToast(r.result.error || 'Update failed', 'error'); loadTeachersTab(); return; }
+        showToast('Permission updated', 'success');
+        loadTeachersTab();
+    }
+    window.updateTeacherPermission = updateTeacherPermission;
+
+    async function updateTeacherRole(teacherId, newRole) {
+        var r = await callManageTeacher({ action: 'update_role', class_id: currentClass.id, teacher_id: teacherId, role_label: newRole });
+        if (!r.ok) { showToast(r.result.error || 'Update failed', 'error'); loadTeachersTab(); return; }
+        showToast('Role updated', 'success');
+        loadTeachersTab();
+    }
+    window.updateTeacherRole = updateTeacherRole;
+
+    async function removeTeacher(teacherId, name) {
+        if (!confirm('Remove ' + name + ' from this class?')) return;
+        var r = await callManageTeacher({ action: 'remove', class_id: currentClass.id, teacher_id: teacherId });
+        if (!r.ok) { showToast(r.result.error || 'Remove failed', 'error'); return; }
+        showToast('Teacher removed', 'success');
+        loadTeachersTab();
+    }
+    window.removeTeacher = removeTeacher;
+
+    async function removeSelfFromClass() {
+        if (!confirm('Leave this class? You will lose access to it. Ask another editor to add you back if you change your mind.')) return;
+        var r = await callManageTeacher({ action: 'remove', class_id: currentClass.id, teacher_id: currentUser.id });
+        if (!r.ok) { showToast(r.result.error || 'Could not leave', 'error'); return; }
+        window.location.href = 'teacher-dashboard.html';
+    }
+    window.removeSelfFromClass = removeSelfFromClass;
+
+    // ============ Copy assignment to other classes ============
+
+    var copyAssignmentSourceId = null;
+
+    async function openCopyAssignmentModal(assignmentId) {
+        copyAssignmentSourceId = assignmentId;
+        document.getElementById('copyAssignmentError').style.display = 'none';
+        document.getElementById('copyAssignmentModal').style.display = 'flex';
+        var listEl = document.getElementById('copyClassList');
+        listEl.innerHTML = '<div class="muted" style="font-size:0.88rem;">Loading your classes...</div>';
+
+        // Load every class the caller has edit on, except the current source class.
+        var { data: rows } = await supabaseClient
+            .from('class_teachers')
+            .select('class_id, permission, classes:class_id(id, name, level, board, archived_at)')
+            .eq('teacher_id', currentUser.id)
+            .eq('permission', 'edit');
+
+        var candidates = (rows || [])
+            .map(function(r) { return r.classes; })
+            .filter(function(c) { return c && !c.archived_at && c.id !== currentClass.id; });
+
+        if (candidates.length === 0) {
+            listEl.innerHTML = '<div class="muted" style="font-size:0.88rem;">No other classes you can edit. Create another class first, or ask an editor on another class to add you.</div>';
+            return;
+        }
+
+        listEl.innerHTML = candidates.map(function(c) {
+            var levelTag = c.level === 'a_level' ? 'A-Level' : 'GCSE';
+            var board = BOARD_LABELS[c.board] || c.board;
+            return '<label style="display:flex; align-items:center; gap:0.6rem; padding:0.6rem 0.8rem; border:1px solid var(--gray-200); border-radius:var(--radius); cursor:pointer;">' +
+                '<input type="checkbox" class="copy-target" value="' + c.id + '">' +
+                '<div style="flex-grow:1;">' +
+                    '<div style="font-weight:600; color:var(--gray-900);">' + esc(c.name) + '</div>' +
+                    '<div class="muted" style="font-size:0.78rem;">' + levelTag + ' · ' + esc(board) + '</div>' +
+                '</div>' +
+            '</label>';
+        }).join('');
+    }
+    window.openCopyAssignmentModal = openCopyAssignmentModal;
+
+    function closeCopyAssignmentModal() {
+        document.getElementById('copyAssignmentModal').style.display = 'none';
+        copyAssignmentSourceId = null;
+    }
+    window.closeCopyAssignmentModal = closeCopyAssignmentModal;
+
+    async function confirmCopyAssignment() {
+        var checked = Array.from(document.querySelectorAll('.copy-target:checked')).map(function(c) { return c.value; });
+        var errBox = document.getElementById('copyAssignmentError');
+        errBox.style.display = 'none';
+        if (checked.length === 0) {
+            errBox.textContent = 'Pick at least one class to copy to.';
+            errBox.style.display = 'block';
+            return;
+        }
+        var btn = document.getElementById('confirmCopyAssignmentBtn');
+        btn.disabled = true;
+        btn.textContent = 'Sending...';
+        try {
+            var sess = await supabaseClient.auth.getSession();
+            var resp = await fetch(SUPABASE_URL + '/functions/v1/copy-assignment-to-classes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + sess.data.session.access_token,
+                    'apikey': SUPABASE_ANON_KEY
+                },
+                body: JSON.stringify({ source_assignment_id: copyAssignmentSourceId, target_class_ids: checked })
+            });
+            var result = await resp.json();
+            if (!resp.ok) {
+                errBox.textContent = result.error || 'Could not copy.';
+                errBox.style.display = 'block';
+                btn.disabled = false;
+                btn.textContent = 'Send copy';
+                return;
+            }
+            showToast('Sent to ' + result.copies_made + ' class' + (result.copies_made === 1 ? '' : 'es'), 'success');
+            closeCopyAssignmentModal();
+        } catch (e) {
+            errBox.textContent = 'Network error: ' + e.message;
+            errBox.style.display = 'block';
+        }
+        btn.disabled = false;
+        btn.textContent = 'Send copy';
+    }
+    window.confirmCopyAssignment = confirmCopyAssignment;
 
     // ============ Integrity flag rendering ============
 
