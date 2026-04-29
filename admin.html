@@ -4575,10 +4575,13 @@ function mybizLoadTikTokPixel() {
                     '<td>' + email + '</td>' +
                     '<td>' + tpEscape(licence) + '</td>' +
                     '<td>' + (s.student_limit || '-') + '</td>' +
-                    '<td>' + domainCell + ' <button class="btn btn-ghost btn-sm" style="padding:0.15rem 0.45rem; font-size:0.72rem; margin-left:0.3rem;" onclick="tpEditSchoolDomain(\'' + s.id + '\', \'' + (s.allowed_email_domain || '') + '\')">Edit</button></td>' +
+                    '<td>' + domainCell + '</td>' +
                     '<td>' + (teacherCounts[s.id] || 0) + '</td>' +
                     '<td>' + (classCounts[s.id] || 0) + '</td>' +
-                    '<td><button class="btn btn-danger btn-sm" onclick="tpDeleteSchool(\'' + s.id + '\', \'' + tpEscape(s.name).replace(/'/g, "\\'") + '\')">Delete</button></td>' +
+                    '<td style="white-space:nowrap;">' +
+                        '<button class="btn btn-secondary btn-sm" style="margin-right:0.4rem;" onclick="tpEditSchool(\'' + s.id + '\')">Edit</button>' +
+                        '<button class="btn btn-danger btn-sm" onclick="tpDeleteSchool(\'' + s.id + '\', \'' + tpEscape(s.name).replace(/'/g, "\\'") + '\')">Delete</button>' +
+                    '</td>' +
                     '</tr>';
             }).join('');
 
@@ -4610,26 +4613,136 @@ function mybizLoadTikTokPixel() {
             tpRefreshTeachers();
         }
 
-        async function tpEditSchoolDomain(schoolId, currentDomain) {
-            var input = prompt('Allowed email domain for this school. Leave blank for no restriction. Example: oakwoodacademy.ac.uk', currentDomain || '');
-            if (input === null) return; // cancelled
-            var clean = input.trim().toLowerCase().replace(/^@/, '');
-            if (clean && !/^[a-z0-9.-]+\.[a-z]{2,}$/.test(clean)) {
-                showToast('Domain looks wrong. Try something like oakwoodacademy.ac.uk', 'error');
+        // Open a modal pre-filled with the school's current values, edit any field, save.
+        async function tpEditSchool(schoolId) {
+            var s = TP_SCHOOLS_CACHE.find(function(x) { return x.id === schoolId; });
+            if (!s) {
+                // Fallback: fetch fresh from DB
+                var { data } = await supabaseClient
+                    .from('schools')
+                    .select('id, name, contact_email, licence_start, licence_end, student_limit, allowed_email_domain, notes')
+                    .eq('id', schoolId).maybeSingle();
+                if (!data) { showToast('Could not load school', 'error'); return; }
+                s = data;
+            } else {
+                // We need the notes field too — not in default cache select. Fetch fresh.
+                var { data: full } = await supabaseClient
+                    .from('schools')
+                    .select('notes')
+                    .eq('id', schoolId).maybeSingle();
+                if (full && 'notes' in full) s = Object.assign({}, s, { notes: full.notes });
+            }
+
+            var existing = document.getElementById('schoolEditModal');
+            if (existing) existing.remove();
+
+            var html = '<div id="schoolEditModal" style="position:fixed; inset:0; background:rgba(15,23,42,0.55); z-index:300; display:flex; align-items:flex-start; justify-content:center; padding:3rem 1rem; overflow:auto;">' +
+                '<div style="background:white; max-width:560px; width:100%; border-radius:16px; overflow:hidden; box-shadow:0 20px 60px rgba(15,23,42,0.25);">' +
+                    '<div style="padding:18px 22px 14px; display:flex; align-items:flex-start; justify-content:space-between; gap:12px; border-bottom:0.5px solid #e2e8f0;">' +
+                        '<div>' +
+                            '<div style="font-size:16px; font-weight:600; color:#0f172a; margin-bottom:2px;">Edit school</div>' +
+                            '<div style="font-size:13px; color:#64748b;">' + tpEscape(s.name || '') + '</div>' +
+                        '</div>' +
+                        '<button onclick="tpCloseEditSchool()" style="background:none;border:none;cursor:pointer;padding:4px;color:#94a3b8;line-height:0;border-radius:6px;">' +
+                            '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6 L18 18 M18 6 L6 18"/></svg>' +
+                        '</button>' +
+                    '</div>' +
+                    '<div style="padding:18px 22px;">' +
+                        '<div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">' +
+                            '<div class="form-group" style="grid-column:1 / -1;">' +
+                                '<label class="form-label">School name</label>' +
+                                '<input type="text" class="form-input" id="editSchoolName" value="' + tpEscape(s.name || '') + '">' +
+                            '</div>' +
+                            '<div class="form-group" style="grid-column:1 / -1;">' +
+                                '<label class="form-label">Contact email</label>' +
+                                '<input type="email" class="form-input" id="editSchoolEmail" value="' + tpEscape(s.contact_email || '') + '">' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                                '<label class="form-label">Licence start</label>' +
+                                '<input type="date" class="form-input" id="editSchoolLicenceStart" value="' + tpEscape(s.licence_start || '') + '">' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                                '<label class="form-label">Licence end</label>' +
+                                '<input type="date" class="form-input" id="editSchoolLicenceEnd" value="' + tpEscape(s.licence_end || '') + '">' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                                '<label class="form-label">Student limit</label>' +
+                                '<input type="number" class="form-input" id="editSchoolLimit" value="' + (s.student_limit || 100) + '" min="1">' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                                '<label class="form-label">Allowed email domain</label>' +
+                                '<input type="text" class="form-input" id="editSchoolDomain" value="' + tpEscape(s.allowed_email_domain || '') + '" placeholder="e.g. oakwoodacademy.ac.uk">' +
+                                '<small style="color: var(--gray-500); font-size:0.78rem;">Leave blank to allow any email.</small>' +
+                            '</div>' +
+                            '<div class="form-group" style="grid-column:1 / -1;">' +
+                                '<label class="form-label">Notes</label>' +
+                                '<input type="text" class="form-input" id="editSchoolNotes" value="' + tpEscape(s.notes || '') + '" placeholder="Internal notes">' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div style="padding:14px 22px 18px; border-top:0.5px solid #e2e8f0; background:#f8fafc; display:flex; gap:0.5rem; justify-content:flex-end;">' +
+                        '<button class="btn btn-ghost" onclick="tpCloseEditSchool()">Cancel</button>' +
+                        '<button class="btn btn-primary" onclick="tpSaveSchoolEdit(\'' + schoolId + '\')">Save changes</button>' +
+                    '</div>' +
+                '</div>' +
+            '</div>';
+
+            document.body.insertAdjacentHTML('beforeend', html);
+            document.getElementById('schoolEditModal').addEventListener('click', function(e) {
+                if (e.target.id === 'schoolEditModal') tpCloseEditSchool();
+            });
+        }
+        window.tpEditSchool = tpEditSchool;
+
+        function tpCloseEditSchool() {
+            var m = document.getElementById('schoolEditModal');
+            if (m) m.remove();
+        }
+        window.tpCloseEditSchool = tpCloseEditSchool;
+
+        async function tpSaveSchoolEdit(schoolId) {
+            var name = document.getElementById('editSchoolName').value.trim();
+            var email = document.getElementById('editSchoolEmail').value.trim();
+            var licenceStart = document.getElementById('editSchoolLicenceStart').value;
+            var licenceEnd = document.getElementById('editSchoolLicenceEnd').value;
+            var limit = parseInt(document.getElementById('editSchoolLimit').value, 10);
+            var domainRaw = document.getElementById('editSchoolDomain').value.trim().toLowerCase().replace(/^@/, '');
+            var notes = document.getElementById('editSchoolNotes').value.trim();
+
+            if (!name) {
+                showToast('School name is required', 'error');
                 return;
             }
+            if (domainRaw && !/^[a-z0-9.-]+\.[a-z]{2,}$/.test(domainRaw)) {
+                showToast('Allowed email domain looks wrong. Try something like oakwoodacademy.ac.uk', 'error');
+                return;
+            }
+
+            var update = {
+                name: name,
+                contact_email: email || null,
+                licence_start: licenceStart || null,
+                licence_end: licenceEnd || null,
+                student_limit: isNaN(limit) ? null : limit,
+                allowed_email_domain: domainRaw || null,
+                notes: notes || null,
+                updated_at: new Date().toISOString()
+            };
+
             var { error } = await supabaseClient
                 .from('schools')
-                .update({ allowed_email_domain: clean || null })
+                .update(update)
                 .eq('id', schoolId);
+
             if (error) {
-                showToast('Could not update: ' + error.message, 'error');
+                showToast('Could not save: ' + error.message, 'error');
                 return;
             }
-            showToast(clean ? ('Domain set to @' + clean) : 'Domain restriction cleared', 'success');
+            showToast('School updated', 'success');
+            tpCloseEditSchool();
             tpRefreshSchools();
         }
-        window.tpEditSchoolDomain = tpEditSchoolDomain;
+        window.tpSaveSchoolEdit = tpSaveSchoolEdit;
 
         async function tpInviteTeacher() {
             var schoolId = document.getElementById('inviteSchoolSelect').value;
