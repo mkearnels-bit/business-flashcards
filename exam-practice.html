@@ -6719,11 +6719,22 @@ async function generateQuestion() {
         // Build unit code: for AQA use 'all' since all content is examinable in all papers
         var unitCode = unitData ? unitData.code : 'all';
 
+        // Refresh the session right before the call. Same fix as in submitAnswer():
+        // the cached currentSession.access_token can be over an hour old and would
+        // be silently rejected by the function with a 401 "Invalid token".
+        var genFreshSessionResult = await supabaseClient.auth.getSession();
+        var genFreshSession = genFreshSessionResult.data && genFreshSessionResult.data.session;
+        if (!genFreshSession || !genFreshSession.access_token) {
+            clearTimeout(fallbackTimer);
+            throw new Error('Your session expired. Please sign in again.');
+        }
+        currentSession = genFreshSession;
+
         var response = await fetch(SUPABASE_URL + '/functions/v1/generate-question', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + currentSession.access_token,
+                'Authorization': 'Bearer ' + genFreshSession.access_token,
                 'apikey': SUPABASE_ANON_KEY
             },
             body: JSON.stringify({
@@ -7010,11 +7021,37 @@ async function submitAnswer() {
     requestWakeLock();
 
     try {
+        // Refresh the session right before submitting. The cached currentSession.access_token
+        // can be over an hour old by the time a student finishes typing, which used to cause
+        // mark-answer to return 401 "Invalid token". getSession() returns the auto-refreshed
+        // token from the Supabase client's internal store.
+        var freshSessionResult = await supabaseClient.auth.getSession();
+        var freshSession = freshSessionResult.data && freshSessionResult.data.session;
+        if (!freshSession || !freshSession.access_token) {
+            releaseWakeLock();
+            btn.disabled = false;
+            btn.innerHTML = 'Submit for Marking';
+            document.getElementById('answerTextarea').readOnly = false;
+            showError('Your session expired. Your answer is still in the box — please sign in again in another tab and click Submit again here.');
+            return;
+        }
+        currentSession = freshSession;
+
+        // Persist the answer to the attempt row before we call the AI marker. If marking fails
+        // for any reason, the typed answer is still safe in the DB and the row can be retried
+        // or recovered by the teacher rather than silently lost.
+        if (currentAttemptId) {
+            supabaseClient.from('exam_practice_attempts')
+                .update({ student_answer: answer })
+                .eq('id', currentAttemptId)
+                .then(function() { /* fire-and-forget; not fatal */ });
+        }
+
         var response = await fetch(SUPABASE_URL + '/functions/v1/mark-answer', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + currentSession.access_token,
+                'Authorization': 'Bearer ' + freshSession.access_token,
                 'apikey': SUPABASE_ANON_KEY
             },
             body: JSON.stringify({
