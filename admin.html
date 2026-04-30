@@ -1894,6 +1894,26 @@ function mybizLoadTikTokPixel() {
                                         <small style="color: var(--gray-500); font-size:0.78rem;">If set, only emails ending @this-domain can sign up. Leave blank for no restriction.</small>
                                     </div>
                                     <div class="form-group">
+                                        <label class="form-label">School Q cap / month</label>
+                                        <input type="number" class="form-input" id="schoolCapSchoolQInput" value="600" min="0">
+                                        <small style="color: var(--gray-500); font-size:0.78rem;">Max questions across all teachers at this school per month.</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">School T cap / month</label>
+                                        <input type="number" class="form-input" id="schoolCapSchoolTInput" value="60" min="0">
+                                        <small style="color: var(--gray-500); font-size:0.78rem;">Max tests across all teachers per month.</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Per-teacher Q cap / month</label>
+                                        <input type="number" class="form-input" id="schoolCapTeacherQInput" value="100" min="0">
+                                        <small style="color: var(--gray-500); font-size:0.78rem;">Max questions per teacher per month at this school.</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Per-teacher T cap / month</label>
+                                        <input type="number" class="form-input" id="schoolCapTeacherTInput" value="12" min="0">
+                                        <small style="color: var(--gray-500); font-size:0.78rem;">Max tests per teacher per month.</small>
+                                    </div>
+                                    <div class="form-group" style="grid-column: 1 / -1;">
                                         <label class="form-label">Notes (optional)</label>
                                         <input type="text" class="form-input" id="schoolNotesInput" placeholder="Any internal notes">
                                     </div>
@@ -4475,6 +4495,10 @@ function mybizLoadTikTokPixel() {
             var limit = parseInt(document.getElementById('schoolLimitInput').value, 10);
             var notes = document.getElementById('schoolNotesInput').value.trim();
             var domainRaw = document.getElementById('schoolDomainInput').value.trim().toLowerCase().replace(/^@/, '');
+            var capSchoolQ = parseInt(document.getElementById('schoolCapSchoolQInput').value, 10);
+            var capSchoolT = parseInt(document.getElementById('schoolCapSchoolTInput').value, 10);
+            var capTeacherQ = parseInt(document.getElementById('schoolCapTeacherQInput').value, 10);
+            var capTeacherT = parseInt(document.getElementById('schoolCapTeacherTInput').value, 10);
 
             if (!name) {
                 showToast('School name is required', 'error');
@@ -4496,6 +4520,10 @@ function mybizLoadTikTokPixel() {
                 licence_end: licenceEnd || null,
                 student_limit: isNaN(limit) ? 100 : limit,
                 allowed_email_domain: domainRaw || null,
+                cap_school_questions: isNaN(capSchoolQ) ? 600 : capSchoolQ,
+                cap_school_tests: isNaN(capSchoolT) ? 60 : capSchoolT,
+                cap_teacher_questions: isNaN(capTeacherQ) ? 100 : capTeacherQ,
+                cap_teacher_tests: isNaN(capTeacherT) ? 12 : capTeacherT,
                 notes: notes || null
             };
 
@@ -4516,6 +4544,10 @@ function mybizLoadTikTokPixel() {
             document.getElementById('schoolLicenceEndInput').value = '';
             document.getElementById('schoolLimitInput').value = '100';
             document.getElementById('schoolDomainInput').value = '';
+            document.getElementById('schoolCapSchoolQInput').value = '600';
+            document.getElementById('schoolCapSchoolTInput').value = '60';
+            document.getElementById('schoolCapTeacherQInput').value = '100';
+            document.getElementById('schoolCapTeacherTInput').value = '12';
             document.getElementById('schoolNotesInput').value = '';
             tpRefreshSchools();
         }
@@ -4615,23 +4647,12 @@ function mybizLoadTikTokPixel() {
 
         // Open a modal pre-filled with the school's current values, edit any field, save.
         async function tpEditSchool(schoolId) {
-            var s = TP_SCHOOLS_CACHE.find(function(x) { return x.id === schoolId; });
-            if (!s) {
-                // Fallback: fetch fresh from DB
-                var { data } = await supabaseClient
-                    .from('schools')
-                    .select('id, name, contact_email, licence_start, licence_end, student_limit, allowed_email_domain, notes')
-                    .eq('id', schoolId).maybeSingle();
-                if (!data) { showToast('Could not load school', 'error'); return; }
-                s = data;
-            } else {
-                // We need the notes field too — not in default cache select. Fetch fresh.
-                var { data: full } = await supabaseClient
-                    .from('schools')
-                    .select('notes')
-                    .eq('id', schoolId).maybeSingle();
-                if (full && 'notes' in full) s = Object.assign({}, s, { notes: full.notes });
-            }
+            // Always fetch fresh — cache doesn't always carry the cap columns or notes.
+            var { data: s, error: schoolErr } = await supabaseClient
+                .from('schools')
+                .select('id, name, contact_email, licence_start, licence_end, student_limit, allowed_email_domain, notes, cap_school_questions, cap_school_tests, cap_teacher_questions, cap_teacher_tests')
+                .eq('id', schoolId).maybeSingle();
+            if (schoolErr || !s) { showToast('Could not load school', 'error'); return; }
 
             var existing = document.getElementById('schoolEditModal');
             if (existing) existing.remove();
@@ -4674,6 +4695,26 @@ function mybizLoadTikTokPixel() {
                                 '<input type="text" class="form-input" id="editSchoolDomain" value="' + tpEscape(s.allowed_email_domain || '') + '" placeholder="e.g. oakwoodacademy.ac.uk">' +
                                 '<small style="color: var(--gray-500); font-size:0.78rem;">Leave blank to allow any email.</small>' +
                             '</div>' +
+                            '<div class="form-group" style="grid-column:1 / -1; margin-top:0.5rem; padding-top:0.85rem; border-top:1px solid #e2e8f0;">' +
+                                '<div style="font-size:0.85rem; font-weight:600; color: var(--gray-700);">Monthly generation caps</div>' +
+                                '<small style="color: var(--gray-500); font-size:0.78rem;">Per-teacher caps apply to each teacher individually. Per-school caps apply across the whole school.</small>' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                                '<label class="form-label">School Q cap / month</label>' +
+                                '<input type="number" class="form-input" id="editSchoolCapSchoolQ" value="' + (s.cap_school_questions || 600) + '" min="0">' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                                '<label class="form-label">School T cap / month</label>' +
+                                '<input type="number" class="form-input" id="editSchoolCapSchoolT" value="' + (s.cap_school_tests || 60) + '" min="0">' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                                '<label class="form-label">Per-teacher Q cap / month</label>' +
+                                '<input type="number" class="form-input" id="editSchoolCapTeacherQ" value="' + (s.cap_teacher_questions || 100) + '" min="0">' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                                '<label class="form-label">Per-teacher T cap / month</label>' +
+                                '<input type="number" class="form-input" id="editSchoolCapTeacherT" value="' + (s.cap_teacher_tests || 12) + '" min="0">' +
+                            '</div>' +
                             '<div class="form-group" style="grid-column:1 / -1;">' +
                                 '<label class="form-label">Notes</label>' +
                                 '<input type="text" class="form-input" id="editSchoolNotes" value="' + tpEscape(s.notes || '') + '" placeholder="Internal notes">' +
@@ -4708,6 +4749,10 @@ function mybizLoadTikTokPixel() {
             var limit = parseInt(document.getElementById('editSchoolLimit').value, 10);
             var domainRaw = document.getElementById('editSchoolDomain').value.trim().toLowerCase().replace(/^@/, '');
             var notes = document.getElementById('editSchoolNotes').value.trim();
+            var capSchoolQ = parseInt(document.getElementById('editSchoolCapSchoolQ').value, 10);
+            var capSchoolT = parseInt(document.getElementById('editSchoolCapSchoolT').value, 10);
+            var capTeacherQ = parseInt(document.getElementById('editSchoolCapTeacherQ').value, 10);
+            var capTeacherT = parseInt(document.getElementById('editSchoolCapTeacherT').value, 10);
 
             if (!name) {
                 showToast('School name is required', 'error');
@@ -4725,6 +4770,10 @@ function mybizLoadTikTokPixel() {
                 licence_end: licenceEnd || null,
                 student_limit: isNaN(limit) ? null : limit,
                 allowed_email_domain: domainRaw || null,
+                cap_school_questions: isNaN(capSchoolQ) ? 600 : capSchoolQ,
+                cap_school_tests: isNaN(capSchoolT) ? 60 : capSchoolT,
+                cap_teacher_questions: isNaN(capTeacherQ) ? 100 : capTeacherQ,
+                cap_teacher_tests: isNaN(capTeacherT) ? 12 : capTeacherT,
                 notes: notes || null,
                 updated_at: new Date().toISOString()
             };

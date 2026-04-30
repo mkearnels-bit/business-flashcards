@@ -262,11 +262,11 @@ table.data-table { width: 100%; border-collapse: collapse; }
             <div class="panel-head">
                 <div>
                     <div class="panel-title">This month's generation usage</div>
-                    <div class="panel-sub">Counts every assignment created for this class, by any teacher on this class. Caps reset on the 1st.</div>
+                    <div class="panel-sub">Your own usage and your school's total. Copies don't count. Caps reset on the 1st.</div>
                 </div>
             </div>
             <div class="panel-body">
-                <div id="classUsageBox" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;"></div>
+                <div id="classUsageBox" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:1rem;"></div>
             </div>
         </div>
     </section>
@@ -1402,23 +1402,47 @@ table.data-table { width: 100%; border-collapse: collapse; }
 
     async function loadClassUsage() {
         var box = document.getElementById('classUsageBox');
-        var period = (function() {
-            var d = new Date();
-            return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
-        })();
-        var { data } = await supabaseClient
-            .from('teacher_usage')
-            .select('questions_used, tests_used')
-            .eq('class_id', currentClass.id)
-            .eq('period', period)
-            .maybeSingle();
+        if (!currentClass.school_id) { box.innerHTML = '<div class="muted" style="font-size:0.88rem;">Class is not linked to a school.</div>'; return; }
 
-        var qUsed = (data && data.questions_used) || 0;
-        var tUsed = (data && data.tests_used) || 0;
-        var qPct = Math.min(100, Math.round((qUsed / 40) * 100));
-        var tPct = Math.min(100, Math.round((tUsed / 5) * 100));
+        // Get school caps.
+        var { data: school } = await supabaseClient
+            .from('schools')
+            .select('cap_school_questions, cap_school_tests, cap_teacher_questions, cap_teacher_tests')
+            .eq('id', currentClass.school_id).maybeSingle();
+        if (!school) { box.innerHTML = '<div class="muted" style="font-size:0.88rem;">Could not load school caps.</div>'; return; }
 
-        function bar(used, cap, pct, label) {
+        var now = new Date();
+        var monthStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, 0, 0, 0)).toISOString();
+
+        // Your usage this month (any class)
+        var { data: mineRows } = await supabaseClient
+            .from('assignments')
+            .select('id, type, copied_from')
+            .eq('created_by', currentUser.id)
+            .gte('pushed_at', monthStart)
+            .is('copied_from', null);
+        var myQ = (mineRows || []).filter(function(r) { return r.type === 'question'; }).length;
+        var myT = (mineRows || []).filter(function(r) { return r.type === 'test'; }).length;
+
+        // School usage: every class in the school, then count assignments.
+        var { data: schoolClasses } = await supabaseClient.from('classes').select('id').eq('school_id', currentClass.school_id);
+        var schoolClassIds = (schoolClasses || []).map(function(c) { return c.id; });
+
+        var schoolQ = 0;
+        var schoolT = 0;
+        if (schoolClassIds.length > 0) {
+            var { data: schoolRows } = await supabaseClient
+                .from('assignments')
+                .select('id, type, copied_from, class_id')
+                .in('class_id', schoolClassIds)
+                .gte('pushed_at', monthStart)
+                .is('copied_from', null);
+            schoolQ = (schoolRows || []).filter(function(r) { return r.type === 'question'; }).length;
+            schoolT = (schoolRows || []).filter(function(r) { return r.type === 'test'; }).length;
+        }
+
+        function bar(label, used, cap) {
+            var pct = cap > 0 ? Math.round((used / cap) * 100) : 0;
             var color = pct >= 80 ? '#e24b4a' : (pct >= 60 ? '#ef9f27' : '#1d9e75');
             return '<div>' +
                 '<div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:0.4rem;">' +
@@ -1426,11 +1450,15 @@ table.data-table { width: 100%; border-collapse: collapse; }
                     '<span style="font-weight:700; color:var(--gray-900); font-variant-numeric:tabular-nums;">' + used + ' <span style="color:var(--gray-400); font-weight:500;">/ ' + cap + '</span></span>' +
                 '</div>' +
                 '<div style="height:10px; background:var(--gray-100); border-radius:999px; overflow:hidden;">' +
-                    '<div style="height:100%; width:' + pct + '%; background:' + color + '; border-radius:999px;"></div>' +
+                    '<div style="height:100%; width:' + Math.min(pct, 100) + '%; background:' + color + '; border-radius:999px;"></div>' +
                 '</div>' +
             '</div>';
         }
-        box.innerHTML = bar(qUsed, 40, qPct, 'Questions') + bar(tUsed, 5, tPct, 'Tests');
+        box.innerHTML =
+            bar('Your questions', myQ, school.cap_teacher_questions) +
+            bar('Your tests', myT, school.cap_teacher_tests) +
+            bar('School questions (all teachers)', schoolQ, school.cap_school_questions) +
+            bar('School tests (all teachers)', schoolT, school.cap_school_tests);
     }
 
     function openAddTeacherModal() {

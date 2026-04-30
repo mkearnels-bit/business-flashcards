@@ -223,13 +223,11 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
         <div class="usage-head">
             <div>
                 <div class="section-title" style="margin-bottom: 0.2rem;">This month's generation usage</div>
-                <div class="muted" style="font-size: 0.88rem;">Caps are per class, per month. One generation pushed to a whole class still counts as one.</div>
+                <div class="muted" style="font-size: 0.88rem;">Your own usage and your school's total. Copies of existing assignments don't count.</div>
             </div>
             <span class="pill pill-primary" id="usagePeriod"></span>
         </div>
-        <div class="usage-grid" id="usageGrid">
-            <!-- Populated by JS -->
-        </div>
+        <div class="usage-grid" id="usageGrid"></div>
     </div>
 
     <div class="section-header">
@@ -412,10 +410,10 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
     }
 
     async function loadDashboard() {
-        // Load the teacher's classes
+        // Load the teacher's class memberships (now including permission and role).
         var classTeacherResult = await supabaseClient
             .from('class_teachers')
-            .select('class_id')
+            .select('class_id, permission, role_label')
             .eq('teacher_id', currentUser.id);
 
         if (classTeacherResult.error) {
@@ -423,12 +421,15 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
             return;
         }
 
-        var classIds = (classTeacherResult.data || []).map(function(r) { return r.class_id; });
+        var membershipMap = {};
+        (classTeacherResult.data || []).forEach(function(r) {
+            membershipMap[r.class_id] = { permission: r.permission, role_label: r.role_label };
+        });
+        var classIds = Object.keys(membershipMap);
 
         if (classIds.length === 0) {
             renderEmptyClasses();
             document.getElementById('heroMeta').textContent = 'No classes yet. Create your first class to get started.';
-            renderEmptyUsage();
             return;
         }
 
@@ -443,10 +444,86 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
             return;
         }
 
-        ALL_CLASSES_CACHE = classesResult.data || [];
+        ALL_CLASSES_CACHE = (classesResult.data || []).map(function(c) {
+            var m = membershipMap[c.id] || {};
+            return Object.assign({}, c, { my_permission: m.permission || 'edit', my_role_label: m.role_label || 'Co-Teacher' });
+        });
         renderClassesFromCache();
-        await renderUsage(ALL_CLASSES_CACHE.filter(function(c) { return !c.archived_at; }));
-        await renderHeroMeta(ALL_CLASSES_CACHE.filter(function(c) { return !c.archived_at; }));
+        await Promise.all([
+            renderHeroMeta(ALL_CLASSES_CACHE.filter(function(c) { return !c.archived_at; })),
+            renderUsageCard()
+        ]);
+    }
+
+    async function renderUsageCard() {
+        // Need the school context (caps live there). Pull from the current user's profile.
+        if (!currentProfile || !currentProfile.school_id) {
+            document.getElementById('usageCard').style.display = 'none';
+            return;
+        }
+        var schoolId = currentProfile.school_id;
+
+        // School caps
+        var { data: school } = await supabaseClient
+            .from('schools')
+            .select('cap_school_questions, cap_school_tests, cap_teacher_questions, cap_teacher_tests')
+            .eq('id', schoolId).maybeSingle();
+        if (!school) {
+            document.getElementById('usageCard').style.display = 'none';
+            return;
+        }
+
+        // Period start (UTC, first of this month)
+        var now = new Date();
+        var monthStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, 0, 0, 0)).toISOString();
+        document.getElementById('usagePeriod').textContent = now.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+
+        // Fetch all assignments this teacher has created this month, plus all assignments in the school this month.
+        var { data: myAssignments } = await supabaseClient
+            .from('assignments')
+            .select('id, type, copied_from')
+            .eq('created_by', currentUser.id)
+            .gte('pushed_at', monthStart)
+            .is('copied_from', null);
+
+        var myQ = (myAssignments || []).filter(function(a) { return a.type === 'question'; }).length;
+        var myT = (myAssignments || []).filter(function(a) { return a.type === 'test'; }).length;
+
+        // School totals: get every class in the school, then count their assignments.
+        var { data: schoolClasses } = await supabaseClient.from('classes').select('id').eq('school_id', schoolId);
+        var schoolClassIds = (schoolClasses || []).map(function(c) { return c.id; });
+
+        var schoolQ = 0;
+        var schoolT = 0;
+        if (schoolClassIds.length > 0) {
+            var { data: schoolAssignments } = await supabaseClient
+                .from('assignments')
+                .select('id, type, copied_from, class_id')
+                .in('class_id', schoolClassIds)
+                .gte('pushed_at', monthStart)
+                .is('copied_from', null);
+            schoolQ = (schoolAssignments || []).filter(function(a) { return a.type === 'question'; }).length;
+            schoolT = (schoolAssignments || []).filter(function(a) { return a.type === 'test'; }).length;
+        }
+
+        function bar(label, used, cap) {
+            var pct = cap > 0 ? Math.round((used / cap) * 100) : 0;
+            var fillCls = pct >= 80 ? 'warn' : '';
+            return '<div>' +
+                '<div class="usage-top"><span class="usage-label">' + label + '</span><span class="usage-count">' + used + ' <span>/ ' + cap + '</span></span></div>' +
+                '<div class="usage-bar"><div class="usage-bar-fill ' + fillCls + '" style="width: ' + Math.min(pct, 100) + '%;"></div></div>' +
+            '</div>';
+        }
+
+        document.getElementById('usageGrid').innerHTML =
+            bar('Your questions', myQ, school.cap_teacher_questions) +
+            bar('Your tests', myT, school.cap_teacher_tests) +
+            bar('School questions (all teachers)', schoolQ, school.cap_school_questions) +
+            bar('School tests (all teachers)', schoolT, school.cap_school_tests);
+
+        // Fix the grid to 2 columns
+        document.getElementById('usageGrid').style.gridTemplateColumns = 'repeat(auto-fit, minmax(260px, 1fr))';
+        document.getElementById('usageCard').style.display = 'block';
     }
 
     var ALL_CLASSES_CACHE = [];
@@ -486,11 +563,21 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
             var badgeClass = (c.level === 'a_level') ? 'class-badge a-level' : 'class-badge';
             var archivedStyle = c.archived_at ? ' style="opacity: 0.65;"' : '';
             var archivedLabel = c.archived_at ? '<span class="muted" style="font-size:0.78rem; font-weight:600; text-transform:uppercase; letter-spacing:0.04em; color: var(--gray-500);">Archived</span>' : '';
+
+            // Role + permission chip on each class
+            var perm = c.my_permission || 'edit';
+            var role = c.my_role_label || 'Co-Teacher';
+            var permLabel = perm === 'view_only' ? 'View only' : 'Edit';
+            var roleChip = '<span style="display:inline-flex; align-items:center; gap:0.3rem; padding:0.18rem 0.55rem; border-radius:999px; background:#eef5fc; color:var(--primary); font-size:0.74rem; font-weight:600;">' +
+                tpEscape(role) + ' &middot; ' + permLabel +
+            '</span>';
+
             html += '<a class="class-card" href="teacher-class.html?id=' + encodeURIComponent(c.id) + '"' + archivedStyle + '>' +
                 '<div class="class-card-head">' +
                     '<div>' +
                         '<div class="class-name">' + tpEscape(c.name) + '</div>' +
                         '<div class="class-sub">' + (c.level === 'a_level' ? 'A-Level' : 'GCSE') + (archivedLabel ? '  ·  ' + archivedLabel : '') + '</div>' +
+                        '<div style="margin-top:0.4rem;">' + roleChip + '</div>' +
                     '</div>' +
                     '<span class="' + badgeClass + '">' + tpEscape(boardLabel) + '</span>' +
                 '</div>' +
@@ -522,52 +609,6 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
             '<div class="empty-body">Create a class to generate a join code that students can use to enrol. You can also invite co-teachers for oversight.</div>' +
             '<button class="btn btn-primary" onclick="openNewClassModal()">Create your first class</button>' +
         '</div>';
-    }
-
-    async function renderUsage(classes) {
-        var period = formatPeriod(new Date());
-        document.getElementById('usagePeriod').textContent = periodLabel(new Date());
-
-        var classIds = classes.map(function(c) { return c.id; });
-        var totalQ = 0;
-        var totalT = 0;
-
-        if (classIds.length > 0) {
-            var usageResult = await supabaseClient
-                .from('teacher_usage')
-                .select('class_id, period, questions_used, tests_used')
-                .in('class_id', classIds)
-                .eq('period', period);
-
-            (usageResult.data || []).forEach(function(r) {
-                totalQ += r.questions_used || 0;
-                totalT += r.tests_used || 0;
-            });
-        }
-
-        // Caps: 40 questions + 5 tests per class per month. Show cap as (classes * cap).
-        var qCap = classes.length * 40;
-        var tCap = classes.length * 5;
-        var qPct = qCap > 0 ? Math.round((totalQ / qCap) * 100) : 0;
-        var tPct = tCap > 0 ? Math.round((totalT / tCap) * 100) : 0;
-
-        document.getElementById('usageGrid').innerHTML =
-            '<div>' +
-                '<div class="usage-top"><span class="usage-label">Questions generated (all classes)</span><span class="usage-count">' + totalQ + ' <span>/ ' + qCap + '</span></span></div>' +
-                '<div class="usage-bar"><div class="usage-bar-fill" style="width: ' + Math.min(qPct, 100) + '%;"></div></div>' +
-                '<div class="muted" style="margin-top: 0.4rem; font-size: 0.82rem;">Each class has a monthly cap of 40 questions.</div>' +
-            '</div>' +
-            '<div>' +
-                '<div class="usage-top"><span class="usage-label">Tests generated (all classes)</span><span class="usage-count">' + totalT + ' <span>/ ' + tCap + '</span></span></div>' +
-                '<div class="usage-bar"><div class="usage-bar-fill ' + (tPct >= 60 ? 'warn' : '') + '" style="width: ' + Math.min(tPct, 100) + '%;"></div></div>' +
-                '<div class="muted" style="margin-top: 0.4rem; font-size: 0.82rem;">Each class has a monthly cap of 5 tests.</div>' +
-            '</div>';
-
-        document.getElementById('usageCard').style.display = 'block';
-    }
-
-    function renderEmptyUsage() {
-        document.getElementById('usageCard').style.display = 'none';
     }
 
     async function renderHeroMeta(classes) {
