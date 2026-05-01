@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<title>My Progress | MyBizStudies Student Portal</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root {
+    --primary: #1e3a5f; --primary-dark: #152a45; --primary-light: #2d5a8a;
+    --accent: #e67e22; --accent-light: #f39c12; --accent-glow: rgba(230,126,34,0.3);
+    --success: #27ae60; --success-bg: #e8f5ec;
+    --warning: #f39c12; --warning-bg: #fef6e7;
+    --error: #e74c3c; --error-bg: #fceae8;
+    --info: #3498db; --info-bg: #e8f2fb;
+    --gray-50: #f8fafc; --gray-100: #f1f5f9; --gray-200: #e2e8f0; --gray-300: #cbd5e1;
+    --gray-400: #94a3b8; --gray-500: #64748b; --gray-700: #334155; --gray-800: #1e293b; --gray-900: #0f172a;
+    --shadow-md: 0 4px 18px rgba(15,23,42,0.08); --shadow-lg: 0 10px 40px rgba(15,23,42,0.12);
+    --radius-sm: 8px; --radius: 12px; --radius-lg: 16px; --radius-xl: 24px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--gray-50); color: var(--gray-800); line-height: 1.55; min-height: 100vh; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+.portal-bar { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.96); backdrop-filter: blur(12px); border-bottom: 1px solid var(--gray-200); }
+.portal-bar-inner { max-width: 1100px; margin: 0 auto; padding: 0.75rem 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.portal-bar-left { display: flex; align-items: center; gap: 1.25rem; }
+.portal-logo { height: 46px; }
+.portal-label { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.8rem; background: rgba(52, 152, 219, 0.1); color: var(--info); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; border-radius: 999px; }
+.portal-bar-right { display: flex; align-items: center; gap: 0.5rem; }
+.portal-nav-link { padding: 0.5rem 0.9rem; font-size: 0.92rem; font-weight: 500; color: var(--gray-500); border-radius: var(--radius-sm); }
+.portal-nav-link:hover { background: var(--gray-100); color: var(--primary); }
+.portal-nav-link.active { color: var(--primary); background: var(--gray-100); font-weight: 600; }
+.portal-avatar { width: 38px; height: 38px; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.9rem; background: linear-gradient(135deg, var(--accent), var(--accent-light)); }
+
+.page { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+.crumb-bar { display: flex; align-items: center; gap: 0.5rem; font-size: 0.88rem; color: var(--gray-500); margin-bottom: 1rem; }
+.crumb-bar a { color: var(--gray-500); }
+.crumb-bar a:hover { color: var(--primary); }
+.crumb-sep { color: var(--gray-300); }
+
+.hero { background: var(--primary); color: white; border-radius: var(--radius-xl); padding: 1.75rem 2rem; margin-bottom: 1.5rem; position: relative; overflow: hidden; }
+.hero::before { content: ""; position: absolute; right: -80px; bottom: -80px; width: 280px; height: 280px; background: radial-gradient(circle, rgba(230,126,34,0.25) 0%, transparent 70%); }
+.hero-content { position: relative; z-index: 1; }
+.hero-title { font-size: 1.7rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.3rem; }
+.hero-sub { opacity: 0.9; font-size: 0.95rem; margin-bottom: 1.25rem; }
+.hero-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.75rem; }
+.hero-stat { background: rgba(255,255,255,0.08); border-radius: var(--radius); padding: 0.85rem 1rem; }
+.hero-stat-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.75; margin-bottom: 0.3rem; font-weight: 600; }
+.hero-stat-value { font-size: 1.6rem; font-weight: 800; line-height: 1; }
+
+.section { margin: 1.75rem 0 1rem; }
+.section-h { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 0.4rem; gap: 1rem; flex-wrap: wrap; }
+.section-title { font-size: 1.1rem; font-weight: 700; color: var(--gray-900); }
+.section-meta { font-size: 0.82rem; color: var(--gray-500); }
+.section-sub { font-size: 0.92rem; color: var(--gray-500); margin-bottom: 1rem; line-height: 1.55; }
+
+.card { background: white; border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 1.5rem; }
+.chart-wrap { position: relative; width: 100%; height: 300px; }
+.chart-legend { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 0.85rem; font-size: 0.82rem; color: var(--gray-500); }
+.chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.chart-legend-swatch { display: inline-block; width: 11px; height: 11px; border-radius: 3px; }
+
+.skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0.85rem; }
+.skill-card { background: white; border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 1.2rem 1.35rem; }
+.skill-head { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.6rem; }
+.skill-icon-wrap { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.skill-name { font-size: 1.02rem; font-weight: 700; color: var(--gray-900); margin: 0; }
+.skill-ao { font-size: 0.72rem; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+.skill-meter-row { display: flex; align-items: center; gap: 0.5rem; margin: 0.6rem 0 0.85rem; }
+.skill-meter { flex-grow: 1; display: flex; gap: 4px; }
+.skill-meter-segment { flex: 1; height: 6px; border-radius: 999px; background: var(--gray-100); }
+.skill-meter-segment.on { background: currentColor; }
+.skill-meter-label { font-size: 0.74rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+.skill-comment { font-size: 0.92rem; color: var(--gray-700); line-height: 1.6; }
+.skill-comment .pos { color: var(--success); font-weight: 600; }
+.skill-comment .imp { color: var(--accent); font-weight: 600; }
+
+.summary-card { background: linear-gradient(135deg, #fff4e6 0%, #fef6e7 100%); border: 1px solid #f7d98a; border-radius: var(--radius-lg); padding: 1.4rem 1.6rem; }
+.summary-head { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.6rem; }
+.summary-label { font-size: 0.74rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #8a5a00; }
+.summary-text { font-size: 0.98rem; color: var(--gray-800); line-height: 1.65; }
+
+.targets-list { display: flex; flex-direction: column; gap: 0.6rem; }
+.target-row { display: flex; align-items: flex-start; gap: 0.85rem; padding: 1rem 1.2rem; background: white; border: 1px solid var(--gray-200); border-radius: var(--radius); }
+.target-num { width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: white; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.target-text { font-size: 0.94rem; color: var(--gray-800); line-height: 1.6; }
+
+.empty-card { background: white; border: 1px dashed var(--gray-300); border-radius: var(--radius-lg); padding: 2.5rem 1.5rem; text-align: center; color: var(--gray-500); }
+.empty-card-title { font-weight: 700; color: var(--gray-700); margin-bottom: 0.4rem; font-size: 1.05rem; }
+
+.access-block { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+.access-card { max-width: 420px; background: white; padding: 2.5rem 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); text-align: center; border: 1px solid var(--gray-200); }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.7rem 1.2rem; font-weight: 600; font-size: 0.94rem; border-radius: var(--radius-sm); }
+.btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent-light)); color: white; }
+.btn-secondary { background: var(--primary); color: white; }
+.btn-ghost { background: white; color: var(--gray-700); border: 1px solid var(--gray-200); }
+
+.muted { color: var(--gray-500); }
+
+@media (max-width: 640px) {
+    .hero { padding: 1.4rem 1.5rem; }
+    .hero-title { font-size: 1.35rem; }
+    .page { padding: 1.25rem 1rem 3rem; }
+}
+</style>
+</head>
+<body>
+
+<div id="loadingShell" style="padding: 3rem; text-align: center; color: var(--gray-500);">Loading your progress...</div>
+
+<div id="accessDenied" style="display: none;" class="access-block">
+    <div class="access-card">
+        <div style="font-size: 2.2rem; margin-bottom: 1rem;">&#128274;</div>
+        <h1 style="font-size: 1.2rem; color: var(--gray-900); margin-bottom: 0.5rem;">Access denied</h1>
+        <p class="muted" style="margin-bottom: 1.5rem;" id="accessMsg"></p>
+        <a href="student-portal.html" class="btn btn-secondary">Back to my work</a>
+    </div>
+</div>
+
+<div id="shell" style="display: none;">
+
+<header class="portal-bar">
+    <div class="portal-bar-inner">
+        <div class="portal-bar-left">
+            <a href="student-portal.html"><img src="logo.png" alt="MyBizStudies" class="portal-logo"></a>
+            <span class="portal-label">Student Portal</span>
+        </div>
+        <div class="portal-bar-right" id="navRight">
+            <a href="student-portal.html" class="portal-nav-link">My work</a>
+            <a href="class-progress.html" class="portal-nav-link active">My progress</a>
+            <a href="exam-practice.html" class="portal-nav-link">Main site</a>
+            <a href="#" class="portal-nav-link" id="logoutLink">Sign out</a>
+            <div class="portal-avatar" id="navAvatar">--</div>
+        </div>
+    </div>
+</header>
+
+<main class="page">
+    <div class="crumb-bar" id="crumbBar">
+        <a href="student-portal.html">Dashboard</a>
+        <span class="crumb-sep">/</span>
+        <span>My progress</span>
+    </div>
+
+    <div id="classSelectorWrap" style="display:none; margin-bottom: 1rem;">
+        <label class="muted" style="font-size: 0.88rem; display:block; margin-bottom: 0.4rem;">Showing progress for</label>
+        <select id="classSelector" class="btn btn-ghost" style="padding: 0.55rem 0.9rem; font-size: 0.94rem; min-width: 220px;"></select>
+    </div>
+
+    <div class="hero">
+        <div class="hero-content">
+            <div class="hero-title" id="heroTitle">Your progress</div>
+            <div class="hero-sub" id="heroSub">Loading your class data...</div>
+            <div class="hero-stats" id="heroStats"></div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-h">
+            <div class="section-title">Performance by question</div>
+            <span class="section-meta" id="chartMeta"></span>
+        </div>
+        <div class="section-sub">How many of each mark allocation you've attempted, with the average score above each bar. Greyed-out bars are mark allocations you haven't tried yet.</div>
+        <div class="card">
+            <div class="chart-wrap"><canvas id="progressChart" role="img" aria-label="Bar chart of questions attempted by mark allocation, with the average score percentage shown above each bar.">Bar chart of questions attempted by mark allocation, with the average score percentage shown above each bar.</canvas></div>
+            <div class="chart-legend">
+                <span><span class="chart-legend-swatch" style="background: #1d9e75;"></span>80% and up</span>
+                <span><span class="chart-legend-swatch" style="background: #ef9f27;"></span>60-79%</span>
+                <span><span class="chart-legend-swatch" style="background: #e24b4a;"></span>Below 60%</span>
+                <span><span class="chart-legend-swatch" style="background: #cbd5e1;"></span>Not attempted</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-h">
+            <div class="section-title">Skills feedback</div>
+            <span class="section-meta" id="skillsMeta">Updated every 5 questions</span>
+        </div>
+        <div class="section-sub">Your teacher reviews your last 5 questions and writes a short comment on each skill. Updates automatically when you finish your next 5.</div>
+        <div id="skillsContainer">
+            <div class="empty-card" id="skillsEmpty">
+                <div class="empty-card-title">Not enough data yet</div>
+                <div id="skillsEmptyMsg">Complete at least 5 class questions to unlock teacher feedback on your skills.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section" id="summarySection" style="display:none;">
+        <div class="section-h"><div class="section-title">Overall teacher summary</div></div>
+        <div class="summary-card">
+            <div class="summary-head">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#8a5a00"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
+                <span class="summary-label">Overall summary</span>
+            </div>
+            <p class="summary-text" id="overallSummaryText"></p>
+        </div>
+    </div>
+
+    <div class="section" id="targetsSection" style="display:none;">
+        <div class="section-h"><div class="section-title">Targets to aim for</div></div>
+        <div class="section-sub">Things to focus on in your next set of class questions.</div>
+        <div class="targets-list" id="targetsList"></div>
+    </div>
+</main>
+
+</div>
+
+<script>
+    var SUPABASE_URL = 'https://zyaywzzmjpctpodpxhge.supabase.co';
+    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5YXl3enptanBjdHBvZHB4aGdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5MjcwODIsImV4cCI6MjA4NTUwMzA4Mn0.Mfx00hUv9e6PNtWvnfbQKZzNWKvXIzQUN7bfqDijGvQ';
+    var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    var BOARD_LABELS = {
+        aqa_gcse: 'AQA GCSE', edexcel_gcse: 'Edexcel GCSE', edexcel_igcse: 'Edexcel IGCSE',
+        cie_igcse: 'Cambridge IGCSE', aqa_uk: 'AQA A-Level', edexcel_uk: 'Edexcel A-Level',
+        edexcel_ial: 'Edexcel IAL', cie_ial: 'Cambridge IAL'
+    };
+
+    var BOARD_MARK_BANDS = {
+        aqa_gcse: [1, 2, 3, 4, 5, 6, 9, 12],
+        edexcel_gcse: [1, 2, 3, 6, 9, 12],
+        edexcel_igcse: [1, 2, 3, 6, 9, 12],
+        cie_igcse: [2, 4, 6, 8, 12],
+        aqa_uk: [3, 4, 6, 9, 12, 16, 20, 25],
+        edexcel_uk: [4, 6, 8, 10, 12, 20],
+        edexcel_ial: [2, 4, 6, 8, 10, 12, 20],
+        cie_ial: [2, 3, 4, 5, 8, 12, 20]
+    };
+
+    var BOARD_AO_LABELS = {
+        aqa_gcse:    { knowledge: 'AO1', application: 'AO2', analysis: 'AO3a', evaluation: 'AO3b' },
+        edexcel_gcse:{ knowledge: 'AO1a / AO1b', application: 'AO2', analysis: 'AO3a', evaluation: 'AO3b' },
+        edexcel_igcse:{ knowledge: 'AO1', application: 'AO2', analysis: 'AO3', evaluation: 'AO4' },
+        cie_igcse:   { knowledge: 'AO1', application: 'AO2', analysis: 'AO3', evaluation: 'AO4' },
+        aqa_uk:      { knowledge: 'AO1', application: 'AO2', analysis: 'AO3', evaluation: 'AO4' },
+        edexcel_uk:  { knowledge: 'AO1', application: 'AO2', analysis: 'AO3', evaluation: 'AO4' },
+        edexcel_ial: { knowledge: 'AO1', application: 'AO2', analysis: 'AO3', evaluation: 'AO4' },
+        cie_ial:     { knowledge: 'AO1', application: 'AO2', analysis: 'AO3', evaluation: 'AO4' }
+    };
+
+    var SKILL_META = {
+        knowledge:   { name: 'Knowledge',   icon: 'M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z', color: '#0f6e56', bg: '#e1f5ee' },
+        application: { name: 'Application', icon: 'M3 21l3-3m6-12L8 10l5 5 4-4zM14 4l6 6', color: '#854f0b', bg: '#faeeda' },
+        analysis:    { name: 'Analysis',    icon: 'M3 3h18v18H3zm9 6v6m-3-3h6', color: '#185fa5', bg: '#e6f1fb' },
+        evaluation:  { name: 'Evaluation',  icon: 'M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z', color: '#5b3eaa', bg: '#eeedfe' }
+    };
+
+    var SIGNAL_META = {
+        working_towards: { label: 'Working towards', segs: 1, color: '#e24b4a' },
+        achieving:       { label: 'Achieving',       segs: 3, color: '#ef9f27' },
+        mastering:       { label: 'Mastering',       segs: 5, color: '#1d9e75' }
+    };
+
+    var currentUser = null;
+    var currentProfile = null;
+    var classMemberships = [];
+    var selectedClassId = null;
+    var teacherViewStudentId = null;
+    var teacherViewStudentName = null;
+    var chartInstance = null;
+
+    document.addEventListener('DOMContentLoaded', init);
+
+    async function init() {
+        var sessionResult = await supabaseClient.auth.getSession();
+        if (!sessionResult.data.session) {
+            window.location.href = 'login.html?redirect=class-progress.html';
+            return;
+        }
+        currentUser = sessionResult.data.session.user;
+
+        var profileResult = await supabaseClient.from('user_profiles').select('user_id, email, name, role, school_id').eq('user_id', currentUser.id).maybeSingle();
+        if (!profileResult.data) {
+            showAccessDenied('Could not load your profile.');
+            return;
+        }
+        currentProfile = profileResult.data;
+
+        var params = new URLSearchParams(window.location.search);
+        var qsClass = params.get('class');
+        var qsStudent = params.get('student');
+
+        if (qsStudent && currentProfile.role === 'teacher') {
+            teacherViewStudentId = qsStudent;
+            await loadTeacherView(qsClass);
+        } else if (currentProfile.role === 'student') {
+            await loadStudentView(qsClass);
+        } else {
+            showAccessDenied('This page is for students. Teachers can view a student\'s progress from the markbook.');
+            return;
+        }
+    }
+
+    function showAccessDenied(msg) {
+        document.getElementById('loadingShell').style.display = 'none';
+        document.getElementById('shell').style.display = 'none';
+        document.getElementById('accessMsg').textContent = msg;
+        document.getElementById('accessDenied').style.display = 'flex';
+    }
+
+    function showShell() {
+        document.getElementById('loadingShell').style.display = 'none';
+        document.getElementById('shell').style.display = 'block';
+        var initials = initialsOf(currentProfile.name || currentProfile.email || 'U');
+        var avatar = document.getElementById('navAvatar');
+        if (avatar) avatar.textContent = initials;
+    }
+
+    async function loadStudentView(preferredClassId) {
+        var { data: links } = await supabaseClient.from('class_students').select('class_id, classes:class_id(id, name, level, board, archived_at)').eq('student_id', currentUser.id);
+        var classes = (links || []).map(function(l) { return l.classes; }).filter(function(c) { return c && !c.archived_at; });
+        if (classes.length === 0) {
+            showShell();
+            renderEmpty('You are not enrolled in any classes yet. Use the + Join class link in the menu to add one.');
+            return;
+        }
+        classMemberships = classes;
+
+        var pickId = preferredClassId && classes.find(function(c) { return c.id === preferredClassId; })
+            ? preferredClassId
+            : classes[0].id;
+
+        if (classes.length > 1) {
+            var sel = document.getElementById('classSelector');
+            sel.innerHTML = classes.map(function(c) { return '<option value="' + c.id + '"' + (c.id === pickId ? ' selected' : '') + '>' + esc(c.name) + '</option>'; }).join('');
+            sel.addEventListener('change', function() {
+                selectedClassId = sel.value;
+                renderForClass(selectedClassId);
+            });
+            document.getElementById('classSelectorWrap').style.display = 'block';
+        }
+
+        showShell();
+        wireNav();
+        selectedClassId = pickId;
+        renderForClass(selectedClassId);
+    }
+
+    async function loadTeacherView(classIdHint) {
+        if (!classIdHint) { showAccessDenied('Class id missing in URL.'); return; }
+        selectedClassId = classIdHint;
+
+        var { data: ct } = await supabaseClient.from('class_teachers').select('class_id, permission').eq('class_id', classIdHint).eq('teacher_id', currentUser.id).maybeSingle();
+        if (!ct) { showAccessDenied("You're not on this class."); return; }
+
+        var [classRes, studentRes] = await Promise.all([
+            supabaseClient.from('classes').select('id, name, level, board').eq('id', classIdHint).maybeSingle(),
+            supabaseClient.from('user_profiles').select('user_id, name, email').eq('user_id', teacherViewStudentId).maybeSingle()
+        ]);
+
+        if (!classRes.data || !studentRes.data) { showAccessDenied('Could not load class or student.'); return; }
+        classMemberships = [classRes.data];
+        teacherViewStudentName = studentRes.data.name || studentRes.data.email;
+
+        document.getElementById('navRight').innerHTML =
+            '<a href="teacher-class.html?id=' + classIdHint + '" class="portal-nav-link">Back to class</a>' +
+            '<a href="#" class="portal-nav-link" id="logoutLink">Sign out</a>' +
+            '<div class="portal-avatar" id="navAvatar">' + initialsOf(currentProfile.name || currentProfile.email || 'T') + '</div>';
+
+        document.getElementById('crumbBar').innerHTML =
+            '<a href="teacher-dashboard.html">Dashboard</a>' +
+            '<span class="crumb-sep">/</span>' +
+            '<a href="teacher-class.html?id=' + classIdHint + '">' + esc(classRes.data.name) + '</a>' +
+            '<span class="crumb-sep">/</span>' +
+            '<span>' + esc(teacherViewStudentName) + ' progress</span>';
+
+        showShell();
+        wireNav();
+        renderForClass(classIdHint);
+    }
+
+    function initialsOf(s) {
+        return String(s).trim().split(/\s+/).slice(0, 2).map(function(p) { return p[0] ? p[0].toUpperCase() : ''; }).join('') || 'U';
+    }
+
+    function wireNav() {
+        var lo = document.getElementById('logoutLink');
+        if (lo) lo.addEventListener('click', async function(e) {
+            e.preventDefault();
+            await supabaseClient.auth.signOut();
+            window.location.href = 'index.html';
+        });
+    }
+
+    async function renderForClass(classId) {
+        var cls = classMemberships.find(function(c) { return c.id === classId; });
+        if (!cls) return;
+
+        var board = canonicaliseBoard(cls.board);
+        var displayName = teacherViewStudentName || (currentProfile.name || (currentProfile.email || '').split('@')[0]);
+        var heroPrefix = teacherViewStudentId ? esc(displayName) + ' — ' : 'Your progress in ';
+        document.getElementById('heroTitle').textContent = (teacherViewStudentId ? heroPrefix : 'Your progress in ') + cls.name;
+        document.getElementById('heroSub').textContent = (BOARD_LABELS[board] || board) + ' · class work since joining';
+
+        var studentId = teacherViewStudentId || currentUser.id;
+        var assignmentsRes = await supabaseClient.from('assignments').select('id, total_marks').eq('class_id', classId);
+        var assignmentMap = {};
+        (assignmentsRes.data || []).forEach(function(a) { assignmentMap[a.id] = a; });
+        var assignmentIds = Object.keys(assignmentMap);
+
+        if (assignmentIds.length === 0) {
+            document.getElementById('heroStats').innerHTML = statTile('Questions done', '0') + statTile('Avg score', '—') + statTile('Highest band', '—');
+            renderChart(board, []);
+            return;
+        }
+
+        var attemptsRes = await supabaseClient.from('student_attempts').select('id, assignment_id, ai_score, ai_total, ai_feedback, status, submitted_at').eq('student_id', studentId).eq('status', 'graded').in('assignment_id', assignmentIds);
+        var attempts = (attemptsRes.data || []).slice().sort(function(a, b) { return (a.submitted_at || '').localeCompare(b.submitted_at || ''); });
+
+        var totalQ = attempts.length;
+        var totalScore = 0, totalAvail = 0;
+        attempts.forEach(function(a) { totalScore += (a.ai_score || 0); totalAvail += (a.ai_total || 0); });
+        var avgPct = totalAvail > 0 ? Math.round((totalScore / totalAvail) * 100) : 0;
+
+        var bestLevel = null;
+        attempts.forEach(function(a) {
+            var fb = a.ai_feedback || {};
+            var lvl = (fb.marking && fb.marking.level) || fb.level || (fb.test_summary && fb.test_summary.level);
+            if (typeof lvl === 'number' && (bestLevel === null || lvl > bestLevel)) bestLevel = lvl;
+        });
+        var bestLabel = (bestLevel !== null) ? ('Level ' + bestLevel) : '—';
+
+        document.getElementById('heroStats').innerHTML =
+            statTile('Questions done', String(totalQ)) +
+            statTile('Avg score', totalAvail > 0 ? avgPct + '%' : '—') +
+            statTile('Highest band', bestLabel);
+
+        renderChart(board, attempts.map(function(a) {
+            var asn = assignmentMap[a.assignment_id] || {};
+            return { marks: asn.total_marks || a.ai_total || 0, score: a.ai_score || 0, total: a.ai_total || asn.total_marks || 0 };
+        }));
+
+        document.getElementById('chartMeta').textContent = totalQ === 0 ? 'No attempts yet' : ('Last ' + totalQ + ' question' + (totalQ === 1 ? '' : 's'));
+
+        await loadOrGenerateProgress(classId, studentId, totalQ);
+    }
+
+    function canonicaliseBoard(b) {
+        if (!b) return 'aqa_gcse';
+        var lc = String(b).toLowerCase();
+        var aliases = { 'aqa_a_level': 'aqa_uk', 'edexcel_a_level': 'edexcel_uk', 'cambridge_a_level': 'cie_ial' };
+        return aliases[lc] || lc;
+    }
+
+    function statTile(label, value) {
+        return '<div class="hero-stat"><div class="hero-stat-label">' + esc(label) + '</div><div class="hero-stat-value">' + esc(value) + '</div></div>';
+    }
+
+    function renderChart(board, attemptsForChart) {
+        var bands = (BOARD_MARK_BANDS[board] || [1, 2, 3, 4, 6, 9, 12]).slice();
+        var counts = {}, sumPct = {};
+        bands.forEach(function(b) { counts[b] = 0; sumPct[b] = 0; });
+        attemptsForChart.forEach(function(a) {
+            var m = a.marks;
+            if (counts[m] === undefined) { counts[m] = 0; sumPct[m] = 0; bands.push(m); }
+            counts[m] += 1;
+            if (a.total > 0) sumPct[m] += (a.score / a.total) * 100;
+        });
+        bands.sort(function(a, b) { return a - b; });
+
+        var avgPcts = bands.map(function(b) { return counts[b] > 0 ? Math.round(sumPct[b] / counts[b]) : null; });
+        var attempted = bands.map(function(b) { return counts[b]; });
+
+        var colors = avgPcts.map(function(p, i) {
+            if (attempted[i] === 0) return '#cbd5e1';
+            if (p >= 80) return '#1d9e75';
+            if (p >= 60) return '#ef9f27';
+            return '#e24b4a';
+        });
+
+        if (chartInstance) chartInstance.destroy();
+        var ctx = document.getElementById('progressChart');
+        chartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: bands.map(function(b) { return b + '-mark'; }),
+                datasets: [{
+                    label: 'Questions attempted',
+                    data: attempted.map(function(v) { return v === 0 ? 0.0001 : v; }),
+                    backgroundColor: colors,
+                    borderRadius: 8,
+                    barThickness: 38
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(ctx) {
+                                var i = ctx.dataIndex;
+                                if (attempted[i] === 0) return 'Not attempted yet';
+                                return 'Attempted: ' + attempted[i] + '   Avg: ' + (avgPcts[i] !== null ? avgPcts[i] + '%' : '—');
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: { grid: { display: false }, ticks: { color: '#64748b', font: { size: 12 } } },
+                    y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { color: '#64748b', stepSize: 1, precision: 0, font: { size: 12 } }, title: { display: true, text: 'Questions attempted', color: '#64748b', font: { size: 11 } } }
+                },
+                animation: { duration: 600 }
+            },
+            plugins: [{
+                id: 'pctLabels',
+                afterDatasetsDraw: function(chart) {
+                    var c = chart.ctx;
+                    var meta = chart.getDatasetMeta(0);
+                    meta.data.forEach(function(bar, i) {
+                        if (attempted[i] === 0) return;
+                        c.save();
+                        c.fillStyle = colors[i];
+                        c.font = '600 12px system-ui, -apple-system, sans-serif';
+                        c.textAlign = 'center';
+                        c.fillText(avgPcts[i] + '%', bar.x, bar.y - 8);
+                        c.restore();
+                    });
+                }
+            }]
+        });
+    }
+
+    async function loadOrGenerateProgress(classId, studentId, totalAttempts) {
+        var board = canonicaliseBoard(classMemberships.find(function(c) { return c.id === classId; }).board);
+
+        var { data: existing } = await supabaseClient.from('class_progress_summaries').select('*').eq('student_id', studentId).eq('class_id', classId).order('generated_at', { ascending: false }).limit(1).maybeSingle();
+
+        var skillsContainer = document.getElementById('skillsContainer');
+        var skillsEmpty = document.getElementById('skillsEmpty');
+        var skillsEmptyMsg = document.getElementById('skillsEmptyMsg');
+
+        if (totalAttempts < 5 && !existing) {
+            skillsContainer.innerHTML = '';
+            skillsContainer.appendChild(skillsEmpty);
+            if (skillsEmptyMsg) skillsEmptyMsg.textContent = 'Complete at least 5 class questions to unlock teacher feedback. You\'ve done ' + totalAttempts + ' so far.';
+            document.getElementById('summarySection').style.display = 'none';
+            document.getElementById('targetsSection').style.display = 'none';
+            return;
+        }
+
+        var shouldGenerate = !existing || (totalAttempts >= existing.attempts_count + 5);
+
+        if (existing) {
+            renderSkills(existing.skills, board);
+            renderSummary(existing.overall_summary);
+            renderTargets(existing.targets);
+            var nextRefresh = existing.attempts_count + 5;
+            var meta = totalAttempts >= nextRefresh
+                ? 'Refreshing now…'
+                : 'Updated after ' + existing.attempts_count + ' questions · next update at ' + nextRefresh;
+            document.getElementById('skillsMeta').textContent = meta;
+        }
+
+        if (shouldGenerate) {
+            try {
+                var sess = await supabaseClient.auth.getSession();
+                var resp = await fetch(SUPABASE_URL + '/functions/v1/generate-class-progress', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + sess.data.session.access_token,
+                        'apikey': SUPABASE_ANON_KEY
+                    },
+                    body: JSON.stringify({ class_id: classId, student_id: teacherViewStudentId || undefined })
+                });
+                var result = await resp.json();
+                if (resp.ok && result.skills) {
+                    renderSkills(result.skills, board);
+                    renderSummary(result.overall_summary);
+                    renderTargets(result.targets);
+                    document.getElementById('skillsMeta').textContent = 'Updated after ' + result.attempts_count + ' questions · next update at ' + (result.attempts_count + 5);
+                } else if (resp.ok && result.already_current) {
+                    document.getElementById('skillsMeta').textContent = 'Up to date';
+                } else if (!existing) {
+                    skillsContainer.innerHTML = '';
+                    skillsContainer.appendChild(skillsEmpty);
+                    if (skillsEmptyMsg) skillsEmptyMsg.textContent = result.error || 'Could not load teacher feedback.';
+                }
+            } catch (e) {
+                if (!existing) {
+                    skillsContainer.innerHTML = '';
+                    skillsContainer.appendChild(skillsEmpty);
+                    if (skillsEmptyMsg) skillsEmptyMsg.textContent = 'Could not load teacher feedback. Try refreshing.';
+                }
+            }
+        }
+    }
+
+    function renderSkills(skills, board) {
+        var aoLabels = BOARD_AO_LABELS[board] || BOARD_AO_LABELS.aqa_gcse;
+        var html = '<div class="skills-grid">';
+        ['knowledge', 'application', 'analysis', 'evaluation'].forEach(function(key) {
+            var skill = skills[key] || {};
+            var meta = SKILL_META[key];
+            var sig = SIGNAL_META[skill.signal] || SIGNAL_META.achieving;
+            var segs = '';
+            for (var i = 1; i <= 5; i++) {
+                segs += '<span class="skill-meter-segment' + (i <= sig.segs ? ' on' : '') + '"></span>';
+            }
+            html += '<div class="skill-card" style="color:' + sig.color + ';">' +
+                '<div class="skill-head">' +
+                    '<div class="skill-icon-wrap" style="background:' + meta.bg + ';">' +
+                        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="' + meta.color + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="' + meta.icon + '"/></svg>' +
+                    '</div>' +
+                    '<div>' +
+                        '<div class="skill-name">' + meta.name + '</div>' +
+                        '<div class="skill-ao">' + aoLabels[key] + '</div>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="skill-meter-row">' +
+                    '<div class="skill-meter">' + segs + '</div>' +
+                    '<span class="skill-meter-label">' + sig.label + '</span>' +
+                '</div>' +
+                '<p class="skill-comment">' + formatComment(skill.comment || '') + '</p>' +
+            '</div>';
+        });
+        html += '</div>';
+        document.getElementById('skillsContainer').innerHTML = html;
+    }
+
+    function formatComment(text) {
+        return esc(text)
+            .replace(/Going well:/g, '<span class="pos">Going well:</span>')
+            .replace(/Push further:/g, '<span class="imp">Push further:</span>');
+    }
+
+    function renderSummary(summary) {
+        document.getElementById('overallSummaryText').textContent = summary || '';
+        document.getElementById('summarySection').style.display = summary ? 'block' : 'none';
+    }
+
+    function renderTargets(targets) {
+        if (!targets || targets.length === 0) {
+            document.getElementById('targetsSection').style.display = 'none';
+            return;
+        }
+        var html = targets.map(function(t, i) {
+            return '<div class="target-row"><div class="target-num">' + (i + 1) + '</div><p class="target-text">' + esc(t) + '</p></div>';
+        }).join('');
+        document.getElementById('targetsList').innerHTML = html;
+        document.getElementById('targetsSection').style.display = 'block';
+    }
+
+    function renderEmpty(msg) {
+        document.getElementById('heroStats').innerHTML = '';
+        document.querySelector('.hero-sub').textContent = msg;
+        document.getElementById('chartMeta').textContent = '';
+        document.getElementById('classSelectorWrap').style.display = 'none';
+        document.querySelectorAll('.section').forEach(function(s) { s.style.display = 'none'; });
+    }
+
+    function esc(s) { if (s === null || s === undefined) return ''; return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+</script>
+
+</body>
+</html>
