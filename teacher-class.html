@@ -145,6 +145,7 @@ table.data-table { width: 100%; border-collapse: collapse; }
 .toast.success { background: var(--success); }
 .toast.error { background: var(--error); }
 @keyframes toastIn { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
+@keyframes sendingSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
 /* Access denied */
 .access-block { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
@@ -1772,7 +1773,7 @@ table.data-table { width: 100%; border-collapse: collapse; }
             else if (alreadyHas === 'not_started') alreadyLabel = '<span class="muted" style="font-size:0.78rem;">Already attached</span>';
             var btn = alreadyHas
                 ? '<button class="btn btn-ghost btn-sm" disabled style="opacity:0.5; cursor:not-allowed;">Attached</button>'
-                : '<button class="btn btn-primary btn-sm" onclick="confirmSendExisting(\'' + a.id + '\')">Send</button>';
+                : '<button class="btn btn-primary btn-sm send-existing-btn" data-aid="' + a.id + '" onclick="confirmSendExisting(\'' + a.id + '\', this)">Send</button>';
             return '<div style="display:flex; align-items:center; gap:0.85rem; padding:0.7rem 0.85rem; border:1px solid var(--gray-200); border-radius:var(--radius);">' +
                 '<div style="flex-grow:1; min-width:0;">' +
                     '<div style="font-weight:600; color:var(--gray-900); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + esc(title) + '</div>' +
@@ -1790,11 +1791,23 @@ table.data-table { width: 100%; border-collapse: collapse; }
     }
     window.closeSendExistingModal = closeSendExistingModal;
 
-    async function confirmSendExisting(assignmentId) {
+    async function confirmSendExisting(assignmentId, btnEl) {
         var errBox = document.getElementById('sendExistingError');
         var okBox = document.getElementById('sendExistingSuccess');
         errBox.style.display = 'none';
         okBox.style.display = 'none';
+
+        // Disable every Send button in the list while one is in flight, and put a
+        // spinner on the clicked one so the teacher can see something is happening.
+        var allBtns = document.querySelectorAll('.send-existing-btn');
+        allBtns.forEach(function(b) { b.disabled = true; b.style.opacity = '0.6'; b.style.cursor = 'not-allowed'; });
+        var originalLabel = '';
+        if (btnEl) {
+            originalLabel = btnEl.innerHTML;
+            btnEl.innerHTML = '<span style="display:inline-flex; align-items:center; gap:0.4rem;"><span style="width:10px; height:10px; border:2px solid currentColor; border-top-color:transparent; border-radius:50%; display:inline-block; animation: sendingSpin 0.6s linear infinite;"></span>Sending...</span>';
+            btnEl.style.opacity = '1';
+        }
+
         try {
             var sess = await supabaseClient.auth.getSession();
             var resp = await fetch(SUPABASE_URL + '/functions/v1/attach-assignment-to-student', {
@@ -1810,9 +1823,13 @@ table.data-table { width: 100%; border-collapse: collapse; }
             if (!resp.ok) {
                 errBox.textContent = result.error || 'Could not send assignment.';
                 errBox.style.display = 'block';
+                // Restore the buttons so they can try again.
+                allBtns.forEach(function(b) { b.disabled = false; b.style.opacity = ''; b.style.cursor = ''; });
+                if (btnEl) btnEl.innerHTML = originalLabel;
                 return;
             }
             if (result.inserted_count > 0) {
+                if (btnEl) btnEl.innerHTML = '<span style="display:inline-flex; align-items:center; gap:0.35rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Sent</span>';
                 okBox.textContent = 'Assignment sent. The student will see it in their portal next time they sign in.';
             } else if (result.already_attached_count > 0) {
                 okBox.textContent = 'This student already has this assignment.';
@@ -1820,13 +1837,18 @@ table.data-table { width: 100%; border-collapse: collapse; }
                 okBox.textContent = 'Done.';
             }
             okBox.style.display = 'block';
-            // Refresh the list so the row updates to "Attached".
-            openSendExistingModal(sendExistingTargetStudentId, '');
+            // Refresh the list so the row updates to "Attached" — happens after a short
+            // pause so the green "Sent" tick is visible to the user first.
+            setTimeout(function() {
+                openSendExistingModal(sendExistingTargetStudentId, '');
+            }, 700);
             // Also refresh attempts cache so the markbook + per-student counts update.
             loadAssignments();
         } catch (e) {
             errBox.textContent = 'Network error: ' + e.message;
             errBox.style.display = 'block';
+            allBtns.forEach(function(b) { b.disabled = false; b.style.opacity = ''; b.style.cursor = ''; });
+            if (btnEl) btnEl.innerHTML = originalLabel;
         }
     }
     window.confirmSendExisting = confirmSendExisting;
