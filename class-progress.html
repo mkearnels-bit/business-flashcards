@@ -69,20 +69,22 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
 .chart-legend-swatch { display: inline-block; width: 11px; height: 11px; border-radius: 3px; }
 
-.skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0.85rem; }
-.skill-card { background: white; border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 1.2rem 1.35rem; }
-.skill-head { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.6rem; }
-.skill-icon-wrap { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.skill-name { font-size: 1.02rem; font-weight: 700; color: var(--gray-900); margin: 0; }
+.skills-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+@media (max-width: 720px) { .skills-grid { grid-template-columns: 1fr; } }
+.skill-card { background: white; border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 1.5rem 1.6rem; display: flex; flex-direction: column; min-height: 320px; }
+.skill-head { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+.skill-icon-wrap { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.skill-name { font-size: 1.05rem; font-weight: 700; color: var(--gray-900); margin: 0; }
 .skill-ao { font-size: 0.72rem; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
-.skill-meter-row { display: flex; align-items: center; gap: 0.5rem; margin: 0.6rem 0 0.85rem; }
+.skill-meter-row { display: flex; align-items: center; gap: 0.6rem; margin: 0.6rem 0 1rem; }
 .skill-meter { flex-grow: 1; display: flex; gap: 4px; }
 .skill-meter-segment { flex: 1; height: 6px; border-radius: 999px; background: var(--gray-100); }
 .skill-meter-segment.on { background: currentColor; }
-.skill-meter-label { font-size: 0.74rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
-.skill-comment { font-size: 0.92rem; color: var(--gray-700); line-height: 1.6; }
-.skill-comment .pos { color: var(--success); font-weight: 600; }
-.skill-comment .imp { color: var(--accent); font-weight: 600; }
+.skill-meter-label { font-size: 0.74rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
+.skill-body { display: flex; flex-direction: column; gap: 0.85rem; flex-grow: 1; }
+.skill-para { font-size: 0.9rem; color: var(--gray-700); line-height: 1.65; text-align: justify; hyphens: auto; margin: 0; }
+.skill-para .pos { color: var(--success); font-weight: 700; }
+.skill-para .imp { color: var(--accent); font-weight: 700; }
 
 .summary-card { background: linear-gradient(135deg, #fff4e6 0%, #fef6e7 100%); border: 1px solid #f7d98a; border-radius: var(--radius-lg); padding: 1.4rem 1.6rem; }
 .summary-head { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.6rem; }
@@ -632,6 +634,20 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
             for (var i = 1; i <= 5; i++) {
                 segs += '<span class="skill-meter-segment' + (i <= sig.segs ? ' on' : '') + '"></span>';
             }
+
+            // Pull going_well + needs_improving from the new schema; fall back to
+            // parsing the old single-comment format if those aren't present.
+            var pieces = extractParagraphs(skill);
+
+            var bodyHtml = '';
+            if (pieces.going_well) {
+                bodyHtml += '<p class="skill-para"><span class="pos">Going well:</span> ' + esc(pieces.going_well) + '</p>';
+            }
+            if (pieces.needs_improving) {
+                bodyHtml += '<p class="skill-para"><span class="imp">Needs Improving:</span> ' + esc(pieces.needs_improving) + '</p>';
+            }
+            if (!bodyHtml) bodyHtml = '<p class="skill-para muted">No comment yet.</p>';
+
             html += '<div class="skill-card" style="color:' + sig.color + ';">' +
                 '<div class="skill-head">' +
                     '<div class="skill-icon-wrap" style="background:' + meta.bg + ';">' +
@@ -646,17 +662,31 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
                     '<div class="skill-meter">' + segs + '</div>' +
                     '<span class="skill-meter-label">' + sig.label + '</span>' +
                 '</div>' +
-                '<p class="skill-comment">' + formatComment(skill.comment || '') + '</p>' +
+                '<div class="skill-body">' + bodyHtml + '</div>' +
             '</div>';
         });
         html += '</div>';
         document.getElementById('skillsContainer').innerHTML = html;
     }
 
-    function formatComment(text) {
-        return esc(text)
-            .replace(/Going well:/g, '<span class="pos">Going well:</span>')
-            .replace(/Push further:/g, '<span class="imp">Push further:</span>');
+    // Returns { going_well, needs_improving } from a skill record, supporting
+    // both the new schema (separate fields) and the legacy "comment" string.
+    function extractParagraphs(skill) {
+        if (skill.going_well || skill.needs_improving) {
+            return {
+                going_well: (skill.going_well || '').trim(),
+                needs_improving: (skill.needs_improving || '').trim()
+            };
+        }
+        var c = (skill.comment || '').trim();
+        if (!c) return { going_well: '', needs_improving: '' };
+
+        // Legacy parse: split on "Push further:" or "Needs improving:"
+        var splitRe = /(?:Push further:|Needs improving:|Needs Improving:)/;
+        var parts = c.split(splitRe);
+        var goingWell = (parts[0] || '').replace(/^Going well:\s*/i, '').trim();
+        var needsImproving = (parts[1] || '').trim();
+        return { going_well: goingWell, needs_improving: needsImproving };
     }
 
     function renderSummary(summary) {
