@@ -322,10 +322,31 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
                     <input type="date" class="field-input" id="dueDateInput">
                 </div>
                 <div class="field">
-                    <label class="field-label">Assign to</label>
+                    <label class="field-label">Class</label>
                     <input type="text" class="field-input" id="assignToLabel" readonly>
                 </div>
             </div>
+
+            <div class="field" style="margin-top:0.5rem;">
+                <label class="field-label">Send to</label>
+                <div style="display:inline-flex; background: var(--gray-100); padding: 4px; border-radius: var(--radius-sm); gap: 2px;" id="recipientToggle">
+                    <button type="button" data-recipients="all" class="active" style="padding: 0.55rem 1.1rem; font-size: 0.9rem; font-weight: 600; color: var(--primary); background: white; box-shadow: 0 1px 2px rgba(15,23,42,0.04); border-radius: 6px; border: none; cursor: pointer;">All students</button>
+                    <button type="button" data-recipients="specific" style="padding: 0.55rem 1.1rem; font-size: 0.9rem; font-weight: 600; color: var(--gray-600); background: none; border-radius: 6px; border: none; cursor: pointer;">Specific students</button>
+                </div>
+            </div>
+
+            <div id="specificStudentsPicker" style="display:none; margin-top:0.85rem; padding:0.85rem 1rem; background:var(--gray-50); border:1px solid var(--gray-200); border-radius:var(--radius);">
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.5rem;">
+                    <span class="muted" style="font-size:0.85rem;">Pick which students should see this assignment.</span>
+                    <span style="font-size:0.85rem;">
+                        <a href="#" id="selectAllStudentsLink" style="color:var(--primary); font-weight:600; text-decoration:none;">Select all</a>
+                        &nbsp;&middot;&nbsp;
+                        <a href="#" id="clearAllStudentsLink" style="color:var(--gray-500); text-decoration:none;">Clear</a>
+                    </span>
+                </div>
+                <div id="recipientStudentList" style="max-height:220px; overflow-y:auto; display:flex; flex-direction:column; gap:0.35rem;"></div>
+            </div>
+
             <div id="pushErrorBox"></div>
             <div class="toolbar">
                 <a href="#" class="btn btn-ghost" id="approveCancelBtn">Cancel</a>
@@ -711,9 +732,17 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
             return;
         }
 
-        // Count students enrolled
-        var enrolResult = await supabaseClient.from('class_students').select('student_id', { count: 'exact', head: true }).eq('class_id', classId);
-        var studentCount = enrolResult.count || 0;
+        // Load enrolled students with names so we can offer the "Specific students" picker.
+        var { data: enrolLinks } = await supabaseClient.from('class_students').select('student_id').eq('class_id', classId);
+        var studentIds = (enrolLinks || []).map(function(l) { return l.student_id; });
+        ENROLLED_STUDENTS = [];
+        if (studentIds.length > 0) {
+            var profileRes = await supabaseClient.from('user_profiles').select('user_id, name, email').in('user_id', studentIds);
+            ENROLLED_STUDENTS = (profileRes.data || []).slice().sort(function(a, b) {
+                return (a.name || a.email || '').localeCompare(b.name || b.email || '');
+            });
+        }
+        var studentCount = ENROLLED_STUDENTS.length;
 
         showShell();
         document.getElementById('classNameLabel').textContent = currentClass.name + ', ' + (BOARD_LABELS[currentClass.board] || currentClass.board);
@@ -723,11 +752,32 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
         document.getElementById('approveCancelBtn').href = 'teacher-class.html?id=' + encodeURIComponent(classId);
         document.getElementById('assignToLabel').value = currentClass.name + ' (' + studentCount + ' student' + (studentCount === 1 ? '' : 's') + ')';
 
+        renderRecipientStudentList();
+
         populateUnitDropdowns();
         populateQTypeDropdown();
         populateCustomBuilder();
         wireEvents();
         loadUsageCap();
+    }
+
+    var ENROLLED_STUDENTS = [];
+    var recipientMode = 'all';
+
+    function renderRecipientStudentList() {
+        var container = document.getElementById('recipientStudentList');
+        if (!container) return;
+        if (ENROLLED_STUDENTS.length === 0) {
+            container.innerHTML = '<div class="muted" style="font-size:0.85rem;">No students enrolled yet. Add students to the class first.</div>';
+            return;
+        }
+        container.innerHTML = ENROLLED_STUDENTS.map(function(s) {
+            var name = s.name || s.email || '-';
+            return '<label style="display:flex; align-items:center; gap:0.6rem; padding:0.5rem 0.6rem; background:white; border:1px solid var(--gray-200); border-radius:var(--radius-sm); cursor:pointer; font-size:0.92rem;">' +
+                '<input type="checkbox" class="recipient-check" value="' + s.user_id + '" checked>' +
+                '<span><strong>' + esc(name) + '</strong> <span class="muted" style="font-size:0.82rem;">' + esc(s.email || '') + '</span></span>' +
+            '</label>';
+        }).join('');
     }
 
     function populateCustomBuilder() {
@@ -865,6 +915,33 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
             }
             customSlots.push({ marks: marks[Math.min(3, marks.length - 1)] || 4 });
             renderSlots();
+        });
+
+        // Recipient mode toggle (all / specific)
+        document.querySelectorAll('#recipientToggle button').forEach(function(b) {
+            b.addEventListener('click', function() {
+                document.querySelectorAll('#recipientToggle button').forEach(function(x) {
+                    x.classList.remove('active');
+                    x.style.background = 'none';
+                    x.style.color = 'var(--gray-600)';
+                    x.style.boxShadow = 'none';
+                });
+                b.classList.add('active');
+                b.style.background = 'white';
+                b.style.color = 'var(--primary)';
+                b.style.boxShadow = '0 1px 2px rgba(15,23,42,0.04)';
+                recipientMode = b.getAttribute('data-recipients');
+                document.getElementById('specificStudentsPicker').style.display = (recipientMode === 'specific') ? 'block' : 'none';
+            });
+        });
+
+        document.getElementById('selectAllStudentsLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelectorAll('.recipient-check').forEach(function(c) { c.checked = true; });
+        });
+        document.getElementById('clearAllStudentsLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelectorAll('.recipient-check').forEach(function(c) { c.checked = false; });
         });
 
         document.getElementById('generateBtn').addEventListener('click', handleGenerate);
@@ -1185,6 +1262,19 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
             generated_payload: generatedPayload,
             due_at: dueAtIso
         };
+
+        // If teacher selected specific students, include them in the payload.
+        // Empty list with mode='specific' means they unticked everyone, which we block.
+        if (recipientMode === 'specific') {
+            var picked = Array.from(document.querySelectorAll('.recipient-check'))
+                .filter(function(c) { return c.checked; })
+                .map(function(c) { return c.value; });
+            if (picked.length === 0) {
+                setPushError('Tick at least one student, or switch back to "All students".');
+                return;
+            }
+            payload.student_ids = picked;
+        }
 
         try {
             var resp = await fetch(SUPABASE_URL + '/functions/v1/push-assignment', {

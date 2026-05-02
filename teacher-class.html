@@ -296,6 +296,31 @@ table.data-table { width: 100%; border-collapse: collapse; }
         </div>
     </div>
 
+    <!-- Send-existing-assignment modal -->
+    <div id="sendExistingModal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.55); z-index:300; align-items:flex-start; justify-content:center; padding:3rem 1rem; overflow:auto;">
+        <div style="background:white; max-width:520px; width:100%; border-radius:16px; overflow:hidden; box-shadow:0 20px 60px rgba(15,23,42,0.25);">
+            <div style="padding:18px 22px 14px; display:flex; align-items:flex-start; justify-content:space-between; gap:12px; border-bottom:0.5px solid #e2e8f0;">
+                <div>
+                    <div style="font-size:16px; font-weight:600; color:#0f172a; margin-bottom:2px;">Send an existing assignment</div>
+                    <div style="font-size:13px; color:#64748b;" id="sendExistingSub">For students who joined late and need to catch up.</div>
+                </div>
+                <button onclick="closeSendExistingModal()" style="background:none;border:none;cursor:pointer;padding:4px;color:#94a3b8;line-height:0;border-radius:6px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6 L18 18 M18 6 L6 18"/></svg>
+                </button>
+            </div>
+            <div style="padding:18px 22px;">
+                <div id="sendExistingList" style="display:flex; flex-direction:column; gap:0.5rem; max-height:320px; overflow-y:auto;">
+                    <div class="muted" style="font-size:0.88rem;">Loading assignments...</div>
+                </div>
+                <div id="sendExistingError" style="display:none; padding:0.6rem 0.85rem; background:#fceae8; color:#791f1f; border:1px solid #f5c6c0; border-radius:var(--radius); font-size:0.88rem; margin-top:0.75rem;"></div>
+                <div id="sendExistingSuccess" style="display:none; padding:0.6rem 0.85rem; background:#e1f5ee; color:#085041; border:1px solid #b8e0c4; border-radius:var(--radius); font-size:0.88rem; margin-top:0.75rem;"></div>
+            </div>
+            <div style="padding:14px 22px 18px; border-top:0.5px solid #e2e8f0; background:#f8fafc; display:flex; gap:0.5rem; justify-content:flex-end;">
+                <button class="btn btn-ghost" onclick="closeSendExistingModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Add-teacher modal -->
     <div id="addTeacherModal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.55); z-index:300; align-items:flex-start; justify-content:center; padding:3rem 1rem; overflow:auto;">
         <div style="background:white; max-width:460px; width:100%; border-radius:16px; overflow:hidden; box-shadow:0 20px 60px rgba(15,23,42,0.25);">
@@ -1612,6 +1637,13 @@ table.data-table { width: 100%; border-collapse: collapse; }
         var listEl = document.getElementById('copyClassList');
         listEl.innerHTML = '<div class="muted" style="font-size:0.88rem;">Loading your classes...</div>';
 
+        // Resolve the source assignment's board + level so we can filter target classes.
+        var sourceAsn = (ASSIGNMENTS_CACHE || []).find(function(a) { return a.id === assignmentId; });
+        var sourceBoard = (sourceAsn && sourceAsn.board) || currentClass.board;
+        var sourceLevel = (sourceAsn && sourceAsn.level) || currentClass.level;
+        var sourceBoardLabel = BOARD_LABELS[sourceBoard] || sourceBoard;
+        var sourceLevelLabel = sourceLevel === 'a_level' ? 'A-Level' : 'GCSE';
+
         // Load every class the caller has edit on, except the current source class.
         var { data: rows } = await supabaseClient
             .from('class_teachers')
@@ -1623,12 +1655,22 @@ table.data-table { width: 100%; border-collapse: collapse; }
             .map(function(r) { return r.classes; })
             .filter(function(c) { return c && !c.archived_at && c.id !== currentClass.id; });
 
-        if (candidates.length === 0) {
-            listEl.innerHTML = '<div class="muted" style="font-size:0.88rem;">No other classes you can edit. Create another class first, or ask an editor on another class to add you.</div>';
+        // Filter to only matching board + level. The AI marker uses board-specific
+        // rules so a copy must stay within the same board and level.
+        var matching = candidates.filter(function(c) { return c.board === sourceBoard && c.level === sourceLevel; });
+        var hidden = candidates.length - matching.length;
+
+        if (matching.length === 0) {
+            var msg = candidates.length === 0
+                ? 'No other classes you can edit. Create another class first, or ask an editor on another class to add you.'
+                : 'No other ' + sourceLevelLabel + ' &middot; ' + sourceBoardLabel + ' classes you can edit. Copies have to stay within the same board and level so the AI marker uses the right mark scheme.';
+            listEl.innerHTML = '<div class="muted" style="font-size:0.88rem;">' + msg + '</div>';
             return;
         }
 
-        listEl.innerHTML = candidates.map(function(c) {
+        var notice = '<div class="muted" style="font-size:0.82rem; margin-bottom:0.6rem;">Showing ' + sourceLevelLabel + ' &middot; ' + sourceBoardLabel + ' classes only' + (hidden > 0 ? ' (' + hidden + ' other class' + (hidden === 1 ? '' : 'es') + ' hidden because the board or level didn\'t match)' : '') + '.</div>';
+
+        listEl.innerHTML = notice + matching.map(function(c) {
             var levelTag = c.level === 'a_level' ? 'A-Level' : 'GCSE';
             var board = BOARD_LABELS[c.board] || c.board;
             return '<label style="display:flex; align-items:center; gap:0.6rem; padding:0.6rem 0.8rem; border:1px solid var(--gray-200); border-radius:var(--radius); cursor:pointer;">' +
@@ -1689,6 +1731,105 @@ table.data-table { width: 100%; border-collapse: collapse; }
         btn.textContent = 'Send copy';
     }
     window.confirmCopyAssignment = confirmCopyAssignment;
+
+    // ============ Send existing assignment to a single (late-joining) student ============
+
+    var sendExistingTargetStudentId = null;
+
+    async function openSendExistingModal(studentId, studentName) {
+        sendExistingTargetStudentId = studentId;
+        document.getElementById('sendExistingError').style.display = 'none';
+        document.getElementById('sendExistingSuccess').style.display = 'none';
+        document.getElementById('sendExistingSub').textContent = 'For ' + studentName + '. Pick an existing class assignment to attach.';
+        document.getElementById('sendExistingModal').style.display = 'flex';
+
+        var listEl = document.getElementById('sendExistingList');
+        listEl.innerHTML = '<div class="muted" style="font-size:0.88rem;">Loading assignments...</div>';
+
+        // Find which assignments this student already has, so we can disable those rows.
+        var { data: existingAttempts } = await supabaseClient
+            .from('student_attempts')
+            .select('assignment_id, status')
+            .eq('student_id', studentId)
+            .in('assignment_id', (ASSIGNMENTS_CACHE || []).map(function(a) { return a.id; }));
+        var attemptMap = {};
+        (existingAttempts || []).forEach(function(r) { attemptMap[r.assignment_id] = r.status; });
+
+        if (!ASSIGNMENTS_CACHE || ASSIGNMENTS_CACHE.length === 0) {
+            listEl.innerHTML = '<div class="muted" style="font-size:0.88rem;">No assignments in this class yet.</div>';
+            return;
+        }
+
+        listEl.innerHTML = ASSIGNMENTS_CACHE.map(function(a) {
+            var title = a.topic || a.unit || (a.type === 'test' ? 'Test' : 'Question');
+            var pushed = a.pushed_at ? new Date(a.pushed_at).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' }) : '';
+            var typeLabel = a.type === 'test' ? 'Test' : 'Question';
+            var marks = a.total_marks ? a.total_marks + ' marks' : '';
+            var alreadyHas = attemptMap[a.id];
+            var alreadyLabel = '';
+            if (alreadyHas === 'graded') alreadyLabel = '<span class="muted" style="font-size:0.78rem;">Already completed</span>';
+            else if (alreadyHas === 'in_progress') alreadyLabel = '<span class="muted" style="font-size:0.78rem;">Already in progress</span>';
+            else if (alreadyHas === 'not_started') alreadyLabel = '<span class="muted" style="font-size:0.78rem;">Already attached</span>';
+            var btn = alreadyHas
+                ? '<button class="btn btn-ghost btn-sm" disabled style="opacity:0.5; cursor:not-allowed;">Attached</button>'
+                : '<button class="btn btn-primary btn-sm" onclick="confirmSendExisting(\'' + a.id + '\')">Send</button>';
+            return '<div style="display:flex; align-items:center; gap:0.85rem; padding:0.7rem 0.85rem; border:1px solid var(--gray-200); border-radius:var(--radius);">' +
+                '<div style="flex-grow:1; min-width:0;">' +
+                    '<div style="font-weight:600; color:var(--gray-900); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + esc(title) + '</div>' +
+                    '<div class="muted" style="font-size:0.78rem;">' + typeLabel + (marks ? ' &middot; ' + marks : '') + (pushed ? ' &middot; pushed ' + pushed : '') + (alreadyLabel ? ' &middot; ' + alreadyLabel : '') + '</div>' +
+                '</div>' +
+                btn +
+            '</div>';
+        }).join('');
+    }
+    window.openSendExistingModal = openSendExistingModal;
+
+    function closeSendExistingModal() {
+        document.getElementById('sendExistingModal').style.display = 'none';
+        sendExistingTargetStudentId = null;
+    }
+    window.closeSendExistingModal = closeSendExistingModal;
+
+    async function confirmSendExisting(assignmentId) {
+        var errBox = document.getElementById('sendExistingError');
+        var okBox = document.getElementById('sendExistingSuccess');
+        errBox.style.display = 'none';
+        okBox.style.display = 'none';
+        try {
+            var sess = await supabaseClient.auth.getSession();
+            var resp = await fetch(SUPABASE_URL + '/functions/v1/attach-assignment-to-student', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + sess.data.session.access_token,
+                    'apikey': SUPABASE_ANON_KEY
+                },
+                body: JSON.stringify({ assignment_id: assignmentId, student_ids: [sendExistingTargetStudentId] })
+            });
+            var result = await resp.json();
+            if (!resp.ok) {
+                errBox.textContent = result.error || 'Could not send assignment.';
+                errBox.style.display = 'block';
+                return;
+            }
+            if (result.inserted_count > 0) {
+                okBox.textContent = 'Assignment sent. The student will see it in their portal next time they sign in.';
+            } else if (result.already_attached_count > 0) {
+                okBox.textContent = 'This student already has this assignment.';
+            } else {
+                okBox.textContent = 'Done.';
+            }
+            okBox.style.display = 'block';
+            // Refresh the list so the row updates to "Attached".
+            openSendExistingModal(sendExistingTargetStudentId, '');
+            // Also refresh attempts cache so the markbook + per-student counts update.
+            loadAssignments();
+        } catch (e) {
+            errBox.textContent = 'Network error: ' + e.message;
+            errBox.style.display = 'block';
+        }
+    }
+    window.confirmSendExisting = confirmSendExisting;
 
     // ============ Integrity flag rendering ============
 
@@ -2024,6 +2165,9 @@ table.data-table { width: 100%; border-collapse: collapse; }
                     '<a class="icon-btn" title="View progress" href="class-progress.html?class=' + encodeURIComponent(currentClass.id) + '&student=' + encodeURIComponent(link.student_id) + '" style="color:var(--primary);">' +
                         '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 6-6"/></svg>' +
                     '</a>' +
+                    '<button class="icon-btn" title="Send an existing assignment" onclick="openSendExistingModal(\'' + link.student_id + '\', \'' + safeName + '\')" style="color:var(--accent);">' +
+                        '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg>' +
+                    '</button>' +
                     '<button class="icon-btn" title="Send password reset email" onclick="tcResetStudentPassword(\'' + safeEmail + '\', \'' + safeName + '\')">' +
                         '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>' +
                     '</button>' +
