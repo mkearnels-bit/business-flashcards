@@ -157,6 +157,10 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
         <div id="errorBox"></div>
 
         <div class="submit-row">
+            <span id="saveIndicator" style="display:none; align-self:center; font-size:0.85rem; color:var(--gray-500); margin-right:auto; display:inline-flex; align-items:center; gap:0.4rem;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                <span id="saveIndicatorText">Saved just now</span>
+            </span>
             <button class="btn btn-primary btn-lg" id="submitBtn">
                 Submit for marking
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg>
@@ -514,7 +518,7 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
         // Load attempt + assignment
         var { data: att, error: attErr } = await supabaseClient
             .from('student_attempts')
-            .select('id, assignment_id, status, ai_score, ai_total, ai_feedback, answers, submitted_at, teacher_feedback, teacher_feedback_at')
+            .select('id, assignment_id, status, ai_score, ai_total, ai_feedback, answers, submitted_at, teacher_feedback, teacher_feedback_at, started_at')
             .eq('id', attemptId)
             .maybeSingle();
         if (attErr || !att) { showAccessDenied('Could not load assignment.'); return; }
@@ -537,10 +541,25 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
         if (att.status === 'graded') {
             renderFeedback();
         } else {
-            startedAt = Date.now();
+            // Preserve started_at across sessions so the integrity duration counter
+            // reflects total time on task, not just this session.
+            if (att.started_at) {
+                startedAt = new Date(att.started_at).getTime();
+            } else {
+                startedAt = Date.now();
+                await supabaseClient.from('student_attempts').update({
+                    status: 'in_progress',
+                    started_at: new Date(startedAt).toISOString()
+                }).eq('id', att.id);
+                currentAttempt.started_at = new Date(startedAt).toISOString();
+                currentAttempt.status = 'in_progress';
+            }
+            // If this is a brand-new return after status was somehow stuck at not_started, bump it.
+            if (att.status === 'not_started' && att.started_at) {
+                await supabaseClient.from('student_attempts').update({ status: 'in_progress' }).eq('id', att.id);
+                currentAttempt.status = 'in_progress';
+            }
             startIntegrityTracking();
-            // Mark as in_progress so the teacher can see
-            await supabaseClient.from('student_attempts').update({ status: 'in_progress', started_at: new Date().toISOString() }).eq('id', att.id);
             renderTakeView();
         }
     }
@@ -626,15 +645,139 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
         document.getElementById('caseStudyContainer').innerHTML = caseHtml;
         document.getElementById('questionsContainer').innerHTML = qHtml;
 
+        // Restore any saved progress so the student can pick up where they left off.
+        prefillSavedAnswers();
+
         document.querySelectorAll('.answer-textarea').forEach(function(t) {
             t.addEventListener('input', function() {
                 var idx = t.getAttribute('data-idx');
                 var wc = (t.value.trim().match(/\b\w+\b/g) || []).length;
-                document.querySelector('[data-wc="' + idx + '"]').textContent = wc + ' word' + (wc === 1 ? '' : 's');
+                var wcEl = document.querySelector('[data-wc="' + idx + '"]');
+                if (wcEl) wcEl.textContent = wc + ' word' + (wc === 1 ? '' : 's');
+                scheduleAutoSave();
             });
         });
 
+        // Save on tab switch / page hide / window blur — covers crashes, accidental
+        // closes, and switching tabs. visibilitychange is the most reliable event.
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) flushAutoSave({ keepalive: true });
+        });
+        window.addEventListener('beforeunload', function() {
+            flushAutoSave({ keepalive: true });
+        });
+
         document.getElementById('submitBtn').addEventListener('click', submitAnswers);
+    }
+
+    // ======== Autosave ========
+    var autoSaveTimer = null;
+    var lastSavedSnapshot = null;
+    var saveInFlight = false;
+
+    function buildAnswersPayload() {
+        if (!currentAssignment) return null;
+        if (currentAssignment.type === 'question') {
+            var ans = '';
+            var ta0 = document.querySelector('.answer-textarea[data-idx="0"]');
+            if (ta0) ans = ta0.value;
+            return { answer: ans };
+        }
+        var paper = (currentAssignment.generated_payload && currentAssignment.generated_payload.paper) || currentAssignment.generated_payload || {};
+        var saList = [];
+        (paper.questions || []).forEach(function(q, idx) {
+            var card = document.querySelector('[data-q-idx="' + idx + '"]');
+            if (!card) return;
+            var t = card.querySelector('.answer-textarea');
+            saList.push({ question_id: (q.id || ('q' + idx)), student_answer: t ? t.value : '' });
+        });
+        return { student_answers: saList };
+    }
+
+    function prefillSavedAnswers() {
+        if (!currentAttempt || !currentAttempt.answers) return;
+        if (currentAssignment.type === 'question') {
+            var saved = currentAttempt.answers.answer;
+            if (saved) {
+                var ta = document.querySelector('.answer-textarea[data-idx="0"]');
+                if (ta) {
+                    ta.value = saved;
+                    var wc0 = (saved.trim().match(/\b\w+\b/g) || []).length;
+                    var wcEl = document.querySelector('[data-wc="0"]');
+                    if (wcEl) wcEl.textContent = wc0 + ' word' + (wc0 === 1 ? '' : 's');
+                }
+            }
+        } else if (Array.isArray(currentAttempt.answers.student_answers)) {
+            currentAttempt.answers.student_answers.forEach(function(sa, idx) {
+                var card = document.querySelector('[data-q-idx="' + idx + '"]');
+                if (!card) return;
+                var t = card.querySelector('.answer-textarea');
+                if (t && sa.student_answer) {
+                    t.value = sa.student_answer;
+                    var wc = (sa.student_answer.trim().match(/\b\w+\b/g) || []).length;
+                    var wcEl = document.querySelector('[data-wc="' + idx + '"]');
+                    if (wcEl) wcEl.textContent = wc + ' word' + (wc === 1 ? '' : 's');
+                }
+            });
+        }
+        // Set the snapshot so the first input event after restore doesn't redundantly save.
+        lastSavedSnapshot = JSON.stringify(buildAnswersPayload() || {});
+        var anyContent = (currentAttempt.answers.answer && currentAttempt.answers.answer.trim()) ||
+            (Array.isArray(currentAttempt.answers.student_answers) && currentAttempt.answers.student_answers.some(function(s) { return s.student_answer && s.student_answer.trim(); }));
+        if (anyContent) showSaveIndicator('Picked up where you left off');
+    }
+
+    function scheduleAutoSave() {
+        if (autoSaveTimer) clearTimeout(autoSaveTimer);
+        showSaveIndicator('Editing...');
+        autoSaveTimer = setTimeout(function() { flushAutoSave({}); }, 1500);
+    }
+
+    async function flushAutoSave(opts) {
+        if (saveInFlight) return;
+        if (!currentAttempt) return;
+        if (currentAttempt.status === 'graded' || currentAttempt.status === 'submitting') return;
+        var payload = buildAnswersPayload();
+        if (!payload) return;
+        var snapshot = JSON.stringify(payload);
+        if (snapshot === lastSavedSnapshot) return;
+
+        saveInFlight = true;
+        try {
+            // Get a fresh token in case the user has been on the page a long time.
+            var sess = await supabaseClient.auth.getSession();
+            var token = sess && sess.data && sess.data.session && sess.data.session.access_token;
+            if (!token) { saveInFlight = false; return; }
+
+            var url = SUPABASE_URL + '/rest/v1/student_attempts?id=eq.' + currentAttempt.id;
+            var fetchOpts = {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token,
+                    'apikey': SUPABASE_ANON_KEY,
+                    'Prefer': 'return=minimal'
+                },
+                body: JSON.stringify({ answers: payload, status: 'in_progress', updated_at: new Date().toISOString() })
+            };
+            // keepalive = true lets the request finish even if the page is closing.
+            if (opts && opts.keepalive) fetchOpts.keepalive = true;
+
+            var resp = await fetch(url, fetchOpts);
+            if (resp.ok) {
+                lastSavedSnapshot = snapshot;
+                showSaveIndicator('Saved just now');
+            }
+        } catch (_e) { /* network blip; will retry on next input */ }
+        saveInFlight = false;
+    }
+
+    function showSaveIndicator(text) {
+        var el = document.getElementById('saveIndicator');
+        var txt = document.getElementById('saveIndicatorText');
+        if (!el || !txt) return;
+        txt.textContent = text;
+        el.style.display = 'inline-flex';
     }
 
     function renderQuestionCard(idx, marks, qText, withTextarea, customLabel, qid) {
@@ -665,6 +808,11 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
 
     async function submitAnswers() {
         document.getElementById('errorBox').innerHTML = '';
+        // Cancel any pending auto-save and prevent new ones from firing while
+        // marking is in flight, otherwise a stale save could clobber the graded row.
+        if (autoSaveTimer) { clearTimeout(autoSaveTimer); autoSaveTimer = null; }
+        if (currentAttempt) currentAttempt.status = 'submitting';
+
         var a = currentAssignment;
 
         var payload = { attempt_id: attemptId };
