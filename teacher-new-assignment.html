@@ -11,6 +11,108 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+(function() {
+    var palette = ['#1e3a5f', '#e67e22', '#1d9e75', '#3498db', '#9b59b6', '#e74c3c', '#f39c12', '#27ae60'];
+    function escAttr(s) { return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    function isNonEmpty(c) {
+        if (!c || typeof c !== 'object') return false;
+        if (Object.keys(c).length === 0) return false;
+        if (c.type === 'table') return Array.isArray(c.rows) && c.rows.length > 0;
+        return Array.isArray(c.series) && c.series.length > 0;
+    }
+    function tableHTML(c) {
+        var html = '<table style="width:100%;border-collapse:collapse;font-size:0.92rem;">';
+        var cols = c.columns || c.headers;
+        if (cols) {
+            html += '<thead><tr>';
+            cols.forEach(function(col) { html += '<th style="text-align:left;padding:0.55rem 0.75rem;border-bottom:2px solid #1e3a5f;color:#1e293b;font-weight:600;">' + escAttr(col) + '</th>'; });
+            html += '</tr></thead>';
+        }
+        html += '<tbody>';
+        (c.rows || []).forEach(function(row) {
+            html += '<tr>';
+            row.forEach(function(cell) { html += '<td style="padding:0.5rem 0.75rem;border-bottom:1px solid #e2e8f0;color:#334155;">' + escAttr(String(cell)) + '</td>'; });
+            html += '</tr>';
+        });
+        html += '</tbody></table>';
+        return html;
+    }
+    function cardHTML(chart, canvasId) {
+        if (!isNonEmpty(chart)) return '';
+        var title = chart.title ? '<div style="font-weight:700;font-size:0.95rem;color:#1e3a5f;margin-bottom:0.6rem;">' + escAttr(chart.title) + '</div>' : '';
+        var body = chart.type === 'table'
+            ? tableHTML(chart)
+            : '<div style="position:relative;height:280px;width:100%;"><canvas id="' + escAttr(canvasId) + '" role="img" aria-label="' + escAttr(chart.title || 'Figure') + '"></canvas></div>';
+        return '<div style="background:#ffffff;border:1px solid #e2e8f0;border-radius:12px;padding:1rem 1.25rem;margin:0.85rem 0;">' + title + body + '</div>';
+    }
+    function buildConfig(chart) {
+        var type = chart.type === 'horizontal_bar' ? 'bar' : chart.type;
+        var datasets = (chart.series || []).map(function(s, i) {
+            var ds = { label: s.name || ('Series ' + (i + 1)), data: s.data || [] };
+            if (type === 'pie' || type === 'doughnut') {
+                ds.backgroundColor = palette.slice(0, ds.data.length);
+                ds.borderWidth = 1; ds.borderColor = '#ffffff';
+            } else if (type === 'line') {
+                ds.borderColor = palette[i % palette.length];
+                ds.backgroundColor = palette[i % palette.length] + '22';
+                ds.fill = false; ds.tension = 0.3; ds.pointRadius = 4;
+                ds.pointBackgroundColor = palette[i % palette.length]; ds.borderWidth = 2;
+            } else {
+                ds.backgroundColor = palette[i % palette.length];
+                ds.borderRadius = 6; ds.borderWidth = 0;
+            }
+            return ds;
+        });
+        var showLegend = (type === 'pie' || type === 'doughnut') || datasets.length > 1;
+        return {
+            type: type,
+            data: { labels: chart.labels || [], datasets: datasets },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                indexAxis: chart.type === 'horizontal_bar' ? 'y' : 'x',
+                plugins: {
+                    legend: { display: showLegend, position: 'bottom', labels: { boxWidth: 14, font: { size: 12 }, padding: 14 } },
+                    tooltip: { titleFont: { size: 13 }, bodyFont: { size: 12 } }
+                },
+                scales: (type === 'pie' || type === 'doughnut') ? {} : {
+                    x: { grid: { display: false }, ticks: { font: { size: 11 } }, title: chart.x_label ? { display: true, text: chart.x_label, font: { size: 11 } } : { display: false } },
+                    y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { font: { size: 11 } }, title: chart.y_label ? { display: true, text: chart.y_label, font: { size: 11 } } : { display: false } }
+                }
+            }
+        };
+    }
+    function draw(chart, canvasId) {
+        if (!chart || chart.type === 'table') return null;
+        var ctx = document.getElementById(canvasId);
+        if (!ctx || !window.Chart) return null;
+        return new Chart(ctx, buildConfig(chart));
+    }
+    function toImageDataURL(chart, width, height) {
+        return new Promise(function(resolve) {
+            if (!chart || chart.type === 'table' || !window.Chart) { resolve(null); return; }
+            var canvas = document.createElement('canvas');
+            canvas.width = width; canvas.height = height;
+            canvas.style.position = 'fixed'; canvas.style.left = '-99999px'; canvas.style.top = '0';
+            document.body.appendChild(canvas);
+            var cfg = buildConfig(chart);
+            cfg.options.responsive = false; cfg.options.maintainAspectRatio = false; cfg.options.devicePixelRatio = 2;
+            cfg.options.animation = {
+                duration: 0,
+                onComplete: function() {
+                    setTimeout(function() {
+                        try { var url = canvas.toDataURL('image/png'); inst.destroy(); canvas.remove(); resolve(url); }
+                        catch (e) { resolve(null); }
+                    }, 50);
+                }
+            };
+            var inst = new Chart(canvas, cfg);
+        });
+    }
+    window.MyBizChart = { cardHTML: cardHTML, draw: draw, toImageDataURL: toImageDataURL, isNonEmpty: isNonEmpty };
+})();
+</script>
 <style>
 :root {
     --primary: #1e3a5f; --primary-dark: #152a45; --primary-light: #2d5a8a;
@@ -405,28 +507,45 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
                 time_allowed: paper.time_allowed || null,
                 duration_minutes: paper.duration_minutes || null,
                 case_extracts: paper.source_booklet || [],
+                paper_chart: paper.chart || null,
                 questions: (paper.questions || []).map(function (q) {
-                    return { number: q.number || '', part: q.part || '', text: q.text || q.question || q.question_text || '', marks: q.marks, command_word: q.command_word || q.command || '', question_type: q.question_type || '', options: q.options || null };
+                    return { number: q.number || '', part: q.part || '', text: q.text || q.question || q.question_text || '', marks: q.marks, command_word: q.command_word || q.command || '', question_type: q.question_type || '', options: q.options || null, chart: q.chart || null };
                 })
             };
         }
         if (payload.question) {
             var q = payload.question;
+            var caseChart = q.chart || payload.chart || null;
             return {
                 title: 'Practice question',
                 board: null, board_name: null,
                 total_marks: q.marks, time_allowed: null, duration_minutes: null,
-                case_extracts: q.question_context && String(q.question_context).trim() ? [{ id: 'A', title: 'Case study', business_name: '', content: q.question_context, data: null }] : [],
-                questions: [{ number: '1', part: '', text: q.question_text || q.question || q.text || '', marks: q.marks, command_word: q.command_word || q.command || '', question_type: q.question_type || '', options: q.options || null }]
+                case_extracts: q.question_context && String(q.question_context).trim() ? [{ id: 'A', title: 'Case study', business_name: '', content: q.question_context, data: caseChart }] : (caseChart ? [{ id: 'A', title: 'Figure', business_name: '', content: '', data: caseChart }] : []),
+                paper_chart: null,
+                questions: [{ number: '1', part: '', text: q.question_text || q.question || q.text || '', marks: q.marks, command_word: q.command_word || q.command || '', question_type: q.question_type || '', options: q.options || null, chart: null }]
             };
         }
         return null;
     }
-    function generate(payload, opts) {
+    async function getChartImage(chart) {
+        if (!chart || chart.type === 'table' || !window.MyBizChart) return null;
+        try { return await window.MyBizChart.toImageDataURL(chart, 900, 500); } catch (e) { return null; }
+    }
+    async function generate(payload, opts) {
         var jsPDFCtor = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
         if (!jsPDFCtor) { alert('PDF library not loaded. Refresh the page and try again.'); return; }
         var data = normalisePayload(payload);
         if (!data) { alert('Nothing to print yet. Generate a question or test first.'); return; }
+        var caseChartImages = [];
+        for (var ci = 0; ci < (data.case_extracts || []).length; ci++) {
+            var d = data.case_extracts[ci] && data.case_extracts[ci].data;
+            caseChartImages.push((d && d.type !== 'table') ? await getChartImage(d) : null);
+        }
+        var qChartImages = [];
+        for (var qi = 0; qi < (data.questions || []).length; qi++) {
+            qChartImages.push(await getChartImage(data.questions[qi].chart));
+        }
+        var paperChartImage = await getChartImage(data.paper_chart);
         opts = opts || {};
         var className = opts.className || 'Class';
         var level = opts.level || 'gcse';
@@ -481,7 +600,7 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
             doc.setFontSize(15); doc.setFont('helvetica', 'bold'); doc.setTextColor(30, 58, 95);
             doc.text('Case study', marginL, y); y += 9;
             doc.setTextColor(0); doc.setFont('helvetica', 'normal'); doc.setFontSize(11);
-            data.case_extracts.forEach(function (ext) {
+            data.case_extracts.forEach(function (ext, extIdx) {
                 var extractTitle = (ext.title || ('Extract ' + (ext.id || ''))) + (ext.business_name ? '  -  ' + ext.business_name : '');
                 ensureSpace(14);
                 doc.setFont('helvetica', 'bold'); doc.setFontSize(11);
@@ -508,8 +627,21 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
                         y += 7;
                     });
                     y += 6;
+                } else if (caseChartImages[extIdx]) {
+                    var imgW = usableW;
+                    var imgH = imgW * (500 / 900);
+                    ensureSpace(imgH + 4);
+                    doc.addImage(caseChartImages[extIdx], 'PNG', marginL, y, imgW, imgH);
+                    y += imgH + 6;
                 }
             });
+        }
+        if (paperChartImage) {
+            var pImgW = usableW;
+            var pImgH = pImgW * (500 / 900);
+            ensureSpace(pImgH + 4);
+            doc.addImage(paperChartImage, 'PNG', marginL, y, pImgW, pImgH);
+            y += pImgH + 6;
         }
         if (data.questions.length > 0) {
             newPage();
@@ -529,6 +661,31 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
                 var wrapped = doc.splitTextToSize(q.text || '', usableW);
                 wrapped.forEach(function (ln) { ensureSpace(6); doc.text(ln, marginL, y); y += 5.5; });
                 y += 3;
+                if (q.chart && q.chart.type === 'table' && Array.isArray(q.chart.headers || q.chart.columns) && Array.isArray(q.chart.rows)) {
+                    ensureSpace(20);
+                    var qHeaders = q.chart.headers || q.chart.columns;
+                    var qColW = usableW / qHeaders.length;
+                    doc.setFont('helvetica', 'bold');
+                    doc.setFillColor(241, 245, 249);
+                    doc.rect(marginL, y, usableW, 7, 'F');
+                    qHeaders.forEach(function (h, hi) { doc.text(String(h), marginL + hi * qColW + 2, y + 5); });
+                    y += 7;
+                    doc.setFont('helvetica', 'normal');
+                    q.chart.rows.forEach(function (row) {
+                        ensureSpace(7);
+                        doc.setDrawColor(220);
+                        doc.line(marginL, y + 7, marginL + usableW, y + 7);
+                        row.forEach(function (cell, ci2) { doc.text(String(cell), marginL + ci2 * qColW + 2, y + 5); });
+                        y += 7;
+                    });
+                    y += 4;
+                } else if (qChartImages[idx]) {
+                    var qImgW = usableW * 0.85;
+                    var qImgH = qImgW * (500 / 900);
+                    ensureSpace(qImgH + 4);
+                    doc.addImage(qChartImages[idx], 'PNG', marginL, y, qImgW, qImgH);
+                    y += qImgH + 4;
+                }
                 if (q.question_type === 'mcq' && q.options && typeof q.options === 'object') {
                     Object.keys(q.options).forEach(function (k) { ensureSpace(6); doc.text(k + '.  ' + q.options[k], marginL + 6, y); y += 6; });
                     y += 3;
@@ -1095,28 +1252,51 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
         document.getElementById('approveTitle').textContent = (command ? command + ' question' : 'Single question');
         document.getElementById('approveSub').textContent = (BOARD_LABELS[currentClass.board] || currentClass.board) + ', ' + marks + ' marks';
 
-        // Single questions sometimes include a case study in question_context
+        var charts = [];
+        function chartCard(chart, idHint) {
+            if (!window.MyBizChart || !window.MyBizChart.isNonEmpty(chart)) return '';
+            var cid = 'tna_chart_' + idHint + '_' + charts.length;
+            charts.push({ chart: chart, canvasId: cid });
+            return window.MyBizChart.cardHTML(chart, cid);
+        }
+
         var caseHtml = '';
         if (q.question_context && String(q.question_context).trim()) {
-            caseHtml = '<div class="case-study"><div class="case-label">Case study</div><div class="case-body">' + esc(q.question_context) + '</div></div>';
+            caseHtml = '<div class="case-study"><div class="case-label">Case study</div><div class="case-body">' + esc(q.question_context) + '</div>' +
+                chartCard(q.chart || data.chart, 'q0') +
+            '</div>';
+        } else if (q.chart || data.chart) {
+            caseHtml = chartCard(q.chart || data.chart, 'q0');
         }
         document.getElementById('caseStudyContainer').innerHTML = caseHtml;
 
         var qText = q.question_text || q.question || q.text || '';
         document.getElementById('questionsContainer').innerHTML = renderEditableQuestion(0, marks, qText);
         wireEditButtons();
+
+        if (charts.length > 0) {
+            setTimeout(function() { charts.forEach(function(c) { window.MyBizChart.draw(c.chart, c.canvasId); }); }, 30);
+        }
     }
 
     function renderApprovalForTest(data) {
         var paper = data.paper || {};
         var caseHtml = '';
-        // Tests put case study extracts in source_booklet[] (the actual generate-test response shape)
+
+        var charts = [];
+        function chartCard(chart, idHint) {
+            if (!window.MyBizChart || !window.MyBizChart.isNonEmpty(chart)) return '';
+            var cid = 'tna_chart_' + idHint + '_' + charts.length;
+            charts.push({ chart: chart, canvasId: cid });
+            return window.MyBizChart.cardHTML(chart, cid);
+        }
+
         var extracts = paper.source_booklet || [];
         if (Array.isArray(extracts) && extracts.length > 0) {
             caseHtml = '<div class="case-study"><div class="case-label">Case study</div><div class="case-body">' +
-                extracts.map(function(ext) {
+                extracts.map(function(ext, ei) {
                     var biz = ext.business_name ? '<strong>' + esc(ext.business_name) + '</strong><br>' : '';
-                    return biz + esc(ext.content || '');
+                    return biz + esc(ext.content || '') + chartCard(ext.data, 'cs' + ei);
                 }).join('<br><br>') +
             '</div>';
         } else if (paper.case_study || paper.scenario || paper.context) {
@@ -1137,11 +1317,15 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
             var qPart = q.part ? (q.part) : '';
             var label = 'Question ' + qNum + (qPart ? qPart : '') + ' (' + (q.marks || '?') + ' marks)';
             var qText = q.text || q.question || q.question_text || '';
-            return renderEditableQuestion(idx, q.marks, qText, label);
+            return renderEditableQuestion(idx, q.marks, qText, label) + chartCard(q.chart, 'q' + idx);
         }).join('');
 
         document.getElementById('questionsContainer').innerHTML = html;
         wireEditButtons();
+
+        if (charts.length > 0) {
+            setTimeout(function() { charts.forEach(function(c) { window.MyBizChart.draw(c.chart, c.canvasId); }); }, 30);
+        }
     }
 
     function renderEditableQuestion(idx, marks, qText, customLabel) {
@@ -1308,7 +1492,7 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
         }
     }
 
-    function handleDownloadPdf() {
+    async function handleDownloadPdf() {
         if (!generatedPayload) {
             showToast('Generate something first.', 'error');
             return;
@@ -1318,7 +1502,7 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
             return;
         }
         try {
-            window.MyBizPdf.generate(generatedPayload, {
+            await window.MyBizPdf.generate(generatedPayload, {
                 className: currentClass.name,
                 level: currentClass.level,
                 board: currentClass.board,

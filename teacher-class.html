@@ -12,6 +12,108 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+(function() {
+    var palette = ['#1e3a5f', '#e67e22', '#1d9e75', '#3498db', '#9b59b6', '#e74c3c', '#f39c12', '#27ae60'];
+    function escAttr(s) { return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    function isNonEmpty(c) {
+        if (!c || typeof c !== 'object') return false;
+        if (Object.keys(c).length === 0) return false;
+        if (c.type === 'table') return Array.isArray(c.rows) && c.rows.length > 0;
+        return Array.isArray(c.series) && c.series.length > 0;
+    }
+    function tableHTML(c) {
+        var html = '<table style="width:100%;border-collapse:collapse;font-size:0.92rem;">';
+        var cols = c.columns || c.headers;
+        if (cols) {
+            html += '<thead><tr>';
+            cols.forEach(function(col) { html += '<th style="text-align:left;padding:0.55rem 0.75rem;border-bottom:2px solid #1e3a5f;color:#1e293b;font-weight:600;">' + escAttr(col) + '</th>'; });
+            html += '</tr></thead>';
+        }
+        html += '<tbody>';
+        (c.rows || []).forEach(function(row) {
+            html += '<tr>';
+            row.forEach(function(cell) { html += '<td style="padding:0.5rem 0.75rem;border-bottom:1px solid #e2e8f0;color:#334155;">' + escAttr(String(cell)) + '</td>'; });
+            html += '</tr>';
+        });
+        html += '</tbody></table>';
+        return html;
+    }
+    function cardHTML(chart, canvasId) {
+        if (!isNonEmpty(chart)) return '';
+        var title = chart.title ? '<div style="font-weight:700;font-size:0.95rem;color:#1e3a5f;margin-bottom:0.6rem;">' + escAttr(chart.title) + '</div>' : '';
+        var body = chart.type === 'table'
+            ? tableHTML(chart)
+            : '<div style="position:relative;height:280px;width:100%;"><canvas id="' + escAttr(canvasId) + '" role="img" aria-label="' + escAttr(chart.title || 'Figure') + '"></canvas></div>';
+        return '<div style="background:#ffffff;border:1px solid #e2e8f0;border-radius:12px;padding:1rem 1.25rem;margin:0.85rem 0;">' + title + body + '</div>';
+    }
+    function buildConfig(chart) {
+        var type = chart.type === 'horizontal_bar' ? 'bar' : chart.type;
+        var datasets = (chart.series || []).map(function(s, i) {
+            var ds = { label: s.name || ('Series ' + (i + 1)), data: s.data || [] };
+            if (type === 'pie' || type === 'doughnut') {
+                ds.backgroundColor = palette.slice(0, ds.data.length);
+                ds.borderWidth = 1; ds.borderColor = '#ffffff';
+            } else if (type === 'line') {
+                ds.borderColor = palette[i % palette.length];
+                ds.backgroundColor = palette[i % palette.length] + '22';
+                ds.fill = false; ds.tension = 0.3; ds.pointRadius = 4;
+                ds.pointBackgroundColor = palette[i % palette.length]; ds.borderWidth = 2;
+            } else {
+                ds.backgroundColor = palette[i % palette.length];
+                ds.borderRadius = 6; ds.borderWidth = 0;
+            }
+            return ds;
+        });
+        var showLegend = (type === 'pie' || type === 'doughnut') || datasets.length > 1;
+        return {
+            type: type,
+            data: { labels: chart.labels || [], datasets: datasets },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                indexAxis: chart.type === 'horizontal_bar' ? 'y' : 'x',
+                plugins: {
+                    legend: { display: showLegend, position: 'bottom', labels: { boxWidth: 14, font: { size: 12 }, padding: 14 } },
+                    tooltip: { titleFont: { size: 13 }, bodyFont: { size: 12 } }
+                },
+                scales: (type === 'pie' || type === 'doughnut') ? {} : {
+                    x: { grid: { display: false }, ticks: { font: { size: 11 } }, title: chart.x_label ? { display: true, text: chart.x_label, font: { size: 11 } } : { display: false } },
+                    y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { font: { size: 11 } }, title: chart.y_label ? { display: true, text: chart.y_label, font: { size: 11 } } : { display: false } }
+                }
+            }
+        };
+    }
+    function draw(chart, canvasId) {
+        if (!chart || chart.type === 'table') return null;
+        var ctx = document.getElementById(canvasId);
+        if (!ctx || !window.Chart) return null;
+        return new Chart(ctx, buildConfig(chart));
+    }
+    function toImageDataURL(chart, width, height) {
+        return new Promise(function(resolve) {
+            if (!chart || chart.type === 'table' || !window.Chart) { resolve(null); return; }
+            var canvas = document.createElement('canvas');
+            canvas.width = width; canvas.height = height;
+            canvas.style.position = 'fixed'; canvas.style.left = '-99999px'; canvas.style.top = '0';
+            document.body.appendChild(canvas);
+            var cfg = buildConfig(chart);
+            cfg.options.responsive = false; cfg.options.maintainAspectRatio = false; cfg.options.devicePixelRatio = 2;
+            cfg.options.animation = {
+                duration: 0,
+                onComplete: function() {
+                    setTimeout(function() {
+                        try { var url = canvas.toDataURL('image/png'); inst.destroy(); canvas.remove(); resolve(url); }
+                        catch (e) { resolve(null); }
+                    }, 50);
+                }
+            };
+            var inst = new Chart(canvas, cfg);
+        });
+    }
+    window.MyBizChart = { cardHTML: cardHTML, draw: draw, toImageDataURL: toImageDataURL, isNonEmpty: isNonEmpty };
+})();
+</script>
 <style>
 :root {
     --primary: #1e3a5f;
@@ -548,28 +650,46 @@ table.data-table { width: 100%; border-collapse: collapse; }
                 time_allowed: paper.time_allowed || null,
                 duration_minutes: paper.duration_minutes || null,
                 case_extracts: paper.source_booklet || [],
+                paper_chart: paper.chart || null,
                 questions: (paper.questions || []).map(function (q) {
-                    return { number: q.number || '', part: q.part || '', text: q.text || q.question || q.question_text || '', marks: q.marks, command_word: q.command_word || q.command || '', question_type: q.question_type || '', options: q.options || null };
+                    return { number: q.number || '', part: q.part || '', text: q.text || q.question || q.question_text || '', marks: q.marks, command_word: q.command_word || q.command || '', question_type: q.question_type || '', options: q.options || null, chart: q.chart || null };
                 })
             };
         }
         if (payload.question) {
             var q = payload.question;
+            var caseChart = q.chart || payload.chart || null;
             return {
                 title: 'Practice question',
                 board: null, board_name: null,
                 total_marks: q.marks, time_allowed: null, duration_minutes: null,
-                case_extracts: q.question_context && String(q.question_context).trim() ? [{ id: 'A', title: 'Case study', business_name: '', content: q.question_context, data: null }] : [],
-                questions: [{ number: '1', part: '', text: q.question_text || q.question || q.text || '', marks: q.marks, command_word: q.command_word || q.command || '', question_type: q.question_type || '', options: q.options || null }]
+                case_extracts: q.question_context && String(q.question_context).trim() ? [{ id: 'A', title: 'Case study', business_name: '', content: q.question_context, data: caseChart }] : (caseChart ? [{ id: 'A', title: 'Figure', business_name: '', content: '', data: caseChart }] : []),
+                paper_chart: null,
+                questions: [{ number: '1', part: '', text: q.question_text || q.question || q.text || '', marks: q.marks, command_word: q.command_word || q.command || '', question_type: q.question_type || '', options: q.options || null, chart: caseChart && q.question_context ? null : null }]
             };
         }
         return null;
     }
-    function generate(payload, opts) {
+    async function getChartImage(chart) {
+        if (!chart || chart.type === 'table' || !window.MyBizChart) return null;
+        try { return await window.MyBizChart.toImageDataURL(chart, 900, 500); } catch (e) { return null; }
+    }
+    async function generate(payload, opts) {
         var jsPDFCtor = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
         if (!jsPDFCtor) { alert('PDF library not loaded. Refresh the page and try again.'); return; }
         var data = normalisePayload(payload);
         if (!data) { alert('Nothing to print yet. Generate a question or test first.'); return; }
+        // Pre-render chart images
+        var caseChartImages = [];
+        for (var ci = 0; ci < (data.case_extracts || []).length; ci++) {
+            var d = data.case_extracts[ci] && data.case_extracts[ci].data;
+            caseChartImages.push((d && d.type !== 'table') ? await getChartImage(d) : null);
+        }
+        var qChartImages = [];
+        for (var qi = 0; qi < (data.questions || []).length; qi++) {
+            qChartImages.push(await getChartImage(data.questions[qi].chart));
+        }
+        var paperChartImage = await getChartImage(data.paper_chart);
         opts = opts || {};
         var className = opts.className || 'Class';
         var level = opts.level || 'gcse';
@@ -624,7 +744,7 @@ table.data-table { width: 100%; border-collapse: collapse; }
             doc.setFontSize(15); doc.setFont('helvetica', 'bold'); doc.setTextColor(30, 58, 95);
             doc.text('Case study', marginL, y); y += 9;
             doc.setTextColor(0); doc.setFont('helvetica', 'normal'); doc.setFontSize(11);
-            data.case_extracts.forEach(function (ext) {
+            data.case_extracts.forEach(function (ext, extIdx) {
                 var extractTitle = (ext.title || ('Extract ' + (ext.id || ''))) + (ext.business_name ? '  -  ' + ext.business_name : '');
                 ensureSpace(14);
                 doc.setFont('helvetica', 'bold'); doc.setFontSize(11);
@@ -651,8 +771,21 @@ table.data-table { width: 100%; border-collapse: collapse; }
                         y += 7;
                     });
                     y += 6;
+                } else if (caseChartImages[extIdx]) {
+                    var imgW = usableW;
+                    var imgH = imgW * (500 / 900);
+                    ensureSpace(imgH + 4);
+                    doc.addImage(caseChartImages[extIdx], 'PNG', marginL, y, imgW, imgH);
+                    y += imgH + 6;
                 }
             });
+        }
+        if (paperChartImage) {
+            var pImgW = usableW;
+            var pImgH = pImgW * (500 / 900);
+            ensureSpace(pImgH + 4);
+            doc.addImage(paperChartImage, 'PNG', marginL, y, pImgW, pImgH);
+            y += pImgH + 6;
         }
         if (data.questions.length > 0) {
             newPage();
@@ -672,6 +805,32 @@ table.data-table { width: 100%; border-collapse: collapse; }
                 var wrapped = doc.splitTextToSize(q.text || '', usableW);
                 wrapped.forEach(function (ln) { ensureSpace(6); doc.text(ln, marginL, y); y += 5.5; });
                 y += 3;
+                // Per-question chart - render as table or image
+                if (q.chart && q.chart.type === 'table' && Array.isArray(q.chart.headers || q.chart.columns) && Array.isArray(q.chart.rows)) {
+                    ensureSpace(20);
+                    var qHeaders = q.chart.headers || q.chart.columns;
+                    var qColW = usableW / qHeaders.length;
+                    doc.setFont('helvetica', 'bold');
+                    doc.setFillColor(241, 245, 249);
+                    doc.rect(marginL, y, usableW, 7, 'F');
+                    qHeaders.forEach(function (h, hi) { doc.text(String(h), marginL + hi * qColW + 2, y + 5); });
+                    y += 7;
+                    doc.setFont('helvetica', 'normal');
+                    q.chart.rows.forEach(function (row) {
+                        ensureSpace(7);
+                        doc.setDrawColor(220);
+                        doc.line(marginL, y + 7, marginL + usableW, y + 7);
+                        row.forEach(function (cell, ci2) { doc.text(String(cell), marginL + ci2 * qColW + 2, y + 5); });
+                        y += 7;
+                    });
+                    y += 4;
+                } else if (qChartImages[idx]) {
+                    var qImgW = usableW * 0.85;
+                    var qImgH = qImgW * (500 / 900);
+                    ensureSpace(qImgH + 4);
+                    doc.addImage(qChartImages[idx], 'PNG', marginL, y, qImgW, qImgH);
+                    y += qImgH + 4;
+                }
                 if (q.question_type === 'mcq' && q.options && typeof q.options === 'object') {
                     Object.keys(q.options).forEach(function (k) { ensureSpace(6); doc.text(k + '.  ' + q.options[k], marginL + 6, y); y += 6; });
                     y += 3;
@@ -1068,12 +1227,23 @@ table.data-table { width: 100%; border-collapse: collapse; }
         var students = {};
         STUDENTS_CACHE.forEach(function(s) { students[s.user_id] = s; });
 
+        // Pending charts to draw after innerHTML insertion.
+        pendingCharts = [];
+        function chartCard(chart, idHint) {
+            if (!window.MyBizChart || !window.MyBizChart.isNonEmpty(chart)) return '';
+            var cid = 'tcd_chart_' + idHint + '_' + pendingCharts.length;
+            pendingCharts.push({ chart: chart, canvasId: cid });
+            return window.MyBizChart.cardHTML(chart, cid);
+        }
+
         // Render question text + per-student status
         var qHtml = '';
         if (a.type === 'question') {
             var q = (a.generated_payload && a.generated_payload.question) || a.generated_payload || {};
             if (q.question_context && String(q.question_context).trim()) {
-                qHtml += '<div style="margin-bottom:1rem; padding:1rem; background:#fffbea; border:1px solid #f7d98a; border-radius:var(--radius);"><div style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#8a5a00; margin-bottom:0.4rem;">Case study</div><div style="white-space:pre-wrap;">' + esc(q.question_context) + '</div></div>';
+                qHtml += '<div style="margin-bottom:1rem; padding:1rem; background:#fffbea; border:1px solid #f7d98a; border-radius:var(--radius);"><div style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#8a5a00; margin-bottom:0.4rem;">Case study</div><div style="white-space:pre-wrap;">' + esc(q.question_context) + '</div>' + chartCard(q.chart || a.generated_payload.chart, 'q0') + '</div>';
+            } else if (q.chart || a.generated_payload.chart) {
+                qHtml += chartCard(q.chart || a.generated_payload.chart, 'q0');
             }
             qHtml += '<div style="margin-bottom:1.5rem; padding:1rem; background:var(--gray-50); border-radius:var(--radius);"><div class="muted" style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.4rem;">Question</div><div style="white-space:pre-wrap;">' + esc(q.question_text || q.question || q.text || '') + '</div></div>';
         } else {
@@ -1081,9 +1251,9 @@ table.data-table { width: 100%; border-collapse: collapse; }
             var extracts = paper.source_booklet || [];
             if (Array.isArray(extracts) && extracts.length > 0) {
                 qHtml += '<div style="margin-bottom:1rem; padding:1rem; background:#fffbea; border:1px solid #f7d98a; border-radius:var(--radius);"><div style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#8a5a00; margin-bottom:0.4rem;">Case study</div>' +
-                    extracts.map(function(ext) {
+                    extracts.map(function(ext, ei) {
                         var biz = ext.business_name ? '<strong>' + esc(ext.business_name) + '</strong><br>' : '';
-                        return '<div style="white-space:pre-wrap; margin-bottom:0.5rem;">' + biz + esc(ext.content || '') + '</div>';
+                        return '<div style="white-space:pre-wrap; margin-bottom:0.5rem;">' + biz + esc(ext.content || '') + '</div>' + chartCard(ext.data, 'cs' + ei);
                     }).join('') +
                 '</div>';
             } else {
@@ -1091,7 +1261,7 @@ table.data-table { width: 100%; border-collapse: collapse; }
                 if (cs) qHtml += '<div style="margin-bottom:1rem; padding:1rem; background:#fffbea; border:1px solid #f7d98a; border-radius:var(--radius);"><div style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#8a5a00; margin-bottom:0.4rem;">Case study</div><div style="white-space:pre-wrap;">' + esc(typeof cs === 'string' ? cs : JSON.stringify(cs)) + '</div></div>';
             }
             (paper.questions || []).forEach(function(q, idx) {
-                qHtml += '<div style="margin-bottom:0.85rem; padding:0.9rem 1rem; background:var(--gray-50); border-radius:var(--radius);"><strong>Q' + (q.number || (idx + 1)) + (q.part || '') + ' (' + (q.marks || '?') + ' marks)</strong><div style="margin-top:0.4rem; white-space:pre-wrap;">' + esc(q.text || q.question || q.question_text || '') + '</div></div>';
+                qHtml += '<div style="margin-bottom:0.85rem; padding:0.9rem 1rem; background:var(--gray-50); border-radius:var(--radius);"><strong>Q' + (q.number || (idx + 1)) + (q.part || '') + ' (' + (q.marks || '?') + ' marks)</strong><div style="margin-top:0.4rem; white-space:pre-wrap;">' + esc(q.text || q.question || q.question_text || '') + '</div>' + chartCard(q.chart, 'q' + idx) + '</div>';
             });
         }
 
@@ -1117,11 +1287,24 @@ table.data-table { width: 100%; border-collapse: collapse; }
 
         document.getElementById('detailBody').innerHTML = detailHtml;
         document.getElementById('attemptDetail').style.display = 'flex';
+        drainPendingCharts();
+    }
+
+    // Draws any charts the recent render functions queued up.
+    var pendingCharts = [];
+    function drainPendingCharts() {
+        if (!window.MyBizChart || pendingCharts.length === 0) { pendingCharts = []; return; }
+        var batch = pendingCharts.slice();
+        pendingCharts = [];
+        setTimeout(function() {
+            batch.forEach(function(item) { window.MyBizChart.draw(item.chart, item.canvasId); });
+        }, 30);
     }
 
     async function openAttemptDetail(attemptId) {
         var att = ATTEMPTS_CACHE.find(function(x) { return x.id === attemptId; });
         if (!att) return;
+        pendingCharts = [];
 
         // Fetch full attempt + the parent assignment's payload so we can show question text alongside answers
         var [attRes, assignRes] = await Promise.all([
@@ -1216,6 +1399,7 @@ table.data-table { width: 100%; border-collapse: collapse; }
         }
 
         document.getElementById('detailBody').innerHTML = detailHtml;
+        drainPendingCharts();
         document.getElementById('attemptDetail').style.display = 'flex';
     }
 
@@ -1227,12 +1411,20 @@ table.data-table { width: 100%; border-collapse: collapse; }
         var studentAnswer = (full.answers && full.answers.answer) || '';
         var marking = (full.ai_feedback && full.ai_feedback.marking) || full.ai_feedback || {};
 
+        function chartCard(chart, idHint) {
+            if (!window.MyBizChart || !window.MyBizChart.isNonEmpty(chart)) return '';
+            var cid = 'tcad_chart_' + idHint + '_' + pendingCharts.length;
+            pendingCharts.push({ chart: chart, canvasId: cid });
+            return window.MyBizChart.cardHTML(chart, cid);
+        }
+
         var caseHtml = caseContext
             ? '<div style="margin-bottom:1.25rem; padding:1rem 1.1rem; background:#fffbea; border:1px solid #f7d98a; border-radius:var(--radius);">' +
                 '<div style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.4rem; color:#8a5a00;">Case study</div>' +
                 '<div style="white-space:pre-wrap; line-height:1.6;">' + esc(caseContext) + '</div>' +
+                chartCard(qPayload.chart || (assignment && assignment.generated_payload && assignment.generated_payload.chart), 'q0') +
               '</div>'
-            : '';
+            : ((qPayload.chart || (assignment && assignment.generated_payload && assignment.generated_payload.chart)) ? chartCard(qPayload.chart || assignment.generated_payload.chart, 'q0') : '');
 
         return caseHtml +
             '<div style="margin-bottom:1.25rem; padding:1rem 1.1rem; background:var(--gray-50); border:1px solid var(--gray-200); border-radius:var(--radius);">' +
@@ -1252,6 +1444,13 @@ table.data-table { width: 100%; border-collapse: collapse; }
         var feedback = full.ai_feedback || {};
         var qResults = feedback.question_results || [];
 
+        function chartCard(chart, idHint) {
+            if (!window.MyBizChart || !window.MyBizChart.isNonEmpty(chart)) return '';
+            var cid = 'tcat_chart_' + idHint + '_' + pendingCharts.length;
+            pendingCharts.push({ chart: chart, canvasId: cid });
+            return window.MyBizChart.cardHTML(chart, cid);
+        }
+
         // Map answers by question_id for lookup
         var answerMap = {};
         studentAnswers.forEach(function(sa) { if (sa && sa.question_id) answerMap[sa.question_id] = sa.student_answer; });
@@ -1269,6 +1468,27 @@ table.data-table { width: 100%; border-collapse: collapse; }
             '</div>';
         }
 
+        // Source booklet / case study extracts at the top of the test
+        var sourceBooklet = paper.source_booklet || paper.case_study || [];
+        if (Array.isArray(sourceBooklet) && sourceBooklet.length > 0) {
+            html += '<div style="margin-bottom:1.25rem; padding:1rem 1.1rem; background:#fffbea; border:1px solid #f7d98a; border-radius:var(--radius);">' +
+                '<div style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.4rem; color:#8a5a00;">Case study</div>';
+            sourceBooklet.forEach(function(extract, ei) {
+                if (!extract) return;
+                if (typeof extract === 'string') {
+                    html += '<div style="white-space:pre-wrap; line-height:1.6; margin-bottom:0.6rem;">' + esc(extract) + '</div>';
+                } else {
+                    if (extract.title) html += '<div style="font-weight:700; margin-top:' + (ei > 0 ? '0.6rem' : '0') + ';">' + esc(extract.title) + '</div>';
+                    if (extract.text) html += '<div style="white-space:pre-wrap; line-height:1.6; margin-bottom:0.4rem;">' + esc(extract.text) + '</div>';
+                    if (extract.data) html += chartCard(extract.data, 'src' + ei);
+                    if (extract.chart) html += chartCard(extract.chart, 'src' + ei);
+                }
+            });
+            html += '</div>';
+        } else if (paper.chart) {
+            html += chartCard(paper.chart, 'paper');
+        }
+
         (paper.questions || []).forEach(function(q, idx) {
             var qid = q.id || ('q' + (idx + 1));
             var qNum = (q.number || (idx + 1)) + (q.part || '');
@@ -1284,6 +1504,7 @@ table.data-table { width: 100%; border-collapse: collapse; }
                     (qrAwarded !== undefined && qrAwarded !== null ? '<span class="pill pill-info">' + qrAwarded + ' / ' + (qr.total_marks || marks) + '</span>' : '') +
                 '</div>' +
                 '<div style="white-space:pre-wrap; line-height:1.55; margin-bottom:0.75rem;">' + esc(qText) + '</div>' +
+                chartCard(q.chart, 'q' + idx) +
                 '<div style="background:white; border:1px solid var(--gray-200); border-radius:var(--radius-sm); padding:0.85rem;">' +
                     '<div style="font-size:0.74rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.35rem; color:var(--gray-500);">Their answer</div>' +
                     '<div style="white-space:pre-wrap; line-height:1.6; font-size:0.95rem;">' + esc(ans || 'No answer.') + '</div>' +
@@ -1336,7 +1557,7 @@ table.data-table { width: 100%; border-collapse: collapse; }
         if (!window.MyBizPdf) { showToast('PDF library not loaded yet. Try again.', 'error'); return; }
 
         try {
-            window.MyBizPdf.generate(a.generated_payload, {
+            await window.MyBizPdf.generate(a.generated_payload, {
                 className: currentClass.name,
                 level: currentClass.level,
                 board: currentClass.board,
