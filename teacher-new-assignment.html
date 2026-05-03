@@ -208,7 +208,12 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
 
 .loading-card { background: white; border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 2.5rem 1.5rem; text-align: center; margin: 1.5rem 0; }
 .spinner { display: inline-block; width: 32px; height: 32px; border: 3px solid var(--gray-200); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 0.75rem; }
+.spinner-sm { display: inline-block; width: 14px; height: 14px; border: 2px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: -2px; margin-right: 6px; opacity: 0.85; }
 @keyframes spin { to { transform: rotate(360deg); } }
+.regen-banner { background: linear-gradient(180deg, #fff8ec, #fdf1d4); border: 1px solid #f0c66d; border-radius: var(--radius-lg); padding: 2rem 1.5rem; text-align: center; margin-bottom: 1.5rem; }
+.regen-banner .spinner { border-top-color: var(--accent); margin-bottom: 0.6rem; }
+.regen-banner-title { font-weight: 700; color: var(--gray-800); font-size: 1.05rem; margin-bottom: 0.3rem; }
+.regen-banner-sub { color: var(--gray-600); font-size: 0.9rem; }
 
 .toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); background: var(--gray-900); color: white; padding: 0.75rem 1.25rem; border-radius: 999px; font-size: 0.92rem; font-weight: 500; box-shadow: var(--shadow-lg); display: none; z-index: 300; }
 .toast.show { display: block; }
@@ -388,7 +393,13 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
     <!-- ============ STEP 2: APPROVE ============ -->
     <div id="view-approve" style="display:none;">
 
-        <div class="panel">
+        <div class="regen-banner" id="regenBanner" style="display:none;">
+            <div class="spinner"></div>
+            <div class="regen-banner-title" id="regenBannerTitle">Regenerating your question...</div>
+            <div class="regen-banner-sub" id="regenBannerSub">This usually takes 10-30 seconds. Tests can take up to a minute.</div>
+        </div>
+
+        <div class="panel" id="approveContentPanel">
             <div class="alert info">
                 Review the generated content before pushing to your class. You can regenerate, edit any text, or push as-is.
             </div>
@@ -1134,6 +1145,28 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
         document.getElementById('generateBtn').textContent = 'Generating...';
         document.getElementById('regenerateBtn').disabled = true;
 
+        // If we're regenerating from the approval view, show a clear inline loading state
+        // there too. Without this the user sees the existing content with only a slightly
+        // greyed-out button and assumes nothing is happening.
+        var isRegen = document.getElementById('view-approve').style.display === 'block';
+        var regenBtn = document.getElementById('regenerateBtn');
+        var regenBanner = document.getElementById('regenBanner');
+        var approvePanel = document.getElementById('approveContentPanel');
+        var regenBannerTitle = document.getElementById('regenBannerTitle');
+        var regenBannerSub = document.getElementById('regenBannerSub');
+        if (isRegen) {
+            // Update the regenerate button to show a spinner inline.
+            regenBtn.innerHTML = '<span class="spinner-sm"></span>Regenerating...';
+            // Word the banner appropriately for question vs test.
+            var wantsTest = currentType === 'test';
+            regenBannerTitle.textContent = wantsTest ? 'Regenerating your test...' : 'Regenerating your question...';
+            regenBannerSub.textContent = wantsTest ? 'Standard tests can take up to a minute. Custom tests are usually 20-40 seconds.' : 'This usually takes 10-30 seconds.';
+            regenBanner.style.display = 'block';
+            // Hide the existing content while we wait so it can't be confused with the new content.
+            if (approvePanel) approvePanel.style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
         var loadingTitle = document.getElementById('loadingTitle');
         var loadingSub = document.getElementById('loadingSub');
 
@@ -1256,6 +1289,10 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
         document.getElementById('generateBtn').disabled = false;
         document.getElementById('generateBtn').innerHTML = 'Generate <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>';
         document.getElementById('regenerateBtn').disabled = false;
+        document.getElementById('regenerateBtn').innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 4v5h5"/></svg> Regenerate';
+        document.getElementById('regenBanner').style.display = 'none';
+        var approvePanelEnd = document.getElementById('approveContentPanel');
+        if (approvePanelEnd) approvePanelEnd.style.display = 'block';
     }
 
     function renderApprovalForQuestion(data) {
