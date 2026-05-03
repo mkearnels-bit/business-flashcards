@@ -1197,7 +1197,8 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
                         board: currentClass.board,
                         unit: unit,
                         question_type: qtype,
-                        topics: topic ? [topic] : undefined
+                        topics: topic ? [topic] : undefined,
+                        class_id: currentClass.id
                     })
                 });
                 if (!resp.ok) {
@@ -1224,7 +1225,8 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
                     unit: unit3,
                     topic: topic3 || null,
                     time_allowed: time3 || null,
-                    custom_marks_spec: customSlots.map(function(s) { return { marks: parseInt(s.marks, 10) }; })
+                    custom_marks_spec: customSlots.map(function(s) { return { marks: parseInt(s.marks, 10) }; }),
+                    class_id: currentClass.id
                 };
 
                 var respC = await fetch(SUPABASE_URL + '/functions/v1/generate-custom-test', {
@@ -1255,7 +1257,8 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
                     test_type: testType,
                     board: currentClass.board,
                     unit: unit2,
-                    topic: testType === 'topic_test' && topic2 ? topic2 : null
+                    topic: testType === 'topic_test' && topic2 ? topic2 : null,
+                    class_id: currentClass.id
                 };
 
                 var resp2 = await fetch(SUPABASE_URL + '/functions/v1/generate-test', {
