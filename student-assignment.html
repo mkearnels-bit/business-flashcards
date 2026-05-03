@@ -1019,11 +1019,26 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
         await requestWakeLock();
 
         try {
+            // Refresh the session right before submitting. The cached currentSession.access_token
+            // can be over an hour old by the time a student finishes typing, which would cause
+            // submit-student-attempt to return 401 "Invalid token". Their answer is safe (auto-saved)
+            // but the submit would silently fail. getSession() returns the auto-refreshed token.
+            var freshSessionResult = await supabaseClient.auth.getSession();
+            var freshSession = freshSessionResult.data && freshSessionResult.data.session;
+            if (!freshSession || !freshSession.access_token) {
+                releaseWakeLock();
+                document.getElementById('markingView').style.display = 'none';
+                document.getElementById('takeView').style.display = 'block';
+                showError('Your session has expired. Your answer has been saved. Please <a href="login.html" style="color:var(--accent);font-weight:600;">sign in again</a> and submit.');
+                return;
+            }
+            currentSession = freshSession;
+
             var resp = await fetch(SUPABASE_URL + '/functions/v1/submit-student-attempt', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + currentSession.access_token,
+                    'Authorization': 'Bearer ' + freshSession.access_token,
                     'apikey': SUPABASE_ANON_KEY
                 },
                 body: JSON.stringify(payload)
@@ -1034,7 +1049,11 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
             if (!resp.ok) {
                 document.getElementById('markingView').style.display = 'none';
                 document.getElementById('takeView').style.display = 'block';
-                showError(result.error || 'Marking failed. Please try again.');
+                if (resp.status === 401) {
+                    showError('Your session has expired. Your answer has been saved. Please <a href="login.html" style="color:var(--accent);font-weight:600;">sign in again</a> and submit.');
+                } else {
+                    showError(result.error || 'Marking failed. Please try again.');
+                }
                 return;
             }
 

@@ -1138,6 +1138,15 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
         var loadingSub = document.getElementById('loadingSub');
 
         try {
+            // Refresh the session so a stale cached token (page open >1 hour) doesn't trigger
+            // a silent 401 from the edge function. getSession() returns the auto-refreshed token.
+            var freshSessionResult = await supabaseClient.auth.getSession();
+            var freshSession = freshSessionResult.data && freshSessionResult.data.session;
+            if (!freshSession || !freshSession.access_token) {
+                throw new Error('SESSION_EXPIRED');
+            }
+            currentSession = freshSession;
+
             if (currentType === 'question') {
                 loadingTitle.textContent = 'Generating your question...';
                 var unit = document.getElementById('qUnitSelect').value;
@@ -1236,7 +1245,11 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
             }
             switchView('approve');
         } catch (e) {
-            setError(e.message || 'Something went wrong. Try again.');
+            if (e.message === 'SESSION_EXPIRED') {
+                setError('Your session has expired. Please <a href="login.html" style="color:var(--accent);font-weight:600;">sign in again</a> and try again.');
+            } else {
+                setError(e.message || 'Something went wrong. Try again.');
+            }
         }
 
         document.getElementById('loadingCard').style.display = 'none';
@@ -1461,18 +1474,33 @@ input, select, textarea { font-family: inherit; font-size: 1rem; color: var(--gr
         }
 
         try {
+            // Refresh the session before pushing. If the teacher created a draft hours earlier
+            // and only just clicked Push, the cached token will have expired and the call would
+            // return 401 with an empty body, surfacing as a useless "Push failed" message.
+            var freshSessionResult = await supabaseClient.auth.getSession();
+            var freshSession = freshSessionResult.data && freshSessionResult.data.session;
+            if (!freshSession || !freshSession.access_token) {
+                setPushError('Your session has expired. Please <a href="login.html" style="color:var(--accent);font-weight:600;">sign in again</a> to push.');
+                pushBtn.disabled = false;
+                pushBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg> Push to class';
+                return;
+            }
+            currentSession = freshSession;
+
             var resp = await fetch(SUPABASE_URL + '/functions/v1/push-assignment', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + currentSession.access_token,
+                    'Authorization': 'Bearer ' + freshSession.access_token,
                     'apikey': SUPABASE_ANON_KEY
                 },
                 body: JSON.stringify(payload)
             });
-            var result = await resp.json();
+            var result = await resp.json().catch(function() { return {}; });
             if (!resp.ok) {
-                if (result.code === 'CAP_REACHED') {
+                if (resp.status === 401) {
+                    setPushError('Your session has expired. Please <a href="login.html" style="color:var(--accent);font-weight:600;">sign in again</a> to push.');
+                } else if (result.code === 'CAP_REACHED') {
                     setPushError(result.error + ' You can push again next month.');
                 } else {
                     setPushError(result.error || 'Push failed');
